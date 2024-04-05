@@ -11,7 +11,6 @@ const Sidebar = () => {
         { inactive: "assets/departments.png", active: "assets/departmentsActive.png" },
         { inactive: "assets/groups.png", active: "assets/groupsActive.png" },
         { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
-        { inactive: "assets/analytics.png", active: "assets/analyticsActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
         { inactive: "assets/settings.png", active: "assets/settingsActive.png" },
         { inactive: "assets/logout.png", active: "assets/logout.png" }
@@ -22,12 +21,12 @@ const Sidebar = () => {
 
     return (
         <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
-            <nav className="flex flex-col p-4 space-y-2">
+            <nav className="flex flex-col p-4 space-y-2 ">
                 {buttons.map((button, i) => (
                     <InertiaLink 
                         key={i} 
                         href={button.to} 
-                        className={`w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} 
+                        className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} 
                         onClick={() => setActiveIndex(i)}
                     >
                         <img src={activeIndex === i ? button.active : button.inactive} alt={button.name} className="w-12 h-12 mx-auto" />

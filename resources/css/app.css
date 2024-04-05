@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.input-no-outline:focus {
+    outline: none !important;
+    box-shadow: none !important; 
+}
+
+.input-focus-style:focus {
+    outline: none;
+    border: 1px solid #4880FF;
+    border-radius: 1.5rem; 
+    box-shadow: none; 
+  }

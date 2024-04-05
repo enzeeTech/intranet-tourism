@@ -7,7 +7,7 @@ a {
 }
 
 .fc .fc-myCustomButton-button {
-    background-image: url('../../../../public/assets/printButton.png'); /* Update the path */
+    background-image: url('../../../../public/assets/printButton.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
