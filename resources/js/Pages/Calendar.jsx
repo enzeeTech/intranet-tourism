@@ -41,6 +41,16 @@ function Calendar() {
     const handleChange = (e) => {
         setEventData({ ...eventData, [e.target.name]: e.target.value });
     };
+          {/* Search Input */}
+          <input
+            type="search"
+            className="flex-grow px-4 py-2 border-none rounded-none input-no-outline"
+            placeholder="Search for events"
+            aria-label="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ outline: 'none' }}
+          />
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -53,11 +63,60 @@ function Calendar() {
                 console.error('Error creating event: ', error);
             });
     };
+          {/* Find Events Button */}
+          <button className="flex items-center justify-center py-2 pl-2 pr-2">
+            <img src={searchButton} alt="Find Events" className=" w-30 h-11" />
+          </button>
+        </div>
+      </div>
 
-    return (
-        <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
-            <h1 className="mb-2 font-sans text-4xl font-bold text-left">Calendar</h1>
-            <hr className="mx-auto" style={{ borderColor: '#E4E4E4', borderWidth: '2px' }} />
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+        initialView="dayGridMonth"
+        selectable={true}
+        selectHelper={true}
+        select={handleDateSelect}
+        headerToolbar={{
+          start: 'prev,next today printButton',
+          center: 'title',
+          end: 'dayGridMonth,timeGridWeek,timeGridDay,list',
+        }}
+        height={650}
+        buttonText={{
+          today: 'Today',
+          month: 'Month',
+          week: 'Week',
+          day: 'Day',
+        }}
+        events={[
+          {
+            title: 'Standup Meeting Tourism',
+            start: '2024-04-04T11:00',
+            end: '2024-04-04T12:00',
+            color: 'black',
+          },
+        ]}
+        eventDidMount={(info) => {
+          return new bootstrap.Popover(info.el, {
+            title: info.event.title,
+            placement: "auto",
+            trigger: "hover",
+            customClass: "popoverStyle",
+            content:
+              "<p>Come to Oval Room</p>",
+            html: true,
+          });
+        }}
+        customButtons={{
+          printButton: {
+            text: 'Print',
+            click: function() {
+              alert('Clicked the print button!');
+              // Add your custom button logic here
+            },
+          }
+        }}
+      />
 
             <div className="flex justify-center mt-4 mb-5 rounded-full" style={{ border: '2px solid #E4E4E4' }}>
                 <div className="flex items-center" style={{ width: '100%' }}>
