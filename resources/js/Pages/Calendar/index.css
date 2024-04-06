@@ -3,7 +3,7 @@
 }
 
 a {
-    color: #212529 !important;
+    color: black !important;
 }
 
 .fc .fc-myCustomButton-button {
@@ -19,15 +19,31 @@ a {
   }
 
 .fc .fc-button-primary {
-    background-color: white;
-    color: black;
+    background-color: #4880FF;
+    color: white;
     border-color: white; /* Or any other color you prefer for the border */
     border-radius: 15px; /* Adjust the border-radius to get the desired roundness */
+    background-image: none;
+}
+
+.fc .fc-button-primary:active:focus {
+    background-color: #4880FF !important;
+    color: black;
+    border-color: #4880FF !important; /* Or any other color you prefer for the border */
+    border-radius: 15px; /* Adjust the border-radius to get the desired roundness */
+    box-shadow: none !important;
+    background-image: none;
 }
 
 .fc .fc-button-primary:hover {
-    background-color: white;
-    color: black;
-    border-color: #4880FF; /* Or any other color you prefer for the border */
+    background-color: white !important;
+    color: #4880FF;
+    border-color: #4880FF !important; /* Or any other color you prefer for the border */
     border-radius: 15px; /* Adjust the border-radius to get the desired roundness */
+    background-image: none;
+}
+
+.input-no-outline:focus {
+    outline: none !important;
+    box-shadow: none !important; 
 }

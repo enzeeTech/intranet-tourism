@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         // In your migration file (e.g., create_events_table.php)
-Schema::create('events', function (Blueprint $table) {
-    $table->id();
-    $table->string('title');
-    $table->datetime('start_time');
-    $table->datetime('end_time');
-    $table->string('color');
-    $table->timestamps();
-});
-
+        Schema::create('events', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->datetime('start_time');
+            $table->datetime('end_time');
+            $table->string('color');
+            $table->timestamps();
+        });
     }
 
     /**
