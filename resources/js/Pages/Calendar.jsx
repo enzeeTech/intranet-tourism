@@ -31,17 +31,21 @@ function Calendar() {
                 console.error('Error fetching events: ', error);
             });
     };
+
     const handleDateSelect = (info) => {
         setIsModalOpen(true);
         setEventData({ ...eventData, start: info.startStr, end: info.endStr });
     };
+
     const closeModal = () => {
         setIsModalOpen(false);
         setEventData({ title: '', start: '', end: '', color: 'purple' });
     };
+
     const handleChange = (e) => {
         setEventData({ ...eventData, [e.target.name]: e.target.value });
     };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         axios.post('/calendar/event', eventData)
@@ -103,13 +107,13 @@ function Calendar() {
             headerToolbar={{
                 start: 'prev,next today',
                 center: 'title',
-                end: 'dayGridMonth,timeGridWeek,timeGridDay,list',
+                end: 'dayGridYear,dayGridMonth,timeGridDay',
             }}
             height={650}
             buttonText={{
                 today: 'Today',
+                year: 'Year',
                 month: 'Month',
-                week: 'Week',
                 day: 'Day',
             }}
             events={events}
@@ -124,16 +128,8 @@ function Calendar() {
                 html: true,
               });
             }}
-            customButtons={{
-              printButton: {
-                text: 'Print',
-                click: function() {
-                  alert('Clicked the print button!');
-                  // Add your custom button logic here
-                },
-              }
-            }}
         />
+
 
         {isModalOpen && (
           <div
