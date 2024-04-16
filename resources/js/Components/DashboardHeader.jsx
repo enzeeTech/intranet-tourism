@@ -45,7 +45,7 @@ const Header = () => {
         <button onClick={() => {}} className="focus:outline-none">
           <img src={notification} alt="Notification" className="w-4.5 h-6 mr-1" />
         </button>
-        <a href="../Pages/Profile.jsx">
+        <a href="../profile">
         <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
         </a>
         <span className="mr-2 font-semibold">Username</span>
