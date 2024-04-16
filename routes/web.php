@@ -11,6 +11,7 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         //'laravelVersion' => Application::VERSION,
+        // 'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
 });
@@ -19,10 +20,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
     Route::get('/calendar/events', [CalendarController::class, 'getEvents'])->name('calendar.events');
-    Route::post('/calendar/event', [CalendarController::class, 'handleDateSelect'])->name('calendar.event');    
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/calendar/event', [CalendarController::class, 'handleDateSelect'])->name('calendar.event');
+    Route::put('/calendar/event/{id}', [CalendarController::class, 'updateEvent'])->name('calendar.update');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');  
 });
 
 require __DIR__ . '/auth.php';
