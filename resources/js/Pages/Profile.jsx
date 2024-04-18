@@ -10,9 +10,16 @@ function ProfileImage({ src, alt, className }) {
   );
 }
 
-function ProfileHeader({ backgroundImage, profileImage, name, status }) {
+function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner }) {
+  const handleEditBanner = (e) => {
+    e.stopPropagation(); // Prevents the click event from propagating to parent elements
+    onEditBanner(); // Calls the onEditBanner function when the background image is clicked
+  };
   return (
-    <header className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half">
+    <header
+      className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
+      onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
+    >
       <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
       <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
       <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
@@ -23,18 +30,18 @@ function ProfileHeader({ backgroundImage, profileImage, name, status }) {
   );
 }
 
-function ProfileNav() {
+function ProfileNav({ activeTab, setActiveTab }) {
   return (
     <nav className="flex gap-5 justify-between mt-14 ml-10 max-w-full text-sm font-semibold text-center whitespace-nowrap text-neutral-800 text-opacity-30 w-[423px] max-md:flex-wrap max-md:mt-10">
-      <a href="#activities" className="text-stone-300">Activities</a>
-      <a href="#bio" className="text-base font-bold text-blue-500">Bio</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#files">Files</a>
+      <a href="#activities" className={`text-stone-300 ${activeTab === "activities" ? "font-bold text-blue-500" : ""}`} onClick={() => setActiveTab("activities")}>Activities</a>
+      <a href="#bio" className={`text-base font-bold ${activeTab === "bio" ? "text-blue-500" : ""}`} onClick={() => setActiveTab("bio")}>Bio</a>
+      <a href="#gallery" className={`${activeTab === "gallery" ? "font-bold text-blue-500" : ""}`} onClick={() => setActiveTab("gallery")}>Gallery</a>
+      <a href="#files" className={`${activeTab === "files" ? "font-bold text-blue-500" : ""}`} onClick={() => setActiveTab("files")}>Files</a>
     </nav>
   );
 }
 
-function ProfileDetails({ email, department, position, grade, location, phone }) {
+function ProfileBio({ email, department, position, grade, location, phone }) {
   return (
     <div className="flex-auto my-auto max-md:max-w-full">
       <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -63,14 +70,171 @@ function ProfileDetails({ email, department, position, grade, location, phone })
   );
 }
 
-function ProfileIcons({ icon1, icon2 }) {
+function PhotoItem({ src, alt }) {
   return (
-    <div className="flex flex-col">
-      <img src={icon1} alt="" className="aspect-square w-[30px]" />
-      <img src={icon2} alt="" className="self-center mt-36 aspect-square w-[38px] max-md:mt-10" />
+    <div className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+      <img
+        loading="lazy"
+        src={src}
+        alt={alt}
+        className="grow shrink-0 mt-8 max-w-full aspect-[1.19] w-[173px] max-md:mt-10"
+      />
     </div>
   );
 }
+
+function VideoItem({ src, alt }) {
+  return (
+    <div className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+      <img
+        loading="lazy"
+        src={src}
+        alt={alt}
+        className="grow shrink-0 mt-8 max-w-full aspect-[1.19] w-[173px] max-md:mt-10"
+      />
+    </div>
+  );
+}
+
+function ProfileGallery({ photoData, videoData }) {
+  return (
+    <div className="flex flex-col max-w-[800px]">
+      <section className="px-6 py-6 w-full bg-white rounded-md shadow-sm max-md:px-5 max-md:max-w-full">
+        <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+          <div className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+            <div className="flex flex-col grow text-2xl font-bold whitespace-nowrap text-neutral-800 max-md:mt-10">
+              <h2>Photo</h2>
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b964b38ab4577424894ab89afca98d210e5a3ab6ee6f4091065c1b0e53df2748?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                alt="Main Photo"
+                className="self-center mt-3.5 aspect-[1.19] w-[172px]"
+              />
+            </div>
+          </div>
+          {photoData.map((photo, index) => (
+            <PhotoItem key={index} src={photo.src} alt={photo.alt} />
+          ))}
+        </div>
+      </section>
+      <section className="px-6 py-6 w-full bg-white rounded-md shadow-sm max-md:px-5 max-md:max-w-full">
+        <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+          <div className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+            <div className="flex flex-col grow text-2xl font-bold whitespace-nowrap text-neutral-800 max-md:mt-10">
+              <h2>Videos</h2>
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                alt="Video 1"
+                className="self-center mt-3.5 aspect-[1.92] w-[172px]"
+              />
+            </div>
+          </div>
+          {videoData.map((video, index) => (
+            <VideoItem key={index} src={video.src} alt={video.alt} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+
+function ProfileIcons({ icon1, icon2 }) {
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+  const [qrCodeLink, setQrCodeLink] = React.useState('');
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    console.log("bukak");
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    console.log("tutup");
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".popup")) {
+        closePopup();
+      }
+    };
+
+    if (isPopupOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isPopupOpen]);
+
+  const handleDownload = (e) => {
+    e.stopPropagation();
+    e.preventDefault(); // Prevent the default behavior of the anchor element
+    const qrImage = 'assets/hehe.png'; // Path to the QR image
+    const link = document.createElement('a');
+    link.href = qrImage;
+    link.download = 'qr-image.png'; // Name of the downloaded file
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+
+  const handleCopyLink = () => {
+    const qrCodeLink = "https://shattereddisk.github.io/rickroll/rickroll.mp4";
+    navigator.clipboard.writeText(qrCodeLink)
+      .then(() => {
+        console.log("QR code link copied to clipboard:", qrCodeLink);
+        window.alert("QR code link copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Failed to copy QR code link:", error);
+      });
+  };
+  
+
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+    openPopup();
+  };
+  
+  return (
+    <div className="flex flex-col">
+      <img src={icon1} alt="" className="aspect-square w-[30px]" />
+      <img
+        src={icon2}
+        alt=""
+        className="self-center mt-36 aspect-square w-[38px] max-md:mt-10 cursor-pointer"
+        onClick={handleIconClick}
+      />
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={closePopup}>
+          <div className="bg-white p-2 rounded-xl shadow-lg max-w-md" onClick={(e) => e.stopPropagation()}>
+            <img
+              src="assets/hehe.png"
+              alt="QR Code"
+              className="mx-auto mt-4"
+            />
+            <div className="flex justify-between -mt-1 relative">
+              <hr className="absolute -top-3 w-full border-t border-gray-300" />
+                <button onClick={handleDownload} className="text-white px-24 py-2 rounded-md">
+                  <img src="assets/DownloadIcon.png" alt="Download Icon" className="w-8 h-8" />
+                </button>
+              <hr className="absolute top-0 right-52 h-full border-l border-gray-300" />
+                <button onClick={handleCopyLink} className="text-white px-24 py-2 rounded-md">
+                  <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-8 h-8" />
+                </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );  
+}
+
 
 
 function FeaturedEvent({ date, title, time }) {
@@ -108,7 +272,25 @@ function OnlinePerson({ name, imageUrl }) {
   );
 }
 
+function Popup({ title, content, onClose, onSave }) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
+        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+        <p className="mb-4">{content}</p>
+        <div className="flex justify-end">
+          <button onClick={onClose} className="mr-4 bg-gray-200 px-4 py-2 rounded-md">Cancel</button>
+          <button onClick={onSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function MyComponent() {
+
+  const [activeTab, setActiveTab] = React.useState("activities");
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
 
   const profileData = {
         backgroundImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
@@ -151,8 +333,42 @@ export default function MyComponent() {
     { name: "Nik", imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/1371d1db42581f9e74ea98761f867e47963c0e4ded2d8acbb9d1747172ee55ae?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" },
   ];
 
+  const photoData = [
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Photo 1" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Photo 2" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc01566f85a165f9e8c89da57eaa7e81212a8fa1e58ed53877c900bf64c5baf1?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Photo 3" },
+  ];
+
+  const videoData = [
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Video 1" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Video 2" },
+  ];
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleSavePopup = () => {
+    // save logic here
+    closePopup();
+  };
+
+
+
   return (
     <div className="pt-2.5">
+      {isPopupOpen && (
+        <Popup
+          title="Edit Banner Photo"
+          content="Choose photo from the device"
+          onClose={closePopup}
+          onSave={handleSavePopup}
+        />
+      )}
       <div className="flex gap-5 max-md:flex-col max-md:gap-0">
         <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
           <div className="flex flex-col grow px-5 mt-20 max-md:mt-10">
@@ -203,33 +419,35 @@ export default function MyComponent() {
         <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
           <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
             <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full">
-            <div className="flex flex-col pb-5 w-full bg-white rounded-none shadow-sm max-md:max-w-full">
-           <ProfileHeader
-              backgroundImage={profileData.backgroundImage}
-              profileImage={profileData.profileImage}
-              name={profileData.name}
-              status={profileData.status}
-            />
-            <ProfileNav />
-          </div>
-              
-              
+              <ProfileHeader
+                backgroundImage={profileData.backgroundImage}
+                profileImage={profileData.profileImage}
+                name={profileData.name}
+                status={profileData.status}
+                onEditBanner={openPopup}
+              />
+              <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
             </section>
-            <section className="flex gap-5 px-8 py-4 mt-6 w-full bg-white rounded-lg shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-              <div className="flex-auto my-auto max-md:max-w-full">
-                <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                  <ProfileDetails
-                    email={profileData.email}
-                    department={profileData.department}
-                    position={profileData.position}
-                    grade={profileData.grade}
-                    location={profileData.location}
-                    phone={profileData.phone}
-                  />
-                  <ProfileIcons icon1={profileData.icon1} icon2={profileData.icon2} />
+            {activeTab === "bio" && (
+              <section className="flex gap-5 px-8 py-4 mt-6 w-full bg-white rounded-lg shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                <div className="flex-auto my-auto max-md:max-w-full">
+                  <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+                    <ProfileBio
+                      email={profileData.email}
+                      department={profileData.department}
+                      position={profileData.position}
+                      grade={profileData.grade}
+                      location={profileData.location}
+                      phone={profileData.phone}
+                    />
+                    <ProfileIcons icon1={profileData.icon1} icon2={profileData.icon2} />
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
+            {activeTab === "gallery" && (
+              <ProfileGallery photoData={photoData} videoData={videoData} />
+            )}
           </div>
         </main>
       </div>
