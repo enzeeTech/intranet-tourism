@@ -1,6 +1,5 @@
 import * as React from "react";
 
-
 function ProfileImage({ src, alt, className }) {
   return (
     <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-44 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className}`}>
@@ -139,6 +138,31 @@ function ProfileGallery({ photoData, videoData }) {
   );
 }
 
+function SearchInput() {
+  return (
+    <div className="flex min-w-72 gap-2 px-5 py-1.5 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
+      <img
+        loading="lazy"
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/e9a74adec558c689d2c2036311d5dad5a1cc1d44aea0cf5f88c1bd1bafeea3ce?apiKey=285d536833cc4168a8fbec258311d77b&"
+        alt=""
+        className="shrink-0 w-6 aspect-square"
+      />
+      <input
+        type="text"
+        className="flex-auto bg-transparent border-none outline-none text-md text-neutral-800"
+        placeholder="Search"
+      />
+    </div>
+  );
+}
+
+function SearchButton() {
+  return (
+    <button className="justify-center px-5 py-1.5 my-auto text-s font-bold text-center text-white bg-blue-500 rounded-3xl mt-10">
+      Search
+    </button>
+  );
+}
 
 function ProfileIcons({ icon1, icon2 }) {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
@@ -240,24 +264,35 @@ function ProfileIcons({ icon1, icon2 }) {
 function FeaturedEvent({ date, title, time }) {
   const [day, month] = date.split(" ");
 
-  return (
+  const handleMoreClick = () => { 
     
-      <div className="flex gap-3 p-2 border-b border-l-gray-200">
-        <div className="flex flex-col pb-2.5 font-bold text-center whitespace-nowrap bg-red-500 rounded-lg shadow-sm h-[64px] w-[54px]">
-          <div className="justify-center px-5 py-3 text-xs bg-white rounded-md text-neutral-800">
-            {day}
-          </div>
-          <div className="self-center mt-0 text-xs text-white uppercase">
-            {month}
-          </div>
+    console.log('More clicked!');
+    // Add more code here to perform specific actions, like opening a modal or navigating to a new page 
+    window.location.href = 'https://www.example.com/';
+  };
+
+  return (
+    <div className="flex gap-3 p-2 border-b border-l-gray-200">
+      <div className="flex flex-col pb-2.5 font-bold text-center whitespace-nowrap bg-red-500 rounded-lg shadow-sm h-[64px] w-[54px]">
+        <div className="justify-center px-5 py-3 text-xs bg-white rounded-t-md text-neutral-800">
+          {day}
         </div>
-        <div className="flex flex-col self-start text-sm font-semibold">
-          <div className="font-bold text-neutral-800">{title}</div>
-          <div className="mt-0.1 text-neutral-400">{time}</div>
-          <div className="mt-1.5 text-xs text-sky-500 underline">More</div>
+        <div className="self-center mt-1 text-xs text-white uppercase">
+          {month}
         </div>
       </div>
-    
+      <div className="flex flex-col self-start text-sm font-semibold">
+        <div className="font-bold text-neutral-800">{title}</div>
+        <div className="mt-.5 text-neutral-400">{time}</div>
+        {/* Make the "More" text clickable */}
+        <div
+          className="mt-2.5 text-xs text-sky-500 underline cursor-pointer"
+          onClick={handleMoreClick} // Attach the click event handler 
+        > 
+          More
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -447,6 +482,12 @@ export default function MyComponent() {
             )}
             {activeTab === "gallery" && (
               <ProfileGallery photoData={photoData} videoData={videoData} />
+            )}
+            {activeTab === "files" && (
+              <div className="flex gap-4 whitespace-nowrap">
+                <SearchInput />
+                <SearchButton />
+              </div>
             )}
           </div>
         </main>
