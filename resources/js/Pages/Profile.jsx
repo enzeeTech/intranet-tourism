@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ProfileHeader, ProfileNav, Popup, OnlinePerson } from "../Components/Profile";
-import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "../Components/ProfileTabbar"
-import { FeaturedEvent } from "../Components/SideCalendar";
+import { ProfileHeader, ProfileNav, Popup, OnlinePerson } from "@/Components/Profile";
+import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "@/Components/ProfileTabbar"
+import { FeaturedEvent } from "@/Components/SideCalendar";
 
 
 export default function MyComponent() {
@@ -98,13 +98,15 @@ export default function MyComponent() {
                 <FeaturedEvent key={event.title} {...event} />
               ))}
               <div className="flex gap-2 mt-4 text-xs font-semibold uppercase text-neutral-800 max-md:pr-5">
-                <div className="my-auto">view all</div>
-                <img
-                  loading="lazy"
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/94038c67d19dccbc5e7edb68bf4b9e991042ccf0a6c1a73a67760cbeb4b2d1e9?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                  alt=""
-                  className="shrink-0 aspect-[1.25] w-[15px]"
-                />
+                  <a href="../calendar">
+                    <div className="my-auto">view all</div>
+                      <img
+                        loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/94038c67d19dccbc5e7edb68bf4b9e991042ccf0a6c1a73a67760cbeb4b2d1e9?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                        alt=""
+                        className="shrink-0 aspect-[1.25] w-[15px]"
+                      />
+                  </a>
               </div>
             </section>
             <section className="flex flex-col px-3 py-4 mt-14 w-full bg-white rounded-2xl shadow-sm max-md:mt-10">
