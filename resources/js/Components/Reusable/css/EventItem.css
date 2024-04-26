@@ -1,0 +1,53 @@
+.event-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff; 
+    overflow: hidden; 
+  }
+  
+  .event-date-box {
+    padding: 10px;
+    background-color: #d9534f; 
+    color: white; 
+    text-align: center;
+    border-radius: 6px;
+    width: 25%;
+  }
+  
+  .event-day {
+    font-size: 1.2rem; 
+    font-weight: bold;
+    line-height: 1; 
+  }
+  
+  .event-month {
+    font-size: 0.60rem; 
+    font-weight: bolder;
+  }
+  
+  .event-details {
+    padding: 10px;
+    flex-grow: 1;
+  }
+  
+  .event-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .event-full-date {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #9D9EA2;
+  }
+  
+  .more-link {
+    color: #008FFF; 
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.5rem; 
+  }
+
+  
