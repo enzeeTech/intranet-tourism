@@ -7,7 +7,7 @@ const featuredEvents = [
   // This array should be fetched from your backend or passed as props
   { id: 1, date: 'January 19,2024,12:30 PM', title: 'Conference' },
   { id: 2, date: 'January 21,2024,08:00 AM', title: 'Corporate event' },
-  { id: 3, date: 'Febuary 12,2024,07:00 PM', title: 'Exhibition' },
+  { id: 3, date: 'February 12,2024,07:00 PM', title: 'Exhibition' },
 ];
 
 const FeaturedEvents = () => {

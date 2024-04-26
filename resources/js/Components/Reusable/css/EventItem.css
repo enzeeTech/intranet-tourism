@@ -5,16 +5,16 @@
     overflow: hidden; 
   }
   
-  .event-date-box {
+  /* .event-date-box {
     padding: 10px;
     background-color: #d9534f; 
     color: white; 
     text-align: center;
     border-radius: 6px;
     width: 25%;
-  }
+  } */
   
-  .event-day {
+  /* .event-day {
     font-size: 1.2rem; 
     font-weight: bold;
     line-height: 1; 
@@ -23,8 +23,42 @@
   .event-month {
     font-size: 0.60rem; 
     font-weight: bolder;
+  } */
+  
+  .event-date-box {
+    display: flex;
+    flex-direction: column;
+    background-color: #FF5436; 
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    color: white; 
+    width: 54px; 
+    height: 60px; 
+    margin-left: 2px;
+    margin-top: 1px;
+    overflow: hidden;
+  }
+
+  .event-day {
+    background-color: #fff; 
+    color: #333; 
+    font-size: 17px; 
+    font-weight: bold; 
+    border-top-left-radius: 6px; 
+    border-top-right-radius: 6px;
+    padding: 6px; 
+    width: 100%; 
+    height: 35px;
+    text-align: center;
   }
   
+  .event-month {
+    margin-top: 3px;
+    font-size: 12px; 
+    font-weight: bolder;
+    text-align: center;  
+  }
+
   .event-details {
     padding: 10px;
     flex-grow: 1;
