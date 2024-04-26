@@ -27,7 +27,6 @@ const StaffMemberCard = ({ name, role, status, imageUrl, onDeactivateClick }) =>
         onDeactivateClick();
     };
 
-
     // Position popup below the three-dot button
     const getPopupPosition = () => {
         const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
