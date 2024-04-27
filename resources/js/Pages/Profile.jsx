@@ -1,7 +1,8 @@
 import * as React from "react";
 import { ProfileHeader, ProfileNav, Popup, OnlinePerson } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "@/Components/ProfileTabbar"
-import { FeaturedEvent } from "@/Components/SideCalendar";
+// import { FeaturedEvent } from "@/Components/SideCalendar";
+import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 
 
 export default function MyComponent() {
@@ -24,22 +25,28 @@ export default function MyComponent() {
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       };
 
+  // const featuredEvents = [
+  //   {
+  //     date: "19 Jan",
+  //     title: "Conference",
+  //     time: "January 19, 2024, 12:30 PM",
+  //    },
+  //   {
+  //     date: "21 Jan",
+  //     title: "Corporate event",
+  //     time: "January 21, 2024, 08:00 AM",
+  //     },
+  //   {
+  //     date: "12 FEB",
+  //     title: "Exhibition",
+  //     time: "February 12, 2024, 07:00 PM",
+  //     },
+  // ];
+
   const featuredEvents = [
-    {
-      date: "19 Jan",
-      title: "Conference",
-      time: "January 19, 2024, 12:30 PM",
-     },
-    {
-      date: "21 Jan",
-      title: "Corporate event",
-      time: "January 21, 2024, 08:00 AM",
-      },
-    {
-      date: "12 FEB",
-      title: "Exhibition",
-      time: "February 12, 2024, 07:00 PM",
-      },
+    { id: 1, date: 'January 19,2024,12:30 PM', title: 'Conference' },
+    { id: 2, date: 'January 21,2024,08:00 AM', title: 'Corporate event' },
+    { id: 3, date: 'February 12,2024,07:00 PM', title: 'Exhibition' },
   ];
 
   const onlinePeople = [
@@ -88,15 +95,13 @@ export default function MyComponent() {
       )}
       <div className="flex gap-5 max-md:flex-col max-md:gap-0">
         <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
-          <div className="flex flex-col grow px-5 mt-20 max-md:mt-10">
+          <div className="flex flex-col px-5 mt-20 grow max-md:mt-10">
             <h2 className="text-3xl font-bold text-neutral-800">My Profile</h2>
-            <section className="flex flex-col px-4 py-5 mt-9 w-full bg-white rounded-2xl shadow-sm">
+            <section className="flex flex-col w-full px-4 py-5 bg-white shadow-sm mt-9 rounded-2xl">
               <h3 className="text-2xl font-bold text-neutral-800">
                 Featured Events
               </h3>
-              {featuredEvents.map((event) => (
-                <FeaturedEvent key={event.title} {...event} />
-              ))}
+              <FeaturedEvent />
               <div className="flex gap-2 mt-4 text-xs font-semibold uppercase text-neutral-800 max-md:pr-5">
                   <a href="../calendar">
                     <div className="my-auto">view all</div>
@@ -109,7 +114,7 @@ export default function MyComponent() {
                   </a>
               </div>
             </section>
-            <section className="flex flex-col px-3 py-4 mt-14 w-full bg-white rounded-2xl shadow-sm max-md:mt-10">
+            <section className="flex flex-col w-full px-3 py-4 bg-white shadow-sm mt-14 rounded-2xl max-md:mt-10">
               <h3 className="text-2xl font-bold text-neutral-800">
                 Who's Online
               </h3>
@@ -148,7 +153,7 @@ export default function MyComponent() {
               <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
             </section>
             {activeTab === "bio" && (
-              <section className="flex gap-5 px-8 py-4 mt-6 w-full bg-white rounded-lg shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+              <section className="flex w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                 <div className="flex-auto my-auto max-md:max-w-full">
                   <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                     <ProfileBio
