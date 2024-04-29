@@ -3,6 +3,7 @@ import logo from '../../../public/assets/logo.png';
 import search from '../../../public/assets/search.png';
 import notification from '../../../public/assets/notification.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
+import './Reusable/css/General.css';
 
 
 // const Header = () => {
@@ -37,7 +38,8 @@ const Header = () => {
         <input
           type="text"
           placeholder="Search..."
-          className="w-full py-2 pl-12 pr-4 text-black border-none input-focus-style"
+          className="search-input"
+          style={{ paddingLeft: '3rem'}}
         />
       </div>
 

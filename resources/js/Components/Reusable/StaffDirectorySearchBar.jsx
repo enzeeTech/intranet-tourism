@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import searchIcon from '../../../../public/assets/searchStaffButton.png'; 
 import filterIcon from '../../../../public/assets/staffListButton.png'; 
 import './css/StaffDirectorySearchBar.css';
+import './css/General.css';
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,10 +19,11 @@ const SearchBar = ({ onSearch }) => {
         <div className="staff-search-bar">
             <input
                 type="text"
-                className="staff-search-input"
+                className="search-input"
                 placeholder="Search Name"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ paddingLeft: '1.2rem' }}
             />
             <button onClick={handleSearch}>
                 <img src={searchIcon} alt="Search" className="staff-search-btn-img" />

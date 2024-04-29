@@ -20,16 +20,6 @@
     margin-bottom: 5px;
 }
 
-.staff-search-input {
-    flex-grow: 1;
-    border: 2px solid #E4E4E4; 
-    border-radius: 23.5px; 
-    outline: none;
-    padding: 10px;
-    font-size: 1rem;
-    margin-right: 15px; 
-}
-
 .staff-filter-btn {
     align-items: center;
     justify-content: center;
