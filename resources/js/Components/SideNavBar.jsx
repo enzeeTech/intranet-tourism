@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Sidebar = () => {
 
@@ -12,20 +12,86 @@ const Sidebar = () => {
         { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
         { inactive: "assets/settings.png", active: "assets/settingsActive.png" },
-        { inactive: "assets/logout.png", active: "assets/logout.png" }
+        { inactive: "assets/logout.png", to: '/logout', active: "assets/logout.png" }
     ]
 
-    // State to track the active button index
     const [activeIndex, setActiveIndex] = useState(null);
+    const [csrfToken, setCsrfToken] = useState(null);
+
+    console.log('csrfToken', csrfToken)
+
+    // Fetch the CSRF token once
+    useEffect(() => {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        setCsrfToken(token);
+    }, []);
+
+
+    // Function to handle logout
+    const handleLogout = () => {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,  
+            }
+        }).then(() => {
+            window.location.href = '/'; 
+        }).catch(err => console.error(err));
+    };
+
+    // return (
+    //     <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
+    //         <nav className="flex flex-col p-4 space-y-2 ">
+    //             {buttons.map((button, i) => (
+    //                 <a href={button.to} key={i} className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} onClick={() => setActiveIndex(i)}>
+    //                     <img src={activeIndex === i ? button.active : button.inactive} alt={button.name} className="w-12 h-12 mx-auto" />
+    //                 </a>
+    //             ))}
+    //         </nav>
+    //     </aside>
+        
+    // );
 
     return (
         <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
-            <nav className="flex flex-col p-4 space-y-2 ">
-                {buttons.map((button, i) => (
-                    <a href={button.to} key={i} className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} onClick={() => setActiveIndex(i)}>
-                        <img src={activeIndex === i ? button.active : button.inactive} alt={button.name} className="w-12 h-12 mx-auto" />
-                    </a>
-                ))}
+            <nav className="flex flex-col p-4 space-y-2">
+                {buttons.map((button, i) => {
+                    if (button.to === '/logout') {
+                        return (
+                            <a
+                                href="#"
+                                key={i}
+                                className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveIndex(i);
+                                    handleLogout();
+                                }}
+                            >
+                                <img
+                                    src={activeIndex === i ? button.active : button.inactive}
+                                    alt="Logout"
+                                    className="w-12 h-12 mx-auto"
+                                />
+                            </a>
+                        );
+                    }
+
+                    return (
+                        <a
+                            href={button.to}
+                            key={i}
+                            className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`}
+                            onClick={() => setActiveIndex(i)}
+                        >
+                            <img
+                                src={activeIndex === i ? button.active : button.inactive}
+                                alt={button.name || ""}
+                                className="w-12 h-12 mx-auto"
+                            />
+                        </a>
+                        );
+                })}
             </nav>
         </aside>
     );
