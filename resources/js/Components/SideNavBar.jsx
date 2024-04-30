@@ -40,21 +40,8 @@ const Sidebar = () => {
         }).catch(err => console.error(err));
     };
 
-    // return (
-    //     <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
-    //         <nav className="flex flex-col p-4 space-y-2 ">
-    //             {buttons.map((button, i) => (
-    //                 <a href={button.to} key={i} className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} onClick={() => setActiveIndex(i)}>
-    //                     <img src={activeIndex === i ? button.active : button.inactive} alt={button.name} className="w-12 h-12 mx-auto" />
-    //                 </a>
-    //             ))}
-    //         </nav>
-    //     </aside>
-        
-    // );
-
     return (
-        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
+        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0">
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => {
                     if (button.to === '/logout') {
