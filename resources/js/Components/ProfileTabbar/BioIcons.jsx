@@ -81,11 +81,11 @@ function ProfileIcons({ icon1, icon2 }) {
               <div className="flex justify-between -mt-1 relative">
                 <hr className="absolute -top-3 w-full border-t border-gray-300" />
                   <button onClick={handleDownload} className="text-white px-24 py-2 rounded-md">
-                    <img src="assets/DownloadIcon.png" alt="Download Icon" className="w-24 h-7" />
+                    <img src="assets/DownloadIcon.png" alt="Download Icon" className="" />
                   </button>
                 <hr className="absolute top-0 right-52 h-full border-l border-gray-300" />
                   <button onClick={handleCopyLink} className="text-white px-24 py-2 rounded-md">
-                    <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-24 h-7" />
+                    <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="" />
                   </button>
               </div>
             </div>
