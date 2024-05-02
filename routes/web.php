@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\StaffDirectoryController;
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/calendar/event/{id}', [CalendarController::class, 'updateEvent'])->name('calendar.update');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
+    Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
 });
 
 require __DIR__ . '/auth.php';
