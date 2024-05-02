@@ -14,3 +14,9 @@
     border-radius: 1.5rem; 
     box-shadow: none; 
   }
+
+/* For the 'File' and 'Date' columns */
+.th-file, .td-file, .th-date, .td-date {
+  border: 2px solid #3182ce; /* Tailwind blue-500 */
+}
+    

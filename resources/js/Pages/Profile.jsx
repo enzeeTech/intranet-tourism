@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ProfileHeader, ProfileNav, Popup, OnlinePerson } from "@/Components/Profile";
-import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "@/Components/ProfileTabbar"
+import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar"
 import { FeaturedEvent } from "@/Components/SideCalendar";
 
 
@@ -168,11 +168,14 @@ export default function MyComponent() {
               <ProfileGallery photoData={photoData} videoData={videoData} />
             )}
             {activeTab === "files" && (
+              <div>
               <div className="flex gap-4 whitespace-nowrap">
-                <SearchInput />
-                <SearchButton />
+                  <SearchInput />
+                  <SearchButton />
               </div>
-            )}
+                <Table />
+              </div>
+              )}
           </div>
         </main>
       </div>
