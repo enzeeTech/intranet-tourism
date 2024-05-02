@@ -7,6 +7,7 @@ import { ProfileHeader, ProfileNav, Popup, } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "@/Components/ProfileTabbar";
 
 
+
 export default function MyComponent() {
 
   const [activeTab, setActiveTab] = React.useState("activities");
@@ -112,11 +113,14 @@ export default function MyComponent() {
               <ProfileGallery photoData={photoData} videoData={videoData} />
             )}
             {activeTab === "files" && (
+              <div>
               <div className="flex gap-4 whitespace-nowrap">
-                <SearchInput />
-                <SearchButton />
+                  <SearchInput />
+                  <SearchButton />
               </div>
-            )}
+                <Table />
+              </div>
+              )}
           </div>
         </main>
     </div>
