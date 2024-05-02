@@ -1,0 +1,65 @@
+.deactivate-modal-backdrop {
+    position: fixed;
+    /* Cover the entire viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* This will blur the background */
+    backdrop-filter: blur(5px);
+  }
+  
+  .deactivate-modal {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px; /* Adjust width as needed */
+    text-align: center;
+    position: relative; /* For positioning the close button */
+  }
+  
+  .modal-content {
+    margin-bottom: 10px;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .confirm-button{
+    width: 30%;
+    height: 35px;
+    margin-right: 20px;
+    border-radius: 16.5px;
+    background-color: #4880FF;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    width: 30%;
+    height: 35px;
+    border-radius: 16.5px;
+    border-width: 1px;
+    cursor: pointer;
+    background-color: transparent;
+    color: #979797;
+  }
+  
+  .close-modal-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  
