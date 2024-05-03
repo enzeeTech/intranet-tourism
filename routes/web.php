@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\departments;
 use App\Http\Controllers\StaffDirectoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+    Route::get('/departments', [departments::class, 'index'])->name('Departments');
 });
 
 require __DIR__ . '/auth.php';

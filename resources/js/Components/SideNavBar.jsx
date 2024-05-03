@@ -7,7 +7,7 @@ const Sidebar = () => {
         { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png" },
         { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png" },
         { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png" },
-        { inactive: "assets/departments.png", active: "assets/departmentsActive.png" },
+        { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png" },
         { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png" },
         { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
