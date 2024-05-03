@@ -7,8 +7,8 @@ const Sidebar = () => {
         { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png" },
         { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png" },
         { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png" },
-        { inactive: "assets/departments.png", active: "assets/departmentsActive.png" },
-        { inactive: "assets/groups.png", active: "assets/groupsActive.png" },
+        { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png" },
+        { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png" },
         { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
         { inactive: "assets/settings.png", active: "assets/settingsActive.png" },
@@ -40,21 +40,8 @@ const Sidebar = () => {
         }).catch(err => console.error(err));
     };
 
-    // return (
-    //     <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
-    //         <nav className="flex flex-col p-4 space-y-2 ">
-    //             {buttons.map((button, i) => (
-    //                 <a href={button.to} key={i} className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`} onClick={() => setActiveIndex(i)}>
-    //                     <img src={activeIndex === i ? button.active : button.inactive} alt={button.name} className="w-12 h-12 mx-auto" />
-    //                 </a>
-    //             ))}
-    //         </nav>
-    //     </aside>
-        
-    // );
-
     return (
-        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30">
+        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0">
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => {
                     if (button.to === '/logout') {

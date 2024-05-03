@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\departments;
 use App\Http\Controllers\StaffDirectoryController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
+    Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+    Route::get('/departments', [departments::class, 'index'])->name('Departments');
 });
 
 require __DIR__ . '/auth.php';

@@ -5,10 +5,11 @@ import logo from '../../../public/assets/logo.png';
 import search from '../../../public/assets/search.png';
 import notification from '../../../public/assets/notification.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
+import './Reusable/css/General.css';
 
 const Header = () => {
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md">
+    <header className="flex items-center justify-between p-4 bg-white shadow-md sticky top-0 z-50">
       <img src={logo} alt="Logo" className="h-12 ml-8" />
 
       <div className="relative flex items-center flex-grow mx-8">
