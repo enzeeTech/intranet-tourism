@@ -82,9 +82,10 @@ const Notification = () => {
   return (
     // <Layout>
     <div className="flex flex-col px-5 mx-auto max-w-[940px]">
-      <h1 className="w-full text-3xl font-bold text-neutral-800 max-md:max-w-full">
+      <h1 className="w-full text-3xl font-bold text-neutral-800 max-md:max-w-full mt-6 mb-2">
         My Notifications
       </h1>
+      <div className='w-1/3 border-b-2'></div>
       <section className="flex gap-5 justify-between self-end pt-7 pr-2 pl-7 mt-4 max-w-full bg-white rounded-xl shadow-2xl w-[735px] max-md:flex-wrap max-md:pl-5">
         <div className="flex flex-col pb-5">
           <h2 className="text-2xl font-extrabold text-neutral-800">
@@ -94,9 +95,11 @@ const Notification = () => {
             <a href="http://localhost:8000/notification">All</a>
             <a href="#" className="underline">Unread</a>
           </nav>
-          {notificationData.map((notification, index) => (
-            <NotificationItem key={index} {...notification} />
-          ))}
+          <div>
+            {notificationData.map((notification, index) => (
+              <NotificationItem key={index} {...notification} />
+            ))}
+          </div>
         </div>
       </section>
     </div>
