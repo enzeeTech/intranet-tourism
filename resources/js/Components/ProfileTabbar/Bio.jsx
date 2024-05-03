@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ProfileBio({ email, department, position, grade, location, phone }) {
+function ProfileBio({ email, department, position, grade, location, phone, whatsapp }) {
     return (
       <div className="flex-auto my-auto max-md:max-w-full">
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -11,7 +11,8 @@ function ProfileBio({ email, department, position, grade, location, phone }) {
               <div className="mt-8">position</div>
               <div className="mt-7">grade</div>
               <div className="mt-7">location</div>
-              <div className="mt-7">mob/Ext number</div>
+              <div className="mt-7">office number</div>
+              <div className="mt-7">whatsapp me at</div>
             </div>
           </div>
           <div className="flex flex-col ml-5 w-[64%] max-md:ml-0 max-md:w-full">
@@ -22,6 +23,7 @@ function ProfileBio({ email, department, position, grade, location, phone }) {
               <div className="mt-8">{grade}</div>
               <div className="mt-8">{location}</div>
               <div className="mt-8">{phone}</div>
+              <div className="mt-8">{whatsapp}</div>
             </div>
           </div>
         </div>

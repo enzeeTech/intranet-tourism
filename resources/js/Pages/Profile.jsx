@@ -22,7 +22,8 @@ export default function MyComponent() {
         position: "Tetap",
         grade: "N11",
         location: "Tingkat 18",
-        phone: "+601140734567 / 8094",
+        phone: "+0388918094",
+        whatsapp: "+60 14 971 8736",
         icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       };
@@ -102,6 +103,7 @@ export default function MyComponent() {
                       grade={profileData.grade}
                       location={profileData.location}
                       phone={profileData.phone}
+                      whatsapp={profileData.whatsapp}
                     />
                     <ProfileIcons icon1={profileData.icon1} icon2={profileData.icon2} />
                   </div>
