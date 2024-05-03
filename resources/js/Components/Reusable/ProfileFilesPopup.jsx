@@ -28,6 +28,17 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
         };
     };
 
+    const handleDelete = () => {
+        console.log("Delete button clicked");
+        // Here, you would typically call a function to handle the actual delete operation.
+    };
+    
+    // Define the onClick handler for downloading an item
+    const handleDownload = () => {
+        console.log("Download button clicked");
+        // Here, you would typically call a function to handle the actual download operation.
+    };
+
     return (
         <div>
             <button
@@ -39,34 +50,45 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
             </button>
             {isThreeDotPopupOpen && (
                 <div className="profile-files-popup">
-                <div
-                    className="staff-member-popup2"
-                    style={{
-                        top: `${getPopupPosition().top}px`,
-                        left: `${getPopupPosition().left}px`,
-                        position: 'absolute',
-                        zIndex: 999, // Ensure it's above other elements
-                    }}
-                >
-                    <img src="assets/🦆 icon _image_.png" alt={name} className="staff-member-popup-image" />
-                    <p className="text-neutral-500 pr-11 -ml-1.5">Delete</p>
+                    <div
+                        className="staff-member-popup2"
+                        style={{
+                            top: `${getPopupPosition().top}px`,
+                            left: `${getPopupPosition().left}px`,
+                            position: 'absolute',
+                            zIndex: 999, // Ensure it's above other elements
+                        }}
+                    >
+                        <img src="assets/🦆 icon _image_.png" alt={name} className="staff-member-popup-image" />
+                        <button
+                            className="text-neutral-500 pr-11 -ml-1.5"
+                            onClick={handleDelete}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                    <div
+                        className="staff-member-popup3"
+                        style={{
+                            top: '34px',
+                            left: `${getPopupPosition().left}px`,
+                            position: 'absolute',
+                            zIndex: 999, // Ensure it's above other elements
+                        }}
+                    >
+                        <img src="assets/🦆 icon _lock_.png" alt={name} className="staff-member-popup-image" />
+                        <button
+                            className="text-neutral-500 pr-4 -ml-1.5"
+                            onClick={handleDownload}
+                        >
+                            Download
+                        </button>
+                    </div>
                 </div>
-                <div
-                className="staff-member-popup3"
-                style={{
-                    top: '34px',
-                    left: `${getPopupPosition().left}px`,
-                    position: 'absolute',
-                    zIndex: 999, // Ensure it's above other elements
-                }}
-            >
-                <img src="assets/🦆 icon _lock_.png" alt={name} className="staff-member-popup-image" />
-                <p className="text-neutral-500 pr-4 -ml-1.5">Download</p>
-            </div>
-            </div>
             )}
         </div>
     );
+    
 };
 
 export default PopupContent;
