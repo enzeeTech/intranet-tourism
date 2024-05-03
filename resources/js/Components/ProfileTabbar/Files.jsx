@@ -28,6 +28,7 @@ function SearchButton() {
   );
 }
 
+
 const people = [
   { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
   { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023' , Author: 'by Musa' },
@@ -65,29 +66,34 @@ export default function Table() {
 
 
   return (
-    <div className="w-3/4 px-4 sm:px-6 lg:px-0">
+    <div className="ml-8 w-3/4 px-4 sm:px-6 lg:px-0">
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 shadow-lg">
             <table className="min-w-full">
               <thead>
                 <tr>
                   <th scope="col" className="rounded-2xl bg-blue-200 py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">
                     Name
                   </th>
-                  <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-3 shadow-lg">
-                    File
+                  <th scope="col" className="rounded-2xl bg-blue-200 px- py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">
+                    <div className="flex justify-center">
+                      <img src="assets/File.png" alt="File" className="File" />
+                    </div>
                   </th>
                   <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-3 shadow-lg">
                     Size
                   </th>
-                  <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-3 shadow-lg">
-                    Date
+                  <th scope="col" className="rounded-2xl bg-blue-200 px- py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">
+                    <div className="flex justify-center">
+                      <img src="assets/FileTableCalendar.png" alt="File" className="File" />
+                    </div>
                   </th>
-                  <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-3 shadow-lg">
-                    Author
+                  <th scope="col" className="rounded-2xl bg-blue-200 px- py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">
+                    <div className="flex justify-center">
+                      <img src="assets/Author.png" alt="File" className="File" />
+                    </div>
                   </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pl-3 hover:bg-gray-200">
+                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pl-3">
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
@@ -101,8 +107,8 @@ export default function Table() {
                     <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.File}</td>
                     <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Size}</td>
                     <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Date}</td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Author}</td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"><PopupContent /></td>
+                    <td className="border-b border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Author}</td>
+                    <td className="flex relative mt-3.5"><PopupContent /></td>
                   </tr>
                 ))}
               </tbody>
@@ -118,7 +124,6 @@ export default function Table() {
                 </button>
               ))}
             </div>
-          </div>
         </div>
       </div>
     </div>

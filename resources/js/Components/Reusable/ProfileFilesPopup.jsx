@@ -23,8 +23,8 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
     const getPopupPosition = () => {
         // const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
         return {
-            top: 10,
-            left: 100, // Add an offset to position it to the right of the button
+            top: -7,
+            left: 75, // Add an offset to position it to the right of the button
         };
     };
 
@@ -38,8 +38,9 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" />
             </button>
             {isThreeDotPopupOpen && (
+                <div className="profile-files-popup">
                 <div
-                    className="staff-member-popup"
+                    className="staff-member-popup2"
                     style={{
                         top: `${getPopupPosition().top}px`,
                         left: `${getPopupPosition().left}px`,
@@ -47,9 +48,22 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                         zIndex: 999, // Ensure it's above other elements
                     }}
                 >
-                    <img src={deactivateButton} alt={name} className="staff-member-popup-image" />
-                    <p className="staff-member-popup-text">Deactivate</p>
+                    <img src="assets/🦆 icon _image_.png" alt={name} className="staff-member-popup-image" />
+                    <p className="text-neutral-500 pr-11 -ml-1.5">Delete</p>
                 </div>
+                <div
+                className="staff-member-popup3"
+                style={{
+                    top: '34px',
+                    left: `${getPopupPosition().left}px`,
+                    position: 'absolute',
+                    zIndex: 999, // Ensure it's above other elements
+                }}
+            >
+                <img src="assets/🦆 icon _lock_.png" alt={name} className="staff-member-popup-image" />
+                <p className="text-neutral-500 pr-4 -ml-1.5">Download</p>
+            </div>
+            </div>
             )}
         </div>
     );
