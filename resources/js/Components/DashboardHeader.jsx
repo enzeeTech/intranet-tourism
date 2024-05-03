@@ -180,8 +180,9 @@ const Header = () => {
         <table>
           <tr>
             <td>
+              <a href='../profile'>
               <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
-
+              </a>
             </td>
             <td>
               <span className="mr-2 font-semibold">Username</span>
