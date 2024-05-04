@@ -43,7 +43,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         < div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
         {isPopupOpen && (
-          <PhotoAndAvatarPopup />
+          <PhotoAndAvatarPopup onClick={closePopup}/>
         )}
         </div>
         <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
