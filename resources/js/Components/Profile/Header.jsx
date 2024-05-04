@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PhotoAndAvatarPopup from './PhotoAndAvatarPopup';
 
 function ProfileImage({ src, alt, className }) {
     return (
@@ -10,19 +10,42 @@ function ProfileImage({ src, alt, className }) {
     );
 }
 
-
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner }) {
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    console.log("bukak");
+  };
+  
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    console.log("tutup");
+  };
+
     const handleEditBanner = (e) => {
       e.stopPropagation(); // Prevents the click event from propagating to parent elements
       onEditBanner(); // Calls the onEditBanner function when the background image is clicked
     };
+    const handleIconClick = (e) => {
+      console.log("tekan");
+      e.stopPropagation();
+      openPopup();
+
+        };
     return (
       <header
         className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
         onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
+        < div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
+        {isPopupOpen && (
+          <PhotoAndAvatarPopup />
+        )}
+        </div>
         <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
           <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
           <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>
