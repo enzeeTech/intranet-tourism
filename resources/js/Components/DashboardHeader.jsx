@@ -7,6 +7,7 @@ import notification from '../../../public/assets/notification.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
 import './Reusable/css/General.css';
 
+
 const Header = () => {
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md sticky top-0 z-50">
@@ -170,7 +171,7 @@ const Header = () => {
             <div className="flex flex-row w-full h-10"></div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             View All
-          </button>
+        </button>
                 </form>
               </div>
             </Menu.Items>
@@ -180,11 +181,11 @@ const Header = () => {
         <table>
           <tr>
             <td>
-              <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
+        <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
 
             </td>
             <td>
-              <span className="mr-2 font-semibold">Username</span>
+        <span className="mr-2 font-semibold">Username</span>
             </td>
           </tr>
         </table>

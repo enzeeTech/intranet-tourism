@@ -10,9 +10,10 @@ const NotificationItem = ({
   notiView,
 }) => {
   return (
-    <div>
-    {notiView === 1 && (
-      <div className='grid grid-rows-3 grid-flow-col'>
+<div>
+  {notiView === 1 && (
+    <a href="#" className="mt-2 text-xs text-blue-500 ">
+      <div className='grid grid-rows-2 grid-flow-col hover:bg-gray-200 pl-6 pr-6'>
         <div className='row-span-2'>
           <div className="flex gap-3 py-5">
             <img src={imageSrc} alt="" className="shrink-0 aspect-square w-[68px]" />
@@ -21,23 +22,20 @@ const NotificationItem = ({
                 {message}
                 <span className="font-extrabold">Approved</span>!
               </p>
-              <a href="#" className="mt-2 text-xs text-blue-500 underline">
-                {linkText}
-              </a>
               <time className="mt-4 text-xs font-medium text-neutral-800 text-opacity-50">
                 {timeAgo}
               </time>
             </div>
           </div>
         </div>
-      
-        <div className='row-span-2 col-span-2 place-self-center px-2'>
-            <img src={icon_noti_orange} alt="" className=" " />
+        <div className='row-span-2 col-span-2 flex items-center justify-end px-2'>
+          <img src={icon_noti_orange} alt="icon notification orange" />
         </div>
       </div>
-    )}
-    </div>
-  );
+    </a>
+  )}
+</div>
+);
 };
 //notiView = 1 = read | notiView = 0 = unread
 const notificationData = [
@@ -86,12 +84,12 @@ const Notification = () => {
         My Notifications
       </h1>
       <div className='w-1/3 border-b-2'></div>
-      <section className="flex gap-5 justify-between self-end pt-7 pr-2 pl-7 mt-4 max-w-full bg-white rounded-xl shadow-2xl w-[735px] max-md:flex-wrap max-md:pl-5">
+      <section className="flex gap-5 justify-between self-end pt-7 pr-0 pl-0 mt-4 max-w-full bg-white rounded-xl shadow-2xl w-[735px] max-md:flex-wrap max-md">
         <div className="flex flex-col pb-5">
-          <h2 className="text-2xl font-extrabold text-neutral-800">
+          <h2 className="text-2xl font-extrabold text-neutral-800 pl-6 pr-6">
             Notifications
           </h2>
-          <nav className="flex gap-5 justify-between self-start pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
+          <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
             <a href="http://localhost:8000/notification">All</a>
             <a href="#" className="underline">Unread</a>
           </nav>
