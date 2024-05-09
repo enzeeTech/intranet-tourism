@@ -10,7 +10,7 @@ import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
 
-const StaffMemberCard = ({ name, role, status, imageUrl, onDeactivateClick }) => {
+const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
 
     const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
     const threeDotButtonRef = useRef(null);
