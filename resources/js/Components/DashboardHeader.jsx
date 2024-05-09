@@ -6,13 +6,17 @@ import search from '../../../public/assets/search.png';
 import notification from '../../../public/assets/notification.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
 import './Reusable/css/General.css';
+import NotificationPopup from '../Components/Noti-popup-test';
+// import styles from './styles.css';
+
 
 
 const Header = () => {
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md sticky top-0 z-50">
-      <img src={logo} alt="Logo" className="h-12 ml-8" />
 
+
+       <a href= '../dashboard'><img src={logo}   alt="Logo" className="h-12 ml-8" /> </a>
       <div className="relative flex items-center flex-grow mx-8">
         <img src={search} alt="Search" className="absolute w-6 h-6 transform -translate-y-1/2 left-3 top-1/2" />
         <input
@@ -27,10 +31,12 @@ const Header = () => {
 
       <div className="flex items-center">
         <Menu as="div" className="relative inline-block text-left">
-          <div>
-            <Menu.Button className="focus:outline-none relative">
-              <img src={notification} alt="Notification" className="w-5 h-6 mr-1  " />
-              <div className="absolute top-0 left-0 w-10 h-10 bg-black opacity-0 transition duration-300 ease-in-out hover:opacity-5 rounded-sm  "></div>
+          <div >
+            <Menu.Button className="focus:outline-none hover:underline relative ">
+            <img src={notification} alt="Notification" className="w-5 h-6 mr-1" />
+              <div className="absolute top-0 left-0 w-10 h-10 opacity-0 transition duration-300 ease-in-out rounded-sm ">
+
+              </div>
             </Menu.Button>
           </div>
           <Transition
@@ -42,138 +48,38 @@ const Header = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-96  max-h-96 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="py-4 px-4 ">
+            <Menu.Items className="absolute right-0 z-10 mt-2 w-96  max-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="">
+             
+                <Menu.Items>
+                  <NotificationPopup />
+                </Menu.Items>
 
-              <Menu.Item>
-              {({ active }) => (
-                <div className="flex items-center bg-gray">
-
-              <div className=" relative"><img src={profileDummy} alt="Image" className="h-14 w-14 mr-2" />
-                     <img src={profileDummy} alt="Additional Image" className="absolute h-5 w-5 bottom-2 left-10 " />
-                </div>
-                <div className="flex-col">
-                  {/* Add an additional image here */}
-                  <a
-                    href="#"
-                    className={`block px-2 py-1 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                  >
-                    Thomas requested to join a group!
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-500"> Check The Request</span>
-                      <span className="text-xs text-gray-500">10 min ago</span>
-                    </div> 
-                  </a>
-                </div>
-              </div>
-              
-               
-               
-              )}
-            </Menu.Item>
-
-
-            <Menu.Item>
-              {({ active }) => (
-          <div className="flex items-center bg-gray">
-              <div className=" relative"><img src={profileDummy} alt="Image" className="h-14 w-14 mr-2" />
-                     <img src={profileDummy} alt="Additional Image" className="absolute h-5 w-5 bottom-2 left-10 " />
-                    </div>
-          <div className="flex-col">
-            <a
-              href="#"
-              className={`block px-2 py-1 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-            >
-              Lepp requested to join a group!
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500"> Check The Request</span>
-                <span className="text-xs text-gray-500">10 min ago</span>
-              </div> 
+            <div className="flex flex-row w-full h-10 hover:bg-gray-200 ">  
+            <a href="http://127.0.0.1:8000/notification" className="flex items-center w-full bg-white-500  text-black font-bold py-2 px-4 rounded">
+              View All
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-4 w-6 ml-4">
+                <path d="M1 6H8" stroke="#222222" strokeLinecap="round"/>
+                <path d="M11.7941 5.84152C11.8981 5.92158 11.8981 6.07842 11.7941 6.15848L10.072 7.48418C9.94049 7.58542 9.75 7.49166 9.75 7.32569L9.75 4.6743C9.75 4.50834 9.94049 4.41458 10.072 4.51582L11.7941 5.84152Z" fill="#222222"/>
+                <path fillRule="evenodd" clipRule="evenodd" d="M15 6C15 8.76142 12.7614 11 9.99999 11C8.46035 11 7.08325 10.3041 6.16606 9.2097C6.05778 9.08051 5.90044 9 5.73188 9C5.31911 9 5.069 9.44402 5.32822 9.76525C6.42809 11.1282 8.11223 12 9.99999 12C13.3137 12 16 9.31371 16 6C16 2.68629 13.3137 0 9.99999 0C8.11223 0 6.42809 0.871801 5.32822 2.23475C5.069 2.55598 5.31911 3 5.73188 3C5.90044 3 6.05779 2.91949 6.16606 2.7903C7.08325 1.69589 8.46035 1 9.99999 1C12.7614 1 15 3.23858 15 6Z" fill="#222222"/>
+              </svg>
             </a>
+
+            </div>
+
+                {/*TESST*/}
+            {/* <div className="flex flex-row w-full h-10 ">
+              <a href="http://127.0.0.1:8000/notipopup" className=" flex items-center bg-white-500 hover:bg-gray-200 text-black font-bold py-2 px-4 rounded ">      
+
+            TEST<img src={"http://127.0.0.1:5173/public/assets/view-all-icon.png"} alt="Additional Image" className=" h-4 w-6 ml-4" />
+
+
+              </a>
+            </div> */}
+                {/* </form> */}
           </div>
-        </div>
-        
-               
-              )}
-            </Menu.Item>  
-            <Menu.Item>
-              {({ active }) => (
-          <div className="flex items-center bg-gray">
 
-                  <div className=" relative"><img src={profileDummy} alt="Image" className="h-14 w-14 mr-2" />
-                     <img src="http://127.0.0.1:5173/public/assets/comment.png" alt="Comment Image" className="absolute h-5 w-5 bottom-2 left-10 " />
-                    </div>  
-                   <div className="flex-col">
-                     {/* Add an additional image here */}
-                     <a
-                       href="#"
-                       className={`block px-2 py-1 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                     >
-                       Wan requested to join a group!
-                       <div className="flex flex-col">
-                         <span className="text-xs text-gray-500"> Check The Request</span>
-                         <span className="text-xs text-gray-500">10 min ago</span>
-                       </div> 
-                     </a>
-                   </div>
-                 </div>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                   <div className="flex items-center bg-gray">
-
-                  <div className=" relative"><img src={profileDummy} alt="Image" className="h-14 w-14 mr-2" />
-                     <img src={profileDummy} alt="Additional Image" className="absolute h-5 w-5 bottom-2 left-10 " />
-                    </div>
-                   <div className="flex-col">
-                     {/* Add an additional image here */}
-                     <a
-                       href="#"
-                       className={`block px-2 py-1 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                     >
-                       Lee requested to join a group!
-                       <div className="flex flex-col">
-                         <span className="text-xs text-gray-500"> Check The Request</span>
-                         <span className="text-xs text-gray-500">10 min ago</span>
-                       </div> 
-                     </a>
-                   </div>
-                 </div>
-               
-              )}
-            </Menu.Item>
-                <form method="POST" action="#">
-                <Menu.Item>
-              {({ active }) => (
-                   <div className="flex items-center bg-gray">
-
-                    <div className=" relative"><img src={profileDummy} alt="Image" className="h-14 w-14 mr-2" />
-                     <img src={profileDummy} alt="Additional Image" className="absolute h-5 w-5 bottom-2 left-10 " />
-                    </div>
-                   <div className="flex-col">
-                     {/* Add an additional image here */}
-                     <a
-                       href="#"
-                       className={`block px-2 py-1 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
-                     >
-                       Brendo requested to join a group!
-                       <div className="flex flex-col">
-                         <span className="text-xs text-gray-500"> Check The Request</span>
-                         <span className="text-xs text-gray-500">10 min ago</span>
-                       </div> 
-                     </a>
-                   </div>
-                   
-                 </div>
-              )}
-            </Menu.Item>
-            <div className="flex flex-row w-full h-10"></div>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            View All
-        </button>
-                </form>
-              </div>
+          
             </Menu.Items>
           </Transition>
         </Menu>
@@ -181,8 +87,9 @@ const Header = () => {
         <table>
           <tr>
             <td>
-        <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
-
+              <a href='../profile'>
+                <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
+              </a>
             </td>
             <td>
         <span className="mr-2 font-semibold">Username</span>

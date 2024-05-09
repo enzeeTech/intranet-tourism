@@ -5,6 +5,8 @@ import icon_noti_orange from '../../../public/assets/icon/notification/Ellipse-o
 const NotificationItem = ({
   imageSrc,
   message,
+  users,
+  miniIcon,
   // linkText,
   timeAgo,
   notiView,
@@ -12,12 +14,23 @@ const NotificationItem = ({
   return (
     <div className="w-full">
       <a href="#" className="block mt-2 text-xs text-blue-500">
-        <div className="flex items-center gap-3 p-6 hover:bg-gray-200 w-full">
-          <img src={imageSrc} alt="" className="shrink-0 aspect-square w-[68px]" />
+        <div className="flex items-center gap-3 p-6 hover:bg-blue-100 w-full">
+
+        <div className="flex items-center bg-gray h-16 relative">
+          <img src={imageSrc} alt="Background Image" className=" aspect-square w-[68px] rounded-full" />
+            <img src={miniIcon} alt="Overlay Image" className="absolute h-5 w-5  left-12 mt-14" />
+        </div>
+
           <div className="flex flex-col grow my-auto">
-            <p className="text-sm font-bold text-neutral-800">
+
+          <p className="text-sm text-neutral-800"><strong>
+              {users}</strong>
+              <span className=""> &nbsp; &nbsp; Approved</span>!
+            </p>
+
+            <p className="text-sm text-neutral-800">
               {message}
-              <span className="font-extrabold">Approved</span>!
+              <span>Approved</span>!
             </p>
             <time className="mt-4 text-xs font-medium text-neutral-800 text-opacity-50">
               {timeAgo}
@@ -37,8 +50,10 @@ const NotificationItem = ({
 //notiView = 1 = read | notiView = 0 = unread
 const notificationData = [
   {
-    imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
+    imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
     message: "Your request to change the Organisational chart picture was 1",
+    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
+    users: "ACAPAN",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -46,6 +61,8 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 2 ",
+    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
+    users: "ACAPAN",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -53,6 +70,8 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 3 ",
+    miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
+    users: "ACAPAN",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -60,13 +79,17 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 4 ",
+    miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
+    users: "ACAPAN",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 1,
   },
   {
-    imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
+    imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
     message: "Your request to change the Organisational chart picture was 5 ",
+    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
+    users: "ACAPAN",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 1,
@@ -77,7 +100,7 @@ const Notification = () => {
   return (
     // <Layout>
     <div className="flex flex-col px-5 mx-auto max-w-[940px]">
-      <h1 className="w-full text-3xl font-bold text-neutral-800 max-md:max-w-full mt-6 mb-2">
+      <h1 className="w-full text-3xl font-bold text-neutral-800 mt-6 mb-2">
         My Notifications
       </h1>
       <div className='w-1/3 border-b-2'></div>
@@ -88,7 +111,10 @@ const Notification = () => {
           </h2>
           <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
             <a href="#" className="underline">All</a>
-            <a href="http://localhost:8000/notification-unread" >Unread</a>
+            <a href="http://localhost:8000/notification-unread" className='text-gray-500 relative '>
+              Unread
+              <span className="absolute h-2 w-2 bg-blue-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+            </a>
           </nav>
           <div>
             {notificationData.map((notification, index) => (
@@ -102,4 +128,4 @@ const Notification = () => {
   );
 }
 
-export default Notification;
+export default Notification;

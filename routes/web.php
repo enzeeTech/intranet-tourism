@@ -42,9 +42,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
+    Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
+    Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
+
 });
 
 require __DIR__ . '/auth.php';
