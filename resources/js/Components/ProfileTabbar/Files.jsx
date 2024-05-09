@@ -23,7 +23,6 @@ function SearchButton() {
   <button className="justify-center px-5 py-1.5 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-10">
     Search
   </button>
-
   );
 }
 

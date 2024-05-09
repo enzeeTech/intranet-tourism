@@ -4,7 +4,7 @@ import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedE
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup, } from "@/Components/Profile";
-import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 
 
 
@@ -56,7 +56,7 @@ export default function MyComponent() {
 
 
   return (
-    <div className="staff-directory">
+    <div className="staff-directory bg-gray-200">
       {isPopupOpen && (
         <Popup
           title="Edit Banner Photo"
