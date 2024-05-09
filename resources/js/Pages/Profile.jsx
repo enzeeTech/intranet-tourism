@@ -7,6 +7,7 @@ import { ProfileHeader, ProfileNav, Popup, } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 
 
+
 export default function MyComponent() {
 
   const [activeTab, setActiveTab] = React.useState("activities");
@@ -22,8 +23,8 @@ export default function MyComponent() {
         position: "Tetap",
         grade: "N11",
         location: "Tingkat 18",
-        phone: "+0388918094",
-        whatsapp: "+60 14 971 8736",
+        phone: "+03 8891 8094",
+        whatsapp: "+6014 971 8736",
         icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       };

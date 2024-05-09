@@ -67,7 +67,7 @@ function ProfileIcons({ icon1, icon2 }) {
         <img
           src={icon2}
           alt=""
-          className="self-center mt-36 aspect-square w-[38px] max-md:mt-10 cursor-pointer"
+          className="self-center mt-36 aspect-square w-[30px] max-md:mt-10 cursor-pointer"
           onClick={handleIconClick}
         />
         {isPopupOpen && (

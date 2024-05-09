@@ -111,3 +111,45 @@
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+.search-input {
+  display: flex;
+  width: 100%;
+  padding: 8px;
+  border-radius: 999px;
+  background: white;
+  align-items: center;
+}
+
+.search-icon {
+  width: 24px;
+  margin-right: 8px;
+}
+
+.search-box {
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: blue;
+  color: white;
+  border-radius: 20px;
+}
+
+.table-container {
+  margin: 8px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (max-width: 600px) {
+  .search-button, .search-input, .page-button {
+    font-size: 14px;
+  }
+}
