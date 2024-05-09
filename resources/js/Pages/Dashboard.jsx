@@ -5,6 +5,9 @@ import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import Layout from '../Layouts/DashboardLayout';
 import { Stories, Birthday } from '@/Components/Dashboard';
+import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
+import { Filter } from '@/Components/Reusable/WallPosting';
+import MyComponent from './Departments';
 
 const Dashboard = () => {
 
@@ -31,6 +34,12 @@ const Dashboard = () => {
               <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full ml-16">
                 <Stories />
                 {/* <Birthday /> */}
+                {/* <div className="featured-events-container"> */}
+                <ShareYourThoughts />
+                <Filter />
+                {/* </div> */}
+                <div className="mb-20"></div>
+                <MyComponent />
               </section>
             </div>
           </main>
