@@ -74,7 +74,7 @@ function ProfileIcons({ icon1, icon2 }) {
           <div className="fixed inset-0 flex items-center justify-center bg--800 bg-opacity-50 z-50" onClick={closePopup}>
             <div className="bg-white p-2 rounded-3xl shadow-lg max-w-md" onClick={(e) => e.stopPropagation()}>
               <img
-                src="assets/hehe.png"
+                src="assets/qrAcap.jpg"
                 alt="QR Code"
                 className="mx-auto mt-4"
               />
