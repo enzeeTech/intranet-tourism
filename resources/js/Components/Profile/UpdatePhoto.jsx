@@ -4,7 +4,7 @@ import RequestSentMessage from './RequestAdmin';
 const PhotoButton = ({ type, text, onClick }) => {
   const className = type === "primary"
     ? "justify-center px-7 py-3 bg-blue-500 text-white rounded-2xl"
-    : "justify-center px-8 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400";
+    : "justify-center px-7 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400";
 
   return (
     <button className={className} onClick={onClick}>
@@ -29,7 +29,7 @@ function UpdatePhotoButton({ onClose }) {
       console.log("Action completed, closing all popups");
       setIsPopupOpen(false); // Close the RequestSentMessage popup
       onClose(e); // Close the main popup
-    }, 2000); // Set timeout for 3000 ms or adjust based on actual needs
+    }, 20000); // Set timeout for 3000 ms or adjust based on actual needs
 
   };
 
@@ -42,15 +42,15 @@ function UpdatePhotoButton({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col px-2.5 py-3.5 font-bold text-center bg-white rounded-xl shadow-lg w-[380px]">
+        <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-xl shadow-lg w-[380px]">
           <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff" 
                alt="Close icon" 
-               className="self-end w-6 aspect-square cursor-pointer" 
+               className="self-end w-6 my-2 aspect-square cursor-pointer" 
                onClick={handleCloseClick} 
           />
           <div className="flex flex-col pr-2.5 pl-2 w-full">
             <h2 className="text-xl text-neutral-800">Update Photo to Staff Directory?</h2>
-            <div className="flex gap-4 self-center mt-4">
+            <div className="flex gap-4 self-center my-5">
               <PhotoButton type="primary" text="Yes" onClick={handleIconClick} />
               <PhotoButton type="secondary" text="No" onClick={handleCloseClick} />
             </div>

@@ -12,7 +12,7 @@ function IconButton({ icon, alt, onClick }) {
 
 function ListItem({ icon, alt, text, onClick }) {
   return (
-    <div className="flex gap-5 mt-2 cursor-pointer" onClick={onClick}>
+    <div className="flex gap-5 my-2 cursor-pointer" onClick={onClick}>
       <img src={icon} alt={alt} className="shrink-0 aspect-square w-[27px]" />
       <div className="flex-auto my-auto">{text}</div>
     </div>
