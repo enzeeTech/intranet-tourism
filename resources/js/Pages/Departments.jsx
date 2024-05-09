@@ -30,6 +30,7 @@ function MyComponent() {
   ];
 
   return (
+    <div className="input-box-container" style={{ height: "230px", marginTop: "-10px" }}>
     <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
       <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
         <div className="flex gap-1 mt-2">
@@ -49,6 +50,7 @@ function MyComponent() {
       <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">@Ben is tagged</p>
       <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/43a67f09e9b89eea063b1d9366edb8440d017120e345e0655e5821a7ff627b95?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&" alt="" className="mt-2.5 aspect-[3.85] w-[66px]" />
     </article>
+    </div>
   );
 }
 
