@@ -98,16 +98,16 @@ export default function Table() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y-reverse divide-neutral-300 text-center shadow-lg rounded-2xl">
+              <tbody className="divide-y-reverse divide-neutral-500 text-center shadow-lg rounded-2xl">
                 {currentItems.map((person, index) => (
                   <tr key={index}>
-                    <td className="border-b border-r border-neutral-200 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-neutral-800 sm:pl-1">
+                    <td className="border-b border-r border-neutral-500 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-neutral-800 sm:pl-1">
                       {person.name}
                     </td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.File}</td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Size}</td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Date}</td>
-                    <td className="border-b border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Author}</td>
+                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.File}</td>
+                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Size}</td>
+                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Date}</td>
+                    <td className="border-b border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800">{person.Author}</td>
                     <td className="flex relative mt-3.5"><PopupContent /></td>
                   </tr>
                 ))}

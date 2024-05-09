@@ -1,10 +1,21 @@
 import * as React from "react";
 
-function Avatar({ src, alt }) {
-  return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[94px]" />;
+function Avatar({ src, alt, isSelected, onClick }) {
+  return (
+    <img
+      loading="lazy"
+      src={src}
+      alt={alt}
+      className={`shrink-0 aspect-square w-[94px] cursor-pointer hover:scale-125 transition-transform duration-300 ${isSelected ? 'border-4 border-blue-500' : ''}`}
+      onClick={onClick}
+    />
+  );
 }
 
-function PhotoAndAvatarPopup() {
+function PhotoAndAvatarPopup({ onClose }) {
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+  const [selectedAvatar, setSelectedAvatar] = React.useState(null);
+
   const avatars = [
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/4e1c4a581808ca681f0a37e05a0e54c14f0fe4b55b80cc4765c6aaa1b915eb20?apiKey=285d536833cc4168a8fbec258311d77b&", alt: "Avatar 1" },
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/c06e20af9a472e9e623b3a6f9cf09d8682201ad07858e14413344ea8e0d85c7f?apiKey=285d536833cc4168a8fbec258311d77b&", alt: "Avatar 2" },
@@ -23,39 +34,58 @@ function PhotoAndAvatarPopup() {
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/e1a889361219e037789252f15ae7a87e5fa1ea9f6afa24209cf4b2d709692952?apiKey=285d536833cc4168a8fbec258311d77b&", alt: "Avatar 15" },
   ];
 
+  const handleAvatarClick = (avatar) => {
+    setSelectedAvatar(avatar.src); // Set the selected avatar using its source URL as a unique identifier
+    console.log(`Avatar clicked: ${avatar.alt}`);
+  };
+
+
+  const handleCloseUpdatePopup = (e) => {
+    e.stopPropagation();
+    setShowUpdatePopup(false);
+    onClose(e); // Optionally close the entire modal if needed
+  };
+  
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-2xl shadow-sm max-w-[700px]">
-      <div className="flex flex-col pr-2.5 pl-5 w-full max-md:max-w-full">
-        <header className="flex gap-5 items-start text-2xl font-bold text-neutral-800 max-md:flex-wrap max-md:max-w-full">
-          <h1 className="flex-auto mt-5">Pick an Avatar</h1>
-          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&" alt="Close icon" className="shrink-0 w-6 aspect-square" />
-        </header>
-        <div className="flex gap-5 mt-9 max-md:flex-wrap">
-          {avatars.slice(0, 6).map((avatar) => (
-            <Avatar key={avatar.src} src={avatar.src} alt={avatar.alt} />
-          ))}
-        </div>
-        <div className="flex gap-5 mt-5 max-md:flex-wrap">
-          {avatars.slice(6, 12).map((avatar) => (
-            <Avatar key={avatar.src} src={avatar.src} alt={avatar.alt} />
-          ))}
-        </div>
-        <div className="flex gap-5 self-start mt-5">
-          {avatars.slice(12).map((avatar) => (
-            <Avatar key={avatar.src} src={avatar.src} alt={avatar.alt} />
-          ))}
-        </div>
+    <div className="fixed inset-0 flex items-center justify-center bg--800 bg-opacity-50 z-50 rounded-3xl shadow-lg">
+      <div className="p-2 rounded-3xl w-2xl" onClick={(e) => e.stopPropagation()}>
+        <section className="flex flex-col py-2.5 bg-white rounded-2xl w-[700px]">
+          <div className="flex flex-col pr-2.5 pl-5 w-full">
+            <header className="flex gap-5 items-start text-2xl font-bold text-neutral-800">
+              <h1 className="flex-auto mt-5">Pick an Avatar</h1>
+              <img
+                loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
+                alt="Close icon"
+                className="shrink-0 w-6 aspect-square cursor-pointer"
+                onClick={onClose}
+              />
+            </header>
+            <div className="grid grid-cols-6 gap-3 mt-9">
+              {avatars.map((avatar) => (
+                <div className="w-[90px] h-[90px]" key={avatar.src}>
+                  <Avatar
+                    src={avatar.src}
+                    alt={avatar.alt}
+                    isSelected={selectedAvatar === avatar.src}
+                    onClick={() => handleAvatarClick(avatar)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <footer className="flex gap-2.5 self-end mt-3.5 mr-6 text-sm font-bold text-center">
+            <button onClick={onClose} className="justify-center px-4 py-2.5 whitespace-nowrap bg-white rounded-2xl border border-solid border-stone-300 text-neutral-400">
+              Cancel
+            </button>
+            <button onClick={onClose} className="flex flex-col justify-center text-white">
+              <span className="justify-center px-6 py-2.5 bg-blue-500 rounded-2xl">Save</span>
+            </button>
+          </footer>
+        </section>
       </div>
-      <footer className="flex gap-2.5 self-end mt-3.5 mr-6 text-sm font-bold text-center max-md:mr-2.5">
-        <button className="justify-center px-4 py-2.5 whitespace-nowrap bg-white rounded-2xl border border-solid border-stone-300 text-neutral-400">
-          Cancel
-        </button>
-        <button className="flex flex-col justify-center text-white">
-          <span className="justify-center px-6 py-2.5 bg-blue-500 rounded-2xl max-md:px-5">Save</span>
-        </button>
-      </footer>
-    </section>
+    </div>
   );
 }
 
-export default PhotoAndAvatarPopup
+export default PhotoAndAvatarPopup;

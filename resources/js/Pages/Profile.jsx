@@ -53,8 +53,6 @@ export default function MyComponent() {
     closePopup();
   };
 
-
-
   return (
     <div className="staff-directory">
       {isPopupOpen && (

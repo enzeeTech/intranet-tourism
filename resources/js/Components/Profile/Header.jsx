@@ -1,5 +1,6 @@
 import React from 'react';
-import PhotoAndAvatarPopup from './PhotoAndAvatarPopup';
+
+import EditProfilePhoto from './EditProfilePhoto';
 
 function ProfileImage({ src, alt, className }) {
     return (
@@ -13,27 +14,34 @@ function ProfileImage({ src, alt, className }) {
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner }) {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
 
-
   const openPopup = () => {
     setIsPopupOpen(true);
     console.log("bukak");
   };
   
-  const closePopup = () => {
-    setIsPopupOpen(false);
-    console.log("tutup");
-  };
+  // const handleCloseClick = () => {
+  //   setIsPopupOpen(false);
+  //   console.log("tutup");
+  // };
 
     const handleEditBanner = (e) => {
       e.stopPropagation(); // Prevents the click event from propagating to parent elements
       onEditBanner(); // Calls the onEditBanner function when the background image is clicked
     };
-    const handleIconClick = (e) => {
-      console.log("tekan");
-      e.stopPropagation();
-      openPopup();
 
-        };
+    const handleCloseClick = (e) => {
+      e.stopPropagation(); // Prevent any parent handlers from being executed
+      setIsPopupOpen(false); // Close the popup
+      console.log("Tutup bro");
+    };
+    
+    // Ensure that clicking on the ProfileImage or the header does not unintentionally toggle the popup:
+    const handleIconClick = (e) => {
+      e.stopPropagation(); // Prevent the click from affecting parent elements
+      if (!isPopupOpen) {
+        openPopup(); // Only open if it is not already open
+      }
+    };
     return (
       <header
         className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
@@ -43,7 +51,16 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         < div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
         {isPopupOpen && (
-          <PhotoAndAvatarPopup onClick={closePopup}/>
+          // <EditProfilePhoto onClose={handleCloseClick} />
+          // <EditProfilePhoto onClose={handleCloseClick} onOpenUpdatePopup={() => setIsPopupOpen(false)} />
+          <EditProfilePhoto
+  onClose={handleCloseClick}
+  onOpenUpdatePopup={() => {
+    setIsPopupOpen(false);
+    console.log("Main popup closed, ready to open update popup.");
+    return new Promise(resolve => setTimeout(resolve, 0)); // Ensures that state update completes
+  }}
+/>
         )}
         </div>
         <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
