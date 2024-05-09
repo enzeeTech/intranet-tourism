@@ -25,7 +25,7 @@ const NotificationItem = ({
 
           <p className="text-sm text-neutral-800"><strong>
               {users}</strong>
-              <span className=""> &nbsp; &nbsp; Approved</span>!
+              <span className=""> &nbsp;  Approved</span>!
             </p>
 
             <p className="text-sm text-neutral-800">
@@ -50,10 +50,10 @@ const NotificationItem = ({
 //notiView = 1 = read | notiView = 0 = unread
 const notificationData = [
   {
-    imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
+    imageSrc: "/assets/smile.jpg",
     message: "Your request to change the Organisational chart picture was 1",
-    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
-    users: "ACAPAN",
+    miniIcon: "/assets/comment.svg",
+    users: "Nyet",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -61,8 +61,8 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 2 ",
-    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
-    users: "ACAPAN",
+    miniIcon: "/assets/comment.svg",
+    users: "Nyet",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -70,8 +70,8 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 3 ",
-    miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
-    users: "ACAPAN",
+    miniIcon: "/assets/birthday.svg",
+    users: "Nyet",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 0,
@@ -79,17 +79,17 @@ const notificationData = [
   {
     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
     message: "Your request to change the Organisational chart picture was 4 ",
-    miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
-    users: "ACAPAN",
+    miniIcon: "/assets/birthday.svg",
+    users: "Nyet",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 1,
   },
   {
-    imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
+    imageSrc: "/assets/smile.jpg",
     message: "Your request to change the Organisational chart picture was 5 ",
-    miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
-    users: "ACAPAN",
+    miniIcon: "/assets/comment.svg",
+    users: "Nyet",
     linkText: "Check it out!",
     timeAgo: "10 mins ago",
     notiView: 1,

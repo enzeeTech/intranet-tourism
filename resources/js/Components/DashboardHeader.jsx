@@ -3,14 +3,13 @@ import { Menu, Transition } from '@headlessui/react';
 // import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import logo from '../../../public/assets/logo.png';
 import search from '../../../public/assets/search.png';
-import notification from '../../../public/assets/notification.png';
+// import bell from '../../../public/assets/notification.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
 import './Reusable/css/General.css';
 import NotificationPopup from '../Components/Noti-popup-test';
 // import styles from './styles.css';
 
-
-
+  
 const Header = () => {
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md sticky top-0 z-50">
@@ -30,11 +29,13 @@ const Header = () => {
       </div>
 
       <div className="flex items-center">
+
         <Menu as="div" className="relative inline-block text-left">
           <div >
             <Menu.Button className="focus:outline-none hover:underline relative ">
-            <img src={notification} alt="Notification" className="w-5 h-6 mr-1" />
+            <img src= "/assets/notification.png" alt="Notification" className="w-5 h-6 mr-1" />
               <div className="absolute top-0 left-0 w-10 h-10 opacity-0 transition duration-300 ease-in-out rounded-sm ">
+
 
               </div>
             </Menu.Button>
@@ -104,3 +105,4 @@ const Header = () => {
 };
 
 export default Header;
+

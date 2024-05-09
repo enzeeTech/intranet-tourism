@@ -14,40 +14,40 @@ class NotificationPopup extends React.Component {
       activeTab: 'all', // Default active tab is 'all'
       notifications: [
         {id: 1,
-          imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
-          miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
+          imageSrc: "/assets/smile.jpg",
+          miniIcon: "/assets/birthday.svg",
           users: "ACAPAN",
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
+          orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 1 ",
 
           // linkText: "Check it out!",
           timeAgo: "10 mins ago",
           notiView: 0, read: true },
         {id: 2,
-          imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
-          miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
+          imageSrc: "/assets/smile.jpg",
+          miniIcon: "/assets/comment.svg",
           users: "ACAPAN",
 
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
+          orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 2 ",
           // linkText: "Check it out!",
           timeAgo: "10 mins ago",
           notiView: 0, read: false },
         {id: 3,
-          imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
-          miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
+          imageSrc: "/assets/smile.jpg",
+          miniIcon: "/assets/birthday.svg",
           users: "ACAPAN",
 
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
+          orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 3 ",
           // linkText: "Check it out!",
           timeAgo: "10 mins ago",
           notiView: 0, read: true },
         {id: 4,
-          imageSrc: "http://127.0.0.1:5173/public/assets/smile.jpg",
-          miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
-          users: "ACAPAN",
+          imageSrc: "/assets/smile.jpg",
+          miniIcon: "/assets/comment.svg",
+          orangeball: "/assets/orangeball.png",
+          users: "Nyet",
 
           message: "Your request to change the Organisational chart picture was 4 ",
           // linkText: "Check it out!",
@@ -55,9 +55,9 @@ class NotificationPopup extends React.Component {
           notiView: 0, read: false },
         {id: 5,
           imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-          miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
-          users: "ACAPAN",
+          miniIcon: "/assets/birthday.svg",
+          orangeball: "/assets/orangeball.png",
+          users: "Nyet",
 
           message: "Your request to change the Organisational chart picture was 5 ",
           // linkText: "Check it out!",
@@ -65,9 +65,9 @@ class NotificationPopup extends React.Component {
           notiView: 0, read: true },
         {id: 6,
           imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-          miniIcon: "http://127.0.0.1:5173/public/assets/comment.svg",
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
-          users: "ACAPAN",
+          miniIcon: "/assets/comment.svg",
+          orangeball: "/assets/orangeball.png",
+          users: "Nyet",
 
           message: "Your request to change the Organisational chart picture was 6 ",
           // linkText: "Check it out!",
@@ -76,7 +76,7 @@ class NotificationPopup extends React.Component {
         {id: 7,
           imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
           miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
-          users: "ACAPAN",
+          users: "Nyet",
           message: "Your request to change the Organisational chart picture was 7 ",
           orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
 
@@ -162,14 +162,14 @@ class NotificationPopup extends React.Component {
                     <img className="h-14 w-14  ml-2 " src={notification.imageSrc} alt="" 
                     style={{
                     
-                      height:"100px",
+                      height:"80px",
                       width:"120px",
                       borderRadius:"100%"	
                     }} />
-                    <img className="absolute h-5 w-5 left-20 mt-14 " src={notification.miniIcon} alt="" /> 
+                    <img className="absolute h-5 w-5 left-16 mt-14 " src={notification.miniIcon} alt="" /> 
                   </div>
 
-                  <div className='flex flex-col w-100 h-50'>
+                  <div className='flex flex-col w-100 h-50 ml-4'>
                     <div className="block px-2 py-1 text-sm font-bold">{notification.users}</div>
                     <div className="block px-2 py-1 text-sm">{notification.message}</div>
                     <div className="block px-2 py-1 text-sm">{notification.timeAgo}</div>
@@ -187,7 +187,7 @@ class NotificationPopup extends React.Component {
                             <img
                                 src="http://127.0.0.1:5173/public/assets/orangeball.png"
                                 alt="Unread"
-                                style={{ width: '10px', height: '10px', marginRight: '10px' }}
+                                style={{ width: '10px', height: '10px', marginRight: '30px' }}
                             />
                         )}
                     </div>
