@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import SearchMembers from '../Components/Reusable/StaffDirectorySearchBar';
-import DepartmentDropdown from '../Components/Reusable/DropdownStaffDirectory';
-import StaffMemberCard from '../Components/Reusable/StaffMemberCard';
+import SearchMembers from '../Components/Reusable/CommunitySearch';
+import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
+import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import './css/StaffDirectory.css';
 
@@ -14,126 +14,121 @@ const StaffDirectory = () => {
 
   // Dummy departments
   const departments = [
-    'Some Department 1',
-    'Some Department 2',
-    'Some Department 3',
-    'Some Department 4',
-    'Some Department 5',
-    'Some Department 6',
-    'Some Department 7',
-    'Some Department 8',
+    'All',
+    'Public',
+    'Private',
   ];
 
   // Dummy staff members
   const staffMembers = [
     {
       id: 1,
-      name: 'Iskander Mirza',
+      name: 'Puspanita LPPM',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
     },
     {
       id: 2,
-      name: 'Nor Rahimah Binti Ariffin',
+      name: 'Kelab Rekreasi LPPM',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 3,
-      name: 'Eduzar Zar Bin Ayob Azari',
+      name: 'KOPPEMA',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 4,
-      name: 'Hishamuddin Mustafa',
+      name: 'Kesatuan',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 5,
-      name: 'Iskander Mirza',
+      name: 'Jomla V3 Feedback',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
     },
     {
       id: 6,
-      name: 'Nor Rahimah Binti Ariffin',
+      name: 'BTM Feedback',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 7,
-      name: 'Eduzar Zar Bin Ayob Azari',
+      name: 'Urus Tadbir Admin',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 8,
-      name: 'Hishamuddin Mustafa',
+      name: 'TBC',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 9,
-      name: 'Iskander Mirza',
+      name: 'Puspanita LPPM',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
     },
     {
       id: 10,
-      name: 'Nor Rahimah Binti Ariffin',
+      name: 'Kelab Rekreasi LPPM',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 11,
-      name: 'Eduzar Zar Bin Ayob Azari',
+      name: 'KOPPEMA',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 12,
-      name: 'Hishamuddin Mustafa',
+      name: 'KOPPEMA',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 13,
-      name: 'Iskander Mirza',
+      name: 'KOPPEMA',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
     },
     {
       id: 14,
-      name: 'Nor Rahimah Binti Ariffin',
+      name: 'KOPPEMA',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 15,
-      name: 'Eduzar Zar Bin Ayob Azari',
+      name: 'KOPPEMA',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 16,
-      name: 'Hishamuddin Mustafa',
+      name: 'KOPPEMA',
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
@@ -157,7 +152,7 @@ const StaffDirectory = () => {
     <div className="staff-directory">
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
-          <PageTitle title="Staff Directory" />
+          <PageTitle title="Community" />
         </div>
         <hr className="staff-directory-underline" />
         <div className="widgets-container">
@@ -171,7 +166,7 @@ const StaffDirectory = () => {
               departments={departments}
               onSelectDepartment={handleSelectDepartment}
             />
-            {selectedDepartment === 'Some Department 1' && (
+            {selectedDepartment === 'All' && (
               <div className="staff-member-grid-container">
                 {staffMembers.map((member) => (
                     <StaffMemberCard 
