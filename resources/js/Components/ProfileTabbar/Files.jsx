@@ -71,7 +71,7 @@ const Table = () => {
     <div className="ml-8 w-3/4 px-4 sm:px-6 lg:px-0">
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-          <table className="min-w-full">
+          <table className="min-w-full rounded-2xl bg-white">
             <thead>
               <tr>
                 <th scope="col" className="rounded-2xl bg-blue-200 py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">Name</th>
