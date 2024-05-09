@@ -1,16 +1,15 @@
 export default function Guest({ children }) {
     return (
-        <div className="flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
-            <div className="grid items-center grid-cols-2"> {/* Grid layout with two columns */}
-                <div className="w-full h-full"> {/* Container for the image */}
-                    <img src="/assets/LoginSide.png" alt="Image" className="w-full h-full rounded-l-lg hidden md:block" />
-                </div>
-
-                <div style={{alignContent: 'center'}} className="w-full h-full px-6 overflow-hidden bg-white rounded-r-lg shadow-sm"> {/* Container for the form */}
-                    <div style={{marginLeft: 100}}>
-                        <img src="/assets/logo.png" alt="Logo" className="w-48 h-16 mt-3 mb-6" />
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 w-full p-4 sm:p -6 sm:py-8">
+            <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow">
+                <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+                    <div className="hidden md:block">
+                        <img src="/assets/LoginSide.png" alt="Side Image" className="object-cover w-full h-full rounded-l-lg" />
                     </div>
-                    {children}
+                    <div className="flex flex-col justify-center w-full p-6">
+                        <img src="/assets/logo.png" alt="Logo" className="w-48 h-16 mx-auto my-3" />
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>
