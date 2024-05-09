@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Popup({ title, content, onClose, onSave }) {
+function Popup ({ title, content, onClose, onSave }) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
@@ -15,4 +15,4 @@ function Popup({ title, content, onClose, onSave }) {
     );
 }
 
-export default Popup;
+export default Popup; 

@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 function ProfileImage({ src, alt, className }) {
     return (
       <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-24 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className}`}>
@@ -10,7 +9,6 @@ function ProfileImage({ src, alt, className }) {
     );
 }
 
-
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner }) {
     const handleEditBanner = (e) => {
       e.stopPropagation(); // Prevents the click event from propagating to parent elements
@@ -18,7 +16,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     };
     return (
       <header
-        className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
+        className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half "
         onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
@@ -27,8 +25,11 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
           <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>
         </div>
+
       </header>
     );
+    
+
 }
 
 export default ProfileHeader;
