@@ -7,8 +7,8 @@ function ProfileBio({ email, department, position, grade, location, phone, whats
           <div className="flex flex-col w-[20%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow text-base font-semibold capitalize text-neutral-800 max-md:mt-10">
               <div>e-mail</div>
-              <div className="mt-2">department</div>
-              <div className="mt-4">position</div>
+              <div className="mt-2.5">department</div>
+              <div className="mt-3">position</div>
               <div className="mt-3">grade</div>
               <div className="mt-3">location</div>
               <div className="mt-3">office no.</div>

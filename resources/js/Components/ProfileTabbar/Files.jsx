@@ -77,16 +77,16 @@ const Table = () => {
                 <th scope="col" className="rounded-2xl bg-blue-200 py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">Name</th>
                 <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">                    
                 <div className="flex justify-center">
-                  <img src="assets/File.png" alt="File" className="File" />
+                  <img src="assets/File.svg" alt="File" className="File" />
                 </div></th>
                 <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">Size</th>
                 <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">                    
                 <div className="flex justify-center">
-                  <img src="assets/FileTableCalendar.png" alt="File" className="File" />
+                  <img src="assets/FileTableCalendar.svg" alt="File" className="File" />
                 </div></th>
                 <th scope="col" className="rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">                    
                 <div className="flex justify-center">
-                  <img src="assets/Author.png" alt="File" className="File" />
+                  <img src="assets/Author.svg" alt="File" className="File" />
                 </div></th>
                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
               </tr>
