@@ -67,25 +67,25 @@ function ProfileIcons({ icon1, icon2 }) {
         <img
           src={icon2}
           alt=""
-          className="self-center mt-36 aspect-square w-[30px] max-md:mt-10 cursor-pointer"
+          className="self-center mt-36 aspect-square w-[38px] max-md:mt-10 cursor-pointer"
           onClick={handleIconClick}
         />
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg--800 bg-opacity-50 z-50" onClick={closePopup}>
-            <div className="bg-white p-2 rounded-3xl shadow-lg max-w-md" onClick={(e) => e.stopPropagation()}>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={closePopup}>
+            <div className="bg-white p-2 rounded-xl shadow-lg max-w-md" onClick={(e) => e.stopPropagation()}>
               <img
-                src="assets/qrAcap.jpg"
+                src="assets/hehe.png"
                 alt="QR Code"
                 className="mx-auto mt-4"
               />
               <div className="flex justify-between -mt-1 relative">
                 <hr className="absolute -top-3 w-full border-t border-gray-300" />
                   <button onClick={handleDownload} className="text-white px-24 py-2 rounded-md">
-                    <img src="assets/DownloadIcon.png" alt="Download Icon" className="" />
+                    <img src="assets/DownloadIcon.png" alt="Download Icon" className="w-8 h-8" />
                   </button>
                 <hr className="absolute top-0 right-52 h-full border-l border-gray-300" />
                   <button onClick={handleCopyLink} className="text-white px-24 py-2 rounded-md">
-                    <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="" />
+                    <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-8 h-8" />
                   </button>
               </div>
             </div>
