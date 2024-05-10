@@ -1,33 +1,15 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
-
 export default function Guest({ children }) {
-//     return (
-//         <div className="relative flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
-//             <img src="/assets/LoginSide.png" alt="Image" className="absolute ml-8 top-15 left-80 w-96 h-96" />
-//             <div className="flex items-center justify-center">
-//     <div className="relative px-6 py-4 overflow-hidden bg-white rounded-r-lg shadow-md w-96 h-96 left-40 sm:max-w-md">
-//         <div>
-//             <img src="/assets/logo.png" alt="Logo" className="w-48 h-16 mt-3 mb-6 ml-20" />
-//         </div>
-//         {children}
-//     </div>
-// </div>
-
-//         </div>
-//     );
     return (
-        <div className="flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
-            <div className="grid items-center grid-cols-2 ">  {/* Grid layout with two columns */}
-                <div className="w-full h-full ">  {/* Container for the image */}
-                    <img src="/assets/LoginSide.png" alt="Image" className="w-full h-full rounded-l-lg " />
-                </div>
-
-                <div style={{alignContent: 'center'}} className="w-full h-full px-6 overflow-hidden bg-white rounded-r-lg shadow-sm">  {/* Container for the form */}
-                    <div style={{marginLeft: 100}}>
-                        <img src="/assets/logo.png" alt="Logo" className="w-48 h-16 mt-3 mb-6" />
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 w-full p-4 sm:p -6 sm:py-8">
+            <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow">
+                <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+                    <div className="hidden md:block">
+                        <img src="/assets/LoginSide.png" alt="Side Image" className="object-cover w-full h-full rounded-l-lg" />
                     </div>
-                    {children}
+                    <div className="flex flex-col justify-center w-full p-6">
+                        <img src="/assets/logo.png" alt="Logo" className="w-48 h-16 mx-auto my-3" />
+                        {children}
+                    </div>
                 </div>
             </div>
         </div>

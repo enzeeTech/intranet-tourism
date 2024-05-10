@@ -4,7 +4,10 @@ import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedE
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import Layout from '../Layouts/DashboardLayout';
-import { Stories, Birthday } from '@/Components/Dashboard';
+import { Stories, Birthday, CreateStory } from '@/Components/Dashboard';
+import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
+import { Filter } from '@/Components/Reusable/WallPosting';
+import MyComponent from './Departments';
 
 const Dashboard = () => {
 
@@ -30,10 +33,19 @@ const Dashboard = () => {
             <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
               <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full ml-16">
                 <Stories />
+                {/* <CreateStory /> */}
                 {/* <Birthday /> */}
+                {/* <div className="featured-events-container"> */}
+                <ShareYourThoughts />
+                <Filter />
+                {/* </div> */}
+                <div className="mb-20"></div>
+                <MyComponent />
               </section>
             </div>
+            <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full"></div>
           </main>
+          
         </div>
       </div>
     </Layout>

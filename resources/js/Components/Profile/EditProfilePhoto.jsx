@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import PhotoAndAvatarPopup from './PhotoAndAvatarPopup';
 import UpdatePhotoButton from './UpdatePhoto';
@@ -18,6 +19,7 @@ function ListItem({ icon, alt, text, onClick }) {
     </div>
   );
 }
+
 
 function EditProfilePhoto({ onClose, onOpenUpdatePopup }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -99,5 +101,6 @@ function EditProfilePhoto({ onClose, onOpenUpdatePopup }) {
     </div>
   );
 }
+
 
 export default EditProfilePhoto;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import EditProfilePhoto from './EditProfilePhoto';
 
 function ProfileImage({ src, alt, className }) {
@@ -44,7 +43,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     };
     return (
       <header
-        className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
+        className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half "
         onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
@@ -67,8 +66,11 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
           <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>
         </div>
+
       </header>
     );
+    
+
 }
 
 export default ProfileHeader;

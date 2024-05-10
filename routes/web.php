@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\departments;
+use App\Http\Controllers\communityPost;
 use App\Http\Controllers\StaffDirectoryController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -38,6 +42,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/calendar/event/{id}', [CalendarController::class, 'updateEvent'])->name('calendar.update');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
+    Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
+    Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
+    Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
+    Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+    Route::get('/departments', [departments::class, 'index'])->name('Departments');
+    Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
+    Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
 });
 
 require __DIR__ . '/auth.php';

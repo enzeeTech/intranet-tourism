@@ -24,10 +24,10 @@ const WhosOnline = () => {
         ))}
       </div>
       <hr style={{marginTop: '5px', marginBottom: '5px'}} className="underline" />
-      <button className="view-all-btn">
+      <a href="../onlinelist"> <button className="view-all-btn"  >
         VIEW ALL 
         <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
-      </button>
+      </button></a>
     </div>
   );
 };
