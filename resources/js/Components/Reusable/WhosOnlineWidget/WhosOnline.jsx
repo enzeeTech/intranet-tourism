@@ -8,7 +8,7 @@ const onlineUsers = [
   // This array should come from your backend or passed as props
   { name: 'Aisha', avatar: dummyProfilePic },
   { name: 'Thomas', avatar: dummyProfilePic },
-  { name: 'Fareez', avatar: dummyProfilePic },
+  { name: 'Ben', avatar: dummyProfilePic },
   { name: 'Sarah', avatar: dummyProfilePic },
   { name: 'Nik', avatar: dummyProfilePic}
 ];
