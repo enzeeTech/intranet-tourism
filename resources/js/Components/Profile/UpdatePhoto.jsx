@@ -29,7 +29,7 @@ function UpdatePhotoButton({ onClose }) {
       console.log("Action completed, closing all popups");
       setIsPopupOpen(false); // Close the RequestSentMessage popup
       onClose(e); // Close the main popup
-    }, 1200); // Set timeout for 3000 ms or adjust based on actual needs
+    }, 20000); // Set timeout for 3000 ms or adjust based on actual needs
 
   };
 

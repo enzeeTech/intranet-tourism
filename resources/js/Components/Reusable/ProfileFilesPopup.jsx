@@ -94,7 +94,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                             zIndex: 999, // Ensure it's above other elements
                         }}
                     >
-                        <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
+                        <img src="assets/🦆 icon _image_.png" alt={name} className="staff-member-popup-image" />
                         <button
                             className="text-neutral-500 pr-11 -ml-1.5"
                             onClick={handleDelete}
@@ -111,7 +111,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                             zIndex: 999, // Ensure it's above other elements
                         }}
                     >
-                        <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
+                        <img src="assets/🦆 icon _lock_.png" alt={name} className="staff-member-popup-image" />
                         <button
                             className="text-neutral-500 pr-4 -ml-1.5"
                             onClick={handleDownload}
