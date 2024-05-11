@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
+    Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
+ 
 });
 
 require __DIR__ . '/auth.php';
