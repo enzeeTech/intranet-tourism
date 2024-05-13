@@ -2,7 +2,7 @@ import React from "react";
 
 const File = () => {
     return (
-        <h1>Letak File Di Sini Ya</h1>
+        <h1>Letak File Di Sini Ya Wan</h1>
     )
 }
 
