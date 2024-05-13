@@ -2,13 +2,18 @@
     "name": "enzee/jomla",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "tourism",
+        "enzee",
+        "socmed",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "dedoc/scramble": "^0.9.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
+        "laravel/reverb": "@beta",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "nwidart/laravel-modules": "^11.0",
@@ -24,6 +29,8 @@
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "dedoc/scramble": "^0.9.0",
+        "predis/predis": "^2.2",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
@@ -55,20 +62,17 @@
             "@php artisan migrate --graceful --ansi"
         ],
         "format": [
-            "@php ./vendor/bin/pint"
-        ],
-        "lint": [
-            "@php ./vendor/bin/phpstan analyse --memory-limit=2G"
-        ],
-        "setup": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan key:generate --ansi",
-            "@php artisan migrate:fresh --seed"
+            "@php ./vendor/bin/pint ."
         ]
     },
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "merge-plugin": {
+            "include": [
+                "Modules/*/composer.json"
+            ]
         }
     },
     "config": {
