@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\departments;
 use App\Http\Controllers\communityPost;
-use App\Http\Controllers\fileManagement;
 use App\Http\Controllers\StaffDirectoryController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
@@ -49,8 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
-    Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
- 
+    Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
+    
 });
 
 require __DIR__ . '/auth.php';
