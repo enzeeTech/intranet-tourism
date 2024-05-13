@@ -30,5 +30,3 @@ Route::prefix('email')
             ->middleware(['throttle:6,1'])
             ->name('verification.send');
     });
-
-require_once 'email.php';

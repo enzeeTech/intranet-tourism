@@ -1,3 +1,5 @@
 {
-    "Crud": true
+    "Crud": true,
+    "Auth": true,
+    "Profile": true
 }
