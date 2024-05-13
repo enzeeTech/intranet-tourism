@@ -5,17 +5,18 @@ const Sidebar = () => {
     // Path to buttons
     const buttons = [
         { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png" },
-        { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png" },
-        { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png" },
-        { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png" },
-        { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png" },
-        { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
+        { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png", text: "Benjamin"  },
+        { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png", text: "Benjamin" },
+        { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png", text: "Benjamin" },
+        { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png", text: "Benjamin" },
+        { inactive: "assets/fileManagement.png", to: '/fileManagement', active: "assets/fileManagementActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
         { inactive: "assets/settings.png", active: "assets/settingsActive.png" },
         { inactive: "assets/logout.png", to: '/logout', active: "assets/logout.png" }
     ]
 
     const [activeIndex, setActiveIndex] = useState(null);
+    const [showText, setShowText] = useState(null);
     const [csrfToken, setCsrfToken] = useState(null);
 
     console.log('csrfToken', csrfToken)
@@ -75,6 +76,8 @@ const Sidebar = () => {
                                 src={activeIndex === i ? button.active : button.inactive}
                                 alt={button.name || ""}
                                 className="w-12 h-12 mx-auto"
+                                onMouseEnter={() => setActiveIndex(i)}
+                                onMouseLeave={() => setActiveIndex(null)}
                             />
                         </a>
                         );
