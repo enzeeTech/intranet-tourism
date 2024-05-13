@@ -1,15 +1,18 @@
 {
-    "name": "laravel/laravel",
+    "name": "enzee/jomla",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "dedoc/scramble": "^0.9.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "nwidart/laravel-modules": "^11.0",
+        "spatie/laravel-permission": "^6.7",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -50,6 +53,17 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "format": [
+            "@php ./vendor/bin/pint"
+        ],
+        "lint": [
+            "@php ./vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "setup": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate --ansi",
+            "@php artisan migrate:fresh --seed"
         ]
     },
     "extra": {
@@ -63,7 +77,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "minimum-stability": "stable",
