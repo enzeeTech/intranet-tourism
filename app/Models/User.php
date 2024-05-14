@@ -8,15 +8,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles, HasPermissions;
+    use HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable;
     use QueryableApi;
 
     /**
@@ -53,7 +51,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-
     public static function rules($scenario = 'default')
     {
         $rules = [
@@ -64,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
                     'department_id' => 'required',
                     'email' => 'required',
                     'password' => 'required',
-                ]
+                ],
             ],
             'register' => [
                 [
@@ -75,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 [
                     'email.unique' => 'Emel telah berdaftar. Sila set semula kata laluan sekiranya anda terlupa kata laluan',
                     'employee_no.unique' => 'No Pekerja telah berdaftar. Sila set semula kata laluan sekiranya anda terlupa kata laluan atau semak semula No Pekerja anda',
-                ]
+                ],
             ],
         ];
 

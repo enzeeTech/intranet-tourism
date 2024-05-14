@@ -17,6 +17,7 @@ class AuthorizationController extends Controller
             $user->syncRoles(Role::whereIn('id', request('roles'))->get())->save();
             abort_unless(User::role('Pentadbir Sistem', 'web')->count(), 422, 'Pentadbir Sistem perlu ada sekurang-kurangnya satu pengguna.');
             DB::commit();
+
             return response()->noContent();
         } catch (\Throwable $th) {
             DB::rollback();

@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Controllers\AuthorizationController;
 use Modules\Auth\Http\Controllers\ChangePasswordController;
+use Modules\Auth\Http\Controllers\EmailVerifcationController;
 use Modules\Auth\Http\Controllers\LoginController;
 use Modules\Auth\Http\Controllers\NewPasswordController;
 use Modules\Auth\Http\Controllers\RegisterationController;
-use Modules\Auth\Http\Controllers\EmailVerifcationController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('user/{user}/sync-roles', [AuthorizationController::class, 'syncRoles'])->name('sync-roles');

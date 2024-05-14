@@ -2,12 +2,12 @@
 
 namespace Modules\Auth\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
 use Nwidart\Modules\Facades\Module;
 
 class RegisterationController extends Controller
@@ -51,6 +51,7 @@ class RegisterationController extends Controller
 
             event(new Registered($user));
             DB::commit();
+
             return $this->success('Succesfull Register', $user);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -65,8 +66,6 @@ class RegisterationController extends Controller
     {
         //
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -91,12 +90,13 @@ class RegisterationController extends Controller
     {
         //
     }
+
     public function success(string $message, mixed $data = null)
     {
         $response = [
             'message' => $message,
             'status' => $data ? 200 : 500,
-            'data'  => $data
+            'data' => $data,
         ];
 
         return response()->json($response);

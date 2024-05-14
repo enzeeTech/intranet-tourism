@@ -9,7 +9,6 @@ use Modules\Auth\Http\Requests\LoginRequest;
 
 class LoginController extends Controller
 {
-
     public function login(LoginRequest $request)
     {
         $request->authenticate();
@@ -23,8 +22,8 @@ class LoginController extends Controller
                 'hasVerifiedEmail' => $user->hasVerifiedEmail(),
                 'token' => $user->createToken(name: 'web', expiresAt: request('remember') ? now()->addDays(7) : null)->plainTextToken,
                 'user' => $user->only('id', 'name', 'email'),
-                'permissions' => $user->roles->flatMap->permissions->pluck('name')->unique()->toArray()
-            ]
+                'permissions' => $user->roles->flatMap->permissions->pluck('name')->unique()->toArray(),
+            ],
         ]);
     }
 
@@ -37,6 +36,7 @@ class LoginController extends Controller
         } else {
             auth()->user()->currentAccessToken()->delete();
         }
+
         return response()->noContent();
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Overides;
 
-use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\LengthAwarePaginator as BaseLengthAwarePaginator;
+use Illuminate\Support\Facades\URL;
 
-class LengthAwarePaginator  extends BaseLengthAwarePaginator
+class LengthAwarePaginator extends BaseLengthAwarePaginator
 {
-
     public function path()
     {
-        return  URL::current();
+        return URL::current();
     }
 }

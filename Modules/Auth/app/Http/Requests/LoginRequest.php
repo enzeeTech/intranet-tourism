@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 class LoginRequest extends FormRequest
 {
     private $authKey = 'email';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -46,7 +47,7 @@ class LoginRequest extends FormRequest
 
         $this->authKey = filter_var(request('credential'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $this->merge([$this->authKey => request('credential')]);
-        if (!auth()->attempt($this->only($this->authKey, 'password'), $this->boolean('remember'))) {
+        if (! auth()->attempt($this->only($this->authKey, 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             abort(422, 'Sila masukkan alamat emel atau nombor pekerja yang sah.');
@@ -72,7 +73,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -93,6 +94,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input($this->authKey)) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->input($this->authKey)).'|'.$this->ip());
     }
 }
