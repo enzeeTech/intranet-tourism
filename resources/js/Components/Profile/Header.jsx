@@ -1,4 +1,5 @@
 import React from 'react';
+import EditProfilePhoto from './EditProfilePhoto';
 
 function ProfileImage({ src, alt, className }) {
     return (
@@ -10,9 +11,35 @@ function ProfileImage({ src, alt, className }) {
 }
 
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner }) {
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+    console.log("bukak");
+  };
+  
+  // const handleCloseClick = () => {
+  //   setIsPopupOpen(false);
+  //   console.log("tutup");
+  // };
+
     const handleEditBanner = (e) => {
       e.stopPropagation(); // Prevents the click event from propagating to parent elements
       onEditBanner(); // Calls the onEditBanner function when the background image is clicked
+    };
+
+    const handleCloseClick = (e) => {
+      e.stopPropagation(); // Prevent any parent handlers from being executed
+      setIsPopupOpen(false); // Close the popup
+      console.log("Tutup bro");
+    };
+    
+    // Ensure that clicking on the ProfileImage or the header does not unintentionally toggle the popup:
+    const handleIconClick = (e) => {
+      e.stopPropagation(); // Prevent the click from affecting parent elements
+      if (!isPopupOpen) {
+        openPopup(); // Only open if it is not already open
+      }
     };
     return (
       <header
@@ -20,7 +47,21 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
+        < div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
+        {isPopupOpen && (
+          // <EditProfilePhoto onClose={handleCloseClick} />
+          // <EditProfilePhoto onClose={handleCloseClick} onOpenUpdatePopup={() => setIsPopupOpen(false)} />
+          <EditProfilePhoto
+  onClose={handleCloseClick}
+  onOpenUpdatePopup={() => {
+    setIsPopupOpen(false);
+    console.log("Main popup closed, ready to open update popup.");
+    return new Promise(resolve => setTimeout(resolve, 0)); // Ensures that state update completes
+  }}
+/>
+        )}
+        </div>
         <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
           <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
           <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>

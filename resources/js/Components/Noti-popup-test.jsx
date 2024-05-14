@@ -16,7 +16,7 @@ class NotificationPopup extends React.Component {
         {id: 1,
           imageSrc: "/assets/smile.jpg",
           miniIcon: "/assets/birthday.svg",
-          users: "ACAPAN",
+          users: "Nyet",
           orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 1 ",
 
@@ -26,7 +26,7 @@ class NotificationPopup extends React.Component {
         {id: 2,
           imageSrc: "/assets/smile.jpg",
           miniIcon: "/assets/comment.svg",
-          users: "ACAPAN",
+          users: "Nyet",
 
           orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 2 ",
@@ -36,7 +36,7 @@ class NotificationPopup extends React.Component {
         {id: 3,
           imageSrc: "/assets/smile.jpg",
           miniIcon: "/assets/birthday.svg",
-          users: "ACAPAN",
+          users: "Nyet",
 
           orangeball: "/assets/orangeball.png",
           message: "Your request to change the Organisational chart picture was 3 ",
@@ -75,10 +75,10 @@ class NotificationPopup extends React.Component {
           notiView: 0, read: false },
         {id: 7,
           imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-          miniIcon: "http://127.0.0.1:5173/public/assets/birthday.svg",
+          miniIcon: "/assets/birthday.svg",
           users: "Nyet",
           message: "Your request to change the Organisational chart picture was 7 ",
-          orangeball: "http://127.0.0.1:5173/public/assets/orangeball.png",
+          orangeball: "/assets/orangeball.png",
 
           // linkText: "Check it out!",
           timeAgo: "10 mins ago",
@@ -175,11 +175,10 @@ class NotificationPopup extends React.Component {
                     <div className="block px-2 py-1 text-sm">{notification.timeAgo}</div>
                 </div>
 
-
                     <div>
                         {!notification.read && (
                             <img
-                                src="http://127.0.0.1:5173/public/assets/orangeball.png"
+                                src="/assets/orangeball.png"
                                 alt="Unread"
                                 style={{ width: '10px', height: '10px', marginRight: '30px' }}
                             />
