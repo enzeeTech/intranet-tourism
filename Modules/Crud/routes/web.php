@@ -17,3 +17,4 @@ use Modules\Crud\Http\Controllers\CrudController;
 Route::group([], function () {
     Route::resource('crud', CrudController::class)->names('crud');
 });
+require __DIR__.'/crud.php';
