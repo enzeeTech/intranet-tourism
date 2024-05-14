@@ -57,7 +57,7 @@ export default function MyComponent() {
   };
 
   return (
-    <div className="staff-directory bg-gray-200">
+    <div className="staff-directory">
       {isPopupOpen && (
         <Popup
           title="Edit Banner Photo"
