@@ -29,15 +29,16 @@ const Header = () => {
       <div className="flex items-center">
 
         <Menu as="div" className="relative inline-block text-left">
+
           <div >
             <Menu.Button className="relative focus:outline-none hover:underline ">
             <img src= "/assets/notification.png" alt="Notification" className="w-5 h-6 mr-1" />
               <div className="absolute top-0 left-0 w-10 h-10 transition duration-300 ease-in-out rounded-sm opacity-0 ">
 
-
               </div>
             </Menu.Button>
           </div>
+          
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"

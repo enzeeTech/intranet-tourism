@@ -9,7 +9,7 @@ const Sidebar = () => {
         { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png" },
         { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png" },
         { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png" },
-        { inactive: "assets/fileManagement.png", active: "assets/fileManagementActive.png" },
+        { inactive: "assets/fileManagement.png", to: '/fileManagement', active: "assets/fileManagementActive.png" },
         { inactive: "assets/links.png", active: "assets/linksActive.png" },
         { inactive: "assets/settings.png", active: "assets/settingsActive.png" },
         { inactive: "assets/logout.png", to: '/logout', active: "assets/logout.png" }

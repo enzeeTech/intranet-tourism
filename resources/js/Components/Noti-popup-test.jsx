@@ -153,7 +153,7 @@ class NotificationPopup extends React.Component {
 
             </ul>
             <br></br>
-            <div className="notification-list mb-4 ">
+            <div className="notification-list mb-4"  >
               <ul>
                 {filteredNotifications.map(notification => (
                 <div className="flex flex-row gap-2 mb-4 hover:bg-blue-100 items-center"  key={notification.id}>
@@ -174,13 +174,6 @@ class NotificationPopup extends React.Component {
                     <div className="block px-2 py-1 text-sm">{notification.message}</div>
                     <div className="block px-2 py-1 text-sm">{notification.timeAgo}</div>
                 </div>
-
-                {/* <div>{notification.read ? (
-                        <img src="path_to_read_image" alt="Read" style={{ width: '20px', height: '20px' }} />
-                    ) : (
-                        <img src="/assets/orangeball.png" alt="Unread" style={{ width: '10px', height: '10px', marginRight:'20px' }} />
-                    )}</div>
-                     */}
 
                     <div>
                         {!notification.read && (
