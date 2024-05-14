@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // In your migration file (e.g., create_events_table.php)
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->datetime('start_time');
-            $table->datetime('end_time');
-            $table->string('color');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->string('file_name');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('files');
     }
 };
