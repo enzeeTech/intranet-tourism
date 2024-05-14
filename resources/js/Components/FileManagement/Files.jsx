@@ -3,7 +3,7 @@ import PopupContent from '../Reusable/ProfileFilesPopup';
 
 
 const data = [
-  { name: 'Brhvyuhvbyubyyhung', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
+  { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
   { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023' , Author: 'by Musa' },
   { name: 'Statistics for the Report', File: 'XLSX', Size: '3', Date: '24.09.2023' , Author: 'by Musa' },
   { name: 'Data on the Report', File: 'XLSX', Size: '2.5', Date: '22.09.2023' , Author: 'by Musa' },

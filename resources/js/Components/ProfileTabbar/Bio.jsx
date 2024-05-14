@@ -11,8 +11,8 @@ function ProfileBio({ email, department, position, grade, location, phone, whats
               <div className="mt-3">position</div>
               <div className="mt-3">grade</div>
               <div className="mt-3">location</div>
-              <div className="mt-3">office no.</div>
-              <div className="mt-3">whatsapp no.</div>
+              <div className="mt-3">office number</div>
+              <div className="mt-3">whatsapp number</div>
             </div>
           </div>
           <div className="flex flex-col ml-5 w-[64%] max-md:ml-0 max-md:w-full">
