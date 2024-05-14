@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('post_accessibilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->references('id')->on('postings');
+            $table->foreignId('post_id')->on('postings');
             $table->morphs('accesable_type');
             $table->string('accessable_id');
-            $table->foreignId('created_by')->references('id')->on('users');
+            $table->foreignId('created_by')->on('users');
 
             $table->timestamps();
         });

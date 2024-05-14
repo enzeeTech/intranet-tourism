@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "332cca40b6a9a5390291bc7f6d23f228",
+    "content-hash": "b9a8d146617a7090d5dab5f7e49e1dd6",
     "packages": [
         {
             "name": "brick/math",
@@ -4376,6 +4376,54 @@
                 }
             ],
             "time": "2023-06-16T10:52:11+00:00"
+        },
+        {
+            "name": "rekamy/kikof",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../kikof",
+                "reference": "5da8b618e7b34a7bddd02289b4e0b0789b2f9b3d"
+            },
+            "require": {
+                "illuminate/console": ">=11.0",
+                "illuminate/database": ">=11.0",
+                "illuminate/filesystem": ">=11.0",
+                "illuminate/support": ">=11.0",
+                "php": ">=8.0",
+                "symfony/console": "^7.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.2",
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^8.0|^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rekamy\\Kikof\\KikofServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rekamy\\Kikof\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zahrin Azam",
+                    "email": "zahrin.azam@gmail.com"
+                }
+            ],
+            "description": "Opinionated laravel generator",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "spatie/laravel-permission",
@@ -10711,7 +10759,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "laravel/reverb": 10
     },

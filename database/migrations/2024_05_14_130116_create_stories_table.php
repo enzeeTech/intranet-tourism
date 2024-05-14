@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignUuid('user_id')->on('users');
             $table->string('file_name');
             $table->string('description');
             $table->timestamps();

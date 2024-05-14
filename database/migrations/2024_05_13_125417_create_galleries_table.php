@@ -11,8 +11,8 @@ class CreateGalleriesTable extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('post_id')->references('id')->on('postings');
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignId('post_id')->on('postings');
+            $table->foreignId('user_id')->on('users');
             $table->string('file_name');
             $table->timestamps();
         });

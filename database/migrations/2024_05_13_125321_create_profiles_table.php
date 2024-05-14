@@ -17,8 +17,8 @@ class CreateProfilesTable extends Migration
             $table->string('office_no')->nullable();
             $table->string('cover_photo')->nullable();
             $table->string('job_title')->nullable();
-            $table->foreignId('position_id')->constrained('positions');
-            $table->foreignId('grade_id')->constrained('grades');
+            // $table->foreignId('position_id')->constrained('positions');
+            // $table->foreignId('grade_id')->constrained('grades');
             $table->date('date_of_birth')->nullable();
             $table->timestamps();
         });
