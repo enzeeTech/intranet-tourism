@@ -29,6 +29,8 @@ export default function MyComponent() {
       };
 
 
+
+      
   const photoData = [
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Photo 1" },
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&", alt: "Photo 2" },
