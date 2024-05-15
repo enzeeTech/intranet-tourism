@@ -92,7 +92,7 @@
     "repositories": [
         {
          "type" : "path",
-         "url" : "../kikof"
+         "url" : "../packages/kikof"
         }
      ]
 }

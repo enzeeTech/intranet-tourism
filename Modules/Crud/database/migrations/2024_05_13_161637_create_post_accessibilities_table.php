@@ -17,7 +17,6 @@ return new class extends Migration
             $table->morphs('accesable_type');
             $table->string('accessable_id');
             $table->foreignId('created_by')->on('users');
-
             $table->timestamps();
         });
     }

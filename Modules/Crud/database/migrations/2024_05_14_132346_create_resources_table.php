@@ -11,10 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('resources', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->string('file_name');
+            $table->string('attachable_type');
+            $table->string('attachable_id');
+            $table->string('for')->default('attachment');
+            $table->string('path');
+            $table->string('extension');
+            $table->string('mime_type');
+            $table->string('filesize');
+            $table->json('metadata');
             $table->timestamps();
         });
     }

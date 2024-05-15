@@ -4,29 +4,31 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostingsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained();
+            $table->string('type')->default('post')->comment('post,comment,announcement,poll')->index();
+            $table->text('content');
             $table->string('title')->nullable();
-            $table->text('content')->nullable();
-            $table->json('tag')->nullable();
-            $table->string('visibility')->default('public')->comment('public, department, file');
+            $table->json('tag')->nullable()->index();
+            $table->string('visibility')->default('public')->comment('public, department, file')->index();
             $table->json('pool_posting')->nullable();
-            $table->json('mention')->nullable();
-            $table->dateTime('create_date');
+            $table->json('likes')->nullable();
+            $table->json('mentions')->nullable();
             $table->timestamps();
         });
+
     }
 
     public function down()
     {
         Schema::dropIfExists('posts');
     }
-}
+};
 
 // Post
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfilesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -12,14 +12,14 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->text('bio')->nullable();
-            $table->string('profile_picture')->nullable();
-            $table->string('phone_no')->nullable();
-            $table->string('office_no')->nullable();
+            $table->string('image')->nullable();
             $table->string('cover_photo')->nullable();
-            $table->string('job_title')->nullable();
+            $table->string('phone_no')->nullable();
+            // $table->string('office_no')->nullable();
+            // $table->string('job_title')->nullable();
             // $table->foreignId('position_id')->constrained('positions');
             // $table->foreignId('grade_id')->constrained('grades');
-            $table->date('date_of_birth')->nullable();
+            $table->date('dob')->nullable();
             $table->timestamps();
         });
     }
@@ -28,4 +28,4 @@ class CreateProfilesTable extends Migration
     {
         Schema::dropIfExists('profiles');
     }
-}
+};

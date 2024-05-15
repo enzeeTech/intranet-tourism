@@ -4,17 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommunitiesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
         Schema::create('communities', function (Blueprint $table) {
 
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('banner')->nullable();
             $table->string('description')->nullable();
-            $table->string('type')->default('public')->comment('public, private');
+            $table->string('type')->default('public')->comment('public, private')->index();
             $table->timestamps();
         });
     }
@@ -23,4 +23,4 @@ class CreateCommunitiesTable extends Migration
     {
         Schema::dropIfExists('communities');
     }
-}
+};

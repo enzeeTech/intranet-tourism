@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGalleriesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        Schema::create('galleries', function (Blueprint $table) {
+        Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('post_id')->on('postings');
             $table->foreignId('user_id')->on('users');
@@ -21,4 +21,4 @@ class CreateGalleriesTable extends Migration
     {
         Schema::dropIfExists('galleries');
     }
-}
+};
