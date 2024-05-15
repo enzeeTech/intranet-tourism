@@ -4,9 +4,6 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
-import DepartmentDropdown from '../Components/Reusable/DropdownStaffDirectory';
-import StaffMemberCard from '../Components/Reusable/StaffMemberCard';
-import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import './css/StaffDirectory.css';
 
 
@@ -16,12 +13,12 @@ const FileManage = () => {
 
 
   return (
-    <div className="staff-directory">
+    <div className="file-directory">
       <div>
-        <div className="staff-directory-header">
+        <div className="file-directory-header">
           <PageTitle title="Files" />
         </div>
-        <hr className="staff-directory-underline" />
+        <hr className="file-directory-underline" />
         <div className="widgets-container">
           <div className="left-widget">
             <FeaturedEvents />
@@ -35,11 +32,6 @@ const FileManage = () => {
 
         </div>
       </div>
-      {/* <DeactivateModal 
-        isOpen={isDeactivateModalOpen}
-        onClose={closeDeactivateModal}
-        onConfirm={() => console.log('Deactivated')}
-      /> */}
     </div>
   );
 };

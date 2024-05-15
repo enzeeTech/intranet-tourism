@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import searchIcon from '../../../../public/assets/searchStaffButton.png'; 
-// import filterIcon from '../../../../public/assets/staffListButton.png'; 
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
