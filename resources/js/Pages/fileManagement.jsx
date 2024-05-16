@@ -5,6 +5,7 @@ import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
 import './css/StaffDirectory.css';
+import '../Components/Reusable/css/FileManagementSearchBar.css';
 
 
 
