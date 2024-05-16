@@ -28,27 +28,21 @@ class Notification extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'type' => ['string', 'required'],
                     'notifiable_type' => ['string', 'required'],
                     'notifiable_id' => ['string', 'required'],
                     'data' => ['string', 'required'],
                     'read_at' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'type' => ['string', 'required'],
                     'notifiable_type' => ['string', 'required'],
                     'notifiable_id' => ['string', 'required'],
                     'data' => ['string', 'required'],
                     'read_at' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],

@@ -27,25 +27,21 @@ class Job extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'queue' => ['string', 'required'],
                     'payload' => ['string', 'required'],
                     'attempts' => ['string', 'required'],
                     'reserved_at' => ['string'],
                     'available_at' => ['string', 'required'],
-                    'created_at' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'queue' => ['string', 'required'],
                     'payload' => ['string', 'required'],
                     'attempts' => ['string', 'required'],
                     'reserved_at' => ['string'],
                     'available_at' => ['string', 'required'],
-                    'created_at' => ['string', 'required'],
                 ],
                 // [],
             ],

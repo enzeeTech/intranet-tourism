@@ -27,7 +27,6 @@ class FailedJob extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'uuid' => ['string', 'required'],
                     'connection' => ['string', 'required'],
                     'queue' => ['string', 'required'],
@@ -39,7 +38,6 @@ class FailedJob extends Model
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'uuid' => ['string', 'required'],
                     'connection' => ['string', 'required'],
                     'queue' => ['string', 'required'],

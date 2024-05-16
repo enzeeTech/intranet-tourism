@@ -26,23 +26,17 @@ class Permission extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'guard_name' => ['string', 'required'],
                     'description' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'guard_name' => ['string', 'required'],
                     'description' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],

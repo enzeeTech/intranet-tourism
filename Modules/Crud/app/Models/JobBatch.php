@@ -30,7 +30,6 @@ class JobBatch extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'total_jobs' => ['string', 'required'],
                     'pending_jobs' => ['string', 'required'],
@@ -38,14 +37,12 @@ class JobBatch extends Model
                     'failed_job_ids' => ['string', 'required'],
                     'options' => ['string'],
                     'cancelled_at' => ['string'],
-                    'created_at' => ['string', 'required'],
                     'finished_at' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'total_jobs' => ['string', 'required'],
                     'pending_jobs' => ['string', 'required'],
@@ -53,7 +50,6 @@ class JobBatch extends Model
                     'failed_job_ids' => ['string', 'required'],
                     'options' => ['string'],
                     'cancelled_at' => ['string'],
-                    'created_at' => ['string', 'required'],
                     'finished_at' => ['string'],
                 ],
                 // [],

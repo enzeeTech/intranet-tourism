@@ -26,7 +26,6 @@ class Session extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string'],
                     'ip_address' => ['string'],
                     'user_agent' => ['string'],
@@ -37,7 +36,6 @@ class Session extends Model
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string'],
                     'ip_address' => ['string'],
                     'user_agent' => ['string'],

@@ -23,7 +23,6 @@ class Migration extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'migration' => ['string', 'required'],
                     'batch' => ['string', 'required'],
                 ],
@@ -31,7 +30,6 @@ class Migration extends Model
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'migration' => ['string', 'required'],
                     'batch' => ['string', 'required'],
                 ],

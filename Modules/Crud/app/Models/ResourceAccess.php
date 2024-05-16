@@ -30,31 +30,17 @@ class ResourceAccess extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string', 'required'],
                     'resource_id' => ['string', 'required'],
                     'ability' => ['string', 'required'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string', 'required'],
                     'resource_id' => ['string', 'required'],
                     'ability' => ['string', 'required'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],

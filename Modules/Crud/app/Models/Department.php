@@ -30,31 +30,17 @@ class Department extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string'],
                     'banner' => ['string'],
                     'description' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string'],
                     'banner' => ['string'],
                     'description' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],

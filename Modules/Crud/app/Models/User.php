@@ -28,27 +28,21 @@ class User extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'email' => ['string', 'required'],
                     'email_verified_at' => ['string'],
                     'password' => ['string', 'required'],
                     'remember_token' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
                     'email' => ['string', 'required'],
                     'email_verified_at' => ['string'],
                     'password' => ['string', 'required'],
                     'remember_token' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],

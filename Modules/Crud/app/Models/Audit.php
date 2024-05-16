@@ -34,7 +34,6 @@ class Audit extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_type' => ['string'],
                     'user_id' => ['string'],
                     'event' => ['string', 'required'],
@@ -46,14 +45,11 @@ class Audit extends Model
                     'ip_address' => ['string'],
                     'user_agent' => ['string'],
                     'tags' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_type' => ['string'],
                     'user_id' => ['string'],
                     'event' => ['string', 'required'],
@@ -65,8 +61,6 @@ class Audit extends Model
                     'ip_address' => ['string'],
                     'user_agent' => ['string'],
                     'tags' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
                 ],
                 // [],
             ],

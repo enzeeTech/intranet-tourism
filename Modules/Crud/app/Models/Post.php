@@ -36,7 +36,6 @@ class Post extends Model
         $rules = [
             'create' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string', 'required'],
                     'type' => ['string', 'required'],
                     'content' => ['string', 'required'],
@@ -46,18 +45,11 @@ class Post extends Model
                     'pool_posting' => ['string'],
                     'likes' => ['string'],
                     'mentions' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'id' => ['string', 'required'],
                     'user_id' => ['string', 'required'],
                     'type' => ['string', 'required'],
                     'content' => ['string', 'required'],
@@ -67,12 +59,6 @@ class Post extends Model
                     'pool_posting' => ['string'],
                     'likes' => ['string'],
                     'mentions' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
-                    'created_by' => ['string', 'required'],
-                    'updated_by' => ['string', 'required'],
-                    'deleted_at' => ['string'],
-                    'deleted_by' => ['string', 'required'],
                 ],
                 // [],
             ],

@@ -25,7 +25,6 @@ class PasswordResetToken extends Model
                 [
                     'email' => ['string', 'required'],
                     'token' => ['string', 'required'],
-                    'created_at' => ['string'],
                 ],
                 // [],
             ],
@@ -33,7 +32,6 @@ class PasswordResetToken extends Model
                 [
                     'email' => ['string', 'required'],
                     'token' => ['string', 'required'],
-                    'created_at' => ['string'],
                 ],
                 // [],
             ],
