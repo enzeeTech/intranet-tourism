@@ -38,7 +38,7 @@ function Image() {
                 <ImageComponent
                   src={img.src}
                   alt={img.alt}
-                  className="grow shrink-0 max-w-full aspect-[1.19] w-[172px] max-md:mt-5"
+                  className="grow shrink-0 max-w-full aspect-[1.19] w-[175px] max-md:mt-5"
                 />
               </figure>
             )
