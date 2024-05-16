@@ -5,8 +5,6 @@ namespace Modules\Crud\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Crud\Models\Community;
 
-// use App\Models\Community;
-
 class CommunityController extends Controller
 {
     public function index()

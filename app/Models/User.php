@@ -16,6 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable;
     use QueryableApi;
     use QueryableApi;
+
     protected $table = 'users';
 
     /**
