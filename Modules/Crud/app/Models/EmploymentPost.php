@@ -4,6 +4,7 @@ namespace Modules\Crud\Models;
 
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,18 +14,12 @@ class EmploymentPost extends Model
 
     protected $table = 'employment_posts';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'department_id',
         'business_post_id',
         'business_grade_id',
         'business_scheme_id',
         'user_id',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -53,5 +48,35 @@ class EmploymentPost extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function businessGrade()
+    {
+        return $this->belongsTo(BusinessGrade::class);
+    }
+
+    public function businessPost()
+    {
+        return $this->belongsTo(BusinessPost::class);
+    }
+
+    public function businessScheme()
+    {
+        return $this->belongsTo(BusinessScheme::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function supervisors()
+    {
+        return $this->hasMany(Supervisor::class);
     }
 }

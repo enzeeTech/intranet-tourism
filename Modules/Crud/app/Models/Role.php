@@ -13,12 +13,10 @@ class Role extends Model
 
     protected $table = 'roles';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'name',
         'guard_name',
         'description',
-        'created_at',
-        'updated_at',
     ];
 
     public static function rules($scenario = 'create')
@@ -43,5 +41,15 @@ class Role extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function s()
+    {
+        return $this->hasMany(ModelHasRole::class);
+    }
+
+    public function hasPermissions()
+    {
+        return $this->hasMany(RoleHasPermission::class);
     }
 }

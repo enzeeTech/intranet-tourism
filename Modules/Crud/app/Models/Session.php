@@ -13,7 +13,7 @@ class Session extends Model
 
     protected $table = 'sessions';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_id',
         'ip_address',
         'user_agent',

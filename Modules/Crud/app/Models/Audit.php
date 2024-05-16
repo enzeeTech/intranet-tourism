@@ -13,7 +13,7 @@ class Audit extends Model
 
     protected $table = 'audits';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_type',
         'user_id',
         'event',
@@ -25,8 +25,6 @@ class Audit extends Model
         'ip_address',
         'user_agent',
         'tags',
-        'created_at',
-        'updated_at',
     ];
 
     public static function rules($scenario = 'create')

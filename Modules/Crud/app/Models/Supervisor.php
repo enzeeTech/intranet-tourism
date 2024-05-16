@@ -13,15 +13,9 @@ class Supervisor extends Model
 
     protected $table = 'supervisors';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'child_id',
         'parent_id',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -44,5 +38,15 @@ class Supervisor extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function child()
+    {
+        return $this->belongsTo(EmploymentPost::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(EmploymentPost::class);
     }
 }

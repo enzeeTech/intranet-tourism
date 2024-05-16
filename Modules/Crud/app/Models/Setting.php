@@ -13,16 +13,10 @@ class Setting extends Model
 
     protected $table = 'settings';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'group',
         'key',
         'value',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')

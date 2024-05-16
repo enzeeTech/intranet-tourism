@@ -13,7 +13,7 @@ class FailedJob extends Model
 
     protected $table = 'failed_jobs';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'uuid',
         'connection',
         'queue',

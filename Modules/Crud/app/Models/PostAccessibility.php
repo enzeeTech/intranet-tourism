@@ -13,16 +13,10 @@ class PostAccessibility extends Model
 
     protected $table = 'post_accessibilities';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'post_id',
         'accessable_type',
         'accessable_id',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -47,5 +41,10 @@ class PostAccessibility extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
     }
 }

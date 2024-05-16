@@ -13,14 +13,8 @@ class BusinessPost extends Model
 
     protected $table = 'business_posts';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'title',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -41,5 +35,10 @@ class BusinessPost extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function employmentPosts()
+    {
+        return $this->hasMany(EmploymentPost::class);
     }
 }

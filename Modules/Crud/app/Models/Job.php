@@ -13,13 +13,12 @@ class Job extends Model
 
     protected $table = 'jobs';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'queue',
         'payload',
         'attempts',
         'reserved_at',
         'available_at',
-        'created_at',
     ];
 
     public static function rules($scenario = 'create')

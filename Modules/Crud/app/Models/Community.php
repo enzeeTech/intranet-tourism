@@ -13,17 +13,11 @@ class Community extends Model
 
     protected $table = 'communities';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'name',
         'banner',
         'description',
         'type',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -50,5 +44,15 @@ class Community extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function members()
+    {
+        return $this->hasMany(CommunityMember::class);
+    }
+
+    public function preferences()
+    {
+        return $this->hasMany(CommunityPreference::class);
     }
 }

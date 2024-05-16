@@ -13,12 +13,10 @@ class Permission extends Model
 
     protected $table = 'permissions';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'name',
         'guard_name',
         'description',
-        'created_at',
-        'updated_at',
     ];
 
     public static function rules($scenario = 'create')
@@ -43,5 +41,10 @@ class Permission extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function s()
+    {
+        return $this->hasMany(ModelHasPermission::class);
     }
 }

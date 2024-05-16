@@ -13,7 +13,8 @@ class Cache extends Model
 
     protected $table = 'cache';
 
-    protected $fillable = ['key',
+    protected $fillable = [
+        'key',
         'value',
         'expiration',
     ];

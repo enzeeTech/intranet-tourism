@@ -13,15 +13,9 @@ class TaskItem extends Model
 
     protected $table = 'task_items';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'task_id',
         'description',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -44,5 +38,10 @@ class TaskItem extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
     }
 }

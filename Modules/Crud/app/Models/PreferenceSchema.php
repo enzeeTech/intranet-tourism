@@ -13,19 +13,13 @@ class PreferenceSchema extends Model
 
     protected $table = 'preference_schemas';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'preferencable_type',
         'preferencable_id',
         'group_name',
         'subgroup_name',
         'item',
         'value_type',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')

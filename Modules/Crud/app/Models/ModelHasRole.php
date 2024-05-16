@@ -13,7 +13,8 @@ class ModelHasRole extends Model
 
     protected $table = 'model_has_roles';
 
-    protected $fillable = ['role_id',
+    protected $fillable = [
+        'role_id',
         'model_type',
         'model_id',
     ];
@@ -40,5 +41,10 @@ class ModelHasRole extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

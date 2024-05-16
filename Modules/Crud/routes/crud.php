@@ -30,7 +30,7 @@ Route::apiResources([
     'permissions' => \Modules\Crud\Http\Controllers\PermissionController::class,
     'posts' => \Modules\Crud\Http\Controllers\PostController::class,
     'post_accessibilities' => \Modules\Crud\Http\Controllers\PostAccessibilityController::class,
-    'post_comments' => \Modules\Crud\Http\Controllers\PostCommentController::class,
+    'post_comment' => \Modules\Crud\Http\Controllers\PostCommentController::class,
     'preference_schemas' => \Modules\Crud\Http\Controllers\PreferenceSchemaController::class,
     'profiles' => \Modules\Crud\Http\Controllers\ProfileController::class,
     'resources' => \Modules\Crud\Http\Controllers\ResourceController::class,

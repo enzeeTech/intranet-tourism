@@ -13,14 +13,12 @@ class Notification extends Model
 
     protected $table = 'notifications';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'type',
         'notifiable_type',
         'notifiable_id',
         'data',
         'read_at',
-        'created_at',
-        'updated_at',
     ];
 
     public static function rules($scenario = 'create')

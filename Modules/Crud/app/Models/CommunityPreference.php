@@ -13,18 +13,12 @@ class CommunityPreference extends Model
 
     protected $table = 'community_preferences';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'community_id',
         'group',
         'subgroup',
         'key',
         'value',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -53,5 +47,10 @@ class CommunityPreference extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function community()
+    {
+        return $this->belongsTo(Community::class);
     }
 }

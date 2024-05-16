@@ -13,9 +13,9 @@ class PasswordResetToken extends Model
 
     protected $table = 'password_reset_tokens';
 
-    protected $fillable = ['email',
+    protected $fillable = [
+        'email',
         'token',
-        'created_at',
     ];
 
     public static function rules($scenario = 'create')

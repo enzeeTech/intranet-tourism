@@ -13,7 +13,7 @@ class JobBatch extends Model
 
     protected $table = 'job_batches';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'name',
         'total_jobs',
         'pending_jobs',
@@ -21,7 +21,6 @@ class JobBatch extends Model
         'failed_job_ids',
         'options',
         'cancelled_at',
-        'created_at',
         'finished_at',
     ];
 

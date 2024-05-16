@@ -4,6 +4,7 @@ namespace Modules\Crud\Models;
 
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Resource extends Model
 
     protected $table = 'resources';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_id',
         'attachable_type',
         'attachable_id',
@@ -24,12 +25,6 @@ class Resource extends Model
         'filesize',
         'duration',
         'metadata',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -68,5 +63,15 @@ class Resource extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function accesses()
+    {
+        return $this->hasMany(ResourceAccess::class);
     }
 }

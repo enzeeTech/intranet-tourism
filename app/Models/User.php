@@ -13,9 +13,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable;
-    use QueryableApi;
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
+    use HasApiTokens, HasPermissions, HasRoles, Notifiable;
 
     protected $table = 'users';
 

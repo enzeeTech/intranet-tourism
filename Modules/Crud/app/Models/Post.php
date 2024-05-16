@@ -4,6 +4,7 @@ namespace Modules\Crud\Models;
 
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Post extends Model
 
     protected $table = 'posts';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_id',
         'type',
         'content',
@@ -23,12 +24,6 @@ class Post extends Model
         'pool_posting',
         'likes',
         'mentions',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -65,5 +60,20 @@ class Post extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function accessibilities()
+    {
+        return $this->hasMany(PostAccessibility::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(PostComment::class);
     }
 }

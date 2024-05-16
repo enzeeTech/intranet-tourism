@@ -4,6 +4,7 @@ namespace Modules\Crud\Models;
 
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,18 +14,12 @@ class UserPreference extends Model
 
     protected $table = 'user_preferences';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_id',
         'group',
         'subgroup',
         'key',
         'value',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -53,5 +48,10 @@ class UserPreference extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

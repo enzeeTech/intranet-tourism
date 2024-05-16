@@ -22,11 +22,10 @@ return new class extends Migration
             $table->auditable();
         });
 
-        Schema::create('post_comments', function (Blueprint $table) {
+        Schema::create('post_comment', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('post_id')->constrained('posts');
             $table->foreignUuid('comment_id')->constrained('posts');
-            $table->foreignId('user_id')->constrained('users');
             $table->auditable();
         });
 

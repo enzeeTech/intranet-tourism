@@ -13,14 +13,8 @@ class BusinessGrade extends Model
 
     protected $table = 'business_grades';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'code',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -41,5 +35,10 @@ class BusinessGrade extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function employmentPosts()
+    {
+        return $this->hasMany(EmploymentPost::class);
     }
 }

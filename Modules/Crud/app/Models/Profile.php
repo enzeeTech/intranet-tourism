@@ -4,6 +4,7 @@ namespace Modules\Crud\Models;
 
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,19 +14,13 @@ class Profile extends Model
 
     protected $table = 'profiles';
 
-    protected $fillable = ['id',
+    protected $fillable = [
         'user_id',
         'bio',
         'image',
         'cover_photo',
         'phone_no',
         'dob',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
@@ -56,5 +51,10 @@ class Profile extends Model
         ];
 
         return $rules[$scenario];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
