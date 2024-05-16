@@ -27,6 +27,7 @@ export default function MyComponent() {
         whatsapp: "+6014 971 8736",
         icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
+        photo: "https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&"
       };
 
 
@@ -94,10 +95,11 @@ export default function MyComponent() {
               <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
             </section>
             {activeTab === "bio" && (
-              <section className="flex w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+              <section className="flex w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-lg max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                 <div className="flex-auto my-auto max-md:max-w-full">
                   <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                     <ProfileBio
+                      photo={profileData.photo}
                       email={profileData.email}
                       department={profileData.department}
                       position={profileData.position}
