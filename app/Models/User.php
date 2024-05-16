@@ -2,50 +2,75 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Model
+use App\Models\Traits\QueryableApi;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable implements MustVerifyEmail
 {
-    protected $table = 'users';
+    use HasApiTokens, HasFactory, HasPermissions, HasRoles, Notifiable;
+    use QueryableApi;
 
-    protected $fillable = ['id',
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
         'name',
         'email',
-        'email_verified_at',
         'password',
-        'remember_token',
-        'created_at',
-        'updated_at',
     ];
 
-    public static function rules($scenario = 'create')
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    public static function rules($scenario = 'default')
     {
         $rules = [
-            'create' => [
+            'default' => [
                 [
-                    'id' => ['string', 'required'],
-                    'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
+                    'name' => 'required',
+                    'email' => 'required',
+                    'password' => 'required',
                 ],
-                // [],
             ],
-            'update' => [
+            'register' => [
                 [
-                    'id' => ['string', 'required'],
-                    'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
-                    'created_at' => ['string'],
-                    'updated_at' => ['string'],
+                    'name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'email', 'unique:users', 'max:255'],
+                    'password' => ['required', 'confirmed'],
                 ],
-                // [],
+                [
+                    'email.unique' => 'Emel telah berdaftar. Sila set semula kata laluan sekiranya anda terlupa kata laluan',
+                ],
             ],
         ];
 

@@ -2,44 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
+use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            'data' => Notification::queryable()->paginate(),
-        ]);
+        return Inertia::render('Notification');
     }
 
-    public function show()
+    public function index_unread()
     {
-        return response()->json([
-            'data' => Notification::queryable()->firstOrFail(request('id')),
-        ]);
+        return Inertia::render('Notification_unread');
     }
 
-    public function store()
+    public function testing()
     {
-        $validated = request()->validate(...Notification::rules());
-        Notification::create($validated);
-
-        return response()->noContent();
-    }
-
-    public function update(Notification $notification)
-    {
-        $validated = request()->validate(...Notification::rules('update'));
-        $notification->update($validated);
-
-        return response()->noContent();
-    }
-
-    public function delete(Notification $notification)
-    {
-        $notification->delete();
-
-        return response()->noContent();
+        return Inertia::render('Noti-popup-test');
     }
 }
