@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Cache;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Cache;
 
 class CacheController extends Controller
 {
@@ -16,7 +17,7 @@ class CacheController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Cache::queryable()->firstOrFail(request('id')),
+            'data' => Cache::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class CacheController extends Controller
         return response()->noContent();
     }
 
-    public function update(Cache $resource)
+    public function update(Cache $cache)
     {
         $validated = request()->validate(...Cache::rules('update'));
-        $resource->update($validated);
+        $cache->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Cache $resource)
+    public function delete(Cache $cache)
     {
-        $resource->delete();
+        $cache->delete();
 
         return response()->noContent();
     }

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Event;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Event;
 
 class EventController extends Controller
 {
@@ -16,7 +17,7 @@ class EventController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Event::queryable()->firstOrFail(request('id')),
+            'data' => Event::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class EventController extends Controller
         return response()->noContent();
     }
 
-    public function update(Event $resource)
+    public function update(Event $event)
     {
         $validated = request()->validate(...Event::rules('update'));
-        $resource->update($validated);
+        $event->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Event $resource)
+    public function delete(Event $event)
     {
-        $resource->delete();
+        $event->delete();
 
         return response()->noContent();
     }

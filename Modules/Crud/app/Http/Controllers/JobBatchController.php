@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\JobBatch;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\JobBatch;
 
 class JobBatchController extends Controller
 {
@@ -16,7 +17,7 @@ class JobBatchController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => JobBatch::queryable()->firstOrFail(request('id')),
+            'data' => JobBatch::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class JobBatchController extends Controller
         return response()->noContent();
     }
 
-    public function update(JobBatch $resource)
+    public function update(JobBatch $job_batch)
     {
         $validated = request()->validate(...JobBatch::rules('update'));
-        $resource->update($validated);
+        $job_batch->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(JobBatch $resource)
+    public function delete(JobBatch $job_batch)
     {
-        $resource->delete();
+        $job_batch->delete();
 
         return response()->noContent();
     }

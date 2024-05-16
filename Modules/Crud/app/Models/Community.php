@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Community extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'communities';
 
@@ -18,13 +20,47 @@ class Community extends Model
         'type',
         'created_at',
         'updated_at',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'banner' => ['string'],
+                    'description' => ['string'],
+                    'type' => ['string', 'required'],
+                    'created_at' => ['string'],
+                    'updated_at' => ['string'],
+                    'created_by' => ['string', 'required'],
+                    'updated_by' => ['string', 'required'],
+                    'deleted_at' => ['string'],
+                    'deleted_by' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'banner' => ['string'],
+                    'description' => ['string'],
+                    'type' => ['string', 'required'],
+                    'created_at' => ['string'],
+                    'updated_at' => ['string'],
+                    'created_by' => ['string', 'required'],
+                    'updated_by' => ['string', 'required'],
+                    'deleted_at' => ['string'],
+                    'deleted_by' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

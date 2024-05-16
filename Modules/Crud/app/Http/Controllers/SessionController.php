@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Session;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Session;
 
 class SessionController extends Controller
 {
@@ -16,7 +17,7 @@ class SessionController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Session::queryable()->firstOrFail(request('id')),
+            'data' => Session::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class SessionController extends Controller
         return response()->noContent();
     }
 
-    public function update(Session $resource)
+    public function update(Session $session)
     {
         $validated = request()->validate(...Session::rules('update'));
-        $resource->update($validated);
+        $session->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Session $resource)
+    public function delete(Session $session)
     {
-        $resource->delete();
+        $session->delete();
 
         return response()->noContent();
     }

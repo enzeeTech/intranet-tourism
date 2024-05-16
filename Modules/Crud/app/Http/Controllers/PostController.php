@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Post;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Post;
 
 class PostController extends Controller
 {
@@ -16,7 +17,7 @@ class PostController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Post::queryable()->firstOrFail(request('id')),
+            'data' => Post::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function update(Post $resource)
+    public function update(Post $post)
     {
         $validated = request()->validate(...Post::rules('update'));
-        $resource->update($validated);
+        $post->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Post $resource)
+    public function delete(Post $post)
     {
-        $resource->delete();
+        $post->delete();
 
         return response()->noContent();
     }

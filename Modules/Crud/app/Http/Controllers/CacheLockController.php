@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\CacheLock;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\CacheLock;
 
 class CacheLockController extends Controller
 {
@@ -16,7 +17,7 @@ class CacheLockController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => CacheLock::queryable()->firstOrFail(request('id')),
+            'data' => CacheLock::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class CacheLockController extends Controller
         return response()->noContent();
     }
 
-    public function update(CacheLock $resource)
+    public function update(CacheLock $cache_lock)
     {
         $validated = request()->validate(...CacheLock::rules('update'));
-        $resource->update($validated);
+        $cache_lock->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(CacheLock $resource)
+    public function delete(CacheLock $cache_lock)
     {
-        $resource->delete();
+        $cache_lock->delete();
 
         return response()->noContent();
     }

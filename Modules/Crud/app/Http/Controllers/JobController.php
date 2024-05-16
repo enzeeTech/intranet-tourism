@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Job;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Job;
 
 class JobController extends Controller
 {
@@ -16,7 +17,7 @@ class JobController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Job::queryable()->firstOrFail(request('id')),
+            'data' => Job::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class JobController extends Controller
         return response()->noContent();
     }
 
-    public function update(Job $resource)
+    public function update(Job $job)
     {
         $validated = request()->validate(...Job::rules('update'));
-        $resource->update($validated);
+        $job->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Job $resource)
+    public function delete(Job $job)
     {
-        $resource->delete();
+        $job->delete();
 
         return response()->noContent();
     }

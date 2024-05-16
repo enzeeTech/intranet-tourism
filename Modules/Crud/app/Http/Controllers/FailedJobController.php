@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\FailedJob;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\FailedJob;
 
 class FailedJobController extends Controller
 {
@@ -16,7 +17,7 @@ class FailedJobController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => FailedJob::queryable()->firstOrFail(request('id')),
+            'data' => FailedJob::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class FailedJobController extends Controller
         return response()->noContent();
     }
 
-    public function update(FailedJob $resource)
+    public function update(FailedJob $failed_job)
     {
         $validated = request()->validate(...FailedJob::rules('update'));
-        $resource->update($validated);
+        $failed_job->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(FailedJob $resource)
+    public function delete(FailedJob $failed_job)
     {
-        $resource->delete();
+        $failed_job->delete();
 
         return response()->noContent();
     }

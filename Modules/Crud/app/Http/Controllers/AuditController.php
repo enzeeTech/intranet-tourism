@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Audit;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Audit;
 
 class AuditController extends Controller
 {
@@ -16,7 +17,7 @@ class AuditController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Audit::queryable()->firstOrFail(request('id')),
+            'data' => Audit::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class AuditController extends Controller
         return response()->noContent();
     }
 
-    public function update(Audit $resource)
+    public function update(Audit $audit)
     {
         $validated = request()->validate(...Audit::rules('update'));
-        $resource->update($validated);
+        $audit->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Audit $resource)
+    public function delete(Audit $audit)
     {
-        $resource->delete();
+        $audit->delete();
 
         return response()->noContent();
     }

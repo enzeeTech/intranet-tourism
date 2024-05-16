@@ -19,7 +19,6 @@
         "laravel/tinker": "^2.9",
         "nwidart/laravel-modules": "^11.0",
         "owen-it/laravel-auditing": "^13.6",
-        "rekamy/kikof": "dev-main",
         "spatie/laravel-permission": "^6.7",
         "tightenco/ziggy": "^2.0"
     },
@@ -89,11 +88,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-         "type" : "path",
-         "url" : "../packages/kikof"
-        }
-     ]
+    "prefer-stable": true
 }

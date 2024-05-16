@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\PasswordResetToken;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\PasswordResetToken;
 
 class PasswordResetTokenController extends Controller
 {
@@ -16,7 +17,7 @@ class PasswordResetTokenController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => PasswordResetToken::queryable()->firstOrFail(request('id')),
+            'data' => PasswordResetToken::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class PasswordResetTokenController extends Controller
         return response()->noContent();
     }
 
-    public function update(PasswordResetToken $resource)
+    public function update(PasswordResetToken $password_reset_token)
     {
         $validated = request()->validate(...PasswordResetToken::rules('update'));
-        $resource->update($validated);
+        $password_reset_token->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(PasswordResetToken $resource)
+    public function delete(PasswordResetToken $password_reset_token)
     {
-        $resource->delete();
+        $password_reset_token->delete();
 
         return response()->noContent();
     }

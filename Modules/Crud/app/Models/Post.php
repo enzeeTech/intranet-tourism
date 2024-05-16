@@ -1,34 +1,81 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'posts';
 
     protected $fillable = ['id',
         'user_id',
-        'title',
+        'type',
         'content',
+        'title',
         'tag',
         'visibility',
         'pool_posting',
-        'mention',
-        'create_date',
+        'likes',
+        'mentions',
         'created_at',
         'updated_at',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'deleted_by',
     ];
 
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'user_id' => ['string', 'required'],
+                    'type' => ['string', 'required'],
+                    'content' => ['string', 'required'],
+                    'title' => ['string'],
+                    'tag' => ['string'],
+                    'visibility' => ['string', 'required'],
+                    'pool_posting' => ['string'],
+                    'likes' => ['string'],
+                    'mentions' => ['string'],
+                    'created_at' => ['string'],
+                    'updated_at' => ['string'],
+                    'created_by' => ['string', 'required'],
+                    'updated_by' => ['string', 'required'],
+                    'deleted_at' => ['string'],
+                    'deleted_by' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'user_id' => ['string', 'required'],
+                    'type' => ['string', 'required'],
+                    'content' => ['string', 'required'],
+                    'title' => ['string'],
+                    'tag' => ['string'],
+                    'visibility' => ['string', 'required'],
+                    'pool_posting' => ['string'],
+                    'likes' => ['string'],
+                    'mentions' => ['string'],
+                    'created_at' => ['string'],
+                    'updated_at' => ['string'],
+                    'created_by' => ['string', 'required'],
+                    'updated_by' => ['string', 'required'],
+                    'deleted_at' => ['string'],
+                    'deleted_by' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

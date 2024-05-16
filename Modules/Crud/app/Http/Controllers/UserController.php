@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\User;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => User::queryable()->firstOrFail(request('id')),
+            'data' => User::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function update(User $resource)
+    public function update(User $user)
     {
         $validated = request()->validate(...User::rules('update'));
-        $resource->update($validated);
+        $user->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(User $resource)
+    public function delete(User $user)
     {
-        $resource->delete();
+        $user->delete();
 
         return response()->noContent();
     }

@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class JobBatch extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'job_batches';
 
@@ -26,8 +28,36 @@ class JobBatch extends Model
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'total_jobs' => ['string', 'required'],
+                    'pending_jobs' => ['string', 'required'],
+                    'failed_jobs' => ['string', 'required'],
+                    'failed_job_ids' => ['string', 'required'],
+                    'options' => ['string'],
+                    'cancelled_at' => ['string'],
+                    'created_at' => ['string', 'required'],
+                    'finished_at' => ['string'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'total_jobs' => ['string', 'required'],
+                    'pending_jobs' => ['string', 'required'],
+                    'failed_jobs' => ['string', 'required'],
+                    'failed_job_ids' => ['string', 'required'],
+                    'options' => ['string'],
+                    'cancelled_at' => ['string'],
+                    'created_at' => ['string', 'required'],
+                    'finished_at' => ['string'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

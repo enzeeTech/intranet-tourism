@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\PostAccessibility;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\PostAccessibility;
 
 class PostAccessibilityController extends Controller
 {
@@ -16,7 +17,7 @@ class PostAccessibilityController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => PostAccessibility::queryable()->firstOrFail(request('id')),
+            'data' => PostAccessibility::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class PostAccessibilityController extends Controller
         return response()->noContent();
     }
 
-    public function update(PostAccessibility $resource)
+    public function update(PostAccessibility $post_accessibility)
     {
         $validated = request()->validate(...PostAccessibility::rules('update'));
-        $resource->update($validated);
+        $post_accessibility->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(PostAccessibility $resource)
+    public function delete(PostAccessibility $post_accessibility)
     {
-        $resource->delete();
+        $post_accessibility->delete();
 
         return response()->noContent();
     }

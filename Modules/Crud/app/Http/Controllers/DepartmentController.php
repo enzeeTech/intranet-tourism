@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Department;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Department;
 
 class DepartmentController extends Controller
 {
@@ -16,7 +17,7 @@ class DepartmentController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Department::queryable()->firstOrFail(request('id')),
+            'data' => Department::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class DepartmentController extends Controller
         return response()->noContent();
     }
 
-    public function update(Department $resource)
+    public function update(Department $department)
     {
         $validated = request()->validate(...Department::rules('update'));
-        $resource->update($validated);
+        $department->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Department $resource)
+    public function delete(Department $department)
     {
-        $resource->delete();
+        $department->delete();
 
         return response()->noContent();
     }

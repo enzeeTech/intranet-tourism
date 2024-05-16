@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Profile;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Profile;
 
 class ProfileController extends Controller
 {
@@ -16,7 +17,7 @@ class ProfileController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Profile::queryable()->firstOrFail(request('id')),
+            'data' => Profile::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class ProfileController extends Controller
         return response()->noContent();
     }
 
-    public function update(Profile $resource)
+    public function update(Profile $profile)
     {
         $validated = request()->validate(...Profile::rules('update'));
-        $resource->update($validated);
+        $profile->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Profile $resource)
+    public function delete(Profile $profile)
     {
-        $resource->delete();
+        $profile->delete();
 
         return response()->noContent();
     }

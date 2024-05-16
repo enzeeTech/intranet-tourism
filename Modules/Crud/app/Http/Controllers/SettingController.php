@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Setting;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Setting;
 
 class SettingController extends Controller
 {
@@ -16,7 +17,7 @@ class SettingController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Setting::queryable()->firstOrFail(request('id')),
+            'data' => Setting::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class SettingController extends Controller
         return response()->noContent();
     }
 
-    public function update(Setting $resource)
+    public function update(Setting $setting)
     {
         $validated = request()->validate(...Setting::rules('update'));
-        $resource->update($validated);
+        $setting->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Setting $resource)
+    public function delete(Setting $setting)
     {
-        $resource->delete();
+        $setting->delete();
 
         return response()->noContent();
     }

@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Migration extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'migrations';
 
@@ -19,8 +21,22 @@ class Migration extends Model
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'migration' => ['string', 'required'],
+                    'batch' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'migration' => ['string', 'required'],
+                    'batch' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

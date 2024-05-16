@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FailedJob extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'failed_jobs';
 
@@ -23,8 +25,30 @@ class FailedJob extends Model
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'uuid' => ['string', 'required'],
+                    'connection' => ['string', 'required'],
+                    'queue' => ['string', 'required'],
+                    'payload' => ['string', 'required'],
+                    'exception' => ['string', 'required'],
+                    'failed_at' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'uuid' => ['string', 'required'],
+                    'connection' => ['string', 'required'],
+                    'queue' => ['string', 'required'],
+                    'payload' => ['string', 'required'],
+                    'exception' => ['string', 'required'],
+                    'failed_at' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

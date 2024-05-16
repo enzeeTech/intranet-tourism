@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Crud\Models;
 
+use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
-    use QueryableApi;
+    use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'sessions';
 
@@ -22,8 +24,28 @@ class Session extends Model
     public static function rules($scenario = 'create')
     {
         $rules = [
-            'create' => [],
-            'update' => [],
+            'create' => [
+                [
+                    'id' => ['string', 'required'],
+                    'user_id' => ['string'],
+                    'ip_address' => ['string'],
+                    'user_agent' => ['string'],
+                    'payload' => ['string', 'required'],
+                    'last_activity' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'update' => [
+                [
+                    'id' => ['string', 'required'],
+                    'user_id' => ['string'],
+                    'ip_address' => ['string'],
+                    'user_agent' => ['string'],
+                    'payload' => ['string', 'required'],
+                    'last_activity' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

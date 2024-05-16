@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Migration;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Migration;
 
 class MigrationController extends Controller
 {
@@ -16,7 +17,7 @@ class MigrationController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Migration::queryable()->firstOrFail(request('id')),
+            'data' => Migration::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class MigrationController extends Controller
         return response()->noContent();
     }
 
-    public function update(Migration $resource)
+    public function update(Migration $migration)
     {
         $validated = request()->validate(...Migration::rules('update'));
-        $resource->update($validated);
+        $migration->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Migration $resource)
+    public function delete(Migration $migration)
     {
-        $resource->delete();
+        $migration->delete();
 
         return response()->noContent();
     }

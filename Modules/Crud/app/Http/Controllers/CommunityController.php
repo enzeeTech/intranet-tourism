@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Crud\Http\Controllers;
 
-use App\Models\Community;
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\Community;
 
 class CommunityController extends Controller
 {
@@ -16,7 +17,7 @@ class CommunityController extends Controller
     public function show()
     {
         return response()->json([
-            'data' => Community::queryable()->firstOrFail(request('id')),
+            'data' => Community::where('id', request('id'))->queryable()->firstOrFail(),
         ]);
     }
 
@@ -28,17 +29,17 @@ class CommunityController extends Controller
         return response()->noContent();
     }
 
-    public function update(Community $resource)
+    public function update(Community $community)
     {
         $validated = request()->validate(...Community::rules('update'));
-        $resource->update($validated);
+        $community->update($validated);
 
         return response()->noContent();
     }
 
-    public function delete(Community $resource)
+    public function delete(Community $community)
     {
-        $resource->delete();
+        $community->delete();
 
         return response()->noContent();
     }
