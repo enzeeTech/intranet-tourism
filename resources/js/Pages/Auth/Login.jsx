@@ -87,6 +87,18 @@ export default function Login({ status, canResetPassword }) {
                 <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
                     Log in
                 </PrimaryButton>
+                <div className="h-1">
+    <InputError 
+        message={
+            errors.email ? "username and/or password is wrong" : 
+            errors.password ? "username and/or password is wrong" : 
+            ""
+        } 
+        className="text-sm text-red-500" 
+    />
+</div>
+
+
             </form>
         </GuestLayout>
     );

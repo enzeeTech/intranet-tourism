@@ -71,7 +71,9 @@ const Table = () => {
     <div className="ml-8 w-3/4 px-4 sm:px-6 lg:px-0">
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-          <table className="min-w-full rounded-2xl bg-white">
+        <div className="bg-white-200 w-[850px] h-[675px] px-8 py-8 rounded-2xl shadow-2xl">
+
+          <table className="w-full rounded-2xl bg-white">
             <thead>
               <tr>
                 <th scope="col" className="rounded-2xl bg-blue-200 py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">Name</th>
@@ -91,7 +93,7 @@ const Table = () => {
                 <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
               </tr>
             </thead>
-            <tbody className="divide-y-reverse divide-neutral-500 text-center shadow-lg rounded-2xl">
+            <tbody className="divide-y-reverse divide-neutral-500 text-center  rounded-2xl ">
               {currentItems.map((person, index) => (
                 <tr key={index}>
                   <td className="border-b border-r border-neutral-500 whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-neutral-800 sm:pl-1">{person.name}</td>
@@ -107,8 +109,9 @@ const Table = () => {
           <Pagination totalItems={data.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
         </div>
       </div>
+      </div>
     </div>
   );
-}
+}  
 
 export { SearchButton, SearchInput, Table };
