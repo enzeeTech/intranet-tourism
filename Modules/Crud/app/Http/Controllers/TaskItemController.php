@@ -14,10 +14,10 @@ class TaskItemController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => TaskItem::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => TaskItem::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class TaskItemController extends Controller
         return response()->noContent();
     }
 
-    public function delete(TaskItem $task_item)
+    public function destroy(TaskItem $task_item)
     {
         $task_item->delete();
 

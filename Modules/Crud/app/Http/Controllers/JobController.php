@@ -14,10 +14,10 @@ class JobController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Job::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Job::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class JobController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Job $job)
+    public function destroy(Job $job)
     {
         $job->delete();
 

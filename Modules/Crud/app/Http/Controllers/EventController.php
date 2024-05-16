@@ -14,10 +14,10 @@ class EventController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Event::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Event::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class EventController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Event $event)
+    public function destroy(Event $event)
     {
         $event->delete();
 

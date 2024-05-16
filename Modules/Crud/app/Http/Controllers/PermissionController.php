@@ -14,10 +14,10 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Permission::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Permission::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PermissionController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Permission $permission)
+    public function destroy(Permission $permission)
     {
         $permission->delete();
 

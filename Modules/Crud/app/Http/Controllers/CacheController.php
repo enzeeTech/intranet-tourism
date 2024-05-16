@@ -14,10 +14,10 @@ class CacheController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Cache::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Cache::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class CacheController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Cache $cache)
+    public function destroy(Cache $cache)
     {
         $cache->delete();
 

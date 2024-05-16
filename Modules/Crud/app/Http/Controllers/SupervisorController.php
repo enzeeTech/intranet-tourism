@@ -14,10 +14,10 @@ class SupervisorController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Supervisor::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Supervisor::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class SupervisorController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Supervisor $supervisor)
+    public function destroy(Supervisor $supervisor)
     {
         $supervisor->delete();
 

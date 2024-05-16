@@ -14,10 +14,10 @@ class EventAttendanceController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => EventAttendance::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => EventAttendance::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class EventAttendanceController extends Controller
         return response()->noContent();
     }
 
-    public function delete(EventAttendance $event_attendance)
+    public function destroy(EventAttendance $event_attendance)
     {
         $event_attendance->delete();
 

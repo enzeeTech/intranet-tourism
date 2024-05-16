@@ -14,10 +14,10 @@ class PasswordResetTokenController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => PasswordResetToken::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => PasswordResetToken::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PasswordResetTokenController extends Controller
         return response()->noContent();
     }
 
-    public function delete(PasswordResetToken $password_reset_token)
+    public function destroy(PasswordResetToken $password_reset_token)
     {
         $password_reset_token->delete();
 

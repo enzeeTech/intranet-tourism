@@ -14,10 +14,10 @@ class PostCommentController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => PostComment::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => PostComment::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PostCommentController extends Controller
         return response()->noContent();
     }
 
-    public function delete(PostComment $post_comment)
+    public function destroy(PostComment $post_comment)
     {
         $post_comment->delete();
 

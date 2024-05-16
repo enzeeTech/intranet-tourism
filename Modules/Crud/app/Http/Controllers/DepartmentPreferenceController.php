@@ -14,10 +14,10 @@ class DepartmentPreferenceController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => DepartmentPreference::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => DepartmentPreference::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class DepartmentPreferenceController extends Controller
         return response()->noContent();
     }
 
-    public function delete(DepartmentPreference $department_preference)
+    public function destroy(DepartmentPreference $department_preference)
     {
         $department_preference->delete();
 

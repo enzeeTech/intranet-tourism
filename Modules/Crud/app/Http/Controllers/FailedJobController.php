@@ -14,10 +14,10 @@ class FailedJobController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => FailedJob::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => FailedJob::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class FailedJobController extends Controller
         return response()->noContent();
     }
 
-    public function delete(FailedJob $failed_job)
+    public function destroy(FailedJob $failed_job)
     {
         $failed_job->delete();
 

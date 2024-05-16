@@ -2,15 +2,17 @@
 
 namespace Modules\Crud\Models;
 
+use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class ResourceAccess extends Model
+class ResourceAccess extends Model implements AuditableContract
 {
-    use Authorizable, HasFactory, QueryableApi;
+    use Auditable, Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'resource_access';
 

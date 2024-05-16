@@ -14,10 +14,10 @@ class BusinessSchemeController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => BusinessScheme::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => BusinessScheme::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class BusinessSchemeController extends Controller
         return response()->noContent();
     }
 
-    public function delete(BusinessScheme $business_scheme)
+    public function destroy(BusinessScheme $business_scheme)
     {
         $business_scheme->delete();
 

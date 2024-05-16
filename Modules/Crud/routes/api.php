@@ -17,3 +17,5 @@ use Modules\Crud\Http\Controllers\CrudController;
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     Route::apiResource('crud', CrudController::class)->names('crud');
 });
+
+require_once 'crud.php';

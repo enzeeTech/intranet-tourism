@@ -14,10 +14,10 @@ class PreferenceSchemaController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => PreferenceSchema::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => PreferenceSchema::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PreferenceSchemaController extends Controller
         return response()->noContent();
     }
 
-    public function delete(PreferenceSchema $preference_schema)
+    public function destroy(PreferenceSchema $preference_schema)
     {
         $preference_schema->delete();
 

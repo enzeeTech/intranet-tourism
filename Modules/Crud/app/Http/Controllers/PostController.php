@@ -14,10 +14,10 @@ class PostController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Post::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Post::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Post $post)
+    public function destroy(Post $post)
     {
         $post->delete();
 

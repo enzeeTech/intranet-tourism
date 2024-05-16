@@ -14,10 +14,10 @@ class AuditController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Audit::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Audit::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class AuditController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Audit $audit)
+    public function destroy(Audit $audit)
     {
         $audit->delete();
 

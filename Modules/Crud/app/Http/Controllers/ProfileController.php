@@ -14,10 +14,10 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Profile::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Profile::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class ProfileController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Profile $profile)
+    public function destroy(Profile $profile)
     {
         $profile->delete();
 

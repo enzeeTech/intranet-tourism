@@ -14,10 +14,10 @@ class PostAccessibilityController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => PostAccessibility::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => PostAccessibility::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class PostAccessibilityController extends Controller
         return response()->noContent();
     }
 
-    public function delete(PostAccessibility $post_accessibility)
+    public function destroy(PostAccessibility $post_accessibility)
     {
         $post_accessibility->delete();
 

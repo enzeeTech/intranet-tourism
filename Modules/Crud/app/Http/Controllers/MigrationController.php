@@ -14,10 +14,10 @@ class MigrationController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Migration::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Migration::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class MigrationController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Migration $migration)
+    public function destroy(Migration $migration)
     {
         $migration->delete();
 

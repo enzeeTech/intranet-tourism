@@ -14,10 +14,10 @@ class InvitationController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Invitation::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Invitation::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class InvitationController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Invitation $invitation)
+    public function destroy(Invitation $invitation)
     {
         $invitation->delete();
 

@@ -14,10 +14,10 @@ class SessionController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Session::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Session::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class SessionController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Session $session)
+    public function destroy(Session $session)
     {
         $session->delete();
 

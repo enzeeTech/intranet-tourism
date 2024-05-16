@@ -14,10 +14,10 @@ class SettingController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Setting::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Setting::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class SettingController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Setting $setting)
+    public function destroy(Setting $setting)
     {
         $setting->delete();
 

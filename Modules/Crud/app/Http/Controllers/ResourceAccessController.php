@@ -14,10 +14,10 @@ class ResourceAccessController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => ResourceAccess::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => ResourceAccess::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class ResourceAccessController extends Controller
         return response()->noContent();
     }
 
-    public function delete(ResourceAccess $resource_access)
+    public function destroy(ResourceAccess $resource_access)
     {
         $resource_access->delete();
 

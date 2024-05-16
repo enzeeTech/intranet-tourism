@@ -14,10 +14,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => User::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => User::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function delete(User $user)
+    public function destroy(User $user)
     {
         $user->delete();
 

@@ -14,10 +14,10 @@ class BusinessGradeController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => BusinessGrade::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => BusinessGrade::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class BusinessGradeController extends Controller
         return response()->noContent();
     }
 
-    public function delete(BusinessGrade $business_grade)
+    public function destroy(BusinessGrade $business_grade)
     {
         $business_grade->delete();
 

@@ -14,10 +14,10 @@ class CacheLockController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => CacheLock::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => CacheLock::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class CacheLockController extends Controller
         return response()->noContent();
     }
 
-    public function delete(CacheLock $cache_lock)
+    public function destroy(CacheLock $cache_lock)
     {
         $cache_lock->delete();
 

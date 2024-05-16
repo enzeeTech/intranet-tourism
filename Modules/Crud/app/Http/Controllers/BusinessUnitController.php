@@ -14,10 +14,10 @@ class BusinessUnitController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => BusinessUnit::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => BusinessUnit::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class BusinessUnitController extends Controller
         return response()->noContent();
     }
 
-    public function delete(BusinessUnit $business_unit)
+    public function destroy(BusinessUnit $business_unit)
     {
         $business_unit->delete();
 

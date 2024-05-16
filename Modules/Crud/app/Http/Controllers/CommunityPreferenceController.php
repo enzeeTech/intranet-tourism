@@ -14,10 +14,10 @@ class CommunityPreferenceController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => CommunityPreference::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => CommunityPreference::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class CommunityPreferenceController extends Controller
         return response()->noContent();
     }
 
-    public function delete(CommunityPreference $community_preference)
+    public function destroy(CommunityPreference $community_preference)
     {
         $community_preference->delete();
 

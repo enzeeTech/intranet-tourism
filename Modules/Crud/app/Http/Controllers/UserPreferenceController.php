@@ -14,10 +14,10 @@ class UserPreferenceController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => UserPreference::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => UserPreference::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class UserPreferenceController extends Controller
         return response()->noContent();
     }
 
-    public function delete(UserPreference $user_preference)
+    public function destroy(UserPreference $user_preference)
     {
         $user_preference->delete();
 

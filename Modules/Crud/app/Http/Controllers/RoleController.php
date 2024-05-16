@@ -14,10 +14,10 @@ class RoleController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Role::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Role::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class RoleController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Role $role)
+    public function destroy(Role $role)
     {
         $role->delete();
 

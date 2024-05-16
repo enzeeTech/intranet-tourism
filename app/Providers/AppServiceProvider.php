@@ -27,10 +27,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Blueprint::macro('auditable', function () {
             $this->timestamps();
-            $this->foreignId('created_by');
-            $this->foreignId('updated_by');
+            $this->string('created_by')->nullable();
+            $this->string('updated_by')->nullable();
             $this->softDeletes();
-            $this->foreignId('deleted_by');
+            $this->string('deleted_by')->nullable();
         });
     }
 }

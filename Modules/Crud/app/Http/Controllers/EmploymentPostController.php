@@ -14,10 +14,10 @@ class EmploymentPostController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => EmploymentPost::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => EmploymentPost::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class EmploymentPostController extends Controller
         return response()->noContent();
     }
 
-    public function delete(EmploymentPost $employment_post)
+    public function destroy(EmploymentPost $employment_post)
     {
         $employment_post->delete();
 

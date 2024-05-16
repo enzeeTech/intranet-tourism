@@ -14,10 +14,10 @@ class ModelHasPermissionController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => ModelHasPermission::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => ModelHasPermission::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class ModelHasPermissionController extends Controller
         return response()->noContent();
     }
 
-    public function delete(ModelHasPermission $model_has_permission)
+    public function destroy(ModelHasPermission $model_has_permission)
     {
         $model_has_permission->delete();
 

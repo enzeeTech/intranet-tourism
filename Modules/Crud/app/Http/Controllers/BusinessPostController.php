@@ -14,10 +14,10 @@ class BusinessPostController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => BusinessPost::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => BusinessPost::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class BusinessPostController extends Controller
         return response()->noContent();
     }
 
-    public function delete(BusinessPost $business_post)
+    public function destroy(BusinessPost $business_post)
     {
         $business_post->delete();
 

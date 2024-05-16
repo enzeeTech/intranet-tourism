@@ -14,10 +14,10 @@ class ModelHasRoleController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => ModelHasRole::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => ModelHasRole::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class ModelHasRoleController extends Controller
         return response()->noContent();
     }
 
-    public function delete(ModelHasRole $model_has_role)
+    public function destroy(ModelHasRole $model_has_role)
     {
         $model_has_role->delete();
 

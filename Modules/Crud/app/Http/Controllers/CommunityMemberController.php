@@ -14,10 +14,10 @@ class CommunityMemberController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => CommunityMember::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => CommunityMember::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class CommunityMemberController extends Controller
         return response()->noContent();
     }
 
-    public function delete(CommunityMember $community_member)
+    public function destroy(CommunityMember $community_member)
     {
         $community_member->delete();
 

@@ -14,10 +14,10 @@ class DepartmentController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Department::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Department::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class DepartmentController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Department $department)
+    public function destroy(Department $department)
     {
         $department->delete();
 

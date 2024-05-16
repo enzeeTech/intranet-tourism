@@ -14,10 +14,10 @@ class JobBatchController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => JobBatch::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => JobBatch::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class JobBatchController extends Controller
         return response()->noContent();
     }
 
-    public function delete(JobBatch $job_batch)
+    public function destroy(JobBatch $job_batch)
     {
         $job_batch->delete();
 

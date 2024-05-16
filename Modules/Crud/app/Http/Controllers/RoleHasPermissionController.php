@@ -14,10 +14,10 @@ class RoleHasPermissionController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => RoleHasPermission::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => RoleHasPermission::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class RoleHasPermissionController extends Controller
         return response()->noContent();
     }
 
-    public function delete(RoleHasPermission $role_has_permission)
+    public function destroy(RoleHasPermission $role_has_permission)
     {
         $role_has_permission->delete();
 

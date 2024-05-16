@@ -14,10 +14,10 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
         return response()->json([
-            'data' => Notification::where('id', request('id'))->queryable()->firstOrFail(),
+            'data' => Notification::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
@@ -37,7 +37,7 @@ class NotificationController extends Controller
         return response()->noContent();
     }
 
-    public function delete(Notification $notification)
+    public function destroy(Notification $notification)
     {
         $notification->delete();
 
