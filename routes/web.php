@@ -9,6 +9,7 @@ use App\Http\Controllers\communityPost;
 use App\Http\Controllers\fileManagement;
 use App\Http\Controllers\StaffDirectoryController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
+    Route::get('/media', [MediaController::class, 'index'])->name('Media');
  
 });
 
