@@ -6,12 +6,18 @@ use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class BusinessPost extends Model
 {
+<<<<<<< HEAD:Modules/Crud/app/Models/BusinessPost.php
     use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'business_posts';
+=======
+    use QueryableApi;
+    protected $table = 'events';
+>>>>>>> dcf2146ac26fd5066fb93545f00491bc13ce2e46:app/Models/Event.php
 
     protected $fillable = ['id',
         'title',

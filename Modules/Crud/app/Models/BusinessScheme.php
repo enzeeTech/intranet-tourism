@@ -6,12 +6,18 @@ use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class BusinessScheme extends Model
 {
+<<<<<<< HEAD:Modules/Crud/app/Models/BusinessScheme.php
     use Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'business_schemes';
+=======
+    use QueryableApi;
+    protected $table = 'post_accessibilities';
+>>>>>>> dcf2146ac26fd5066fb93545f00491bc13ce2e46:app/Models/PostAccessibility.php
 
     protected $fillable = ['id',
         'code',
