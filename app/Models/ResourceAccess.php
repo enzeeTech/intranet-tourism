@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class ResourceAccess extends Model
 {
+    use QueryableApi;
     protected $table = 'resource_access';
 
     protected $fillable = ['id',

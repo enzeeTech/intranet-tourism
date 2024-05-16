@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class CommunityMember extends Model
 {
+    use QueryableApi;
     protected $table = 'community_members';
 
     protected $fillable = ['id',

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class TaskItem extends Model
 {
+    use QueryableApi;
     protected $table = 'task_items';
 
     protected $fillable = ['id',

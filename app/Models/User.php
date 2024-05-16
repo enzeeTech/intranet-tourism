@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class User extends Model
 {
+    use QueryableApi;
     protected $table = 'users';
 
     protected $fillable = ['id',

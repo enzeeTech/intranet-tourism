@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class PostComment extends Model
 {
+    use QueryableApi;
     protected $table = 'post_comments';
 
     protected $fillable = ['id',

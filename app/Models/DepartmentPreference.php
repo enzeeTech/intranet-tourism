@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class DepartmentPreference extends Model
 {
+    use QueryableApi;
     protected $table = 'department_preferences';
 
     protected $fillable = ['id',

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class CommunityPreference extends Model
 {
+    use QueryableApi;
     protected $table = 'community_preferences';
 
     protected $fillable = ['id',

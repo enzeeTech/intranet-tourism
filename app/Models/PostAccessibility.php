@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class PostAccessibility extends Model
 {
+    use QueryableApi;
     protected $table = 'post_accessibilities';
 
     protected $fillable = ['id',

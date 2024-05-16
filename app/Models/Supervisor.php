@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class Supervisor extends Model
 {
+    use QueryableApi;
     protected $table = 'supervisors';
 
     protected $fillable = ['id',

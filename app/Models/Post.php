@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class Post extends Model
 {
+    use QueryableApi;
     protected $table = 'posts';
 
     protected $fillable = ['id',

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class EventAttendance extends Model
 {
+    use QueryableApi;
     protected $table = 'event_attendance';
 
     protected $fillable = ['id',

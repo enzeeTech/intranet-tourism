@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\QueryableApi;
 
 class ModelHasRole extends Model
 {
+    use QueryableApi;
     protected $table = 'model_has_roles';
 
     protected $fillable = ['role_id',
