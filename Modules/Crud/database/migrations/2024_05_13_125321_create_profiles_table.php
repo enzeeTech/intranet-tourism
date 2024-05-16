@@ -20,8 +20,17 @@ return new class extends Migration
             // $table->foreignId('position_id')->constrained('positions');
             // $table->foreignId('grade_id')->constrained('grades');
             $table->date('dob')->nullable();
-            $table->timestamps();
+            $table->auditable();
         });
+
+        Schema::create('invitations', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained('users');
+            $table->morphs('invitable');
+            $table->string('status')->default('PENDING')->comment('PENDING, APRROVED');
+            $table->auditable();
+        });
+
     }
 
     public function down()

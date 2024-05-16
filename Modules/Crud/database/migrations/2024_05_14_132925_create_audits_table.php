@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('audits', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('event');
-            $table->timestamps();
+            $table->auditable();
         });
     }
 

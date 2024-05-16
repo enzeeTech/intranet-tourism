@@ -19,15 +19,20 @@ class AuthSeeder extends Seeder
 
     private function seedAuth()
     {
-        $adminRole = Role::create(['name' => 'Pentadbir Sistem', 'description' => 'Pentadbir Sistem']);
-        $userRole = Role::create(['name' => 'Pengguna', 'description' => 'Pengguna']);
-        Role::create(['name' => 'Pengguna Baru', 'description' => 'Pengguna Baru']);
+        $superAdminRole = Role::create(['name' => 'superadmin', 'description' => 'Pentadbir Sistem']);
+        $adminRole = Role::create(['name' => 'admin_department', 'description' => 'Pentadbir Jabatan']);
+        $userRole = Role::create(['name' => 'user', 'description' => 'Pengguna']);
+        Role::create(['name' => 'new_user', 'description' => 'Pengguna Baru']);
 
         $permissions = [
-            $adminRole->id => [
+            $superAdminRole->id => [
                 ['user:all' => 'Manage users'],
-                ['profile:all' => 'Manage user profiles'],
+                ['profile:all' => 'Manage profiles'],
                 ['authorization:all' => 'Manage roles and permission'],
+            ],
+            $adminRole->id => [
+                ['user:department' => 'Manage department users'],
+                ['profile:department' => 'Manage department profiles'],
             ],
             $userRole->id => [
                 ['user:own' => 'Manage own user'],

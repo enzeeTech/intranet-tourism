@@ -25,9 +25,12 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerMacros()
     {
-        Blueprint::macro('auditable', function (Blueprint $table) {
-            $table->timestamps();
-            $table->softDeletes();
+        Blueprint::macro('auditable', function () {
+            $this->timestamps();
+            $this->foreignId('created_by');
+            $this->foreignId('updated_by');
+            $this->softDeletes();
+            $this->foreignId('deleted_by');
         });
     }
 }

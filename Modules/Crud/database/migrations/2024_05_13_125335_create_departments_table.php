@@ -13,38 +13,50 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('banner')->nullable();
             $table->string('description')->nullable();
-            $table->timestamps();
+            $table->auditable();
         });
 
-        Schema::create('ranks', function (Blueprint $table) {
+        Schema::create('business_units', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->auditable();
+        });
+
+        Schema::create('business_posts', function (Blueprint $table) {
             $table->id();
             $table->string('title')->index();
-            $table->timestamps();
+            $table->auditable();
         });
 
-        Schema::create('grades', function (Blueprint $table) {
+        Schema::create('business_grades', function (Blueprint $table) {
             $table->id();
             $table->string('code')->index();
-            $table->timestamps();
+            $table->auditable();
         });
 
-        Schema::create('schemes', function (Blueprint $table) {
+        Schema::create('business_schemes', function (Blueprint $table) {
             $table->id();
             $table->string('code')->index();
             $table->string('title');
-            $table->timestamps();
+            $table->auditable();
         });
 
         Schema::create('employment_posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_id')->constrained();
-            $table->foreignId('rank_id')->constrained();
-            $table->foreignId('grade_id')->constrained();
-            $table->foreignId('scheme_id')->constrained();
+            $table->foreignId('business_post_id')->constrained();
+            $table->foreignId('business_grade_id')->constrained();
+            $table->foreignId('business_scheme_id')->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
-            $table->timestamps();
+            $table->auditable();
         });
 
+        Schema::create('supervisors', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('child_id')->constrained('employment_posts');
+            $table->foreignId('parent_id')->constrained('employment_posts');
+            $table->auditable();
+        });
     }
 
     public function down()

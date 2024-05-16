@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained('users');
             $table->string('type')->default('post')->comment('post,comment,announcement,poll')->index();
             $table->text('content');
             $table->string('title')->nullable();
@@ -19,14 +19,29 @@ return new class extends Migration
             $table->json('pool_posting')->nullable();
             $table->json('likes')->nullable();
             $table->json('mentions')->nullable();
-            $table->timestamps();
+            $table->auditable();
         });
 
+        Schema::create('post_comments', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('post_id')->constrained('posts');
+            $table->foreignUuid('comment_id')->constrained('posts');
+            $table->foreignId('user_id')->constrained('users');
+            $table->auditable();
+        });
+
+        Schema::create('post_accessibilities', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('post_id')->constrained('posts');
+            $table->morphs('accessable');
+            $table->auditable();
+        });
     }
 
     public function down()
     {
         Schema::dropIfExists('posts');
+        Schema::dropIfExists('post_comments');
     }
 };
 

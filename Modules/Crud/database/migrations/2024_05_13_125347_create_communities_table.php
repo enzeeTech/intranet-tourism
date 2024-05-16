@@ -9,14 +9,22 @@ return new class extends Migration
     public function up()
     {
         Schema::create('communities', function (Blueprint $table) {
-
             $table->id();
             $table->string('name');
             $table->string('banner')->nullable();
             $table->string('description')->nullable();
             $table->string('type')->default('public')->comment('public, private')->index();
-            $table->timestamps();
+            $table->auditable();
         });
+
+        Schema::create('community_members', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('community_id')->constrained();
+            $table->string('role')->default('MEMBER')->comment('MEMBER, MODERATOR, ADMIN, OWNER');
+            $table->auditable();
+        });
+
     }
 
     public function down()

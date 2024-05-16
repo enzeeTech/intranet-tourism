@@ -12,14 +12,40 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->string('title')->nullable();
+            $table->uuid('id')->primary();
+            $table->string('title');
             $table->string('description')->nullable();
-            $table->datetime('start_time')->nullable();
-            $table->datetime('end_time')->nullable();
-            $table->json('attendance')->nullable();
-            $table->timestamps();
+            $table->string('color')->nullable();
+            $table->datetime('start_at')->nullable();
+            $table->datetime('end_at')->nullable();
+            $table->auditable();
         });
+
+        Schema::create('event_attendance', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignUuid('event_id')->constrained();
+            $table->auditable();
+        });
+
+        Schema::create('tasks', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('title');
+            $table->string('description')->nullable();
+            $table->string('color')->nullable();
+            $table->datetime('start_at')->nullable();
+            $table->datetime('end_at')->nullable();
+            $table->auditable();
+        });
+
+        Schema::create('task_items', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('task_id')->constrained();
+            $table->string('description');
+            $table->auditable();
+        });
+
+
     }
 
     /**

@@ -12,17 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('resources', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->string('attachable_type');
-            $table->string('attachable_id');
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained();
+            $table->morphs('attachable');
             $table->string('for')->default('attachment');
             $table->string('path');
             $table->string('extension');
             $table->string('mime_type');
             $table->string('filesize');
+            $table->string('duration')->nullable();
             $table->json('metadata');
-            $table->timestamps();
+            $table->auditable();
+        });
+
+        Schema::create('resource_access', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignUuid('resource_id')->constrained();
+            $table->json('ability')->default('["VIEW"]')->comment('VIEW, EDIT, DELETE, SHARE, DOWNLOAD');
+            $table->auditable();
         });
     }
 
