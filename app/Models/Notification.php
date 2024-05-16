@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Notification extends Model
 {
-    protected $table = 'users';
+    protected $table = 'notifications';
 
     protected $fillable = ['id',
-        'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'remember_token',
+        'type',
+        'notifiable_type',
+        'notifiable_id',
+        'data',
+        'read_at',
         'created_at',
         'updated_at',
     ];
@@ -24,11 +24,11 @@ class User extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
+                    'type' => ['string', 'required'],
+                    'notifiable_type' => ['string', 'required'],
+                    'notifiable_id' => ['string', 'required'],
+                    'data' => ['string', 'required'],
+                    'read_at' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                 ],
@@ -37,11 +37,11 @@ class User extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
+                    'type' => ['string', 'required'],
+                    'notifiable_type' => ['string', 'required'],
+                    'notifiable_id' => ['string', 'required'],
+                    'data' => ['string', 'required'],
+                    'read_at' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                 ],

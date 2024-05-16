@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Community extends Model
 {
-    protected $table = 'events';
+    protected $table = 'communities';
 
     protected $fillable = ['id',
-        'title',
+        'name',
+        'banner',
         'description',
-        'color',
-        'start_at',
-        'end_at',
+        'type',
         'created_at',
         'updated_at',
         'created_by',
@@ -28,11 +27,10 @@ class Event extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'banner' => ['string'],
                     'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'type' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -45,11 +43,10 @@ class Event extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
+                    'name' => ['string', 'required'],
+                    'banner' => ['string'],
                     'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'type' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],

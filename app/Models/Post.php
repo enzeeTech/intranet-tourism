@@ -4,16 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Post extends Model
 {
-    protected $table = 'events';
+    protected $table = 'posts';
 
     protected $fillable = ['id',
+        'user_id',
+        'type',
+        'content',
         'title',
-        'description',
-        'color',
-        'start_at',
-        'end_at',
+        'tag',
+        'visibility',
+        'pool_posting',
+        'likes',
+        'mentions',
         'created_at',
         'updated_at',
         'created_by',
@@ -28,11 +32,15 @@ class Event extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'user_id' => ['string', 'required'],
+                    'type' => ['string', 'required'],
+                    'content' => ['string', 'required'],
+                    'title' => ['string'],
+                    'tag' => ['string'],
+                    'visibility' => ['string', 'required'],
+                    'pool_posting' => ['string'],
+                    'likes' => ['string'],
+                    'mentions' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -45,11 +53,15 @@ class Event extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'user_id' => ['string', 'required'],
+                    'type' => ['string', 'required'],
+                    'content' => ['string', 'required'],
+                    'title' => ['string'],
+                    'tag' => ['string'],
+                    'visibility' => ['string', 'required'],
+                    'pool_posting' => ['string'],
+                    'likes' => ['string'],
+                    'mentions' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],

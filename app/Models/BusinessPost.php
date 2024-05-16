@@ -4,16 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class BusinessPost extends Model
 {
-    protected $table = 'events';
+    protected $table = 'business_posts';
 
     protected $fillable = ['id',
         'title',
-        'description',
-        'color',
-        'start_at',
-        'end_at',
         'created_at',
         'updated_at',
         'created_by',
@@ -29,10 +25,6 @@ class Event extends Model
                 [
                     'id' => ['string', 'required'],
                     'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -46,10 +38,6 @@ class Event extends Model
                 [
                     'id' => ['string', 'required'],
                     'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Task extends Model
 {
-    protected $table = 'events';
+    protected $table = 'tasks';
 
     protected $fillable = ['id',
         'title',

@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class PreferenceSchema extends Model
 {
-    protected $table = 'events';
+    protected $table = 'preference_schemas';
 
     protected $fillable = ['id',
-        'title',
-        'description',
-        'color',
-        'start_at',
-        'end_at',
+        'preferencable_type',
+        'preferencable_id',
+        'group_name',
+        'subgroup_name',
+        'item',
+        'value_type',
         'created_at',
         'updated_at',
         'created_by',
@@ -28,11 +29,12 @@ class Event extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'preferencable_type' => ['string', 'required'],
+                    'preferencable_id' => ['string', 'required'],
+                    'group_name' => ['string', 'required'],
+                    'subgroup_name' => ['string'],
+                    'item' => ['string', 'required'],
+                    'value_type' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -45,11 +47,12 @@ class Event extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'preferencable_type' => ['string', 'required'],
+                    'preferencable_id' => ['string', 'required'],
+                    'group_name' => ['string', 'required'],
+                    'subgroup_name' => ['string'],
+                    'item' => ['string', 'required'],
+                    'value_type' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],

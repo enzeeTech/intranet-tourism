@@ -4,16 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Role extends Model
 {
-    protected $table = 'users';
+    protected $table = 'roles';
 
     protected $fillable = ['id',
         'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'remember_token',
+        'guard_name',
+        'description',
         'created_at',
         'updated_at',
     ];
@@ -25,10 +23,8 @@ class User extends Model
                 [
                     'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
+                    'guard_name' => ['string', 'required'],
+                    'description' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                 ],
@@ -38,10 +34,8 @@ class User extends Model
                 [
                     'id' => ['string', 'required'],
                     'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
+                    'guard_name' => ['string', 'required'],
+                    'description' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                 ],

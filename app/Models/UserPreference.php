@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class UserPreference extends Model
 {
-    protected $table = 'events';
+    protected $table = 'user_preferences';
 
     protected $fillable = ['id',
-        'title',
-        'description',
-        'color',
-        'start_at',
-        'end_at',
+        'user_id',
+        'group',
+        'subgroup',
+        'key',
+        'value',
         'created_at',
         'updated_at',
         'created_by',
@@ -28,11 +28,11 @@ class Event extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'user_id' => ['string', 'required'],
+                    'group' => ['string', 'required'],
+                    'subgroup' => ['string'],
+                    'key' => ['string', 'required'],
+                    'value' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -45,11 +45,11 @@ class Event extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'user_id' => ['string', 'required'],
+                    'group' => ['string', 'required'],
+                    'subgroup' => ['string'],
+                    'key' => ['string', 'required'],
+                    'value' => ['string', 'required'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],

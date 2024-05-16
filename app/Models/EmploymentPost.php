@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class EmploymentPost extends Model
 {
-    protected $table = 'events';
+    protected $table = 'employment_posts';
 
     protected $fillable = ['id',
-        'title',
-        'description',
-        'color',
-        'start_at',
-        'end_at',
+        'department_id',
+        'business_post_id',
+        'business_grade_id',
+        'business_scheme_id',
+        'user_id',
         'created_at',
         'updated_at',
         'created_by',
@@ -28,11 +28,11 @@ class Event extends Model
             'create' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'department_id' => ['string', 'required'],
+                    'business_post_id' => ['string', 'required'],
+                    'business_grade_id' => ['string', 'required'],
+                    'business_scheme_id' => ['string', 'required'],
+                    'user_id' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
@@ -45,11 +45,11 @@ class Event extends Model
             'update' => [
                 [
                     'id' => ['string', 'required'],
-                    'title' => ['string', 'required'],
-                    'description' => ['string'],
-                    'color' => ['string'],
-                    'start_at' => ['string'],
-                    'end_at' => ['string'],
+                    'department_id' => ['string', 'required'],
+                    'business_post_id' => ['string', 'required'],
+                    'business_grade_id' => ['string', 'required'],
+                    'business_scheme_id' => ['string', 'required'],
+                    'user_id' => ['string'],
                     'created_at' => ['string'],
                     'updated_at' => ['string'],
                     'created_by' => ['string', 'required'],
