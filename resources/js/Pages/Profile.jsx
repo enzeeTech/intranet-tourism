@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import PageTitle from '../Components/Reusable/PageTitle';
+import PageTitle from '../Components/Reusable/PageTitleNew';
 import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
@@ -106,7 +106,7 @@ export default function MyComponent() {
                       phone={profileData.phone}
                       whatsapp={profileData.whatsapp}
                     />
-                    <ProfileIcons icon1={profileData.icon1} icon2={profileData.icon2} />
+                    <ProfileIcons icon1={profileData.icon1} icon2={profileData.icon2}/>
                   </div>
                 </div>
               </section>

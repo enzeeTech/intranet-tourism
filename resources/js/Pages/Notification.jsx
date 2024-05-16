@@ -95,7 +95,6 @@ const notificationData = [
     notiView: 1,
   },
 
-  
 ];
 
 const Notification = () => {
@@ -106,7 +105,7 @@ const Notification = () => {
         My Notifications
       </h1>
       <div className='w-1/3 border-b-2'></div>
-      <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl shadow-2xl">
+      <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl ">
         <div className="flex flex-col pb-5">
           <h2 className="text-2xl font-extrabold text-neutral-800 pl-6 pr-6">
             Notifications
