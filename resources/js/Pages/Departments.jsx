@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import PageTitle from '../Components/Reusable/PageTitleNew';
+import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
