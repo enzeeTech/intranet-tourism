@@ -6,8 +6,23 @@ import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 
+function SaveNotification({ title, content, onClose }) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+      <div className="p-2 rounded-3xl w-4xl">
+        <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-lg w-[380px] h-[165px]">
+          <div className="flex flex-col w-full">
+            <h2 className="text-xl text-neutral-800">Request Sent to Jomla! Admin</h2>
+          </div>
+        </section>
+      </div>
+    </div>
+    );
+}
+
 export default function MyComponent() {
     const [activeTab, setActiveTab] = useState("activities");
+    const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
@@ -43,17 +58,16 @@ export default function MyComponent() {
         { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Video 2" },
     ];
 
-    const openPopup = () => {
-        setIsPopupOpen(true);
+    const openSaveNotification = () => {
+        setIsSaveNotificationOpen(true);
     };
 
-    const closePopup = () => {
-        setIsPopupOpen(false);
+    const closeSaveNotification = () => {
+        setIsSaveNotificationOpen(false);
     };
 
-    const handleSavePopup = () => {
-        // save logic here
-        closePopup();
+    const handleSaveNotification = () => {
+        closeSaveNotification();
     };
 
     const handleFormDataChange = (newData) => {
@@ -68,6 +82,8 @@ export default function MyComponent() {
         setOriginalFormData(formData);
         setOriginalPhoto(photo);
         setIsEditing(false);
+        openSaveNotification();
+        setTimeout(closeSaveNotification, 1200);
     };
 
     const handleCancel = () => {
@@ -82,12 +98,17 @@ export default function MyComponent() {
 
     return (
         <div className="staff-directory">
+            {isSaveNotificationOpen && (
+                <SaveNotification
+                    title="Changes Saved"
+                    onClose={closeSaveNotification}
+                />
+            )}
             {isPopupOpen && (
                 <Popup
                     title="Edit Banner Photo"
                     content="Choose photo from the device"
-                    onClose={closePopup}
-                    onSave={handleSavePopup}
+                    onClose={() => setIsPopupOpen(false)}
                 />
             )}
             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -113,7 +134,7 @@ export default function MyComponent() {
                                 profileImage={profileData.profileImage}
                                 name={profileData.name}
                                 status={profileData.status}
-                                onEditBanner={openPopup}
+                                onEditBanner={() => setIsPopupOpen(true)}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         </section>

@@ -73,7 +73,7 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
             <img
                 src={icon2}
                 alt=""
-                className="self-center mt-80 aspect-square w-[30px] max-md:mt-10 cursor-pointer"
+                className="self-center mt-auto aspect-square w-[30px] max-md:mt-10 cursor-pointer"
                 onClick={handleIcon2Click}
             />
             {isPopupOpen && (
