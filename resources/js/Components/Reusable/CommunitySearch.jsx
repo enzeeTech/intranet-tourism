@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <div className="staff-search-bar-container">
         <div className="staff-search-bar-title">
-            <h2>Search Community...</h2>
+            <h2>Search Department...</h2>
         </div>
         <div className="staff-search-bar">
             <input
