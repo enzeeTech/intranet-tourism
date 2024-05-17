@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Crud\Http\Controllers\CrudController;
+use Modules\Crud\Http\Controllers\PostController;
 
 /*
  *--------------------------------------------------------------------------
@@ -19,3 +20,5 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 });
 
 require_once 'crud.php';
+
+Route::post('/post/{post}/comment', [PostController::class, 'commentPost']);

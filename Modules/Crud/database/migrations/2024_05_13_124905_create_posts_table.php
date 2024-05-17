@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('type')->default('post')->comment('post,comment,announcement,poll')->index();
             $table->text('content');
             $table->string('title')->nullable();
-            $table->json('tag')->nullable()->index();
+            $table->json('tag')->nullable()->index();  // ['AkuKauDanDia', 'GegearVaganza']
             $table->string('visibility')->default('public')->comment('public, department, file')->index();
             $table->json('pool_posting')->nullable();
             $table->json('likes')->nullable();

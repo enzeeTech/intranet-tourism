@@ -13,12 +13,28 @@ trait QueryableApi
         });
 
         $query->when(request()->has('filter'), function ($query) {
-            foreach (request('filter') as $filter) {
-                foreach ($filter as $filterBy => $value) {
-                    $query->$filterBy($value);
+            if (current(request('filter'))) {
+                $scope = current(request('filter'));
+                $query->$scope();
+            } else {
+                foreach (request('filter') as $filter) {
+                    foreach ($filter as $filterBy => $value) {
+                        // dd($filterBy, ...$value);
+                        // dd($value);
+                        $query->$filterBy(key($value), 'like', '%'.current($value).'%');
+                    }
                 }
             }
         });
+
+        // $query->when(request()->has('search'), function ($query) {
+        //     foreach (request('search') as $filter) {
+        //         foreach ($filter as $filterBy => $value) {
+
+        //             $query->whereAny([], $value);
+        //         }
+        //     }
+        // });
 
         $query->when(request()->has('scope'), function ($query) {
             foreach (request('scope') as $scope) {
