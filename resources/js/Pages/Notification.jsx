@@ -94,6 +94,8 @@ const notificationData = [
     timeAgo: "10 mins ago",
     notiView: 1,
   },
+
+  
 ];
 
 const Notification = () => {
@@ -111,7 +113,7 @@ const Notification = () => {
           </h2>
           <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
             <a href="#" className="underline">All</a>
-            <a href="http://localhost:8000/notification-unread" className='text-gray-500 relative '>
+            <a href=" /notification-unread" className='text-gray-500 relative '>
               Unread
               <span className="absolute h-2 w-2 bg-blue-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
             </a>
