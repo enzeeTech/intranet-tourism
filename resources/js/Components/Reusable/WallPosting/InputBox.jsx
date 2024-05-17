@@ -155,6 +155,7 @@ function ShareYourThoughts() {
               className="w-[10px] h-auto"
               onClick={handleClickPeople}
             />
+             
           </div>
         </div>
         <img

@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import PageTitle from '../Components/Reusable/PageTitleNew';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
+import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import SearchMembers from '../Components/Reusable/CommunitySearch';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
+import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
+
+
 import './css/StaffDirectory.css';
+
 
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -142,7 +147,9 @@ const StaffDirectory = () => {
         <div className="widgets-container">
           <div className="left-widget">
             <FeaturedEvents />
+            <Birthdaypopup/>
             <WhosOnline />
+
           </div>
           <div className="right-widget">
             <SearchMembers />
@@ -150,6 +157,8 @@ const StaffDirectory = () => {
               departments={departments}
               onSelectDepartment={handleSelectDepartment}
             />
+            <ShareYourThoughtsDepart/>
+
             {selectedDepartment === 'All' && (
               <div className="staff-member-grid-container">
                 {staffMembers.map((member) => (
