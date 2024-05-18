@@ -172,7 +172,7 @@ function ShareYourThoughtsDepart() {
         loading="lazy"
         src="assets/BDicon.svg"
         alt="Icon 5"
-        className="w-[10px] h-auto"
+        className="w-[14px] h-auto"
         onClick={handlePopupOpen}
       />
       {isPopupOpen && (
