@@ -6,13 +6,15 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\Attachable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Post extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi;
+    use Auditable, Authorizable, HasFactory, QueryableApi, HasUuids, Attachable;
 
     protected $table = 'posts';
 
@@ -78,4 +80,5 @@ class Post extends Model implements AuditableContract
     {
         return $this->hasMany(PostComment::class);
     }
+
 }

@@ -3,7 +3,9 @@
 namespace Modules\Crud\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Modules\Crud\Models\Post;
+use Modules\Crud\Models\Resource;
 
 class PostController extends Controller
 {
@@ -24,7 +26,9 @@ class PostController extends Controller
     public function store()
     {
         $validated = request()->validate(...Post::rules());
-        Post::create($validated);
+        $post = new Post;
+        $post->fill($validated)->save();
+        $post->storeAttachments(for: 'post');
 
         return response()->noContent();
     }

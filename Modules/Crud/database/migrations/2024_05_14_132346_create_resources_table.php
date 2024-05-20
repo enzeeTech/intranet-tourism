@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained();
-            $table->morphs('attachable');
+            $table->uuidMorphs('attachable');
             $table->string('for')->default('attachment');
             $table->string('path');
             $table->string('extension');

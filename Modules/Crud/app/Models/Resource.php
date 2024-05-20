@@ -6,13 +6,14 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Resource extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi;
+    use Auditable, Authorizable, HasFactory, QueryableApi, HasUuids;
 
     protected $table = 'resources';
 
@@ -75,5 +76,10 @@ class Resource extends Model implements AuditableContract
     public function accesses()
     {
         return $this->hasMany(ResourceAccess::class);
+    }
+
+    public function attachable()
+    {
+        return $this->morphTo();
     }
 }
