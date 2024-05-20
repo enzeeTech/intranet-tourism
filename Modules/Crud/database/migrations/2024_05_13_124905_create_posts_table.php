@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('type')->default('post')->comment('post,comment,announcement,poll')->index();
+            $table->string('type')->nullable()->default('post')->comment('post,comment,announcement,poll')->index();
             $table->text('content');
             $table->string('title')->nullable();
             $table->json('tag')->nullable()->index();  // ['AkuKauDanDia', 'GegearVaganza']
-            $table->string('visibility')->default('public')->comment('public, department, file')->index();
+            $table->string('visibility')->nullable()->default('public')->comment('public, department, file')->index();
             $table->json('pool_posting')->nullable();
             $table->json('likes')->nullable();
             $table->json('mentions')->nullable();

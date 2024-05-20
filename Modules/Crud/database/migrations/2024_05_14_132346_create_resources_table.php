@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained();
             $table->uuidMorphs('attachable');
-            $table->string('for')->default('attachment');
+            $table->string('for')->nullable()->default('attachment');
             $table->string('path');
             $table->string('extension');
             $table->string('mime_type');
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained();
             $table->foreignUuid('resource_id')->constrained();
-            $table->json('ability')->default('["VIEW"]')->comment('VIEW, EDIT, DELETE, SHARE, DOWNLOAD');
+            $table->json('ability')->nullable()->default('["VIEW"]')->comment('VIEW, EDIT, DELETE, SHARE, DOWNLOAD');
             $table->auditable();
         });
     }

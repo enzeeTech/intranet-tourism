@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('banner')->nullable();
             $table->string('description')->nullable();
-            $table->string('type')->default('public')->comment('public, private')->index();
+            $table->string('type')->nullable()->default('public')->comment('public, private')->index();
             $table->auditable();
         });
 
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('community_id')->constrained();
-            $table->string('role')->default('MEMBER')->comment('MEMBER, MODERATOR, ADMIN, OWNER');
+            $table->string('role')->nullable()->default('MEMBER')->comment('MEMBER, MODERATOR, ADMIN, OWNER');
             $table->auditable();
         });
 
