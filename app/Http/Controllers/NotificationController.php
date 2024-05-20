@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Inertia\Inertia;
 
 class NotificationController extends Controller
@@ -17,6 +15,7 @@ class NotificationController extends Controller
     {
         return Inertia::render('Notification_unread');
     }
+
     public function testing()
     {
         return Inertia::render('Noti-popup-test');
