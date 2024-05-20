@@ -15,6 +15,42 @@ function ShareYourThoughts() {
     setInputValue(event.target.value);
   };
 
+  const handleClickSend = () => {
+    fetch("/api/crud/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: "1",
+        type: "post",
+        visibility: "public",
+        content: inputValue,
+        attachments: [],
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // Check if the response has content
+        return response.text().then((text) => {
+          return text ? JSON.parse(text) : {};
+        });
+      })
+      .then((data) => {
+        console.log("Success:", data);
+        // Clear the input value after successful submission
+        setInputValue("");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  
+
   const handleClickImg = () => {
     console.log('masukkan gamba bro');
     const fileInput = document.createElement('input');
@@ -162,6 +198,7 @@ function ShareYourThoughts() {
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
           alt=""
           className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-1 -ml-16"
+          onClick={handleClickSend}
         />
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}
