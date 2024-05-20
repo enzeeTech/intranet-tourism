@@ -28,7 +28,7 @@ class PostController extends Controller
         $validated = request()->validate(...Post::rules());
         $post = new Post;
         $post->fill($validated)->save();
-        $post->storeAttachments(for: 'post');
+        $post->storeAttachments();
 
         return response()->noContent();
     }

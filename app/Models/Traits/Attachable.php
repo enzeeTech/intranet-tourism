@@ -12,7 +12,7 @@ trait Attachable
         return $this->morphOne(Resource::class, 'attachable');
     }
 
-    public function storeAttachments($for)
+    public function storeAttachments($for = 'attachment')
     {
         if ($resources = request()->file('attachments')) {
             foreach ($resources as $resource) {
