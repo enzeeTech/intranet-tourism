@@ -55,7 +55,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
         // const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
         return {
             top: -8,
-            left: 75, // Add an offset to position it to the right of the button
+            left: 90.5, // Add an offset to position it to the right of the button
         };
     };
 
@@ -86,9 +86,26 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
             {isThreeDotPopupOpen && (
                 <div className="profile-files-popup">
                     <div
-                        className="staff-member-popup2"
+                        className="staff-member-popup4"
                         style={{
                             top: `${getPopupPosition().top}px`,
+                            left: `${getPopupPosition().left}px`,
+                            position: 'absolute',
+                            zIndex: 999, // Ensure it's above other elements
+                        }}
+                    >
+                        <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
+                        <button
+                            className="text-neutral-500 pr-11 -ml-1.5"
+                            onClick={handleDelete}
+                        >
+                            Rename
+                        </button>
+                    </div>
+                    <div
+                        className="staff-member-popup2"
+                        style={{
+                            top: '33px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -103,9 +120,26 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                         </button>
                     </div>
                     <div
+                        className="staff-member-popup5"
+                        style={{
+                            top: '74.5px',
+                            left: `${getPopupPosition().left}px`,
+                            position: 'absolute',
+                            zIndex: 999, // Ensure it's above other elements
+                        }}
+                    >
+                        <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
+                        <button
+                            className="text-neutral-500 pr-2 -mr-1"
+                            onClick={handleDelete}
+                        >
+                            Manage Admin
+                        </button>
+                    </div>
+                    <div
                         className="staff-member-popup3"
                         style={{
-                            top: '33px',
+                            top: '116px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -113,7 +147,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     >
                         <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-4 -ml-1.5"
+                            className="text-neutral-500 pr-2 -mr-50"
                             onClick={handleDownload}
                         >
                             Download

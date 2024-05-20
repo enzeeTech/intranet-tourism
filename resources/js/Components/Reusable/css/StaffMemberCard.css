@@ -108,17 +108,17 @@
     justify-content: center; 
     background: #fff;
     border-radius: 16px;
-    padding: 20px;
-    height: 30px;
+    padding: 12px;
+    height: 40px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     position: absolute;
     z-index: 1000;
-    width: 150px; 
+    width: 180px; 
     transform: translateX(-50%); 
     border-radius: 16px; 
     margin-top: 8px; 
     font-weight: normal;
-    border-radius: 5px 5px 1px 1px;
+    border-radius: 0px 0px 0px 0px;
   }
 
   .staff-member-popup3 {
@@ -127,30 +127,69 @@
     justify-content: center; 
     background: #fff;
     border-radius: 16px;
-    padding: 20px;
-    height: 30px;
+    padding: 12px;
+    height: 40px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
     position: absolute;
     z-index: 1000;
-    width: 150px; 
+    width: 180px; 
     transform: translateX(-50%); 
     border-radius: 16px; 
     margin-top: 8px; 
     font-weight: normal;
-    border-radius: 1px 1px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
   }
+
+  .staff-member-popup4 {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    height: 40px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    z-index: 1000;
+    width: 180px; 
+    transform: translateX(-50%); 
+    border-radius: 16px; 
+    margin-top: 8px; 
+    font-weight: normal;
+    border-radius: 5px 5px 0px 0px;
+  }
+
+  .staff-member-popup5 {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px;
+    height: 40px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    z-index: 1000;
+    width: 180px; 
+    transform: translateX(-50%); 
+    border-radius: 16px; 
+    margin-top: 8px; 
+    font-weight: normal;
+    border-radius: 0px 0px 0px 0px;
+  }
+
   .profile-files-popup {
     display: flex; 
     align-items: center; 
     justify-content: center; 
     background: #fff;
     border-radius: 16px;
-    padding: 20px;
-    height: 80px;
+    padding: 12px;
+    height: 164.5px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     position: absolute;
     z-index: 1000;
-    width: 149.5px; 
+    width: 180px; 
     transform: translateX(-50%); 
     border-radius: 16px; 
     margin-top: 10px;
