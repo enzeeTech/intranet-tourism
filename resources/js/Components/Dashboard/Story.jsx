@@ -80,8 +80,8 @@ function Stories() {
           <div className="relative">
           <button onClick={openPopup}>
           <div className="flex items-center bg-gray h-24 border-4 border-white-700 rounded-full p-px">
-            <img className="flex items-center bg-white h-24 w-24  rounded-full "
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/f9f2a26cfd4c2c4cfd165c8a11e72547b5817ce689fd1780656a7eef5b65f656?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+            <img className="flex items-center bg-black h-24 w-24  rounded-full "
+              src="/assets/profileDummy.png"
               // alt="Decorative border"
             /><img className="absolute h-5 w-5 left-20 mt-14 " 
             src="/assets/story/iconAddStory.svg"/>

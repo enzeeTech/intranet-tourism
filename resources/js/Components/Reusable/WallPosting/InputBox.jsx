@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
 import '../css/InputBox.css';
+import '../../../Pages/Calendar/index.css'
 
 function ShareYourThoughts() {
   const [inputValue, setInputValue] = useState("");
@@ -107,16 +108,16 @@ function ShareYourThoughts() {
             ref={textAreaRef}
             value={inputValue}
             onChange={handleChange}
-            placeholder="Share Your Thoughts"
-            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none"
+            placeholder="Share Your Thoughts..."
+            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline"
             style={{
-              width: "570px",
-              height: "50px", // Set the desired height
+              width: "540px",
+              height: "1000px", // Set the desired height
               outline: "none", // Remove the default outline on focus
               border: "none", // Remove the border
             }}
           />
-          <div className="self-center mt-7 flex gap-3 -ml-96 mr-16">
+          <div className="self-center mt-7 flex gap-3 -ml-96 mr-8">
             {/* Example icon */}
             <img
               loading="lazy"
@@ -160,7 +161,7 @@ function ShareYourThoughts() {
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
           alt=""
-          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-10 -ml-12"
+          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-1 -ml-16"
         />
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}

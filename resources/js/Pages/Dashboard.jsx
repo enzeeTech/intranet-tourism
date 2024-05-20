@@ -7,7 +7,7 @@ import Layout from '../Layouts/DashboardLayout';
 import { Stories, Birthday, CreateStory } from '@/Components/Dashboard';
 import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { Filter } from '@/Components/Reusable/WallPosting';
-import MyComponent from './Departments';
+import { OutputData } from '@/Components/Reusable/WallPosting';
 
 const Dashboard = () => {
 
@@ -40,7 +40,7 @@ const Dashboard = () => {
                 <Filter />
                 {/* </div> */}
                 <div className="mb-20"></div>
-                <MyComponent />
+                <OutputData />
               </section>
             </div>
             <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full"></div>
