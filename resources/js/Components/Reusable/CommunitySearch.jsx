@@ -28,9 +28,6 @@ const SearchBar = ({ onSearch }) => {
             <button onClick={handleSearch}>
                 <img src={searchIcon} alt="Search" className="staff-search-btn-img" />
             </button>
-            <button >
-                <img src={filterIcon} alt="Filter" className="staff-filter-btn-img" />
-            </button>
         </div>
     </div>
   );

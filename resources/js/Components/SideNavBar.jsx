@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const Sidebar = () => {
-
     // Path to buttons
     const buttons = [
         { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png" },
@@ -19,14 +18,11 @@ const Sidebar = () => {
     const [showText, setShowText] = useState(null);
     const [csrfToken, setCsrfToken] = useState(null);
 
-    console.log('csrfToken', csrfToken)
-
     // Fetch the CSRF token once
     useEffect(() => {
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         setCsrfToken(token);
     }, []);
-
 
     // Function to handle logout
     const handleLogout = () => {
@@ -34,15 +30,27 @@ const Sidebar = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken,  
+                'X-CSRF-Token': csrfToken,
             }
-        }).then(() => {
-            window.location.href = '/'; 
-        }).catch(err => console.error(err));
+        })
+            .then(() => {
+                window.location.href = '/';
+            })
+            .catch(err => console.error(err));
+    };
+
+    const handleMouseEnter = (text, event) => {
+        const rect = event.target.getBoundingClientRect();
+        setShowText(text);
+        setShowTextPosition({ top: rect.top + window.scrollY, left: rect.left + rect.width + window.scrollX });
+    };
+
+    const handleMouseLeave = () => {
+        setShowText(null);
     };
 
     return (
-        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0">
+        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0 relative">
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => {
                     if (button.to === '/logout') {
@@ -82,7 +90,16 @@ const Sidebar = () => {
                         </a>
                         );
                 })}
+
             </nav>
+            {showText && (
+                <div
+                    className="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 z-20"
+                    style={{ top: showTextPosition.top, left: showTextPosition.left }}
+                >
+                    {showText}
+                </div>
+            )}
         </aside>
     );
 };
