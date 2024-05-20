@@ -84,7 +84,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" onClick={handleIconClick} />
             </button>
             {isThreeDotPopupOpen && (
-                <div className="profile-files-popup">
+                <div className="profile-files-popup text-sm">
                     <div
                         className="staff-member-popup4"
                         style={{
@@ -94,9 +94,9 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                             zIndex: 999, // Ensure it's above other elements
                         }}
                     >
-                        <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
+                        <img src="assets/🦆 icon _Rename.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-11 -ml-1.5"
+                            className="text-neutral-500 pr-2 mr-12"
                             onClick={handleDelete}
                         >
                             Rename
@@ -105,7 +105,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     <div
                         className="staff-member-popup2"
                         style={{
-                            top: '33px',
+                            top: '33.5px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -113,7 +113,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     >
                         <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-11 -ml-1.5"
+                            className="text-neutral-500 pr-2 mr-14"
                             onClick={handleDelete}
                         >
                             Delete
@@ -122,15 +122,15 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     <div
                         className="staff-member-popup5"
                         style={{
-                            top: '74.5px',
+                            top: '75.5px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
                         }}
                     >
-                        <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
+                        <img src="assets/🦆 icon _Admin.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-2 -mr-1"
+                            className="text-neutral-500 pr-2"
                             onClick={handleDelete}
                         >
                             Manage Admin
@@ -139,7 +139,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     <div
                         className="staff-member-popup3"
                         style={{
-                            top: '116px',
+                            top: '117.5px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -147,7 +147,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     >
                         <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-2 -mr-50"
+                            className="text-neutral-500 pr-2 mr-8"
                             onClick={handleDownload}
                         >
                             Download
