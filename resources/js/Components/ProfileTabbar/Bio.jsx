@@ -28,7 +28,7 @@
                             <tbody>
                                 <tr>
                                     <td className="py-2 align-center w-1/3">
-                                        <div className="text-base text-neutral-800">
+                                        <div className="text-base text-neutral-800 font-semibold">
                                             Staff’s photo
                                             <button
                                                 className="ml-2 inline-block justify-center items-center w-3.5 h-3.5 text-xs text-center text-white whitespace-nowrap rounded-full bg-zinc-300"
@@ -38,7 +38,7 @@
                                                 ?
                                             </button>
                                         </div>
-                                        <div className="text-xs text-blue-500">Maximum size: 1MB</div>
+                                        {/* <div className="text-xs text-blue-500">Maximum size: 1MB</div> */}
                                     </td>
                                     <td className="py-2 align-center w-2/3">
                                         <div className="flex items-center gap-4">
