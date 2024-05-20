@@ -13,17 +13,9 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
       onEdit();
   };
 
-
-
     const closePopup = () => {
         setIsPopupOpen(false);
     };
-
-
-
-
-
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {

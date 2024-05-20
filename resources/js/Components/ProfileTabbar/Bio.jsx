@@ -38,7 +38,7 @@
                                                 ?
                                             </button>
                                         </div>
-                                        {/* <div className="text-xs text-blue-500">Maximum size: 1MB</div> */}
+                                        <div className="text-xs text-blue-500">Maximum size: 1MB</div>
                                     </td>
                                     <td className="py-2 align-center w-2/3">
                                         <div className="flex items-center gap-4">
