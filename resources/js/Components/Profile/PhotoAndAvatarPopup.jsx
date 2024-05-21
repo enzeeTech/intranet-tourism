@@ -13,7 +13,7 @@ function Avatar({ src, alt, isSelected, onClick }) {
 }
 
 function PhotoAndAvatarPopup({ onClose }) {
-  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+  // const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [selectedAvatar, setSelectedAvatar] = React.useState(null);
 
   const avatars = [
@@ -40,11 +40,17 @@ function PhotoAndAvatarPopup({ onClose }) {
   };
 
 
-  const handleCloseUpdatePopup = (e) => {
-    e.stopPropagation();
-    setShowUpdatePopup(false);
-    onClose(e); // Optionally close the entire modal if needed
-  };
+  // const handleCloseUpdatePopup = (e) => {
+  //   e.stopPropagation();
+  //   setShowUpdatePopup(false);
+  //   onTutup(e); // Optionally close the entire modal if needed
+  // };
+
+  // const handleCloseClick = (e) => {
+  //   console.log("Closing popup via internal close"); // Debug log
+  //   setIsPopupOpen(false);
+  //   onTutup(e);
+  // };
   
   return (
     <div className="fixed inset-0 flex items-center justify-center bg--800 bg-opacity-50 z-50 rounded-3xl shadow-lg">
