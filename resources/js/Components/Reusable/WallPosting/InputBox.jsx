@@ -155,6 +155,7 @@ function ShareYourThoughts() {
           />
           <div className="self-center mt-7 flex gap-3 -ml-96 mr-8">
             {/* Example icon */}
+            <button>
             <img
               loading="lazy"
               src="assets/inputpolls.svg"
@@ -162,7 +163,9 @@ function ShareYourThoughts() {
               className="w-[15px] h-auto"
               onClick={handleClickPoll}
             />
+            </button>
             {/* Repeat for the other icons */}
+            <button>
             <img
               loading="lazy"
               src="assets/inputimg.svg"
@@ -170,6 +173,8 @@ function ShareYourThoughts() {
               className="w-[15px] h-auto"
               onClick={handleClickImg}
             />
+            </button>
+            <button>
             <img
               loading="lazy"
               src="assets/inputvid.svg"
@@ -177,6 +182,8 @@ function ShareYourThoughts() {
               className="w-[15px] h-auto"
               onClick={handleClickVid}
             />
+            </button>
+            <button>
             <img
               loading="lazy"
               src="assets/inputdoc.svg"
@@ -184,6 +191,8 @@ function ShareYourThoughts() {
               className="w-[15px] h-auto"
               onClick={handleClickDoc}
             />
+            </button>
+            <button>
             <img
               loading="lazy"
               src="assets/inputpeople.svg"
@@ -191,15 +200,44 @@ function ShareYourThoughts() {
               className="w-[10px] h-auto"
               onClick={handleClickPeople}
             />
+            </button>
           </div>
         </div>
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-          alt=""
-          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-1 -ml-16"
+        <button
           onClick={handleClickSend}
-        />
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <div
+            style={{
+              width: "42px", // Set desired width
+              height: "63px", // Set desired height (width * aspect ratio)
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "12px",
+              marginLeft: "-20px",
+            }}
+          >
+            <img
+              loading="lazy"
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+              alt=""
+              style={{
+                width: "50%", // Ensure it scales within the container
+                height: "50%", // Ensure it scales within the container
+                // objectFit: "cover", // Maintain aspect ratio
+              }}
+            />
+          </div>
+        </button>
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}
       {showPeoplePopup && <People onClose={closePopup} />}
