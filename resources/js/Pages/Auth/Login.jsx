@@ -44,7 +44,7 @@ export default function Login({ status, canResetPassword }) {
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
-                    <div className="h-6">
+                    <div className="mt-2 h-6">
                         <InputError message={errors.email} className="text-sm text-red-500" />
                     </div>
                 </div>
@@ -61,7 +61,7 @@ export default function Login({ status, canResetPassword }) {
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
-                    <div className="h-6">
+                    <div className="mt-2 h-6">
                         <InputError message={errors.password} className="text-sm text-red-500" />
                     </div>
                 </div>
@@ -87,6 +87,13 @@ export default function Login({ status, canResetPassword }) {
                 <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
                     Log in
                 </PrimaryButton>
+                <div className="mt-2 h-1">
+                 <InputError message={
+                    errors.email ? "Username and/or password is wrong" : 
+                    errors.password ? "Username and/or password is wrong" : 
+                    ""} 
+                    className="text-sm text-red-500" />
+                </div>
             </form>
         </GuestLayout>
     );

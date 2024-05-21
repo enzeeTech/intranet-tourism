@@ -21,7 +21,7 @@ function ListItem({ icon, alt, text, onClick }) {
 }
 
 
-function EditProfilePhoto({ onClose, onOpenUpdatePopup }) {
+function EditProfilePhoto({ onClose }) {
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -42,6 +42,7 @@ function EditProfilePhoto({ onClose, onOpenUpdatePopup }) {
     };
     fileInput.click();
   };
+
 
   const handleClickAvt = () => {
     setShowPopup(true);
@@ -96,7 +97,7 @@ function EditProfilePhoto({ onClose, onOpenUpdatePopup }) {
           </div>
         </section>
       </div>
-      {showPopup && <PhotoAndAvatarPopup onClose={handleAvatarClose} />}
+      {showPopup && <PhotoAndAvatarPopup onClose={handleCloseUpdatePopup} />}
       {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} />}
     </div>
   );
