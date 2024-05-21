@@ -26,9 +26,17 @@ class PostController extends Controller
     public function store()
     {
         $validated = request()->validate(...Post::rules());
-        $post = new Post;
-        $post->fill($validated)->save();
-        $post->storeAttachments();
+
+        DB::beginTransaction();
+        try {
+            $post = new Post;
+            $post->fill($validated)->save();
+            $post->storeAttachments();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
 
         return response()->noContent();
     }
