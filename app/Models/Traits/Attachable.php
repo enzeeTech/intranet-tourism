@@ -17,8 +17,8 @@ trait Attachable
         if ($resources = request()->file('attachments')) {
             foreach ($resources as $resource) {
                 $resourceRef = uploadFile($resource);
-                $this->resources()->create(array_merge($resourceRef, [
-                    'user_id' => auth()->id(),
+                $this->attachments()->create(array_merge($resourceRef, [
+                    'user_id' => auth()->id() ?? '1',
                     'for' => $for,
                     'metadata' => json_encode($resourceRef)
                     // 'duration' => '1',
