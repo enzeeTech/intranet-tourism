@@ -3,6 +3,7 @@
 namespace Modules\Crud\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Modules\Crud\Models\Post;
 use Modules\Crud\Models\Resource;
