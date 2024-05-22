@@ -21,7 +21,7 @@
         };
 
         return (
-            <div className="flex-auto my-auto max-md:max-w-full p-4">
+            <div className="flex-auto my-auto max-md:max-w-full p-4 shadow-custom">
                 <div className="flex gap-5 max-md:flex-col max-md:gap-4">
                     <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                         <table className="table-auto w-full text-left border-collapse">

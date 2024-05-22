@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PopupContent from '../Reusable/ProfileFilesPopup';
+import {ProfilePopupContent} from '../Reusable/ProfileFilesPopup';
 
 const SearchInput = () => (
   <div className="flex min-w-72 gap-2 px-5 py-1.5 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
@@ -109,7 +109,7 @@ const Table = () => {
                     <td className="border-b border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
                       {item.Author}
                     </td>
-                    <td className="flex relative mt-3.5"><PopupContent /></td>
+                    <td className="flex relative mt-3.5"><ProfilePopupContent /></td>
                   </tr>
                 ))}
               </tbody>
