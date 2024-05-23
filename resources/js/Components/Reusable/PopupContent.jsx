@@ -53,7 +53,6 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
   
     // Position popup next to the three dots icon button
     const getPopupPosition = () => {
-      // const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
       return {
         top: -8,
         left: 90.5, // Add an offset to position it to the right of the button
@@ -64,20 +63,21 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
       e.stopPropagation();
       e.preventDefault();
       console.log("Delete button clicked");
-      // Here, you would typically call a function to handle the actual delete operation.
     };
   
-    // Define the onClick handler for downloading an item
     const handleDownload = (e) => {
       e.stopPropagation();
       e.preventDefault();
       console.log("Download button clicked");
-      // Here, you would typically call a function to handle the actual download operation.
     };
   
     const handleManageAdminClick = (e) => {
       e.stopPropagation();
       setIsAdminPopupOpen(true);
+    };
+  
+    const closeAdminPopup = () => {
+      setIsAdminPopupOpen(false);
     };
   
     return (
@@ -97,7 +97,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 top: `${getPopupPosition().top}px`,
                 left: `${getPopupPosition().left}px`,
                 position: 'absolute',
-                zIndex: 999, // Ensure it's above other elements
+                zIndex: 999,
               }}
             >
               <img src="assets/🦆 icon _Rename.svg" alt={name} className="staff-member-popup-image" />
@@ -114,7 +114,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 top: '33.5px',
                 left: `${getPopupPosition().left}px`,
                 position: 'absolute',
-                zIndex: 999, // Ensure it's above other elements
+                zIndex: 999,
               }}
             >
               <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
@@ -131,7 +131,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 top: '74.8px',
                 left: `${getPopupPosition().left}px`,
                 position: 'absolute',
-                zIndex: 999, // Ensure it's above other elements
+                zIndex: 999,
               }}
             >
               <img src="assets/🦆 icon _Admin.svg" alt={name} className="staff-member-popup-image" />
@@ -148,7 +148,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 top: '116.5px',
                 left: `${getPopupPosition().left}px`,
                 position: 'absolute',
-                zIndex: 999, // Ensure it's above other elements
+                zIndex: 999,
               }}
             >
               <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
@@ -161,7 +161,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
             </div>
           </div>
         )}
-        {isAdminPopupOpen && <ViewAdminPopup />}
+        {isAdminPopupOpen && <ViewAdminPopup onClose={closeAdminPopup} />}
       </div>
     );
   };
