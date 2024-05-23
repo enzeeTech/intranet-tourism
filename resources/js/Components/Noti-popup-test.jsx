@@ -156,20 +156,20 @@ class NotificationPopup extends React.Component {
             <div className="notification-list mb-4"  >
               <ul>
                 {filteredNotifications.map(notification => (
-                <div className="flex flex-row gap-2 mb-4 hover:bg-blue-100 items-center"  key={notification.id}>
+                <div className="flex flex-row gap-2 mb-4 hover:bg-blue-100 items-center "  key={notification.id}>
 
-                  <div className="flex items-center bg-gray h-16">
+                  <div className="flex items-center bg-gray h-16 ">
                     <img className="h-14 w-14  ml-2 " src={notification.imageSrc} alt="" 
                     style={{
                     
                       height:"80px",
-                      width:"120px",
+                      width:"90px",
                       borderRadius:"100%"	
                     }} />
-                    <img className="absolute h-5 w-5 left-16 mt-14 " src={notification.miniIcon} alt="" /> 
+                    <img className="absolute h-5 w-5 left-20 mt-14 " src={notification.miniIcon} alt="" /> 
                   </div>
 
-                  <div className='flex flex-col w-100 h-50 ml-4'>
+                  <div className='flex flex-col w-48 h-50 ml-4 '>
                     <div className="block px-2 py-1 text-sm font-bold">{notification.users}</div>
                     <div className="block px-2 py-1 text-sm">{notification.message}</div>
                     <div className="block px-2 py-1 text-sm">{notification.timeAgo}</div>
@@ -180,7 +180,7 @@ class NotificationPopup extends React.Component {
                             <img
                                 src="/assets/orangeball.png"
                                 alt="Unread"
-                                style={{ width: '10px', height: '10px', marginRight: '30px' }}
+                                style={{ width: '10px', height: '10px', marginLeft: '30px' }}
                             />
                         )}
                     </div>

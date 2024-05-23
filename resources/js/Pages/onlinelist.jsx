@@ -15,7 +15,7 @@ const ProfileCard = ({ name, role, status, imageSrc, altText }) => {
   };
 
   return (
-    <div className="flex gap-3 hover:bg-blue-100 w-full px-5 py-5">
+    <div className="flex gap-3 hover:bg-blue-100 w-full px-0 py-5">
     <div className="relative flex items-center h-16 sm:h-[75px]">
         <img
           loading="lazy"
@@ -29,7 +29,7 @@ const ProfileCard = ({ name, role, status, imageSrc, altText }) => {
       </div>
     <div className="flex flex-col self-start mt-2.5">
       <div className="text-base sm:text-lg font-extrabold">{name}</div>
-      <div className="mt-1 sm:mt-2 text-sm">{role}</div>
+      <div className="mt-2 sm:mt-0 text-sm">{role}</div>
       <div className="mt-2 sm:mt-4 text-xs text-neutral-800 text-opacity-50">{status}</div>
     </div>
   </div>
@@ -60,19 +60,19 @@ const MyComponent = () => {
   return (
     <div className="w-full bg-slate-100">
       <section className="flex flex-row justify-center gap-5 rounded-xl shadow-lg max-w-1920 max-md:flex-wrap max-md:pl-5 max-h-full">
-      <header className="text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
+      <header className="font-sans text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
           Who’s Online
           <div className="font-extrabold text-neutral-800 mt-2 mb-6 border-b-2 border-neutral-300"></div>
         </header>
-        <div className="container max-w-screen-lg bg-white py-10 rounded-xl mt-10 sm:mt-40 mb-40 items-start shadow-2xl">
-          <div className="flex flex-col text-neutral-800 px-4 sm:px-10">
-            <header className="text-xl sm:text-2xl font-extrabold text-neutral-800 ml-2 sm:ml-0">
+        <div className="container max-w-screen-lg bg-white py-10 rounded-xl mt-10 sm:mt-40 mb-40 items-start shadow-2xl mx-5">
+          <div className="flex flex-col text-neutral-800 px-4  sm:px-10">
+            <header className="text-xl sm:text-2xl font-extrabold text-neutral-800 ml-2 sm:-ml-1">
               Online List
             </header>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 mt-5 text-lg font-semibold text-neutral-800 ml-2 sm:ml-0 max-md:pr-5">
-  <div className="relative flex items-center gap-1 sm:ml-10">
+<div className=" flex flex-row  justify-start items-start sm:flex-row gap-2 sm:gap-4 mt-2 text-lg font-semibold text-neutral-800 ml-2 sm:ml-0 max-md:pr-5 ">
+  <div className="relative flex items-center gap-1 sm:ml-0 ">
     <button
-      className={`grow ${statusFilter === "Online" && "underline"} ${statusFilter === "Online" && "text-black-500"}`}
+      className={`grow ${statusFilter === "Online" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
       onClick={() => handleStatusFilter("Online")}
     >
       Online
@@ -83,7 +83,7 @@ const MyComponent = () => {
   </div>
   <div className="relative flex items-center gap-1">
     <button
-      className={`grow ${statusFilter === "Away" && "underline"} ${statusFilter === "Away" && "text-black-500"}`}
+      className={`grow ${statusFilter === "Away" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
       onClick={() => handleStatusFilter("Away")}
     >
       Away
@@ -98,7 +98,7 @@ const MyComponent = () => {
   </div>
   <div className="relative flex items-center gap-1">
     <button
-      className={`grow ${statusFilter === "Offline" && "underline"} ${statusFilter === "Offline" && "text-black-500"}`}
+      className={`grow ${statusFilter === "Offline" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
       onClick={() => handleStatusFilter("Offline")}
     >
       Offline
@@ -108,6 +108,7 @@ const MyComponent = () => {
     />
   </div>
 </div>
+
 
             {profiles
               .filter((profile) => profile.status === statusFilter)

@@ -4,6 +4,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import SearchMembers from '../Components/Reusable/CommunitySearch';
+import Adminsection from '../Components/Adminwall';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
@@ -142,10 +143,11 @@ const StaffDirectory = () => {
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Department" />
-        </div>
+        </div> 
         <hr className="staff-directory-underline" />
         <div className="widgets-container">
           <div className="left-widget">
+           
             <FeaturedEvents />
             <Birthdaypopup/>
             <WhosOnline />
@@ -157,6 +159,8 @@ const StaffDirectory = () => {
               departments={departments}
               onSelectDepartment={handleSelectDepartment}
             />
+            <Adminsection/>
+
             <ShareYourThoughtsDepart/>
 
             {selectedDepartment === 'All' && (
