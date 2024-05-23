@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PopupContent from '../Reusable/PopupContent';
 
-
 const data = [
   { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
   { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023' , Author: 'by Musa' },
@@ -42,12 +41,27 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
 const FileTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [files, setFiles] = useState(data);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = files.slice(indexOfFirstItem, indexOfLastItem);
 
+  const handleRename = (index, newName) => {
+    const updatedFiles = files.map((file, i) => {
+      if (i === index) {
+        return { ...file, name: newName };
+      }
+      return file;
+    });
+    setFiles(updatedFiles);
+  };
 
-  // maybe can make in phone view just has list of the items only
+  const handleDelete = (index) => {
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
+  };
+
   return (
     <div className="ml-8 w-full px-4 sm:px-6 lg:px-0 overflow-visible">
       <div className="mt-8 flow-root">
@@ -68,11 +82,7 @@ const FileTable = () => {
                       <img src="assets/FileTableCalendar.svg" alt="Date" className="Date" />
                     </div>
                   </th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">
-                    <div className="flex justify-center">
-                      <img src="assets/Author.svg" alt="Author" className="Author" />
-                    </div>
-                  </th>
+                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Author</th>
                   <th scope="col" className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
                 </tr>
               </thead>
@@ -88,12 +98,18 @@ const FileTable = () => {
                     <td className="border-b border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
                       {item.Author}
                     </td>
-                    <td className="flex relative mt-3.5"><PopupContent /></td>
+                    <td className="flex relative mt-3.5">
+                      <PopupContent
+                        name={item.name}
+                        onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
+                        onDelete={() => handleDelete(indexOfFirstItem + index)}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <Pagination totalItems={data.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
+            <Pagination totalItems={files.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
           </div>
         </div>
       </div>
