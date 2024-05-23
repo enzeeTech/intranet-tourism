@@ -10,7 +10,7 @@ function SaveNotification({ title, content, onClose }) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="p-2 rounded-3xl w-4xl">
-        <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-lg w-[380px] h-[165px]">
+        <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
           <div className="flex flex-col w-full">
             <h2 className="text-xl text-neutral-800">Request Sent to Jomla! Admin</h2>
           </div>
@@ -128,7 +128,7 @@ export default function MyComponent() {
                 </aside>
                 <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
                     <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
-                        <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full">
+                        <section className="flex flex-col pb-5 bg-white rounded-none shadow-custom max-md:max-w-full">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
                                 profileImage={profileData.profileImage}
@@ -139,7 +139,7 @@ export default function MyComponent() {
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         </section>
                         {activeTab === "bio" && (
-                            <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-lg max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                            <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                 <div className="flex-auto my-auto max-md:max-w-full">
                                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                                         <ProfileBio

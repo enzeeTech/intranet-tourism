@@ -110,7 +110,7 @@
     border-radius: 16px;
     padding: 12px;
     height: 40px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1000;
     width: 180px; 
@@ -129,7 +129,7 @@
     border-radius: 16px;
     padding: 12px;
     height: 40px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1000;
     width: 180px; 
@@ -148,7 +148,7 @@
     border-radius: 16px;
     padding: 12px;
     height: 40px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1000;
     width: 180px; 
@@ -167,7 +167,7 @@
     border-radius: 16px;
     padding: 12px;
     height: 40px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1000;
     width: 180px; 
@@ -185,8 +185,8 @@
     background: #fff;
     border-radius: 16px;
     padding: 12px;
-    height: 166px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    height: 165px;
+    box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
     position: absolute;
     z-index: 1000;
     width: 180px; 
@@ -195,6 +195,7 @@
     margin-top: 10px;
     margin-left: 130px; 
     font-weight: bolder;
+    border-radius: 5px 5px 5px 5px;
   }
 
   .staff-member-popup-image {
@@ -209,4 +210,62 @@
     font-weight: bold;
   }
   
-  
+/* User Profile Popup */
+
+.staff-member-popup6 {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 1000;
+  width: 180px; 
+  transform: translateX(-50%); 
+  border-radius: 16px; 
+  margin-top: 8px; 
+  font-weight: normal;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.staff-member-popup7 {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 1000;
+  width: 180px; 
+  transform: translateX(-50%); 
+  border-radius: 16px; 
+  margin-top: 8px; 
+  font-weight: normal;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.profile-files-popup2 {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 82.5px;
+  box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 1000;
+  width: 180px; 
+  transform: translateX(-50%); 
+  border-radius: 16px; 
+  margin-top: 10px;
+  margin-left: 130px; 
+  font-weight: bolder;
+  border-radius: 5px 5px 5px 5px;
+}

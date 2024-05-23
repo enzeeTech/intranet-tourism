@@ -42,7 +42,7 @@ const Sidebar = () => {
     };
 
     return (
-        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0">
+        <aside className="h-screen mt-1 text-white bg-white shadow-custom w-30 sticky top-0">
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => {
                     if (button.to === '/logout') {
