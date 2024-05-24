@@ -45,7 +45,7 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full"></div>
           </main>
-          
+
         </div>
       </div>
     </Layout>
@@ -53,4 +53,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

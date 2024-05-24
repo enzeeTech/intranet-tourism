@@ -27,7 +27,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
             $table->morphs('invitable');
-            $table->string('status')->default('PENDING')->comment('PENDING, APRROVED');
+            $table->string('status')->nullable()->default('PENDING')->comment('PENDING, APRROVED');
             $table->auditable();
         });
 

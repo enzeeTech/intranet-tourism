@@ -15,10 +15,8 @@ use Modules\Crud\Http\Controllers\PostController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('crud', CrudController::class)->names('crud');
-});
+// Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+//     Route::apiResource('crud', CrudController::class)->names('crud');
+// });
 
 require_once 'crud.php';
-
-Route::post('/post/{post}/comment', [PostController::class, 'commentPost']);

@@ -1,27 +1,6 @@
 import React, { useState } from 'react';
 import PopupContent from '../Reusable/ProfileFilesPopup';
 
-const SearchInput = () => (
-  <div className="flex min-w-72 gap-2 px-5 py-1.5 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
-    <img
-      loading="lazy"
-      src="https://cdn.builder.io/api/v1/image/assets/TEMP/e9a74adec558c689d2c2036311d5dad5a1cc1d44aea0cf5f88c1bd1bafeea3ce?apiKey=285d536833cc4168a8fbec258311d77b&"
-      alt="Search Icon"
-      className="shrink-0 w-6 aspect-square"
-    />
-    <input
-      type="text"
-      className="w-full py-2 pr-4 text-black border-none input-focus-style"
-      placeholder="Search"
-    />
-  </div>
-);
-
-const SearchButton = () => (
-  <button className="justify-center px-5 py-1.5 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-10">
-    Search
-  </button>
-);
 
 const data = [
   { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
@@ -60,7 +39,7 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
   </div>
 );
 
-const Table = () => {
+const FileTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -122,4 +101,4 @@ const Table = () => {
   );
 };
 
-export { SearchButton, SearchInput, Table };
+export default FileTable;

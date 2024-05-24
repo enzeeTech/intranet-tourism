@@ -45,7 +45,7 @@ return new class extends Migration
         Schema::create('employment_posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_id')->constrained();
-            $table->foreignId('unit_id')->nullable()->constrained();
+            $table->foreignId('business_unit_id')->nullable()->constrained();
             $table->foreignId('business_post_id')->constrained();
             $table->foreignId('business_grade_id')->constrained();
             $table->foreignId('business_scheme_id')->constrained();
