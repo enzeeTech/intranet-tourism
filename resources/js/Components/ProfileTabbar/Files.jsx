@@ -24,10 +24,10 @@ const SearchButton = () => (
 );
 
 const data = [
-  { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
-  { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023' , Author: 'by Musa' },
-  { name: 'Statistics for the Report', File: 'XLSX', Size: '3', Date: '24.09.2023' , Author: 'by Musa' },
-  { name: 'Data on the Report', File: 'XLSX', Size: '2.5', Date: '22.09.2023' , Author: 'by Musa' },
+  { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023', Author: 'by Musa' },
+  { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023', Author: 'by Musa' },
+  { name: 'Statistics for the Report', File: 'XLSX', Size: '3', Date: '24.09.2023', Author: 'by Musa' },
+  { name: 'Data on the Report', File: 'XLSX', Size: '2.5', Date: '22.09.2023', Author: 'by Musa' },
   { name: 'User Guide', File: 'PDF', Size: '12.4', Date: '12.10.2023', Author: 'by Alex' },
   { name: 'System Overview', File: 'Doc', Size: '7.8', Date: '07.10.2023', Author: 'by Jamie' },
   { name: 'Error Logs', File: 'TXT', Size: '3.1', Date: '24.09.2023', Author: 'by Casey' },
@@ -62,13 +62,17 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
 
 const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [files, setFiles] = useState(data);
   const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = files.slice(indexOfFirstItem, indexOfLastItem);
 
+  const handleDelete = (index) => {
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
+  };
 
-  // maybe can make in phone view just has list of the items only
   return (
     <div className="ml-8 w-full px-4 sm:px-6 lg:px-0 overflow-visible">
       <div className="mt-8 flow-root">
@@ -109,12 +113,17 @@ const Table = () => {
                     <td className="border-b border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
                       {item.Author}
                     </td>
-                    <td className="flex relative mt-3.5"><UserFilePopup /></td>
+                    <td className="flex relative mt-3.5">
+                      <UserFilePopup
+                        name={item.name}
+                        onDelete={() => handleDelete(indexOfFirstItem + index)}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <Pagination totalItems={data.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
+            <Pagination totalItems={files.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
           </div>
         </div>
       </div>

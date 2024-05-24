@@ -5,7 +5,8 @@ import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 // import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
-const UserFilePopup = ({ name, role, status, imageUrl, onDeactivateClick }) => {
+
+const UserFilePopup = ({ name, role, status, imageUrl, onDeactivateClick, onDelete }) => {
 
     const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
     const threeDotButtonRef = useRef(null);
@@ -61,17 +62,20 @@ const UserFilePopup = ({ name, role, status, imageUrl, onDeactivateClick }) => {
 
     const handleDelete = (e) => {
         e.stopPropagation();
-        e.preventDefault();
-        console.log("Delete button clicked");
-        // Here, you would typically call a function to handle the actual delete operation.
-    };
+        onDelete();
+        closePopup();
+      };
     
-    // Define the onClick handler for downloading an item
-    const handleDownload = (e) => {
+      const handleDownload = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        console.log("Download button clicked");
-        // Here, you would typically call a function to handle the actual download operation.
+        const qrImage = 'assets/hehe.png';
+        const link = document.createElement('a');
+        link.href = qrImage;
+        link.download = 'qr-image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (

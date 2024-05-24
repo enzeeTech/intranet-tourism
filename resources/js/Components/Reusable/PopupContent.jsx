@@ -1,7 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './css/StaffMemberCard.css';
 import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
-import deactivateButton from '../../../../public/assets/deactivateButton.png';
 import ViewAdminPopup from '../Reusable/ViewAdminPopup';
 
 const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRename, onDelete }) => {
@@ -10,6 +9,8 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(name);
   const threeDotButtonRef = useRef(null);
+  const popupRef = useRef(null);
+  const renamePopupRef = useRef(null);
 
   const toggleThreeDotButton = () => {
     setIsThreeDotPopupOpen(!isThreeDotPopupOpen);
@@ -19,19 +20,28 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
     setIsThreeDotPopupOpen(false);
   };
 
-  React.useEffect(() => {
+  const closeRenamePopup = () => {
+    setIsRenaming(false);
+    setNewName(name); // Reset the new name to the original name
+  };
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest(".popup")) {
+      if (
+        popupRef.current && !popupRef.current.contains(event.target) &&
+        threeDotButtonRef.current && !threeDotButtonRef.current.contains(event.target) &&
+        (!renamePopupRef.current || !renamePopupRef.current.contains(event.target))
+      ) {
         closePopup();
       }
     };
 
     if (isThreeDotPopupOpen) {
-      document.addEventListener("click", handleClickOutside);
+      document.addEventListener('click', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [isThreeDotPopupOpen]);
 
@@ -40,16 +50,10 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
     toggleThreeDotButton();
   };
 
-  const getPopupPosition = () => {
-    return {
-      top: -8,
-      left: 90.5,
-    };
-  };
-
   const handleRenameClick = (e) => {
     e.stopPropagation();
     setIsRenaming(true);
+    setIsThreeDotPopupOpen(false); // Close the three-dot popup when renaming starts
   };
 
   const handleRenameChange = (e) => {
@@ -60,7 +64,10 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
     e.preventDefault();
     onRename(newName);
     setIsRenaming(false);
-    closePopup();
+  };
+
+  const handleCancelRename = () => {
+    closeRenamePopup();
   };
 
   const handleManageAdminClick = (e) => {
@@ -80,21 +87,34 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
 
   const handleDownload = (e) => {
     e.stopPropagation();
-    // Implement your download logic here
-    console.log('Download clicked');
+    e.preventDefault();
+    const qrImage = 'assets/hehe.png';
+    const link = document.createElement('a');
+    link.href = qrImage;
+    link.download = 'qr-image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+  const getPopupPosition = () => {
+    return {
+      top: -8,
+      left: 90.5,
+    };
   };
 
   return (
     <div>
       <button
         className="three-dot-button"
-        onClick={toggleThreeDotButton}
+        onClick={handleIconClick}
         ref={threeDotButtonRef}
       >
-        <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" onClick={handleIconClick} />
+        <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" />
       </button>
       {isThreeDotPopupOpen && (
-        <div className="profile-files-popup text-sm">
+        <div className="profile-files-popup text-sm" ref={popupRef}>
           <div
             className="staff-member-popup4"
             style={{
@@ -104,24 +124,13 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
               zIndex: 999,
             }}
           >
-            {isRenaming ? (
-              <form onSubmit={handleRenameSubmit}>
-                <input
-                  type="text"
-                  value={newName}
-                  onChange={handleRenameChange}
-                  className="text-neutral-500 pr-2 mr-12"
-                />
-                <button type="submit" className="text-neutral-500 pr-2 mr-12">Save</button>
-              </form>
-            ) : (
-              <button
-                className="text-neutral-500 pr-2 mr-12"
-                onClick={handleRenameClick}
-              >
-                Rename
-              </button>
-            )}
+            <img src="assets/🦆 icon _Rename.svg" alt={name} className="staff-member-popup-image" />
+            <button
+              className="text-neutral-500 pr-2 mr-12"
+              onClick={handleRenameClick}
+            >
+              Rename
+            </button>
           </div>
           <div
             className="staff-member-popup2"
@@ -132,6 +141,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
               zIndex: 999,
             }}
           >
+            <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />  
             <button
               className="text-neutral-500 pr-2 mr-14"
               onClick={handleDelete}
@@ -148,6 +158,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
               zIndex: 999,
             }}
           >
+            <img src="assets/🦆 icon _Admin.svg" alt={name} className="staff-member-popup-image" />
             <button
               className="text-neutral-500 pr-2"
               onClick={handleManageAdminClick}
@@ -164,12 +175,32 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick, onRenam
               zIndex: 999,
             }}
           >
+            <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
             <button
               className="text-neutral-500 pr-2 mr-8"
               onClick={handleDownload}
             >
               Download
             </button>
+          </div>
+        </div>
+      )}
+      {isRenaming && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div ref={renamePopupRef} className="relative bg-white rounded-xl shadow-custom p-6 w-[300px]">
+            <h2 className="text-xl font-bold mb-4">Rename</h2>
+            <form onSubmit={handleRenameSubmit} className="flex flex-col">
+              <input
+                type="text"
+                value={newName}
+                onChange={handleRenameChange}
+                className="text-neutral-500 pr-2 mb-4 p-2 border border-gray-300 rounded"
+              />
+              <div className="flex gap-2 justify-end">
+                <button type="button" className="text-neutral-500 border border-gray-300 px-4 py-2 rounded" onClick={handleCancelRename}>Cancel</button>
+                <button type="submit" className="text-white bg-blue-500 px-4 py-2 rounded">Save</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
