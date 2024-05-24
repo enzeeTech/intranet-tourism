@@ -70,12 +70,19 @@ function HeaderSection() {
 }
 
 function Navigation() {
+  const [activeTab, setActiveTab] = useState(null);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+ 
   return (
     <nav className="flex gap-5 items-start px-9 py-6 w-full text-sm font-semibold text-center whitespace-nowrap bg-white rounded-none text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-      <div className="text-base font-bold text-blue-500">Home</div>
-      <div>Gallery</div>
-      <div>Files</div>
-      <div>Members</div>
+      <div className={`text-base font-bold ${activeTab === 'Home' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Home')}>Home</div>
+      <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
+      <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
+      <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
+      {activeTab === 'Members' && <DpMembers />} {/* Render DpMembers component when Members tab is active */}
     </nav>
   );
 }
