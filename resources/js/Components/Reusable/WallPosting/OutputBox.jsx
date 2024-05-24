@@ -20,6 +20,7 @@ function IconButton({ src, alt }) {
 
 function OutputData() {
   const [postData, setPostData] = useState([]);
+  const [attachmentData, setattachmentData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,21 +29,26 @@ function OutputData() {
     })
       .then((response) => {
         if (!response.ok) {
-          // console.log('Network response was not ok');
           throw new Error("Network response was not ok");
         }
         return response.json();
       })
       .then((data) => {
         console.log("Posts data:", data.data.data);
-        setPostData(data.data.data);
+        // Transform attachments to always be an array
+        const posts = data.data.data.map((post) => {
+          post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
+          return post;
+        });
+        setPostData(posts);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
-        setLoading(false); // Even in case of error, set loading to false
+        setLoading(false);
       });
   }, []);
+
 
   const icons = [
     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/594907e3c69b98b6d0101683915b195ce42280c8ba80773ecd95b387436ea664?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&", alt: "Icon 1" },
@@ -50,47 +56,62 @@ function OutputData() {
   ];
 
   if (loading) {
-    return <div>Loading...</div>; // Or any other loading indicator
+    return <div>Loading...</div>;
   }
 
   return (
     <>
-      {postData && postData.map((post) => (
-        <div key={post.id} className="input-box-container" style={{ height: "230px", marginTop: "-10px" }}>
-          <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
-            <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
-              <div className="flex gap-1 mt-2">
-                {/* <Avatar src={post.user.avatar} alt={`${post.user.name}'s avatar`} /> */}
-                {/* <UserInfo name={post.user.name} timestamp={post.timestamp} /> */}
-              </div>
-              <div className="flex gap-5 justify-between">
-                {icons.map((icon, index) => (
-                  <IconButton key={index} src={icon.src} alt={icon.alt} />
-                ))}
-              </div>
-            </header>
-            <p className="mt-2.5 text-base leading-6 text-neutral-800 max-md:max-w-full">
-              {post.content}
-            </p>
-            <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
-              {post.tag}
-            </p>
-            {/* Render attachments */}
-            {post.attachments && post.attachments.map((attachment, index) => (
-              <div key={index} className="mt-2">
-                {attachment.path.endsWith(".png") || attachment.path.endsWith(".jpg") || attachment.path.endsWith(".jpeg") ?
-                  <img src={attachment.path} alt="Attachment" className="max-w-full h-auto" />
-                  :
-                  <a href={attachment.path} target="_blank" rel="noopener noreferrer">{attachment.path.split("/").pop()}</a>
-                }
-              </div>
-            ))}
-          </article>
+{postData && postData.map((post) => (
+  <div key={post.id} className="input-box-container" style={{ height: "auto", marginTop: "-10px" }}>
+    <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
+      <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
+        <div className="flex gap-1 mt-2">
+          {/* <Avatar src={post.user.avatar} alt={`${post.user.name}'s avatar`} /> */}
+          {/* <UserInfo name={post.user.name} timestamp={post.timestamp} /> */}
         </div>
-      ))}
+        <div className="flex gap-5 justify-between">
+          {icons.map((icon, index) => (
+            <IconButton key={index} src={icon.src} alt={icon.alt} />
+          ))}
+        </div>
+      </header>
+      <p className="mt-2.5 text-base leading-6 text-neutral-800 max-md:max-w-full">
+        {post.content}
+      </p>
+      <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
+        {post.tag}
+      </p>
+      {/* Render attachments */}
+      {/* {post.attachments.map((attachment, index) => (
+        <div key={index} className="mt-2">
+          {attachment.mime_type.startsWith("image/") ? (
+            <img src={`/storage/${attachment.path}`} alt="Attachment" className="max-w-full h-auto" />
+          ) : (
+            <a href={`/storage/${attachment.path}`} target="_blank" rel="noopener noreferrer">
+              {attachment.path.split("/").pop()}
+            </a>
+          )}
+        </div>
+      ))} */}
+
+{post.attachments.map((attachment, index) => (
+  <div key={index} className="mt-2">
+    {attachment.mime_type.startsWith("image/") ? (
+      <img src={`/storage/${attachment.path}`} alt="Attachment" className="max-w-full h-auto" />
+    ) : (
+      <a href={`/storage/${attachment.path}`} target="_blank" rel="noopener noreferrer">
+        {attachment.path.split("/").pop()}
+      </a>
+    )}
+  </div>
+))}
+
+
+    </article>
+  </div>
+))}
     </>
   );
 }
-
 
 export default OutputData;
