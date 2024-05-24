@@ -1,13 +1,12 @@
 import React from 'react';
-import DashboardContent from './DashboardContent';
-import StaffDirectoryContent from './StaffDirectoryContent';
-import CalendarContent from './CalendarContent';
-import DepartmentsContent from './DepartmentsContent';
-import GroupsContent from './GroupsContent';
-import FileManagementContent from './FileManagementContent';
-import LinksContent from './LinksContent';
-import SettingsContent from './SettingsContent';
-import LogoutContent from './LogoutContent';
+import MyComponent from '../Pages/Departments';
+import StaffDirectory from '../Pages/StaffDirectory';
+import Calendar from '../Pages/Calendar';
+//import GroupsContent from './GroupsContent';
+import File from '../Pages/fileManagement';
+//import LinksContent from './LinksContent';
+//import SettingsContent from './SettingsContent';
+//import LogoutContent from './LogoutContent';
 
 const MainContent = ({ content }) => {
     const renderContent = () => {
@@ -15,15 +14,15 @@ const MainContent = ({ content }) => {
             case 'DashboardContent':
                 return <DashboardContent />;
             case 'StaffDirectoryContent':
-                return <StaffDirectoryContent />;
+                return <StaffDirectory />;
             case 'CalendarContent':
-                return <CalendarContent />;
+                return <Calendar />;
             case 'DepartmentsContent':
-                return <DepartmentsContent />;
+                return <MyComponent />;
             case 'GroupsContent':
                 return <GroupsContent />;
             case 'FileManagementContent':
-                return <FileManagementContent />;
+                return <File />;
             case 'LinksContent':
                 return <LinksContent />;
             case 'SettingsContent':
