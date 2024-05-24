@@ -1,45 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-const Sidebar = () => {
-    // Path to buttons
+const Sidebar = ({ setContent }) => {
     const buttons = [
-        { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png", text: "Dashboard" },
-        { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png", text: "Staff Directory" },
-        { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png", text: "Calendar" },
-        { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png", text: "Departments" },
-        { inactive: "assets/groups.png", to: '/community', active: "assets/groupsActive.png", text: "Groups" },
-        { inactive: "assets/fileManagement.png", to: '/fileManagement', active: "assets/fileManagementActive.png", text: "File Management" },
-        { inactive: "assets/links.png", active: "assets/linksActive.png", text: "Links" },
-        { inactive: "assets/settings.png", active: "assets/settingsActive.png", text: "Settings" },
-        { inactive: "assets/logout.png", to: '/logout', active: "assets/logout.png", text: "Logout" }
+        { inactive: "assets/dashboard.png", content: 'DashboardContent', active: "assets/dashboardActive.png", text: "Dashboard" },
+        { inactive: "assets/staffDirectory.png", content: 'StaffDirectoryContent', active: "assets/staffDirectoryActive.png", text: "Staff Directory" },
+        { inactive: "assets/calendar.png", content: 'CalendarContent', active: "assets/calendarActive.png", text: "Calendar" },
+        { inactive: "assets/departments.png", content: 'DepartmentsContent', active: "assets/departmentsActive.png", text: "Departments" },
+        { inactive: "assets/groups.png", content: 'GroupsContent', active: "assets/groupsActive.png", text: "Groups" },
+        { inactive: "assets/fileManagement.png", content: 'FileManagementContent', active: "assets/fileManagementActive.png", text: "File Management" },
+        { inactive: "assets/links.png", content: 'LinksContent', active: "assets/linksActive.png", text: "Links" },
+        { inactive: "assets/settings.png", content: 'SettingsContent', active: "assets/settingsActive.png", text: "Settings" },
+        { inactive: "assets/logout.png", content: 'LogoutContent', active: "assets/logout.png", text: "Logout" }
     ];
 
     const [activeIndex, setActiveIndex] = useState(null);
-    const [activeText, setActiveText] = useState(null);
     const [showText, setShowText] = useState(null);
     const [showTextPosition, setShowTextPosition] = useState({ top: 0, left: 0 });
-    const [csrfToken, setCsrfToken] = useState(null);
-
-    // Fetch the CSRF token once
-    useEffect(() => {
-        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        setCsrfToken(token);
-    }, []);
-
-    // Function to handle logout
-    const handleLogout = () => {
-        fetch('/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken,
-            }
-        })
-            .then(() => {
-                window.location.href = '/';
-            })
-            .catch(err => console.error(err));
-    };
 
     const handleMouseEnter = (text, event) => {
         const rect = event.target.getBoundingClientRect();
@@ -56,15 +32,12 @@ const Sidebar = () => {
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => (
                     <a
-                        href={button.to || '#'} // Use '#' as fallback to avoid warnings
+                        href="#"
                         key={i}
                         className={`z-10 w-full flex justify-center ${activeIndex === i ? 'active' : ''}`}
                         onClick={() => {
                             setActiveIndex(i);
-                            setActiveText(button.text);
-                            if (button.to === '/logout') {
-                                handleLogout();
-                            }
+                            setContent(button.content);
                         }}
                         onMouseEnter={(event) => handleMouseEnter(button.text, event)}
                         onMouseLeave={handleMouseLeave}
