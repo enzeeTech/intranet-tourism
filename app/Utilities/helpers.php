@@ -4,7 +4,7 @@
 use \Illuminate\Http\UploadedFile;
 
 if (!function_exists('uploadFile')) {
-    function uploadFile(UploadedFile $uploadedFile, $fileName = null, $folder = null, $disk = null)
+    function uploadFile(UploadedFile $uploadedFile, $fileName = null, $folder = null, $disk = 'public')
     {
         $fileRef = [];
         $whitelistExtension = !empty(config('filesystems.whitelist'))
