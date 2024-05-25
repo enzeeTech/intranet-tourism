@@ -8,7 +8,7 @@ if (!function_exists('uploadFile')) {
     {
         $fileRef = [];
         $whitelistExtension = !empty(config('filesystems.whitelist'))
-            ? explode(',', config('filesystems.whitelist.criteria.extension'))
+            ? config('filesystems.whitelist.criteria.extension')
             : ["jpg", "jpeg", "png", "bmp", "pdf"];
 
         $fileRef['extension'] = strtolower($uploadedFile->extension() ?? $uploadedFile->clientExtension());
