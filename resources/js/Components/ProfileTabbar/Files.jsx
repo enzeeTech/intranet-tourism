@@ -82,7 +82,7 @@ const Table = () => {
               <thead>
                 <tr>
                   <th scope="col" className="w-1/3 md:w-1/5 lg:w-1/3 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size</th>
+                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
                   <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">
                     <div className="flex justify-center">
                       <img src="assets/FileTableCalendar.svg" alt="Date" className="Date" />

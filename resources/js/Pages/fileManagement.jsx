@@ -6,7 +6,7 @@ import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
-
+import Layout from '@/Layouts/DashboardLayout';
 
 
 
@@ -14,6 +14,7 @@ const FileManage = () => {
 
 
   return (
+    <Layout>
     <div className="file-directory">
       <div>
         <div className="file-directory-header">
@@ -34,6 +35,7 @@ const FileManage = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
   
