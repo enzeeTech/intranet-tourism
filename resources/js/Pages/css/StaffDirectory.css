@@ -19,6 +19,14 @@
   width: 130%;
 }
 
+.my-profile-underline {
+  border: none;
+  border-top: 1px solid #E4E4E4; 
+  margin: 0; 
+  margin-bottom: 40px;
+  width: 108%;
+}
+
 .widgets-container {
   display: flex;
   gap: 20px; 

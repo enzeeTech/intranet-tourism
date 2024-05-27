@@ -115,11 +115,11 @@ export default function MyComponent() {
             )}
             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                 <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col px-5 mt-20 grow max-md:mt-10">
+                    <div className="flex flex-col px-5 mt-0 grow max-md:mt-10">
                         <div className="staff-directory-header">
-                            <PageTitle title="Profile" />
+                            <PageTitle title="My Profile" />
                         </div>
-                        <hr className="staff-directory-underline" />
+                        <hr className="my-profile-underline" />
                         <div className="widgets-container">
                             <div className="left-widget">
                                 <FeaturedEvent />
@@ -128,7 +128,7 @@ export default function MyComponent() {
                         </div>
                     </div>
                 </aside>
-                <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
+                <main className="flex flex-col ml-5 w-screen max-md:ml-0 max-md:w-full">
                     <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
                         <section className="flex flex-col pb-5 bg-white rounded-none shadow-custom max-md:max-w-full">
                             <ProfileHeader
