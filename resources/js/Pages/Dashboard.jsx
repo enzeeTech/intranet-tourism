@@ -31,7 +31,7 @@ const Dashboard = () => {
           </aside>
           <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
-              <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full ml-16">
+              <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full ml-16 mt-20">
                 <Stories />
                 {/* <CreateStory /> */}
                 {/* <Birthday /> */}

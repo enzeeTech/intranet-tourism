@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import PopupContent from '../Reusable/PopupContent';
 
 
-
-
-
-
 const data = [
   { name: 'Briefing.pdf', Size: '12', Date: '12.10.2023', Author: 'by Musa' },
   { name: 'Report.doc', Size: '7.4', Date: '07.10.2023', Author: 'by Musa' },
