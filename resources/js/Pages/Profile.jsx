@@ -5,6 +5,7 @@ import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import Layout from '@/Layouts/DashboardLayout';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -97,6 +98,7 @@ export default function MyComponent() {
     };
 
     return (
+        <Layout>
         <div className="staff-directory">
             {isSaveNotificationOpen && (
                 <SaveNotification
@@ -186,5 +188,6 @@ export default function MyComponent() {
                 </main>
             </div>
         </div>
+        </Layout>
     );
 }
