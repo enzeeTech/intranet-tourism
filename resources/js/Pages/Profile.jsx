@@ -128,7 +128,7 @@ export default function MyComponent() {
                         </div>
                     </div>
                 </aside>
-                <main className="flex flex-col ml-5 w-screen max-md:ml-0 max-md:w-full">
+                <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
                     <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
                         <section className="flex flex-col pb-5 bg-white rounded-none shadow-custom max-md:max-w-full">
                             <ProfileHeader
