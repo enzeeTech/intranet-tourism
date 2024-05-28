@@ -8,7 +8,7 @@ import Adminsection from '../Components/Adminwall';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
-import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
+// import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
 
 
 import './css/StaffDirectory.css';
@@ -149,7 +149,13 @@ const StaffDirectory = () => {
           <div className="left-widget">
            
             <FeaturedEvents />
+
+
             <Birthdaypopup/>
+
+
+
+            
             <WhosOnline />
 
           </div>
@@ -159,9 +165,9 @@ const StaffDirectory = () => {
               departments={departments}
               onSelectDepartment={handleSelectDepartment}
             />
-            <Adminsection/>
+            <Adminsection />
 
-            <ShareYourThoughtsDepart/>
+            {/* <ShareYourThoughtsDepart/> */}
 
             {selectedDepartment === 'All' && (
               <div className="staff-member-grid-container">

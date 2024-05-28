@@ -1,4 +1,10 @@
 import * as React from "react";
+import { useState, useRef } from "react";
+import BirthdayCom from "../Birthdayfunction/birthdaypopup";
+import Popup from "../Popup";
+
+
+
 
 
 function NotificationCard({ imgSrc, altText, name, message, btnImgSrc, btnAltText, btnText }) {
@@ -22,9 +28,32 @@ function NotificationCard({ imgSrc, altText, name, message, btnImgSrc, btnAltTex
 }
 
 function Birthdaypopup() {
+
+
+  const [inputValue, setInputValue] = useState("");
+  const [showPollPopup, setShowPollPopup] = useState(false);
+  const [showPeoplePopup, setShowPeoplePopup] = useState(false);
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const handlePopupOpen = () => {
+      setIsPopupOpen(true);
+    };
+
+    const handlePopupClose = () => {
+      setIsPopupOpen(false);
+    };
+
+
+
   return (
-    <main className="flex flex-col justify-center max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl ">
-      <NotificationCard
+    <main className="flex flex-col justify-center max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl border-2 border-red-300">
+      
+      <div onClick={handlePopupOpen}><NotificationCard
         imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/80d03561f93a8c4f659ca6eb6958bfd4e2b46ee8c54d6d205eb675ead43272e1?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
         altText="Musa's profile picture"
         name="Musa’s"
@@ -32,7 +61,27 @@ function Birthdaypopup() {
         btnImgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/c88916557d5108d0695fbf9e464053f706989bf26f0ecf83032e9f46a6646632?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
         btnAltText="celebration icon"
         btnText="Let’s Celebrate!"
-      />
+        loading="lazy"
+        onClick={handlePopupOpen}
+
+      /></div>
+
+      {/* <img
+        loading="lazy"
+        src="assets/BDicon.svg"
+        alt="Icon 5"
+        className="w-[14px] h-auto"
+        onClick={handlePopupOpen}
+      /> */}
+      {isPopupOpen && (
+        <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
+          <BirthdayCom />
+        </Popup>
+      )}
+
+      {showPollPopup && <Polls onClose={closePopup} />}
+      {showPeoplePopup && <People onClose={closePopup} />}
+
     </main>
   );
 }

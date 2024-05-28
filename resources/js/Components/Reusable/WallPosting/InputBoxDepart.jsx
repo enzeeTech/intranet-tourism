@@ -161,7 +161,7 @@ function ShareYourThoughtsDepart() {
               className="w-[15px] h-auto"
               onClick={handleClickDoc}
             />
-            <img
+            {/* <img
               loading="lazy"
               src="assets/inputpeople.svg"
               alt="Icon 5"
@@ -174,7 +174,7 @@ function ShareYourThoughtsDepart() {
         alt="Icon 5"
         className="w-[14px] h-auto"
         onClick={handlePopupOpen}
-      />
+      /> */}
       {isPopupOpen && (
         <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
           <BirthdayCom />
@@ -189,11 +189,6 @@ function ShareYourThoughtsDepart() {
           className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-1 -ml-16"
         />
       </div>
-      {/* <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
-
-<BirthdayCom/>
-
-</Popup> */}
       {showPollPopup && <Polls onClose={closePopup} />}
       {showPeoplePopup && <People onClose={closePopup} />}
     </section>

@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
+import DpMembers from '../Components/DepartmentCom/DepartmentMembers';
+import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
+// import ProfileGallery from '../Components/ProfileTabbar/Gallery';
+import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+
+
 
 function HeaderSection() {
+
+
   const [isEditing, setIsEditing] = useState(false);
   const [textContent, setTextContent] = useState('Horem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.');
 
@@ -18,7 +26,7 @@ function HeaderSection() {
   };
 
   return (
-    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-full text-white min-h-[235px] max-md:px-5 max-md:max-w-full rounded-xl">
+    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-full text-white min-h-[235px] max-md:px-5 max-md:max-w-full rounded-t-xl">
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
@@ -43,7 +51,7 @@ function HeaderSection() {
       <div className="relative mt-5 text-base font-medium leading-5 max-md:max-w-full">
         {isEditing ? (
           <textarea
-            className="w-full h-32 p-2 text-black"
+            className="w-full h-32 p-2 text-white bg-inherit focus:outline-none focus:ring focus:ring-blue-500"
             value={textContent}
             onChange={handleInputChange}
           />
@@ -57,12 +65,21 @@ function HeaderSection() {
         className="mt-6 aspect-square w-[30px]"
         alt="Section Icon"
       />
-      <div className="absolute inset-x-0 bottom-0 flex justify-between items-center gap-4 px-11 py-4 max-md:px-5">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Join</button>
+     <div className="absolute inset-x-0 bottom-0 flex justify-start items-center gap-4 px-11 py-4 max-md:px-5">
         {isEditing ? (
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md" onClick={handleSaveClick}>Save</button>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center" onClick={handleSaveClick}>
+           
+            Save
+          </button>
         ) : (
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md" onClick={handleEditClick}>Edit</button>
+          <button className="w-8 h-8 px-1 py-1 bg-blue-500 text-white rounded-full flex items-center justify-center" onClick={handleEditClick}>
+            <img
+              src="/assets/pencil.svg"
+              alt="Edit Icon"
+              className="w-4 h-4 "
+            />
+            
+          </button>
         )}
       </div>
     </header>
@@ -75,21 +92,65 @@ function Navigation() {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
- 
+
+  const photoData = [
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?", alt: "Photo 1" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Photo 2" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc01566f85a165f9e8c89da57eaa7e81212a8fa1e58ed53877c900bf64c5baf1?", alt: "Photo 3" },
+];
+
+const videoData = [
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?", alt: "Video 1" },
+    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Video 2" },
+];
+
   return (
-    <nav className="flex gap-5 items-start px-9 py-6 w-full text-sm font-semibold text-center whitespace-nowrap bg-white rounded-none text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-      <div className={`text-base font-bold ${activeTab === 'Home' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Home')}>Home</div>
-      <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
-      <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
-      <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
-      {activeTab === 'Members' && <DpMembers />} {/* Render DpMembers component when Members tab is active */}
-    </nav>
+    <div>
+      <nav className="flex border-2 border-gray-300 gap-5 items-start px-9 py-6 w-full text-sm font-semibold text-center whitespace-nowrap bg-white rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+        <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
+        <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
+        <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
+        <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
+      </nav>
+      
+
+
+      {activeTab === 'Members' && (
+        <div className="flex justify-center w-full mt-4 ">
+          <div className="max-w-[900px] w-full ">
+            <DpMembers />
+          </div>
+        </div>
+      )}   
+
+                  {activeTab === "Files" && (
+                            <div>
+                                <div className="flex gap-4 whitespace-nowrap">
+                                    <SearchInput />
+                                    <SearchButton />
+                                </div>
+                                <Table />
+                            </div>
+                            )}
+
+                  {activeTab === "Gallery" && (
+                          <ProfileGallery photoData={photoData} videoData={videoData} />
+                        )}
+
+      {activeTab === 'Post' && (
+              <div className="flex justify-center w-full mt-4">
+                <div className="max-w-[900px] w-full">
+                <ShareYourThoughtsDepart/>
+                </div>
+              </div>
+            )}
+          </div>
   );
 }
 
 function Adminsection() {
   return (
-    <div className="flex flex-col max-w-[900px] border-2 border-red-300 bg-white shadow-2xl pb-6 rounded-xl mt-6">
+    <div className="flex flex-col max-w-[900px] border-2 border-blue-200   shadow-2xl pb-6 rounded-xl mt-6">
       <HeaderSection />
       <Navigation />
     </div>
