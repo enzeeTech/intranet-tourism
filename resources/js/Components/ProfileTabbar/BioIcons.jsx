@@ -58,7 +58,7 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
     };
 
     return (
-        <div className="flex flex-col bg-black">
+        <div className="flex flex-col">
             <button onClick={handleIcon1Click}>
                 <img src={icon1} alt="" className="aspect-square w-[30px]" />
             </button>

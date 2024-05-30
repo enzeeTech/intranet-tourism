@@ -21,8 +21,8 @@
         };
 
         return (
-            <div className="flex-auto my-auto p-4 bg-blue-500">
-            <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6 bg-yellow-500">
+            <div className="flex-auto my-auto p-4">
+            <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6">
                     <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                         <table className="table-auto w-full text-left border-collapse">
                             <tbody>
