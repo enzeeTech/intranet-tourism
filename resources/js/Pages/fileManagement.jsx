@@ -7,8 +7,6 @@ import { FileTable } from '@/Components/FileManagement';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
 import Layout from '@/Layouts/DashboardLayoutNew';
-import Example from './Profile2';
-
 
 
 const FileManage = () => {
@@ -30,9 +28,7 @@ const FileManage = () => {
           <div className="right-widget">
             <SearchFile />
             <FileTable />
-
           </div>
-
         </div>
       </div>
     </div>
