@@ -12,7 +12,7 @@ import NotificationPopup from '../Components/Noti-popup-test';
   
 const Header = () => {
   return (
-    <header className="fixed top-0 z-50 flex w-full items-center justify-between p-4 bg-white shadow-custom">
+    <header className="fixed top-0 z-50 flex w-full items-center justify-between p-4 bg-transparent shadow-custom">
       <a href= '../dashboard'><img src={logo}   alt="Logo" className="h-12 ml-8" /> </a>
       <div className="relative flex items-center flex-grow mx-8 ">
       <img src={search} alt="Search" className="absolute w-6 h-6 transform -translate-y-1/2 left-3 top-1/2" />
@@ -87,9 +87,9 @@ const Header = () => {
         <table>
           <tr>
             <td>
-              <a href='../profile'>
+              <a href='../profile2'>
 
-              <img src={profileDummy} alt="Profile" className="w-12 h-12 ml-4 mr-2 rounded-full" />
+              <img src={profileDummy} alt="Profile2" className="w-12 h-12 ml-4 mr-2 rounded-full" />
 
               </a>
             </td>

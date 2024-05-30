@@ -6,7 +6,8 @@ import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
-import Layout from '@/Layouts/DashboardLayout';
+import Layout from '@/Layouts/DashboardLayoutNew';
+import Example from './Profile2';
 
 
 
@@ -28,7 +29,7 @@ const FileManage = () => {
           </div>
           <div className="right-widget">
             <SearchFile />
-      <FileTable />
+            <FileTable />
 
           </div>
 

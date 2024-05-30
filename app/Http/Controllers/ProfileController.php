@@ -63,6 +63,6 @@ class ProfileController extends Controller
 
     public function index()
 {
-    return Inertia::render('Profile'); // Assuming 'Profile' is the name of your profile view
+    return Inertia::render('Profile2'); // Assuming 'Profile' is the name of your profile view
 }
 }

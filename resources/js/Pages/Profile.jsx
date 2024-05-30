@@ -9,15 +9,15 @@ import Layout from '@/Layouts/DashboardLayout';
 
 function SaveNotification({ title, content, onClose }) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="p-2 rounded-3xl w-4xl">
-        <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
-          <div className="flex flex-col w-full">
-            <h2 className="text-xl text-neutral-800">Request Sent to Jomla! Admin</h2>
-          </div>
-        </section>
-      </div>
-    </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div className="p-2 rounded-3xl w-4xl">
+                <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
+                    <div className="flex flex-col w-full">
+                        <h2 className="text-xl text-neutral-800">Request Sent to Jomla! Admin</h2>
+                    </div>
+                </section>
+            </div>
+        </div>
     );
 }
 
@@ -98,96 +98,96 @@ export default function MyComponent() {
     };
 
     return (
-        <Layout>
-        <div className="staff-directory">
-            {isSaveNotificationOpen && (
-                <SaveNotification
-                    title="Changes Saved"
-                    onClose={closeSaveNotification}
-                />
-            )}
-            {isPopupOpen && (
-                <Popup
-                    title="Edit Banner Photo"
-                    content="Choose photo from the device"
-                    onClose={() => setIsPopupOpen(false)}
-                />
-            )}
-            <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col px-5 mt-0 grow max-md:mt-10">
-                        <div className="staff-directory-header">
-                            <PageTitle title="My Profile" />
-                        </div>
-                        <hr className="my-profile-underline" />
-                        <div className="widgets-container">
-                            <div className="left-widget">
-                                <FeaturedEvent />
-                                <WhosOnline />
+        <>
+            <div className="staff-directory">
+                {isSaveNotificationOpen && (
+                    <SaveNotification
+                        title="Changes Saved"
+                        onClose={closeSaveNotification}
+                    />
+                )}
+                {isPopupOpen && (
+                    <Popup
+                        title="Edit Banner Photo"
+                        content="Choose photo from the device"
+                        onClose={() => setIsPopupOpen(false)}
+                    />
+                )}
+                <div className="flex flex-col w-full md:flex-row gap-5 max-md:gap-0">
+                    <aside className="flex flex-col w-full md:w-[27%]">
+                        <div className="flex flex-col px-5 mt-0 grow max-md:mt-10">
+                            <div className="staff-directory-header">
+                                <PageTitle title="My Profile" />
+                            </div>
+                            <hr className="my-profile-underline" />
+                            <div className="widgets-container">
+                                <div className="left-widget">
+                                    <FeaturedEvent />
+                                    <WhosOnline />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </aside>
-                <main className="flex flex-col ml-5 w-screen max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
-                        <section className="flex flex-col pb-5 bg-white rounded-none shadow-custom max-md:max-w-full">
-                            <ProfileHeader
-                                backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
-                                name={profileData.name}
-                                status={profileData.status}
-                                onEditBanner={() => setIsPopupOpen(true)}
-                            />
-                            <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
-                        </section>
-                        {activeTab === "bio" && (
-                            <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                <div className="flex-auto my-auto max-md:max-w-full">
-                                    <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                                        <ProfileBio
-                                            photo={photo}
-                                            email={formData.email}
-                                            department={formData.department}
-                                            position={formData.position}
-                                            grade={formData.grade}
-                                            location={formData.location}
-                                            phone={formData.phone}
-                                            whatsapp={formData.whatsapp}
-                                            isEditing={isEditing}
-                                            onFormDataChange={handleFormDataChange}
-                                            onPhotoChange={handlePhotoChange}
-                                        />
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            icon2={profileData.icon2}
-                                            onEdit={handleEdit}
-                                        />
-                                    </div>
-                                    {isEditing && (
-                                        <div className="flex justify-end mt-4">
-                                            <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-                                            <button onClick={handleCancel} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
-                                        </div>
-                                    )}
-                                </div>
+                    </aside>
+                    <main className="flex flex-col w-full md:ml-5">
+                        <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
+                            <section className="flex flex-col pb-5 bg-white rounded-none shadow-custom max-md:max-w-full">
+                                <ProfileHeader
+                                    backgroundImage={profileData.backgroundImage}
+                                    profileImage={profileData.profileImage}
+                                    name={profileData.name}
+                                    status={profileData.status}
+                                    onEditBanner={() => setIsPopupOpen(true)}
+                                />
+                                <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             </section>
-                        )}
-                        {activeTab === "gallery" && (
-                            <ProfileGallery photoData={photoData} videoData={videoData} />
-                        )}
-                        {activeTab === "files" && (
-                            <div>
-                                <div className="flex gap-4 whitespace-nowrap">
-                                    <SearchInput />
-                                    <SearchButton />
+                            {activeTab === "bio" && (
+                                <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                    <div className="flex-auto my-auto max-md:max-w-full">
+                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                            <ProfileBio
+                                                photo={photo}
+                                                email={formData.email}
+                                                department={formData.department}
+                                                position={formData.position}
+                                                grade={formData.grade}
+                                                location={formData.location}
+                                                phone={formData.phone}
+                                                whatsapp={formData.whatsapp}
+                                                isEditing={isEditing}
+                                                onFormDataChange={handleFormDataChange}
+                                                onPhotoChange={handlePhotoChange}
+                                            />
+                                            <ProfileIcons
+                                                icon1={profileData.icon1}
+                                                icon2={profileData.icon2}
+                                                onEdit={handleEdit}
+                                            />
+                                        </div>
+                                        {isEditing && (
+                                            <div className="flex justify-end mt-4">
+                                                <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
+                                                <button onClick={handleCancel} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
+                            )}
+                            {activeTab === "gallery" && (
+                                <ProfileGallery photoData={photoData} videoData={videoData} />
+                            )}
+                            {activeTab === "files" && (
+                                <div>
+                                    <div className="flex gap-4 whitespace-nowrap">
+                                        <SearchInput />
+                                        <SearchButton />
+                                    </div>
+                                    <Table />
                                 </div>
-                                <Table />
-                            </div>
-                        )}
-                    </div>
-                </main>
+                            )}
+                        </div>
+                    </main>
+                </div>
             </div>
-        </div>
-        </Layout>
+        </>
     );
 }

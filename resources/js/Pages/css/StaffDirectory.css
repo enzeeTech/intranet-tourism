@@ -39,6 +39,12 @@
   width: 30%; 
 }
 
+@media (max-width: 1372px) {
+  .left-widget {
+      display: none;
+  }
+}
+
 .right-widget {
   display: flex;
   flex-direction: column;
