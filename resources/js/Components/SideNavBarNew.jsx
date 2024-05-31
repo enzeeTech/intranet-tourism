@@ -62,13 +62,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white shadow-sm px-6 pb-2 ring-1 ring-gray-200 border-r border-gray-200">
                   <div className="flex h-16 shrink-0 items-center">
-                    <a href="/">
                       <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
+                        className="h-8 w-[70px]"
+                        src="assets/Jomla logo red.svg"
+                        alt="Jomla Logo"
                       />
-                    </a>
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="-mx-2 flex-1 space-y-1">
@@ -100,13 +98,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-white lg:shadow-sm lg:border-r lg:border-gray-200 lg:pb-4">
         <div className="flex h-16 shrink-0 items-center justify-center">
-          <a href="/">
             <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Your Company"
+              className="h-8 w-[70px]"
+              src="assets/Jomla logo red.svg"
+              alt="Jomla Logo"
             />
-          </a>
         </div>
         <nav className="mt-8">
           <ul role="list" className="flex flex-col items-center space-y-1">
