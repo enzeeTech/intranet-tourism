@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="staff-directory">
+      <div className="staff-directory bg-color-gray-500">
         <div className="flex gap-5 max-md:flex-col max-md:gap-0">
           <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col px-5 mt-20 grow max-md:mt-10">
