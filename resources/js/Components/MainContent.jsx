@@ -5,7 +5,7 @@ import Calendar from '../Pages/Calendar';
 //import GroupsContent from './GroupsContent';
 import File from '../Pages/fileManagement';
 //import LinksContent from './LinksContent';
-//import SettingsContent from './SettingsContent';
+import Settings from '../Pages/Settings';
 //import LogoutContent from './LogoutContent';
 
 const MainContent = ({ content }) => {
@@ -26,7 +26,7 @@ const MainContent = ({ content }) => {
             case 'LinksContent':
                 return <LinksContent />;
             case 'SettingsContent':
-                return <SettingsContent />;
+                return <Settings />;
             case 'LogoutContent':
                 return <LogoutContent />;
             default:
