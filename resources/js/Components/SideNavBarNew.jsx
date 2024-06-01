@@ -1,14 +1,19 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, HomeIcon, UsersIcon, FolderIcon, CalendarIcon, DocumentDuplicateIcon, ChartPieIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, HomeIcon, UserGroupIcon, CalendarIcon, BuildingOfficeIcon, GlobeAltIcon, FolderIcon, LinkIcon, Cog6ToothIcon, PlayCircleIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { useState, Fragment } from 'react'
 
+
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: false },
+  { name: 'StaffDirectory', href: '/staffDirectory', icon: UserGroupIcon, current: false },
+  { name: 'Calendar', href: '/calendar', icon: CalendarIcon, current: false },
+  { name: 'Department', href: '/departments', icon: BuildingOfficeIcon, current: false },
+  { name: 'Community Groups', href: '/community', icon: GlobeAltIcon, current: false },
+  { name: 'File Management', href: '/fileManagement', icon: FolderIcon, current: true },
+  { name: 'Links', href: '#', icon: LinkIcon, current: false },
+  { name: 'Media', href: '#', icon: PlayCircleIcon, current: false },
+  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+  { name: 'Logout', href: '/logout', icon: ArrowLeftStartOnRectangleIcon, current: false },
 ]
 
 function classNames(...classes) {
@@ -61,12 +66,12 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </Transition.Child>
 
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white shadow-sm px-6 pb-2 ring-1 ring-gray-200 border-r border-gray-200">
-                  <div className="flex h-16 shrink-0 items-center">
-                      <img
-                        className="h-8 w-[70px]"
-                        src="assets/Jomla logo red.svg"
-                        alt="Jomla Logo"
-                      />
+                  <div className="flex h-16 shrink-0 items-center lg:hidden">
+                    <img
+                      className="h-8 w-[70px]"
+                      src="assets/Jomla logo red.svg"
+                      alt="Jomla Logo"
+                    />
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="-mx-2 flex-1 space-y-1">
@@ -98,11 +103,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-white lg:shadow-sm lg:border-r lg:border-gray-200 lg:pb-4">
         <div className="flex h-16 shrink-0 items-center justify-center">
-            <img
-              className="h-8 w-[70px]"
-              src="assets/Jomla logo red.svg"
-              alt="Jomla Logo"
-            />
+          {/* Removed Jomla Logo from here */}
         </div>
         <nav className="mt-8">
           <ul role="list" className="flex flex-col items-center space-y-1">
@@ -111,7 +112,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 <a
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+                    item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 stroke-blue-500',
                     'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
                   )}
                 >
