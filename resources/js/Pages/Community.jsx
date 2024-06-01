@@ -6,6 +6,8 @@ import SearchMembers from '../Components/Reusable/CommunitySearch';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
+import Header from '../Components/DashboardHeader';
+import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
 
 const StaffDirectory = () => {
@@ -133,7 +135,12 @@ const StaffDirectory = () => {
   };
 
   return (
-    <div className="staff-directory">
+    <div className="flex-row">
+      <Header />
+      <div className="flex " style={{backgroundColor: '#F3F4F6'}}>
+        <Sidebar />
+        <main style={{width: '100%'}}>
+        <div className="staff-directory" style={{marginLeft: '30px'}}>
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Community" />
@@ -169,6 +176,10 @@ const StaffDirectory = () => {
         onConfirm={() => console.log('Deactivated')}
       />
     </div>
+        </main>
+      </div>
+    </div>
+    
   );
 };
   

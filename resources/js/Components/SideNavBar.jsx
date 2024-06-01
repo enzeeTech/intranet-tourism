@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const Sidebar = () => {
     // Path to buttons
     const buttons = [
-        { inactive: "assets/dashboard.png", active: "assets/dashboardActive.png" },
+        { inactive: "assets/dashboard.png", to: '/dashboard', active: "assets/dashboardActive.png" },
         { inactive: "assets/staffDirectory.png", to: '/staffDirectory', active: "assets/staffDirectoryActive.png", text: "Benjamin"  },
         { name: "Calendar", to:'/calendar', inactive: "assets/calendar.png", active: "assets/calendarActive.png", text: "Benjamin" },
         { inactive: "assets/departments.png", to: '/departments', active: "assets/departmentsActive.png", text: "Benjamin" },
@@ -50,7 +50,7 @@ const Sidebar = () => {
     };
 
     return (
-        <aside className="h-screen mt-1 text-white bg-white shadow-lg w-30 sticky top-0 relative">
+        <aside className="relative sticky top-0 h-screen mt-1 text-white bg-white shadow-lg w-30">
             <nav className="flex flex-col p-4 space-y-2">
                 {buttons.map((button, i) => {
                     if (button.to === '/logout') {
@@ -94,7 +94,7 @@ const Sidebar = () => {
             </nav>
             {showText && (
                 <div
-                    className="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 z-20"
+                    className="absolute z-20 px-2 py-1 text-xs text-white bg-gray-700 rounded"
                     style={{ top: showTextPosition.top, left: showTextPosition.left }}
                 >
                     {showText}

@@ -39,7 +39,14 @@
 }
 
 /* Add responsive styles for smaller screens */
-@media (max-width: 768px) {
+@media (max-width: 1161px) {
+
+  .staff-directory {
+    padding: 20px 10px;
+    height: 100%;
+    width: 100%;
+  }
+
   .widgets-container {
     flex-direction: column;
   }
@@ -47,6 +54,7 @@
   .left-widget,
   .right-widget {
     width: 100%; /* On small screens, each widget takes full width */
+    height: 100%;
   }
 
   .right-widget {
