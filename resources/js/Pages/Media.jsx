@@ -4,8 +4,9 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import { Image } from '@/Components/Reusable/Media';
 import { Video } from '@/Components/Reusable/Media';
-import Layout from '../Layouts/DashboardLayout';
+import Example from '../Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
+import '../Components/Reusable/css/FileManagementSearchBar.css'
 
 
 
@@ -14,28 +15,26 @@ const Media = () => {
 
 
   return (
-    <Layout>
-    <div className="staff-directory bg-slate-200">
-      <div>
-        <div className="staff-directory-header">
+    <Example>
+    <div className="file-director">
+        <div className="file-directory-header">
           <PageTitle title="Media" />
         </div>
-        <hr className="staff-directory-underline" />
+        <hr className="file-directory-underline" />
         <div className="widgets-container">
           <div className="left-widget">
             <FeaturedEvents />
             <WhosOnline />
           </div>
-          <div className="right-widget">
+          <div className="right-widget -mt-20">
             <Image />
             <div className='mt-16'></div>
             <Video />
           </div>
         </div>
-      </div>
     </div>
-    </Layout>
+    </Example>
   );
 };
-  
+
 export default Media;
