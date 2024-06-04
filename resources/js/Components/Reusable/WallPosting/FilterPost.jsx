@@ -1,54 +1,13 @@
 import React, { useState } from "react";
 
-
-function Filter() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
+function MenuItem({ src, alt, text }) {
   return (
-    <div className="flex flex-col justify-center text-sm max-w-[132px] text-neutral-800 relative">
-        <div
-            className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg"
-            onClick={toggleDropdown}
-        >
-            <div>All posts</div>
-            <img
-            loading="lazy"
-            src="assets/Dropdownarrow.svg"
-            alt="Decorative icon"
-            className={`shrink-0 my-auto aspect-[1.89] stroke-[2px] w-[15px] ${
-                isOpen ? "transform rotate-180" : ""
-            }`}
-            />
-        </div>
-      {isOpen && <IconMenu />}
+    <div className="flex items-center gap-3 p-2 hover:bg-blue-100 rounded-md cursor-pointer">
+      <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[21px]" />
+      <span className="my-auto text-neutral-800">{text}</span>
     </div>
   );
 }
-
-// function MenuItem({ icon, label }) {
-//   return (
-//     <div className="flex relative gap-3 self-start mt-2.5 ml-3.5 text-xs font-semibold whitespace-nowrap text-neutral-800 text-opacity-50">
-//       <img loading="lazy" src={icon} alt="" className="shrink-0 aspect-square w-[21px]" />
-//       <div className="my-auto">{label}</div>
-//     </div>
-//   );
-// }
-
-
-function MenuItem({ src, alt, text }) {
-    return (
-      <div className="flex items-center gap-3 p-2 hover:bg-blue-100 rounded-md cursor-pointer">
-        <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[21px]" />
-        <span className="my-auto text-neutral-800">{text}</span>
-      </div>
-    );
-  }
-
-
 
 function IconMenu() {
   const menuItems = [
@@ -104,4 +63,3 @@ function Filter() {
 }
 
 export default Filter;
-
