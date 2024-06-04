@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Commmmunity;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\departments;
+use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\communityPost;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\departments;
 use App\Http\Controllers\fileManagement;
-use App\Http\Controllers\StaffDirectoryController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StaffDirectoryController;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -31,9 +32,9 @@ Route::get('/', function () {
 // Logout route
 Route::post('/logout', function () {
     Auth::logout();  // Call Laravel's built-in logout method
+
     return redirect('/');  // Redirect to home or login page
 })->name('logout');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -51,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
- 
+    Route::get('/media', [MediaController::class, 'index'])->name('Media');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

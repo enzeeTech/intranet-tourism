@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Event; // Don't forget to import the Event model
-
+use App\Models\Event;
+use Illuminate\Http\Request; // Don't forget to import the Event model
 use Inertia\Inertia;
 
 class CalendarController extends Controller
@@ -42,4 +41,3 @@ class CalendarController extends Controller
         return response()->json(['success' => true, 'message' => 'Event created successfully']);
     }
 }
-

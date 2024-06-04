@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // In your migration file (e.g., create_events_table.php)
-        Schema::create('events', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->datetime('start_time');
-            $table->datetime('end_time');
-            $table->string('color');
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('notifications');
     }
 };

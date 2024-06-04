@@ -61,7 +61,6 @@
                                 </a>
                             );
                         }
-
                         return (
                             <a
                                 href={button.to}
@@ -83,5 +82,6 @@
             </aside>
         );
     };
+
 
     export default Sidebar;
