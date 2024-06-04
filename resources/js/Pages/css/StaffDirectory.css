@@ -19,6 +19,14 @@
     width: 100%;
 }
 
+.my-profile-underline {
+  border: none;
+  border-top: 1px solid #E4E4E4; 
+  margin: 0; 
+  margin-bottom: 40px;
+  width: 108%;
+}
+
 .widgets-container {
     display: flex;
     gap: 20px;
@@ -29,6 +37,12 @@
     flex-direction: column;
     gap: 20px;
     width: 30%;
+}
+
+@media (max-width: 1372px) {
+  .left-widget {
+      display: none;
+  }
 }
 
 .right-widget {

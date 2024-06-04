@@ -25,7 +25,7 @@ const SearchFile = ({ onSearch }) => {
                 style={{ paddingLeft: '1.2rem' }}
             />
             <button onClick={handleSearch}>
-                <img src={searchIcon} alt="Search" className="file-search-btn-img" />
+              <img src="assets/filesearchbutton.svg" alt="filesearchbutton" className="" />
             </button>
             <button className='pl-2'>
             <img  loading="lazy"
