@@ -34,5 +34,32 @@ function IconMenu() {
   );
 }
 
+function Filter() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div className="flex flex-col justify-center text-sm max-w-[132px] text-neutral-800 relative">
+      <div
+        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg"
+        onClick={toggleDropdown}
+      >
+        <div>All posts</div>
+        <img
+          loading="lazy"
+          src="assets/Dropdownarrow.svg"
+          alt="Decorative icon"
+          className={`shrink-0 my-auto aspect-[1.89] stroke-[2px] w-[15px] ${
+            isOpen ? "transform rotate-180" : ""
+          }`}
+        />
+      </div>
+      {isOpen && <IconMenu />}
+    </div>
+  );
+}
 
 export default Filter;
