@@ -9,7 +9,7 @@ import './Reusable/css/General.css';
 import NotificationPopup from '../Components/Noti-popup-test';
 // import styles from './styles.css';
 
-  
+
 const Header = () => {
   return (
     <header className="fixed top-0 z-50 flex w-full items-center justify-between p-4 bg-transparent shadow-custom">
@@ -38,7 +38,7 @@ const Header = () => {
               </div>
             </Menu.Button>
           </div>
-          
+
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"
@@ -50,13 +50,13 @@ const Header = () => {
           >
             <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-custom w-96 max-full ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="">
-             
+
                 <Menu.Items>
                   <NotificationPopup />
                 </Menu.Items>
 
-            <div className="flex flex-row w-full h-10 hover:bg-gray-200 ">  
-            <a href="http://127.0.0.1:8000/notification" className="flex items-center w-full px-4 py-2 font-bold text-black rounded bg-white-500">
+            <div className="flex flex-row w-full h-10 hover:bg-gray-200 ">
+            <a href="/notification" className="flex items-center w-full px-4 py-2 font-bold text-black rounded bg-white-500">
               View All
               <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-4 ml-4">
                 <path d="M1 6H8" stroke="#222222" strokeLinecap="round"/>
@@ -69,7 +69,7 @@ const Header = () => {
 
                 {/*TESST*/}
             {/* <div className="flex flex-row w-full h-10 ">
-              <a href="http://127.0.0.1:8000/notipopup" className="flex items-center px-4 py-2 font-bold text-black rounded bg-white-500 hover:bg-gray-200">      
+              <a href="http://127.0.0.1:8000/notipopup" className="flex items-center px-4 py-2 font-bold text-black rounded bg-white-500 hover:bg-gray-200">
 
             TEST<img src={"http://127.0.0.1:5173/public/assets/view-all-icon.png"} alt="Additional Image" className="w-6 h-4 ml-4 " />
 
@@ -79,7 +79,7 @@ const Header = () => {
                 {/* </form> */}
           </div>
 
-          
+
             </Menu.Items>
           </Transition>
         </Menu>

@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Community Groups', href: '/community', icon: GlobeAltIcon, current: false },
   { name: 'File Management', href: '/fileManagement', icon: FolderIcon, current: true },
   { name: 'Links', href: '#', icon: LinkIcon, current: false },
-  { name: 'Media', href: '#', icon: PlayCircleIcon, current: false },
+  { name: 'Media', href: '/media', icon: PlayCircleIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
   { name: 'Logout', href: '/logout', icon: ArrowLeftStartOnRectangleIcon, current: false },
 ]

@@ -1,15 +1,25 @@
 {
-    "name": "laravel/laravel",
+    "name": "enzee/jomla",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "tourism",
+        "enzee",
+        "socmed",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "illuminate/support": "*",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
+        "laravel/reverb": "@beta",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "nwidart/laravel-modules": "^11.0",
+        "owen-it/laravel-auditing": "^13.6",
+        "spatie/laravel-permission": "^6.7",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
@@ -21,6 +31,8 @@
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
+        "dedoc/scramble": "^0.9.0",
+        "predis/predis": "^2.2",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
@@ -28,7 +40,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files":[
+            "./app/Utilities/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -50,11 +65,19 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "format": [
+            "@php ./vendor/bin/pint ."
         ]
     },
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "merge-plugin": {
+            "include": [
+                "Modules/*/composer.json"
+            ]
         }
     },
     "config": {
@@ -67,6 +90,6 @@
             "wikimedia/composer-merge-plugin": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
