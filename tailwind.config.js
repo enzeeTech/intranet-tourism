@@ -3,26 +3,33 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.jsx',
-    ],
+  content: [
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+    './storage/framework/views/*.php',
+    './resources/views/**/*.blade.php',
+    './resources/js/**/*.jsx',
+  ],
 
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+      },
 
-            boxShadow: {
-                'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
-            },
-        },
+      boxShadow: {
+        'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+      },
     },
+  },
 
-    plugins: [
-        require('@tailwindcss/forms'),
-      ],
+  plugins: [
+    forms,
+    function({ addUtilities }) {
+      addUtilities({
+        '.blur-background': {
+          filter: 'blur(10px)',
+        },
+      });
+    },
+  ],
 };

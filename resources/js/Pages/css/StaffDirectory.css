@@ -39,7 +39,7 @@
   width: 30%; 
 }
 
-@media (max-width: 1372px) {
+@media (max-width: 640px) {
   .left-widget {
       display: none;
   }

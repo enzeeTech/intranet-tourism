@@ -28,7 +28,7 @@ function PhotoItem({ src, alt }) {
   
   function ProfileGallery({ photoData, videoData }) {
     return (
-      <div className="flex flex-col max-w-[800px] mt-10">
+      <div className="flex flex-col w-full mt-6">
         <section className="px-6 py-6 w-full bg-white rounded-md shadow-custom max-md:px-5 max-md:max-w-full">
           <div className="flex gap-5 max-md:flex-col max-md:gap-0">
             <div className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
