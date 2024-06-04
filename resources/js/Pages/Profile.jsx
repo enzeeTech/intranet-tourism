@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Fragment } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
-import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
+import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
@@ -100,30 +100,10 @@ export default function MyComponent() {
 
     return (
         <Example>
-            <div className="file-directory">
-                <div className="file-directory-header">
-                    <PageTitle title="My Profile" />
-                </div>
-                <hr className="file-directory-underline" />
-                {isSaveNotificationOpen && (
-                    <SaveNotification
-                        title="Changes Saved"
-                        onClose={closeSaveNotification}
-                    />
-                )}
-                {isPopupOpen && (
-                    <Popup
-                        title="Edit Banner Photo"
-                        content="Choose photo from the device"
-                        onClose={() => setIsPopupOpen(false)}
-                    />
-                )}
-                <div className="widgets-container">
-                    <div className="left-widget">
-                        <FeaturedEvent />
-                        <WhosOnline />
-                    </div>
-                    <div className="right-widget -mt-20">
+    <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div>
+            <div className="w-full">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
                             profileImage={profileData.profileImage}
@@ -177,8 +157,23 @@ export default function MyComponent() {
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
-        </Example>
+                    </div>
+                    </div>
+                    </main>
+                    <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <div className="file-directory-header">
+          <PageTitle title="My Profile" />
+        </div>
+        <hr className="file-directory-underline" />
+
+        <div>
+            <FeaturedEvents />
+            <WhosOnline />
+        </div>
+    </aside>
+    </Example>
+
+                    
+
     );
 }

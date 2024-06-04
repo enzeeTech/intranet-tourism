@@ -6,33 +6,35 @@ import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
-import Layout from '@/Layouts/DashboardLayoutNew';
+import Example from '@/Layouts/DashboardLayoutNew';
+
 
 
 const FileManage = () => {
 
 
   return (
-    <Layout>
-    <div className="file-directory">
-      <div>
-        <div className="file-directory-header">
-          <PageTitle title="Files" />
-        </div>
-        <hr className="file-directory-underline" />
-        <div className="widgets-container">
-          <div className="left-widget">
-            <FeaturedEvents />
-            <WhosOnline />
-          </div>
-          <div className="right-widget">
+    <Example>
+    <main className="xl:pl-96">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div>
             <SearchFile />
             <FileTable />
-          </div>
+            </div>
         </div>
-      </div>
-    </div>
-    </Layout>
+    </main>
+    <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <div className="file-directory-header">
+          <PageTitle title="File" />
+        </div>
+        <hr className="file-directory-underline" />
+
+        <div>
+            <FeaturedEvents />
+            <WhosOnline />
+        </div>
+    </aside>
+    </Example>
   );
 };
   
