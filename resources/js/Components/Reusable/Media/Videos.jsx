@@ -27,59 +27,18 @@ function Video() {
         <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
           Videos
         </h1>
-      <hr className="underline" />
+        <hr className="underline" />
       </header>
       <section className="mt-8 max-md:max-w-full">
-        <div className="flex flex-wrap gap-5 max-md:flex-col max-md:gap-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {videos.map((img, index) => (
-            index < 4 && (
-              <figure
-                key={index}
-                className="flex flex-col max-md:ml-0 max-md:w-full "
-              >
-                <VideoComponent
-                  src={img.src}
-                  alt={img.alt}
-                  className="grow shrink-0 max-w-full aspect-[1.19] w-[234.31px] max-md:mt-5"
-                />
-              </figure>
-            )
-          ))}
-        </div>
-      </section>
-      <section className="mt-5 max-md:max-w-full">
-        <div className="flex flex-wrap gap-5 max-md:flex-col max-md:gap-0">
-          {videos.map((img, index) => (
-            index >= 4 && index < 8 && (
-              <figure
-                key={index}
-                className="flex flex-col max-md:ml-0 max-md:w-full"
-              >
-                <VideoComponent
-                  src={img.src}
-                  alt={img.alt}
-                  className="grow shrink-0 max-w-full aspect-[1.19] w-[234.31px] max-md:mt-5"
-                />
-              </figure>
-            )
-          ))}
-        </div>
-      </section>
-      <section className="mt-5 max-md:max-w-full">
-        <div className="flex flex-wrap gap-5 max-md:flex-col max-md:gap-0">
-          {videos.map((img, index) => (
-            index >= 8 && index < 12 && (
-              <figure
-                key={index}
-                className="flex flex-col max-md:ml-0 max-md:w-full"
-              >
-                <VideoComponent
-                  src={img.src}
-                  alt={img.alt}
-                  className="grow shrink-0 max-w-full aspect-[1.19] w-[234.31px] max-md:mt-5"
-                />
-              </figure>
-            )
+            <figure key={index} className="flex flex-col">
+              <VideoComponent
+                src={img.src}
+                alt={img.alt}
+                className="grow shrink-0 max-w-full aspect-[1.19] w-full"
+              />
+            </figure>
           ))}
         </div>
       </section>
@@ -88,4 +47,3 @@ function Video() {
 }
 
 export default Video;
-
