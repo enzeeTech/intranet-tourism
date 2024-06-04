@@ -114,7 +114,7 @@ const Notification = () => {
             <a href="#" className="underline">All</a>
             <a href=" /notification-unread" className='text-gray-500 relative '>
               Unread
-              <span className="absolute h-2 w-2 bg-blue-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+              <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
             </a>
           </nav>
           <div>

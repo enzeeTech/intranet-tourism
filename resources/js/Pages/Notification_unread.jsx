@@ -28,7 +28,7 @@ const NotificationItem = ({
             
             <p className="text-sm text-neutral-800"><strong>
               {users}</strong>
-              <span className=""> &nbsp;  Approved</span>!
+              <span className="">&nbsp;Approved</span>!
             </p>
 
             <p className="text-sm  text-neutral-800">
@@ -116,7 +116,7 @@ const Notification = () => {
             <a href="/notification" className='text-gray-500'>All</a>
 
             <a href="#" className="underline relative">Unread
-            <span className="absolute h-2 w-2 bg-blue-500 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+            <span className="absolute h-2 w-2 bg-orange-500 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
             </a>
 
           </nav>

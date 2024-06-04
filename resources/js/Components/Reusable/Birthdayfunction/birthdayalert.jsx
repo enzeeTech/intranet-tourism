@@ -9,22 +9,22 @@ import Popup from "../Popup";
 
 function NotificationCard({ imgSrc, altText, name, message, btnImgSrc, btnAltText, btnText }) {
   return (
-    <article className="flex gap-3.5 py-5 pr-6 pl-2.5 mr-0 bg-white rounded-2xl shadow-sm border-2">
-      <img src={imgSrc} alt={altText} loading="lazy" className="shrink-0 aspect-square w-[100px]" />
+    <article className="flex gap-6 py-5 pr-6 pl-2.5 mr-0 bg-white rounded-2xl shadow-sm border-2">
+      <img src={imgSrc} alt={altText} loading="lazy" className="shrink-0 aspect-square w-[100px] rounded-full border-2 border-white shadow-xl"/>
       <div className="flex flex-col  mt-2.5">
-        <p className="text-sm font-semibold">
+        <p className="text-sm font-semibold mb-6">
           <span className="text-neutral-800">It’s </span>
-          <span className="font-extrabold text-neutral-800">{name}</span>
+          <span className="font-extrabold text-neutral-800">{name}</span> 
           <span className="text-neutral-800">{message}</span>
         </p>
-        <div className="flex gap-2 mt-2 text-xs">
+        <div className="flex gap-2 mt-2 text-xs  ">
           <img src={btnImgSrc} alt={btnAltText} loading="lazy" className="shrink-0 aspect-square w-[22px]" />
 
-          <button className="flex-auto my-auto underline" aria-label={btnText}>{btnText}</button>
+          <button className="flex underline " aria-label={btnText}>{btnText}</button>
         </div>
       </div>
     </article>
-  );
+  );  
 }
 
 function Birthdaypopup() {
@@ -51,7 +51,7 @@ function Birthdaypopup() {
 
 
   return (
-    <main className="flex flex-col justify-center max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl border-2 border-red-300">
+    <main className="flex flex-col justify-center gap-14 max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl border-2 ">
       
       <div onClick={handlePopupOpen}><NotificationCard
         imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/80d03561f93a8c4f659ca6eb6958bfd4e2b46ee8c54d6d205eb675ead43272e1?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
@@ -66,13 +66,7 @@ function Birthdaypopup() {
 
       /></div>
 
-      {/* <img
-        loading="lazy"
-        src="assets/BDicon.svg"
-        alt="Icon 5"
-        className="w-[14px] h-auto"
-        onClick={handlePopupOpen}
-      /> */}
+
       {isPopupOpen && (
         <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
           <BirthdayCom />

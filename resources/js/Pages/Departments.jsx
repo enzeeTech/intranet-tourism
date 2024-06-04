@@ -149,13 +149,7 @@ const StaffDirectory = () => {
           <div className="left-widget">
            
             <FeaturedEvents />
-
-
             <Birthdaypopup/>
-
-
-
-            
             <WhosOnline />
 
           </div>

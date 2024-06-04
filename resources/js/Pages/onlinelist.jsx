@@ -38,17 +38,17 @@ const ProfileCard = ({ name, role, status, imageSrc, altText }) => {
 
 const MyComponent = () => {
   const profiles = [
-    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "/assets/smile.jpg", altText: "Iskander Mirza's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/6954c899b9516ae5758ea91f8d51a68d4b0239ba37bbe41db764c7680a6f3b25?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/c43d93545cf604bc894b11a43e5bf867b2f30f33f4fd4e7302d371c6fc6cd2cc?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Nor Rahimah Binti Ariffin's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5d92ce50067115f60fa94f3675e4a836947ca7e839206e7618b8c3ea3aae032f?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/863d540b8b11568ee552694df1f5331c01430254c682474061825b671ca1f620?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b69229fef789e65ccbbd40f5084486249b34607e63cbed1fb5f8163bdb13848d?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Iskander Mirza's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/6954c899b9516ae5758ea91f8d51a68d4b0239ba37bbe41db764c7680a6f3b25?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/c43d93545cf604bc894b11a43e5bf867b2f30f33f4fd4e7302d371c6fc6cd2cc?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Nor Rahimah Binti Ariffin's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5d92ce50067115f60fa94f3675e4a836947ca7e839206e7618b8c3ea3aae032f?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/863d540b8b11568ee552694df1f5331c01430254c682474061825b671ca1f620?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/9073ec69c990f59e63adb3c1bc5bef83837496a800b7347ced2f2725efac325e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Apes", role: "amazon", status: "Online", imageSrc: "/assets/smile.jpg", altText: "Iskander Mirza's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "/assets/person.svg", altText: "Nor Rahimah Binti Ariffin's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Iskander Mirza's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "/assets/person.svg", altText: "Nor Rahimah Binti Ariffin's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
   ];
 
   const [statusFilter, setStatusFilter] = useState("Online");
