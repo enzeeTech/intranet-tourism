@@ -42,11 +42,11 @@ function ShareYourThoughts() {
         setInputValue("");
         setAttachments([]);
         setFileNames([]);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);
-        window.location.reload();
+        // window.location.reload();
       });
   };
 
