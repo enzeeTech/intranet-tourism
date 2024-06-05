@@ -77,25 +77,23 @@ function DpMembers() {
   return (
     <section className="flex flex-col px-6 pt-8 pb-20  rounded-3xl shadow-sm max-w-[800px] h-auto max-md:px-5">
       <div className="flex gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full ">
-        <input
-          type="text"
-          value={searchInput}
-          onChange={handleSearchChange}
-          className="flex-grow px-7 py-4 bg-gray-100 rounded-3xl text-neutral-800 text-opacity-30 max-md:px-5 max-md:max-w-full"
-          style={{ width: "900px" }}
-          placeholder="Search Member"
-        />
+      <input
+  type="text"
+  value={searchInput}
+  onChange={handleSearchChange}
+  className="flex-grow px-7 py-4 bg-gray-100 rounded-3xl border-gray-100 text-neutral-800 max-md:px-5 max-md:max-w-full"
+  style={{ width: "581px", color: "rgba(128, 128, 128, 0.5)" }}
+  placeholder="Search Member"
+/>
+
         <button
-          onClick={handleSearch}
-          className="justify-center px-6 py-4 text-center whitespace-nowrap bg-blue-500 rounded-3xl max-md:px-5"
-        >
-          Search
-        </button>
+  onClick={handleSearch}
+  className="justify-center px-6 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5"
+  style={{ backgroundColor: 'rgb(72, 128, 255)' }}> Search</button>
+
         <button
           onClick={handleInviteClick}
-          className="justify-center px-11 py-4 text-center whitespace-nowrap bg-red-500 rounded-3xl max-md:px-5"
-        >
-          Invite
+          className="justify-center px-11 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5" style={{backgroundColor:'rgb(255, 84, 54)'}}>Invite
         </button>
       </div>
       <header className="flex gap-5 self-start mt-6 whitespace-nowrap">

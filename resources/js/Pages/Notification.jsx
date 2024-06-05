@@ -100,14 +100,15 @@ const notificationData = [
 const Notification = () => {
   return (
     // <Layout>
-    <div className="flex flex-col px-5 mx-auto max-w-[940px]">
-      <h1 className="w-full text-3xl font-bold text-neutral-800 mt-6 mb-2">
-        My Notifications
-      </h1>
-      <div className='w-1/3 border-b-2'></div>
+    <div className="max-w-full bg-grey-100">
+      <h1 className="w-full text-3xl font-bold text-neutral-800 mt-6 mb-2 ml-12 ">
+          My Notifications<div className='w-[300px] border-b-2 mt-2'></div>
+        </h1> 
+      <div className='flex flex-col px-5 mx-auto bg-white max-w-[940px] shadow-2xl mt-20 rounded-2xl border-4' >
+     
       <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl ">
         <div className="flex flex-col pb-5">
-          <h2 className="text-2xl font-extrabold text-neutral-800 pl-6 pr-6">
+          <h2 className="text-4xl font-extrabold text-neutral-800 pl-6 pr-6">
             Notifications
           </h2>
           <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
@@ -124,6 +125,7 @@ const Notification = () => {
           </div>
         </div>
       </section>
+      </div>
     </div>
     // </Layout>
   );

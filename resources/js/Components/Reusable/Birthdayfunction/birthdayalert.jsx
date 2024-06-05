@@ -49,23 +49,22 @@ function Birthdaypopup() {
     };
 
 
-
   return (
-    <main className="flex flex-col justify-center gap-14 max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl border-2 ">
+    <main className="flex flex-col justify-center gap-14 max-w-[500px] w-[340px] text-neutral-800 shadow-lg rounded-2xl  ">
       
-      <div onClick={handlePopupOpen}><NotificationCard
-        imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/80d03561f93a8c4f659ca6eb6958bfd4e2b46ee8c54d6d205eb675ead43272e1?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
-        altText="Musa's profile picture"
-        name="Musa’s"
-        message=" Birthday today!"
-        btnImgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/c88916557d5108d0695fbf9e464053f706989bf26f0ecf83032e9f46a6646632?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
-        btnAltText="celebration icon"
-        btnText="Let’s Celebrate!"
-        loading="lazy"
-        onClick={handlePopupOpen}
-
-      /></div>
-
+      <div onClick={handlePopupOpen} style={{ color: "rgba(128, 128, 128, 128)" }}>
+  <NotificationCard
+    imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/80d03561f93a8c4f659ca6eb6958bfd4e2b46ee8c54d6d205eb675ead43272e1?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
+    altText="Musa's profile picture"
+    name="Musa’s"
+    message=" Birthday today!"
+    btnImgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/c88916557d5108d0695fbf9e464053f706989bf26f0ecf83032e9f46a6646632?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
+    btnAltText="celebration icon"
+    btnText="Let’s Celebrate!"
+    loading="lazy"
+    onClick={handlePopupOpen}
+  />
+</div>
 
       {isPopupOpen && (
         <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
