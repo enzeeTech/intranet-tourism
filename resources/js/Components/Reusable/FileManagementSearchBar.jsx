@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import searchIcon from '../../../../public/assets/searchStaffButton.png';
+import axios from 'axios'; // Import Axios for making HTTP requests
+import searchIcon from '../../../../public/assets/searchStaffButton.png'; 
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 

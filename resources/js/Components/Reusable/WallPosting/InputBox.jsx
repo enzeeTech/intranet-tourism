@@ -29,33 +29,61 @@ const SearchFile = ({ onSearch, requiredData }) => {
     }
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('user_id', 1);  // Setting user_id to 1
-    formData.append('attachable_type', requiredData.attachable_type);
-    formData.append('attachable_id', requiredData.attachable_id);
-    formData.append('for', requiredData.for);
-    formData.append('path', requiredData.path);
-    formData.append('extension', requiredData.extension);
-    formData.append('mime_type', requiredData.mime_type);
-    formData.append('filesize', requiredData.filesize);
-    formData.append('metadata', requiredData.metadata);
+    formData.append('user_id', '1');
+    formData.append('type', 'post');
+    formData.append('visibility', 'public');
+    formData.append('content', inputValue);
 
-    const options = {
-      method: 'POST',
-      url: 'http://127.0.0.1:8000/api/crud/resources',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      data: formData
+    attachments.forEach((file, index) => {
+      formData.append(`attachments[${index}]`, file);
+    });
+
+    fetch("/api/crud/posts", {
+      method: "POST",
+      body: formData,
+      headers: { Accept: 'application/json' }
+    })
+    .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setInputValue("");
+        setAttachments([]);
+        setFileNames([]);
+        // window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // window.location.reload();
+      });
+  };
+
+  const handleFileUpload = (file) => {
+    setAttachments((prevAttachments) => [...prevAttachments, file]);
+    setFileNames((prevFileNames) => [...prevFileNames, file.name]);
+  };
+
+  const createFileInputHandler = (accept) => () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = accept;
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      handleFileUpload(file);
     };
+    fileInput.click();
+  };
 
-    try {
-      const { data } = await axios.request(options);
-      console.log('File uploaded successfully:', data);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
+  const handleClickImg = createFileInputHandler('image/*');
+  const handleClickVid = createFileInputHandler('video/*');
+  const handleClickDoc = createFileInputHandler('application/pdf, .doc, .docx, .txt');
+
+  const handleClickPoll = () => {
+    setShowPollPopup(true);
   };
 
   const handleFileDelete = () => {

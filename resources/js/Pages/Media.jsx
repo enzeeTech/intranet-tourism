@@ -13,6 +13,17 @@ import '../Components/Reusable/css/FileManagementSearchBar.css'
 
 
 const Media = () => {
+    const [selectedMedia, setSelectedMedia] = useState('All');
+
+    const menuItems = [
+        'All',
+        'TM Networking Day',
+        'Peraduan Jomla!',
+    ];
+
+    const handleSelectMedia = (menuItem) => {
+        setSelectedMedia(menuItem);
+      };
 
 
   return (
@@ -20,10 +31,14 @@ const Media = () => {
     <main className="xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
-                <Filter />
-                <Image />
+                <Filter
+                    menuItems={menuItems}
+                    onSelectMedia={handleSelectMedia}
+                />
+                {/* {selectedMedia === 'All'} */}
+                <Image selectedItem={selectedMedia} />
                     <div className='mt-16'></div>
-                <Video />
+                <Video selectedItem={selectedMedia} />
             </div>
         </div>
     </main>
