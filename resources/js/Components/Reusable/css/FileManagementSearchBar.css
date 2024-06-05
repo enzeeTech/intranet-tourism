@@ -43,7 +43,7 @@
     width: 100%;
   }
   
-  @media (max-width: 1372px) {
+  @media (max-width: 640px) {
     .file-directory-underline {
         display: none;
     }
