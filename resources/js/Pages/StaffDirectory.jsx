@@ -44,6 +44,7 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 3,
@@ -51,6 +52,7 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 4,
@@ -58,6 +60,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 5,
@@ -65,6 +68,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      phoneNo: ''
     },
     {
       id: 6,
@@ -72,6 +76,7 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 7,
@@ -79,6 +84,7 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 8,
@@ -86,6 +92,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 9,
@@ -93,6 +100,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      phoneNo: ''
     },
     {
       id: 10,
@@ -100,6 +108,7 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 11,
@@ -107,6 +116,7 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 12,
@@ -114,6 +124,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 13,
@@ -121,6 +132,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      phoneNo: ''
     },
     {
       id: 14,
@@ -128,6 +140,7 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 15,
@@ -135,6 +148,7 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
     {
       id: 16,
@@ -142,6 +156,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
+      phoneNo: ''
     },
 
   ];

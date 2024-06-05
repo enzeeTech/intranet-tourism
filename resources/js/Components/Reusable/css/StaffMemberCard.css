@@ -218,5 +218,56 @@
     font-weight: bold;
     font-family: 'Nunito Sans';
   }
+
+  .popup-backdrop {
+    position: fixed;
+    /* Cover the entire viewport */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    /* background: rgba(0, 0, 0, 0.5); */
+    z-index: 1000;
+  }
+  
+  .popup {
+    background: white;
+    padding: 20px;
+    border-radius: 18px; /* Rounded edges */
+    text-align: center;
+    box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    font-family: 'Nunito Sans';
+    font-weight: 500;
+  }
+  
+  .yes-button {
+    width: 30%;
+    height: 35px;
+    margin-right: 20px;
+    border-radius: 16.5px;
+    background-color: #4880FF;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nunito Sans';
+  }
+  
+  .no-button {
+    width: 30%;
+    height: 35px;
+    border-radius: 16.5px;
+    border-width: 1px;
+    cursor: pointer;
+    background-color: transparent;
+    border-color: #BDBDBD;
+    color: #979797;
+    font-family: 'Nunito Sans';
+  }
+  
   
   
