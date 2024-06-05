@@ -1,29 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PopupContent from '../Reusable/PopupContent';
-
-
-const data = [
-  { name: 'Briefing.pdf', Size: '12', Date: '12.10.2023', Author: 'by Musa' },
-  { name: 'Report.doc', Size: '7.4', Date: '07.10.2023', Author: 'by Musa' },
-  { name: 'Statistics for the Report.xlsx', Size: '3', Date: '24.09.2023', Author: 'by Musa' },
-  { name: 'Data on the Report.xlsx', Size: '2.5', Date: '22.09.2023', Author: 'by Musa' },
-  { name: 'User Guide.pdf', Size: '12.4', Date: '12.10.2023', Author: 'by Alex' },
-  { name: 'System Overview.doc', Size: '7.8', Date: '07.10.2023', Author: 'by Jamie' },
-  { name: 'Error Logs.txt', Size: '3.1', Date: '24.09.2023', Author: 'by Casey' },
-  { name: 'Backup Data.zip', Size: '250', Date: '22.09.2023', Author: 'by Taylor' },
-  { name: 'Configuration Settings.xml', Size: '1.5', Date: '15.09.2023', Author: 'by Jordan' },
-  { name: 'Database Schema.sql', Size: '8.2', Date: '10.09.2023', Author: 'by Morgan' },
-  { name: 'License Agreement.pdf', Size: '0.9', Date: '05.09.2023', Author: 'by Riley' },
-  { name: 'User Permissions.csv', Size: '0.6', Date: '01.09.2023', Author: 'by Quinn' },
-  { name: 'Security Audit.doc', Size: '5.4', Date: '28.08.2023', Author: 'by Avery' },
-  { name: 'Patch Notes.pdf', Size: '2.2', Date: '20.08.2023', Author: 'by Sam' },
-  { name: 'Performance Report.xlsx', Size: '3.7', Date: '15.08.2023', Author: 'by Cameron' },
-  { name: 'Change Log.txt', Size: '1.0', Date: '10.08.2023', Author: 'by Skyler' },
-  { name: 'Deployment Guide.pdf', Size: '14.3', Date: '05.08.2023', Author: 'by Dakota' },
-  { name: 'Server Configuration.yaml', File: 'YAML', Size: '0.8', Date: '01.08.2023', Author: 'by Devon' },
-  { name: 'Incident Report.doc', Size: '4.0', Date: '28.07.2023', Author: 'by Casey' },
-  { name: 'API Documentation.html', Size: '6.7', Date: '20.07.2023', Author: 'by Alex' },
-];
 
 const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
   <div className="py-3">
@@ -42,7 +19,26 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
 const FileTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [files, setFiles] = useState(data);
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    const options = {
+      method: 'GET',
+      url: 'http://127.0.0.1:8000/api/crud/resources',
+      headers: {Accept: 'application/json'}
+    };
+    // Function to fetch file details from the server
+    const fetchFiles = async () => {
+      try {
+        const { data } = await axios.request(options);
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchFiles();
+  }, []);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -64,7 +60,6 @@ const FileTable = () => {
   };
 
   return (
- 
     <div className="w-full px-4 sm:px-0 lg:px-0 overflow-visible">
       <div className="mt-8 flow-root">
         <div className="overflow-visible">
@@ -110,7 +105,6 @@ const FileTable = () => {
         </div>
       </div>
     </div>
- 
   );
 };
 
