@@ -29,6 +29,7 @@
     align-items: center;
     font-size: 14px;
     color: #202224;
+    font-family: 'Nunito Sans';
   }
   
   .dropdown-list {
@@ -125,7 +126,8 @@
     transform: translateX(-50%); 
     border-radius: 16px; 
     margin-top: 8px; 
-    font-weight: bolder;
+    font-weight: bold;
+    font-family: 'Nunito Sans';
   }
   
   

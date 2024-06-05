@@ -18,7 +18,7 @@ const DeactivateModal = ({ isOpen, onClose, onConfirm }) => {
           <img src={closeModalIcon} alt="Close" />
         </button>
         <div className="modal-content">
-          <h2 style={{fontSize: 20, fontWeight: 'bolder', color: '#222222'}}>Deactivate?</h2>
+          <h2 style={{fontSize: 20, fontWeight: 'bold', color: '#222222', fontFamily: 'Nunito Sans'}}>Deactivate?</h2>
           <div className="modal-actions">
             <button onClick={onConfirm} className="confirm-button">Yes</button>
             <button onClick={onClose} className="cancel-button">No</button>

@@ -13,6 +13,8 @@ import './css/StaffDirectory.css';
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+  const [isStaffListActive, setStaffListActive] = useState(true);
+  const [isOrgChartActive, setOrgChartActive] = useState(false);
 
   // Dummy departments
   const departments = [
@@ -34,6 +36,7 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      phoneNo: '+601123201960'
     },
     {
       id: 2,
@@ -155,6 +158,16 @@ const StaffDirectory = () => {
     setIsDeactivateModalOpen(false);
   };
 
+  const handleStaffListButton = () => {
+    setStaffListActive(true);
+    setOrgChartActive(false);
+  }
+
+  const handleOrgChartButton = () => {
+    setStaffListActive(false);
+    setOrgChartActive(true);
+  }
+
   return (
     <div className="flex-row">
       <Header />
@@ -173,7 +186,7 @@ const StaffDirectory = () => {
                   <WhosOnline />
                 </div>
                 <div className="right-widget">
-                  <SearchMembers />
+                  <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
                   <DepartmentDropdown
                     departments={departments}
                     onSelectDepartment={handleSelectDepartment}

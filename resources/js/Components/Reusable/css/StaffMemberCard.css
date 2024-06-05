@@ -37,15 +37,18 @@
   .staff-member-name {
     font-size: 12px;
     font-weight: bold;
+    font-family: 'Nunito Sans';
   }
   
   .staff-member-role {
     color: #202224;
     font-size: 10px;
+    font-family: 'Nunito Sans';
   }
   
   .staff-member-status {
     font-size: 8px;
+    font-family: 'Nunito Sans';
   }
 
   /* Color for Online Status */
@@ -100,6 +103,7 @@
     border-radius: 16px; 
     margin-top: 8px; 
     font-weight: bolder;
+    font-family: 'Nunito Sans';
   }
 
   .staff-member-popup2 {
@@ -119,6 +123,7 @@
     margin-top: 8px; 
     font-weight: normal;
     border-radius: 0px 0px 0px 0px;
+    font-family: 'Nunito Sans';
   }
 
   .staff-member-popup3 {
@@ -138,6 +143,7 @@
     margin-top: 8px; 
     font-weight: normal;
     border-radius: 0px 0px 5px 5px;
+    font-family: 'Nunito Sans';
   }
 
   .staff-member-popup4 {
@@ -157,6 +163,7 @@
     margin-top: 8px; 
     font-weight: normal;
     border-radius: 5px 5px 0px 0px;
+    font-family: 'Nunito Sans';font-family: 'Nunito Sans';
   }
 
   .staff-member-popup5 {
@@ -176,6 +183,7 @@
     margin-top: 8px; 
     font-weight: normal;
     border-radius: 0px 0px 0px 0px;
+    font-family: 'Nunito Sans';
   }
 
   .profile-files-popup {
@@ -194,7 +202,8 @@
     border-radius: 16px; 
     margin-top: 10px;
     margin-left: 130px; 
-    font-weight: bolder;
+    font-weight: bold;
+    font-family: 'Nunito Sans';
   }
 
   .staff-member-popup-image {
@@ -207,6 +216,7 @@
   .staff-member-popup-name {
     font-size: 12px;
     font-weight: bold;
+    font-family: 'Nunito Sans';
   }
   
   

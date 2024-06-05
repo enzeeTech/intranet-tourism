@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png'; 
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
 import addPersonButton from '../../../../public/assets/addPersonButton.png'; 
@@ -17,7 +17,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
     setIsOpen(false);
   };
 
-  // Popup for showing reporting structure option
+  // Popup for showing reporting structure option which closes when clicked outside
   const toggleReportingPopup = () => setIsReportingPopupOpen(!isReportingPopupOpen);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -44,6 +44,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
         <button className="three-dot-btn" onClick={toggleReportingPopup}>
             <img src={threeDotButton} alt="More Options" />
         </button>
+
         {isReportingPopupOpen && (
             <button 
                 onClick={toggleReportingPopup} 
