@@ -1,6 +1,5 @@
 import React, {useState, useRef} from 'react';
 import './css/StaffMemberCard.css'; 
-import DeactivateModal from './DeactivateModal';
 import callIcon from '../../../../public/assets/callIcon.png'; 
 import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
 import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
@@ -8,9 +7,9 @@ import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
 
-const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateClick }) => {
+const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateClick, isPopupOpen, setActivePopup, closePopup }) => {
 
-    const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
+    // const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
     const threeDotButtonRef = useRef(null);
     const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
     const [isWhatsAppPopupOpen, setIsWhatsAppPopupOpen] = useState(false);
@@ -49,16 +48,16 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
         closeWhatsAppPopup();
     };
 
-    // Three dot button on click function to create a popup modal
-    const toggleThreeDotButton = () => {
-        setIsThreeDotPopupOpen(!isThreeDotPopupOpen);
-    }
+    // // Three dot button on click function to create a popup modal
+    // const toggleThreeDotButton = () => {
+    //     setIsThreeDotPopupOpen(!isThreeDotPopupOpen);
+    // }
 
-    // Open deactivate option modal
-    const openDeactivateModal = () => {
-        setIsThreeDotPopupOpen(false);
-        onDeactivateClick();
-    };
+    // // Open deactivate option modal
+    // const openDeactivateModal = () => {
+    //     setIsThreeDotPopupOpen(false);
+    //     onDeactivateClick();
+    // };
 
     // Position popup below the three-dot button
     const getPopupPosition = () => {
@@ -75,7 +74,15 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
                 <img src={dummyStaffImage} alt={name} className="staff-member-image" />
                 <button 
                     className="three-dot-button" 
-                    onClick={toggleThreeDotButton}
+                    // onClick={toggleThreeDotButton}
+                    // ref={threeDotButtonRef}
+                    onClick={() => {
+                        if (isPopupOpen) {
+                            closePopup();
+                        } else {
+                            setActivePopup();
+                        }
+                    }}
                     ref={threeDotButtonRef}
                 >
                     <img style={{width: '40px'}} src={threeDotsIcon} alt="Three dots" />
@@ -94,9 +101,23 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
                     <img style={{width: '20px', height: '20px'}} src={whatsappIcon} alt="WhatsApp" />
                 </button>
             </div>
-            {isThreeDotPopupOpen && (
+            {/* {isThreeDotPopupOpen && (
                 <button 
                     onClick={openDeactivateModal} 
+                    className="staff-member-popup"
+                    style={{
+                        top: `${getPopupPosition().top}px`, 
+                        left: `${getPopupPosition().left}px`,
+                    }}
+                >
+                    <img src={deactivateButton} alt={name} className="staff-member-popup-image" />
+                    <p className="staff-member-popup-text">Deactivate</p>
+                </button>
+            )} */}
+            {isPopupOpen && (
+                <button 
+                    id={`staff-popup-${name}`} // Unique ID for the popup
+                    onClick={onDeactivateClick} 
                     className="staff-member-popup"
                     style={{
                         top: `${getPopupPosition().top}px`, 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
@@ -15,6 +15,8 @@ const StaffDirectory = () => {
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
   const [isStaffListActive, setStaffListActive] = useState(true);
   const [isOrgChartActive, setOrgChartActive] = useState(false);
+  const [activePopupId, setActivePopupId] = useState(null);
+  const [activePopupRef, setActivePopupRef] = useState(null);
 
   // Dummy departments
   const departments = [
@@ -36,7 +38,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
-      phoneNo: '+601123201960'
+      phoneNo: '+601123201960',
+      isDeactivated: 'false'
     },
     {
       id: 2,
@@ -44,7 +47,8 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 3,
@@ -52,7 +56,8 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 4,
@@ -60,7 +65,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 5,
@@ -68,7 +74,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 6,
@@ -76,7 +83,8 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 7,
@@ -84,7 +92,8 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 8,
@@ -92,7 +101,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 9,
@@ -100,7 +110,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 10,
@@ -108,7 +119,8 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 11,
@@ -116,7 +128,8 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 12,
@@ -124,7 +137,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 13,
@@ -132,7 +146,8 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png', 
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 14,
@@ -140,7 +155,8 @@ const StaffDirectory = () => {
       role: 'Setiausaha Pejabat',
       status: 'Offline',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 15,
@@ -148,7 +164,8 @@ const StaffDirectory = () => {
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
     {
       id: 16,
@@ -156,10 +173,30 @@ const StaffDirectory = () => {
       role: 'Pengarah Kanan',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: ''
+      phoneNo: '',
+      isDeactivated: 'false'
     },
 
   ];
+
+  const handleOutsideClick = (event) => {
+    if (activePopupRef && !activePopupRef.contains(event.target)) {
+      setActivePopupId(null);
+      setActivePopupRef(null);
+    }
+  };
+
+  useEffect(() => {
+    if (activePopupRef) {
+      document.addEventListener('click', handleOutsideClick);
+    } else {
+      document.removeEventListener('click', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [activePopupRef]);
 
   const handleSelectDepartment = (department) => {
     setSelectedDepartment(department);
@@ -211,7 +248,16 @@ const StaffDirectory = () => {
                       {staffMembers.map((member) => (
                           <StaffMemberCard 
                             key={member.id} {...member}
-                            onDeactivateClick={openDeactivateModal}
+                            onDeactivateClick={() => setIsDeactivateModalOpen(true)}
+                            isPopupOpen={activePopupId === member.id}
+                            setActivePopup={() => {
+                              setActivePopupId(member.id);
+                              setActivePopupRef(document.getElementById(`staff-popup-${member.id}`));
+                            }}
+                            closePopup={() => {
+                              setActivePopupId(null);
+                              setActivePopupRef(null);
+                            }}
                           />
                         ))}
                     </div>
