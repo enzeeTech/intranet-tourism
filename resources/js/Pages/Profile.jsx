@@ -100,9 +100,10 @@ export default function MyComponent() {
 
     return (
         <Example>
-            <main className="xl:pl-96">
-                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                    <div className="w-10/12 h-[485px] shadow-custom rounded-lg">
+                <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div>
+            <div className="w-full bg-white shadow-custom h-[485px] rounded-lg"></div>
                         {isSaveNotificationOpen && (
                             <SaveNotification
                                 title="Changes Saved"
@@ -116,6 +117,7 @@ export default function MyComponent() {
                                 onClose={() => setIsPopupOpen(false)}
                             />
                         )}
+
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
                             profileImage={profileData.profileImage}

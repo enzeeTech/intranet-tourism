@@ -19,17 +19,20 @@ export default {
       boxShadow: {
         'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
       },
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            boxShadow: {
+                custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+            },
+        },
     },
   },
 
-  plugins: [
-    forms,
-    function({ addUtilities }) {
-      addUtilities({
-        '.blur-background': {
-          filter: 'blur(10px)',
-        },
-      });
-    },
-  ],
+    plugins: [
+        forms,
+        require('@tailwindcss/aspect-ratio'),
+    ],
 };

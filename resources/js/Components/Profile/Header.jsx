@@ -42,6 +42,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       onClick={handleEditBanner}
     >
       <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 rounded-lg shadow-custom" />
+      <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 rounded-lg" />
       <div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
         {isPopupOpen && (
