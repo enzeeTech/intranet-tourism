@@ -20,25 +20,33 @@ const FileTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const options = {
       method: 'GET',
       url: 'http://127.0.0.1:8000/api/crud/resources',
-      headers: {Accept: 'application/json'}
+      headers: { Accept: 'application/json' }
     };
-    // Function to fetch file details from the server
+
     const fetchFiles = async () => {
       try {
-        const { data } = await axios.request(options);
-        console.log(data);
+        const response = await axios.request(options);
+        const filesData = response.data.data.data; // Adjust this path based on the actual structure
+        setFiles(filesData);
+        setLoading(false);
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     };
 
     fetchFiles();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -47,7 +55,9 @@ const FileTable = () => {
   const handleRename = (index, newName) => {
     const updatedFiles = files.map((file, i) => {
       if (i === index) {
-        return { ...file, name: newName };
+        const metadata = JSON.parse(file.metadata);
+        metadata.name = newName;
+        return { ...file, metadata: JSON.stringify(metadata) };
       }
       return file;
     });
@@ -68,36 +78,39 @@ const FileTable = () => {
               <thead>
                 <tr>
                   <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
-                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">(MB)</th>
-                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">
-                    <div className="flex justify-center">
-                      <img src="assets/FileTableCalendar.svg" alt="Date" className="Date" />
-                    </div>
-                  </th>
-                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Author</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
                   <th scope="col" className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
                 </tr>
               </thead>
               <tbody className="divide-y-reverse divide-neutral-300 text-center rounded-full">
-                {currentItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
-                      {item.name}
-                    </td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">{item.Size}</td>
-                    <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">{item.Date}</td>
-                    <td className="border-b border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
-                      {item.Author}
-                    </td>
-                    <td className="flex relative mt-3.5">
-                      <PopupContent
-                        name={item.name}
-                        onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
-                        onDelete={() => handleDelete(indexOfFirstItem + index)}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {currentItems.map((item, index) => {
+                  const metadata = JSON.parse(item.metadata);
+                  return (
+                    <tr key={index}>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
+                        {metadata.name}
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {(item.filesize / 1024 / 1024).toFixed(2)} MB
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {item.extension}
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="flex relative mt-3.5">
+                        <PopupContent
+                          name={metadata.name}
+                          onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
+                          onDelete={() => handleDelete(indexOfFirstItem + index)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <Pagination totalItems={files.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
