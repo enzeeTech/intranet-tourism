@@ -1,26 +1,56 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, HomeIcon, UserGroupIcon, CalendarIcon, BuildingOfficeIcon, GlobeAltIcon, FolderIcon, LinkIcon, Cog6ToothIcon, PlayCircleIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline'
-import { useState, Fragment } from 'react'
-
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useState, useEffect, Fragment } from 'react'
+import classNames from 'classnames'
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: false },
-  { name: 'StaffDirectory', href: '/staffDirectory', icon: UserGroupIcon, current: false },
-  { name: 'Calendar', href: '/calendar', icon: CalendarIcon, current: false },
-  { name: 'Department', href: '/departments', icon: BuildingOfficeIcon, current: false },
-  { name: 'Community Groups', href: '/community', icon: GlobeAltIcon, current: false },
-  { name: 'File Management', href: '/fileManagement', icon: FolderIcon, current: true },
-  { name: 'Links', href: '#', icon: LinkIcon, current: false },
-  { name: 'Media', href: '#', icon: PlayCircleIcon, current: false },
-  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-  { name: 'Logout', href: '/logout', icon: ArrowLeftStartOnRectangleIcon, current: false },
-]
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+  { name: "Dashboard", href: "/", inactive: "assets/Dashboard Inactive.svg", active: "assets/Dashboard Active.svg" },
+  { name: "Staff Directory", href: '/staffDirectory', inactive: "assets/Staff Directory Inactive.svg", active: "assets/Staff Directory Active.svg" },
+  { name: "Calendar", href: '/calendar', inactive: "assets/Calendar Inactive.svg", active: "assets/Calendar Active.svg" },
+  { name: "Departments", href: '/departments', inactive: "assets/Group Department Inactive.svg", active: "assets/Group Department Active.svg" },
+  { name: "Community", href: '/community', inactive: "assets/Group Community Inactive.svg", active: "assets/Group Community Active.svg" },
+  { name: "File Management", href: '/fileManagement', inactive: "assets/File Management Inactive.svg", active: "assets/File Management Active.svg" },
+  { name: "Link", href: '/link', inactive: "assets/Link Inactive.svg", active: "assets/Link Active.svg" },
+  { name: "Settings", href: '/settings', inactive: "assets/Settings Inactive.svg", active: "assets/Settings Active.svg" },
+  { name: "Logout", href: '/logout', inactive: "assets/Logout Inactive.svg", active: "assets/Logout Active.svg" }
+];
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [csrfToken, setCsrfToken] = useState(null);
+
+  useEffect(() => {
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    setCsrfToken(token);
+  }, []);
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const currentIndex = navigation.findIndex(item => item.href === currentPath);
+    setActiveIndex(currentIndex);
+  }, []);
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    fetch('/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken,
+      }
+    }).then(() => {
+      window.location.href = '/';
+    }).catch(err => console.error(err));
+  };
+
+  const handleClick = (event, index, name) => {
+    if (name === 'Logout') {
+      handleLogout(event);
+    } else {
+      setActiveIndex(index);
+    }
+  };
+
   return (
     <>
       <Transition show={sidebarOpen} as={Fragment}>
@@ -75,18 +105,17 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="-mx-2 flex-1 space-y-1">
-                      {navigation.map((item) => (
+                      {navigation.map((item, index) => (
                         <li key={item.name}>
                           <a
                             href={item.href}
                             className={classNames(
-                              item.current
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+                              activeIndex === index ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
                               'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                             )}
+                            onClick={(e) => handleClick(e, index, item.name)}
                           >
-                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                            <img src={activeIndex === index ? item.active : item.inactive} className="h-6 w-6 shrink-0" alt={item.name} />
                             {item.name}
                           </a>
                         </li>
@@ -107,16 +136,17 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </div>
         <nav className="mt-8">
           <ul role="list" className="flex flex-col items-center space-y-1">
-            {navigation.map((item) => (
+            {navigation.map((item, index) => (
               <li key={item.name}>
                 <a
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 stroke-blue-500',
+                    activeIndex === index ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
                     'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
                   )}
+                  onClick={(e) => handleClick(e, index, item.name)}
                 >
-                  <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                  <img src={activeIndex === index ? item.active : item.inactive} className="h-6 w-6 shrink-0" alt={item.name} />
                   <span className="sr-only">{item.name}</span>
                 </a>
               </li>

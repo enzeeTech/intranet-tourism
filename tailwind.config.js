@@ -15,14 +15,14 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-
             boxShadow: {
-                'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+                custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
             },
         },
     },
 
     plugins: [
-        require('@tailwindcss/forms'),
-      ],
+        forms,
+        require('@tailwindcss/aspect-ratio'),
+    ],
 };
