@@ -84,6 +84,11 @@ function OutputData() {
                 <div key={index} className="attachment">
                   {attachment.mime_type.startsWith("image/") ? (
                     <img src={`/storage/${attachment.path}`} alt="Attachment" className="w-full h-32 object-cover" />
+                  ) : attachment.mime_type.startsWith("video/") ? (
+                    <video controls className="w-full h-32 object-cover">
+                      <source src={`/storage/${attachment.path}`} type={attachment.mime_type} />
+                      Your browser does not support the video tag.
+                    </video>
                   ) : (
                     <a href={`/storage/${attachment.path}`} target="_blank" rel="noopener noreferrer">
                       {attachment.path.split("/").pop()}
