@@ -112,7 +112,7 @@ function Navigation() {
       {activeTab === 'Members' && (
         <div className="flex justify-center w-full mt-4 ">
           <div className="max-w-[900px] w-full ">
-            <DpMembers />
+            <DpMembers/>
           </div>
         </div>
       )}
@@ -120,8 +120,8 @@ function Navigation() {
       {activeTab === "Files" && (
         <div>
           <div className="flex gap-4 whitespace-nowrap">
-            <SearchInput />
-            <SearchButton />
+            <SearchInput/>
+            <SearchButton/>
           </div>
           <Table />
         </div>
