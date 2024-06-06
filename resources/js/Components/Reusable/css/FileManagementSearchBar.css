@@ -26,7 +26,7 @@
 }
 
 .file-search-btn-img{
-    width: 131px; 
+    width: 131px;
     height: 48px;
 }
 .file-filter-btn-img {
@@ -42,12 +42,12 @@
     margin-bottom: 40px;
     width: 100%;
   }
-  
-  @media (max-width: 1372px) {
+
+  /* @media (max-width: 1372px) {
     .file-directory-underline {
         display: none;
     }
-  }
+  } */
 
 .file-directory {
     display: flex;
