@@ -1,7 +1,63 @@
-import * as React from "react";
-import { CreateStory } from '@/Components/Dashboard';
+import React, { useState, useRef, useEffect } from "react";
+import defaultImg from '../../../../public/assets/story/upload-photo-story.png';
 
-function Avatar({ src, alt, name, addbtn }) {
+// CreateStory component
+const CreateStory = ({ goBack, onClose }) => {
+  const [image, setImage] = useState('');
+  const [text, setText] = useState('');
+  const [previewedText, setPreviewedText] = useState('');
+
+  const fileUploadRef = useRef();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    e.preventDefault();
+    fileUploadRef.current.click();
+  };
+
+  const handleTextChange = (e) => {
+    if (!image) {
+      alert('Please upload an image first.');
+    } else {
+      setText(e.target.value);
+    }
+  };
+
+  const handlePreview = () => {
+    setPreviewedText(text);
+  };
+
+  const handleReset = () => {
+    setImage('');
+    setText('');
+    setPreviewedText('');
+  };
+
+  const handlePost = () => {
+    if (image && text) {
+      console.log('Posting story:');
+      console.log('Image:', image);
+      console.log('Text:', text);
+      alert('Story has been posted!');
+    } else if (!image && !text) {
+      alert('Please upload an image or add text before posting.');
+    } else {
+      alert('Please add both image and text before posting.');
+    }
+  };
+
   return (
     <div className="flex flex-col grow items-center text-sm text-center whitespace-nowrap text-neutral-800 max-md:mt-6">
 
@@ -16,32 +72,128 @@ function Avatar({ src, alt, name, addbtn }) {
       <div className="mt-3">{name}</div>
     </div>
   );
-}
+};
 
-function Popup({ visible, onClose, content }) {
+// Popup component
+const Popup = ({ isOpen, onClose }) => {
+  const [section, setSection] = useState('main');
+
+  const handlePictureClick = () => {
+    setSection('picture');
+  };
+
+  const handleVideoClick = () => {
+    setSection('video');
+  };
+
+  const handleBackClick = () => {
+    setSection('main');
+  };
+
+  const handleClose = () => {
+    setSection('main');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    visible && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div className="bg-white p-5 rounded shadow-lg w-4/6 h-5/6">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      {section === 'main' && (
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
           <div className="flex justify-between items-center mb-4">
-            <div className="flex-1 text-center">
-              <h3 className="text-2xl font-bold border-b border-gray-300 pb-4">Create a Story</h3>
-            </div>
-            <button onClick={onClose} className="text-gray-600 hover:text-black">
-              <img src="/assets/icon-close.png" alt="" />
+            <h1 className="text-2xl font-bold w-full text-center">Create a Story</h1>
+            <button onClick={handleClose} className="text-gray-600 hover:text-black">
+              <img src="/assets/icon-close.png" alt="Close" />
             </button>
           </div>
-          <div><CreateStory/></div>
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded m-2"
+            onClick={handlePictureClick}
+          >
+            Picture
+          </button>
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded m-2"
+            onClick={handleVideoClick}
+          >
+            Video
+          </button>
+          <button
+            className="bg-red-500 text-white py-2 px-4 rounded m-2"
+            onClick={handleClose}
+          >
+            Close
+          </button>
+        </div>
+      )}
+      {section === 'picture' && (
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center w-5/6 h-5/6">
+          <CreateStory goBack={handleBackClick} onClose={handleClose} />
+        </div>
+      )}
+      {section === 'video' && (
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center w-5/6 h-5/6">
+          <CreateVideoStory goBack={handleBackClick} onClose={handleClose} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ImagePopup component
+const ImagePopup = ({ isOpen, onClose, image }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
+      <div className="p-6 rounded-lg text-center">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold w-full text-center"> </h1>
+          <button onClick={onClose} className="text-gray-600 hover:text-black">
+            <img src="/assets/icon-close.png" alt="Close" />
+          </button>
+        </div>
+        <div className=" w-96 h-120">
+          <img src={image} alt="Popup" className="object-cover rounded-lg" />
         </div>
       </div>
-    )
+    </div>
+  );
+};
+
+// Avatar component
+function Avatar({ src, alt, name }) {
+  return (
+    <div className="flex flex-col grow items-center text-sm text-center whitespace-nowrap text-neutral-800 max-md:mt-6">
+      <img src={src} alt={alt} className="aspect-square w-[98px]" />
+      <div className="mt-3">{name}</div>
+    </div>
   );
 }
 
+// Stories component
 function Stories() {
-  const [isPopupVisible, setPopupVisible] = React.useState(false);
-  const openPopup = () => setPopupVisible(true);
-  const closePopup = () => setPopupVisible(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [image] = useState("https://th.bing.com/th/id/R.f48ceff9ab3322d4e84ed12a44c484d1?rik=0KQ6OgL4T%2b9uCA&riu=http%3a%2f%2fwww.photo-paysage.com%2falbums%2fuserpics%2f10001%2fCascade_-15.JPG&ehk=kx1JjE9ugj%2bZvUIrjzSmcnslPc7NE1cOnZdra%2f3pJEM%3d&risl=1&pid=ImgRaw&r=0");
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const openImagePopup = () => {
+    setIsImagePopupOpen(true);
+  };
+
+  const closeImagePopup = () => {
+    setIsImagePopupOpen(false);
+  }
+  
   const avatars = [
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f112564488aa36e3249859d0a7978ae87e135589f7a2546f20452573f4289865?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
@@ -71,14 +223,9 @@ function Stories() {
 
   return (
     <div className="max-w-[624px]">
-      <Popup
-        visible={isPopupVisible}
-        onClose={closePopup}
-        content={<div>Here is the popup content!</div>}
-      />
       <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-          <div className="relative">
-          <button onClick={openPopup}>
+        <div className="relative">
+        <button onClick={openPopup}>
           <div className="flex items-center bg-gray h-24 border-4 border-white-700 rounded-full p-px">
             <img className="flex items-center bg-black h-24 w-24  rounded-full "
               src="/assets/profileDummy.png"
@@ -87,7 +234,15 @@ function Stories() {
             src="/assets/story/iconAddStory.svg"/>
           </div>
           </button>
-          </div>
+          {/* <button
+            className="bg-blue-500 text-white py-2 px-4 rounded ml-4"
+            onClick={openImagePopup}
+          >
+            Open Image Popup
+          </button> */}
+          <Popup isOpen={isPopupOpen} onClose={closePopup} />
+          <ImagePopup isOpen={isImagePopupOpen} onClose={closeImagePopup} image={image} />
+        </div>
         <div className="flex flex-col ml-5 w-[83%] max-md:ml-0 max-md:w-full">
           <div className="px-5 max-md:mt-10 max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -100,7 +255,7 @@ function Stories() {
                     src={avatar.src}
                     alt={avatar.alt}
                     name={avatar.name}
-                    addbtn={avatar.addbtn}
+                    onClick={openImagePopup}
                   />
                 </div>
               ))}
