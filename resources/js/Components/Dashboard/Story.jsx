@@ -59,225 +59,17 @@ const CreateStory = ({ goBack, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg">
-      <div className="flex justify-between w-full items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center w-full">Create Picture Story</h1>
-        <button onClick={onClose} className="text-gray-600 hover:text-black">
-          <img src="/assets/icon-close.png" alt="Close" />
-        </button>
-      </div>
-      <div className="flex rounded-lg ">
-        <div className="w-3/12 p-4 border-r flex flex-col gap-4 w-full">
-          <textarea
-            placeholder="Write your story..."
-            value={text}
-            onChange={handleTextChange}
-            className="resize-none w-full h-48 p-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            className="py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-700"
-            onClick={handlePreview}
-          >
-            Preview Text
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-neutral-300 text-black rounded-full hover:bg-neutral-400"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-green-600 text-white rounded-full hover:bg-green-700"
-            onClick={handlePost}
-          >
-            Post
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-gray-600 text-white rounded-full hover:bg-gray-700"
-            onClick={goBack}
-          >
-            Go Back
-          </button>
-        </div>
-        <div className="w-9/12 flex justify-center items-center relative p-4">
-          <button onClick={handleImageUpload} className="relative max-h-96 max-w-full">
-            <img
-              src={image || defaultImg}
-              alt="Uploading"
-              className="max-h-96 max-w-full object-contain rounded-lg"
-            />
-            {previewedText && (
-              <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-50 text-white text-center p-2 rounded-b-lg">
-                {previewedText}
-              </div>
-            )}
-          </button>
-          <input
-            type="file"
-            ref={fileUploadRef}
-            hidden
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
+    <div className="flex flex-col grow items-center text-sm text-center whitespace-nowrap text-neutral-800 max-md:mt-6">
 
-const CreateVideoStory = ({ goBack, onClose }) => {
-  const [video, setVideo] = useState('');
-  const [text, setText] = useState('');
-  const [previewedText, setPreviewedText] = useState('');
+{/* <div className="w-100 h-100 border-2 border-gray-700 rounded-full shadow-lg relative"> */}
 
-  const fileUploadRef = useRef();
-  const videoRef = useRef();
 
-  const handleVideoChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+      <img src={src} alt={alt} className="aspect-square w-[98px]" />
+            {/* <img className="absolute h-5 w-5 left-20 mt-14 " src={addbtn}/>  */}
 
-    reader.onload = () => {
-      setVideo(reader.result);
-    };
+      {/* </div> */}
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleVideoUpload = (e) => {
-    e.preventDefault();
-    fileUploadRef.current.click();
-  };
-
-  const handleTextChange = (e) => {
-    if (!video) {
-      alert('Please upload an video first.');
-    } else {
-      setText(e.target.value);
-    }
-  };
-
-  const handlePreview = () => {
-    setPreviewedText(text);
-  };
-
-  const handleReset = () => {
-    setVideo('');
-    setText('');
-    setPreviewedText('');
-  };
-
-  const handlePost = () => {
-    if (video && text) {
-      console.log('Posting story:');
-      console.log('Video:', video);
-      console.log('Text:', text);
-      alert('Story has been posted!');
-    } else if (!video && !text) {
-      alert('Please upload a video or add text before posting.');
-    } else {
-      alert('Please add both video and text before posting.');
-    }
-  };
-
-  useEffect(() => {
-    let timer;
-    if (videoRef.current) {
-      videoRef.current.addEventListener('play', () => {
-        timer = setTimeout(() => {
-          videoRef.current.pause();
-        }, 30000); // 30 seconds
-      });
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-      if (videoRef.current) videoRef.current.removeEventListener('play', () => {});
-    };
-  }, [video]);
-
-  return (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg">
-      <div className="flex justify-between w-full items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center w-full">Create Video Story</h1>
-        <button onClick={onClose} className="text-gray-600 hover:text-black">
-          <img src="/assets/icon-close.png" alt="Close" />
-        </button>
-      </div>
-      <div className="flex rounded-lg w-full">
-        <div className="w-3/12 p-4 border-r flex flex-col gap-4">
-          <textarea
-            placeholder="Write your story..."
-            value={text}
-            onChange={handleTextChange}
-            className="resize-none w-full h-48 p-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            className="py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 max-w-32 "
-            onClick={handlePreview}
-          >
-            Preview Text
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-neutral-300 text-black rounded-full hover:bg-neutral-400 max-w-32"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-green-600 text-white rounded-full hover:bg-green-700 max-w-32"
-            onClick={handlePost}
-          >
-            Post
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-gray-600 text-white rounded-full hover:bg-gray-700 max-w-32"
-            onClick={goBack}
-          >
-            Go Back
-          </button>
-        </div>
-        <div className="w-9/12 flex justify-center items-center relative p-4">
-          
-          {video ? (
-            <div className="relative max-h-96 max-w-full">
-              <video ref={videoRef} className="max-h-96 max-w-full object-contain rounded-lg" controls autoPlay>
-                <source src={video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              {previewedText && (
-                <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-50 text-white text-center p-2 rounded-b-lg">
-                  {previewedText}
-                </div>
-              )}
-            </div>
-          ) : (
-            <button onClick={handleVideoUpload} className="relative max-h-96 max-w-full">
-              <img
-                src={defaultImg}
-                alt="Uploading"
-                className="max-h-96 max-w-full object-contain rounded-lg"
-              />
-              </button>
-            )}
-          <input
-            type="file"
-            ref={fileUploadRef}
-            hidden
-            accept="video/*"
-            onChange={handleVideoChange}
-          />
-        </div>
-      </div>
+      <div className="mt-3">{name}</div>
     </div>
   );
 };
@@ -406,21 +198,25 @@ function Stories() {
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f112564488aa36e3249859d0a7978ae87e135589f7a2546f20452573f4289865?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       alt: "Avatar of Thomas",
+      addbtn: "/public/assets/addStory.svg",
       name: "Thomas",
     },
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/26e9c323e2b3e2d4cb3ba7c439300d489fcd7efc28471a423d6df3137de94320?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       alt: "Avatar of Aisha",
+      addbtn: "/public/assets/addStory.svg",
       name: "Aisha",
     },
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f9f2a26cfd4c2c4cfd165c8a11e72547b5817ce689fd1780656a7eef5b65f656?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       alt: "Avatar of Dan",
+      addbtn: "/public/assets/addStory.svg",
       name: "Dan",
     },
     {
       src: "https://cdn.builder.io/api/v1/image/assets/TEMP/39895574049d881fb475ea138e7d0fa865baaad0626f61c876f3d7b93f879f0b?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
       alt: "Avatar of Musa",
+      addbtn: "/public/assets/addStory.svg",
       name: "Musa",
     },
   ];
@@ -434,7 +230,7 @@ function Stories() {
             <img className="flex items-center bg-black h-24 w-24  rounded-full "
               src="/assets/profileDummy.png"
               // alt="Decorative border"
-            /><img className="absolute h-5 w-5 left-20 mt-14 " 
+            /><img className="absolute h-5 w-5 left-20 mt-14 "
             src="/assets/story/iconAddStory.svg"/>
           </div>
           </button>

@@ -9,7 +9,7 @@ trait Attachable
 
     public function attachments()
     {
-        return $this->morphOne(Resource::class, 'attachable');
+        return $this->morphMany(Resource::class, 'attachable');
     }
 
     public function storeAttachments($for = 'attachment')

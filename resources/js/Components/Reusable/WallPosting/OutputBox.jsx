@@ -28,19 +28,22 @@ function OutputData() {
     })
       .then((response) => {
         if (!response.ok) {
-          // console.log('Network response was not ok');
           throw new Error("Network response was not ok");
         }
         return response.json();
       })
       .then((data) => {
         console.log("Posts data:", data.data.data);
-        setPostData(data.data.data);
+        const posts = data.data.data.map((post) => {
+          post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
+          return post;
+        });
+        setPostData(posts);
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
-        setLoading(false); // Even in case of error, set loading to false
+        setLoading(false);
       });
   }, []);
 
@@ -50,13 +53,13 @@ function OutputData() {
   ];
 
   if (loading) {
-    return <div>Loading...</div>; // Or any other loading indicator
+    return <div>Loading...</div>;
   }
 
   return (
     <>
       {postData && postData.map((post) => (
-        <div key={post.id} className="input-box-container" style={{ height: "230px", marginTop: "-10px" }}>
+        <div key={post.id} className="input-box-container" style={{ height: "auto", marginTop: "-10px" }}>
           <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
             <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
               <div className="flex gap-1 mt-2">
@@ -76,21 +79,29 @@ function OutputData() {
               {post.tag}
             </p>
             {/* Render attachments */}
-            {post.attachments && post.attachments.map((attachment, index) => (
-              <div key={index} className="mt-2">
-                {attachment.path.endsWith(".png") || attachment.path.endsWith(".jpg") || attachment.path.endsWith(".jpeg") ?
-                  <img src={attachment.path} alt="Attachment" className="max-w-full h-auto" />
-                  :
-                  <a href={attachment.path} target="_blank" rel="noopener noreferrer">{attachment.path.split("/").pop()}</a>
-                }
-              </div>
-            ))}
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {post.attachments.map((attachment, index) => (
+                <div key={index} className="attachment">
+                  {attachment.mime_type.startsWith("image/") ? (
+                    <img src={`/storage/${attachment.path}`} alt="Attachment" className="w-full h-32 object-cover" />
+                  ) : attachment.mime_type.startsWith("video/") ? (
+                    <video controls className="w-full h-32 object-cover">
+                      <source src={`/storage/${attachment.path}`} type={attachment.mime_type} />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <a href={`/storage/${attachment.path}`} target="_blank" rel="noopener noreferrer">
+                      {attachment.path.split("/").pop()}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
           </article>
         </div>
       ))}
     </>
   );
 }
-
 
 export default OutputData;
