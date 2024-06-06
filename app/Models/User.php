@@ -77,4 +77,55 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $rules[$scenario];
     }
+
+
+    public function communityMembers()
+    {
+        return $this->hasMany(\Modules\Crud\Models\CommunityMember::class);
+    }
+
+    public function employmentPost()
+    {
+        return $this->hasOne(\Modules\Crud\Models\EmploymentPost::class)->latestOfMany();
+    }
+
+    public function employmentPosts()
+    {
+        return $this->hasMany(\Modules\Crud\Models\EmploymentPost::class);
+    }
+
+    public function eventAttendances()
+    {
+        return $this->hasMany(\Modules\Crud\Models\EventAttendance::class);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(\Modules\Crud\Models\Invitation::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(\Modules\Crud\Models\Post::class);
+    }
+
+    public function profiles()
+    {
+        return $this->hasMany(\Modules\Crud\Models\Profile::class);
+    }
+
+    public function resources()
+    {
+        return $this->hasMany(\Modules\Crud\Models\Resource::class);
+    }
+
+    public function resourceAccesses()
+    {
+        return $this->hasMany(\Modules\Crud\Models\ResourceAccess::class);
+    }
+
+    public function preferences()
+    {
+        return $this->hasMany(\Modules\Crud\Models\UserPreference::class);
+    }
 }
