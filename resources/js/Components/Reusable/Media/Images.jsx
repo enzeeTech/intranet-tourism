@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 const ImageComponent = ({ src, alt, className }) => (
-  <img loading="lazy" src={src} alt={alt} className={className} />
+  <img
+    loading="lazy"
+    src={src}
+    alt={alt}
+    className={className}
+    style={{ objectFit: "cover", width: "100%", height: "100%" }}
+  />
 );
 
 function Image({ selectedItem }) {
@@ -46,7 +52,7 @@ function Image({ selectedItem }) {
                 <ImageComponent
                   src={img.src}
                   alt={img.alt}
-                  className="grow shrink-0 max-w-full aspect-[1.19] w-full"
+                  className="grow shrink-0 w-full h-full"
                 />
               </figure>
             ))

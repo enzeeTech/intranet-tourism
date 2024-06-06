@@ -26,8 +26,8 @@
     justify-content: center;
 }
 
-.file-search-btn-img {
-    width: 131px; 
+.file-search-btn-img{
+    width: 131px;
     height: 48px;
 }
 
@@ -43,8 +43,14 @@
     margin: 0;
     margin-bottom: 40px;
     width: 100%;
-}
-  
+  }
+
+  /* @media (max-width: 1372px) {
+    .file-directory-underline {
+        display: none;
+    }
+  } */
+
 .file-directory {
     display: flex;
     flex-direction: column;
