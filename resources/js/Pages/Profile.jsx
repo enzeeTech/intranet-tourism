@@ -207,5 +207,6 @@ export default function Profile() {
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
             )}
         </Example>
+
     );
 }
