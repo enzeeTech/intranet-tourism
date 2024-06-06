@@ -7,6 +7,7 @@ import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import './css/StaffDirectory.css';
+import Example from '@/Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -133,6 +134,7 @@ const StaffDirectory = () => {
   };
 
   return (
+  <Example>
     <div className="staff-directory">
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
@@ -169,6 +171,7 @@ const StaffDirectory = () => {
         onConfirm={() => console.log('Deactivated')}
       />
     </div>
+    </Example>
   );
 };
   

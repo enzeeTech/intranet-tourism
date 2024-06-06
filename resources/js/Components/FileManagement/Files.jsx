@@ -1,29 +1,6 @@
-import React, { useState } from 'react';
-import PopupContent from '../Reusable/ProfileFilesPopup';
-
-
-const data = [
-  { name: 'Briefing', File: 'PDF', Size: '12', Date: '12.10.2023' , Author: 'by Musa' },
-  { name: 'Report', File: 'Doc', Size: '7.4', Date: '07.10.2023' , Author: 'by Musa' },
-  { name: 'Statistics for the Report', File: 'XLSX', Size: '3', Date: '24.09.2023' , Author: 'by Musa' },
-  { name: 'Data on the Report', File: 'XLSX', Size: '2.5', Date: '22.09.2023' , Author: 'by Musa' },
-  { name: 'User Guide', File: 'PDF', Size: '12.4', Date: '12.10.2023', Author: 'by Alex' },
-  { name: 'System Overview', File: 'Doc', Size: '7.8', Date: '07.10.2023', Author: 'by Jamie' },
-  { name: 'Error Logs', File: 'TXT', Size: '3.1', Date: '24.09.2023', Author: 'by Casey' },
-  { name: 'Backup Data', File: 'ZIP', Size: '250', Date: '22.09.2023', Author: 'by Taylor' },
-  { name: 'Configuration Settings', File: 'XML', Size: '1.5', Date: '15.09.2023', Author: 'by Jordan' },
-  { name: 'Database Schema', File: 'SQL', Size: '8.2', Date: '10.09.2023', Author: 'by Morgan' },
-  { name: 'License Agreement', File: 'PDF', Size: '0.9', Date: '05.09.2023', Author: 'by Riley' },
-  { name: 'User Permissions', File: 'CSV', Size: '0.6', Date: '01.09.2023', Author: 'by Quinn' },
-  { name: 'Security Audit', File: 'DOC', Size: '5.4', Date: '28.08.2023', Author: 'by Avery' },
-  { name: 'Patch Notes', File: 'PDF', Size: '2.2', Date: '20.08.2023', Author: 'by Sam' },
-  { name: 'Performance Report', File: 'XLSX', Size: '3.7', Date: '15.08.2023', Author: 'by Cameron' },
-  { name: 'Change Log', File: 'TXT', Size: '1.0', Date: '10.08.2023', Author: 'by Skyler' },
-  { name: 'Deployment Guide', File: 'PDF', Size: '14.3', Date: '05.08.2023', Author: 'by Dakota' },
-  { name: 'Server Configuration', File: 'YAML', Size: '0.8', Date: '01.08.2023', Author: 'by Devon' },
-  { name: 'Incident Report', File: 'DOC', Size: '4.0', Date: '28.07.2023', Author: 'by Casey' },
-  { name: 'API Documentation', File: 'HTML', Size: '6.7', Date: '20.07.2023', Author: 'by Alex' },
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import PopupContent from '../Reusable/PopupContent';
 
 const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
   <div className="py-3">
@@ -42,58 +19,101 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
 const FileTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const options = {
+      method: 'GET',
+      url: 'http://127.0.0.1:8000/api/crud/resources',
+      headers: { Accept: 'application/json' }
+    };
+
+    const fetchFiles = async () => {
+      try {
+        const response = await axios.request(options);
+        const filesData = response.data.data.data; // Adjust this path based on the actual structure
+        setFiles(filesData);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    fetchFiles();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = files.slice(indexOfFirstItem, indexOfLastItem);
 
+  const handleRename = (index, newName) => {
+    const updatedFiles = files.map((file, i) => {
+      if (i === index) {
+        const metadata = JSON.parse(file.metadata);
+        metadata.name = newName;
+        return { ...file, metadata: JSON.stringify(metadata) };
+      }
+      return file;
+    });
+    setFiles(updatedFiles);
+  };
 
-  // maybe can make in phone view just has list of the items only
+  const handleDelete = (index) => {
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
+  };
+
   return (
-    <div className="ml-8 w-full px-4 sm:px-6 lg:px-0 overflow-visible">
+    <div className="w-full px-4 sm:px-0 lg:px-0 overflow-visible">
       <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8 overflow-visible">
-          <div className="bg-white-200 w-full h-[675px] px-8 py-8 rounded-2xl shadow-2xl overflow-visible">
-            <table className="w-full rounded-2xl bg-white table-fixed overflow-visible">
+        <div className="overflow-visible">
+          <div className="bg-white-200 w-full h-[715px] px-8 py-8 rounded-2xl shadow-custom overflow-visible">
+            <table className="w-full rounded-2xl bg-white table-fixed overflow-visible border-separate border-spacing-1">
               <thead>
                 <tr>
-                  <th scope="col" className="w-1/3 md:w-1/5 lg:w-1/3 rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">Name</th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-2xl bg-blue-200 px-3.5 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">
-                    <div className="flex justify-center">
-                      <img src="assets/File.svg" alt="File" className="File" />
-                    </div>
-                  </th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">Size</th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-lg">
-                    <div className="flex justify-center">
-                      <img src="assets/FileTableCalendar.svg" alt="Date" className="Date" />
-                    </div>
-                  </th>
-                  <th scope="col" className="w-1/8 md:w-1/10 lg:w-1/10 rounded-2xl bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-lg">
-                    <div className="flex justify-center">
-                      <img src="assets/Author.svg" alt="Author" className="Author" />
-                    </div>
-                  </th>
+                  <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
+                  <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
                   <th scope="col" className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y-reverse divide-neutral-500 text-center rounded-2xl">
-                {currentItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
-                      {item.name}
-                    </td>
-                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">{item.File}</td>
-                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">{item.Size}</td>
-                    <td className="border-b border-r border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">{item.Date}</td>
-                    <td className="border-b border-neutral-500 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
-                      {item.Author}
-                    </td>
-                    <td className="flex relative mt-3.5"><PopupContent /></td>
-                  </tr>
-                ))}
+              <tbody className="divide-y-reverse divide-neutral-300 text-center rounded-full">
+                {currentItems.map((item, index) => {
+                  const metadata = JSON.parse(item.metadata);
+                  return (
+                    <tr key={index}>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
+                        {metadata.name}
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {(item.filesize / 1024 / 1024).toFixed(2)} MB
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {item.extension}
+                      </td>
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="flex relative mt-3.5">
+                        <PopupContent
+                          name={metadata.name}
+                          onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
+                          onDelete={() => handleDelete(indexOfFirstItem + index)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-            <Pagination totalItems={data.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
+            <Pagination totalItems={files.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
           </div>
         </div>
       </div>
