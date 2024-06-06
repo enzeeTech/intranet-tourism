@@ -45,7 +45,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $this->authKey = filter_var(request('credential'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $this->authKey = filter_var(request('credential'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         $this->merge([$this->authKey => request('credential')]);
         if (! auth()->attempt($this->only($this->authKey, 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

@@ -7,10 +7,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\departments;
 use App\Http\Controllers\fileManagement;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MediaController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffDirectoryController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // Route::get('/', function () {
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
+    Route::get('/media', [MediaController::class, 'index'])->name('Media');
 });
 
 require __DIR__.'/auth.php';

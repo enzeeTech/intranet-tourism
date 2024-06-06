@@ -56,9 +56,9 @@ const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
                 <p className={`staff-member-status ${status.toLowerCase()}`}>{status}</p>
             </div>
             <div className="card-footer">
-                <button className="call-button" onClick={handleCall}>
-                <img style={{width: '', height: '20px'}} src={Massage} alt="Call" />
-                </button>
+            <button className="justify-center px-5 bg-white rounded-3xl border border-solid border-neutral-400" aria-label="Visit">
+                Visit
+            </button>
             </div>
             {isThreeDotPopupOpen && (
             <button 

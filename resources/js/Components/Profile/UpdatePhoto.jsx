@@ -42,7 +42,7 @@ function UpdatePhotoButton({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-xl shadow-lg w-[380px]">
+        <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-xl shadow-custom w-[380px]">
           <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff" 
                alt="Close icon" 
                className="self-end w-6 my-2 aspect-square cursor-pointer" 
