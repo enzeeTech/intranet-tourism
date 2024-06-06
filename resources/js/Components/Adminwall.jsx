@@ -3,6 +3,8 @@ import { useState } from 'react';
 import DpMembers from '../Components/DepartmentCom/DepartmentMembers';
 import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import { Filter } from '@/Components/Reusable/WallPosting';
+
 
 function HeaderSection() {
   const [isEditing, setIsEditing] = useState(false);
@@ -131,8 +133,9 @@ function Navigation() {
 
       {activeTab === 'Post' && (
         <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-          <div className="max-w-[900px] w-full ml-4">
+          <div className="max-w-[900px] w-full ml-4 whitespace-nowrap">
             <ShareYourThoughtsDepart />
+            <Filter/>
           </div>
         </div>
       )}
