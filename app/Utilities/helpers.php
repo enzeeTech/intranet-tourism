@@ -15,9 +15,11 @@ if (!function_exists('uploadFile')) {
         $whitelistExtension = !empty(config('filesystems.whitelist'))
             ? config('filesystems.whitelist.criteria.extension')
             : ["jpg", "jpeg", "png", "bmp", "pdf"];
+            // echo phpinfo();
+            // die();
             // dd(
             //     $uploadedFile,
-            //     $uploadedFile->extension(),
+            //     // $uploadedFile->extension(),
             //     $uploadedFile->path(),
             //     $uploadedFile->dimensions(),
             //     $uploadedFile->clientExtension(),
