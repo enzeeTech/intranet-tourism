@@ -28,7 +28,7 @@ export default function Login({ status, canResetPassword }) {
     return (
         <GuestLayout>
             <Head title="Log in" />
-            <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8">
+            <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8 ">
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
                 <div className="mb-6">
@@ -81,7 +81,7 @@ export default function Login({ status, canResetPassword }) {
                         width={40}
                         className="react-switch"
                     />
-                    <span className="ml-2 text-sm text-blue-600">Remember me?</span>
+                    <span className="ml-2 text-sm text-neutral-500">Remember me?</span>
                 </div>
 
                 <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
