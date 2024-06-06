@@ -82,4 +82,9 @@ class Resource extends Model implements AuditableContract
     {
         return $this->morphTo();
     }
+
+    public function scopeSearchByTag($query, $tags)
+    {
+        $query->whereRelation('attachable', 'tag', 'like', '%' . $tags . '%');
+    }
 }

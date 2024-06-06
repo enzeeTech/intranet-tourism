@@ -36,6 +36,13 @@ trait QueryableApi
         //     }
         // });
 
+
+        $query->when(request()->has('sort'), function ($query) {
+            foreach (request('sort') as $sort) {
+                $query->orderBy(key($sort), current($sort) ?? 'asc');
+            }
+        });
+
         $query->when(request()->has('scope'), function ($query) {
             foreach (request('scope') as $scope) {
                 foreach ($scope as $scopeBy => $value) {
