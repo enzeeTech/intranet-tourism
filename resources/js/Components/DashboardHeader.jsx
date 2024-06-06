@@ -32,7 +32,7 @@ const Header = () => {
     };
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-white shadow-md">
+    <header className="fixed top-0 z-50 flex w-full items-center justify-between p-4 bg-transparent shadow-custom">
       <a href= '../dashboard'><img src={logo}   alt="Logo" className="h-12 ml-8" /> </a>
       <div className="relative flex items-center flex-grow mx-8 ">
       <img src={search} alt="Search" className="absolute w-6 h-6 transform -translate-y-1/2 left-3 top-1/2" />
@@ -72,7 +72,7 @@ const Header = () => {
         <div className="absolute top-0 left-0 w-10 h-10 transition duration-300 ease-in-out rounded-sm opacity-0"></div>
       </Menu.Button>
           </div>
-          
+
           <Transition
             as={Fragment}
             enter="transition ease-out duration-100"
@@ -82,15 +82,15 @@ const Header = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-96 max-full ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-custom w-96 max-full ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="">
-             
+
                 <Menu.Items>
                   <NotificationPopup />
                 </Menu.Items>
 
-            <div className="flex flex-row w-full h-10 hover:bg-gray-200 ">  
-            <a href="http://127.0.0.1:8000/notification" className="flex items-center w-full px-4 py-2 font-bold text-black rounded bg-white-500">
+            <div className="flex flex-row w-full h-10 hover:bg-gray-200 ">
+            <a href="/notification" className="flex items-center w-full px-4 py-2 font-bold text-black rounded bg-white-500">
               View All
               <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-6 h-4 ml-4">
                 <path d="M1 6H8" stroke="#222222" strokeLinecap="round"/>
@@ -103,7 +103,7 @@ const Header = () => {
 
                 {/*TESST*/}
             {/* <div className="flex flex-row w-full h-10 ">
-              <a href="http://127.0.0.1:8000/notipopup" className="flex items-center px-4 py-2 font-bold text-black rounded bg-white-500 hover:bg-gray-200">      
+              <a href="http://127.0.0.1:8000/notipopup" className="flex items-center px-4 py-2 font-bold text-black rounded bg-white-500 hover:bg-gray-200">
 
             TEST<img src={"http://127.0.0.1:5173/public/assets/view-all-icon.png"} alt="Additional Image" className="w-6 h-4 ml-4 " />
 
@@ -113,7 +113,7 @@ const Header = () => {
                 {/* </form> */}
           </div>
 
-          
+
             </Menu.Items>
           </Transition>
         </Menu>

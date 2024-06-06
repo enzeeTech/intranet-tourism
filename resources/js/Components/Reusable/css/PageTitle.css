@@ -1,10 +1,29 @@
 .page-title-container {
-    padding: 10px;
+  padding: 10px;
+}
+
+.page-title {
+  font-size: 32px;
+  color: #202224; 
+  font-weight: 600;
+}
+
+/* @media (max-width: 640px) {
+  .page-title-container {
+      display: none;
   }
-  
+} */
+
+@media (max-width: 640px) {
+  .page-title-container {
+      display: none;
+  }
+
   .page-title {
     font-size: 32px;
-    color: #202224; 
-    font-weight: 600;
-  }
-  
+    color: #202224;
+    font-weight:600;
+}
+
+}
+

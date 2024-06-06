@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
+import { Fragment } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
-import FeaturedEvent from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
+import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import Example from '@/Layouts/DashboardLayoutNew';
 
 function SaveNotification({ title, content, onClose }) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="p-2 rounded-3xl w-4xl">
-        <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-lg w-[380px] h-[165px]">
-          <div className="flex flex-col w-full">
-            <h2 className="text-xl text-neutral-800">Request Sent to Jomla! Admin</h2>
-          </div>
-        </section>
-      </div>
-    </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+            <div className="p-2 rounded-3xl w-4xl">
+                <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
+                    <div className="flex flex-col w-full">
+                        <h2 className="text-xl text-neutral-800">{title}</h2>
+                    </div>
+                </section>
+            </div>
+        </div>
     );
 }
 
 export default function MyComponent() {
-    const [activeTab, setActiveTab] = useState("activities");
+    const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
@@ -97,51 +99,23 @@ export default function MyComponent() {
     };
 
     return (
-        <div className="staff-directory">
-            {isSaveNotificationOpen && (
-                <SaveNotification
-                    title="Changes Saved"
-                    onClose={closeSaveNotification}
-                />
-            )}
-            {isPopupOpen && (
-                <Popup
-                    title="Edit Banner Photo"
-                    content="Choose photo from the device"
-                    onClose={() => setIsPopupOpen(false)}
-                />
-            )}
-            <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col px-5 mt-20 grow max-md:mt-10">
-                        <div className="staff-directory-header">
-                            <PageTitle title="Profile" />
-                        </div>
-                        <hr className="staff-directory-underline" />
-                        <div className="widgets-container">
-                            <div className="left-widget">
-                                <FeaturedEvent />
-                                <WhosOnline />
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-                <main className="flex flex-col ml-5 w-[73%] max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col mt-2.5 max-md:mt-10 max-md:max-w-full">
-                        <section className="flex flex-col pb-5 bg-white rounded-none shadow-sm max-md:max-w-full">
-                            <ProfileHeader
-                                backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
-                                name={profileData.name}
-                                status={profileData.status}
-                                onEditBanner={() => setIsPopupOpen(true)}
-                            />
-                            <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
-                        </section>
+        <Example>
+    <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div>
+            <div className="w-full bg-white h-[485px] shadow-custom">
+                        <ProfileHeader
+                            backgroundImage={profileData.backgroundImage}
+                            profileImage={profileData.profileImage}
+                            name={profileData.name}
+                            status={profileData.status}
+                            onEditBanner={() => setIsPopupOpen(true)}
+                        />
+                        <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         {activeTab === "bio" && (
-                            <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-lg max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                            <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                 <div className="flex-auto my-auto max-md:max-w-full">
-                                    <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+                                    <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                         <ProfileBio
                                             photo={photo}
                                             email={formData.email}
@@ -183,8 +157,23 @@ export default function MyComponent() {
                             </div>
                         )}
                     </div>
-                </main>
-            </div>
+                    </div>
+                    </div>
+                    </main>
+                    <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <div className="file-directory-header">
+          <PageTitle title="My Profile" />
         </div>
-    );
+        <hr className="file-directory-underline" />
+
+        <div>
+            <FeaturedEvents />
+            <WhosOnline />
+        </div>
+    </aside>
+    </Example>
+
+                    
+
+    );
 }

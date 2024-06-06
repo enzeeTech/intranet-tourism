@@ -5,7 +5,8 @@ import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 // import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
-const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
+
+const UserFilePopup = ({ name, role, status, imageUrl, onDeactivateClick, onDelete }) => {
 
     const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
     const threeDotButtonRef = useRef(null);
@@ -55,23 +56,26 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
         // const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
         return {
             top: -8,
-            left: 75, // Add an offset to position it to the right of the button
+            left: 90.5, // Add an offset to position it to the right of the button
         };
     };
 
     const handleDelete = (e) => {
         e.stopPropagation();
-        e.preventDefault();
-        console.log("Delete button clicked");
-        // Here, you would typically call a function to handle the actual delete operation.
-    };
+        onDelete();
+        closePopup();
+      };
     
-    // Define the onClick handler for downloading an item
-    const handleDownload = (e) => {
+      const handleDownload = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        console.log("Download button clicked");
-        // Here, you would typically call a function to handle the actual download operation.
+        const qrImage = 'assets/hehe.png';
+        const link = document.createElement('a');
+        link.href = qrImage;
+        link.download = 'qr-image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -84,11 +88,11 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" onClick={handleIconClick} />
             </button>
             {isThreeDotPopupOpen && (
-                <div className="profile-files-popup">
+                <div className="profile-files-popup2 text-sm">
                     <div
-                        className="staff-member-popup2"
+                        className="staff-member-popup6"
                         style={{
-                            top: `${getPopupPosition().top}px`,
+                            top: '-8px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -96,16 +100,16 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     >
                         <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-11 -ml-1.5"
+                            className="text-neutral-500 pr-2 mr-14"
                             onClick={handleDelete}
                         >
                             Delete
                         </button>
                     </div>
                     <div
-                        className="staff-member-popup3"
+                        className="staff-member-popup7"
                         style={{
-                            top: '33px',
+                            top: '33.5px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -113,7 +117,7 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                     >
                         <img src="assets/🦆 icon _lock_.svg" alt={name} className="staff-member-popup-image" />
                         <button
-                            className="text-neutral-500 pr-4 -ml-1.5"
+                            className="text-neutral-500 pr-2 mr-8"
                             onClick={handleDownload}
                         >
                             Download
@@ -126,4 +130,4 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
     
 };
 
-export default PopupContent;
+export default UserFilePopup;

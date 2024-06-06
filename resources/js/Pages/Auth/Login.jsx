@@ -28,7 +28,7 @@ export default function Login({ status, canResetPassword }) {
     return (
         <GuestLayout>
             <Head title="Log in" />
-            <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8">
+            <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8 ">
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
                 <div className="mb-6">
@@ -39,7 +39,7 @@ export default function Login({ status, canResetPassword }) {
                         name="email"
                         placeholder="Username"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full outline-none shadow-none"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
@@ -57,7 +57,7 @@ export default function Login({ status, canResetPassword }) {
                         name="password"
                         placeholder="Password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full outline-none shadow-none"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
