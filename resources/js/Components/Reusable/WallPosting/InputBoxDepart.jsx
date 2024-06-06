@@ -114,7 +114,7 @@ function ShareYourThoughtsDepart() {
     };
 
   return (
-    <section className="flex flex-col justify-center text-sm max-w-[610px] text-neutral-800">
+    <section className="flex flex-col justify-center text-sm max-w-[610px] text-neutral-800 ">
       <div className="input-box-container mt-16 flex gap-5 justify-between px-8 pt-5 pb-2 w-24 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
         <div className="flex flex-col">
           <textarea
@@ -130,7 +130,7 @@ function ShareYourThoughtsDepart() {
               border: "none", // Remove the border
             }}
           />
-          <div className="self-center mt-7 flex gap-3 -ml-96 mr-8">
+          <div className="self-center mt-7 flex gap-3 -ml-96 mr-8 ">
             {/* Example icon */}
             <img
               loading="lazy"
