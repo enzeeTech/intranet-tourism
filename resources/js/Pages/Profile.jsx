@@ -23,9 +23,7 @@ function SaveNotification({ title, content, onClose }) {
 }
 
 export default function Profile() {
-    const { props } = usePage();
-    const { id } = props; // Access the user ID from props
-
+    
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -38,18 +36,22 @@ export default function Profile() {
         location: "Tingkat 18",
         phone: "+03 8891 8094",
         whatsapp: "+6014 971 8736",
-    });
-    const [originalFormData, setOriginalFormData] = useState(formData);
-    const [originalPhoto, setOriginalPhoto] = useState(photo);
-    const [isEditing, setIsEditing] = useState(false);
-    const [profileData, setProfileData] = useState({
-        backgroundImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?",
-        profileImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?",
-        name: "", // Initialize with empty string or placeholder
-        status: "Online",
-        icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?",
-        icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
-    });
+        });
+        const [originalFormData, setOriginalFormData] = useState(formData);
+        const [originalPhoto, setOriginalPhoto] = useState(photo);
+        const [isEditing, setIsEditing] = useState(false);
+        const [profileData, setProfileData] = useState({
+            backgroundImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?",
+            profileImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?",
+            name: "", // Initialize with empty string or placeholder
+            status: "Online",
+            icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?",
+            icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
+            });
+
+
+    const { props } = usePage();
+    const { id } = props; // Access the user ID from props
     const [userData, setUserData] = useState([]);
 
     useEffect(() => {
