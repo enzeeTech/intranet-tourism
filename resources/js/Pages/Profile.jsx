@@ -103,7 +103,7 @@ export default function MyComponent() {
     <main className="xl:pl-96 w-full">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
-            <div className="w-full bg-white h-[440px] shadow-custom">
+            <div className="w-full bg-white h-[485px] shadow-custom">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
                             profileImage={profileData.profileImage}
