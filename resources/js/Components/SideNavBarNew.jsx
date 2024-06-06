@@ -4,7 +4,7 @@ import { useState, useEffect, Fragment } from 'react'
 import classNames from 'classnames'
 
 const navigation = [
-  { name: "Dashboard", href: "/", inactive: "assets/Dashboard Inactive.svg", active: "assets/Dashboard Active.svg" },
+  { name: "Dashboard", href: "/dashboard", inactive: "assets/Dashboard Inactive.svg", active: "assets/Dashboard Active.svg" },
   { name: "Staff Directory", href: '/staffDirectory', inactive: "assets/Staff Directory Inactive.svg", active: "assets/Staff Directory Active.svg" },
   { name: "Calendar", href: '/calendar', inactive: "assets/Calendar Inactive.svg", active: "assets/Calendar Active.svg" },
   { name: "Departments", href: '/departments', inactive: "assets/Group Department Inactive.svg", active: "assets/Group Department Active.svg" },

@@ -35,4 +35,5 @@ export default {
         forms,
         require('@tailwindcss/aspect-ratio'),
     ],
+}
 };

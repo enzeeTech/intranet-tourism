@@ -21,14 +21,16 @@
 }
 
 .file-filter-btn {
+    display: flex; /* Added display: flex; */
     align-items: center;
     justify-content: center;
 }
 
-.file-search-btn-img{
+.file-search-btn-img {
     width: 131px; 
     height: 48px;
 }
+
 .file-filter-btn-img {
     width: 50px;
     height: auto;
@@ -41,24 +43,23 @@
     margin: 0;
     margin-bottom: 40px;
     width: 100%;
-  }
+}
   
-  @media (max-width: 640px) {
-    .file-directory-underline {
-        display: none;
-    }
-  }
-
 .file-directory {
     display: flex;
     flex-direction: column;
     padding: 20px;
     max-width: 1300px;
     margin-left: 30px;
-  }
+}
 
 .file-directory-header {
     display: flex;
-    justify-content: space;
-  }
+    justify-content: space-between; 
+}
 
+@media (max-width: 640px) {
+    .file-directory-underline {
+        display: none;
+    }
+}
