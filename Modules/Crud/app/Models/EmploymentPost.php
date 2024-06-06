@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use App\Models\User;
+use Database\Factories\EmploymentPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
@@ -16,12 +17,21 @@ class EmploymentPost extends Model implements AuditableContract
 
     protected $table = 'employment_posts';
 
+    protected static function newFactory()
+    {
+        return EmploymentPostFactory::new();
+    }
+
     protected $fillable = [
         'department_id',
         'business_post_id',
         'business_grade_id',
         'business_scheme_id',
         'user_id',
+    ];
+
+    protected $appends = [
+        'fullGrade',
     ];
 
     public static function rules($scenario = 'create')
@@ -50,6 +60,10 @@ class EmploymentPost extends Model implements AuditableContract
         ];
 
         return $rules[$scenario];
+    }
+
+    public function getFullGradeAttribute() {
+        return "{$this->businessScheme->code}{$this->businessGrade->code}";
     }
 
     public function businessGrade()
@@ -81,4 +95,6 @@ class EmploymentPost extends Model implements AuditableContract
     {
         return $this->hasMany(Supervisor::class);
     }
+
+
 }

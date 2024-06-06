@@ -5,7 +5,8 @@ import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 // import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
-const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
+
+const UserFilePopup = ({ name, role, status, imageUrl, onDeactivateClick, onDelete }) => {
 
     const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
     const threeDotButtonRef = useRef(null);
@@ -61,17 +62,20 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
 
     const handleDelete = (e) => {
         e.stopPropagation();
-        e.preventDefault();
-        console.log("Delete button clicked");
-        // Here, you would typically call a function to handle the actual delete operation.
-    };
+        onDelete();
+        closePopup();
+      };
     
-    // Define the onClick handler for downloading an item
-    const handleDownload = (e) => {
+      const handleDownload = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        console.log("Download button clicked");
-        // Here, you would typically call a function to handle the actual download operation.
+        const qrImage = 'assets/hehe.png';
+        const link = document.createElement('a');
+        link.href = qrImage;
+        link.download = 'qr-image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -84,28 +88,11 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                 <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" onClick={handleIconClick} />
             </button>
             {isThreeDotPopupOpen && (
-                <div className="profile-files-popup text-sm">
+                <div className="profile-files-popup2 text-sm">
                     <div
-                        className="staff-member-popup4"
+                        className="staff-member-popup6"
                         style={{
-                            top: `${getPopupPosition().top}px`,
-                            left: `${getPopupPosition().left}px`,
-                            position: 'absolute',
-                            zIndex: 999, // Ensure it's above other elements
-                        }}
-                    >
-                        <img src="assets/🦆 icon _Rename.svg" alt={name} className="staff-member-popup-image" />
-                        <button
-                            className="text-neutral-500 pr-2 mr-12"
-                            onClick={handleDelete}
-                        >
-                            Rename
-                        </button>
-                    </div>
-                    <div
-                        className="staff-member-popup2"
-                        style={{
-                            top: '33.5px',
+                            top: '-8px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -120,26 +107,9 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
                         </button>
                     </div>
                     <div
-                        className="staff-member-popup5"
+                        className="staff-member-popup7"
                         style={{
-                            top: '75.5px',
-                            left: `${getPopupPosition().left}px`,
-                            position: 'absolute',
-                            zIndex: 999, // Ensure it's above other elements
-                        }}
-                    >
-                        <img src="assets/🦆 icon _Admin.svg" alt={name} className="staff-member-popup-image" />
-                        <button
-                            className="text-neutral-500 pr-2"
-                            onClick={handleDelete}
-                        >
-                            Manage Admin
-                        </button>
-                    </div>
-                    <div
-                        className="staff-member-popup3"
-                        style={{
-                            top: '117.5px',
+                            top: '33.5px',
                             left: `${getPopupPosition().left}px`,
                             position: 'absolute',
                             zIndex: 999, // Ensure it's above other elements
@@ -160,4 +130,4 @@ const PopupContent = ({ name, role, status, imageUrl, onDeactivateClick }) => {
     
 };
 
-export default PopupContent;
+export default UserFilePopup;
