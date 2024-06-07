@@ -497,12 +497,12 @@ function Stories() {
                 src="/assets/story/iconAddStory.svg"/>
             </div>
           </button>
-          <button
+          {/* <button
             className="bg-blue-500 text-white py-2 px-4 rounded ml-4"
             onClick={openImageVideoPopup}
           >
             Open Image/Video Popup
-          </button>
+          </button> */}
         </div>
         <Popup isOpen={isPopupOpen} onClose={closePopup} />
         <ImageVideoPopup isOpen={isImageVideoPopupOpen} onClose={closeImageVideoPopup} media={sampleMedia} />
