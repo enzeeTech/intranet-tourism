@@ -222,24 +222,15 @@ const StaffDirectory = () => {
   }
 
   return (
+    <Example>
     <div className="flex-row">
-      <Header />
-      <div className="flex " style={{backgroundColor: '#F3F4F6'}}>
-        <Sidebar />
-        <main style={{width: '100%'}}>
-          <div className="staff-directory" style={{marginLeft: '30px'}}>
-            <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
-              <div className="staff-directory-header">
-                <PageTitle title="Staff Directory" />
-              </div>
-              <hr className="staff-directory-underline" />
-              <div className="widgets-container">
-                <div className="left-widget">
-                  <FeaturedEvents />
-                  <WhosOnline />
-                </div>
-                <div className="right-widget">
-                  <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
+      {/* <Header /> */}
+      <div className="flex ">
+        {/* <Sidebar /> */}
+
+        <main className="xl:pl-96 w-full">
+                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
                   <DepartmentDropdown
                     departments={departments}
                     onSelectDepartment={handleSelectDepartment}
@@ -264,6 +255,33 @@ const StaffDirectory = () => {
                     </div>
                   )}
                 </div>
+                </main>
+
+                <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <div className="file-directory-header">
+          <PageTitle title="Staff Directory" />
+        </div>
+        <hr className="file-directory-underline" />
+        <div>
+          <FeaturedEvents />
+          <WhosOnline />
+        </div>
+      </aside>
+
+        {/* <main style={{width: '100%'}}>
+          <div className="staff-directory" style={{marginLeft: '30px'}}>
+            <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
+              <div className="staff-directory-header">
+                <PageTitle title="Staff Directory" />
+              </div>
+              <hr className="staff-directory-underline" />
+              <div className="widgets-container">
+                <div className="left-widget">
+                  <FeaturedEvents />
+                  <WhosOnline />
+                </div>
+                <div className="right-widget">
+
               </div>
             </div>
             <DeactivateModal
@@ -274,8 +292,10 @@ const StaffDirectory = () => {
           </div>
         </main>
       </div>
+    </div> */}
     </div>
-
+    </div>
+    </Example>
   );
 };
 

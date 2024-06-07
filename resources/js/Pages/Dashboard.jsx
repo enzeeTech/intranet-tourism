@@ -14,15 +14,15 @@ const Dashboard = () => {
 
   return (
     <Example>
-   <main className="xl:pl-72 xl:pr-96">
-  <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-    <Stories />
-    <ShareYourThoughts />
-    <Filter />
-    <div className="mb-20"></div>
-    <OutputData />
-  </div>
-</main>
+    <main className="xl:pl-72 xl:pr-96">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
+            <Stories />
+            <ShareYourThoughts />
+            <Filter />
+            <div className="mb-20"></div>
+            <OutputData />
+        </div>
+    </main>
 
 
       <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">

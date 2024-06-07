@@ -6,8 +6,6 @@ import SearchMembers from '../Components/Reusable/CommunitySearch';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
-import Header from '../Components/DashboardHeader';
-import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
@@ -136,12 +134,38 @@ const StaffDirectory = () => {
   };
 
   return (
-    <div className="flex-row">
-      <Header />
-      <div className="flex " style={{backgroundColor: '#F3F4F6'}}>
-        <Sidebar />
-        <main style={{width: '100%'}}>
-        <div className="staff-directory" style={{marginLeft: '30px'}}>
+  <Example>
+
+<main className="xl:pl-96 w-full">
+<div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+<SearchMembers />
+            <DepartmentDropdown
+              departments={departments}
+              onSelectDepartment={handleSelectDepartment}
+            />
+            {selectedDepartment === 'All' && (
+              <div className="staff-member-grid-container">
+                {staffMembers.map((member) => (
+                    <StaffMemberCard
+                      key={member.id} {...member}
+                      onDeactivateClick={openDeactivateModal}
+                    />
+                  ))}
+              </div>
+            )}
+            </div>
+            </main>
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <div className="file-directory-header">
+                    <PageTitle title="Community" />
+                </div>
+                <hr className="file-directory-underline" />
+                <div>
+                    <FeaturedEvents />
+                    <WhosOnline />
+                </div>
+            </aside>
+    {/* <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Community" />
@@ -176,11 +200,8 @@ const StaffDirectory = () => {
         onClose={closeDeactivateModal}
         onConfirm={() => console.log('Deactivated')}
       />
-    </div>
-        </main>
-      </div>
-    </div>
-
+    </div> */}
+    </Example>
   );
 };
 

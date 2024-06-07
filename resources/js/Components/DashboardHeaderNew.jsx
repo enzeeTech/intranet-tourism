@@ -3,6 +3,8 @@ import { Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { usePage } from '@inertiajs/react';
+import NotificationPopup from '../Components/Noti-popup-test';
+
 
 const userNavigation = [
     { name: 'Your profile', href: '../profile' },
