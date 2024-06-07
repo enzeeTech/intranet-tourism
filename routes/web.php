@@ -14,6 +14,7 @@ use App\Http\Controllers\StaffDirectoryController;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\LinkController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -53,8 +54,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
-    Route::get('/media', [MediaController::class, 'index'])->name('Media');
+    Route::get('/link', [LinkController::class, 'index'])->name('link');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::get('/media', [MediaController::class, 'index'])->name('Media');
 
 });
 
