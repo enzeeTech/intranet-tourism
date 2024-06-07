@@ -70,7 +70,7 @@
   padding: 16px; 
   margin-left: -16px; 
   margin-top: 16px; 
-  max-height: calc(100vh - 250px); 
+  /* max-height: calc(100vh - 250px);  */
 }
 
 
