@@ -26,7 +26,7 @@ const StaffDirectory = () => {
       id: 1,
       name: 'Puspanita LPPM',
       role: 'Followed By:',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 2,
@@ -50,7 +50,7 @@ const StaffDirectory = () => {
       id: 5,
       name: 'Jomla V3 Feedback',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 6,
@@ -74,7 +74,7 @@ const StaffDirectory = () => {
       id: 9,
       name: 'Puspanita LPPM',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 10,
@@ -98,7 +98,7 @@ const StaffDirectory = () => {
       id: 13,
       name: 'KOPPEMA',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 14,
@@ -135,7 +135,37 @@ const StaffDirectory = () => {
 
   return (
   <Example>
-    <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+
+<main className="xl:pl-96 w-full">
+<div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+<SearchMembers />
+            <DepartmentDropdown
+              departments={departments}
+              onSelectDepartment={handleSelectDepartment}
+            />
+            {selectedDepartment === 'All' && (
+              <div className="staff-member-grid-container">
+                {staffMembers.map((member) => (
+                    <StaffMemberCard
+                      key={member.id} {...member}
+                      onDeactivateClick={openDeactivateModal}
+                    />
+                  ))}
+              </div>
+            )}
+            </div>
+            </main>
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <div className="file-directory-header">
+                    <PageTitle title="Community" />
+                </div>
+                <hr className="file-directory-underline" />
+                <div>
+                    <FeaturedEvents />
+                    <WhosOnline />
+                </div>
+            </aside>
+    {/* <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Community" />
@@ -155,7 +185,7 @@ const StaffDirectory = () => {
             {selectedDepartment === 'All' && (
               <div className="staff-member-grid-container">
                 {staffMembers.map((member) => (
-                    <StaffMemberCard 
+                    <StaffMemberCard
                       key={member.id} {...member}
                       onDeactivateClick={openDeactivateModal}
                     />
@@ -165,14 +195,14 @@ const StaffDirectory = () => {
           </div>
         </div>
       </div>
-      <DeactivateModal 
+      <DeactivateModal
         isOpen={isDeactivateModalOpen}
         onClose={closeDeactivateModal}
         onConfirm={() => console.log('Deactivated')}
       />
-    </div>
+    </div> */}
     </Example>
   );
 };
-  
+
 export default StaffDirectory;

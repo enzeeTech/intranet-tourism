@@ -31,7 +31,7 @@ export default function Login({ status, canResetPassword }) {
             <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8 ">
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-                <div className="mb-6">
+                <div className="mb-2.5">
                     <InputLabel htmlFor="email" value="Email" />
                     <TextInput
                         id="email"
@@ -39,7 +39,7 @@ export default function Login({ status, canResetPassword }) {
                         name="email"
                         placeholder="Email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-3.5 py-2 whitespace-nowrap rounded-lg border-2 border-solid border-neutral-200 shadow-none focus:outline-none focus:border-2 focus:border-blue-500"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
@@ -49,7 +49,7 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-2.5">
                     <InputLabel htmlFor="password" value="Password" />
                     <TextInput
                         id="password"
@@ -57,7 +57,7 @@ export default function Login({ status, canResetPassword }) {
                         name="password"
                         placeholder="Password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full px-3.5 py-2 whitespace-nowrap rounded-lg border-2 border-solid border-neutral-200 shadow-none focus:outline-none focus:border-2 focus:border-blue-500"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
@@ -66,7 +66,7 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
 
-                <div className="mt-4 flex items-center mb-6">
+                <div className="mt-4 flex items-center mb-2.5">
                     <Switch
                         checked={data.remember}
                         onChange={(checked) => setData('remember', checked)}
