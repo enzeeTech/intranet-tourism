@@ -135,7 +135,7 @@ const StaffDirectory = () => {
 
   return (
   <Example>
-    <div className="staff-directory">
+    <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Community" />
