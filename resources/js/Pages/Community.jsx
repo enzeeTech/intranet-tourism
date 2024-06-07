@@ -6,6 +6,8 @@ import SearchMembers from '../Components/Reusable/CommunitySearch';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
+import Header from '../Components/DashboardHeader';
+import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
@@ -26,7 +28,7 @@ const StaffDirectory = () => {
       id: 1,
       name: 'Puspanita LPPM',
       role: 'Followed By:',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 2,
@@ -50,7 +52,7 @@ const StaffDirectory = () => {
       id: 5,
       name: 'Jomla V3 Feedback',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 6,
@@ -74,7 +76,7 @@ const StaffDirectory = () => {
       id: 9,
       name: 'Puspanita LPPM',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 10,
@@ -98,7 +100,7 @@ const StaffDirectory = () => {
       id: 13,
       name: 'KOPPEMA',
       role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 14,
@@ -134,8 +136,12 @@ const StaffDirectory = () => {
   };
 
   return (
-  <Example>
-    <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+    <div className="flex-row">
+      <Header />
+      <div className="flex " style={{backgroundColor: '#F3F4F6'}}>
+        <Sidebar />
+        <main style={{width: '100%'}}>
+        <div className="staff-directory" style={{marginLeft: '30px'}}>
       <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
         <div className="staff-directory-header">
           <PageTitle title="Community" />
@@ -155,7 +161,7 @@ const StaffDirectory = () => {
             {selectedDepartment === 'All' && (
               <div className="staff-member-grid-container">
                 {staffMembers.map((member) => (
-                    <StaffMemberCard 
+                    <StaffMemberCard
                       key={member.id} {...member}
                       onDeactivateClick={openDeactivateModal}
                     />
@@ -165,14 +171,17 @@ const StaffDirectory = () => {
           </div>
         </div>
       </div>
-      <DeactivateModal 
+      <DeactivateModal
         isOpen={isDeactivateModalOpen}
         onClose={closeDeactivateModal}
         onConfirm={() => console.log('Deactivated')}
       />
     </div>
-    </Example>
+        </main>
+      </div>
+    </div>
+
   );
 };
-  
+
 export default StaffDirectory;
