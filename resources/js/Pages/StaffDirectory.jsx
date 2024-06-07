@@ -7,6 +7,7 @@ import DepartmentDropdown from '../Components/Reusable/DropdownStaffDirectory';
 import StaffMemberCard from '../Components/Reusable/StaffMemberCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import './css/StaffDirectory.css';
+import Example from '@/Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -31,7 +32,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 2,
@@ -59,7 +60,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 6,
@@ -87,7 +88,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 10,
@@ -115,7 +116,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png', 
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
     },
     {
       id: 14,
@@ -154,43 +155,45 @@ const StaffDirectory = () => {
   };
 
   return (
-    <div className="staff-directory">
-      <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
-        <div className="staff-directory-header">
-          <PageTitle title="Staff Directory" />
+    <Example>
+        <div className="staff-directory">
+        <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
+            <div className="staff-directory-header">
+            <PageTitle title="Staff Directory" />
+            </div>
+            <hr className="staff-directory-underline" />
+            <div className="widgets-container">
+            <div className="left-widget">
+                <FeaturedEvents />
+                <WhosOnline />
+            </div>
+            <div className="right-widget">
+                <SearchMembers />
+                <DepartmentDropdown
+                departments={departments}
+                onSelectDepartment={handleSelectDepartment}
+                />
+                {selectedDepartment === 'Some Department 1' && (
+                <div className="staff-member-grid-container">
+                    {staffMembers.map((member) => (
+                        <StaffMemberCard
+                        key={member.id} {...member}
+                        onDeactivateClick={openDeactivateModal}
+                        />
+                    ))}
+                </div>
+                )}
+            </div>
+            </div>
         </div>
-        <hr className="staff-directory-underline" />
-        <div className="widgets-container">
-          <div className="left-widget">
-            <FeaturedEvents />
-            <WhosOnline />
-          </div>
-          <div className="right-widget">
-            <SearchMembers />
-            <DepartmentDropdown
-              departments={departments}
-              onSelectDepartment={handleSelectDepartment}
-            />
-            {selectedDepartment === 'Some Department 1' && (
-              <div className="staff-member-grid-container">
-                {staffMembers.map((member) => (
-                    <StaffMemberCard 
-                      key={member.id} {...member}
-                      onDeactivateClick={openDeactivateModal}
-                    />
-                  ))}
-              </div>
-            )}
-          </div>
+        <DeactivateModal
+            isOpen={isDeactivateModalOpen}
+            onClose={closeDeactivateModal}
+            onConfirm={() => console.log('Deactivated')}
+        />
         </div>
-      </div>
-      <DeactivateModal 
-        isOpen={isDeactivateModalOpen}
-        onClose={closeDeactivateModal}
-        onConfirm={() => console.log('Deactivated')}
-      />
-    </div>
+    </Example>
   );
 };
-  
+
 export default StaffDirectory;
