@@ -9,6 +9,7 @@ import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { Filter } from '@/Components/Reusable/WallPosting';
 import { OutputData } from '@/Components/Reusable/WallPosting';
 import MyComponent from '@/Components/Reusable/CommunitySide';
+import MyComponent from '@/Components/Reusable/CommunitySide';
 
 const Dashboard = () => {
 
