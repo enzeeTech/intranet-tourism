@@ -61,6 +61,11 @@ class User extends Model implements AuditableContract
         return $this->hasMany(EmploymentPost::class);
     }
 
+    public function employmentPost()
+    {
+        return $this->hasOne(EmploymentPost::class)->latestOfMany();
+    }
+
     public function eventAttendances()
     {
         return $this->hasMany(EventAttendance::class);
@@ -76,9 +81,14 @@ class User extends Model implements AuditableContract
         return $this->hasMany(Post::class);
     }
 
-    public function profiles()
+    // public function profiles()
+    // {
+    //     return $this->hasMany(Profile::class);
+    // }
+
+    public function profile()
     {
-        return $this->hasMany(Profile::class);
+        return $this->hasOne(Profile::class);
     }
 
     public function resources()
@@ -95,4 +105,5 @@ class User extends Model implements AuditableContract
     {
         return $this->hasMany(UserPreference::class);
     }
+
 }
