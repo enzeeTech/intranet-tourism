@@ -9,19 +9,22 @@ import {
   } from '@heroicons/react/24/outline'
 
   const navigation = [
-    { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-    { name: 'Team', href: '#', icon: UsersIcon, current: false },
-    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-    { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-    { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Account Settings', href: '#', icon: HomeIcon, current: true },
+    { name: 'Themes', href: '#', icon: UsersIcon, current: false },
+    { name: 'Advance Settings', href: '#', icon: FolderIcon, current: false },
+    { name: 'Departments', href: '#', icon: CalendarIcon, current: false },
+    { name: 'Categories', href: '#', icon: DocumentDuplicateIcon, current: false },
+    { name: 'Requests', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Audit Trail', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Feedback', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Birthday Template', href: '#', icon: ChartPieIcon, current: false },
   ]
   
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
   
-  export default function SettingNavigation() {
+  const SettingNavigation() { 
     return (
       <nav className="flex flex-1 flex-col" aria-label="Sidebar">
         <ul role="list" className="-mx-2 space-y-1">
@@ -48,4 +51,11 @@ import {
         </ul>
       </nav>
     )
+
+
+
+
+
+
+
   }

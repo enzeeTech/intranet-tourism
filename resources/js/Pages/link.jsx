@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import SettingNavigation from '@/Components/Settings/SettingsComponent';
 import Example from '@/Layouts/DashboardLayoutNew';
+import Pautan from '@/Components/Settings/LinkComponent';
 
 
 
@@ -15,7 +16,7 @@ const Settings = () => {
             <div>
             <PageTitle title="Pautan" />
             <hr className="file-directory-underline" />
-            
+            <Pautan />
             </div>
         </div>
     </main>

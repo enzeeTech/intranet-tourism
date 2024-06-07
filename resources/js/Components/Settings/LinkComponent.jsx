@@ -1,111 +1,93 @@
-import React, { Fragment } from 'react';
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import React from 'react';
+import { ChevronRightIcon } from '@heroicons/react/20/solid'; // Assuming you're using Heroicons
 
-const link = [
+const links = [
   {
-    name: 'Leslie Alexander',
-    email: 'leslie.alexander@example.com',
-    role: 'Co-Founder / CEO',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: '3h ago',
-    lastSeenDateTime: '2023-01-23T13:23Z',
+    linkname: 'e-Library',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
   {
-    name: 'Michael Foster',
-    email: 'michael.foster@example.com',
-    role: 'Co-Founder / CTO',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: '3h ago',
-    lastSeenDateTime: '2023-01-23T13:23Z',
+    linkname: 'ERMS (Electronic Record Management System)',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
   {
-    name: 'Dries Vincent',
-    email: 'dries.vincent@example.com',
-    role: 'Business Relations',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: null,
+    linkname: 'Executive Information System (EIS)',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
   {
-    name: 'Lindsay Walton',
-    email: 'lindsay.walton@example.com',
-    role: 'Front-end Developer',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: '3h ago',
-    lastSeenDateTime: '2023-01-23T13:23Z',
+    linkname: 'HRMIS',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
   {
-    name: 'Courtney Henry',
-    email: 'courtney.henry@example.com',
-    role: 'Designer',
-    imageUrl:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: '3h ago',
-    lastSeenDateTime: '2023-01-23T13:23Z',
+    linkname: 'MyFIS 2.0',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
   {
-    name: 'Tom Cook',
-    email: 'tom.cook@example.com',
-    role: 'Director of Product',
-    imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    href: '#',
-    lastSeen: null,
+    linkname: 'MyFIS Lite 2.0: Pejabat Cawangan (Dalam Negeri/Luar Negeri)',
+    url: 'https://example.com/e-library' // Replace with actual URL
   },
-]
+  {
+    linkname: 'MyFIS : Tuntutan Perjalanan dan Pendahuluan Ibu Pejabat',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'MyFIS : Portal Staf',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'MyFIS Core',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'MyFIS Lite : Pejabat Cawangan (Dalam Negeri/Luar Negeri)',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Office 365',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Sistem Kehadiran Pejabat',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Sistem Keluar Pejabat',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Sistem Pengurusan Aduan Integriti',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Sistem Pengurusan Fasiliti',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+  {
+    linkname: 'Sistem Pengurusan Helpdesk',
+    url: 'https://example.com/e-library' // Replace with actual URL
+  },
+];
 
-export default function Example() {
+export default function Pautan() {
   return (
     <ul
       role="list"
-      className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+      className="divide-y divide-gray-100 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
     >
-      {link.map((person) => (
-        <li key={person.email} className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
-          <div className="flex min-w-0 gap-x-4">
-            <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
+      {links.map((refer) => (
+        <li key={refer.url} className="relative flex justify-between gap-x-4 px-2 py-2 hover:bg-gray-50 sm:px-4">
+          <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
             <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
-                <a href={person.href}>
-                  <span className="absolute inset-x-0 -top-px bottom-0" />
-                  {person.name}
-                </a>
-              </p>
-              <p className="mt-1 flex text-xs leading-5 text-gray-500">
-                <a href={`mailto:${person.email}`} className="relative truncate hover:underline">
-                  {person.email}
-                </a>
+              <p className="text-sm font-semibold leading-5 text-gray-900">
+                {refer.linkname}
               </p>
             </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-x-4">
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-gray-900">{person.role}</p>
-              {person.lastSeen ? (
-                <p className="mt-1 text-xs leading-5 text-gray-500">
-                  Last seen <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
-                </p>
-              ) : (
-                <div className="mt-1 flex items-center gap-x-1.5">
-                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <p className="text-xs leading-5 text-gray-500">Online</p>
-                </div>
-              )}
+            <div className="flex shrink-0 items-center gap-x-2">
+              <ChevronRightIcon className="h-4 w-4 flex-none text-gray-400" aria-hidden="true" />
             </div>
-            <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-          </div>
+          </a>
         </li>
       ))}
     </ul>
-  )
+  );
 }
