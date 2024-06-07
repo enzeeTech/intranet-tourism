@@ -30,8 +30,8 @@ export default function Register() {
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8">
-                <div >
+            <form onSubmit={submit}>
+                <div>
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
