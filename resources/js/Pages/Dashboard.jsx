@@ -8,6 +8,7 @@ import { Stories, Birthday, CreateStory } from '@/Components/Dashboard';
 import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { Filter } from '@/Components/Reusable/WallPosting';
 import { OutputData } from '@/Components/Reusable/WallPosting';
+import MyComponent from '@/Components/Reusable/CommunitySide';
 
 const Dashboard = () => {
 
@@ -24,6 +25,7 @@ const Dashboard = () => {
                 {/* </div> */}
                 <div className="mb-20"></div>
                 <OutputData />
+                <MyComponent />
             </div>
         </main>
         <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
