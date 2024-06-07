@@ -8,6 +8,7 @@ import StaffMemberCard from '../Components/Reusable/StaffMemberCard';
 import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
+import Example from '@/Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');

@@ -19,12 +19,12 @@ import {
     { name: 'Feedback', href: '#', icon: ChartPieIcon, current: false },
     { name: 'Birthday Template', href: '#', icon: ChartPieIcon, current: false },
   ]
-  
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
-  
-  const SettingNavigation() { 
+
+  const SettingNavigation = () => {
     return (
       <nav className="flex flex-1 flex-col" aria-label="Sidebar">
         <ul role="list" className="-mx-2 space-y-1">
@@ -51,11 +51,7 @@ import {
         </ul>
       </nav>
     )
-
-
-
-
-
-
-
   }
+
+
+  export default SettingNavigation;
