@@ -31,7 +31,7 @@ export default function Login({ status, canResetPassword }) {
             <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8 ">
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
-                <div className="mb-6">
+                <div className="mb-2.5">
                     <InputLabel htmlFor="email" value="Email" />
                     <TextInput
                         id="email"
@@ -49,7 +49,7 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-2.5">
                     <InputLabel htmlFor="password" value="Password" />
                     <TextInput
                         id="password"
@@ -66,7 +66,7 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </div>
 
-                <div className="mt-4 flex items-center mb-6">
+                <div className="mt-4 flex items-center mb-2.5">
                     <Switch
                         checked={data.remember}
                         onChange={(checked) => setData('remember', checked)}
