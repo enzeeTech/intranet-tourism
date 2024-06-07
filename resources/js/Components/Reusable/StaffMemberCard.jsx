@@ -116,7 +116,7 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
             )} */}
             {isPopupOpen && (
                 <button 
-                    id={`staff-popup-${name}`} // Unique ID for the popup
+                    id={`staff-popup-${name}`} 
                     onClick={onDeactivateClick} 
                     className="staff-member-popup"
                     style={{

@@ -35,11 +35,11 @@ const StaffDirectory = () => {
   const staffMembers = [
     {
       id: 1,
-      name: 'Iskander Mirza',
-      role: 'Pengarah Kanan',
+      name: 'Mr Asyraf Jalil',
+      role: 'Design and Development Lead',
       status: 'Online',
       imageUrl: '../../../public/assets/dummyStaffImage.png',
-      phoneNo: '+601123201960',
+      phoneNo: '+60175165175',
       isDeactivated: 'false'
     },
     {
@@ -239,12 +239,22 @@ const StaffDirectory = () => {
                     <div className="staff-member-grid-container">
                       {staffMembers.map((member) => (
                           <StaffMemberCard
-                            key={member.id} {...member}
-                            onDeactivateClick={() => setIsDeactivateModalOpen(true)}
+                            key={member.id}
+                            name={member.name}
+                            role={member.role}
+                            status={member.status}
+                            imageUrl={member.imageUrl}
+                            phoneNo={member.phoneNo}
+                            onDeactivateClick={() => {
+                              setIsDeactivateModalOpen(true)
+                              setActivePopupId(null);
+                              setActivePopupRef(null);
+                            }}
                             isPopupOpen={activePopupId === member.id}
                             setActivePopup={() => {
                               setActivePopupId(member.id);
                               setActivePopupRef(document.getElementById(`staff-popup-${member.id}`));
+                              console.log('Active Popup ID:', activePopupRef);
                             }}
                             closePopup={() => {
                               setActivePopupId(null);
