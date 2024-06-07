@@ -157,7 +157,7 @@ const CreateVideoStory = ({ goBack, onClose }) => {
 
   const handleTextChange = (e) => {
     if (!video) {
-      alert('Please upload an video first.');
+      alert('Please upload a video first.');
     } else {
       setText(e.target.value);
     }
@@ -185,21 +185,6 @@ const CreateVideoStory = ({ goBack, onClose }) => {
       alert('Please add both video and text before posting.');
     }
   };
-
-  useEffect(() => {
-    let timer;
-    if (videoRef.current) {
-      videoRef.current.addEventListener('play', () => {
-        timer = setTimeout(() => {
-          videoRef.current.pause();
-        }, 30000); // 30 seconds
-      });
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-      if (videoRef.current) videoRef.current.removeEventListener('play', () => {});
-    };
-  }, [video]);
 
   return (
     <div className="flex flex-col items-center p-6 bg-white rounded-lg">
@@ -247,10 +232,14 @@ const CreateVideoStory = ({ goBack, onClose }) => {
           </button>
         </div>
         <div className="w-9/12 flex justify-center items-center relative p-4">
-
           {video ? (
             <div className="relative max-h-96 max-w-full">
-              <video ref={videoRef} className="max-h-96 max-w-full object-contain rounded-lg" controls autoPlay>
+              <video
+                ref={videoRef}
+                className="max-h-96 max-w-full object-contain rounded-lg"
+                autoPlay
+                onEnded={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length)}
+              >
                 <source src={video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -267,8 +256,8 @@ const CreateVideoStory = ({ goBack, onClose }) => {
                 alt="Uploading"
                 className="max-h-96 max-w-full object-contain rounded-lg"
               />
-              </button>
-            )}
+            </button>
+          )}
           <input
             type="file"
             ref={fileUploadRef}
@@ -349,21 +338,83 @@ const Popup = ({ isOpen, onClose }) => {
   );
 };
 
-// ImagePopup component
-const ImagePopup = ({ isOpen, onClose, image }) => {
+// ImageVideoPopup component
+const ImageVideoPopup = ({ isOpen, onClose, media }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slideInterval = useRef(null);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      const slideDuration = media[currentSlide].type === 'image' ? 10000 : 30000;
+
+      slideInterval.current = setInterval(() => {
+        setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
+      }, slideDuration);
+
+      return () => clearInterval(slideInterval.current);
+    }
+  }, [isOpen, media, currentSlide]);
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + media.length) % media.length);
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
+  };
+
+  const handleVideoEnded = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
+  };
+
+  useEffect(() => {
+    if (isOpen && media[currentSlide].type === 'video') {
+      const videoElement = videoRef.current;
+      videoElement.currentTime = 0;
+      videoElement.play();
+
+      videoElement.onended = handleVideoEnded;
+
+      const videoTimeout = setTimeout(() => {
+        handleVideoEnded();
+      }, 30000);
+
+      return () => {
+        clearTimeout(videoTimeout);
+        videoElement.onended = null;
+      };
+    }
+  }, [isOpen, currentSlide, media]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
-      <div className="p-6 rounded-lg text-center">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold w-full text-center"> </h1>
-          <button onClick={onClose} className="text-gray-600 hover:text-black">
-            <img src="/assets/icon-close.png" alt="Close" />
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-5/6 h-5/6 relative">
+        <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-black">
+          <img src="/assets/icon-close.png" alt="Close" />
+        </button>
+        <div className="flex justify-between items-center h-full">
+          <button onClick={handlePrevSlide} className="text-gray-600 hover:text-black">
+            &lt;
           </button>
-        </div>
-        <div className=" w-96 h-120">
-          <img src={image} alt="Popup" className="object-cover rounded-lg" />
+          <div className="w-4/5 flex justify-center items-center">
+            {media[currentSlide].type === 'image' ? (
+              <img src={media[currentSlide].src} alt="Slide" className="max-h-full max-w-full object-contain" />
+            ) : (
+              <video
+                ref={videoRef}
+                id="video-element"
+                src={media[currentSlide].src}
+                autoPlay
+                className="max-h-full max-w-full object-contain"
+              />
+            )}
+          </div>
+          <button onClick={handleNextSlide} className="text-gray-600 hover:text-black">
+            &gt;
+          </button>
         </div>
       </div>
     </div>
@@ -383,7 +434,7 @@ function Avatar({ src, alt, name }) {
 // Stories component
 function Stories() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isImageVideoPopupOpen, setIsImageVideoPopupOpen] = useState(false);
   const [image] = useState("https://th.bing.com/th/id/R.f48ceff9ab3322d4e84ed12a44c484d1?rik=0KQ6OgL4T%2b9uCA&riu=http%3a%2f%2fwww.photo-paysage.com%2falbums%2fuserpics%2f10001%2fCascade_-15.JPG&ehk=kx1JjE9ugj%2bZvUIrjzSmcnslPc7NE1cOnZdra%2f3pJEM%3d&risl=1&pid=ImgRaw&r=0");
 
   const openPopup = () => {
@@ -394,12 +445,12 @@ function Stories() {
     setIsPopupOpen(false);
   };
 
-  const openImagePopup = () => {
-    setIsImagePopupOpen(true);
+  const openImageVideoPopup = () => {
+    setIsImageVideoPopupOpen(true);
   };
 
-  const closeImagePopup = () => {
-    setIsImagePopupOpen(false);
+  const closeImageVideoPopup = () => {
+    setIsImageVideoPopupOpen(false);
   }
 
   const avatars = [
@@ -425,28 +476,36 @@ function Stories() {
     },
   ];
 
+  // Sample images and videos for the popup
+  const sampleMedia = [
+    { type: 'image', src: 'https://via.placeholder.com/800x600.png?text=Image+1' },
+    { type: 'image', src: 'https://via.placeholder.com/800x600.png?text=Image+2' },
+    { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+    { type: 'video', src: 'https://www.w3schools.com/html/movie.mp4' },
+  ];
+
   return (
     <div className="max-w-[624px]">
       <div className="flex gap-5 max-md:flex-col max-md:gap-0">
         <div className="relative">
-        <button onClick={openPopup}>
-          <div className="flex items-center bg-gray h-24 border-4 border-white-700 rounded-full p-px">
-            <img className="flex items-center bg-black h-24 w-24  rounded-full "
-              src="/assets/profileDummy.png"
-              // alt="Decorative border"
-            /><img className="absolute h-5 w-5 left-20 mt-14 "
-            src="/assets/story/iconAddStory.svg"/>
-          </div>
+          <button onClick={openPopup}>
+            <div className="flex items-center bg-gray h-24 border-4 border-white-700 rounded-full p-px">
+              <img className="flex items-center bg-black h-24 w-24  rounded-full "
+                src="/assets/profileDummy.png"
+              />
+              <img className="absolute h-5 w-5 left-20 mt-14 "
+                src="/assets/story/iconAddStory.svg"/>
+            </div>
           </button>
-          {/* <button
+          <button
             className="bg-blue-500 text-white py-2 px-4 rounded ml-4"
-            onClick={openImagePopup}
+            onClick={openImageVideoPopup}
           >
-            Open Image Popup
-          </button> */}
-          <Popup isOpen={isPopupOpen} onClose={closePopup} />
-          <ImagePopup isOpen={isImagePopupOpen} onClose={closeImagePopup} image={image} />
+            Open Image/Video Popup
+          </button>
         </div>
+        <Popup isOpen={isPopupOpen} onClose={closePopup} />
+        <ImageVideoPopup isOpen={isImageVideoPopupOpen} onClose={closeImageVideoPopup} media={sampleMedia} />
         <div className="flex flex-col ml-5 w-[83%] max-md:ml-0 max-md:w-full">
           <div className="px-5 max-md:mt-10 max-md:max-w-full">
             <div className="flex gap-5 max-md:flex-col max-md:gap-0">
@@ -459,7 +518,7 @@ function Stories() {
                     src={avatar.src}
                     alt={avatar.alt}
                     name={avatar.name}
-                    onClick={openImagePopup}
+                    onClick={openImageVideoPopup}
                   />
                 </div>
               ))}
