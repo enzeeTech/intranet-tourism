@@ -101,11 +101,13 @@ const notificationData = [
 const Notification = () => {
   return (
     // <Layout>
-    <div className="flex flex-col px-5 mx-auto max-w-[940px]">
-      <h1 className="w-full text-3xl font-bold text-neutral-800 mt-6 mb-2">
+    <div className="flex flex-col px-5 mx-auto  w-full justify-center items-center">
+      <h1 className="w-full text-3xl font-bold text-neutral-800 mt-6 mb-2 flex-start ">
         My Notifications
       </h1>
-      <div className='w-1/3 border-b-2'></div>
+      {/* <div className='w-1/3 border-b-2'></div> */}
+
+    <div className='border-2 rounded-xl shadow-sm max-w-[940px] mb-10'>
       <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl shadow-2xl">
         <div className="flex flex-col pb-5">
           <h2 className="text-2xl font-extrabold text-neutral-800 pl-6 pr-6">
@@ -115,7 +117,7 @@ const Notification = () => {
             <a href="#" className="underline">All</a>
             <a href=" /notification-unread" className='text-gray-500 relative '>
               Unread
-              <span className="absolute h-2 w-2 bg-blue-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+              <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
             </a>
           </nav>
           <div>
@@ -125,6 +127,7 @@ const Notification = () => {
           </div>
         </div>
       </section>
+      </div>
     </div>
     // </Layout>
   );
