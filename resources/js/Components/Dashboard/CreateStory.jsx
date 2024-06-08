@@ -28,7 +28,11 @@ function CreateStory() {
   };
 
   const handleTextChange = (e) => {
-    setText(e.target.value);
+    if (image ==null || image =="") {
+      alert('Please upload an image first.');
+    }else{
+      setText(e.target.value);
+    }
   };
 
   const handlePreview = () => {

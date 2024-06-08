@@ -41,6 +41,7 @@
     color: #FFFFFF;
     border: none;
     cursor: pointer;
+    font-family: 'Nunito Sans';
   }
   
   .cancel-button {
@@ -51,6 +52,7 @@
     cursor: pointer;
     background-color: transparent;
     color: #979797;
+    font-family: 'Nunito Sans';
   }
   
   .close-modal-button {
