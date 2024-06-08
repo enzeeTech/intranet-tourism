@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PopupContent from '../Reusable/PopupContent';
+import { data } from 'autoprefixer';
 
 const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
   <div className="py-3">
@@ -35,6 +36,8 @@ const FileTable = () => {
         const filesData = response.data.data.data; // Adjust this path based on the actual structure
         setFiles(filesData);
         setLoading(false);
+        // const { data } = await axios.request(options);
+        // console.log(data);
       } catch (error) {
         console.error(error);
         setLoading(false);
