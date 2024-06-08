@@ -13,6 +13,6 @@ class MediaController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Media');
+        return Inertia::render('Media', ['id' => auth()->id()]);
     }
 }

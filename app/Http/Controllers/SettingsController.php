@@ -9,6 +9,6 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        return Inertia::render('settings');
+        return Inertia::render('settings', ['id' => auth()->id()]);
     }
 }

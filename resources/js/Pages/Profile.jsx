@@ -28,13 +28,14 @@ export default function Profile() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
-        email: "aisyahbintemusa@tourism.gov.my",
-        department: "Pejabat Timbalan Ketua Pengarah (Promosi)",
-        position: "Tetap",
-        grade: "N11",
-        location: "Tingkat 18",
-        phone: "+03 8891 8094",
-        whatsapp: "+6014 971 8736",
+        name: "", // Add name field
+        email: "",
+        department: "",
+        position: "",
+        grade: "",
+        location: "",
+        phone: "",
+        whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [originalPhoto, setOriginalPhoto] = useState(photo);
@@ -54,9 +55,7 @@ export default function Profile() {
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch("/api/crud/users", {
-            method: "GET",
-        })
+        fetch(`/api/crud/users?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
@@ -77,6 +76,18 @@ export default function Profile() {
                             setProfileData((prevProfileData) => ({
                                 ...prevProfileData,
                                 name: currentUserData.name,
+                            }));
+                            setFormData((prevFormData) => ({
+                                ...prevFormData,
+                                name: currentUserData.name,
+                                email: currentUserData.email,
+                                department: currentUserData.department,
+                                position: currentUserData.position,
+                                grade: currentUserData.grade,
+                                location: currentUserData.location,
+                                // phone: currentUserData.phone,
+                                phone: currentUserData.profile?.phone_no || "",
+                                whatsapp: currentUserData.whatsapp,
                             }));
                         } else {
                             console.log(`User with ID ${id} not found in fetched data.`);
@@ -159,6 +170,7 @@ export default function Profile() {
                                     <div className="flex-auto my-auto max-md:max-w-full">
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
+                                                name={formData.name} // Add name field
                                                 photo={photo}
                                                 email={formData.email}
                                                 department={formData.department}
