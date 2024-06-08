@@ -103,7 +103,7 @@ export default function MyComponent() {
     <main className="xl:pl-96 w-full">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
-            <div className="w-full bg-white h-[485px] shadow-custom">
+            <div className="w-full">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
                             profileImage={profileData.profileImage}
@@ -161,20 +161,19 @@ export default function MyComponent() {
                     </div>
                     </main>
                     <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-                            <div className="file-directory-header">
-                                <PageTitle title="My Profile" />
-                            </div>
-                        <hr className="file-directory-underline" />
+        <div className="file-directory-header">
+          <PageTitle title="My Profile" />
+        </div>
+        <hr className="file-directory-underline" />
 
-                        <div>
-                            <FeaturedEvents />
-                            <WhosOnline />
-                        </div>
-                    </aside>
+        <div>
+            <FeaturedEvents />
+            <WhosOnline />
+        </div>
+    </aside>
     </Example>
 
+                    
 
-                    
-
-    );
+    );
 }

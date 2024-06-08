@@ -1,54 +1,31 @@
 import React, { useState } from "react";
 
-const ProfileCard = ({ name, role, status, imageSrc, altText }) => {
-  const getStatusIndicatorClass = (status) => {
-    switch (status) {
-      case "Online":
-        return "bg-green-500";
-      case "Away":
-        return "bg-yellow-500";
-      case "Offline":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
+const ProfileCard = ({ name, role, status, imageSrc, altText }) => (
+  <div className="flex gap-3 mt-10 hover:bg-blue-100 w-full">
 
-  return (
-    <div className="flex gap-3 hover:bg-blue-100 w-full px-0 py-5">
-    <div className="relative flex items-center h-16 sm:h-[75px]">
-        <img
-          loading="lazy"
-          src={imageSrc}
-          alt={altText}
-          className="shrink-0 w-16 h-16 sm:w-[75px] sm:h-[75px] rounded-full"
-        />
-        <div
-          className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white ${getStatusIndicatorClass(status)}`}
-        />
-      </div>
+    <img loading="lazy" src={imageSrc} alt={altText} className="shrink-0 aspect-[0.97] w-[68px]" />
     <div className="flex flex-col self-start mt-2.5">
-      <div className="text-base sm:text-lg font-extrabold">{name}</div>
-      <div className="mt-2 sm:mt-0 text-sm">{role}</div>
-      <div className="mt-2 sm:mt-4 text-xs text-neutral-800 text-opacity-50">{status}</div>
+      <div className="text-lg font-extrabold">{name}</div>
+      <div className="mt-2 text-sm">{role}</div>
+      <div className="mt-4 text-xs text-neutral-800 text-opacity-50">{status}</div>
     </div>
+
   </div>
-  );
-};
+);
 
 const MyComponent = () => {
   const profiles = [
-    { name: "Apes", role: "amazon", status: "Online", imageSrc: "/assets/smile.jpg", altText: "Iskander Mirza's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "/assets/person.svg", altText: "Nor Rahimah Binti Ariffin's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Iskander Mirza's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "/assets/person.svg", altText: "Nor Rahimah Binti Ariffin's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b69229fef789e65ccbbd40f5084486249b34607e63cbed1fb5f8163bdb13848d?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Iskander Mirza's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/6954c899b9516ae5758ea91f8d51a68d4b0239ba37bbe41db764c7680a6f3b25?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/c43d93545cf604bc894b11a43e5bf867b2f30f33f4fd4e7302d371c6fc6cd2cc?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Nor Rahimah Binti Ariffin's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5d92ce50067115f60fa94f3675e4a836947ca7e839206e7618b8c3ea3aae032f?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/863d540b8b11568ee552694df1f5331c01430254c682474061825b671ca1f620?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Iskander Mirza", role: "Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b69229fef789e65ccbbd40f5084486249b34607e63cbed1fb5f8163bdb13848d?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Iskander Mirza's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/6954c899b9516ae5758ea91f8d51a68d4b0239ba37bbe41db764c7680a6f3b25?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Nor Rahimah Binti Ariffin", role: "Setiausaha Pejabat", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/c43d93545cf604bc894b11a43e5bf867b2f30f33f4fd4e7302d371c6fc6cd2cc?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Nor Rahimah Binti Ariffin's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5d92ce50067115f60fa94f3675e4a836947ca7e839206e7618b8c3ea3aae032f?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/863d540b8b11568ee552694df1f5331c01430254c682474061825b671ca1f620?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
+    { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/9073ec69c990f59e63adb3c1bc5bef83837496a800b7347ced2f2725efac325e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
   ];
 
   const [statusFilter, setStatusFilter] = useState("Online");
@@ -58,68 +35,48 @@ const MyComponent = () => {
   };
 
   return (
-    <div className="w-full bg-slate-100">
-      <section className="flex flex-row justify-center gap-5 rounded-xl shadow-lg max-w-1920 max-md:flex-wrap max-md:pl-5 max-h-full">
-      <header className="font-sans text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
-          Who’s Online
-          <div className="font-extrabold text-neutral-800 mt-2 mb-6 border-b-2 border-neutral-300"></div>
-        </header>
-        <div className="container max-w-screen-lg bg-white py-10 rounded-xl mt-10 sm:mt-40 mb-40 items-start shadow-2xl mx-5">
-          <div className="flex flex-col text-neutral-800 px-4  sm:px-10">
-            <header className="text-xl sm:text-2xl font-extrabold text-neutral-800 ml-2 sm:-ml-1">
-              Online List
-            </header>
-<div className=" flex flex-row  justify-start items-start sm:flex-row gap-2 sm:gap-4 mt-2 text-lg font-semibold text-neutral-800 ml-2 sm:ml-0 max-md:pr-5 ">
-  <div className="relative flex items-center gap-1 sm:ml-0 ">
-    <button
-      className={`grow ${statusFilter === "Online" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
-      onClick={() => handleStatusFilter("Online")}
-    >
-      Online
-    </button>
-    <div
-      className={`w-3 h-3 rounded-full border-2 border-white ${statusFilter === "Online" ? "bg-green-500" : "bg-green-500 opacity-50"}`}
-    />
-  </div>
-  <div className="relative flex items-center gap-1">
-    <button
-      className={`grow ${statusFilter === "Away" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
-      onClick={() => handleStatusFilter("Away")}
-    >
-      Away
-    </button>
-    <div className="w-6 h-6 rounded-full border-2 border-white">
-      {statusFilter === "Away" ? (
-        <img src="/assets/awayicon1.svg" alt="Active Away Icon" className="w-full h-full" />
-      ) : (
-        <img src="/assets/awayicon.svg" alt="Inactive Away Icon" className="w-full h-full opacity-50" />
-      )}
-    </div>
-  </div>
-  <div className="relative flex items-center gap-1">
-    <button
-      className={`grow ${statusFilter === "Offline" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
-      onClick={() => handleStatusFilter("Offline")}
-    >
-      Offline
-    </button>
-    <div
-      className={`w-3 h-3 rounded-full border-2 border-white ${statusFilter === "Offline" ? "bg-red-500" : "bg-red-500 opacity-50"}`}
-    />
-  </div>
-</div>
+    <section className=" object-center	 flex flex-center gap-5 justify-between pt-7 pr-2 pb-2.5 pl-9 bg-slate-200 rounded-xl shadow-sm max-w-1920 max-md:flex-wrap max-md:pl-5">
 
-
-            {profiles
-              .filter((profile) => profile.status === statusFilter)
-              .map((profile, index) => (
-                <ProfileCard key={index} {...profile} />
-              ))}
+<div class="container max-w-screen-md  bg-white px-10 py-10 rounded-xl ">
+      <div className="flex flex-col text-neutral-800 ">
+        <header className="text-2xl font-extrabold text-neutral-800">Online List</header>
+        <div className="flex gap-5 mt-5 text-lg font-semibold whitespace-nowrap text-neutral-800 max-md:pr-5 ">
+          <div className="flex flex-1 gap-1">
+            <button className={`grow ${statusFilter === "Online" && "underline"} ${statusFilter === "Online" && "text-black-500"}`} onClick={() => handleStatusFilter("Online")}>Online</button>
+            <div className={`shrink-0 self-start w-3 h-3 bg-green-500 rounded-full border-2 border-white border-solid stroke-[2px] ${statusFilter !== "Online" && "opacity-0"}`} />
+          </div>
+          <div className="flex flex-1 gap-1">
+            <button className={`grow ${statusFilter === "Away" && "underline"} ${statusFilter === "Away" && "text-black-500"}`} onClick={() => handleStatusFilter("Away")}>Away</button>
+            <div className={`shrink-0 self-start w-3 h-3 bg-yellow-500 rounded-full border-2 border-white border-solid stroke-[2px]  ${statusFilter !== "Away" && "opacity-0"}`} />
+          </div>
+          <div className="flex flex-1 gap-1.5 self-start">
+            <button className={`grow ${statusFilter === "Offline" && "underline"} ${statusFilter === "Offline" && "text-black-500"}`} onClick={() => handleStatusFilter("Offline")}>Offline</button>
+            <div className={`shrink-0 self-start w-3 h-3 bg-red-500 rounded-full border-2 border-white border-solid stroke-[2px] ${statusFilter !== "Offline" && "opacity-0"}`} />
           </div>
         </div>
-      </section>
-    </div>
+        {profiles
+          .filter((profile) => profile.status === statusFilter)
+          .map((profile, index) => (
+            <ProfileCard key={index} {...profile} />
+          ))}
+      </div>
+      {/* <aside className="flex flex-col items-start my-auto max-md:hidden"> */}
+
+        {/* <div className="flex gap-5 self-stretch"> */}
+          {/* <div className="flex flex-col flex-1 self-end mt-16 max-md:hidden max-md:mt-10">
+            <div className="shrink-0 w-3 h-3 bg-green-500 rounded-full" />
+            <div className="shrink-0 mt-24 w-3 h-3 bg-green-500 rounded-full max-md:mt-10" />
+            <div className="shrink-0 mt-24 w-3 h-3 bg-green-500 rounded-full max-md:mt-10" />
+          </div> */}
+          {/* <div className="shrink-0 w-2 h-80 rounded bg-zinc-300" /> */}
+        {/* </div> */}
+        {/* <div className="shrink-0 mt-20 w-3 h-3 bg-green-500 rounded-full max-md:mt-10" />
+        <div className="shrink-0 mt-24 w-3 h-3 bg-green-500 rounded-full max-md:mt-10" />
+        <div className="shrink-0 mt-24 w-3 h-3 bg-green-500 rounded-full max-md:mt-10" />
+      </aside> */}
+  </div>
+    </section>
   );
 };
 
-export default MyComponent;
+export default MyComponent; 

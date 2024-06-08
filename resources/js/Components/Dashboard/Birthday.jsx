@@ -43,6 +43,4 @@ function Birthday() {
   );
 }
 
-// this page related with dashboard
-
 export default Birthday;

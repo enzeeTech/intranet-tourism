@@ -1,4 +1,4 @@
-import React, { Fragment,useState } from 'react';
+import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 // import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import logo from '../../../public/assets/logo.png';
@@ -7,30 +7,10 @@ import search from '../../../public/assets/search.png';
 import profileDummy from '../../../public/assets/profileDummy.png';
 import './Reusable/css/General.css';
 import NotificationPopup from '../Components/Noti-popup-test';
-
 // import styles from './styles.css';
 
 
-
 const Header = () => {
-
-
-  
-    const [isActive, setIsActive] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-  
-    const handleClick = () => {
-      setIsActive(!isActive);
-    };
-  
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
-  
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
-
   return (
     <header className="fixed top-0 z-50 flex w-full items-center justify-between p-4 bg-transparent shadow-custom">
       <a href= '../dashboard'><img src={logo}   alt="Logo" className="h-12 ml-8" /> </a>
@@ -46,31 +26,17 @@ const Header = () => {
         />
       </div>
 
-
       <div className="flex items-center">
 
         <Menu as="div" className="relative inline-block text-left">
 
           <div >
-      <Menu.Button
-        className="relative focus:outline-none hover:underline"
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <img
-          src={
-            isActive
-              ? '/assets/activeBell.svg' // Image when active
-              : isHovered
-              ? '/assets/hoverBell.svg' // Image when hovered
-              : '/assets/notification.png' // Default image
-          }
-          alt="Notification"
-          className="w-5 h-6 mr-1"
-        />
-        <div className="absolute top-0 left-0 w-10 h-10 transition duration-300 ease-in-out rounded-sm opacity-0"></div>
-      </Menu.Button>
+            <Menu.Button className="relative focus:outline-none hover:underline ">
+            <img src= "/assets/notification.png" alt="Notification" className="w-5 h-6 mr-1" />
+              <div className="absolute top-0 left-0 w-10 h-10 transition duration-300 ease-in-out rounded-sm opacity-0 ">
+
+              </div>
+            </Menu.Button>
           </div>
 
           <Transition

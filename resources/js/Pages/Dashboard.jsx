@@ -9,25 +9,19 @@ import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { Filter } from '@/Components/Reusable/WallPosting';
 import { OutputData } from '@/Components/Reusable/WallPosting';
 
-
 const Dashboard = () => {
-  
-    
+
   return (
     <Example>
         <main className="xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <Stories />
-
                 {/* <CreateStory /> */}
                 {/* <Birthday /> */}
                 {/* <div className="featured-events-container"> */}
-
                 <ShareYourThoughts />
                 <Filter />
-
                 {/* </div> */}
-
                 <div className="mb-20"></div>
                 <OutputData />
             </div>

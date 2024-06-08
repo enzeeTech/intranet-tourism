@@ -11,31 +11,3 @@
     outline:solid green 1px;
 }
 
-
-/* Targeting the container */
-.relative {
-  /* Additional styling */
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: #888 #f1f1f1; /* Thumb and track color for Firefox */
-}
-
-/* WebKit-based browsers (Chrome, Safari) */
-.relative::-webkit-scrollbar {
-  height: 2px; /* Reduce the height for horizontal scrollbar */
-  width: 10px;  /* Reduce the width for vertical scrollbar if needed */
-}
-
-.relative::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Track color */
-  border-radius: 25px;
-}
-
-.relative::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar color */
-  border-radius: 25px;
-}
-
-.relative::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Scrollbar color on hover */
-}
-

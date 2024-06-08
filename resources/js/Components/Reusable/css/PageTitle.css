@@ -8,7 +8,7 @@
   font-weight: 600;
 }
 
-/* @media (max-width: 640px) {
+@media (max-width: 1372px) {
   .page-title-container {
       display: none;
   }
@@ -18,4 +18,5 @@
     color: #202224;
     font-weight: 600;
   }
-} */
+
+}
