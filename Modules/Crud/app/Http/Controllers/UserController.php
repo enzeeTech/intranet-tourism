@@ -9,9 +9,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            'data' => User::queryable()->paginate(),
-        ]);
+        $query = request()->query();
+        $modelBuilder = User::queryable();
+        if (array_key_exists('disabledPagination', $query)) {
+            $data = $modelBuilder->get();
+        } else {
+            $data = $modelBuilder->paginate();
+        }
+        return response()->json([ 'data' => $data ]);
     }
 
     public function show($id)

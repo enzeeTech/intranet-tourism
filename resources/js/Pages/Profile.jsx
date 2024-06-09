@@ -28,7 +28,7 @@ export default function Profile() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
-        name: "", // Add name field
+        name: "",
         email: "",
         department: "",
         position: "",
@@ -51,56 +51,91 @@ export default function Profile() {
 
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState({});
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch(`/api/crud/users?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("User data fetched:", data); // Log fetched data
-                console.log("User data structure:", data.data); // Log the structure of data.data
-                if (data && data.data) {
-                    // Check the structure of data.data
-                    const users = Array.isArray(data.data) ? data.data : data.data.data;
-                    console.log("Parsed user data:", users); // Log parsed user data
-                    if (users && users.length > 0) {
-                        setUserData(users);
-                        const currentUserData = users.find(user => user.id === id);
-                        if (currentUserData) {
-                            setProfileData((prevProfileData) => ({
-                                ...prevProfileData,
-                                name: currentUserData.name,
-                            }));
-                            setFormData((prevFormData) => ({
-                                ...prevFormData,
-                                name: currentUserData.name,
-                                email: currentUserData.email,
-                                department: currentUserData.department,
-                                position: currentUserData.position,
-                                grade: currentUserData.grade,
-                                location: currentUserData.location,
-                                // phone: currentUserData.phone,
-                                phone: currentUserData.profile?.phone_no || "",
-                                whatsapp: currentUserData.whatsapp,
-                            }));
-                        } else {
-                            console.log(`User with ID ${id} not found in fetched data.`);
-                        }
-                    } else {
-                        console.log("No user data found.");
-                    }
-                }
+        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+            method: "GET",
+        })
+
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+
+        // fetch(`/api/crud/users?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`)
+
+        // // fetch(`/api/crud/users/${id}`, {
+        // //     method: "GET",
+        // // })
+
+        //     .then((response) => {
+        //         if (!response.ok) {
+        //             throw new Error("Network response was not ok");
+        //         }
+        //         return response.json();
+        //     })
+
+        //     .then((data) => {
+        //         console.log("User data fetched:", data); // Log fetched data
+        //         console.log("User data structure:", data.data); // Log the structure of data.data
+        //         if (data && data.data) {
+        //             // Check the structure of data.data
+        //             const users = Array.isArray(data.data) ? data.data : data.data.data;
+        //             console.log("Parsed user data:", users); // Log parsed user data
+        //             if (users && users.length > 0) {
+        //                 setUserData(users);
+        //                 const currentUserData = users.find(user => user.id === id);
+        //                 if (currentUserData) {
+        //                     setProfileData((prevProfileData) => ({
+        //                         ...prevProfileData,
+        //                         name: currentUserData.name,
+        //                     }));
+        //                     setFormData((prevFormData) => ({
+        //                         ...prevFormData,
+        //                         name: currentUserData.name,
+        //                         email: currentUserData.email,
+        //                         department: currentUserData.department,
+        //                         position: currentUserData.position,
+        //                         grade: currentUserData.grade,
+        //                         location: currentUserData.location,
+        //                         // phone: currentUserData.phone,
+        //                         phone: currentUserData.profile?.phone_no || "",
+        //                         whatsapp: currentUserData.whatsapp,
+        //                     }));
+        //                 } else {
+        //                     console.log(`User with ID ${id} not found in fetched data.`);
+        //                 }
+        //             } else {
+        //                 console.log("No user data found.");
+        //             }
+        //         }
+
+            .then(({ data }) => {
+                setProfileData(pv => ({
+                    ...pv, ...data,
+                    profileImage: data.profile && data.profile.image? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                }))
+
+                setFormData((pv) => ({
+                    ...pv,
+                    name: data.name,
+                    email: data.email,
+                    department: data.department ?? 'Please set', // maybe in diff attr
+                    position: data.position,// maybe in diff attr
+                    grade: data.grade,// maybe in diff attr
+                    location: data.location,// maybe in diff attr
+                    phone: data.profile && data.profile?.phone_no || "",
+                    whatsapp: data.whatsapp,
+                }));
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id]); // Use the user ID here if needed in the effect
+    }, [id]);
 
     const photoData = [
         { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?", alt: "Photo 1" },
@@ -151,6 +186,7 @@ export default function Profile() {
         setIsEditing(true);
     };
 
+    console.log("DDD", profileData)
     return (
         <Example>
             <main className="xl:pl-96 w-full">
@@ -159,7 +195,7 @@ export default function Profile() {
                         <div className="w-full bg-white h-[485px] shadow-custom">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
+                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}

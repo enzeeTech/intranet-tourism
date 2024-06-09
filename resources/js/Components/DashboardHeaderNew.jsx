@@ -18,11 +18,37 @@ function classNames(...classes) {
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    const [userData, setUserData] = useState([]);
+    // const [userData, setUserData] = useState([]);
     const [userName, setUserName] = useState('');
 
+    // useEffect(() => {
+    //     fetch("/api/crud/users", {
+    //         method: "GET",
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error("Network response was not ok");
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((data) => {
+    //             console.log("User data:", data);
+    //             if (data && data.data && data.data.data && data.data.data.length > 0) {
+    //                 setUserData(data.data.data);
+    //                 const currentUserData = data.data.data.find(user => user.id === id);
+    //                 if (currentUserData) {
+    //                     setUserName(currentUserData.name);
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching user data:", error);
+    //         });
+    // }, [id]);
+
     useEffect(() => {
-        fetch("/api/crud/users", {
+        console.log("Fetching user data...");
+        fetch(`/api/crud/users/${id}`, {
             method: "GET",
         })
             .then((response) => {
@@ -31,20 +57,13 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
-            .then((data) => {
-                console.log("User data:", data);
-                if (data && data.data && data.data.data && data.data.data.length > 0) {
-                    setUserData(data.data.data);
-                    const currentUserData = data.data.data.find(user => user.id === id);
-                    if (currentUserData) {
-                        setUserName(currentUserData.name);
-                    }
-                }
+            .then(({ data }) => {
+                setUserName(data.name)
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id]); // Use the user ID here if needed in the effect
+    }, [id]);
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
