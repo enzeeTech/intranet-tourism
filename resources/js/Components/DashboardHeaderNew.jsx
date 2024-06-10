@@ -18,8 +18,11 @@ function classNames(...classes) {
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    // const [userData, setUserData] = useState([]);
-    const [userName, setUserName] = useState('');
+    const [userData, setUserData] = useState({
+        name: "",
+        profileImage: "",
+    });
+    // const [userName, setUserName] = useState('');
 
     // useEffect(() => {
     //     fetch("/api/crud/users", {
@@ -48,7 +51,7 @@ export default function Header({ setSidebarOpen }) {
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch(`/api/crud/users/${id}`, {
+        fetch(`/api/crud/users/${id}?with[]=profile`, {
             method: "GET",
         })
             .then((response) => {
@@ -57,8 +60,18 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
+            // .then(({ data }) => {
+            //     setUserData(data.name)
+            // })
             .then(({ data }) => {
-                setUserName(data.name)
+                console.log("DD", data)
+                setUserData(
+                    pv => ({
+                    ...pv, ...data,
+                    name: data.name,
+                    profileImage: data.profile && data.profile.image? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                })
+            )
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
@@ -112,12 +125,12 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="h-8 w-8 rounded-full bg-gray-50"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"
+                                src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">
                                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                                    {userName}
+                                    {userData.name}
                                 </span>
                                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>

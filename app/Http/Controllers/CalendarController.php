@@ -10,34 +10,34 @@ class CalendarController extends Controller
 {
     public function index()
     {
-        $events = Event::all(['id', 'title', 'start_time as start', 'end_time as end', 'color']);
+        // $events = Event::all(['id', 'title', 'start_time as start', 'end_time as end', 'color']);
 
-        return Inertia::render('Calendar', ['events' => $events]);
+        return Inertia::render('Calendar');
     }
 
-    public function getEvents()
-    {
-        $events = Event::all(['id', 'title', 'start_time as start', 'end_time as end', 'color']);
+    // public function getEvents()
+    // {
+    //     // $events = Event::all(['id', 'title', 'start_time as start', 'end_time as end', 'color']);
 
-        return response()->json($events);
-    }
+    //     return response()->json($events);
+    // }
 
-    public function handleDateSelect(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required',
-            'start' => 'required|date',
-            'end' => 'required|date|after:start',
-            'color' => 'required',
-        ]);
+    // public function handleDateSelect(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'title' => 'required',
+    //         'start' => 'required|date',
+    //         'end' => 'required|date|after:start',
+    //         'color' => 'required',
+    //     ]);
 
-        $event = new Event();
-        $event->title = $validatedData['title'];
-        $event->start_time = $validatedData['start'];
-        $event->end_time = $validatedData['end'];
-        $event->color = $validatedData['color'];
-        $event->save();
+    //     // // $event = new Event();
+    //     // $event->title = $validatedData['title'];
+    //     // $event->start_time = $validatedData['start'];
+    //     // $event->end_time = $validatedData['end'];
+    //     // $event->color = $validatedData['color'];
+    //     // $event->save();
 
-        return response()->json(['success' => true, 'message' => 'Event created successfully']);
-    }
+    //     return response()->json(['success' => true, 'message' => 'Event created successfully']);
+    // }
 }
