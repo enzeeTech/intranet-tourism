@@ -42,13 +42,13 @@
 
 //   const [OnlineData, setOnlineData] = useState({
 
-    
+
 //     name      :"",
 //     role      :"Timbalan Pengarah Kanan",
 //     status    :"Online",
 //     imageSrc  :"/assets/person.svg"
-    
-    
+
+
 
 //     // { name: "Apes", role: "amazon", status: "Online", imageSrc: "/assets/smile.jpg", altText: "Iskander Mirza's Portrait" },
 //     // { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
@@ -61,7 +61,7 @@
 //     // { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Away", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
 //     // { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Offline", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
 //     // { name: "Edzuar Zar Bin Ayob Azari", role: "Timbalan Pengarah Kanan", status: "Online", imageSrc: "/assets/person.svg", altText: "Edzuar Zar Bin Ayob Azari's Portrait" },
-  
+
 //   });
 
 //   const { props } = usePage();
@@ -345,4 +345,3 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
-    

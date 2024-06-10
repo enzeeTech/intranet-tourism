@@ -349,6 +349,7 @@ function ShareYourThoughts() {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
               alt=""
             />
+             
           </div>
         </button>
       </div>

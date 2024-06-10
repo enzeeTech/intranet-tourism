@@ -28,7 +28,7 @@ const NotificationItem = ({
             
             <p className="text-sm text-neutral-800"><strong>
               {users}</strong>
-              <span className=""> &nbsp;  Approved</span>!
+              <span className="">&nbsp;Approved</span>!
             </p>
 
             <p className="text-sm  text-neutral-800">

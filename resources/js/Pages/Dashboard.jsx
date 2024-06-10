@@ -12,6 +12,7 @@ import MyComponent from '@/Components/Reusable/CommunitySide';
 
 const Dashboard = () => {
 
+
   return (
     <Example>
       <main className="xl:pl-[calc(25%+4rem)] xl:pr-[calc(25%+2rem)]">
