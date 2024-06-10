@@ -12,6 +12,7 @@ import DeactivateModal from '../Components/Reusable/DeactivateModal';
 
 
 import './css/StaffDirectory.css';
+import Example from '@/Layouts/DashboardLayoutNew';
 
 
 const StaffDirectory = () => {
@@ -139,22 +140,10 @@ const StaffDirectory = () => {
   };
 
   return (
-    <div className="staff-directory">
-      <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
-        <div className="staff-directory-header">
-          <PageTitle title="Department" />
-        </div>
-        <hr className="staff-directory-underline" />
-        <div className="widgets-container">
-          <div className="left-widget">
-
-            <FeaturedEvents />
-            <Birthdaypopup/>
-            <WhosOnline />
-
-          </div>
-          <div className="right-widget">
-            <SearchMembers />
+    <Example>
+        <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <SearchMembers />
             <DepartmentDropdown
               departments={departments}
               onSelectDepartment={handleSelectDepartment}
@@ -173,15 +162,21 @@ const StaffDirectory = () => {
                   ))}
               </div>
             )}
-          </div>
-        </div>
-      </div>
-      <DeactivateModal
-        isOpen={isDeactivateModalOpen}
-        onClose={closeDeactivateModal}
-        onConfirm={() => console.log('Deactivated')}
-      />
-    </div>
+            </div>
+            </main>
+
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <div className="file-directory-header">
+                    <PageTitle title="My Profile" />
+                </div>
+                <hr className="file-directory-underline" />
+                <div>
+                    <FeaturedEvents />
+                    <Birthdaypopup/>
+                    <WhosOnline />
+                </div>
+            </aside>
+    </Example>
   );
 };
 
