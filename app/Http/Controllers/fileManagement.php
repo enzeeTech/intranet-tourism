@@ -8,6 +8,6 @@ class fileManagement extends Controller
 {
     public function index()
     {
-        return Inertia::render('fileManagement');
+        return Inertia::render('fileManagement', ['id' => auth()->id()]);
     }
 }

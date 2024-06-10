@@ -8,6 +8,6 @@ class Commmmunity extends Controller
 {
     public function index()
     {
-        return Inertia::render('Community');
+        return Inertia::render('Community', ['id' => auth()->id()]);
     }
 }

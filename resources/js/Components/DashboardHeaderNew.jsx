@@ -18,11 +18,40 @@ function classNames(...classes) {
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    const [userData, setUserData] = useState([]);
-    const [userName, setUserName] = useState('');
+    const [userData, setUserData] = useState({
+        name: "",
+        profileImage: "",
+    });
+    // const [userName, setUserName] = useState('');
+
+    // useEffect(() => {
+    //     fetch("/api/crud/users", {
+    //         method: "GET",
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error("Network response was not ok");
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((data) => {
+    //             console.log("User data:", data);
+    //             if (data && data.data && data.data.data && data.data.data.length > 0) {
+    //                 setUserData(data.data.data);
+    //                 const currentUserData = data.data.data.find(user => user.id === id);
+    //                 if (currentUserData) {
+    //                     setUserName(currentUserData.name);
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching user data:", error);
+    //         });
+    // }, [id]);
 
     useEffect(() => {
-        fetch("/api/crud/users", {
+        console.log("Fetching user data...");
+        fetch(`/api/crud/users/${id}?with[]=profile`, {
             method: "GET",
         })
             .then((response) => {
@@ -31,20 +60,23 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
-            .then((data) => {
-                console.log("User data:", data);
-                if (data && data.data && data.data.data && data.data.data.length > 0) {
-                    setUserData(data.data.data);
-                    const currentUserData = data.data.data.find(user => user.id === id);
-                    if (currentUserData) {
-                        setUserName(currentUserData.name);
-                    }
-                }
+            // .then(({ data }) => {
+            //     setUserData(data.name)
+            // })
+            .then(({ data }) => {
+                console.log("DD", data)
+                setUserData(
+                    pv => ({
+                    ...pv, ...data,
+                    name: data.name,
+                    profileImage: data.profile && data.profile.image? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                })
+            )
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id]); // Use the user ID here if needed in the effect
+    }, [id]);
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -93,12 +125,12 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="h-8 w-8 rounded-full bg-gray-50"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"
+                                src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">
                                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                                    {userName}
+                                    {userData.name}
                                 </span>
                                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>

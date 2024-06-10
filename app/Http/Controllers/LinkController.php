@@ -9,6 +9,6 @@ class LinkController extends Controller
 {
     public function index()
     {
-        return Inertia::render('link');
+        return Inertia::render('link', ['id' => auth()->id()]);
     }
 }
