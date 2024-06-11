@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import SettingNavigation from './SettingsComponent';
+import React from 'react';
 
-const SettingsPage = () => {
-    const [currentPage, setCurrentPage] = useState('Account Settings');
-
+const SettingsPage = ({ currentPage }) => {
     const renderContent = () => {
         switch (currentPage) {
             case 'Account Settings':
@@ -29,14 +26,7 @@ const SettingsPage = () => {
         }
     };
 
-    return (
-        <div className="flex">
-            <SettingNavigation current={currentPage} setCurrent={setCurrentPage} />
-            <main className="flex-1 p-4">
-                {renderContent()}
-            </main>
-        </div>
-    );
+    return <div>{renderContent()}</div>;
 };
 
 export default SettingsPage;
