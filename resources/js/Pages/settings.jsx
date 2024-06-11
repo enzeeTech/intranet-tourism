@@ -5,7 +5,7 @@ import SettingNavigation from '@/Components/Settings/SettingsComponent';
 import SettingsPage from '@/Components/Settings/SettingsPage';
 
 const Settings = () => {
-    const [currentPage, setCurrentPage] = useState('Account Settings');
+    const [currentPage, setCurrentPage] = useState('Basic Settings');
 
     return (
         <Example>

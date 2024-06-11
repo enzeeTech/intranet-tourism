@@ -1,32 +1,68 @@
 import React from 'react';
 
-const SettingsPage = ({ currentPage }) => {
-    const renderContent = () => {
-        switch (currentPage) {
-            case 'Account Settings':
-                return <div>Account Settings Content</div>;
-            case 'Themes':
-                return <div>Themes Content</div>;
-            case 'Advance Settings':
-                return <div>Advance Settings Content</div>;
-            case 'Departments':
-                return <div>Departments Content</div>;
-            case 'Categories':
-                return <div>Categories Content</div>;
-            case 'Requests':
-                return <div>Requests Content</div>;
-            case 'Audit Trail':
-                return <div>Audit Trail Content</div>;
-            case 'Feedback':
-                return <div>Feedback Content</div>;
-            case 'Birthday Template':
-                return <div>Birthday Template Content</div>;
-            default:
-                return <div>Select an option</div>;
-        }
-    };
 
-    return <div>{renderContent()}</div>;
+const SettingsPage = ({ currentPage }) => {
+    return (
+        <div>
+            <h1>{currentPage}</h1>
+            {currentPage === 'Basic Settings' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Themes' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Advance Settings' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Department' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Media' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Requests' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Audit Trail' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Feedback' && <div></div>}
+
+
+
+
+
+            {currentPage === 'Birthday Template' && <div></div>}
+
+
+
+
+            
+            {currentPage === 'Pautan' && <div></div>}
+        </div>
+    );
 };
 
 export default SettingsPage;
+
