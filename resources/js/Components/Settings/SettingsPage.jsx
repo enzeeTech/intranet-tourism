@@ -110,7 +110,7 @@ const SettingsPage = ({ currentPage }) => {
 
   return (
     <div>
-      <h1>{currentPage}</h1>
+      <h1 className="hidden">{currentPage}</h1>
       {currentPage === 'Basic Settings' && <div></div>}
       {currentPage === 'Themes' && <ThemeComponent onSave={handleSave} />}
       {currentPage === 'Advance Settings' && <div></div>}
