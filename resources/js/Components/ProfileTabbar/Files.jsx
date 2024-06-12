@@ -11,7 +11,7 @@ const SearchInput = () => (
     />
     <input
       type="text"
-      className="w-full py-2 pr-4 text-black border-none input-focus-style"
+      className="w-full py-2 pr-4 text-black border-none focus:outline-none"
       placeholder="Search"
     />
   </div>

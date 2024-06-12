@@ -5,8 +5,10 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
-import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
+import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -58,76 +60,26 @@ export default function Profile() {
         fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
-
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-
-        // fetch(`/api/crud/users?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`)
-
-        // // fetch(`/api/crud/users/${id}`, {
-        // //     method: "GET",
-        // // })
-
-        //     .then((response) => {
-        //         if (!response.ok) {
-        //             throw new Error("Network response was not ok");
-        //         }
-        //         return response.json();
-        //     })
-
-        //     .then((data) => {
-        //         console.log("User data fetched:", data); // Log fetched data
-        //         console.log("User data structure:", data.data); // Log the structure of data.data
-        //         if (data && data.data) {
-        //             // Check the structure of data.data
-        //             const users = Array.isArray(data.data) ? data.data : data.data.data;
-        //             console.log("Parsed user data:", users); // Log parsed user data
-        //             if (users && users.length > 0) {
-        //                 setUserData(users);
-        //                 const currentUserData = users.find(user => user.id === id);
-        //                 if (currentUserData) {
-        //                     setProfileData((prevProfileData) => ({
-        //                         ...prevProfileData,
-        //                         name: currentUserData.name,
-        //                     }));
-        //                     setFormData((prevFormData) => ({
-        //                         ...prevFormData,
-        //                         name: currentUserData.name,
-        //                         email: currentUserData.email,
-        //                         department: currentUserData.department,
-        //                         position: currentUserData.position,
-        //                         grade: currentUserData.grade,
-        //                         location: currentUserData.location,
-        //                         // phone: currentUserData.phone,
-        //                         phone: currentUserData.profile?.phone_no || "",
-        //                         whatsapp: currentUserData.whatsapp,
-        //                     }));
-        //                 } else {
-        //                     console.log(`User with ID ${id} not found in fetched data.`);
-        //                 }
-        //             } else {
-        //                 console.log("No user data found.");
-        //             }
-        //         }
-
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
             .then(({ data }) => {
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-                }))
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
                     email: data.email,
                     department: data.department ?? 'Please set', // maybe in diff attr
-                    position: data.position,// maybe in diff attr
-                    grade: data.grade,// maybe in diff attr
-                    location: data.location,// maybe in diff attr
+                    position: data.position, // maybe in diff attr
+                    grade: data.grade, // maybe in diff attr
+                    location: data.location, // maybe in diff attr
                     phone: data.profile && data.profile?.phone_no || "",
                     whatsapp: data.whatsapp,
                 }));
@@ -136,17 +88,6 @@ export default function Profile() {
                 console.error("Error fetching user data:", error);
             });
     }, [id]);
-
-    const photoData = [
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?", alt: "Photo 1" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Photo 2" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc01566f85a165f9e8c89da57eaa7e81212a8fa1e58ed53877c900bf64c5baf1?", alt: "Photo 3" },
-    ];
-
-    const videoData = [
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?", alt: "Video 1" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Video 2" },
-    ];
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -186,7 +127,13 @@ export default function Profile() {
         setIsEditing(true);
     };
 
-    console.log("DDD", profileData)
+    const handleSelectMedia = (selectedMedia) => {
+        console.log("Selected Media:", selectedMedia);
+        // Handle media selection logic here
+    };
+
+    console.log("DDD", profileData);
+
     return (
         <Example>
             <main className="xl:pl-96 w-full">
@@ -235,7 +182,10 @@ export default function Profile() {
                                 </section>
                             )}
                             {activeTab === "gallery" && (
-                                <ProfileGallery photoData={photoData} videoData={videoData} />
+                                <section>
+                                    <ImageProfile selectedItem="All" />
+                                    <VideoProfile selectedItem="All" />
+                                </section>
                             )}
                             {activeTab === "files" && (
                                 <div>
@@ -266,3 +216,4 @@ export default function Profile() {
         </Example>
     );
 }
+

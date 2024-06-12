@@ -1,137 +1,130 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
-const files = [
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  // More files...
-]
+const ImageComponent = ({ src, alt, className }) => (
+  <img
+    loading="lazy"
+    src={src}
+    alt={alt}
+    className={className}
+    style={{ objectFit: "cover", width: "100%", height: "100%" }}
+  />
+);
 
-const videoData = [
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  {
-    title: 'IMG_4985.HEIC',
-    size: '3.9 MB',
-    source:
-      'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80',
-  },
-  // More files...
-]
+const ImageProfile = ({ selectedItem }) => {
+  const [images, setImages] = useState([]);
 
-function ProfileGallery() {
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/crud/resources")
+      .then((response) => response.json())
+      .then((data) => {
+        const imagePaths = data.data.data
+          .filter((item) => {
+            // Check if the item is an image, you can adjust the condition based on your API response
+            const fileExtension = item.path.split('.').pop().toLowerCase();
+            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+          })
+          .map((item) => ({
+            src: `http://127.0.0.1:8000/storage/${item.path}`,
+            alt: `Description ${item.id}`,
+            category: item.attachable_type // Adjust as per your condition
+          }));
+        setImages(imagePaths);
+      })
+      .catch((error) => console.error("Error fetching images:", error));
+  }, []);
+
+  // Filter images based on selectedItem
+  const filteredImages = selectedItem === "All" ? images : images.filter((image) => image.category === selectedItem);
+
   return (
-    <div className="flex flex-col w-full mt-6">
-      <section className="px-6 py-6 w-full bg-white rounded-md shadow-custom max-md:px-5 max-md:max-w-full">
-        <div className="text-2xl font-bold text-neutral-800 mb-6">Photo</div>
-        <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-          {files.map((file, index) => (
-            <li key={`${file.source}-${index}`} className="relative">
-              <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                <img src={file.source} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
-                <button type="button" className="absolute inset-0 focus:outline-none">
-                  <span className="sr-only">View details for {file.title}</span>
-                </button>
-              </div>
-              <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{file.title}</p>
-              <p className="pointer-events-none block text-sm font-medium text-gray-500">{file.size}</p>
-            </li>
-          ))}
-        </ul>
+    <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-6">
+      <header>
+        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+          Images
+        </h1>
+        <hr className="underline" />
+      </header>
+      <section className="mt-8 max-md:max-w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {filteredImages.length > 0 ? (
+            filteredImages.map((img, index) => (
+              <figure key={index} className="flex flex-col">
+                <ImageComponent
+                  src={img.src}
+                  alt={img.alt}
+                  className="grow shrink-0 w-full h-full"
+                />
+              </figure>
+            ))
+          ) : (
+            <p>No Images available...</p>
+          )}
+        </div>
       </section>
-      <section className="px-6 py-6 w-full bg-white rounded-md shadow-custom max-md:px-5 max-md:max-w-full mt-10">
-        <div className="text-2xl font-bold text-neutral-800 mb-6">Videos</div>
-        <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-          {videoData.map((video, index) => (
-            <li key={`${video.source}-${index}`} className="relative">
-              <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                <img src={video.source} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
-                <button type="button" className="absolute inset-0 focus:outline-none">
-                  <span className="sr-only">View details for {video.title}</span>
-                </button>
-              </div>
-              <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{video.title}</p>
-              <p className="pointer-events-none block text-sm font-medium text-gray-500">{video.size}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
+    </section>
   );
-}
+};
 
-export default ProfileGallery;
+const VideoComponent = ({ src, alt, className }) => (
+  <video controls className={className}>
+    <source src={src} type="video/mp4" />
+    {alt}
+  </video>
+);
 
+const VideoProfile = ({ selectedItem }) => {
+  const [videos, setVideos] = useState([]);
 
-// function MediaItem({ src, alt }) {
-//   return (
-//     <div className="flex flex-col w-[18%] max-md:ml-0 max-md:w-full">
-//       <img
-//         loading="lazy"
-//         src={src}
-//         alt={alt}
-//         className="grow shrink-0 mt-3.5 max-w-full aspect-[1.19] w-auto max-md:mt-10"
-//       />
-//     </div>
-//   );
-// }
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/crud/resources")
+      .then((response) => response.json())
+      .then((data) => {
+        const videoPaths = data.data.data
+          .filter((item) => {
+            // Check if the item is a video, you can adjust the condition based on your API response
+            const fileExtension = item.path.split('.').pop().toLowerCase();
+            return ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension);
+          })
+          .map((item) => ({
+            src: `http://127.0.0.1:8000/storage/${item.path}`,
+            alt: `Description ${item.id}`,
+            category: item.attachable_type // Adjust as per your condition
+          }));
+        setVideos(videoPaths);
+      })
+      .catch((error) => console.error("Error fetching videos:", error));
+  }, []);
 
-// export function ProfileGallery() {
-//   return (
-    // <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-    //   {files.map((file) => (
-    //     <li key={file.source} className="relative">
-    //       <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-    //         <img src={file.source} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
-    //         <button type="button" className="absolute inset-0 focus:outline-none">
-    //           <span className="sr-only">View details for {file.title}</span>
-    //         </button>
-    //       </div>
-    //       <p className="pointer-events-none mt-2 block truncate text-sm font-medium text-gray-900">{file.title}</p>
-    //       <p className="pointer-events-none block text-sm font-medium text-gray-500">{file.size}</p>
-    //     </li>
-    //   ))}
-    // </ul>
-//   )
-// }
+  // Filter videos based on selectedItem
+  const filteredVideos = selectedItem === "All" ? videos : videos.filter((video) => video.category === selectedItem);
 
-// export default ProfileGallery;
+  return (
+    <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-4">
+      <header>
+        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+          Videos
+        </h1>
+        <hr className="underline" />
+      </header>
+      <section className="mt-8 max-md:max-w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {filteredVideos.length > 0 ? (
+            filteredVideos.map((video, index) => (
+              <figure key={index} className="flex flex-col">
+                <VideoComponent
+                  src={video.src}
+                  alt={video.alt}
+                  className="grow shrink-0 max-w-full aspect-[1.19] w-full"
+                />
+              </figure>
+            ))
+          ) : (
+            <p>No Videos available...</p>
+          )}
+        </div>
+      </section>
+    </section>
+  );
+};
 
-        {/* <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-          <div className="flex flex-col w-[18%] max-md:ml-0 max-md:w-full">
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/b964b38ab4577424894ab89afca98d210e5a3ab6ee6f4091065c1b0e53df2748?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-              alt="Main Photo"
-              className="self-center mt-3.5 aspect-[1.19] w-[172px]"
-            />
-          </div>
-          {photoData.map((photo, index) => (
-            <MediaItem key={index} src={photo.src} alt={photo.alt} />
-          ))}
-        </div> */}
+export { ImageProfile, VideoProfile };
