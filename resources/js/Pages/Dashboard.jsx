@@ -4,7 +4,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import Example from '../Layouts/DashboardLayoutNew';
-import { Stories, Birthday, CreateStory } from '@/Components/Dashboard';
+import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { Filter } from '@/Components/Reusable/WallPosting';
 import { OutputData } from '@/Components/Reusable/WallPosting';
@@ -15,9 +15,10 @@ const Dashboard = () => {
 
   return (
     <Example>
-      <main className="xl:pl-[calc(25%+4rem)] xl:pr-[calc(25%+2rem)]">
+      <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)]">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center">
-            <Stories />
+            {/* <Stories /> */}
+            <StoryNew />
             <ShareYourThoughts />
             <Filter />
             <div className="mb-20"></div>
@@ -25,7 +26,7 @@ const Dashboard = () => {
         </div>
       </main>
 
-      <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+      <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-3 xl:block ">
         <div className="file-directory-header">
           <PageTitle title="My Wall" />
         </div>

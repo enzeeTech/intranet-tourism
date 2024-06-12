@@ -106,29 +106,28 @@ const Notification = () => {
       </h1>
       {/* <div className='w-1/3 border-b-2'></div> */}
 
-    <div className='border-2 rounded-xl shadow-sm max-w-[940px] mb-10'>
-      <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl shadow-2xl">
-        <div className="flex flex-col pb-5">
-          <h2 className="text-4xl font-extrabold text-neutral-800 pl-6 pr-6">
-            Notifications
-          </h2>
-          <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
-            <a href="#" className="underline">All</a>
-            <a href=" /notification-unread" className='text-gray-500 relative '>
-              Unread
-              <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
-              <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
-            </a>
-          </nav>
-          <div>
-            {notificationData.map((notification, index) => (
-              <NotificationItem key={index} {...notification} />
-            ))}
-          </div>
+        <div className='border-2 rounded-xl shadow-sm max-w-[940px] mb-10'>
+        <section className="flex flex-col gap-5 pt-7 mt-4 w-full bg-white rounded-xl shadow-2xl">
+            <div className="flex flex-col pb-5">
+            <h2 className="text-4xl font-extrabold text-neutral-800 pl-6 pr-6">
+                Notifications
+            </h2>
+            <nav className="flex gap-5 justify-between self-start pl-6 pr-6 pb-5 mt-6 text-lg font-semibold whitespace-nowrap text-neutral-800 max-sm:self-center">
+                <a href="#" className="underline">All</a>
+                <a href=" /notification-unread" className='text-gray-500 relative '>
+                Unread
+                <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+                <span className="absolute h-2 w-2 bg-orange-200 rounded-full top-1/2 transform -translate-y-1/2 ml-2"></span>
+                </a>
+            </nav>
+            <div>
+                {notificationData.map((notification, index) => (
+                <NotificationItem key={index} {...notification} />
+                ))}
+            </div>
+            </div>
+        </section>
         </div>
-      </section>
-      </div>
-      </div>
     </div>
     // </Layout>
   );
