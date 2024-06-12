@@ -102,7 +102,7 @@ function Navigation() {
 
   return (
     <div>
-      <nav className="flex border-2 border-gray-300 gap-5 items-start px-9 py-6 w-full text-sm font-semibold text-center bg-gray-200 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+      <nav className="flex  gap-5 items-start px-9 py-6  w-full text-sm font-semibold text-center bg-white rounded-b-2xl shadow-xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
         <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
@@ -119,7 +119,7 @@ function Navigation() {
 
       {activeTab === "Files" && (
         <div>
-          <div className="flex gap-4 whitespace-nowrap">
+          <div className="flex gap-4 whitespace-nowrap ml-12">
             <SearchInput />
             <SearchButton />
           </div>
@@ -133,8 +133,8 @@ function Navigation() {
 
       {activeTab === 'Post' && (
         <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-          <div className="max-w-[900px] w-full ml-4 whitespace-nowrap">
-            <ShareYourThoughtsDepart />
+          <div className="max-w-[900px] w-full ml-4 whitespace-nowrap absolute content-items">
+            <ShareYourThoughtsDepart /><br></br>
             <Filter/>
           </div>
         </div>
@@ -145,7 +145,7 @@ function Navigation() {
 
 function Adminsection() {
   return (
-    <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-4 bg-transparent">
+    <div className='w-[875px]'>
       <HeaderSection />
       <Navigation />
     </div>

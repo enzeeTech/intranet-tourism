@@ -114,18 +114,18 @@ function ShareYourThoughtsDepart() {
     };
 
   return (
-    <section className="flex flex-col justify-center text-sm max-w-[610px] text-neutral-800 ">
-      <div className="input-box-container mt-16 flex gap-5 justify-between px-8 pt-5 pb-2 w-24 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-        <div className="flex flex-col">
+    <section className="flex flex-col justify-center text-sm max-w-[875px] text-neutral-800 border-2 shadow-xl rounded-xl">
+      <div className="input-box-container flex gap-5 justify-between border-2 border-slaute-200 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px max-md:max-w-full" style={{ width: "875px", height: "90px" }}>
+      <div className="flex flex-col">
           <textarea
             ref={textAreaRef}
             value={inputValue}
             onChange={handleChange}
             placeholder="Share Your Thoughts..."
-            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline"
+            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline w-full h-[70px]"
             style={{
               width: "540px",
-              height: "1000px", // Set the desired height
+              maxHeight: "1000px", // Set the desired height
               outline: "none", // Remove the default outline on focus
               border: "none", // Remove the border
             }}
@@ -136,7 +136,7 @@ function ShareYourThoughtsDepart() {
               loading="lazy"
               src="assets/inputpolls.svg"
               alt="Icon 1"
-              className="w-[15px] h-auto"
+              className="w-[15px] h-auto "  
               onClick={handleClickPoll}
             />
             {/* Repeat for the other icons */}
@@ -186,7 +186,7 @@ function ShareYourThoughtsDepart() {
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
           alt=""
-          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-1 -ml-16"
+          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-4 -ml-4 border-2"
         />
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}
