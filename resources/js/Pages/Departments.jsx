@@ -170,10 +170,10 @@ const StaffDirectory = () => {
                     <PageTitle title="My Profile" />
                 </div>
                 <hr className="file-directory-underline" />
-                <div>
+                <div > 
                     <FeaturedEvents />
-                    <Birthdaypopup/>
-                    <WhosOnline />
+                    <Birthdaypopup className='mb-4'/><br></br>
+                    <WhosOnline className='mb-4'/>
                 </div>
             </aside>
     </Example>

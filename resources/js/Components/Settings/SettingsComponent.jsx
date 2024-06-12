@@ -1,28 +1,18 @@
 import React from 'react';
-import {
-    CalendarIcon,
-    ChartPieIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
-    HomeIcon,
-    UsersIcon,
-} from '@heroicons/react/24/outline';
+import classNames from 'classnames'
 
 const navigation = [
-    { name: 'Account Settings', href: '#', icon: HomeIcon },
-    { name: 'Themes', href: '#', icon: UsersIcon },
-    { name: 'Advance Settings', href: '#', icon: FolderIcon },
-    { name: 'Departments', href: '#', icon: CalendarIcon },
-    { name: 'Categories', href: '#', icon: DocumentDuplicateIcon },
-    { name: 'Requests', href: '#', icon: ChartPieIcon },
-    { name: 'Audit Trail', href: '#', icon: ChartPieIcon },
-    { name: 'Feedback', href: '#', icon: ChartPieIcon },
-    { name: 'Birthday Template', href: '#', icon: ChartPieIcon },
+    { name: 'Basic Settings', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Themes', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Advance Settings', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Departments', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Media', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Requests', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Audit Trail', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Feedback', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Birthday Template', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: 'Pautan', href: '#', src: "assets/Dashboard Active.svg" },
 ];
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-}
 
 const SettingNavigation = ({ current, setCurrent }) => {
     return (
@@ -41,7 +31,9 @@ const SettingNavigation = ({ current, setCurrent }) => {
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                             )}
                         >
-                            <item.icon
+                            <img
+                                src={item.src}
+                                alt={`${item.name} icon`}
                                 className={classNames(
                                     item.name === current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
                                     'h-6 w-6 shrink-0'
