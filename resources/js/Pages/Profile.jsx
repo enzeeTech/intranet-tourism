@@ -9,7 +9,6 @@ import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Co
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
 
-
 function SaveNotification({ title, content, onClose }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
@@ -213,7 +212,9 @@ export default function Profile() {
             {isSaveNotificationOpen && (
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
             )}
+            {isPopupOpen && (
+                <Popup title="Edit Banner" onClose={() => setIsPopupOpen(false)} />
+            )}
         </Example>
     );
 }
-
