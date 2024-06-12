@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRightIcon } from '@heroicons/react/20/solid'; // Assuming you're using Heroicons
+import { ChevronRightIcon } from '@heroicons/react/20/solid';
 
 const links = [
   {
@@ -75,7 +75,7 @@ export default function Pautan() {
       className="divide-y divide-gray-100 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
     >
       {links.map((refer) => (
-        <li key={refer.url} className="relative flex justify-between gap-x-4 px-2 py-2 hover:bg-gray-50 sm:px-4">
+        <li key={refer.linkname} className="relative flex justify-between gap-x-4 px-2 py-2 hover:bg-gray-50 sm:px-4">
           <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
             <div className="min-w-0 flex-auto">
               <p className="text-sm font-semibold leading-5 text-gray-900">

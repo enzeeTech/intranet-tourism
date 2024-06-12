@@ -129,7 +129,7 @@ const Notification = () => {
       </section>
       </div>
       </div>
-    </div>
+    
     // </Layout>
   );
 }
