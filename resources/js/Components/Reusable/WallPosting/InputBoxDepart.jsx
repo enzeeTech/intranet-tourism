@@ -1,48 +1,47 @@
-import * as React from "react";
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { formatDistanceToNow } from 'date-fns';
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
 import '../css/InputBox.css';
-import '../../../Pages/Calendar/index.css'
-import Popup from "../Popup";
-import BirthdayCom from "../Birthdayfunction/birthdaypopup";
+import '../../../Pages/Calendar/index.css';
+import '../css/posting-department.css'
 
 
 function ShareYourThoughtsDepart() {
   const [inputValue, setInputValue] = useState("");
   const [showPollPopup, setShowPollPopup] = useState(false);
   const [showPeoplePopup, setShowPeoplePopup] = useState(false);
+  const [posts, setPosts] = useState([]); // State to store the submitted posts
   const textAreaRef = useRef(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
   const handleClickImg = () => {
-    console.log('masukkan gamba bro');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
-  
+
       // You can upload the file to your server here
       console.log('Uploading file:', file);
-  
+
       // If you want to display the file name in the textarea
       const fileName = file.name;
       const newValue = `${inputValue}\n${fileName}`;
       setInputValue(newValue);
-  
+
       // Set focus back to the textarea
       textAreaRef.current.focus();
     };
     fileInput.click();
-  };  
+  };
 
   const handleClickVid = () => {
-    console.log('masukkan video bro');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'video/*';
@@ -65,12 +64,10 @@ function ShareYourThoughtsDepart() {
   };
 
   const handleClickPoll = () => {
-    console.log('masukkan poll bro');
     setShowPollPopup(true);
   };
 
   const handleClickDoc = () => {
-    console.log('masukkan doc bro');
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'application/pdf, .doc, .docx, .txt'; // Accept PDF, Word documents, and text files
@@ -93,53 +90,56 @@ function ShareYourThoughtsDepart() {
   };
 
   const handleClickPeople = () => {
-    console.log('masukkan orang bro');
     setShowPeoplePopup(true);
   };
 
   const closePopup = () => {
     setShowPollPopup(false);
     setShowPeoplePopup(false);
-    console.log("tutup");
   };
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const handleSubmitPost = () => {
+    if (inputValue.trim()) {
+      const currentTime = new Date(); // Capture the current time
+      setPosts([{ text: inputValue, time: currentTime }, ...posts]);
+      setInputValue(""); // Clear the input field after submission
+    }
+  };
 
-    const handlePopupOpen = () => {
-      setIsPopupOpen(true);
-    };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Trigger re-render to update relative time
+      setPosts([...posts]);
+    }, 60000); // Update every minute
 
-    const handlePopupClose = () => {
-      setIsPopupOpen(false);
-    };
+    return () => clearInterval(interval);
+  }, [posts]);
 
   return (
-    <section className="flex flex-col justify-center text-sm max-w-[875px] text-neutral-800 border-2 shadow-xl rounded-xl">
-      <div className="input-box-container flex gap-5 justify-between border-2 border-slaute-200 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px max-md:max-w-full" style={{ width: "875px", height: "90px" }}>
-      <div className="flex flex-col">
+    <section className="flex flex-col">
+      <div className="input-box-container flex justify-between border-2 border-slaute-200 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:max-w-full" style={{ width: "875px", height: "90px" }}>
+        <div className="flex flex-col">
           <textarea
             ref={textAreaRef}
             value={inputValue}
             onChange={handleChange}
             placeholder="Share Your Thoughts..."
-            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline w-full h-[70px]"
+            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline w-full h-[100px]"
             style={{
-              width: "540px",
-              maxHeight: "1000px", // Set the desired height
-              outline: "none", // Remove the default outline on focus
-              border: "none", // Remove the border
+              width: "800px",
+              height: "100px",
+              outline: "none",
+              border: "none",
             }}
           />
-          <div className="self-center mt-7 flex gap-3 -ml-96 mr-8 ">
-            {/* Example icon */}
+          <div className="flex gap-3">
             <img
               loading="lazy"
               src="assets/inputpolls.svg"
               alt="Icon 1"
-              className="w-[15px] h-auto "  
+              className="w-[15px] h-auto"
               onClick={handleClickPoll}
             />
-            {/* Repeat for the other icons */}
             <img
               loading="lazy"
               src="assets/inputimg.svg"
@@ -161,36 +161,44 @@ function ShareYourThoughtsDepart() {
               className="w-[15px] h-auto"
               onClick={handleClickDoc}
             />
-            {/* <img
+            <img
               loading="lazy"
               src="assets/inputpeople.svg"
               alt="Icon 5"
               className="w-[10px] h-auto"
               onClick={handleClickPeople}
             />
-             <img
-        loading="lazy"
-        src="assets/BDicon.svg"
-        alt="Icon 5"
-        className="w-[14px] h-auto"
-        onClick={handlePopupOpen}
-      /> */}
-      {isPopupOpen && (
-        <Popup isOpen={isPopupOpen} onClose={handlePopupClose}>
-          <BirthdayCom />
-        </Popup>
-      )}
           </div>
         </div>
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-          alt=""
-          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] mt-12 mr-4 -ml-4 border-2"
+          alt="Submit"
+          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] cursor-pointer"
+          onClick={handleSubmitPost}
         />
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}
       {showPeoplePopup && <People onClose={closePopup} />}
+      
+<div className="mt-4 ">
+  {posts.map((post, index) => (
+    <div key={index} className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] ">
+      <p className="text-gray-500 text-sm">{formatDistanceToNow(new Date(post.time), { addSuffix: true })}</p>
+      <div className="post-content break-words overflow-hidden">
+        {post.text}
+      </div>
+      <div className="flex justify-start gap-2 w-4 h-4">
+        <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
+        <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
+        <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
     </section>
   );
 }

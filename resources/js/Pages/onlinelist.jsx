@@ -275,8 +275,8 @@ const MyComponent = () => {
   console.log("Filtered users:", filteredUsers);
 
   return (
-    <section className="w-full bg-slate-100 h-full max-h-full">
-      <div className="flex flex-row justify-center gap-5 rounded-xl shadow-lg max-w-1920 max-md:flex-wrap max-md:pl-5 max-h-full">
+    <section className="w-full bg-slate-100 h-full max-h-full max-w-full">
+      <div className="flex flex-row justify-center gap-5 rounded-xl shadow-lg max-w-1920 max-md:flex-wrap max-md:pl-5  max-h-full">
         <header className="font-sans text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
           Who’s Online
           <div className="font-extrabold text-neutral-800 mt-2 mb-6 border-b-2 border-neutral-300"></div>

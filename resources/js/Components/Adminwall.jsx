@@ -111,7 +111,7 @@ function Navigation() {
 
       {activeTab === 'Members' && (
         <div className="flex justify-center w-full mt-4 ">
-          <div className="max-w-[900px] w-full ">
+          <div className="max-w-[900px] w-full  border-inherit rounded-2xl shadow-2xl">
             <DpMembers />
           </div>
         </div>
@@ -133,7 +133,7 @@ function Navigation() {
 
       {activeTab === 'Post' && (
         <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-          <div className="max-w-[900px] w-full ml-4 whitespace-nowrap absolute content-items">
+          <div className="max-w-[900px] w-full  whitespace-nowrap absolute content-items">
             <ShareYourThoughtsDepart /><br></br>
             <Filter/>
           </div>

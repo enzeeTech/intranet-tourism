@@ -1,0 +1,5 @@
+.post-content {
+  max-width: 100%; /* Ensures the text container does not exceed the container width */
+  word-break: break-word; /* Ensures long words break to fit within the container */
+  overflow-wrap: break-word; /* Ensures the text wraps within the container */
+}
