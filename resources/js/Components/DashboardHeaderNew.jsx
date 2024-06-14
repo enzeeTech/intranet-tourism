@@ -1,10 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { BellIcon } from '@heroicons/react/24/outline';
 import { usePage } from '@inertiajs/react';
 import NotificationPopup from '../Components/Noti-popup-test';
-
 
 const userNavigation = [
     { name: 'Your profile', href: '../profile' },
@@ -22,32 +20,39 @@ export default function Header({ setSidebarOpen }) {
         name: "",
         profileImage: "",
     });
-    // const [userName, setUserName] = useState('');
 
-    // useEffect(() => {
-    //     fetch("/api/crud/users", {
-    //         method: "GET",
-    //     })
-    //         .then((response) => {
-    //             if (!response.ok) {
-    //                 throw new Error("Network response was not ok");
-    //             }
-    //             return response.json();
-    //         })
-    //         .then((data) => {
-    //             console.log("User data:", data);
-    //             if (data && data.data && data.data.data && data.data.data.length > 0) {
-    //                 setUserData(data.data.data);
-    //                 const currentUserData = data.data.data.find(user => user.id === id);
-    //                 if (currentUserData) {
-    //                     setUserName(currentUserData.name);
-    //                 }
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching user data:", error);
-    //         });
-    // }, [id]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isActive, setIsActive] = useState(false);
+
+    const notificationRef = useRef();
+
+    const togglePopup = () => {
+        setIsPopupVisible(!isPopupVisible);
+        setIsActive(!isActive);
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+            setIsPopupVisible(false);
+            setIsActive(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         console.log("Fetching user data...");
@@ -60,23 +65,27 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
-            // .then(({ data }) => {
-            //     setUserData(data.name)
-            // })
             .then(({ data }) => {
-                console.log("DD", data)
-                setUserData(
-                    pv => ({
+                setUserData(pv => ({
                     ...pv, ...data,
                     name: data.name,
-                    profileImage: data.profile && data.profile.image? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-                })
-            )
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                }));
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
     }, [id]);
+
+    const getIconSrc = () => {
+        if (isActive) {
+            return "/Assets/bell-active.svg";
+        } else if (isHovered) {
+            return "/Assets/bell-hover.svg";
+        } else {
+            return "/Assets/bell.svg";
+        }
+    };
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -111,10 +120,20 @@ export default function Header({ setSidebarOpen }) {
                     />
                 </form>
                 <div className="flex items-center gap-x-4 lg:gap-x-6">
-                    {/* <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button> */}
+                    <div className="relative" ref={notificationRef}>
+                        <button
+                            type="button"
+                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                            onClick={togglePopup}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            <img src={getIconSrc()} className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                        {isPopupVisible && (
+                            <NotificationPopup />
+                        )}
+                    </div>
 
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
