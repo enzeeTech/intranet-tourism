@@ -12,10 +12,16 @@
   .page-title-container {
       display: none;
   }
+} */
+
+@media (max-width: 640px) {
+  .page-title-container {
+      display: none;
+  }
 
   .page-title {
     font-size: 32px;
     color: #202224;
     font-weight: 600;
   }
-} */
+}

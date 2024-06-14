@@ -17,60 +17,50 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     setIsPopupOpen(true);
     console.log("bukak");
   };
-  
-  // const handleCloseClick = () => {
-  //   setIsPopupOpen(false);
-  //   console.log("tutup");
-  // };
 
-    const handleEditBanner = (e) => {
-      e.stopPropagation(); // Prevents the click event from propagating to parent elements
-      onEditBanner(); // Calls the onEditBanner function when the background image is clicked
-    };
+  const handleEditBanner = (e) => {
+    e.stopPropagation();
+    onEditBanner();
+  };
 
-    const handleCloseClick = (e) => {
-      e.stopPropagation(); // Prevent any parent handlers from being executed
-      setIsPopupOpen(false); // Close the popup
-      console.log("Tutup bro");
-    };
-    
-    // Ensure that clicking on the ProfileImage or the header does not unintentionally toggle the popup:
-    const handleIconClick = (e) => {
-      e.stopPropagation(); // Prevent the click from affecting parent elements
-      if (!isPopupOpen) {
-        openPopup(); // Only open if it is not already open
-      }
-    };
-    return (
-      <header
-        className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-20 -mt-14 w-half min-h-[270px] max-md:px-5 max-md:max-w-half"
-        onClick={handleEditBanner} // Added onClick handler to trigger onEditBanner
-      >
-        <img src={backgroundImage} alt="" className="object-cover absolute inset-0 size-half" />
-        < div onClick={handleIconClick}>
+  const handleCloseClick = (e) => {
+    e.stopPropagation();
+    setIsPopupOpen(false);
+    console.log("Tutup bro");
+  };
+
+  const handleIconClick = (e) => {
+    e.stopPropagation();
+    if (!isPopupOpen) {
+      openPopup();
+    }
+  };
+
+  return (
+    <header
+      className="flex overflow-hidden relative z-999 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[400px] max-md:px-5 max-md:max-w-full"
+      onClick={handleEditBanner}
+    >
+      <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 rounded-lg shadow-custom" />
+      <div onClick={handleIconClick}>
         <ProfileImage src={profileImage} alt={`${name}'s profile picture`} />
         {isPopupOpen && (
-          // <EditProfilePhoto onClose={handleCloseClick} />
-          // <EditProfilePhoto onClose={handleCloseClick} onOpenUpdatePopup={() => setIsPopupOpen(false)} />
           <EditProfilePhoto
-  onClose={handleCloseClick}
-  onOpenUpdatePopup={() => {
-    setIsPopupOpen(false);
-    console.log("Main popup closed, ready to open update popup.");
-    return new Promise(resolve => setTimeout(resolve, 0)); // Ensures that state update completes
-  }}
-/>
+            onClose={handleCloseClick}
+            onOpenUpdatePopup={() => {
+              setIsPopupOpen(false);
+              console.log("Main popup closed, ready to open update popup.");
+              return new Promise(resolve => setTimeout(resolve, 0));
+            }}
+          />
         )}
-        </div>
-        <div className="flex flex-col self-center px-5 -mt-10 -ml-96">
-          <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
-          <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>
-        </div>
-
-      </header>
-    );
-    
-
+      </div>
+      <div className="flex flex-col self-start px-5 -mt-16 -ml-10">
+        <h1 className="self-end text-3xl font-extrabold text-neutral-800 ml-48">{name}</h1>
+        <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48">{status}</div>
+      </div>
+    </header>
+  );
 }
 
 export default ProfileHeader;

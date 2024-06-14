@@ -11,6 +11,8 @@ import printIcon from '../../../public/assets/printButton.png';
 import * as bootstrap from "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Calendar/index.css";
+import Example from '@/Layouts/DashboardLayoutNew';
+import PageTitle from '@/Components/Reusable/PageTitle';
 
 function Calendar() {
     const [events, setEvents] = useState([]);
@@ -59,6 +61,9 @@ function Calendar() {
     };
 
     return (
+      <Example>
+        {/* <main className="xl:pl-[calc(25%+4rem)] xl:pr-[calc(25%+2rem)]">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center"> */}
       <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
       <h1 className="mb-2 font-sans text-4xl font-bold text-left" >Calendar</h1>
       <hr className="mx-auto" style={{ borderColor: '#E4E4E4', borderWidth: '2px' }} />
@@ -192,6 +197,10 @@ function Calendar() {
           </div>
         )}
       </div>
+      {/* </div>
+      </main> */}
+  
+      </Example>
     );
 }
 

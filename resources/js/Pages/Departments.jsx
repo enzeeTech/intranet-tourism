@@ -1,57 +1,183 @@
-import * as React from "react";
+import React, {useState} from 'react';
+import PageTitle from '../Components/Reusable/PageTitle';
+import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
+import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
+import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
+import SearchMembers from '../Components/Reusable/CommunitySearch';
+import Adminsection from '../Components/Adminwall';
+import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
+import StaffMemberCard from '../Components/Reusable/CommunityCard';
+import DeactivateModal from '../Components/Reusable/DeactivateModal';
+// import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
 
-function Avatar({ src, alt }) {
-  return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
-}
 
-function UserInfo({ name, timestamp }) {
-  return (
-    <div className="flex flex-col my-auto">
-      <div className="text-base font-bold text-neutral-800">{name}</div>
-      <div className="mt-3 text-xs text-neutral-800 text-opacity-50">{timestamp}</div>
-    </div>
-  );
-}
+import './css/StaffDirectory.css';
+import Example from '@/Layouts/DashboardLayoutNew';
 
-function IconButton({ src, alt }) {
-  return <img loading="lazy" src={src} alt={alt} className="shrink-0 w-7 aspect-square" />;
-}
 
-function MyComponent() {
-  const user = {
-    avatar: "https://cdn.builder.io/api/v1/image/assets/TEMP/918fe2ab1e2f4ab02e1d7f05e0e47f6b1a4dcd481beb92e66bb3866ea6da1ed7?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&",
-    name: "Musa (xxx Department)",
-    timestamp: "15 mins ago",
-  };
+const StaffDirectory = () => {
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
 
-  const icons = [
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/594907e3c69b98b6d0101683915b195ce42280c8ba80773ecd95b387436ea664?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&", alt: "Icon 1" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/202b9f1277b73cbc2e1879918537061084b7287ef0a87b496a5b16d68837ff74?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&", alt: "Icon 2" },
+  // Dummy departments
+  const departments = [
+    'All',
+    'Public',
+    'Private',
   ];
 
-  return (
-    <div className="input-box-container" style={{ height: "230px", marginTop: "-10px" }}>
-    <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
-      <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
-        <div className="flex gap-1 mt-2">
-          <Avatar src={user.avatar} alt={`${user.name}'s avatar`} />
-          <UserInfo name={user.name} timestamp={user.timestamp} />
-        </div>
-        <div className="flex gap-5 justify-between">
-          {icons.map((icon, index) => (
-            <IconButton key={index} src={icon.src} alt={icon.alt} />
-          ))}
-        </div>
-      </header>
-      <p className="mt-2.5 text-base leading-6 text-neutral-800 max-md:max-w-full">
-        Borem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet
-        odio <span className="font-semibold">@Ben</span> mattis.
-      </p>
-      <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">@Ben is tagged</p>
-      <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/43a67f09e9b89eea063b1d9366edb8440d017120e345e0655e5821a7ff627b95?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&" alt="" className="mt-2.5 aspect-[3.85] w-[66px]" />
-    </article>
-    </div>
-  );
-}
+  // Dummy staff members
+  const staffMembers = [
+    {
+      id: 1,
+      name: 'Puspanita LPPM',
+      role: 'Followed By:',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 2,
+      name: 'Kelab Rekreasi LPPM',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 3,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 4,
+      name: 'Kesatuan',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 5,
+      name: 'Jomla V3 Feedback',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 6,
+      name: 'BTM Feedback',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 7,
+      name: 'Urus Tadbir Admin',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 8,
+      name: 'TBC',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 9,
+      name: 'Puspanita LPPM',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 10,
+      name: 'Kelab Rekreasi LPPM',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 11,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 12,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 13,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 14,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 15,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
+    {
+      id: 16,
+      name: 'KOPPEMA',
+      role: 'Followed By',
+      imageUrl: '../../../public/assets/dummyStaffImage.png',
+    },
 
-export default MyComponent;
+  ];
+
+  const handleSelectDepartment = (department) => {
+    setSelectedDepartment(department);
+  };
+
+  const openDeactivateModal = () => {
+    setIsDeactivateModalOpen(true);
+  };
+
+  const closeDeactivateModal = () => {
+    setIsDeactivateModalOpen(false);
+  };
+
+  return (
+    <Example>
+        <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <SearchMembers />
+            <DepartmentDropdown
+              departments={departments}
+              onSelectDepartment={handleSelectDepartment}
+            />
+            <Adminsection />
+
+            {/* <ShareYourThoughtsDepart/> */}
+
+            {selectedDepartment === 'All' && (
+              <div className="staff-member-grid-container">
+                {staffMembers.map((member) => (
+                    <StaffMemberCard
+                      key={member.id} {...member}
+                      onDeactivateClick={openDeactivateModal}
+                    />
+                  ))}
+              </div>
+            )}
+            </div>
+            </main>
+
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <div className="file-directory-header">
+                    <PageTitle title="My Profile" />
+                </div>
+                <hr className="file-directory-underline" />
+                <div > 
+                    <FeaturedEvents />
+                    <Birthdaypopup className='mb-4'/><br></br>
+                    <WhosOnline className='mb-4'/>
+                </div>
+            </aside>
+    </Example>
+  );
+};
+
+export default StaffDirectory;
