@@ -118,8 +118,7 @@ const StoryNew = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [avatars, setAvatars] = useState([
-        // your avatars initialization code here
-                        {
+        {
             src: "assets/user4.jpeg",
             alt: "Avatar of Thomas",
             name: "Musa",
