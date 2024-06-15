@@ -1,17 +1,17 @@
 import React from 'react';
-import classNames from 'classnames'
+import classNames from 'classnames';
 
 const navigation = [
-    { name: 'Basic Settings', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Themes', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Advance Settings', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Departments', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Media', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Requests', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Audit Trail', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Feedback', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Birthday Template', href: '#', src: "assets/Dashboard Active.svg" },
-    { name: 'Pautan', href: '#', src: "assets/Dashboard Active.svg" },
+    { name: "Basic Settings", href: '#', inactive: "assets/Inactive Basic Settings.svg", active: "assets/Active Basic Settings.svg" },
+    { name: 'Themes', href: '#', inactive: "assets/Inactive Theme.svg", active: "assets/Active Theme.svg" },
+    { name: 'Advance Settings', href: '#', inactive: "assets/Inactive Advanced Settings.svg", active: "assets/Active Advanced Settings.svg" },
+    { name: 'Departments', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
+    { name: 'Media', href: '#', inactive: "assets/Inactive Media.svg", active: "assets/Active Media.svg" },
+    { name: 'Requests', href: '#', inactive: "assets/Inactive Requests.svg", active: "assets/Active Requests.svg" },
+    { name: 'Audit Trail', href: '#', inactive: "assets/Inactive Audit Trail.svg", active: "assets/Active Audit Trail.svg" },
+    { name: 'Feedback', href: '#', inactive: "assets/Inactive Feedback.svg", active: "assets/Active Feedback.svg" },
+    { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
+    { name: 'Pautan', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
 ];
 
 const SettingNavigation = ({ current, setCurrent }) => {
@@ -32,12 +32,9 @@ const SettingNavigation = ({ current, setCurrent }) => {
                             )}
                         >
                             <img
-                                src={item.src}
+                                src={item.name === current ? item.active : item.inactive}
                                 alt={`${item.name} icon`}
-                                className={classNames(
-                                    item.name === current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
-                                    'h-6 w-6 shrink-0'
-                                )}
+                                className="h-6 w-6 shrink-0"
                                 aria-hidden="true"
                             />
                             {item.name}

@@ -18,6 +18,7 @@ Route::apiResources([
     'employment_posts' => \Modules\Crud\Http\Controllers\EmploymentPostController::class,
     'events' => \Modules\Crud\Http\Controllers\EventController::class,
     'event_attendance' => \Modules\Crud\Http\Controllers\EventAttendanceController::class,
+    'external_links' => \Modules\Crud\Http\Controllers\ExternalLinkController::class,
     'failed_jobs' => \Modules\Crud\Http\Controllers\FailedJobController::class,
     'invitations' => \Modules\Crud\Http\Controllers\InvitationController::class,
     'jobs' => \Modules\Crud\Http\Controllers\JobController::class,
