@@ -178,7 +178,7 @@ class NotificationPopup extends React.Component {
                         {filteredNotifications.map(notification => (
                             <div className="flex flex-row h-[104px] mb-2 hover:bg-blue-100 items-center rounded-xl" key={notification.id}>
                                 <div className="flex items-center bg-gray h-16">
-                                    <img className="h-14 w-14 ml-4" src={notification.imageSrc} alt="" 
+                                    <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt="" 
                                         style={{
                                             height: "80px",
                                             width: "80px",
@@ -246,7 +246,7 @@ class NotificationPopup extends React.Component {
                     </ul>
                 </div>
                 <div onClick={handleClick} className="flex flex-row font-bold bg-slaute-400 h-10 px-2 w-full gap-2 cursor-pointer hover:bg-slate-200 rounded-lg items-center">
-                    View All
+                    VIEW ALL
                     <img className="h-6 w-6" src="/assets/viewall.svg" />
                 </div>
             </div>

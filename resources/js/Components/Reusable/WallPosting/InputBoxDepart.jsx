@@ -183,7 +183,7 @@ function ShareYourThoughtsDepart() {
       
 <div className="mt-4 ">
   {posts.map((post, index) => (
-    <div key={index} className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] ">
+    <div key={index} className=" mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] ">
       <p className="text-gray-500 text-sm">{formatDistanceToNow(new Date(post.time), { addSuffix: true })}</p>
       <div className="post-content break-words overflow-hidden">
         {post.text}
