@@ -120,8 +120,8 @@ class NotificationPopup extends React.Component {
                         -webkit-line-clamp: 2;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        max-height: 2.4em; /* 2 lines * 1.2em line height */
-                        line-height: 1.2em;
+                        max-height: 2.5em; /* 2 lines * 1.1em line height */
+                        line-height: 1.1em;
                     }
                     .tab-button {
                         margin-left: 10px;
