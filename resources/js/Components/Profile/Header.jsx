@@ -38,7 +38,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 
   return (
     <header
-      className="flex overflow-hidden relative z-10 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[270px] max-md:px-5 max-md:max-w-full"
+      className="flex overflow-hidden relative z-999 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[400px] max-md:px-5 max-md:max-w-full"
       onClick={handleEditBanner}
     >
       <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 rounded-lg shadow-custom" />

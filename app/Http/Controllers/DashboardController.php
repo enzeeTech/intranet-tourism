@@ -13,6 +13,6 @@ class DashboardController extends Controller
 
     public function onlinelist()
     {
-        return Inertia::render('onlinelist');
+        return Inertia::render('onlinelist', ['id' => auth()->id()]);
     }
 }

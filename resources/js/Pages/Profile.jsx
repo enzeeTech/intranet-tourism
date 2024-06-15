@@ -5,8 +5,9 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
-import { ProfileBio, ProfileGallery, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
+import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -28,13 +29,14 @@ export default function Profile() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
-        email: "aisyahbintemusa@tourism.gov.my",
-        department: "Pejabat Timbalan Ketua Pengarah (Promosi)",
-        position: "Tetap",
-        grade: "N11",
-        location: "Tingkat 18",
-        phone: "+03 8891 8094",
-        whatsapp: "+6014 971 8736",
+        name: "",
+        email: "",
+        department: "",
+        position: "",
+        grade: "",
+        location: "",
+        phone: "",
+        whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [originalPhoto, setOriginalPhoto] = useState(photo);
@@ -50,11 +52,11 @@ export default function Profile() {
 
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState({});
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch("/api/crud/users", {
+        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
             .then((response) => {
@@ -63,44 +65,28 @@ export default function Profile() {
                 }
                 return response.json();
             })
-            .then((data) => {
-                console.log("User data fetched:", data); // Log fetched data
-                console.log("User data structure:", data.data); // Log the structure of data.data
-                if (data && data.data) {
-                    // Check the structure of data.data
-                    const users = Array.isArray(data.data) ? data.data : data.data.data;
-                    console.log("Parsed user data:", users); // Log parsed user data
-                    if (users && users.length > 0) {
-                        setUserData(users);
-                        const currentUserData = users.find(user => user.id === id);
-                        if (currentUserData) {
-                            setProfileData((prevProfileData) => ({
-                                ...prevProfileData,
-                                name: currentUserData.name,
-                            }));
-                        } else {
-                            console.log(`User with ID ${id} not found in fetched data.`);
-                        }
-                    } else {
-                        console.log("No user data found.");
-                    }
-                }
+            .then(({ data }) => {
+                setProfileData(pv => ({
+                    ...pv, ...data,
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                }));
+
+                setFormData((pv) => ({
+                    ...pv,
+                    name: data.name,
+                    email: data.email,
+                    department: data.department ?? 'Please set', // maybe in diff attr
+                    position: data.position, // maybe in diff attr
+                    grade: data.grade, // maybe in diff attr
+                    location: data.location, // maybe in diff attr
+                    phone: data.profile && data.profile?.phone_no || "",
+                    whatsapp: data.whatsapp,
+                }));
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id]); // Use the user ID here if needed in the effect
-
-    const photoData = [
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?", alt: "Photo 1" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Photo 2" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc01566f85a165f9e8c89da57eaa7e81212a8fa1e58ed53877c900bf64c5baf1?", alt: "Photo 3" },
-    ];
-
-    const videoData = [
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?", alt: "Video 1" },
-        { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Video 2" },
-    ];
+    }, [id]);
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -140,6 +126,13 @@ export default function Profile() {
         setIsEditing(true);
     };
 
+    const handleSelectMedia = (selectedMedia) => {
+        console.log("Selected Media:", selectedMedia);
+        // Handle media selection logic here
+    };
+
+    console.log("DDD", profileData);
+
     return (
         <Example>
             <main className="xl:pl-96 w-full">
@@ -148,7 +141,7 @@ export default function Profile() {
                         <div className="w-full bg-white h-[485px] shadow-custom">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
+                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
@@ -159,6 +152,7 @@ export default function Profile() {
                                     <div className="flex-auto my-auto max-md:max-w-full">
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
+                                                name={formData.name} // Add name field
                                                 photo={photo}
                                                 email={formData.email}
                                                 department={formData.department}
@@ -187,7 +181,10 @@ export default function Profile() {
                                 </section>
                             )}
                             {activeTab === "gallery" && (
-                                <ProfileGallery photoData={photoData} videoData={videoData} />
+                                <section>
+                                    <ImageProfile selectedItem="All" />
+                                    <VideoProfile selectedItem="All" />
+                                </section>
                             )}
                             {activeTab === "files" && (
                                 <div>
@@ -214,6 +211,9 @@ export default function Profile() {
             </aside>
             {isSaveNotificationOpen && (
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
+            )}
+            {isPopupOpen && (
+                <Popup title="Edit Banner" onClose={() => setIsPopupOpen(false)} />
             )}
         </Example>
     );

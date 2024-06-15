@@ -1,533 +1,361 @@
-import React, { useState, useRef, useEffect } from "react";
-import defaultImg from '../../../../public/assets/story/upload-photo-story.png';
+import React, { useState, useEffect } from 'react';
+import Stories from 'react-insta-stories';
+import Popup from './CreateStoryPopup';
+import CreateImageStory from './CreateImageStory';
 
-// CreateStory component
-const CreateStory = ({ goBack, onClose }) => {
-  const [image, setImage] = useState('');
-  const [text, setText] = useState('');
-  const [previewedText, setPreviewedText] = useState('');
+const StoryViewer = ({ stories, onClose, user, onViewed }) => {
+    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
-  const fileUploadRef = useRef();
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      setImage(reader.result);
+    const handleStoryEnd = () => {
+        if (currentStoryIndex === stories.length - 1) {
+            onViewed(user); // Notify parent component that stories have been viewed
+            onClose(); // Close the story viewer only when all stories are played
+        } else {
+            setCurrentStoryIndex(currentStoryIndex + 1); // Play the next story
+        }
     };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleImageUpload = (e) => {
-    e.preventDefault();
-    fileUploadRef.current.click();
-  };
-
-  const handleTextChange = (e) => {
-    if (!image) {
-      alert('Please upload an image first.');
-    } else {
-      setText(e.target.value);
-    }
-  };
-
-  const handlePreview = () => {
-    setPreviewedText(text);
-  };
-
-  const handleReset = () => {
-    setImage('');
-    setText('');
-    setPreviewedText('');
-  };
-
-  const handlePost = () => {
-    if (image && text) {
-      console.log('Posting story:');
-      console.log('Image:', image);
-      console.log('Text:', text);
-      alert('Story has been posted!');
-    } else if (!image && !text) {
-      alert('Please upload an image or add text before posting.');
-    } else {
-      alert('Please add both image and text before posting.');
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg">
-      <div className="flex justify-between w-full items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center w-full">Create Picture Story</h1>
-        <button onClick={onClose} className="text-gray-600 hover:text-black">
-          <img src="/assets/icon-close.png" alt="Close" />
-        </button>
-      </div>
-      <div className="flex rounded-lg ">
-        <div className="w-3/12 p-4 border-r flex flex-col gap-4 w-full">
-          <textarea
-            placeholder="Write your story..."
-            value={text}
-            onChange={handleTextChange}
-            className="resize-none w-full h-48 p-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            className="py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-700"
-            onClick={handlePreview}
-          >
-            Preview Text
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-neutral-300 text-black rounded-full hover:bg-neutral-400"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-green-600 text-white rounded-full hover:bg-green-700"
-            onClick={handlePost}
-          >
-            Post
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-gray-600 text-white rounded-full hover:bg-gray-700"
-            onClick={goBack}
-          >
-            Go Back
-          </button>
-        </div>
-        <div className="w-9/12 flex justify-center items-center relative p-4">
-          <button onClick={handleImageUpload} className="relative max-h-96 max-w-full">
-            <img
-              src={image || defaultImg}
-              alt="Uploading"
-              className="max-h-96 max-w-full object-contain rounded-lg"
-            />
-            {previewedText && (
-              <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-50 text-white text-center p-2 rounded-b-lg">
-                {previewedText}
-              </div>
-            )}
-          </button>
-          <input
-            type="file"
-            ref={fileUploadRef}
-            hidden
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CreateVideoStory = ({ goBack, onClose }) => {
-  const [video, setVideo] = useState('');
-  const [text, setText] = useState('');
-  const [previewedText, setPreviewedText] = useState('');
-
-  const fileUploadRef = useRef();
-  const videoRef = useRef();
-
-  const handleVideoChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      setVideo(reader.result);
+    const handlePrevStory = () => {
+        if (currentStoryIndex > 0) {
+            setCurrentStoryIndex(currentStoryIndex - 1);
+        }
     };
 
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleVideoUpload = (e) => {
-    e.preventDefault();
-    fileUploadRef.current.click();
-  };
-
-  const handleTextChange = (e) => {
-    if (!video) {
-      alert('Please upload a video first.');
-    } else {
-      setText(e.target.value);
-    }
-  };
-
-  const handlePreview = () => {
-    setPreviewedText(text);
-  };
-
-  const handleReset = () => {
-    setVideo('');
-    setText('');
-    setPreviewedText('');
-  };
-
-  const handlePost = () => {
-    if (video && text) {
-      console.log('Posting story:');
-      console.log('Video:', video);
-      console.log('Text:', text);
-      alert('Story has been posted!');
-    } else if (!video && !text) {
-      alert('Please upload a video or add text before posting.');
-    } else {
-      alert('Please add both video and text before posting.');
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center p-6 bg-white rounded-lg">
-      <div className="flex justify-between w-full items-center">
-        <h1 className="text-2xl font-bold mb-4 text-center w-full">Create Video Story</h1>
-        <button onClick={onClose} className="text-gray-600 hover:text-black">
-          <img src="/assets/icon-close.png" alt="Close" />
-        </button>
-      </div>
-      <div className="flex rounded-lg w-full">
-        <div className="w-3/12 p-4 border-r flex flex-col gap-4">
-          <textarea
-            placeholder="Write your story..."
-            value={text}
-            onChange={handleTextChange}
-            className="resize-none w-full h-48 p-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="button"
-            className="py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 max-w-32 "
-            onClick={handlePreview}
-          >
-            Preview Text
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-neutral-300 text-black rounded-full hover:bg-neutral-400 max-w-32"
-            onClick={handleReset}
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-green-600 text-white rounded-full hover:bg-green-700 max-w-32"
-            onClick={handlePost}
-          >
-            Post
-          </button>
-          <button
-            type="button"
-            className="py-2 px-4 bg-gray-600 text-white rounded-full hover:bg-gray-700 max-w-32"
-            onClick={goBack}
-          >
-            Go Back
-          </button>
-        </div>
-        <div className="w-9/12 flex justify-center items-center relative p-4">
-          {video ? (
-            <div className="relative max-h-96 max-w-full">
-              <video
-                ref={videoRef}
-                className="max-h-96 max-w-full object-contain rounded-lg"
-                autoPlay
-                onEnded={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length)}
-              >
-                <source src={video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              {previewedText && (
-                <div className="absolute inset-x-0 bottom-0 bg-black bg-opacity-50 text-white text-center p-2 rounded-b-lg">
-                  {previewedText}
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            pointerEvents: 'none',
+        }}>
+            {/* Overlay */}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: 9998,
+                }}
+            ></div>
+            {/* Story viewer */}
+            <div
+                style={{
+                    position: 'relative',
+                    zIndex: 9999,
+                    pointerEvents: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                }}
+                onClick={(e) => {
+                    if (e.clientX < window.innerWidth / 2) {
+                        handlePrevStory();
+                    }
+                }}
+            >
+                <div style={{
+                    position: 'relative',
+                    backgroundColor: 'white',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
+                    maxWidth: '400px',
+                    maxHeight: '700px',
+                    overflow: 'hidden',
+                }}>
+                    {/* Close button */}
+                    <button
+                        style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '0',
+                        }}
+                        onClick={onClose}
+                    >
+                        <img
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
+                            alt="Close icon"
+                            style={{ width: '24px', height: '24px' }}
+                        />
+                    </button>
+                    {/* User info */}
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <img src={user.src} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit:'cover' }} />
+                        <div style={{ fontSize: '14px' }}>{user.name}</div>
+                    </div>
+                    {/* Stories */}
+                    <Stories
+                        stories={stories}
+                        defaultInterval={1500}
+                        width={360}
+                        height={596}
+                        onStoryEnd={handleStoryEnd}
+                        currentIndex={currentStoryIndex}
+                    />
                 </div>
-              )}
             </div>
-          ) : (
-            <button onClick={handleVideoUpload} className="relative max-h-96 max-w-full">
-              <img
-                src={defaultImg}
-                alt="Uploading"
-                className="max-h-96 max-w-full object-contain rounded-lg"
-              />
-            </button>
-          )}
-          <input
-            type="file"
-            ref={fileUploadRef}
-            hidden
-            accept="video/*"
-            onChange={handleVideoChange}
-          />
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-// Popup component
-const Popup = ({ isOpen, onClose }) => {
-  const [section, setSection] = useState('main');
+const StoryNew = () => {
+    const [showStoryViewer, setShowStoryViewer] = useState(false);
+    const [selectedStory, setSelectedStory] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [avatars, setAvatars] = useState([
+        {
+            src: "assets/user4.jpeg",
+            alt: "Avatar of Thomas",
+            name: "Musa",
+            stories: []
+        },
+        {
+            src: "assets/women.avif",
+            alt: "Avatar of Aisha",
+            name: "Aisha",
+            stories: [
+                {
+                    url: 'assets/car2.mp4',
+                    type: 'video',
+                    duration: 10000
+                },
+                {
+                    url: 'assets/lambo2.jpeg',
+                    caption: 'Story 2'
+                },
+            ]
+        },
+        {
+            src: "assets/user1.webp",
+            alt: "Avatar of Dan",
+            name: "Dan",
+            stories: [
+                { url: 'assets/lambo4.avif', caption: 'Story 1' },
+                { url: 'assets/lambo5.jpeg', caption: 'Story 2' },
+            ]
+        },
+        {
+            src: "assets/user2.jpeg",
+            alt: "Avatar of Musa",
+            name: "Julie",
+            stories: [
+                { url: 'assets/gtr.jpeg', caption: 'Story 1' },
+                { url: 'assets/gtr2.jpeg', caption: 'Story 2' },
+            ]
+        },
+        {
+            src: "assets/user5.jpeg",
+            alt: "Avatar of Safwan",
+            name: "Safwan",
+            stories: [
+            { url: 'assets/gtr1.jpeg', caption: 'Story 1' },
+            { url: 'assets/gtr3.jpeg', caption: 'Story 2' },
+            ]
+        },
+        {
+            src: "assets/user6.webp",
+            alt: "Avatar of Hazmi",
+            name: "Hazmi",
+            stories: [
+            { url: 'assets/gtr4.jpeg', caption: 'Story 1' },
+            { url: 'assets/tesla.jpeg', caption: 'Story 2' },
+            ]
+        },
+        {
+            src: "assets/user7.png",
+            alt: "Avatar of Jai",
+            name: "Jai",
+            stories: [
+            { url: 'assets/lambo3.webp', caption: 'Story 1' },
+            { url: 'assets/lambo2.jpeg', caption: 'Story 2' },
+            ]
+        },
+    ]);
 
-  const handlePictureClick = () => {
-    setSection('picture');
-  };
+    useEffect(() => {
+        // Add a "viewed" flag to each user
+        setAvatars(avatars.map(avatar => ({
+            ...avatar,
+            viewed: false
+        })));
+    }, []);
 
-  const handleVideoClick = () => {
-    setSection('video');
-  };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAvatars(prevAvatars => {
+                const updatedAvatars = prevAvatars.map(avatar => ({
+                    ...avatar,
+                    stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000) // Filter stories older than 24 hours
+                    // stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 8000) // Filter stories older than 8 second
+                }));
+                return updatedAvatars;
+            });
+        }, 60 * 1000); // Check every minute
+    // }, 8000); // Check every 8 second
 
-  const handleBackClick = () => {
-    setSection('main');
-  };
+        return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []);
 
-  const handleClose = () => {
-    setSection('main');
-    onClose();
-  };
 
-  if (!isOpen) return null;
+    const handleAvatarClick = (avatar) => {
+        if (avatar === firstAvatar) { // Check if the clicked avatar is the first avatar
+            if (avatar.stories && avatar.stories.length === 0) {
+                setIsPopupOpen(true); // Open the popup if the first avatar has no stories
+            } else {
+                setSelectedStory(avatar.stories);
+                setSelectedUser(avatar);
+                setShowStoryViewer(true); // Open the story viewer if the first avatar has stories
+            }
+        } else {
+            if (avatar.stories && avatar.stories.length > 0) {
+                setSelectedStory(avatar.stories);
+                setSelectedUser(avatar);
+                setShowStoryViewer(true); // Open the story viewer for other users
+            }
+        }
+    };
 
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      {section === 'main' && (
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold w-full text-center">Create a Story</h1>
-            <button onClick={handleClose} className="text-gray-600 hover:text-black">
-              <img src="/assets/icon-close.png" alt="Close" />
-            </button>
-          </div>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded m-2"
-            onClick={handlePictureClick}
-          >
-            Picture
-          </button>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded m-2"
-            onClick={handleVideoClick}
-          >
-            Video
-          </button>
-          <button
-            className="bg-red-500 text-white py-2 px-4 rounded m-2"
-            onClick={handleClose}
-          >
-            Close
-          </button>
-        </div>
-      )}
-      {section === 'picture' && (
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center w-5/6 h-5/6">
-          <CreateStory goBack={handleBackClick} onClose={handleClose} />
-        </div>
-      )}
-      {section === 'video' && (
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center w-5/6 h-5/6">
-          <CreateVideoStory goBack={handleBackClick} onClose={handleClose} />
-        </div>
-      )}
-    </div>
-  );
-};
+    const handlePlusButtonClick = () => {
+        setIsPopupOpen(true);
+    };
 
-// ImageVideoPopup component
-const ImageVideoPopup = ({ isOpen, onClose, media }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slideInterval = useRef(null);
-  const videoRef = useRef(null);
+    const handleCloseViewer = () => {
+        setShowStoryViewer(false);
+        setSelectedStory(null);
+        setSelectedUser(null);
+    };
 
-  useEffect(() => {
-    if (isOpen) {
-      const slideDuration = media[currentSlide].type === 'image' ? 10000 : 30000;
+    const handlePostStory = (newStory) => {
+        setAvatars(prevAvatars => {
+            const updatedAvatars = [...prevAvatars];
+            updatedAvatars[0].stories.push(newStory);
+            return updatedAvatars;
+        });
+        setIsPopupOpen(false);
+    };
 
-      slideInterval.current = setInterval(() => {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
-      }, slideDuration);
+    const markUserAsViewed = (user) => {
+        setAvatars(prevAvatars => {
+            const updatedAvatars = prevAvatars.map(avatar => {
+                if (avatar === user) {
+                    return { ...avatar, viewed: true };
+                }
+                return avatar;
+            });
+            return updatedAvatars;
+        });
+    };
 
-      return () => clearInterval(slideInterval.current);
-    }
-  }, [isOpen, media, currentSlide]);
+    const sortedAvatars = [
+        ...avatars.slice(1).sort((a, b) => a.viewed - b.viewed) // Sort
+    ];
 
-  const handlePrevSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide - 1 + media.length) % media.length);
-  };
+    const firstAvatar = avatars[0];
 
-  const handleNextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
-  };
-
-  const handleVideoEnded = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % media.length);
-  };
-
-  useEffect(() => {
-    if (isOpen && media[currentSlide].type === 'video') {
-      const videoElement = videoRef.current;
-      videoElement.currentTime = 0;
-      videoElement.play();
-
-      videoElement.onended = handleVideoEnded;
-
-      const videoTimeout = setTimeout(() => {
-        handleVideoEnded();
-      }, 30000);
-
-      return () => {
-        clearTimeout(videoTimeout);
-        videoElement.onended = null;
-      };
-    }
-  }, [isOpen, currentSlide, media]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-5/6 h-5/6 relative">
-        <button onClick={onClose} className="absolute top-2 right-2 text-gray-600 hover:text-black">
-          <img src="/assets/icon-close.png" alt="Close" />
-        </button>
-        <div className="flex justify-between items-center h-full">
-          <button onClick={handlePrevSlide} className="text-gray-600 hover:text-black">
-            &lt;
-          </button>
-          <div className="w-4/5 flex justify-center items-center">
-            {media[currentSlide].type === 'image' ? (
-              <img src={media[currentSlide].src} alt="Slide" className="max-h-full max-w-full object-contain" />
-            ) : (
-              <video
-                ref={videoRef}
-                id="video-element"
-                src={media[currentSlide].src}
-                autoPlay
-                className="max-h-full max-w-full object-contain"
-              />
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px' }}>
+            <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
+                <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(firstAvatar)} >
+                    <div style={{
+                        borderRadius: '50%',
+                        width: '104px',
+                        height: '104px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: firstAvatar.stories.length > 0 ? 'linear-gradient(45deg, #FCAF45, #FF3559, #FF9C33, #FF3559)' : 'transparent',
+                        padding: '2px'
+                    }}>
+                        <img
+                            src={firstAvatar.src}
+                            alt={firstAvatar.alt}
+                            style={{
+                                borderRadius: '50%',
+                                width: '100px',
+                                height: '100px',
+                                border: '3px solid white'
+                            }}
+                        />
+                    </div>
+                </button>
+                <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={handlePlusButtonClick}>
+                    <span style={{
+                        position: 'absolute',
+                        bottom: '0px',
+                        right: '5px',
+                        width: '22px',
+                        height: '22px',
+                        background: 'blue',
+                        color: 'white',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        border: '2px solid white',
+                    }}>+</span>
+                </button>
+                <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
+                    {firstAvatar.stories.length} {firstAvatar.stories.length === 1 ? 'story' : 'stories'}
+                </div>
+                <div style={{ textAlign: 'center', marginTop: '-5px' }}>{firstAvatar.name}</div>
+            </div>
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                {sortedAvatars.map((avatar, index) => (
+                    <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
+                        <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
+                            <div style={{
+                                borderRadius: '50%',
+                                background: avatar.stories.length > 0 ? 'linear-gradient(45deg, #FCAF45, #FF3559, #FF9C33, #FF3559)' : 'transparent',
+                                padding: '2px',
+                                filter: avatar.viewed ? 'grayscale(100%)' : 'none' // Apply grayscale filter if the stories have been viewed
+                            }}>
+                                <img
+                                    src={avatar.src}
+                                    alt={avatar.alt}
+                                    style={{
+                                        borderRadius: '50%',
+                                        width: '80px',
+                                        height: '80px',
+                                        border: '3px solid white',
+                                        objectFit: 'cover',
+                                    }}
+                                    onClick={() => handleAvatarClick(avatar)}
+                                />
+                            </div>
+                        </button>
+                        <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
+                            {avatar.stories.length} {avatar.stories.length === 1 ? 'story' : 'stories'}
+                        </div>
+                        <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.name}</div>
+                    </div>
+                ))}
+            </div>
+            {showStoryViewer && selectedStory && (
+                <StoryViewer stories={selectedStory} onClose={handleCloseViewer} user={selectedUser} onViewed={markUserAsViewed} />
             )}
-          </div>
-          <button onClick={handleNextSlide} className="text-gray-600 hover:text-black">
-            &gt;
-          </button>
+            {isPopupOpen && (
+                <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+                    <CreateImageStory onPostStory={handlePostStory} />
+                </Popup>
+            )}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-// Avatar component
-function Avatar({ src, alt, name }) {
-  return (
-    <div className="flex flex-col grow items-center text-sm text-center whitespace-nowrap text-neutral-800 max-md:mt-6">
-      <img src={src} alt={alt} className="aspect-square w-[98px]" />
-      <div className="mt-3">{name}</div>
-    </div>
-  );
-}
-
-// Stories component
-function Stories() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isImageVideoPopupOpen, setIsImageVideoPopupOpen] = useState(false);
-  const [image] = useState("https://th.bing.com/th/id/R.f48ceff9ab3322d4e84ed12a44c484d1?rik=0KQ6OgL4T%2b9uCA&riu=http%3a%2f%2fwww.photo-paysage.com%2falbums%2fuserpics%2f10001%2fCascade_-15.JPG&ehk=kx1JjE9ugj%2bZvUIrjzSmcnslPc7NE1cOnZdra%2f3pJEM%3d&risl=1&pid=ImgRaw&r=0");
-
-  const openPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const openImageVideoPopup = () => {
-    setIsImageVideoPopupOpen(true);
-  };
-
-  const closeImageVideoPopup = () => {
-    setIsImageVideoPopupOpen(false);
-  }
-
-  const avatars = [
-    {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f112564488aa36e3249859d0a7978ae87e135589f7a2546f20452573f4289865?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
-      alt: "Avatar of Thomas",
-      name: "Thomas",
-    },
-    {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/26e9c323e2b3e2d4cb3ba7c439300d489fcd7efc28471a423d6df3137de94320?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
-      alt: "Avatar of Aisha",
-      name: "Aisha",
-    },
-    {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/f9f2a26cfd4c2c4cfd165c8a11e72547b5817ce689fd1780656a7eef5b65f656?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
-      alt: "Avatar of Dan",
-      name: "Dan",
-    },
-    {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/39895574049d881fb475ea138e7d0fa865baaad0626f61c876f3d7b93f879f0b?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&",
-      alt: "Avatar of Musa",
-      name: "Musa",
-    },
-  ];
-
-  // Sample images and videos for the popup
-  const sampleMedia = [
-    { type: 'image', src: 'https://via.placeholder.com/800x600.png?text=Image+1' },
-    { type: 'image', src: 'https://via.placeholder.com/800x600.png?text=Image+2' },
-    { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-    { type: 'video', src: 'https://www.w3schools.com/html/movie.mp4' },
-  ];
-
-  return (
-    <div className="max-w-[624px]">
-      <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-        <div className="relative">
-          <button onClick={openPopup}>
-            <div className="flex items-center bg-gray h-24 border-4 border-white-700 rounded-full p-px">
-              <img className="flex items-center bg-black h-24 w-24  rounded-full "
-                src="/assets/profileDummy.png"
-              />
-              <img className="absolute h-5 w-5 left-20 mt-14 "
-                src="/assets/story/iconAddStory.svg"/>
-            </div>
-          </button>
-          {/* <button
-            className="bg-blue-500 text-white py-2 px-4 rounded ml-4"
-            onClick={openImageVideoPopup}
-          >
-            Open Image/Video Popup
-          </button> */}
-        </div>
-        <Popup isOpen={isPopupOpen} onClose={closePopup} />
-        <ImageVideoPopup isOpen={isImageVideoPopupOpen} onClose={closeImageVideoPopup} media={sampleMedia} />
-        <div className="flex flex-col ml-5 w-[83%] max-md:ml-0 max-md:w-full">
-          <div className="px-5 max-md:mt-10 max-md:max-w-full">
-            <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-              {avatars.map((avatar, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col w-3/12 max-md:ml-0 max-md:w-full"
-                >
-                  <Avatar
-                    src={avatar.src}
-                    alt={avatar.alt}
-                    name={avatar.name}
-                    onClick={openImageVideoPopup}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default Stories;
+export default StoryNew;

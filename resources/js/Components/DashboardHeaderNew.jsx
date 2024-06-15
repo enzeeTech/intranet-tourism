@@ -1,10 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { BellIcon } from '@heroicons/react/24/outline';
 import { usePage } from '@inertiajs/react';
 import NotificationPopup from '../Components/Noti-popup-test';
-
 
 const userNavigation = [
     { name: 'Your profile', href: '../profile' },
@@ -18,11 +16,47 @@ function classNames(...classes) {
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
-    const [userData, setUserData] = useState([]);
-    const [userName, setUserName] = useState('');
+    const [userData, setUserData] = useState({
+        name: "",
+        profileImage: "",
+    });
+
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isActive, setIsActive] = useState(false);
+
+    const notificationRef = useRef();
+
+    const togglePopup = () => {
+        setIsPopupVisible(!isPopupVisible);
+        setIsActive(!isActive);
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+            setIsPopupVisible(false);
+            setIsActive(false);
+        }
+    };
 
     useEffect(() => {
-        fetch("/api/crud/users", {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        console.log("Fetching user data...");
+        fetch(`/api/crud/users/${id}?with[]=profile`, {
             method: "GET",
         })
             .then((response) => {
@@ -31,20 +65,27 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
-            .then((data) => {
-                console.log("User data:", data);
-                if (data && data.data && data.data.data && data.data.data.length > 0) {
-                    setUserData(data.data.data);
-                    const currentUserData = data.data.data.find(user => user.id === id);
-                    if (currentUserData) {
-                        setUserName(currentUserData.name);
-                    }
-                }
+            .then(({ data }) => {
+                setUserData(pv => ({
+                    ...pv, ...data,
+                    name: data.name,
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                }));
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id]); // Use the user ID here if needed in the effect
+    }, [id]);
+
+    const getIconSrc = () => {
+        if (isActive) {
+            return "/Assets/bell-active.svg";
+        } else if (isHovered) {
+            return "/Assets/bell-hover.svg";
+        } else {
+            return "/Assets/bell.svg";
+        }
+    };
 
     return (
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
@@ -79,10 +120,20 @@ export default function Header({ setSidebarOpen }) {
                     />
                 </form>
                 <div className="flex items-center gap-x-4 lg:gap-x-6">
-                    {/* <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button> */}
+                    <div className="relative" ref={notificationRef}>
+                        <button
+                            type="button"
+                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                            onClick={togglePopup}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            <img src={getIconSrc()} className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                        {isPopupVisible && (
+                            <NotificationPopup />
+                        )}
+                    </div>
 
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
@@ -93,12 +144,12 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="h-8 w-8 rounded-full bg-gray-50"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"
+                                src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">
                                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                                    {userName}
+                                    {userData.name}
                                 </span>
                                 <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>
