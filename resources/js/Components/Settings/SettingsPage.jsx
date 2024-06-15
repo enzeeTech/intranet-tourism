@@ -221,35 +221,37 @@ function classNames(...classes) {
 }
 
 const CoreFeatures = () => {
-  const [availableToHire, setAvailableToHire] = useState(false);
-  const [privateAccount, setPrivateAccount] = useState(false);
-  const [allowCommenting, setAllowCommenting] = useState(false);
-  const [allowMentions, setAllowMentions] = useState(false);
+  const [wall, setWall] = useState(false);
+  const [calendarOfEvents, setCalendarOfEvents] = useState(false);
+  const [notifications, setNotifications] = useState(false);
+  const [pages, setPages] = useState(false);
+  const [poll, setPoll] = useState(false);
+  const [organisationChart, setOrganisationChart] = useState(false);
 
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
-      <h2 className="text-2xl font-bold text-neutral-800">Privacy</h2>
+      <h2 className="text-2xl font-bold text-blue-500">Enable/Disable Core Features</h2>
       <div className="border-t border-gray-200 mt-2"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
           <Field as="li" className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
               <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Available to hire
+                Wall
               </Label>
             </div>
             <Switch
-              checked={availableToHire}
-              onChange={setAvailableToHire}
+              checked={wall}
+              onChange={setWall}
               className={classNames(
-                availableToHire ? 'bg-teal-500' : 'bg-gray-200',
+                wall ? 'bg-blue-500' : 'bg-gray-200',
                 'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
               )}
             >
               <span
                 aria-hidden="true"
                 className={classNames(
-                  availableToHire ? 'translate-x-5' : 'translate-x-0',
+                  wall ? 'translate-x-5' : 'translate-x-0',
                   'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                 )}
               />
@@ -258,21 +260,21 @@ const CoreFeatures = () => {
           <Field as="li" className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
               <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Make account private
+                Calendar of Events
               </Label>
             </div>
             <Switch
-              checked={privateAccount}
-              onChange={setPrivateAccount}
+              checked={calendarOfEvents}
+              onChange={setCalendarOfEvents}
               className={classNames(
-                privateAccount ? 'bg-teal-500' : 'bg-gray-200',
+                calendarOfEvents ? 'bg-blue-500' : 'bg-gray-200',
                 'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
               )}
             >
               <span
                 aria-hidden="true"
                 className={classNames(
-                  privateAccount ? 'translate-x-5' : 'translate-x-0',
+                  calendarOfEvents ? 'translate-x-5' : 'translate-x-0',
                   'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                 )}
               />
@@ -281,21 +283,21 @@ const CoreFeatures = () => {
           <Field as="li" className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
               <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Allow commenting
+                Notifications
               </Label>
             </div>
             <Switch
-              checked={allowCommenting}
-              onChange={setAllowCommenting}
+              checked={notifications}
+              onChange={setNotifications}
               className={classNames(
-                allowCommenting ? 'bg-teal-500' : 'bg-gray-200',
+                notifications ? 'bg-blue-500' : 'bg-gray-200',
                 'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
               )}
             >
               <span
                 aria-hidden="true"
                 className={classNames(
-                  allowCommenting ? 'translate-x-5' : 'translate-x-0',
+                  notifications ? 'translate-x-5' : 'translate-x-0',
                   'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                 )}
               />
@@ -304,21 +306,67 @@ const CoreFeatures = () => {
           <Field as="li" className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
               <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Allow mentions
+                Pages
               </Label>
             </div>
             <Switch
-              checked={allowMentions}
-              onChange={setAllowMentions}
+              checked={pages}
+              onChange={setPages}
               className={classNames(
-                allowMentions ? 'bg-teal-500' : 'bg-gray-200',
+                pages ? 'bg-blue-500' : 'bg-gray-200',
                 'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
               )}
             >
               <span
                 aria-hidden="true"
                 className={classNames(
-                  allowMentions ? 'translate-x-5' : 'translate-x-0',
+                  pages ? 'translate-x-5' : 'translate-x-0',
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                )}
+              />
+            </Switch>
+          </Field>
+          <Field as="li" className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
+                Poll
+              </Label>
+            </div>
+            <Switch
+              checked={poll}
+              onChange={setPoll}
+              className={classNames(
+                poll ? 'bg-blue-500' : 'bg-gray-200',
+                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  poll ? 'translate-x-5' : 'translate-x-0',
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                )}
+              />
+            </Switch>
+          </Field>
+          <Field as="li" className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
+                Organisation Chart
+              </Label>
+            </div>
+            <Switch
+              checked={organisationChart}
+              onChange={setOrganisationChart}
+              className={classNames(
+                organisationChart ? 'bg-blue-500' : 'bg-gray-200',
+                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  organisationChart ? 'translate-x-5' : 'translate-x-0',
                   'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                 )}
               />
@@ -326,7 +374,7 @@ const CoreFeatures = () => {
           </Field>
         </ul>
       </div>
-      <div className="border-t border-gray-200 mt-4 w-full"></div>
+      <div className="border-t border-gray-200 w-full"></div>
       <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
         <button
           type="button"
@@ -336,7 +384,7 @@ const CoreFeatures = () => {
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-sky-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
