@@ -235,144 +235,37 @@ const CoreFeatures = () => {
       <div className="border-t border-gray-200 mt-2"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Wall
-              </Label>
-            </div>
-            <Switch
-              checked={wall}
-              onChange={setWall}
-              className={classNames(
-                wall ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
+          {[
+            { label: 'Wall', state: wall, setState: setWall },
+            { label: 'Calendar of Events', state: calendarOfEvents, setState: setCalendarOfEvents },
+            { label: 'Notifications', state: notifications, setState: setNotifications },
+            { label: 'Pages', state: pages, setState: setPages },
+            { label: 'Poll', state: poll, setState: setPoll },
+            { label: 'Organisation Chart', state: organisationChart, setState: setOrganisationChart },
+          ].map(({ label, state, setState }) => (
+
+            <li key={label} className="flex items-center justify-between py-4 w-full">
+              <div className="flex flex-col">
+                <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
+              </div>
+              <Switch
+                checked={state}
+                onChange={setState}
                 className={classNames(
-                  wall ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  state ? 'bg-blue-500' : 'bg-gray-200',
+                  'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
                 )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Calendar of Events
-              </Label>
-            </div>
-            <Switch
-              checked={calendarOfEvents}
-              onChange={setCalendarOfEvents}
-              className={classNames(
-                calendarOfEvents ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  calendarOfEvents ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Notifications
-              </Label>
-            </div>
-            <Switch
-              checked={notifications}
-              onChange={setNotifications}
-              className={classNames(
-                notifications ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  notifications ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Pages
-              </Label>
-            </div>
-            <Switch
-              checked={pages}
-              onChange={setPages}
-              className={classNames(
-                pages ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  pages ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Poll
-              </Label>
-            </div>
-            <Switch
-              checked={poll}
-              onChange={setPoll}
-              className={classNames(
-                poll ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  poll ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Organisation Chart
-              </Label>
-            </div>
-            <Switch
-              checked={organisationChart}
-              onChange={setOrganisationChart}
-              className={classNames(
-                organisationChart ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  organisationChart ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
+              >
+                <span
+                  aria-hidden="true"
+                  className={classNames(
+                    state ? 'translate-x-5' : 'translate-x-0',
+                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  )}
+                />
+              </Switch>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="border-t border-gray-200 w-full"></div>
@@ -411,212 +304,55 @@ const SizeLimit = () => {
       <div className="border-t border-gray-200 mt-2"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                File
-              </Label>
-            </div>
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                  {fileLimit}
-                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                </Menu.Button>
+          {[
+            { label: 'File', limit: fileLimit, setLimit: setFileLimit, type: 'file' },
+            { label: 'Video', limit: videoLimit, setLimit: setVideoLimit, type: 'video' },
+            { label: 'Photo', limit: photoLimit, setLimit: setPhotoLimit, type: 'photo' },
+          ].map(({ label, limit, setLimit, type }) => (
+
+            <li key={label} className="flex items-center justify-between py-4 w-full">
+              <div className="flex flex-col">
+                <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
               </div>
-
-              <Transition
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('1 GB', 'file')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          1 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('3 GB', 'file')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          3 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('5 GB', 'file')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          5 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-          </Field>
-
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Video
-              </Label>
-            </div>
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                  {videoLimit}
-                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                </Menu.Button>
-              </div>
-
-              <Transition
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('1 GB', 'video')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          1 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('3 GB', 'video')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          3 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('5 GB', 'video')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          5 GB
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-          </Field>
-
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Photo
-              </Label>
-            </div>
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                  {photoLimit}
-                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                </Menu.Button>
-              </div>
-
-              <Transition
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('10 MB', 'photo')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          10 MB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('30 MB', 'photo')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          30 MB
-                        </a>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <a
-                          href="#"
-                          onClick={() => handleSelect('50 MB', 'photo')}
-                          className={`${
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
-                          50 MB
-                        </a>
-                      )}
-                    </Menu.Item>
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-          </Field>
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    {limit}
+                    <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  </Menu.Button>
+                </div>
+                <Transition
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                      {['1 GB', '3 GB', '5 GB'].map(option => (
+                        <Menu.Item key={option}>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              onClick={() => handleSelect(option, type)}
+                              className={classNames(
+                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                'block px-4 py-2 text-sm'
+                              )}
+                            >
+                              {option}
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </div>
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="border-t border-gray-200 w-full"></div>
@@ -638,7 +374,6 @@ const SizeLimit = () => {
   );
 };
 
-
 const Media = () => {
   const [fileFolder, setFileFolder] = useState(false);
 
@@ -648,19 +383,14 @@ const Media = () => {
       <div className="border-t border-gray-200 mt-2"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Path to Files Folder
-              </Label>
+              <p className="text-sm font-medium leading-6 text-gray-900">Path to Files Folder</p>
             </div>
             <div className="flex flex-col -ml-64">
-              <Label as="p" className="text-sm font-light leading-6 text-gray-900">
-                Allow members to invite
-              </Label>
+              <p className="text-sm font-light leading-6 text-gray-900">Allow members to invite</p>
             </div>
-            <Menu as="div" className="relative inline-block text-left">
-              <Switch
+            <Switch
               checked={fileFolder}
               onChange={setFileFolder}
               className={classNames(
@@ -676,30 +406,24 @@ const Media = () => {
                 )}
               />
             </Switch>
-            </Menu>
-          </Field>
-
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
+          </li>
+          <li className="flex items-center justify-between py-4 w-full">
             <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Limit Email Domain
-              </Label>
+              <p className="text-sm font-medium leading-6 text-gray-900">Limit Email Domain</p>
             </div>
-            <Menu as="div" className="relative inline-block text-left">
             <div>
-      <label htmlFor="link" className="sr-only">
-        Link
-      </label>
-      <input
-        type="link"
-        name="link"
-        id="link"
-        className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
-        placeholder="Link"
-      />
-    </div>
-            </Menu>
-          </Field>
+              <label htmlFor="link" className="sr-only">
+                Link
+              </label>
+              <input
+                type="link"
+                name="link"
+                id="link"
+                className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                placeholder="Link"
+              />
+            </div>
+          </li>
         </ul>
       </div>
       <div className="border-t border-gray-200 w-full"></div>
@@ -731,52 +455,33 @@ const CoverPhotos = () => {
       <div className="border-t border-gray-200 mt-2"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Groups
-              </Label>
-            </div>
-            <Switch
-              checked={groups}
-              onChange={setGroups}
-              className={classNames(
-                groups ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
+          {[
+            { label: 'Groups', state: groups, setState: setGroups },
+            { label: 'Profile', state: profile, setState: setProfile },
+          ].map(({ label, state, setState }) => (
+
+            <li key={label} className="flex items-center justify-between py-4 w-full">
+              <div className="flex flex-col">
+                <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
+              </div>
+              <Switch
+                checked={state}
+                onChange={setState}
                 className={classNames(
-                  groups ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  state ? 'bg-blue-500' : 'bg-gray-200',
+                  'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
                 )}
-              />
-            </Switch>
-          </Field>
-          <Field as="li" className="flex items-center justify-between py-4 w-full">
-            <div className="flex flex-col">
-              <Label as="p" className="text-sm font-medium leading-6 text-gray-900">
-                Profile
-              </Label>
-            </div>
-            <Switch
-              checked={profile}
-              onChange={setProfile}
-              className={classNames(
-                profile ? 'bg-blue-500' : 'bg-gray-200',
-                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-              )}
-            >
-              <span
-                aria-hidden="true"
-                className={classNames(
-                  profile ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                )}
-              />
-            </Switch>
-          </Field>
+              >
+                <span
+                  aria-hidden="true"
+                  className={classNames(
+                    state ? 'translate-x-5' : 'translate-x-0',
+                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  )}
+                />
+              </Switch>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="border-t border-gray-200 w-full"></div>
@@ -798,12 +503,222 @@ const CoverPhotos = () => {
   );
 };
 
+const MailSettings = () => {
+  const [security, setSecurity] = useState('None');
+  const [mail, setMail] = useState('PHP Mail');
+  const [fileFolder, setFileFolder] = useState(false);
+  const [authentication, setAuthentication] = useState(false);
+  const [emailNotification, setEmailNotification] = useState(false);
 
+  const handleSelect = (option, type) => {
+    if (type === 'mail') setMail(option);
+    if (type === 'security') setSecurity(option);
+  };
 
-
-
-
-
+  return (
+    <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px] mt-5">
+      <h2 className="text-2xl font-bold text-blue-500">Mail Settings</h2>
+      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="w-full">
+        <ul role="list" className="divide-y divide-gray-200">
+          <li className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <p className="text-sm font-medium leading-6 text-gray-900">Mailer *</p>
+            </div>
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  {mail}
+                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                </Menu.Button>
+              </div>
+              <Transition
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {['Mail 1', 'Mail 2', 'Mail 3'].map(option => (
+                      <Menu.Item key={option}>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            onClick={() => handleSelect(option, 'mail')}
+                            className={classNames(
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            {option}
+                          </a>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </li>
+          <li className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <p className="text-sm font-medium leading-6 text-gray-900">Path to Files Folder</p>
+            </div>
+            <div className="flex flex-col -ml-64">
+              <p className="text-sm font-light leading-6 text-gray-900">Allow members to invite</p>
+            </div>
+            <Switch
+              checked={fileFolder}
+              onChange={setFileFolder}
+              className={classNames(
+                fileFolder ? 'bg-blue-500' : 'bg-gray-200',
+                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  fileFolder ? 'translate-x-5' : 'translate-x-0',
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                )}
+              />
+            </Switch>
+          </li>
+          {[
+            { label: 'From Email', placeholder: 'jomla@tourism.gov.my', type: 'email' },
+            { label: 'From Name', placeholder: 'jomla!', type: 'text' },
+            { label: 'Sendmail Path', placeholder: '', type: 'text' },
+            { label: 'SMTP Port *', placeholder: '25', type: 'text' },
+            { label: 'SMTP Username', placeholder: 'admin', type: 'text' },
+            { label: 'SMTP Password', placeholder: '***********', type: 'password' },
+            { label: 'SMTP Host', placeholder: 'localhost', type: 'text' },
+          ].map(({ label, placeholder, type }) => (
+            
+            <li key={label} className="flex items-center justify-between py-4 w-full">
+              <div className="flex flex-col">
+                <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
+              </div>
+              <div>
+                <label htmlFor={label} className="sr-only">
+                  {label}
+                </label>
+                <input
+                  type={type}
+                  name={label}
+                  id={label}
+                  className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                  placeholder={placeholder}
+                />
+              </div>
+            </li>
+          ))}
+          <li className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <p className="text-sm font-medium leading-6 text-gray-900">SMTP Authentication</p>
+            </div>
+            <Switch
+              checked={authentication}
+              onChange={setAuthentication}
+              className={classNames(
+                authentication ? 'bg-blue-500' : 'bg-gray-200',
+                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  authentication ? 'translate-x-5' : 'translate-x-0',
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                )}
+              />
+            </Switch>
+          </li>
+          <li className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <p className="text-sm font-medium leading-6 text-gray-900">SMTP Security</p>
+            </div>
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  {security}
+                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                </Menu.Button>
+              </div>
+              <Transition
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {['Security 1', 'Security 2', 'Security 3'].map(option => (
+                      <Menu.Item key={option}>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            onClick={() => handleSelect(option, 'security')}
+                            className={classNames(
+                              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            {option}
+                          </a>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </li>
+          <li className="flex items-center justify-between py-4 w-full">
+            <div className="flex flex-col">
+              <p className="text-sm font-medium leading-6 text-gray-900">Enable Email Notification</p>
+            </div>
+            <Switch
+              checked={emailNotification}
+              onChange={setEmailNotification}
+              className={classNames(
+                emailNotification ? 'bg-blue-500' : 'bg-gray-200',
+                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
+              )}
+            >
+              <span
+                aria-hidden="true"
+                className={classNames(
+                  emailNotification ? 'translate-x-5' : 'translate-x-0',
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                )}
+              />
+            </Switch>
+          </li>
+        </ul>
+      </div>
+      <div className="border-t border-gray-200 w-full"></div>
+      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+        >
+          Save
+        </button>
+      </div>
+    </section>
+  );
+};
 
 // =============================================================================================================================================================
 
@@ -825,6 +740,7 @@ const SettingsPage = ({ currentPage }) => {
           <SizeLimit onSave={handleSave} />
           <Media onSave={handleSave} />
           <CoverPhotos onSave={handleSave} />
+          <MailSettings onSave={handleSave} />
         </>
       )}
       {currentPage === 'Department' && <div></div>}
@@ -838,4 +754,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings };
