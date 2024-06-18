@@ -1,35 +1,41 @@
 import React, { useState } from "react";
 import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
 
-function Avatar({ src, alt, className }) {
-  return <img loading="lazy" src={src} alt={alt} className={className} />;
-}
-
-function UserInfo({ name, role }) {
+function Avatar({ src, alt, className, status }) {
   return (
-    <div className="flex flex-col my-auto">
-      <h2 className="text-xl font-bold">{name}</h2>
-      <p className="mt-5 text-xs font-medium">{role}</p>
+    <div className="relative">
+      <img loading="lazy" src={src} alt={alt} className={className} />
+      {status === 1 && <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-2"></div>}
+      {status === 2 && <div className="absolute bottom-0 right-0 border-2 border-white bg-green-500 rounded-full w-[12px] h-[12px] mb-2"></div>}
     </div>
   );
 }
 
-function UserCard({ src, alt, name, role }) {
+function UserInfo({ name, role }) {
   return (
-    <div className="flex gap-5 text-neutral-800">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px]" />
+    <div className="flex flex-col ml-2">
+      <h2 className="text-xl font-bold">{name}</h2>
+      <p className="text-xs font-medium">{role}</p>
+    </div>
+  );
+}
+
+function UserCard({ src, alt, name, role, status }) {
+  return (
+    <div className="flex text-neutral-800">
+      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
   );
 }
 
-function MemberCard({ src, alt, name, role }) {
+function MemberCard({ src, alt, name, role, status }) {
   return (
     <div className="flex gap-5 mt-5 text-neutral-800">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.98] w-[60px]" />
+      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.98] w-[62px] rounded-full mb-4" status={status} />
       <div className="flex flex-col grow shrink-0 self-start mt-3 basis-0 w-fit">
         <h3 className="text-xl font-bold">{name}</h3>
-        <p className="mt-5 text-xs font-medium">{role}</p>
+        <p className="text-xs font-medium">{role}</p>
       </div>
     </div>
   );
@@ -41,37 +47,42 @@ function DpMembers() {
 
   const [members, setMembers] = useState([
     {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/2f9f8a2bc91be026f18ae2b910894bb4c40cbd422082493fb0a3d64699d672ce?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&",
+      src: "assets/women.avif",
       alt: "Profile picture of Aisha Binti (Department)",
       name: "Aisha Binti (Department)",
-      role: "Pejabat Timbalan Ketua Pengarah (Promosi)"
+      role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
+      status: 1
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/6818c205733ee62f02df7aaa6ad01846d2d560ef6aad5ee20d9f8c784e96ef9e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&",
+      src: "assets/person.svg",
       alt: "",
       name: "Nur Shakilla Binti Ramli",
-      role: "Pejabat Timbalan Ketua Pengarah (Promosi)"
+      role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
+      status: 2
     }
   ]);
 
   const [admins, setAdmins] = useState([
     {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/d1f53e6a8abf50125abe82b6e279b4b722c466ecdf073fb5465d78b036a9cab2?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&",
+      src: "assets/person.svg",
       alt: "Profile picture of Aisyah binte Musa",
       name: "Aisyah binte Musa",
-      role: "Pejabat Timbalan Ketua Pengarah (Promosi)"
+      role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
+      status: 1
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/d1f53e6a8abf50125abe82b6e279b4b722c466ecdf073fb5465d78b036a9cab2?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&",
+      src: "assets/person.svg",
       alt: "Profile picture of Aisyah binte Musa",
       name: "Jojo",
-      role: "Pejabat Timbalan Ketua Pengarah (Promosi)"
+      role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
+      status: 2
     },
     {
-      src: "https://cdn.builder.io/api/v1/image/assets/TEMP/d1f53e6a8abf50125abe82b6e279b4b722c466ecdf073fb5465d78b036a9cab2?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&",
+      src: "assets/person.svg",
       alt: "Profile picture of Aisyah binte Musa",
       name: "Kamelion",
-      role: "Pejabat Timbalan Ketua Pengarah (Promosi)"
+      role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
+      status: 1
     }
   ]);
   const [showInvite, setShowInvite] = useState(false);
@@ -98,9 +109,52 @@ function DpMembers() {
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    
     <section className="flex flex-col px-6 pt-8 pb-20 rounded-3xl shadow-sm max-w-[800px] h-auto max-md:px-5">
-      <div className="flex gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full ">
+      <style>
+        {`
+          .relative {
+            position: relative;
+            display: inline-block;
+          }
+
+          .absolute {
+            position: absolute;
+          }
+
+          .bottom-0 {
+            bottom: 0;
+          }
+
+          .right-0 {
+            right: 0;
+          }
+
+          .bg-red-500 {
+            background-color: #f56565;
+          }
+
+          .bg-green-500 {
+            background-color: #48bb78;
+          }
+
+          .rounded-full {
+            border-radius: 9999px;
+          }
+
+          .w-2 {
+            width: 0.5rem;
+          }
+
+          .h-2 {
+            height: 0.5rem;
+          }
+
+          .mb-2 {
+            margin-bottom: 20px;
+          }
+        `}
+      </style>
+      <div className="flex gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
           value={searchInput}
@@ -109,15 +163,19 @@ function DpMembers() {
           style={{ width: "581px", color: "rgba(128, 128, 128, 0.5)" }}
           placeholder="Search Member"
         />
-
         <button
           onClick={handleSearch}
           className="justify-center px-6 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5"
-          style={{ backgroundColor: 'rgb(72, 128, 255)' }}>Search</button>
+          style={{ backgroundColor: 'rgb(72, 128, 255)' }}
+        >
+          Search
+        </button>
         <button
           onClick={handleInviteClick}
           className="justify-center px-11 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5"
-          style={{ backgroundColor: 'rgb(255, 84, 54)' }}>Invite
+          style={{ backgroundColor: 'rgb(255, 84, 54)' }}
+        >
+          Invite
         </button>
       </div>
 
@@ -133,16 +191,19 @@ function DpMembers() {
           alt={admin.alt}
           name={admin.name}
           role={admin.role}
+          status={admin.status}
         />
-
       ))}
+
       <div className="flex gap-5 justify-between mt-10 max-md:flex-wrap max-md:max-w-full">
         <section className="flex flex-col">
           <div className="flex gap-5 whitespace-nowrap">
-            <h2 className="grow text-2xl font-bold text-black">Members
-            <span className=" ml-4 text-lg font-semibold text-stone-300 ">
-              {displayedMembers.length}
-            </span></h2>
+            <h2 className="grow text-2xl font-bold text-black">
+              Members
+              <span className="ml-4 text-lg font-semibold text-stone-300">
+                {displayedMembers.length}
+              </span>
+            </h2>
           </div>
           {displayedMembers.map((member, index) => (
             <MemberCard
@@ -151,6 +212,7 @@ function DpMembers() {
               alt={member.alt}
               name={member.name}
               role={member.role}
+              status={member.status}
             />
           ))}
         </section>
