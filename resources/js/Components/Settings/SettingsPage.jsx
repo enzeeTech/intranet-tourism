@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import { Field, Label, Switch, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 // Basic Settings
 function FileInputSection({ onFileSelect }) {
@@ -292,7 +293,8 @@ const SizeLimit = () => {
   const [videoLimit, setVideoLimit] = useState('Choose Limit');
   const [photoLimit, setPhotoLimit] = useState('Choose Limit');
 
-  const handleSelect = (option, type) => {
+  const handleSelect = (option, type, event) => {
+    event.preventDefault(); // Prevent the default behavior
     if (type === 'file') setFileLimit(option);
     if (type === 'video') setVideoLimit(option);
     if (type === 'photo') setPhotoLimit(option);
@@ -336,7 +338,7 @@ const SizeLimit = () => {
                           {({ active }) => (
                             <a
                               href="#"
-                              onClick={() => handleSelect(option, type)}
+                              onClick={(event) => handleSelect(option, type, event)} // Pass the event object)}
                               className={classNames(
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm'
@@ -510,7 +512,8 @@ const MailSettings = () => {
   const [authentication, setAuthentication] = useState(false);
   const [emailNotification, setEmailNotification] = useState(false);
 
-  const handleSelect = (option, type) => {
+  const handleSelect = (option, type, event) => {
+    event.preventDefault(); // Prevent the default behavior
     if (type === 'mail') setMail(option);
     if (type === 'security') setSecurity(option);
   };
@@ -547,7 +550,7 @@ const MailSettings = () => {
                         {({ active }) => (
                           <a
                             href="#"
-                            onClick={() => handleSelect(option, 'mail')}
+                            onClick={(event) => handleSelect(option, 'mail', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                               'block px-4 py-2 text-sm'
@@ -662,7 +665,7 @@ const MailSettings = () => {
                         {({ active }) => (
                           <a
                             href="#"
-                            onClick={() => handleSelect(option, 'security')}
+                            onClick={(event) => handleSelect(option, 'security', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                               'block px-4 py-2 text-sm'
@@ -722,6 +725,131 @@ const MailSettings = () => {
 
 // =============================================================================================================================================================
 
+// Departments
+
+const Departments = () => {
+  const initialData = [
+    { id: 1, name: 'Department 1', ordering: 1 },
+    { id: 2, name: 'Department 2', ordering: 2 },
+    { id: 3, name: 'Department 3', ordering: 3 },
+    { id: 4, name: 'Department 4', ordering: 4 },
+    { id: 5, name: 'Department 5', ordering: 5 },
+    { id: 6, name: 'Department 6', ordering: 6 },
+    { id: 7, name: 'Department 7', ordering: 7 },
+    { id: 8, name: 'Department 8', ordering: 8 },
+    { id: 9, name: 'Department 9', ordering: 9 },
+  ];
+
+  const [data, setData] = useState(initialData);
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(data);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setData(items);
+  };
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-2xl font-bold text-gray-900 tracking-wider"
+                >
+                  #
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-2xl font-bold text-gray-900 tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-2xl font-bold text-gray-900 tracking-wider"
+                >
+                  Ordering
+                </th>
+              </tr>
+            </thead>
+            <Droppable droppableId="departments">
+              {(provided) => (
+                <tbody
+                  className="bg-white divide-y divide-gray-200"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {data.map((department, index) => (
+                    <Draggable key={department.id} draggableId={`${department.id}`} index={index}>
+                      {(provided) => (
+                        <tr
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {department.id}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div className="flex flex-col">
+                              <input
+                                type="text"
+                                name={`name-${department.id}`}
+                                id={`name-${department.id}`}
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                                placeholder={department.name}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <div className="flex flex-col items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                              </svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </table>
+        </div>
+        <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+          <button
+            type="button"
+            className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          >
+            Save
+          </button>
+        </div>
+      </section>
+    </DragDropContext>
+  );
+}
+
+// =============================================================================================================================================================
+
+
 // For Settings Page
 
 const SettingsPage = ({ currentPage }) => {
@@ -743,7 +871,7 @@ const SettingsPage = ({ currentPage }) => {
           <MailSettings onSave={handleSave} />
         </>
       )}
-      {currentPage === 'Department' && <div></div>}
+      {currentPage === 'Departments' && <Departments onSave={handleSave} />}
       {currentPage === 'Media' && <div></div>}
       {currentPage === 'Requests' && <div></div>}
       {currentPage === 'Audit Trail' && <div></div>}
@@ -754,4 +882,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments };
