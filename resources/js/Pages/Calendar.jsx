@@ -9,8 +9,9 @@ import searchIcon from '../../../public/assets/search.png';
 import searchButton from '../../../public/assets/searchButton.png';
 import printIcon from '../../../public/assets/printButton.png';
 import * as bootstrap from "bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./Calendar/index.css";
+// import Example from '@/Layouts/DashboardLayoutNew';
 import Example from '@/Layouts/DashboardLayoutNew';
 import PageTitle from '@/Components/Reusable/PageTitle';
 
@@ -89,7 +90,7 @@ function Calendar() {
 
             {/* Find Events Button */}
             <button
-              onClick={() => { alert('Clicked the find events button!')}} 
+              onClick={() => { alert('Clicked the find events button!')}}
               className="flex items-center justify-center py-2 mr-2">
               <img src={searchButton} alt="Find Events" className="w-30 h-11" />
             </button>
@@ -199,7 +200,7 @@ function Calendar() {
       </div>
       {/* </div>
       </main> */}
-  
+
       </Example>
     );
 }

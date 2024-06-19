@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
-use Illuminate\Http\Request; // Don't forget to import the Event model
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CalendarController extends Controller
@@ -12,7 +12,7 @@ class CalendarController extends Controller
     {
         // $events = Event::all(['id', 'title', 'start_time as start', 'end_time as end', 'color']);
 
-        return Inertia::render('Calendar');
+        return Inertia::render('Calendar', ['id' => auth()->id()]);
     }
 
     // public function getEvents()
