@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { Field, Label, Switch, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { Switch, Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
@@ -752,6 +752,24 @@ const Departments = () => {
     setData(items);
   };
 
+  const handleSortUp = (index) => {
+    if (index === 0) return;
+    const items = Array.from(data);
+    const temp = items[index - 1];
+    items[index - 1] = items[index];
+    items[index] = temp;
+    setData(items);
+  };
+
+  const handleSortDown = (index) => {
+    if (index === data.length - 1) return;
+    const items = Array.from(data);
+    const temp = items[index + 1];
+    items[index + 1] = items[index];
+    items[index] = temp;
+    setData(items);
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
@@ -798,7 +816,10 @@ const Departments = () => {
                             {department.id}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <div className="flex flex-col">
+                            <div className="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 -ml-10 pt-2 cursor-grab" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M7 5a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                              </svg>
                               <input
                                 type="text"
                                 name={`name-${department.id}`}
@@ -809,13 +830,19 @@ const Departments = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <div className="flex flex-col items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                              </svg>
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                              </svg>
+                            <div className="flex items-center justify-left">
+                              <img
+                                src="assets/orderingup.svg"
+                                alt="Up Arrow"
+                                className="h-7 w-7 mr-3 cursor-pointer"
+                                onClick={() => handleSortUp(index)}
+                              />
+                              <img
+                                src="assets/orderingdown.svg"
+                                alt="Down Arrow"
+                                className="h-7 w-7 ml-1 cursor-pointer"
+                                onClick={() => handleSortDown(index)}
+                              />
                             </div>
                           </td>
                         </tr>
@@ -845,7 +872,8 @@ const Departments = () => {
       </section>
     </DragDropContext>
   );
-}
+};
+
 
 // =============================================================================================================================================================
 
