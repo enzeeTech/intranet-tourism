@@ -18,6 +18,7 @@ class ExternalLink extends Model implements AuditableContract
     protected $fillable = [
         'label',
         'url',
+        'order',
     ];
 
     public static function rules($scenario = 'create')
@@ -27,6 +28,7 @@ class ExternalLink extends Model implements AuditableContract
                 [
                     'label' => ['string', 'required'],
                     'url' => ['string', 'required'],
+                    'order' => ['integer'],
                 ],
                 // [],
             ],
@@ -34,6 +36,7 @@ class ExternalLink extends Model implements AuditableContract
                 [
                     'label' => ['string', 'required'],
                     'url' => ['string', 'required'],
+                    'order' => ['integer'],
                 ],
                 // [],
             ],
