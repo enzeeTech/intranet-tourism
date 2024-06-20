@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
+            $table->string('venue');
+            $table->string('url')->nullable();
             $table->string('description')->nullable();
             $table->string('color')->nullable();
             $table->datetime('start_at')->nullable();
@@ -21,10 +23,10 @@ return new class extends Migration
             $table->auditable();
         });
 
-        Schema::create('event_attendance', function (Blueprint $table) {
+        Schema::create('event_invitations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('user_id')->constrained();
             $table->foreignUuid('event_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->auditable();
         });
 
