@@ -75,8 +75,8 @@ class NotificationPopup extends React.Component {
                     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
                     miniIcon: "",
                     orangeball: "/assets/orangeball.png",
-                    users: "Shet",
-                    message: "6 request to change the Organisational chart picture was 6 ",
+                    users: "Baihaqi",
+                    message: "request to change the Organisational chart picture was 6 ",
                     timeAgo: "10 mins ago",
                     notiView: 0,
                     status: 7,
@@ -85,8 +85,8 @@ class NotificationPopup extends React.Component {
                 {
                     id: 7,
                     imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-                    users: "Shit",
-                    message: "7 request to change the Organisational chart picture was 7 ",
+                    users: "Ahmad",
+                    message: "request to change the Organisational chart picture was 7 ",
                     orangeball: "/assets/orangeball.png",
                     timeAgo: "10 mins ago",
                     notiView: 0,
@@ -120,8 +120,8 @@ class NotificationPopup extends React.Component {
                         -webkit-line-clamp: 2;
                         overflow: hidden;
                         text-overflow: ellipsis;
-                        max-height: 2.4em; /* 2 lines * 1.2em line height */
-                        line-height: 1.2em;
+                        max-height: 2.5em; /* 2 lines * 1.1em line height */
+                        line-height: 1.1em;
                     }
                     .tab-button {
                         margin-left: 10px;
@@ -178,7 +178,7 @@ class NotificationPopup extends React.Component {
                         {filteredNotifications.map(notification => (
                             <div className="flex flex-row h-[104px] mb-2 hover:bg-blue-100 items-center rounded-xl" key={notification.id}>
                                 <div className="flex items-center bg-gray h-16">
-                                    <img className="h-14 w-14 ml-4" src={notification.imageSrc} alt="" 
+                                    <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt="" 
                                         style={{
                                             height: "80px",
                                             width: "80px",
@@ -246,7 +246,7 @@ class NotificationPopup extends React.Component {
                     </ul>
                 </div>
                 <div onClick={handleClick} className="flex flex-row font-bold bg-slaute-400 h-10 px-2 w-full gap-2 cursor-pointer hover:bg-slate-200 rounded-lg items-center">
-                    View All
+                    VIEW ALL
                     <img className="h-6 w-6" src="/assets/viewall.svg" />
                 </div>
             </div>

@@ -116,15 +116,15 @@ function ShareYourThoughtsDepart() {
   }, [posts]);
 
   return (
-    <section className="flex flex-col">
-      <div className="input-box-container flex justify-between border-2 border-slaute-200 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:max-w-full" style={{ width: "875px", height: "90px" }}>
+    <section className="flex flex-col ">
+      <div className="input-box-container flex justify-between  border-slaute-200 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:max-w-full" style={{ width: "875px", height: "90px" }}>
         <div className="flex flex-col">
           <textarea
             ref={textAreaRef}
             value={inputValue}
             onChange={handleChange}
             placeholder="Share Your Thoughts..."
-            className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline w-full h-[100px]"
+            className="-300 self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline w-32 h-[100px]"
             style={{
               width: "800px",
               height: "100px",
@@ -132,7 +132,7 @@ function ShareYourThoughtsDepart() {
               border: "none",
             }}
           />
-          <div className="flex gap-3">
+          <div className="flex gap-3 ">
             <img
               loading="lazy"
               src="assets/inputpolls.svg"
@@ -170,20 +170,28 @@ function ShareYourThoughtsDepart() {
             />
           </div>
         </div>
+      <div className="flex flex-col space-y-2 h-23 w-8  -mt-4">
         <img
+          loading="lazy"
+          src="assets/wallpost-dotbutton.svg"
+          alt="Submit"
+          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6  cursor-pointer"
+          onClick={handleSubmitPost}
+        />
+         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
           alt="Submit"
-          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-[21px] cursor-pointer"
+          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6   cursor-pointer"
           onClick={handleSubmitPost}
-        />
+        /></div>
       </div>
       {showPollPopup && <Polls onClose={closePopup} />}
       {showPeoplePopup && <People onClose={closePopup} />}
       
 <div className="mt-4 ">
   {posts.map((post, index) => (
-    <div key={index} className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] ">
+    <div key={index} className=" mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] ">
       <p className="text-gray-500 text-sm">{formatDistanceToNow(new Date(post.time), { addSuffix: true })}</p>
       <div className="post-content break-words overflow-hidden">
         {post.text}
