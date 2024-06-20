@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('banner')->nullable();
             $table->string('description')->nullable();
+            $table->integer('order')->default(1);
             $table->auditable();
         });
 

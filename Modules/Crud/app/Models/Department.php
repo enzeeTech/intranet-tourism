@@ -25,6 +25,7 @@ class Department extends Model implements AuditableContract
         'name',
         'banner',
         'description',
+        'order',
     ];
 
     public static function rules($scenario = 'create')
@@ -35,6 +36,7 @@ class Department extends Model implements AuditableContract
                     'name' => ['string'],
                     'banner' => ['string'],
                     'description' => ['string'],
+                    'order' => ['integer'],
                 ],
                 // [],
             ],
@@ -43,6 +45,7 @@ class Department extends Model implements AuditableContract
                     'name' => ['string'],
                     'banner' => ['string'],
                     'description' => ['string'],
+                    'order' => ['integer'],
                 ],
                 // [],
             ],

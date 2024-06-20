@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('label');
             $table->string('url');
+            $table->integer('order')->default(1);
             $table->auditable();
         });
 
