@@ -56,10 +56,19 @@ return new class extends Migration
             $table->auditable();
         });
 
+        Schema::create('external_links', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            $table->string('url');
+            $table->integer('order')->default(1);
+            $table->auditable();
+        });
+
     }
 
     public function down()
     {
         Schema::dropIfExists('settings');
+        Schema::dropIfExists('external_links');
     }
 };
