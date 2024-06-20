@@ -908,8 +908,8 @@ const orgChartPhotoChangeData = [
 ];
 
 const profileInformationData = [
-  { name: 'Thomas', department: 'Department', time: '2024-06-19T04:00:00Z', profileImage: thomasImage, changeType: 'email' },
-  { name: 'Aisha Binti', department: 'Department', time: '2024-06-10T12:00:00Z', profileImage: aishaImage, changeType: 'Profile details' }
+  { name: 'Thomas', department: 'Department', time: '2024-06-19T04:00:00Z', profileImage: thomasImage, changeType: 'Email', currentValue: 'thomas@tourism.com.my', newValue: 'thomas.thomas@tourism.com.my'},
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-10T12:00:00Z', profileImage: aishaImage, changeType: 'Location', currentValue: 'Tingkat 18', newValue: 'Tingkat 22'}
 ];
 
 // Helper function to format time
@@ -1032,31 +1032,53 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
 
 
 
-const ProfileInformationRow = ({ name, department, time, profileImage, changeType }) => (
-  <div className="flex items-center justify-between py-4 border-t border-gray-200">
-    <div className="flex items-center w-1/4">
-      <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
-      <div className="ml-3">
-        <p className="text-sm font-bold text-black">{name} ({department})</p>
-        <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+const ProfileInformationRow = ({ name, department, time, profileImage, changeType, currentValue, newValue }) => {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  return (
+    <>
+      <div className="relative flex items-center justify-between py-4 border-t border-gray-200">
+        <div className="flex items-center w-1/4">
+          <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
+          <div className="ml-3">
+            <p className="text-sm font-bold text-black">{name} ({department})</p>
+            <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+          </div>
+        </div>
+        <p className="w-1/4 text-xs font-semibold text-center text-black">change of</p>
+        <div className="flex items-center w-1/4">
+          <p className="font-medium text-blue-500 cursor-pointer" onClick={() => setIsPopupVisible(true)}>
+            {changeType}
+          </p>
+        </div>
+        <div className="flex justify-end w-1/4">
+          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
+        </div>
       </div>
-    </div>
-    <p className="w-1/4 text-xs font-semibold text-center text-black">change of</p>
-    <div className="flex items-center w-1/4">
-      <p className="font-medium">
-        {changeType === 'email' ? (
-          <a href="mailto:user@example.com" className="text-blue-500">email</a>
-        ) : (
-          <a href="/profile/details" className="text-blue-500">Profile details</a>
-        )}
-      </p>
-    </div>
-    <div className="flex justify-end w-1/4">
-      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
-      <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
-    </div>
-  </div>
-);
+
+      {isPopupVisible && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
+          onClick={() => setIsPopupVisible(false)}
+        >
+          <div
+            className="relative p-4 bg-white rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center">
+              <h2 className="mb-4 text-lg font-semibold">{name} wants to change</h2>
+              <p className="mb-2 text-sm">{changeType}: {currentValue}</p>
+              <p className="mb-4 text-sm">To: {newValue}</p>
+              <button className="px-4 py-2 text-white bg-blue-500 rounded-full" onClick={() => setIsPopupVisible(false)}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 
 // Main Component
 const Requests = () => (
