@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('external_links', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('label');
             $table->string('url');
             $table->auditable();

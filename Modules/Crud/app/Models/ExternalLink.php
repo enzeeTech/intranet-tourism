@@ -25,15 +25,15 @@ class ExternalLink extends Model implements AuditableContract
         $rules = [
             'create' => [
                 [
-                    'label' => ['string'],
-                    'url' => ['string'],
+                    'label' => ['string', 'required'],
+                    'url' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'label' => ['string'],
-                    'url' => ['string'],
+                    'label' => ['string', 'required'],
+                    'url' => ['string', 'required'],
                 ],
                 // [],
             ],
