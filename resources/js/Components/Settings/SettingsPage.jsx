@@ -1013,7 +1013,7 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
 
       {isPopupVisible && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 bg-opacity-50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
           onClick={() => setIsPopupVisible(false)}
         >
           <div
@@ -1027,10 +1027,6 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
     </>
   );
 };
-
-
-
-
 
 const ProfileInformationRow = ({ name, department, time, profileImage, changeType, currentValue, newValue }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -1063,13 +1059,14 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
           onClick={() => setIsPopupVisible(false)}
         >
           <div
-            className="relative p-4 bg-white rounded-lg shadow-lg"
+            className="relative p-8 bg-white shadow-lg rounded-xl w-120"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
-              <h2 className="mb-4 text-lg font-semibold">{name} wants to change</h2>
-              <p className="mb-2 text-sm">{changeType}: {currentValue}</p>
-              <p className="mb-4 text-sm">To: {newValue}</p>
+              <h2 className="mb-4 text-lg font-bold">{name} wants to change</h2>
+              <hr className="border-t border-gray-300" style={{ borderColor: '#E4E4E4', width: '100%' }} />
+              <p className="mt-4 mb-2 text-xl font-bold text-left">{changeType}: {currentValue}</p>
+              <p className="mb-4 text-xl font-bold text-left">To: <a className="text-xl font-bold text-blue-500">{newValue}</a></p>
               <button className="px-4 py-2 text-white bg-blue-500 rounded-full" onClick={() => setIsPopupVisible(false)}>Back</button>
             </div>
           </div>
@@ -1078,6 +1075,7 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
     </>
   );
 };
+
 
 
 // Main Component
