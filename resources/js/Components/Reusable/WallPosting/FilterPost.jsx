@@ -21,7 +21,7 @@ function IconMenu() {
   ];
 
   return (
-    <aside className="absolute flex flex-col p-2 bg-white rounded-lg shadow-lg w-[200px] text-neutral-800 mt-[430px]">
+    <aside className="absolute flex flex-col p-2 bg-white rounded-lg shadow-lg w-[200px] text-neutral-800 mt-[430px] z-10">
       {menuItems.map((item, index) => (
         <React.Fragment key={index}>
           <MenuItem src={item.src} alt={item.alt} text={item.text} />
@@ -44,7 +44,7 @@ function Filter() {
   return (
     <div className="flex flex-col absolute  justify-center text-sm max-w-[132px] text-neutral-800 relative mr-96  -mb-10">
       <div
-        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg"
+        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg mb-4"
         onClick={toggleDropdown}
       >
         <div>All posts</div>

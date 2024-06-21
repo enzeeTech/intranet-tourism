@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { usePage } from '@inertiajs/react';
 
-const ProfileCard = ({ name, status }) => {
+const ProfileCard = ({ name, status , position }) => {
   const getStatusIndicatorClass = (status) => {
     switch (status) {
       case "Online":
@@ -31,8 +31,8 @@ const ProfileCard = ({ name, status }) => {
       </div>
       <div className="flex flex-col self-start mt-2.5">
         <div className="text-base sm:text-lg font-extrabold">{name}</div>
-        <div className="mt-2 sm:mt-0 text-sm">Timbalan Pengarah Kanan</div>
-        <div className="mt-2 sm:mt-4 text-xs text-neutral-800 text-opacity-50">{status}</div>
+        <div className="sm:mt-0 text-sm">Timbalan Pengarah Kanan{position}</div>
+        <div className="sm:mt-2 text-xs text-neutral-800 text-opacity-50">{status}</div>
       </div>
     </div>
   );
@@ -86,16 +86,16 @@ const MyComponent = () => {
   return (
     <div className="w-full min-h-screen bg-slate-100">
       <section className="flex flex-col items-center py-10">
-        <header className="font-sans text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
+        <header className="font-sans ml-4 text-3xl sm:text-4xl font-extrabold text-neutral-800 mt-10 mb-6 w-full sm:w-96 sm:absolute left-5 sm:left-20">
           Who’s Online
           <div className="font-extrabold text-neutral-800 mt-2 mb-6 border-b-2 border-neutral-300"></div>
         </header>
         <div className="container max-w-screen-lg bg-white py-6 px-4 rounded-xl mt-10 sm:mt-40 mb-40 items-start shadow-2xl mx-5">
           <div className="flex flex-col text-neutral-800 ">
-            <header className="text-xl sm:text-2xl font-extrabold text-neutral-800 ml-4">
+            <header className="text-xl sm:text-2xl font-extrabold text-neutral-800 ml-2">
                 Online List
             </header>
-            <div className="flex flex-row justify-start items-start sm:flex-row gap-2 sm:gap-4 mt-2 text-lg font-semibold text-neutral-800 ml-2 sm:ml-4 max-md:pr-5">
+            <div className="flex flex-row justify-start items-start sm:flex-row gap-2 sm:gap-4 mt-4 text-lg font-semibold text-neutral-800 ml-2 sm:ml-2 max-md:pr-5">
               <div className="relative flex items-center gap-1 sm:ml-0">
                 <button
                   className={`grow ${statusFilter === "Online" ? "underline text-black" : "text-gray-700 text-opacity-50"}`}
