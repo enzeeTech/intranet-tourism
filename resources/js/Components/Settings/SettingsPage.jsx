@@ -1,6 +1,16 @@
 import React, { useState, Fragment } from 'react';
-import { Field, Label, Switch, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { Switch, Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import moment from 'moment';
+import aishaImage from '../../../../public/assets/aishaImage.png';
+import benImage from '../../../../public/assets/benImage.png';
+import thomasImage from '../../../../public/assets/thomasImage.png';
+import community1 from  '../../../../public/assets/community1.png';
+import community2 from '../../../../public/assets/community2.png';
+import community3 from '../../../../public/assets/community3.png';
+import changeImage1 from '../../../../public/assets/lambo5.jpeg';
+import changeImage2 from '../../../../public/assets/lambo2.jpeg';
 
 // Basic Settings
 function FileInputSection({ onFileSelect }) {
@@ -24,7 +34,7 @@ function FileInputSection({ onFileSelect }) {
       >
         Choose file
       </button>
-      <span className="flex-auto my-auto text-xs font-medium text-neutral-800 text-opacity-50">
+      <span className="flex-auto my-auto text-xs font-medium text-opacity-50 text-neutral-800">
         No file Chosen
       </span>
     </section>
@@ -40,7 +50,7 @@ function ImageSection({ imageSrc, onDelete }) {
             loading="lazy"
             src={imageSrc}
             alt="Uploaded"
-            className="w-full h-full object-cover"
+            className="object-cover w-full h-full"
           />
         ) : (
           <span className="text-xs text-neutral-800">No image</span>
@@ -85,7 +95,7 @@ function LogoUploader() {
       <ImageSection imageSrc={imageSrc} onDelete={handleDelete} />
       <button
         onClick={handleSave}
-        className="mt-5 self-center px-4 py-2 text-white bg-blue-500 rounded-full"
+        className="self-center px-4 py-2 mt-5 text-white bg-blue-500 rounded-full"
       >
         Save
       </button>
@@ -96,7 +106,7 @@ function LogoUploader() {
             <img
               src={savedImage}
               alt="Saved"
-              className="w-full h-full object-cover"
+              className="object-cover w-full h-full"
             />
           </figure>
         </div>
@@ -123,13 +133,13 @@ const ImageGrid = ({ images, altTexts, onImageClick, selectedImage }) => (
           loading="lazy"
           src={src}
           alt={altTexts[index]}
-          className="aspect-square w-full"
+          className="w-full aspect-square"
         />
         {selectedImage === src && (
           <img
             src="assets/red-tick-select.svg"
             alt="Selected"
-            className="absolute top-2 right-3 w-4 h-4"
+            className="absolute w-4 h-4 top-2 right-3"
           />
         )}
       </div>
@@ -204,7 +214,7 @@ const ThemeComponent = ({ onSave }) => {
       </div>
       <button
         onClick={handleSave}
-        className="mt-5 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="px-4 py-2 mt-5 text-white bg-blue-500 rounded hover:bg-blue-700"
       >
         Save
       </button>
@@ -232,7 +242,7 @@ const CoreFeatures = () => {
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
       <h2 className="text-2xl font-bold text-blue-500">Enable/Disable Core Features</h2>
-      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="mt-2 border-t border-gray-200"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
           {[
@@ -244,7 +254,7 @@ const CoreFeatures = () => {
             { label: 'Organisation Chart', state: organisationChart, setState: setOrganisationChart },
           ].map(({ label, state, setState }) => (
 
-            <li key={label} className="flex items-center justify-between py-4 w-full">
+            <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
               </div>
@@ -268,17 +278,17 @@ const CoreFeatures = () => {
           ))}
         </ul>
       </div>
-      <div className="border-t border-gray-200 w-full"></div>
-      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+      <div className="w-full border-t border-gray-200"></div>
+      <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -292,7 +302,8 @@ const SizeLimit = () => {
   const [videoLimit, setVideoLimit] = useState('Choose Limit');
   const [photoLimit, setPhotoLimit] = useState('Choose Limit');
 
-  const handleSelect = (option, type) => {
+  const handleSelect = (option, type, event) => {
+    event.preventDefault(); // Prevent the default behavior
     if (type === 'file') setFileLimit(option);
     if (type === 'video') setVideoLimit(option);
     if (type === 'photo') setPhotoLimit(option);
@@ -301,7 +312,7 @@ const SizeLimit = () => {
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px] mt-5">
       <h2 className="text-2xl font-bold text-blue-500">File / Video / Photo Size Limit</h2>
-      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="mt-2 border-t border-gray-200"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
           {[
@@ -310,7 +321,7 @@ const SizeLimit = () => {
             { label: 'Photo', limit: photoLimit, setLimit: setPhotoLimit, type: 'photo' },
           ].map(({ label, limit, setLimit, type }) => (
 
-            <li key={label} className="flex items-center justify-between py-4 w-full">
+            <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
               </div>
@@ -318,7 +329,7 @@ const SizeLimit = () => {
                 <div>
                   <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     {limit}
-                    <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                    <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                   </Menu.Button>
                 </div>
                 <Transition
@@ -329,14 +340,14 @@ const SizeLimit = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       {['1 GB', '3 GB', '5 GB'].map(option => (
                         <Menu.Item key={option}>
                           {({ active }) => (
                             <a
                               href="#"
-                              onClick={() => handleSelect(option, type)}
+                              onClick={(event) => handleSelect(option, type, event)} // Pass the event object)}
                               className={classNames(
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                 'block px-4 py-2 text-sm'
@@ -355,17 +366,17 @@ const SizeLimit = () => {
           ))}
         </ul>
       </div>
-      <div className="border-t border-gray-200 w-full"></div>
-      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+      <div className="w-full border-t border-gray-200"></div>
+      <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -380,10 +391,10 @@ const Media = () => {
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px] mt-5">
       <h2 className="text-2xl font-bold text-blue-500">Media</h2>
-      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="mt-2 border-t border-gray-200"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">Path to Files Folder</p>
             </div>
@@ -407,7 +418,7 @@ const Media = () => {
               />
             </Switch>
           </li>
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">Limit Email Domain</p>
             </div>
@@ -426,17 +437,17 @@ const Media = () => {
           </li>
         </ul>
       </div>
-      <div className="border-t border-gray-200 w-full"></div>
-      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+      <div className="w-full border-t border-gray-200"></div>
+      <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -452,7 +463,7 @@ const CoverPhotos = () => {
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px] mt-5">
       <h2 className="text-2xl font-bold text-blue-500">Cover Photos</h2>
-      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="mt-2 border-t border-gray-200"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
           {[
@@ -460,7 +471,7 @@ const CoverPhotos = () => {
             { label: 'Profile', state: profile, setState: setProfile },
           ].map(({ label, state, setState }) => (
 
-            <li key={label} className="flex items-center justify-between py-4 w-full">
+            <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
               </div>
@@ -484,17 +495,17 @@ const CoverPhotos = () => {
           ))}
         </ul>
       </div>
-      <div className="border-t border-gray-200 w-full"></div>
-      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+      <div className="w-full border-t border-gray-200"></div>
+      <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -510,7 +521,8 @@ const MailSettings = () => {
   const [authentication, setAuthentication] = useState(false);
   const [emailNotification, setEmailNotification] = useState(false);
 
-  const handleSelect = (option, type) => {
+  const handleSelect = (option, type, event) => {
+    event.preventDefault(); // Prevent the default behavior
     if (type === 'mail') setMail(option);
     if (type === 'security') setSecurity(option);
   };
@@ -518,10 +530,10 @@ const MailSettings = () => {
   return (
     <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px] mt-5">
       <h2 className="text-2xl font-bold text-blue-500">Mail Settings</h2>
-      <div className="border-t border-gray-200 mt-2"></div>
+      <div className="mt-2 border-t border-gray-200"></div>
       <div className="w-full">
         <ul role="list" className="divide-y divide-gray-200">
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">Mailer *</p>
             </div>
@@ -529,7 +541,7 @@ const MailSettings = () => {
               <div>
                 <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                   {mail}
-                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
               </div>
               <Transition
@@ -540,14 +552,14 @@ const MailSettings = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Mail 1', 'Mail 2', 'Mail 3'].map(option => (
                       <Menu.Item key={option}>
                         {({ active }) => (
                           <a
                             href="#"
-                            onClick={() => handleSelect(option, 'mail')}
+                            onClick={(event) => handleSelect(option, 'mail', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                               'block px-4 py-2 text-sm'
@@ -563,7 +575,7 @@ const MailSettings = () => {
               </Transition>
             </Menu>
           </li>
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">Path to Files Folder</p>
             </div>
@@ -597,7 +609,7 @@ const MailSettings = () => {
             { label: 'SMTP Host', placeholder: 'localhost', type: 'text' },
           ].map(({ label, placeholder, type }) => (
             
-            <li key={label} className="flex items-center justify-between py-4 w-full">
+            <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
               </div>
@@ -615,7 +627,7 @@ const MailSettings = () => {
               </div>
             </li>
           ))}
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">SMTP Authentication</p>
             </div>
@@ -636,7 +648,7 @@ const MailSettings = () => {
               />
             </Switch>
           </li>
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">SMTP Security</p>
             </div>
@@ -644,7 +656,7 @@ const MailSettings = () => {
               <div>
                 <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                   {security}
-                  <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
               </div>
               <Transition
@@ -655,14 +667,14 @@ const MailSettings = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Security 1', 'Security 2', 'Security 3'].map(option => (
                       <Menu.Item key={option}>
                         {({ active }) => (
                           <a
                             href="#"
-                            onClick={() => handleSelect(option, 'security')}
+                            onClick={(event) => handleSelect(option, 'security', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                               'block px-4 py-2 text-sm'
@@ -678,7 +690,7 @@ const MailSettings = () => {
               </Transition>
             </Menu>
           </li>
-          <li className="flex items-center justify-between py-4 w-full">
+          <li className="flex items-center justify-between w-full py-4">
             <div className="flex flex-col">
               <p className="text-sm font-medium leading-6 text-gray-900">Enable Email Notification</p>
             </div>
@@ -701,17 +713,17 @@ const MailSettings = () => {
           </li>
         </ul>
       </div>
-      <div className="border-t border-gray-200 w-full"></div>
-      <div className="mt-4 flex justify-end gap-x-3 px-4 py-4 sm:px-6 w-full">
+      <div className="w-full border-t border-gray-200"></div>
+      <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -719,6 +731,399 @@ const MailSettings = () => {
     </section>
   );
 };
+
+// =============================================================================================================================================================
+
+// Departments
+
+const Departments = () => {
+  const initialData = [
+    { id: 1, name: 'Department 1', ordering: 1 },
+    { id: 2, name: 'Department 2', ordering: 2 },
+    { id: 3, name: 'Department 3', ordering: 3 },
+    { id: 4, name: 'Department 4', ordering: 4 },
+    { id: 5, name: 'Department 5', ordering: 5 },
+    { id: 6, name: 'Department 6', ordering: 6 },
+    { id: 7, name: 'Department 7', ordering: 7 },
+    { id: 8, name: 'Department 8', ordering: 8 },
+    { id: 9, name: 'Department 9', ordering: 9 },
+  ];
+
+  const [data, setData] = useState(initialData);
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(data);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setData(items);
+  };
+
+  const handleSortUp = (index) => {
+    if (index === 0) return;
+    const items = Array.from(data);
+    const temp = items[index - 1];
+    items[index - 1] = items[index];
+    items[index] = temp;
+    setData(items);
+  };
+
+  const handleSortDown = (index) => {
+    if (index === data.length - 1) return;
+    const items = Array.from(data);
+    const temp = items[index + 1];
+    items[index + 1] = items[index];
+    items[index] = temp;
+    setData(items);
+  };
+
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
+                >
+                  #
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
+                >
+                  Ordering
+                </th>
+              </tr>
+            </thead>
+            <Droppable droppableId="departments">
+              {(provided) => (
+                <tbody
+                  className="bg-white divide-y divide-gray-200"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {data.map((department, index) => (
+                    <Draggable key={department.id} draggableId={`${department.id}`} index={index}>
+                      {(provided) => (
+                        <tr
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                            {department.id}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 pt-2 -ml-10 cursor-grab" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M7 5a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                              </svg>
+                              <input
+                                type="text"
+                                name={`name-${department.id}`}
+                                id={`name-${department.id}`}
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                                placeholder={department.name}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                            <div className="flex items-center justify-left">
+                              <img
+                                src="assets/orderingup.svg"
+                                alt="Up Arrow"
+                                className="mr-3 cursor-pointer h-7 w-7"
+                                onClick={() => handleSortUp(index)}
+                              />
+                              <img
+                                src="assets/orderingdown.svg"
+                                alt="Down Arrow"
+                                className="ml-1 cursor-pointer h-7 w-7"
+                                onClick={() => handleSortDown(index)}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </table>
+        </div>
+        <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
+          <button
+            type="button"
+            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          >
+            Save
+          </button>
+        </div>
+      </section>
+    </DragDropContext>
+  );
+};
+
+
+// =============================================================================================================================================================
+
+// Requests
+
+// Sample data for demonstration purposes
+const groupJoinData = [
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-20T04:00:00Z', group: "Malaysia's spots", followers: '12,543 followers', profileImage: aishaImage, groupImage: community2 },
+  { name: 'Thomas', department: 'Department', time: '2024-06-17T12:00:00Z', group: 'Around KL', followers: '13,983 followers', profileImage: thomasImage, groupImage: community3 },
+  { name: 'Ben', department: 'Department', time: '2024-06-15T12:00:00Z', group: 'Where to Go', followers: '14,567 followers', profileImage: benImage, groupImage: community1 },
+  { name: 'Thomas', department: 'Department', time: '2024-06-14T12:00:00Z', group: "Malaysia's spots", followers: '12,543 followers', profileImage: thomasImage, groupImage: community2 },
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-10T12:00:00Z', group: 'Where to Go', followers: '14,567 followers', profileImage: aishaImage, groupImage: community1 }
+];
+
+const communityCreationData = [
+  { name: 'Thomas', department: 'Department', time: '2024-06-20T02:00:00Z', group: "Malaysia's spots", followers: '12,543 followers', profileImage: thomasImage, groupImage: community1},
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-19T04:00:00Z', group: 'Where to Go', followers: '14,567 followers', profileImage: aishaImage, groupImage: community1}
+];
+
+const orgChartPhotoChangeData = [
+  { name: 'Thomas', department: 'Department', time: '2024-06-20T02:00:00Z', currentImage: thomasImage, changeImage: changeImage1 },
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-19T04:00:00Z', currentImage: aishaImage, changeImage: changeImage2 }
+];
+
+const profileInformationData = [
+  { name: 'Thomas', department: 'Department', time: '2024-06-19T04:00:00Z', profileImage: thomasImage, changeType: 'Email', currentValue: 'thomas@tourism.com.my', newValue: 'thomas.thomas@tourism.com.my'},
+  { name: 'Aisha Binti', department: 'Department', time: '2024-06-10T12:00:00Z', profileImage: aishaImage, changeType: 'Location', currentValue: 'Tingkat 18', newValue: 'Tingkat 22'}
+];
+
+// Helper function to format time
+const formatTime = (time) => {
+  const now = moment();
+  const date = moment(time);
+  const diffInHours = now.diff(date, 'hours');
+  const diffInDays = now.diff(date, 'days');
+
+  if (diffInHours < 1) {
+    return 'Just now';
+  } else if (diffInHours < 2) {
+    return '1 hour ago';
+  } else if (diffInHours < 24) {
+    return `${diffInHours} hours ago`;
+  } else if (diffInDays < 2) {
+    return '1 day ago';
+  } else if (diffInDays < 3) {
+    return `${diffInDays} days ago`;
+  } else {
+    return date.format('DD/MM/YYYY');
+  }
+};
+
+// Reusable Row Components
+const GroupJoinRow = ({ name, department, time, group, followers, profileImage, groupImage }) => (
+  <div className="flex items-center justify-between py-4 border-t border-gray-200">
+    <div className="flex items-center w-1/4">
+      <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
+      <div className="ml-3">
+        <p className="text-sm font-bold text-black">{name} ({department})</p>
+        <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+      </div>
+    </div>
+    <p className="w-1/4 text-xs font-semibold text-center text-black">to join</p>
+    <div className="flex items-center w-1/4">
+      <img className="w-10 h-10 rounded-full" src={groupImage} alt="Group" />
+      <div className="ml-3">
+        <p className="text-sm font-bold text-black">{group}</p>
+        <p className="text-xs text-gray-400">{followers}</p>
+      </div>
+    </div>
+    <div className="flex justify-end w-1/4">
+      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+      <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
+    </div>
+  </div>
+);
+
+const CommunityCreationRow = ({ name, department, time, group, followers, profileImage, groupImage }) => (
+  <div className="flex items-center justify-between py-4 border-t border-gray-200">
+    <div className="flex items-center w-1/4">
+      <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
+      <div className="ml-3">
+        <p className="text-sm font-bold text-black">{name} ({department})</p>
+        <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+      </div>
+    </div>
+    <p className="w-1/4 text-xs font-semibold text-center text-black">wants to create</p>
+    <div className="flex items-center w-1/4">
+      <img className="w-10 h-10 rounded-full" src={groupImage} alt="Group" />
+      <div className="ml-3">
+        <p className="text-sm font-bold text-black">{group}</p>
+        <p className="text-xs text-gray-400">{followers}</p>
+      </div>
+    </div>
+    <div className="flex justify-end w-1/4">
+      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+      <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
+    </div>
+  </div>
+);
+
+const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeImage }) => {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  return (
+    <>
+      <div className="relative flex items-center justify-between py-4 border-t border-gray-200">
+        <div className="flex items-center w-1/4">
+          <img className="w-10 h-10 rounded-full" src={currentImage} alt="User profile" />
+          <div className="ml-3">
+            <p className="text-sm font-bold text-black">{name} ({department})</p>
+            <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+          </div>
+        </div>
+        <p className="w-1/4 text-xs font-semibold text-center text-black">change to</p>
+        <div className="flex items-center w-1/4">
+          <img
+            className="w-10 h-10 rounded-full cursor-pointer"
+            src={changeImage}
+            alt="Change"
+            onClick={() => setIsPopupVisible(true)}
+          />
+        </div>
+        <div className="flex justify-end w-1/4">
+          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
+        </div>
+      </div>
+
+      {isPopupVisible && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
+          onClick={() => setIsPopupVisible(false)}
+        >
+          <div
+            className="relative p-4 bg-white rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img className="object-cover rounded-lg w-96 h-96" src={changeImage} alt="Change" />
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const ProfileInformationRow = ({ name, department, time, profileImage, changeType, currentValue, newValue }) => {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  return (
+    <>
+      <div className="relative flex items-center justify-between py-4 border-t border-gray-200">
+        <div className="flex items-center w-1/4">
+          <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
+          <div className="ml-3">
+            <p className="text-sm font-bold text-black">{name} ({department})</p>
+            <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+          </div>
+        </div>
+        <p className="w-1/4 text-xs font-semibold text-center text-black">change of</p>
+        <div className="flex items-center w-1/4">
+          <p className="font-medium text-blue-500 cursor-pointer" onClick={() => setIsPopupVisible(true)}>
+            {changeType}
+          </p>
+        </div>
+        <div className="flex justify-end w-1/4">
+          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-red-500 rounded-full">Reject</button>
+        </div>
+      </div>
+
+      {isPopupVisible && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
+          onClick={() => setIsPopupVisible(false)}
+        >
+          <div
+            className="relative p-8 bg-white shadow-lg rounded-xl w-120"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center">
+              <h2 className="mb-4 text-lg font-bold">{name} wants to change</h2>
+              <hr className="border-t border-gray-300" style={{ borderColor: '#E4E4E4', width: '100%' }} />
+              <p className="mt-4 mb-2 text-xl font-bold text-left">{changeType}: {currentValue}</p>
+              <p className="mb-4 text-xl font-bold text-left">To: <a className="text-xl font-bold text-blue-500">{newValue}</a></p>
+              <button className="px-4 py-2 text-white bg-blue-500 rounded-full" onClick={() => setIsPopupVisible(false)}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+
+
+// Main Component
+const Requests = () => (
+  <div>
+    <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-5">
+      <h2 className="mb-4 text-2xl font-bold text-blue-500">Group Join</h2>
+      {groupJoinData.map((data, index) => (
+        <GroupJoinRow key={index} {...data} />
+      ))}
+    </section>
+    <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-5">
+      <h2 className="mb-4 text-2xl font-bold text-blue-500">Community Creation</h2>
+      {communityCreationData.map((data, index) => (
+        <CommunityCreationRow key={index} {...data} />
+      ))}
+    </section>
+    <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-5">
+      <h2 className="mb-4 text-2xl font-bold text-blue-500">Organisational Chart Photo Change</h2>
+      {orgChartPhotoChangeData.map((data, index) => (
+        <OrgChartPhotoChangeRow key={index} {...data} />
+      ))}
+    </section>
+    <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px]">
+      <h2 className="mb-4 text-2xl font-bold text-blue-500">Profile Information</h2>
+      {profileInformationData.map((data, index) => (
+        <ProfileInformationRow key={index} {...data} />
+      ))}
+    </section>
+  </div>
+);
+
+export default Requests;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // =============================================================================================================================================================
 
@@ -743,9 +1148,9 @@ const SettingsPage = ({ currentPage }) => {
           <MailSettings onSave={handleSave} />
         </>
       )}
-      {currentPage === 'Department' && <div></div>}
+      {currentPage === 'Departments' && <Departments onSave={handleSave} />}
       {currentPage === 'Media' && <div></div>}
-      {currentPage === 'Requests' && <div></div>}
+      {currentPage === 'Requests' && <Requests/>}
       {currentPage === 'Audit Trail' && <div></div>}
       {currentPage === 'Feedback' && <div></div>}
       {currentPage === 'Birthday Template' && <div></div>}
@@ -754,4 +1159,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments };

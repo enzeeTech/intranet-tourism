@@ -9,15 +9,16 @@ import searchIcon from '../../../public/assets/search.png';
 import searchButton from '../../../public/assets/searchButton.png';
 import printIcon from '../../../public/assets/printButton.png';
 import * as bootstrap from "bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./Calendar/index.css";
+// import Example from '@/Layouts/DashboardLayoutNew';
 import Example from '@/Layouts/DashboardLayoutNew';
 import PageTitle from '@/Components/Reusable/PageTitle';
 
 function Calendar() {
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [eventData, setEventData] = useState({ title: '', start: '', end: '', color: 'purple' });
+    const [eventData, setEventData] = useState({ title: '', start_at: '', end_at: '', color: 'purple' });
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -25,9 +26,10 @@ function Calendar() {
     }, []);
 
     const fetchEvents = () => {
-        axios.get('/calendar/events')
+        axios.get('/api/crud/events')
             .then(response => {
-                setEvents(response.data);
+                console.log(response.data.data.data);
+                setEvents(response.data.data.data);
             })
             .catch(error => {
                 console.error('Error fetching events: ', error);
@@ -36,12 +38,12 @@ function Calendar() {
 
     const handleDateSelect = (info) => {
         setIsModalOpen(true);
-        setEventData({ ...eventData, start: info.startStr, end: info.endStr });
+        setEventData({ ...eventData, start_at: info.startStr, end_at: info.endStr });
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setEventData({ title: '', start: '', end: '', color: 'purple' });
+        setEventData({ title: '', start_at: '', end_at: '', color: 'purple' });
     };
 
     const handleChange = (e) => {
@@ -50,7 +52,7 @@ function Calendar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('/calendar/event', eventData)
+        axios.post('/api/crud/events', eventData)
             .then(response => {
                 setEvents([...events, eventData]);
                 closeModal();
@@ -89,7 +91,7 @@ function Calendar() {
 
             {/* Find Events Button */}
             <button
-              onClick={() => { alert('Clicked the find events button!')}} 
+              onClick={() => { alert('Clicked the find events button!')}}
               className="flex items-center justify-center py-2 mr-2">
               <img src={searchButton} alt="Find Events" className="w-30 h-11" />
             </button>
@@ -199,7 +201,7 @@ function Calendar() {
       </div>
       {/* </div>
       </main> */}
-  
+
       </Example>
     );
 }
