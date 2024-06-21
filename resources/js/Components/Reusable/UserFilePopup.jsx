@@ -14,16 +14,16 @@ const PopupContent = ({ file }) => {
     console.log('Delete clicked');
     // Add your delete logic here
     // For example, you might call an API to delete the file
-    // fetch(`/api/deleteFile/${file.id}`, { method: 'DELETE' })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     // Handle successful delete
-    //     console.log('File deleted', data);
-    //   })
-    //   .catch(error => {
-    //     // Handle error
-    //     console.error('Error deleting file', error);
-    //   });
+    fetch(`/api/deleteFile/${file.id}`, { method: 'DELETE' })
+      .then(response => response.json())
+      .then(data => {
+        // Handle successful delete
+        console.log('File deleted', data);
+      })
+      .catch(error => {
+        // Handle error
+        console.error('Error deleting file', error);
+      });
   };
 
   const handleDownload = (e) => {
@@ -31,7 +31,7 @@ const PopupContent = ({ file }) => {
     console.log('Download clicked');
     // Add your download logic here
     // For example, you might redirect to a download URL
-    // window.location.href = `/api/downloadFile/${file.id}`;
+    window.location.href = `/api/downloadFile/${file.id}`;
   };
 
   return (

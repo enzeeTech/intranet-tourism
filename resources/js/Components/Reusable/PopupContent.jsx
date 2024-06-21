@@ -14,27 +14,53 @@ function classNames(...classes) {
 const UserFilePopup = ({ file }) => {
   const [isAdminPopupOpen, setIsAdminPopupOpen] = useState(false);
 
+  const handleRename = (e) => {
+    e.preventDefault();
+    console.log('Rename clicked');
+    const newFileName = prompt("Enter the new name for the file:", file.name);
+    if (newFileName) {
+      // Add your rename logic here
+      fetch(`/api/renameFile/${file.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newName: newFileName }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle successful rename
+          console.log('File renamed', data);
+        })
+        .catch(error => {
+          // Handle error
+          console.error('Error renaming file', error);
+        });
+    }
+  };
+
   const handleDelete = (e) => {
     e.preventDefault();
     console.log('Delete clicked');
-    // Add your delete logic here
-    fetch(`/api/deleteFile/${file.id}`, { method: 'DELETE' })
-      .then(response => response.json())
-      .then(data => {
-        // Handle successful delete
-        console.log('File deleted', data);
-      })
-      .catch(error => {
-        // Handle error
-        console.error('Error deleting file', error);
-      });
+    if (window.confirm("Are you sure you want to delete this file?")) {
+      // Add your delete logic here
+      fetch(`/api/deleteFile/${file.id}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+          // Handle successful delete
+          console.log('File deleted', data);
+        })
+        .catch(error => {
+          // Handle error
+          console.error('Error deleting file', error);
+        });
+    }
   };
 
   const handleDownload = (e) => {
     e.preventDefault();
     console.log('Download clicked');
     // Add your download logic here
-    // For example, you might redirect to a download URL
     window.location.href = `/api/downloadFile/${file.id}`;
   };
 
@@ -48,110 +74,119 @@ const UserFilePopup = ({ file }) => {
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <MenuButton className="inline-flex justify-center items-center w-full pl-5">
-          <img src={threeDotsIcon} alt="Options" className="h-auto w-auto" />
-        </MenuButton>
-      </div>
+    <>
+      <Menu as="div" className="relative inline-block text-left">
+        <div>
+          <MenuButton className="inline-flex justify-center items-center w-full pl-5">
+            <img src={threeDotsIcon} alt="Options" className="h-auto w-auto" />
+          </MenuButton>
+        </div>
 
-      <Transition
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <MenuItems className="absolute right-0 z-10 -mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">
-            <MenuItem>
-              {({ active }) => (
-                <button
-                  onClick={() => console.log('Rename clicked')}
-                  className={classNames(
-                    active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full text-left',
-                  )}
-                >
-                  <img
-                    src={renameIcon}
-                    alt="Rename"
-                    className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  Rename
-                </button>
-              )}
-            </MenuItem>
-            <MenuItem>
-              {({ active }) => (
-                <button
-                  onClick={handleDelete}
-                  className={classNames(
-                    active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full text-left',
-                  )}
-                >
-                  <img
-                    src={deleteIcon}
-                    alt="Delete"
-                    className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  Delete
-                </button>
-              )}
-            </MenuItem>
-            <MenuItem>
-              {({ active }) => (
-                <>
+        <Transition
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <MenuItems className="absolute right-0 z-10 -mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="py-1">
+              <MenuItem>
+                {({ active }) => (
                   <button
-                    onClick={handleManageAdminClick}
+                    onClick={handleRename}
                     className={classNames(
                       active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
                       'group flex items-center px-4 py-2 text-sm w-full text-left',
                     )}
                   >
                     <img
-                      src={adminIcon}
-                      alt="Manage Admin"
+                      src={renameIcon}
+                      alt="Rename"
                       className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    Manage Admin
+                    Rename
                   </button>
-                  {isAdminPopupOpen && <ViewAdminPopup onClose={closeAdminPopup} />}
-                </>
-              )}
-            </MenuItem>
-            <MenuItem>
-              {({ active }) => (
-                <button
-                  onClick={handleDownload}
-                  className={classNames(
-                    active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full text-left',
-                  )}
-                >
-                  <img
-                    src={downloadIcon}
-                    alt="Download"
-                    className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  Download
-                </button>
-              )}
-            </MenuItem>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ active }) => (
+                  <button
+                    onClick={handleDelete}
+                    className={classNames(
+                      active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
+                      'group flex items-center px-4 py-2 text-sm w-full text-left',
+                    )}
+                  >
+                    <img
+                      src={deleteIcon}
+                      alt="Delete"
+                      className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                    Delete
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ active }) => (
+                    <button
+                      onClick={handleManageAdminClick}
+                      className={classNames(
+                        active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
+                        'group flex items-center px-4 py-2 text-sm w-full text-left',
+                      )}
+                    >
+                      <img
+                        src={adminIcon}
+                        alt="Manage Admin"
+                        className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                      Manage Admin
+                    </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ active }) => (
+                  <button
+                    onClick={handleDownload}
+                    className={classNames(
+                      active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
+                      'group flex items-center px-4 py-2 text-sm w-full text-left',
+                    )}
+                  >
+                    <img
+                      src={downloadIcon}
+                      alt="Download"
+                      className="mr-3 h-7 w-7 text-gray-400 group-hover:text-gray-500"
+                      aria-hidden="true"
+                    />
+                    Download
+                  </button>
+                )}
+              </MenuItem>
+            </div>
+          </MenuItems>
+        </Transition>
+      </Menu>
+
+      {isAdminPopupOpen && (
+        <div className="modal-overlay" onClick={closeAdminPopup}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <ViewAdminPopup onClose={closeAdminPopup} />
           </div>
-        </MenuItems>
-      </Transition>
-    </Menu>
+        </div>
+      )}
+    </>
   );
 };
 
 export default UserFilePopup;
+
+
 
 
 
