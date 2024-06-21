@@ -3,17 +3,21 @@ import React, { useEffect, useRef, useState } from 'react';
 // SearchBar Component
 function SearchBar({ onChange }) {
   return (
-    <form className="flex justify-center items-start px-6 py-3.5 text-lg text-center rounded-[30px] text-neutral-800 text-opacity-50">
-      <label className="sr-only " htmlFor="searchInput">Search people</label>
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Search people"
-        className="w-96 rounded-[30px]"
-        aria-label="Search people"
-        onChange={onChange}
-      />
-    </form>
+    <form className="flex w-[430px] justify-center items-start px-6 py-3.5 text-lg text-center rounded-[30px] text-neutral-800 text-opacity-50">
+    <label className="sr-only" htmlFor="searchInput">Search people</label>
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search people"
+      className="w-[500px] h-[43px] rounded-[30px] border-2 p-2"
+      aria-label="Search people"
+      onChange={onChange}
+      style={{ borderColor: 'initial', outline: 'none' }}
+      onFocus={(e) => (e.target.style.borderColor = 'blue')}
+      onBlur={(e) => (e.target.style.borderColor = 'initial')}
+    />
+  </form>
+  
   );
 }
 
@@ -65,9 +69,9 @@ function Invite({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <section ref={popupRef} className="flex flex-col pt-2.5 pb-5 bg-white rounded-2xl shadow-sm max-w-[431px]">
-        <header className="flex gap-5 self-center max-w-full text-lg font-extrabold text-center text-neutral-800 w-[260px]">
+        <header className="flex gap-5 self-center max-w-full text-lg font-extrabold text-center text-neutral-800 w-[431px] px-2">
           <div className="flex-auto">Invite people</div>
-          <button onClick={onClose} className="shrink-0">
+          <button onClick={onClose} className="s">
             <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&" alt="" className="shrink-0 w-6 aspect-square" />
           </button>
         </header>
