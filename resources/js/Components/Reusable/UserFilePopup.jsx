@@ -164,7 +164,6 @@ export default PopupContent;
 //         onDelete();
 //         closePopup();
 //       };
-
 //       const handleDownload = (e) => {
 //         e.stopPropagation();
 //         e.preventDefault();
@@ -226,7 +225,6 @@ export default PopupContent;
 //             )}
 //         </div>
 //     );
-
 // };
 
 // export default UserFilePopup;
