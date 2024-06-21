@@ -19,6 +19,8 @@ class Event extends Model implements AuditableContract
     protected $fillable = [
         'title',
         'description',
+        'venue',
+        'url',
         'color',
         'start_at',
         'end_at',
@@ -30,6 +32,8 @@ class Event extends Model implements AuditableContract
             'create' => [
                 [
                     'title' => ['string', 'required'],
+                    'venue' => ['string', 'required'],
+                    'url' => ['string'],
                     'description' => ['string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
@@ -40,7 +44,9 @@ class Event extends Model implements AuditableContract
             'update' => [
                 [
                     'title' => ['string', 'required'],
+                    'venue' => ['string', 'required'],
                     'description' => ['string'],
+                    'url' => ['string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
                     'end_at' => ['string', 'required'],
