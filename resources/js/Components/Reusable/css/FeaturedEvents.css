@@ -4,9 +4,10 @@
     margin-bottom: 20px;
     border-radius: 16px;
     box-shadow: 0px 0px 20px -10px  rgba(0,0,0,0.3);
-    width: 327px;
+    width: auto;
+    height: auto;
   }
-  
+
   .underline {
     border-bottom: 1px solid #E4E4E4;
   }
@@ -30,10 +31,10 @@
   }
 
   .view-all-btn .arrow-icon {
-    margin-left: 6px; 
+    margin-left: 6px;
     margin-bottom: 1px;
-    width: 15px; 
-    height: auto; 
+    width: 15px;
+    height: auto;
   }
 
   .event-separator {
