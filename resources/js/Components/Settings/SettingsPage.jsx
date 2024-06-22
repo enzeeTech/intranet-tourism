@@ -611,7 +611,7 @@ const MailSettings = () => {
             { label: 'SMTP Password', placeholder: '***********', type: 'password' },
             { label: 'SMTP Host', placeholder: 'localhost', type: 'text' },
           ].map(({ label, placeholder, type }) => (
-            
+
             <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
@@ -1424,7 +1424,7 @@ const SettingsPage = ({ currentPage }) => {
       {currentPage === 'Departments' && <Departments onSave={handleSave} />}
       {currentPage === 'Media' && <div></div>}
       {currentPage === 'Requests' && <Requests/>}
-      {currentPage === 'Audit Trail' &&         
+      {currentPage === 'Audit Trail' &&
         <>
           <AuditSearch onSave={handleSave} />
         </>}
