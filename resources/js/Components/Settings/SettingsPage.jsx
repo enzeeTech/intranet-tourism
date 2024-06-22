@@ -1108,9 +1108,65 @@ const Requests = () => (
   </div>
 );
 
-export default Requests;
 
+// =============================================================================================================================================================
 
+function SearchButton({ children }) {
+  return (
+    <button className="justify-center px-11 py-5 bg-blue-500 rounded-3xl text-white font-bold max-md:px-5">
+      {children}
+    </button>
+  );
+}
+
+function DateRangePicker({ startDate, endDate }) {
+  return (
+    <div className="flex flex-col justify-center px-5 py-1.5 text-xs text-center text-black bg-white rounded-md border border-solid border-zinc-300">
+      <div className="justify-center px-1.5 py-1 rounded-sm bg-sky-500 bg-opacity-10">
+        {startDate} - {endDate}
+      </div>
+    </div>
+  );
+}
+
+function Dropdown({ label }) {
+  return (
+    <div className="flex flex-col justify-center text-xs whitespace-nowrap text-neutral-800">
+      <div className="flex gap-5 justify-between px-3.5 py-2.5 bg-white rounded-2xl shadow-sm">
+        <div>{label}</div>
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/26f2abafc455fbb3d0d889612515f65f2b3263cf94b884a512ab73b4a7aec9b9?apiKey=285d536833cc4168a8fbec258311d77b&"
+          className="shrink-0 self-start border-2 border-black border-solid aspect-[1.85] stroke-[2px] stroke-black w-[13px]"
+          alt=""
+        />
+      </div>
+    </div>
+  );
+}
+
+function AuditSearch() {
+  return (
+    <main className="flex flex-col px-8 py-6 bg-white rounded-2xl shadow-sm max-w-[841px] max-md:px-5">
+      <form className="flex gap-5 text-sm whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
+        <label htmlFor="searchInput" className="sr-only">
+          Search
+        </label>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search"
+          className="grow justify-center items-start self-start p-5 rounded-3xl border border-solid border-neutral-200 text-neutral-800 text-opacity-50 w-fit max-md:pr-5 max-md:max-w-full"
+        />
+        <SearchButton>Search</SearchButton>
+      </form>
+      <section className="flex gap-5 justify-between self-start mt-6">
+        <DateRangePicker startDate="April, 2024" endDate="April, 2024" />
+        <Dropdown label="All" />
+      </section>
+    </main>
+  );
+}
 
 
 
@@ -1151,7 +1207,7 @@ const SettingsPage = ({ currentPage }) => {
       {currentPage === 'Departments' && <Departments onSave={handleSave} />}
       {currentPage === 'Media' && <div></div>}
       {currentPage === 'Requests' && <Requests/>}
-      {currentPage === 'Audit Trail' && <div></div>}
+      {currentPage === 'Audit Trail' && <AuditSearch/>}
       {currentPage === 'Feedback' && <div></div>}
       {currentPage === 'Birthday Template' && <div></div>}
       {currentPage === 'Pautan' && <div></div>}
@@ -1159,4 +1215,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch };
