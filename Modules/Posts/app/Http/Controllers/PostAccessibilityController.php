@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Posts\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\PostAccessibility;
+use Modules\Posts\Models\PostAccessibility;
 
 class PostAccessibilityController extends Controller
 {

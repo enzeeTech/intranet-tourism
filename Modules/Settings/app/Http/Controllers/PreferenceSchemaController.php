@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\PreferenceSchema;
+use Modules\Settings\Models\PreferenceSchema;
 
 class PreferenceSchemaController extends Controller
 {

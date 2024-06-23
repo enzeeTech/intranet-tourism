@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\DepartmentPreference;
+use Modules\Settings\Models\DepartmentPreference;
 
 class DepartmentPreferenceController extends Controller
 {

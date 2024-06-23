@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Profile\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\Invitation;
+use Modules\Profile\Models\Invitation;
 
 class InvitationController extends Controller
 {

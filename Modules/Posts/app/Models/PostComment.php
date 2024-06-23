@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Crud\Models;
+namespace Modules\Posts\Models;
 
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;

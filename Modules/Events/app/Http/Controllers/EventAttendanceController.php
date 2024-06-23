@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Events\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\EventAttendance;
+use Modules\Events\Models\EventAttendance;
 
 class EventAttendanceController extends Controller
 {

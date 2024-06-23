@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Events\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\TaskItem;
+use Modules\Events\Models\TaskItem;
 
 class TaskItemController extends Controller
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Communities\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\Community;
+use Modules\Communities\Models\Community;
 
 class CommunityController extends Controller
 {

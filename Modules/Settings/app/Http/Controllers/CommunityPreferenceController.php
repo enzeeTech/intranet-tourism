@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\CommunityPreference;
+use Modules\Settings\Models\CommunityPreference;
 
 class CommunityPreferenceController extends Controller
 {

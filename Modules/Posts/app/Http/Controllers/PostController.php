@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Posts\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Modules\Crud\Models\Post;
+use Modules\Posts\Models\Post;
 
 class PostController extends Controller
 {

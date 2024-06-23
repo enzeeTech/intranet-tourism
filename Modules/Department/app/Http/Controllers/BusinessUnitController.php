@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\BusinessUnit;
+use Modules\Department\Models\BusinessUnit;
 
 class BusinessUnitController extends Controller
 {

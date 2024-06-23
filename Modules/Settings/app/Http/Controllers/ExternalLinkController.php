@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\ExternalLink;
+use Modules\Settings\Models\ExternalLink;
 
 class ExternalLinkController extends Controller
 {

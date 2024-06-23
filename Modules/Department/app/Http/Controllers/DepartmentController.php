@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\Department;
+use Modules\Department\Models\Department;
 
 class DepartmentController extends Controller
 {

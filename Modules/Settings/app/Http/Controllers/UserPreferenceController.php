@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\UserPreference;
+use Modules\Settings\Models\UserPreference;
 
 class UserPreferenceController extends Controller
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\Supervisor;
+use Modules\Department\Models\Supervisor;
 
 class SupervisorController extends Controller
 {

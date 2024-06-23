@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Crud\Http\Controllers;
+namespace Modules\Resources\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Crud\Models\ResourceAccess;
+use Modules\Resources\Models\ResourceAccess;
 
 class ResourceAccessController extends Controller
 {

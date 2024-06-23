@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Crud\Models;
+namespace Modules\Profile\Models;
 
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Crud\Models\User;
 
 class Profile extends Model implements AuditableContract
 {
