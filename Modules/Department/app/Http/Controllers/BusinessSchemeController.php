@@ -1,9 +1,16 @@
 <?php
 
+<<<<<<< HEAD
 namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Department\Models\BusinessScheme;
+=======
+namespace Modules\Crud\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Modules\Crud\Models\BusinessScheme;
+>>>>>>> 6e0c417 (update: seperate modules)
 
 class BusinessSchemeController extends Controller
 {

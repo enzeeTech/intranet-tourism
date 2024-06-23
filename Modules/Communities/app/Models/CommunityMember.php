@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 namespace Modules\Communities\Models;
+=======
+namespace Modules\Crud\Models;
+>>>>>>> 6e0c417 (update: seperate modules)
 
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
