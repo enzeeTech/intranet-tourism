@@ -5,9 +5,10 @@ namespace Modules\Auth\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Http\Requests\LoginRequest;
-use Modules\Crud\Models\SocialAccount;
+use Modules\Auth\Models\SocialAccount;
 
 class SocialLoginController extends Controller
 {
@@ -30,11 +31,11 @@ class SocialLoginController extends Controller
                 ]);
             }
 
-            SocialAccount::updateOrCreate([
+            SocialAccount::query()->updateOrCreate(
                 [
                     'user_id' => $user->id,
                     'provider' => $driver,
-                    'provider_user_id', $socialiteUser->getId()
+                    'provider_user_id' => $socialiteUser->getId()
                 ],
                 [
                     'token' => $socialiteUser->token,
@@ -42,7 +43,7 @@ class SocialLoginController extends Controller
                     'refresh_token' => $socialiteUser->refreshToken,
                     'expires_in' => $socialiteUser->expiresIn,
                 ]
-            ]);
+            );
 
             auth()->login($user);
             DB::commit();
@@ -51,7 +52,6 @@ class SocialLoginController extends Controller
             DB::rollback();
             throw $th;
         }
-
     }
 
     public function logout(Request $request, $driver)
