@@ -21,7 +21,7 @@ const TagInput = ({ tags, setTags }) => {
   };
 
   return (
-    <div className="tag-input-container">
+    <div className="tag-input-container  ">
       <input
         type="text"
         value={inputValue}

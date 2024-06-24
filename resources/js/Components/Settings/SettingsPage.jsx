@@ -1,6 +1,9 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect  } from 'react';
+import axios from 'axios';
+import { format } from 'date-fns';
 import { Switch, Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import moment from 'moment';
 import aishaImage from '../../../../public/assets/aishaImage.png';
@@ -608,7 +611,6 @@ const MailSettings = () => {
             { label: 'SMTP Password', placeholder: '***********', type: 'password' },
             { label: 'SMTP Host', placeholder: 'localhost', type: 'text' },
           ].map(({ label, placeholder, type }) => (
-            
             <li key={label} className="flex items-center justify-between w-full py-4">
               <div className="flex flex-col">
                 <p className="text-sm font-medium leading-6 text-gray-900">{label}</p>
@@ -1108,10 +1110,280 @@ const Requests = () => (
   </div>
 );
 
-export default Requests;
 
+// =============================================================================================================================================================
 
+// Audit Trail
 
+function SearchButton({ children }) {
+  return (
+    <button className="justify-center px-11 py-5 bg-blue-500 rounded-3xl text-white font-bold max-md:px-5">
+      {children}
+    </button>
+  );
+}
+
+function DateRangePicker({ startDate, endDate, onClick }) {
+  return (
+    <div
+      className="relative flex flex-col justify-center px-5 py-1.5 text-xs text-center text-black bg-white rounded-md border border-solid border-zinc-300 cursor-pointer"
+      onClick={onClick}
+    >
+      <div className="justify-center px-1.5 py-1 rounded-sm bg-sky-500 bg-opacity-10">
+        {startDate} - {endDate}
+      </div>
+    </div>
+  );
+}
+
+function generateDays(month, year, startDate, endDate, today) {
+  const days = [];
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const previousMonthDays = new Date(year, month, 0).getDate();
+
+  // Convert today to a string for comparison
+  const todayString = format(today, 'yyyy-MM-dd');
+
+  // Fill in days from the previous month
+  for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+    const date = new Date(year, month - 1, previousMonthDays - i);
+    days.push({
+      date: format(date, 'yyyy-MM-dd'),
+      isCurrentMonth: false,
+      isSelected: false,
+      isToday: false,
+    });
+  }
+
+  // Fill in days for the current month
+  for (let i = 1; i <= daysInMonth; i++) {
+    const date = new Date(year, month, i);
+    const dateString = format(date, 'yyyy-MM-dd');
+    days.push({
+      date: dateString,
+      isCurrentMonth: true,
+      isSelected:
+        (startDate && dateString === startDate) ||
+        (endDate && dateString === endDate) ||
+        (startDate && endDate && date >= new Date(startDate) && date <= new Date(endDate)),
+      isToday: dateString === todayString,
+    });
+  }
+
+  // Fill in days for the next month
+  const nextMonthDays = 42 - days.length; // 42 ensures 6 rows of weeks in the calendar
+  for (let i = 1; i <= nextMonthDays; i++) {
+    const date = new Date(year, month + 1, i);
+    days.push({
+      date: format(date, 'yyyy-MM-dd'),
+      isCurrentMonth: false,
+      isSelected: false,
+      isToday: false,
+    });
+  }
+
+  console.log('Generated days:', days);
+  return days;
+}
+
+function Dropdown({ label }) {
+  return (
+    <div className="flex flex-col justify-center text-xs whitespace-nowrap text-neutral-800">
+      <div className="flex gap-5 justify-between px-3.5 py-2.5 bg-white rounded-2xl shadow-sm">
+        <div>{label}</div>
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/26f2abafc455fbb3d0d889612515f65f2b3263cf94b884a512ab73b4a7aec9b9?apiKey=285d536833cc4168a8fbec258311d77b&"
+          className="shrink-0 self-start border-2 border-black border-solid aspect-[1.85] stroke-[2px] stroke-black w-[13px]"
+          alt=""
+        />
+      </div>
+    </div>
+  );
+}
+
+function AuditSearch() {
+  return (
+    <main className="flex flex-col px-8 py-6 bg-white rounded-2xl shadow-sm max-w-[841px] max-md:px-5">
+      <form className="flex gap-5 text-sm whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
+        <label htmlFor="searchInput" className="sr-only">
+          Search
+        </label>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search"
+          className="grow justify-center items-start self-start p-5 rounded-3xl border border-solid border-neutral-200 text-neutral-800 text-opacity-50 w-fit max-md:pr-5 max-md:max-w-full"
+        />
+        <SearchButton>Search</SearchButton>
+      </form>
+      <section className="flex gap-5 justify-between self-start mt-6">
+        <AuditCalendar startDate="April, 2024" endDate="April, 2024" />
+        <Dropdown label="All" />
+      </section>
+    </main>
+  );
+}
+
+export default function AuditCalendar() {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState({ startDate: 'Start Date', endDate: 'End Date' });
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isSelectingStartDate, setIsSelectingStartDate] = useState(true);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [today, setToday] = useState(new Date());
+
+  const fetchCurrentTime = async () => {
+    try {
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Asia/Kuala_Lumpur');
+      console.log('API response:', response.data); // Log the API response
+      const localDate = new Date(response.data.datetime);
+      setToday(localDate);
+      setCurrentMonth(localDate.getMonth());
+      setCurrentYear(localDate.getFullYear());
+      console.log('State updated:', localDate); // Log the updated date
+    } catch (error) {
+      console.error('Error fetching current time:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentTime();
+
+    const interval = setInterval(fetchCurrentTime, 1000 * 60); // Update every minute to keep the calendar live
+    return () => clearInterval(interval);
+  }, []);
+
+  const days = generateDays(currentMonth, currentYear, startDate, endDate, today);
+
+  const handleDateRangeClick = () => {
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleDateSelect = (date) => {
+    if (isSelectingStartDate) {
+      setStartDate(date);
+      setEndDate(null);
+      setIsSelectingStartDate(false);
+    } else {
+      if (new Date(date) < new Date(startDate)) {
+        alert('End date must be after start date.');
+        return;
+      }
+      setEndDate(date);
+      setSelectedDateRange({ startDate, endDate: date });
+      setShowCalendar(false);
+      setIsSelectingStartDate(true);
+    }
+  };
+
+  const handleMonthChange = (direction) => {
+    if (direction === 'prev') {
+      if (currentMonth === 0) {
+        setCurrentMonth(11);
+        setCurrentYear(currentYear - 1);
+      } else {
+        setCurrentMonth(currentMonth - 1);
+      }
+    } else if (direction === 'next') {
+      if (currentMonth === 11) {
+        setCurrentMonth(0);
+        setCurrentYear(currentYear + 1);
+      } else {
+        setCurrentMonth(currentMonth + 1);
+      }
+    }
+  };
+
+  const isSelectedDate = (date) => {
+    if (!startDate || !endDate) return false;
+    return new Date(date) >= new Date(startDate) && new Date(date) <= new Date(endDate);
+  };
+
+  return (
+    <div className="relative">
+      <DateRangePicker
+        startDate={selectedDateRange.startDate}
+        endDate={selectedDateRange.endDate}
+        onClick={handleDateRangeClick}
+      />
+      {showCalendar && (
+        <div className="absolute top-12 left-0 z-50 w-[300px] h-auto bg-white border border-gray-300 rounded-md shadow-custom">
+          <div className="text-center lg:mt-2">
+            <div className="flex items-center text-gray-900">
+              <button
+                type="button"
+                className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                onClick={() => handleMonthChange('prev')}
+              >
+                <span className="sr-only">Previous month</span>
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+              <div className="flex-auto text-sm font-semibold">
+                {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}
+              </div>
+              <button
+                type="button"
+                className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                onClick={() => handleMonthChange('next')}
+              >
+                <span className="sr-only">Next month</span>
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="mt-2 grid grid-cols-7 text-xs leading-6 text-gray-500">
+              <div>M</div>
+              <div>T</div>
+              <div>W</div>
+              <div>T</div>
+              <div>F</div>
+              <div>S</div>
+              <div>S</div>
+            </div>
+            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
+              {days.map((day, dayIdx) => (
+                <button
+                  key={day.date}
+                  type="button"
+                  className={classNames(
+                    'py-1.5 hover:bg-gray-100 focus:z-10',
+                    day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
+                    (day.isSelected || day.isToday) && 'font-semibold',
+                    day.isSelected && 'text-white',
+                    !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
+                    !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
+                    day.isToday && !day.isSelected && 'text-indigo-600',
+                    isSelectedDate(day.date) && 'bg-indigo-200',
+                    dayIdx === 0 && 'rounded-tl-lg',
+                    dayIdx === 6 && 'rounded-tr-lg',
+                    dayIdx === days.length - 7 && 'rounded-bl-lg',
+                    dayIdx === days.length - 1 && 'rounded-br-lg',
+                  )}
+                  onClick={() => handleDateSelect(day.date)}
+                >
+                  <time
+                    dateTime={day.date}
+                    className={classNames(
+                      'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
+                      day.isToday && 'bg-indigo-600 text-white', // Styling for today
+                      day.isSelected && !day.isToday && 'bg-indigo-500 text-white', // Styling for selected date
+                      !day.isSelected && isSelectedDate(day.date) && 'bg-indigo-200', // Highlight selected range with lighter color
+                    )}
+                  >
+                    {day.date.split('-').pop().replace(/^0/, '')}
+                  </time>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 
@@ -1151,7 +1423,10 @@ const SettingsPage = ({ currentPage }) => {
       {currentPage === 'Departments' && <Departments onSave={handleSave} />}
       {currentPage === 'Media' && <div></div>}
       {currentPage === 'Requests' && <Requests/>}
-      {currentPage === 'Audit Trail' && <div></div>}
+      {currentPage === 'Audit Trail' &&
+        <>
+          <AuditSearch onSave={handleSave} />
+        </>}
       {currentPage === 'Feedback' && <div></div>}
       {currentPage === 'Birthday Template' && <div></div>}
       {currentPage === 'Pautan' && <div></div>}
@@ -1159,4 +1434,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar };
