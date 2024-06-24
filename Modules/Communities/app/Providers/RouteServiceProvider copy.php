@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Events\Providers;
+namespace Modules\Communities\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(): void
     {
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -34,16 +35,19 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')->group(module_path('Events', '/routes/web.php'));
+        Route::middleware('web')->group(module_path('Communities', '/routes/web.php'));
     }
 
     /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
-     */
+      */
     protected function mapApiRoutes(): void
     {
-        Route::middleware('api')->prefix('api/events')->name('api.')->group(module_path('Events', '/routes/api.php'));
+        Route::middleware('api')
+        ->prefix('api/communities')
+        ->group(module_path('Communities', '/routes/api.php'));
+        Route::middleware('api')->prefix('api/communities')->name('api.')->group(module_path('Communities', '/routes/api.php'));
     }
 }

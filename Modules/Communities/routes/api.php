@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Crud\Http\Controllers\CrudController;
-use Modules\Crud\Http\Controllers\PostController;
+use Modules\Communities\Http\Controllers\CommunityController;
+use Modules\Communities\Http\Controllers\CommunityMemberController;
 
 /*
  *--------------------------------------------------------------------------
@@ -15,8 +15,11 @@ use Modules\Crud\Http\Controllers\PostController;
  *
 */
 
-// Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-//     Route::apiResource('crud', CrudController::class)->names('crud');
-// });
 
-require_once 'crud.php';
+
+Route::apiResources([
+
+    'communities' => CommunityController::class,
+    'community_members' => CommunityMemberController::class,
+
+]);

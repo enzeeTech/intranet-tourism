@@ -1,11 +1,11 @@
 {
-    "name": "Crud",
-    "alias": "crud",
+    "name": "Department",
+    "alias": "department",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Crud\\Providers\\CrudServiceProvider"
+        "Modules\\Department\\Providers\\DepartmentServiceProvider"
     ],
     "files": []
 }

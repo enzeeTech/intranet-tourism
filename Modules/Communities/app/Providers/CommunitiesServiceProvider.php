@@ -1,15 +1,15 @@
 <?php
 
-namespace Modules\Crud\Providers;
+namespace Modules\Communities\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class CrudServiceProvider extends ServiceProvider
+class CommunitiesServiceProvider extends ServiceProvider
 {
-    protected string $moduleName = 'Crud';
+    protected string $moduleName = 'Communities';
 
-    protected string $moduleNameLower = 'crud';
+    protected string $moduleNameLower = 'communities';
 
     /**
      * Boot the application events.
