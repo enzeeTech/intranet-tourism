@@ -7,11 +7,23 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    /**
+     * Called before routes are registered.
+     *
+     * Register any model bindings or pattern based filters.
+     */
+    public function boot(): void
+    {
+        parent::boot();
+    }
+
+    /**
+     * Define the routes for the application.
+     */
     public function map(): void
     {
-        // Route::middleware('web')
-        //     ->prefix('auth')
-        //     ->group(module_path('Auth', '/routes/web.php'));
+
+        $this->mapApiRoutes();
 
         $this->mapWebRoutes();
     }
@@ -33,8 +45,9 @@ class RouteServiceProvider extends ServiceProvider
       */
     protected function mapApiRoutes(): void
     {
-
+        Route::middleware('api')
+        ->prefix('api/communities')
+        ->group(module_path('Communities', '/routes/api.php'));
         Route::middleware('api')->prefix('api/communities')->name('api.')->group(module_path('Communities', '/routes/api.php'));
-
     }
 }

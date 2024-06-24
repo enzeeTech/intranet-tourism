@@ -4,12 +4,6 @@ namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Department\Models\BusinessScheme;
-=======
-namespace Modules\Department\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use Modules\Department\Models\BusinessScheme;
->>>>>>> e2ad440 (update:name space for model and controller)
 
 class BusinessSchemeController extends Controller
 {
