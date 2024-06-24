@@ -2,7 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Crud\Http\Controllers\CrudController;
+use Modules\Crud\Http\Controllers\ExternalLinkController;
 use Modules\Crud\Http\Controllers\PostController;
+use Modules\Settings\Http\Controllers\CommunityPreferenceController;
+use Modules\Settings\Http\Controllers\DepartmentPreferenceController;
+use Modules\Settings\Http\Controllers\PreferenceSchemaController;
+use Modules\Settings\Http\Controllers\SettingController;
+use Modules\Settings\Http\Controllers\UserPreferenceController;
 
 /*
  *--------------------------------------------------------------------------
@@ -19,4 +25,13 @@ use Modules\Crud\Http\Controllers\PostController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
-require_once 'crud.php';
+// require_once 'crud.php';
+Route::apiResources([
+
+    'community_preferences' => CommunityPreferenceController::class,
+    'department_preferences' => DepartmentPreferenceController::class,
+    'external_links' => ExternalLinkController::class,
+    'preference_schemas' => PreferenceSchemaController::class,
+    'settings' => SettingController::class,
+    'user_preferences' => UserPreferenceController::class,
+]);

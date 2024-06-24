@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Crud\Providers;
+namespace Modules\Resource\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class CrudServiceProvider extends ServiceProvider
+class ResourceServiceProvider extends ServiceProvider
 {
     protected string $moduleName = 'Crud';
 

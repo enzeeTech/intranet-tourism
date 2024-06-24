@@ -17,9 +17,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Crud\\": "app/",
-            "Modules\\Crud\\Database\\Factories\\": "database/factories/",
-            "Modules\\Crud\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\Posts\\": "app/",
+            "Modules\\Posts\\Database\\Factories\\": "database/factories/",
+            "Modules\\Posts\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

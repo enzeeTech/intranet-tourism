@@ -1,11 +1,11 @@
 {
-    "name": "Crud",
-    "alias": "crud",
+    "name": "Resource",
+    "alias": "resource",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Crud\\Providers\\CrudServiceProvider"
+        "Modules\\Resources\\Providers\\ResourceServiceProvider"
     ],
     "files": []
 }

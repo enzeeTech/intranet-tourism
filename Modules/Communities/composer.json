@@ -15,9 +15,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Modules\\Communties\\": "app",
-            "Modules\\Communties\\Database\\Factories\\": "database/factories/",
-            "Modules\\Communties\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\Communities\\": "app",
+            "Modules\\Communities\\Database\\Factories\\": "database/factories/",
+            "Modules\\Communities\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

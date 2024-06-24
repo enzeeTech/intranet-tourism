@@ -1,8 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Crud\Http\Controllers\CrudController;
-use Modules\Crud\Http\Controllers\PostController;
+use Modules\Department\Http\Controllers\BusinessGradeController;
+use Modules\Department\Http\Controllers\BusinessPostController;
+use Modules\Department\Http\Controllers\BusinessSchemeController;
+use Modules\Department\Http\Controllers\BusinessUnitController;
+use Modules\Department\Http\Controllers\DepartmentController;
+use Modules\Department\Http\Controllers\EmploymentPostController;
+use Modules\Department\Http\Controllers\SupervisorController;
 
 /*
  *--------------------------------------------------------------------------
@@ -19,4 +24,14 @@ use Modules\Crud\Http\Controllers\PostController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
-require_once 'crud.php';
+// require_once 'crud.php';
+Route::apiResources([
+    'business_grades' => BusinessGradeController::class,
+    'business_posts' => BusinessPostController::class,
+    'business_schemes' => BusinessSchemeController::class,
+    'business_units' => BusinessUnitController::class,
+    'departments' => DepartmentController::class,
+    'employment_posts' => EmploymentPostController::class,
+    'supervisors' => SupervisorController::class,
+
+]);

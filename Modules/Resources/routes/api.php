@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Crud\Http\Controllers\CrudController;
-use Modules\Crud\Http\Controllers\PostController;
+use Modules\Resources\Http\Controllers\ResourceAccessController;
+use Modules\Resources\Http\Controllers\ResourceController;
 
 /*
  *--------------------------------------------------------------------------
@@ -19,4 +19,10 @@ use Modules\Crud\Http\Controllers\PostController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
-require_once 'crud.php';
+// require_once 'crud.php';
+Route::apiResources([
+
+    'resources' => ResourceController::class,
+    'resource_access' => ResourceAccessController::class,
+
+]);

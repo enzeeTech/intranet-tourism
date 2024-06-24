@@ -1,9 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Posts\Http\Controllers\PostAccessibilityController;
-use Modules\Posts\Http\Controllers\PostCommentController;
-use Modules\Posts\Http\Controllers\PostController;
+use Modules\Crud\Http\Controllers\CrudController;
+use Modules\Crud\Http\Controllers\PostController;
+use Modules\Profile\Http\Controllers\InvitationController;
+use Modules\Profile\Http\Controllers\ProfileController;
+
+// use Modules\Profile\Models\Invitation;
+// use Modules\Profile\Models\Profile;
 
 /*
  *--------------------------------------------------------------------------
@@ -20,11 +24,12 @@ use Modules\Posts\Http\Controllers\PostController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
-// require_once 'crud.php';
+
 Route::apiResources([
 
-    'posts' => PostController::class,
-    'post_accessibilities' => PostAccessibilityController::class,
-    'post_comment' => PostCommentController::class,
+    'profiles' => ProfileController::class,
+    'invitations' => InvitationController::class,
 
 ]);
+
+// require_once 'crud.php';

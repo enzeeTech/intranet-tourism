@@ -1,11 +1,11 @@
 {
-    "name": "Crud",
-    "alias": "crud",
+    "name": "Events",
+    "alias": "events",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Crud\\Providers\\CrudServiceProvider"
+        "Modules\\Events\\Providers\\EventsServiceProvider"
     ],
     "files": []
 }

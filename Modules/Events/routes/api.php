@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Crud\Http\Controllers\CrudController;
 use Modules\Crud\Http\Controllers\PostController;
+use Modules\Events\Http\Controllers\EventAttendanceController;
+use Modules\Events\Http\Controllers\EventController;
+use Modules\Events\Http\Controllers\TaskController;
+use Modules\Events\Http\Controllers\TaskItemController;
 
 /*
  *--------------------------------------------------------------------------
@@ -19,4 +23,12 @@ use Modules\Crud\Http\Controllers\PostController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
-require_once 'crud.php';
+// require_once 'crud.php';
+Route::apiResources([
+
+    'events' => EventController::class,
+    'event_attendance' => EventAttendanceController::class,
+    'tasks' => TaskController::class,
+    'task_items' => TaskItemController::class,
+
+]);

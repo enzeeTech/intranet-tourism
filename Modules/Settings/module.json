@@ -1,11 +1,11 @@
 {
-    "name": "Crud",
-    "alias": "crud",
+    "name": "Settings",
+    "alias": "settings",
     "description": "",
     "keywords": [],
     "priority": 0,
     "providers": [
-        "Modules\\Crud\\Providers\\CrudServiceProvider"
+        "Modules\\Settings\\Providers\\SettingsServiceProvider"
     ],
     "files": []
 }
