@@ -21,18 +21,6 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
-
-        Schema::create('social_accounts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('provider');
-            $table->string('provider_user_id');
-            $table->text('token');
-            $table->text('token_secret')->nullable();
-            $table->text('refresh_token')->nullable();
-            $table->integer('expires_in')->nullable();
-            $table->timestamps();
-        });
     }
 
     /**
@@ -41,6 +29,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('personal_access_tokens');
-        Schema::dropIfExists('social_accounts');
     }
 };
