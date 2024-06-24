@@ -19,13 +19,35 @@ class SocialLoginController extends Controller
     {
         $socialiteUser = Socialite::driver($driver)->user();
 
-        $user = User::updateOrCreate([
-            'email' => $socialiteUser->email,
-        ], [
-            'name' => $socialiteUser->name,
-            'email' => $socialiteUser->email,
-            'password' => bcrypt('password'),
-        ]);
+        dd(
+            $token = $socialiteUser->token,
+            $refreshToken = $socialiteUser->refreshToken,
+            $expiresIn = $socialiteUser->expiresIn,
+
+            // OAuth 1.0 providers...
+            $token = $socialiteUser->token,
+            $tokenSecret = $socialiteUser->tokenSecret,
+
+            // All providers...
+            $socialiteUser->getId(),
+            $socialiteUser->getNickname(),
+            $socialiteUser->getName(),
+            $socialiteUser->getEmail(),
+            $socialiteUser->getAvatar(),
+        );
+
+        // FIXME: should query from SocialAccount
+        $user = User::where('email', $socialiteUser->getEmail())->first();
+
+        if (!$user) {
+            $user = User::create([
+                'name' => $socialiteUser->name,
+                'email' => $socialiteUser->email,
+                'password' => bcrypt('password'),
+            ]);
+
+            // save social account token
+        }
 
         auth()->login($user);
 
