@@ -6,7 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\App\Settings\Models\CommunityPreference;
+use Modules\Settings\Models\CommunityPreference;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 

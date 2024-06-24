@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Http\Requests\LoginRequest;
+use Modules\Crud\Models\SocialAccount;
 
 class SocialLoginController extends Controller
 {
@@ -18,40 +19,39 @@ class SocialLoginController extends Controller
     public function callback($driver)
     {
         $socialiteUser = Socialite::driver($driver)->user();
-
-        dd(
-            $token = $socialiteUser->token,
-            $refreshToken = $socialiteUser->refreshToken,
-            $expiresIn = $socialiteUser->expiresIn,
-
-            // OAuth 1.0 providers...
-            $token = $socialiteUser->token,
-            $tokenSecret = $socialiteUser->tokenSecret,
-
-            // All providers...
-            $socialiteUser->getId(),
-            $socialiteUser->getNickname(),
-            $socialiteUser->getName(),
-            $socialiteUser->getEmail(),
-            $socialiteUser->getAvatar(),
-        );
-
-        // FIXME: should query from SocialAccount
         $user = User::where('email', $socialiteUser->getEmail())->first();
+        DB::beginTransaction();
+        try {
+            if (!$user) {
+                $user = User::create([
+                    'name' => $socialiteUser->name,
+                    'email' => $socialiteUser->email,
+                    'password' => bcrypt('password'),
+                ]);
+            }
 
-        if (!$user) {
-            $user = User::create([
-                'name' => $socialiteUser->name,
-                'email' => $socialiteUser->email,
-                'password' => bcrypt('password'),
+            SocialAccount::updateOrCreate([
+                [
+                    'user_id' => $user->id,
+                    'provider' => $driver,
+                    'provider_user_id', $socialiteUser->getId()
+                ],
+                [
+                    'token' => $socialiteUser->token,
+                    'token_secret' => $socialiteUser->tokenSecret,
+                    'refresh_token' => $socialiteUser->refreshToken,
+                    'expires_in' => $socialiteUser->expiresIn,
+                ]
             ]);
 
-            // save social account token
+            auth()->login($user);
+            DB::commit();
+            return redirect('/');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
         }
 
-        auth()->login($user);
-
-        return redirect('/');
     }
 
     public function logout(Request $request, $driver)

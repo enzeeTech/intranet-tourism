@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\App\Settings\Models;
+namespace Modules\Settings\Models;
 
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
