@@ -267,7 +267,7 @@ const StaffDirectory = () => {
                 </div>
                 </main>
 
-                <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
         <div className="file-directory-header">
           <PageTitle title="Staff Directory" />
         </div>
@@ -276,7 +276,26 @@ const StaffDirectory = () => {
           <FeaturedEvents />
           <WhosOnline />
         </div>
-      </aside>
+      </aside> */}
+        <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <style>
+                {`
+                aside::-webkit-scrollbar {
+                    width: 0px;
+                    background: transparent;
+                }
+                `}
+            </style>
+            <div className="file-directory-header">
+            <PageTitle title="Staff Directory" />
+            </div>
+            <hr className="file-directory-underline" />
+
+            <div>
+                <FeaturedEvents />
+                <WhosOnline />
+            </div>
+        </aside>
 
         {/* <main style={{width: '100%'}}>
           <div className="staff-directory" style={{marginLeft: '30px'}}>

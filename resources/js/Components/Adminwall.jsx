@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useState } from 'react';
 import DpMembers from '../Components/DepartmentCom/DepartmentMembers';
 import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
-import {  SearchInput, SearchButton, Table } from "../Components/ProfileTabbar";
-import {ImageProfile, VideoProfile,} from "../Components/ProfileTabbar/Gallery"
+import { SearchInput, SearchButton, Table } from "../Components/ProfileTabbar";
+import { ImageProfile, VideoProfile } from "../Components/ProfileTabbar/Gallery";
 import { Filter } from '@/Components/Reusable/WallPosting';
-
+// import { OutputData } from '@/Components/Reusable/WallPosting';
+import OutputDataDepart from './Reusable/WallPosting/OutputBoxDepart';
 
 function HeaderSection() {
   const [isEditing, setIsEditing] = useState(false);
@@ -84,7 +85,12 @@ function HeaderSection() {
 }
 
 function Navigation() {
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
+  const [polls, setPolls] = useState([]);
+
+  const handleCreatePoll = (poll) => {
+    setPolls((prevPolls) => [...prevPolls, poll]);
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -128,22 +134,19 @@ function Navigation() {
         </div>
       )}
 
-      {/* {activeTab === "Gallery" && (
-        <ProfileGallery photoData={photoData} videoData={videoData} />
-      )} */}
-  {activeTab === "Gallery" && (
-                                <section>
-                                    <ImageProfile selectedItem="All" />
-                                    <VideoProfile selectedItem="All" />
-                                </section>
-)}
-
+      {activeTab === "Gallery" && (
+        <section>
+          <ImageProfile selectedItem="All" />
+          <VideoProfile selectedItem="All" />
+        </section>
+      )}
 
       {activeTab === 'Post' && (
         <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-          <div className="max-w-[900px] w-full  whitespace-nowrap absolute content-items">
-            <ShareYourThoughtsDepart /><br></br>
-            <Filter/>
+          <div className="max-w-[875px] w-full  whitespace-nowrap absolute content-items">
+            <ShareYourThoughtsDepart />
+            <Filter /><br />
+            <OutputDataDepart polls={polls} />
           </div>
         </div>
       )}

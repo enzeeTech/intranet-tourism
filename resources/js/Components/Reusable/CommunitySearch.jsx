@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import searchIcon from '../../../../public/assets/searchStaffButton.png'; 
-import filterIcon from '../../../../public/assets/staffListButton.png'; 
+import searchIcon from '../../../../public/assets/searchStaffButton.png';
+import filterIcon from '../../../../public/assets/staffListButton.png';
 import './css/StaffDirectorySearchBar.css';
 import './css/General.css';
 
@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <div className="staff-search-bar-container">
         <div className="staff-search-bar-title">
-            <h2>Search Department...</h2>
+            <h2>Search Community...</h2>
         </div>
         <div className="staff-search-bar">
             <input

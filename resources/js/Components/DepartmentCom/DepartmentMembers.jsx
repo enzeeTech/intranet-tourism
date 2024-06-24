@@ -3,10 +3,10 @@ import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as nee
 
 function Avatar({ src, alt, className, status }) {
   return (
-    <div className="relative">
+    <div className="relative items-center justify-end h-16">
       <img loading="lazy" src={src} alt={alt} className={className} />
-      {status === 1 && <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-2"></div>}
-      {status === 2 && <div className="absolute bottom-0 right-0 border-2 border-white bg-green-500 rounded-full w-[12px] h-[12px] mb-2"></div>}
+      {status === 1 && <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-1"></div>}
+      {status === 2 && <div className="absolute bottom-0 right-0 border-2 border-white bg-green-500 rounded-full w-[12px] h-[12px] mb-1 "></div>}
     </div>
   );
 }
@@ -22,8 +22,8 @@ function UserInfo({ name, role }) {
 
 function UserCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex text-neutral-800">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
+    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
+      <Avatar src={src} alt={alt} className= "shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
   );
@@ -31,12 +31,9 @@ function UserCard({ src, alt, name, role, status }) {
 
 function MemberCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex gap-5 mt-5 text-neutral-800">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.98] w-[62px] rounded-full mb-4" status={status} />
-      <div className="flex flex-col grow shrink-0 self-start mt-3 basis-0 w-fit">
-        <h3 className="text-xl font-bold">{name}</h3>
-        <p className="text-xs font-medium">{role}</p>
-      </div>
+    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
+      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
+      <UserInfo name={name} role={role} />
     </div>
   );
 }
@@ -47,7 +44,7 @@ function DpMembers() {
 
   const [members, setMembers] = useState([
     {
-      src: "assets/women.avif",
+      src: "assets/person.svg",
       alt: "Profile picture of Aisha Binti (Department)",
       name: "Aisha Binti (Department)",
       role: "Pejabat Timbalan Ketua Pengarah (Promosi)",
@@ -109,7 +106,7 @@ function DpMembers() {
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    <section className="flex flex-col px-6 pt-8 pb-20 rounded-3xl shadow-sm max-w-[800px] h-auto max-md:px-5">
+    <section className="flex flex-col p-6 rounded-3xl shadow-sm max-w-[870px] h-auto max-md:px-5">
       <style>
         {`
           .relative {
@@ -154,7 +151,7 @@ function DpMembers() {
           }
         `}
       </style>
-      <div className="flex gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
+      <div className="flex items-center gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
           value={searchInput}
@@ -165,14 +162,14 @@ function DpMembers() {
         />
         <button
           onClick={handleSearch}
-          className="justify-center px-6 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5"
+          className="justify-center items-center  text-center whitespace-nowrap  w-[96px] h-[45px] rounded-3xl max-md:px-5"
           style={{ backgroundColor: 'rgb(72, 128, 255)' }}
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="justify-center px-11 py-4 text-center whitespace-nowrap rounded-3xl max-md:px-5"
+          className="justify-center items-center  text-center whitespace-nowrap w-[122px] h-[45px] rounded-3xl max-md:px-2"
           style={{ backgroundColor: 'rgb(255, 84, 54)' }}
         >
           Invite
@@ -196,7 +193,7 @@ function DpMembers() {
       ))}
 
       <div className="flex gap-5 justify-between mt-10 max-md:flex-wrap max-md:max-w-full">
-        <section className="flex flex-col">
+        <section className="flex flex-col w-[870px]">
           <div className="flex gap-5 whitespace-nowrap">
             <h2 className="grow text-2xl font-bold text-black">
               Members
@@ -216,11 +213,13 @@ function DpMembers() {
             />
           ))}
         </section>
-        <Avatar
+
+        {/* <Avatar
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/8c58b794fabc4e92d227bdf9620942466bcd49998c3663a1da1f9d932397a921?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
           alt=""
           className="shrink-0 self-end mt-14 w-10 aspect-[1.47] max-md:mt-10"
-        />
+        /> */}
+
       </div>
       {showInvite && <Invite onClose={handleCloseInvite} />}
     </section>
