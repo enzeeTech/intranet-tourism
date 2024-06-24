@@ -27,6 +27,9 @@ import community2 from '../../../../public/assets/community2.png';
 import community3 from '../../../../public/assets/community3.png';
 import changeImage1 from '../../../../public/assets/lambo5.jpeg';
 import changeImage2 from '../../../../public/assets/lambo2.jpeg';
+import blueCheckmarkIcon from '../../../../public/assets/blueCheckmarkIcon.svg';
+import LeftArrowIcon from '../../../../public/assets/leftArrowIcon.svg';
+import RightArrowIcon from '../../../../public/assets/rightArrowIcon.svg';
 
 // Basic Settings
 function FileInputSection({ onFileSelect }) {
@@ -1028,7 +1031,7 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
 
       {isPopupVisible && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 bg-grey-100 backdrop-blur-sm"
           onClick={() => setIsPopupVisible(false)}
         >
           <div
@@ -1070,7 +1073,7 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
 
       {isPopupVisible && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 bg-grey-100 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm"
           onClick={() => setIsPopupVisible(false)}
         >
           <div
@@ -1130,7 +1133,7 @@ const Requests = () => (
 
 function SearchButton({ children }) {
   return (
-    <button className="justify-center px-11 py-5 bg-blue-500 rounded-3xl text-white font-bold max-md:px-5">
+    <button className="justify-center py-5 font-bold text-white bg-blue-500 px-11 rounded-3xl max-md:px-5">
       {children}
     </button>
   );
@@ -1190,7 +1193,7 @@ function Dropdown({ label }) {
 
 function AuditSearch() {
   return (
-    <main className="flex flex-col px-8 py-6 bg-white rounded-2xl shadow-custom w-10/12 max-md:px-5">
+    <main className="flex flex-col w-10/12 px-8 py-6 bg-white rounded-2xl shadow-custom max-md:px-5">
       <form className="flex gap-5 text-sm whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
         <label htmlFor="searchInput" className="sr-only">
           Search
@@ -1199,11 +1202,11 @@ function AuditSearch() {
           id="searchInput"
           type="search"
           placeholder="Search"
-          className="grow justify-center items-start self-start p-5 rounded-3xl border border-solid border-neutral-200 text-neutral-800 text-opacity-50 w-fit max-md:pr-5 max-md:max-w-full"
+          className="items-start self-start justify-center p-5 text-opacity-50 border border-solid grow rounded-3xl border-neutral-200 text-neutral-800 w-fit max-md:pr-5 max-md:max-w-full"
         />
         <SearchButton>Search</SearchButton>
       </form>
-      <section className="flex gap-5 justify-between self-start mt-6">
+      <section className="flex self-start justify-between gap-5 mt-6">
         <AuditCalendar startDate="April, 2024" endDate="April, 2024" />
         <Dropdown label="All" />
       </section>
@@ -1322,7 +1325,7 @@ export default function AuditCalendar() {
                 onClick={() => handleMonthChange('prev')}
               >
                 <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
               </button>
               <div className="flex-auto text-sm font-semibold">
                 {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}
@@ -1333,10 +1336,10 @@ export default function AuditCalendar() {
                 onClick={() => handleMonthChange('next')}
               >
                 <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="mt-2 grid grid-cols-7 text-xs leading-6 text-gray-500">
+            <div className="grid grid-cols-7 mt-2 text-xs leading-6 text-gray-500">
               <div>M</div>
               <div>T</div>
               <div>W</div>
@@ -1345,7 +1348,7 @@ export default function AuditCalendar() {
               <div>S</div>
               <div>S</div>
             </div>
-            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
+            <div className="grid grid-cols-7 gap-px mt-2 text-sm bg-gray-200 rounded-lg shadow isolate ring-1 ring-gray-200">
               {days.map((day, dayIdx) => (
                 <button
                   key={day.date}
@@ -1431,21 +1434,21 @@ function AuditTrailTable() {
   const selectedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
-    <div className="flex flex-col px-5 py-4 bg-white rounded-2xl mt-5 shadow-custom w-10/12">
+    <div className="flex flex-col w-10/12 px-5 py-4 mt-5 bg-white rounded-2xl shadow-custom">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 table-fixed border border-gray-300">
+        <table className="min-w-full border border-gray-300 divide-y divide-gray-200 table-fixed">
           <thead>
             <tr>
-              <th scope="col" className="w-1/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+              <th scope="col" className="w-1/12 px-2 py-3 font-medium text-left border border-gray-300 text-md text-neutral-900">
                 #
               </th>
-              <th scope="col" className="w-2/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+              <th scope="col" className="w-2/12 px-2 py-3 font-medium text-left border border-gray-300 text-md text-neutral-900">
                 Date/Time
               </th>
-              <th scope="col" className="w-2/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+              <th scope="col" className="w-2/12 px-2 py-3 font-medium text-left border border-gray-300 text-md text-neutral-900">
                 Username
               </th>
-              <th scope="col" className="w-7/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+              <th scope="col" className="w-7/12 px-2 py-3 font-medium text-left border border-gray-300 text-md text-neutral-900">
                 Action made
               </th>
             </tr>
@@ -1453,23 +1456,23 @@ function AuditTrailTable() {
           <tbody className="bg-white divide-y divide-gray-200">
             {selectedItems.map((item) => (
               <tr key={item.id}>
-                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.id}</td>
-                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.dateTime}</td>
-                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.username}</td>
-                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.action}</td>
+                <td className="px-2 py-4 text-sm border border-gray-300 whitespace-nowrap text-neutral-900">{item.id}</td>
+                <td className="px-2 py-4 text-sm border border-gray-300 whitespace-nowrap text-neutral-900">{item.dateTime}</td>
+                <td className="px-2 py-4 text-sm border border-gray-300 whitespace-nowrap text-neutral-900">{item.username}</td>
+                <td className="px-2 py-4 text-sm border border-gray-300 whitespace-nowrap text-neutral-900">{item.action}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0 mt-4">
-        <div className="-mt-px flex w-0 flex-1">
+      <nav className="flex items-center justify-between px-4 mt-4 border-t border-gray-200 sm:px-0">
+        <div className="flex flex-1 w-0 -mt-px">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
-            className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-neutral-900 hover:border-gray-300 hover:text-gray-700"
+            className="inline-flex items-center pt-4 pr-1 text-sm font-medium border-t-2 border-transparent text-neutral-900 hover:border-gray-300 hover:text-gray-700"
           >
-            <ArrowLongLeftIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+            <ArrowLongLeftIcon className="w-5 h-5 mr-3 text-gray-400" aria-hidden="true" />
             Previous
           </button>
         </div>
@@ -1487,13 +1490,13 @@ function AuditTrailTable() {
             </button>
           ))}
         </div>
-        <div className="-mt-px flex w-0 flex-1 justify-end">
+        <div className="flex justify-end flex-1 w-0 -mt-px">
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-neutral-900 hover:border-gray-300 hover:text-gray-700"
+            className="inline-flex items-center pt-4 pl-1 text-sm font-medium border-t-2 border-transparent text-neutral-900 hover:border-gray-300 hover:text-gray-700"
           >
             Next
-            <ArrowLongRightIcon className="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+            <ArrowLongRightIcon className="w-5 h-5 ml-3 text-gray-400" aria-hidden="true" />
           </button>
         </div>
       </nav>
@@ -1501,8 +1504,174 @@ function AuditTrailTable() {
   );
 }
 
+// Feedback
 
+// Sample feedback data 
+const feedbackData = [
+  { id: 1, name: 'Aisha Binti', department: 'Department', time: '2024-06-24T04:00:00Z', feedback: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla cursus turpis in imperdiet volutpat. Donec id leo orci. Donec et elit eleifend, tempor lacus et, placerat dui. Donec euismod odio eu nisl vulputate lobortis. ', profileImage: aishaImage, read: false },
+  { id: 2, name: 'Thomas', department: 'Department', time: '2024-06-23T01:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
+  { id: 3, name: 'Ben', department: 'Department', time: '2024-06-19T04:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: benImage, read: false },
+  { id: 4, name: 'Thomas', department: 'Department', time: '2024-06-18T12:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: true },
+  { id: 5, name: 'Aisha Binti', department: 'Department', time: '2024-06-17T08:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: aishaImage, read: true },
+  { id: 6, name: 'Thomas', department: 'Department', time: '2024-06-16T06:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
+  { id: 7, name: 'Ben', department: 'Department', time: '2024-06-15T12:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: benImage, read: true },
+  { id: 8, name: 'Thomas', department: 'Department', time: '2024-06-14T12:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
+  { id: 9, name: 'Aisha Binti', department: 'Department', time: '2024-06-13T12:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: aishaImage, read: false },
+  { id: 10, name: 'Thomas', department: 'Department', time: '2024-06-12T11:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: true },
+  { id: 11, name: 'Ben', department: 'Department', time: '2024-06-11T10:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: benImage, read: false },
+  { id: 12, name: 'Aisha Binti', department: 'Department', time: '2024-06-10T09:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: aishaImage, read: false },
+  { id: 13, name: 'Thomas', department: 'Department', time: '2024-06-09T08:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: true },
+  { id: 14, name: 'Ben', department: 'Department', time: '2024-06-08T07:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: benImage, read: false },
+  { id: 15, name: 'Thomas', department: 'Department', time: '2024-06-07T06:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
+  { id: 16, name: 'Aisha Binti', department: 'Department', time: '2024-06-06T05:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: aishaImage, read: true },
+  { id: 17, name: 'Thomas', department: 'Department', time: '2024-06-05T04:00:00Z', feedback: 'Porem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
+];
 
+// Feedback Row Component
+const FeedbackRow = ({ feedback, onRead, onDelete }) => {
+  const [isFeedbackModalVisible, setIsFeedbackModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  // Function to handle read feedback and show modal
+  const handleRead = () => {
+    onRead(feedback.id);
+    setIsFeedbackModalVisible(true);
+  };
+
+  // Function to handle delete feedback
+  const handleDelete = () => {
+    onDelete(feedback.id);
+    setIsDeleteModalVisible(false);
+  };
+
+  const maxLength = 50;
+  const truncatedFeedback = feedback.feedback.length > maxLength
+    ? `${feedback.feedback.substring(0, maxLength)}...`
+    : feedback.feedback;
+
+  return (
+    <>
+      <div className="flex items-center justify-between py-4 border-t border-gray-200 cursor-pointer" onClick={handleRead}>
+        <div className="flex items-center w-1/4">
+          <img className="w-10 h-10 rounded-full" src={feedback.profileImage} alt="User profile" />
+          <div className="ml-3">
+            <p className="text-sm font-bold text-black">{feedback.name} ({feedback.department})</p>
+            <p className="text-xs font-semibold text-black">{formatTime(feedback.time)}</p>
+          </div>
+        </div>
+        <div className="w-1/2 ">
+          <p className="pl-20 text-sm font-semibold text-center text-black ">"{truncatedFeedback}"</p>
+        </div>
+        <div className="flex items-center justify-end w-1/4">
+          {!feedback.read && <div className="w-3 h-3 mr-10 bg-red-500 rounded-full"></div>}
+          <img
+            className="w-6 h-6 mr-3 cursor-pointer"
+            src={blueCheckmarkIcon}
+            alt="Delete"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsDeleteModalVisible(true);
+            }}
+          />
+        </div>
+      </div>
+
+      {isFeedbackModalVisible && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm"
+          onClick={() => setIsFeedbackModalVisible(false)}
+        >
+          <div
+            className="relative p-8 bg-white rounded-lg shadow-lg w-[600px]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="mb-4 text-2xl font-bold text-center">{feedback.name} ({feedback.department})</h2>
+            <hr className="mb-5 border-t border-gray-300" style={{ borderColor: '#E4E4E4', width: '100%' }} />
+            <p className="mb-2 text-lg font-medium text-center">{feedback.feedback}</p>
+            <div className="flex justify-center space-x-4">
+              <button className="px-8 py-2 mt-5 text-white bg-blue-500 rounded-full" onClick={() => setIsFeedbackModalVisible(false)}>Back</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDeleteModalVisible && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm "
+          onClick={() => setIsDeleteModalVisible(false)}
+        >
+          <div
+            className="relative p-8 bg-white rounded-lg shadow-custom w-96"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center ">
+              <h2 className="mb-4 text-lg font-bold">Delete the feedback permanently?</h2>
+              <div className="flex justify-center space-x-4">
+                <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 border border-blue-500 rounded-full" onClick={handleDelete}>Yes</button>
+                <button className="px-8 py-2 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeleteModalVisible(false)}>No</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+// Main Feedback Component
+const Feedback = () => {
+  const [feedbackList, setFeedbackList] = useState(feedbackData.sort((a, b) => new Date(b.time) - new Date(a.time)));
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 7;
+
+  // Function to mark feedback as read
+  const markAsRead = (id) => {
+    setFeedbackList(feedbackList.map(fb => fb.id === id ? { ...fb, read: true } : fb));
+  };
+
+  // Function to delete feedback
+  const deleteFeedback = (id) => {
+    setFeedbackList(feedbackList.filter(fb => fb.id !== id));
+  };
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentFeedback = feedbackList.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(feedbackList.length / rowsPerPage);
+
+  return (
+    <>
+      <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-10">
+        <h2 className="mb-4 text-2xl font-bold text-blue-500">Feedback</h2>
+        {currentFeedback.map((feedback) => (
+          <FeedbackRow key={feedback.id} feedback={feedback} onRead={markAsRead} onDelete={deleteFeedback} />
+        ))}
+      </section>
+      <div className="max-w-[900px]">
+        <div className="flex items-center justify-end">
+          <button
+            className={`px-4 py-2 bg-[#FAFBFD] border border-[#D5D5D5] rounded-l-lg shadow-custom ${currentPage === 1 ? 'opacity-60 cursor-default' : ''}`}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button
+            className={`px-4 py-2 bg-[#FAFBFD] border border-[#D5D5D5] rounded-r-lg shadow-custom ${currentPage === totalPages ? 'opacity-60 cursor-default' : ''}`}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
 
 
 
@@ -1541,7 +1710,7 @@ const SettingsPage = ({ currentPage }) => {
           <AuditSearch onSave={handleSave} />
           <AuditTrailTable onSave={handleSave} />
         </>}
-      {currentPage === 'Feedback' && <div></div>}
+      {currentPage === 'Feedback' && <Feedback/>}
       {currentPage === 'Birthday Template' && <div></div>}
       {currentPage === 'Pautan' && <div></div>}
     </div>
