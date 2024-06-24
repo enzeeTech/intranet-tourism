@@ -1,15 +1,15 @@
 <?php
 
-namespace Modules\Resource\Providers;
+namespace Modules\Resources\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class ResourceServiceProvider extends ServiceProvider
 {
-    protected string $moduleName = 'Crud';
+    protected string $moduleName = 'Resources';
 
-    protected string $moduleNameLower = 'crud';
+    protected string $moduleNameLower = 'resources';
 
     /**
      * Boot the application events.

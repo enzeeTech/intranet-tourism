@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Resource\Providers;
+namespace Modules\Resources\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -34,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(): void
     {
-        Route::middleware('web')->group(module_path('Resource', '/routes/web.php'));
+        Route::middleware('web')->group(module_path('Resources', '/routes/web.php'));
     }
 
     /**
@@ -44,6 +44,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::middleware('api')->prefix('api/resource')->name('api.')->group(module_path('Resource', '/routes/api.php'));
+        Route::middleware('api')->prefix('api/resources')->name('api.')->group(module_path('Resources', '/routes/api.php'));
     }
 }
