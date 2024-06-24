@@ -135,11 +135,11 @@ export default PopupContent;
 //             closePopup();
 //           }
 //         };
-    
+
 //         if (isThreeDotPopupOpen) {
 //           document.addEventListener("click", handleClickOutside);
 //         }
-    
+
 //         return () => {
 //           document.removeEventListener("click", handleClickOutside);
 //         };
@@ -164,7 +164,7 @@ export default PopupContent;
 //         onDelete();
 //         closePopup();
 //       };
-    
+
 //       const handleDownload = (e) => {
 //         e.stopPropagation();
 //         e.preventDefault();
@@ -226,7 +226,7 @@ export default PopupContent;
 //             )}
 //         </div>
 //     );
-    
+
 // };
 
 // export default UserFilePopup;

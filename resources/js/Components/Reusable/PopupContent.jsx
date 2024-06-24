@@ -345,7 +345,7 @@ export default UserFilePopup;
 //               zIndex: 999,
 //             }}
 //           >
-//             <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />  
+//             <img src="assets/🦆 icon _image_.svg" alt={name} className="staff-member-popup-image" />
 //             <button
 //               className="text-neutral-500 pr-2 mr-14"
 //               onClick={handleDelete}
