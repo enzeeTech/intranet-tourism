@@ -1,0 +1,28 @@
+{
+    "name": "nwidart/crud",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Communities\\": "app",
+            "Modules\\Communities\\Database\\Factories\\": "database/factories/",
+            "Modules\\Communities\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Crud\\Tests\\": "tests/"
+        }
+    }
+}
