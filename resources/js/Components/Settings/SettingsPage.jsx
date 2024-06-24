@@ -1,9 +1,22 @@
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
-import { format } from 'date-fns';
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  parseISO,
+  subDays
+} from 'date-fns';
 import { Switch, Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import moment from 'moment';
 import aishaImage from '../../../../public/assets/aishaImage.png';
@@ -273,7 +286,7 @@ const CoreFeatures = () => {
                   aria-hidden="true"
                   className={classNames(
                     state ? 'translate-x-5' : 'translate-x-0',
-                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                    'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                   )}
                 />
               </Switch>
@@ -285,13 +298,13 @@ const CoreFeatures = () => {
       <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -330,7 +343,7 @@ const SizeLimit = () => {
               </div>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
-                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                     {limit}
                     <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                   </Menu.Button>
@@ -343,7 +356,7 @@ const SizeLimit = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       {['1 GB', '3 GB', '5 GB'].map(option => (
                         <Menu.Item key={option}>
@@ -373,13 +386,13 @@ const SizeLimit = () => {
       <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -416,7 +429,7 @@ const Media = () => {
                 aria-hidden="true"
                 className={classNames(
                   fileFolder ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                 )}
               />
             </Switch>
@@ -433,7 +446,7 @@ const Media = () => {
                 type="link"
                 name="link"
                 id="link"
-                className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
                 placeholder="Link"
               />
             </div>
@@ -444,13 +457,13 @@ const Media = () => {
       <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -490,7 +503,7 @@ const CoverPhotos = () => {
                   aria-hidden="true"
                   className={classNames(
                     state ? 'translate-x-5' : 'translate-x-0',
-                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                    'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                   )}
                 />
               </Switch>
@@ -502,13 +515,13 @@ const CoverPhotos = () => {
       <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -542,7 +555,7 @@ const MailSettings = () => {
             </div>
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                   {mail}
                   <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
@@ -555,7 +568,7 @@ const MailSettings = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Mail 1', 'Mail 2', 'Mail 3'].map(option => (
                       <Menu.Item key={option}>
@@ -597,7 +610,7 @@ const MailSettings = () => {
                 aria-hidden="true"
                 className={classNames(
                   fileFolder ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                 )}
               />
             </Switch>
@@ -623,7 +636,7 @@ const MailSettings = () => {
                   type={type}
                   name={label}
                   id={label}
-                  className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                  className="block w-[160px] rounded-md border-0 py-1.5 text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
                   placeholder={placeholder}
                 />
               </div>
@@ -645,7 +658,7 @@ const MailSettings = () => {
                 aria-hidden="true"
                 className={classNames(
                   authentication ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                 )}
               />
             </Switch>
@@ -656,7 +669,7 @@ const MailSettings = () => {
             </div>
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                   {security}
                   <ChevronDownIcon className="w-5 h-5 -mr-1 text-gray-400" aria-hidden="true" />
                 </Menu.Button>
@@ -669,7 +682,7 @@ const MailSettings = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Security 1', 'Security 2', 'Security 3'].map(option => (
                       <Menu.Item key={option}>
@@ -708,7 +721,7 @@ const MailSettings = () => {
                 aria-hidden="true"
                 className={classNames(
                   emailNotification ? 'translate-x-5' : 'translate-x-0',
-                  'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                  'inline-block h-5 w-5 transform rounded-full bg-white shadow-custom ring-0 transition duration-200 ease-in-out'
                 )}
               />
             </Switch>
@@ -719,13 +732,13 @@ const MailSettings = () => {
       <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
         <button
           type="button"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+          className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
         >
           Save
         </button>
@@ -835,7 +848,7 @@ const Departments = () => {
                                 type="text"
                                 name={`name-${department.id}`}
                                 id={`name-${department.id}`}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-custom ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pl-2"
                                 placeholder={department.name}
                               />
                             </div>
@@ -869,13 +882,13 @@ const Departments = () => {
         <div className="flex justify-end w-full px-4 py-4 mt-4 gap-x-3 sm:px-6">
           <button
             type="button"
-            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-custom ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="inline-flex justify-center px-3 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
             Save
           </button>
@@ -1019,7 +1032,7 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
           onClick={() => setIsPopupVisible(false)}
         >
           <div
-            className="relative p-4 bg-white rounded-lg shadow-lg"
+            className="relative p-4 bg-white rounded-lg shadow-custom"
             onClick={(e) => e.stopPropagation()}
           >
             <img className="object-cover rounded-lg w-96 h-96" src={changeImage} alt="Change" />
@@ -1061,7 +1074,7 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
           onClick={() => setIsPopupVisible(false)}
         >
           <div
-            className="relative p-8 bg-white shadow-lg rounded-xl w-120"
+            className="relative p-8 bg-white shadow-custom rounded-xl w-120"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
@@ -1126,7 +1139,7 @@ function SearchButton({ children }) {
 function DateRangePicker({ startDate, endDate, onClick }) {
   return (
     <div
-      className="relative flex flex-col justify-center px-5 py-1.5 text-xs text-center text-black bg-white rounded-md border border-solid border-zinc-300 cursor-pointer"
+      className="relative flex flex-col justify-center px-5 py-1.5 text-xs text-center text-black bg-white rounded-md border border-solid border-zinc-300 cursor-pointer w-[200px]"
       onClick={onClick}
     >
       <div className="justify-center px-1.5 py-1 rounded-sm bg-sky-500 bg-opacity-10">
@@ -1137,51 +1150,23 @@ function DateRangePicker({ startDate, endDate, onClick }) {
 }
 
 function generateDays(month, year, startDate, endDate, today) {
-  const days = [];
-  const firstDayOfMonth = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const previousMonthDays = new Date(year, month, 0).getDate();
+  const firstDayOfMonth = startOfMonth(new Date(year, month));
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth);
+  const startOfWeekDay = startOfWeek(firstDayOfMonth, { weekStartsOn: 1 });
+  const endOfWeekDay = endOfWeek(lastDayOfMonth, { weekStartsOn: 1 });
 
-  // Convert today to a string for comparison
-  const todayString = format(today, 'yyyy-MM-dd');
-
-  // Fill in days from the previous month
-  for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-    const date = new Date(year, month - 1, previousMonthDays - i);
-    days.push({
-      date: format(date, 'yyyy-MM-dd'),
-      isCurrentMonth: false,
-      isSelected: false,
-      isToday: false,
-    });
-  }
-
-  // Fill in days for the current month
-  for (let i = 1; i <= daysInMonth; i++) {
-    const date = new Date(year, month, i);
+  const days = eachDayOfInterval({ start: startOfWeekDay, end: endOfWeekDay }).map((date) => {
     const dateString = format(date, 'yyyy-MM-dd');
-    days.push({
+    return {
       date: dateString,
-      isCurrentMonth: true,
+      isCurrentMonth: isSameMonth(date, firstDayOfMonth),
       isSelected:
         (startDate && dateString === startDate) ||
         (endDate && dateString === endDate) ||
-        (startDate && endDate && date >= new Date(startDate) && date <= new Date(endDate)),
-      isToday: dateString === todayString,
-    });
-  }
-
-  // Fill in days for the next month
-  const nextMonthDays = 42 - days.length; // 42 ensures 6 rows of weeks in the calendar
-  for (let i = 1; i <= nextMonthDays; i++) {
-    const date = new Date(year, month + 1, i);
-    days.push({
-      date: format(date, 'yyyy-MM-dd'),
-      isCurrentMonth: false,
-      isSelected: false,
-      isToday: false,
-    });
-  }
+        (startDate && endDate && date >= parseISO(startDate) && date <= parseISO(endDate)),
+      isToday: isSameDay(date, today),
+    };
+  });
 
   console.log('Generated days:', days);
   return days;
@@ -1189,13 +1174,13 @@ function generateDays(month, year, startDate, endDate, today) {
 
 function Dropdown({ label }) {
   return (
-    <div className="flex flex-col justify-center text-xs whitespace-nowrap text-neutral-800">
-      <div className="flex gap-5 justify-between px-3.5 py-2.5 bg-white rounded-2xl shadow-sm">
+    <div className="flex flex-col justify-center text-xs whitespace-nowrap text-neutral-800 w-[130px]">
+      <div className="flex gap-5 justify-between px-3.5 py-2.5 bg-white rounded-2xl shadow-custom">
         <div>{label}</div>
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/26f2abafc455fbb3d0d889612515f65f2b3263cf94b884a512ab73b4a7aec9b9?apiKey=285d536833cc4168a8fbec258311d77b&"
-          className="shrink-0 self-start border-2 border-black border-solid aspect-[1.85] stroke-[2px] stroke-black w-[13px]"
+          src="/assets/Dropdownarrow.svg"
+          className="shrink-0 self-start self-center border-black border-solid aspect-[1.85] stroke-[2px] stroke-black w-auto"
           alt=""
         />
       </div>
@@ -1205,7 +1190,7 @@ function Dropdown({ label }) {
 
 function AuditSearch() {
   return (
-    <main className="flex flex-col px-8 py-6 bg-white rounded-2xl shadow-sm max-w-[841px] max-md:px-5">
+    <main className="flex flex-col px-8 py-6 bg-white rounded-2xl shadow-custom w-10/12 max-md:px-5">
       <form className="flex gap-5 text-sm whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
         <label htmlFor="searchInput" className="sr-only">
           Search
@@ -1282,19 +1267,13 @@ export default function AuditCalendar() {
 
   const handleMonthChange = (direction) => {
     if (direction === 'prev') {
-      if (currentMonth === 0) {
-        setCurrentMonth(11);
-        setCurrentYear(currentYear - 1);
-      } else {
-        setCurrentMonth(currentMonth - 1);
-      }
+      const newMonth = subMonths(new Date(currentYear, currentMonth), 1);
+      setCurrentMonth(newMonth.getMonth());
+      setCurrentYear(newMonth.getFullYear());
     } else if (direction === 'next') {
-      if (currentMonth === 11) {
-        setCurrentMonth(0);
-        setCurrentYear(currentYear + 1);
-      } else {
-        setCurrentMonth(currentMonth + 1);
-      }
+      const newMonth = addMonths(new Date(currentYear, currentMonth), 1);
+      setCurrentMonth(newMonth.getMonth());
+      setCurrentYear(newMonth.getFullYear());
     }
   };
 
@@ -1343,7 +1322,7 @@ export default function AuditCalendar() {
               <div>S</div>
               <div>S</div>
             </div>
-            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
+            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow-custom ring-1 ring-gray-200">
               {days.map((day, dayIdx) => (
                 <button
                   key={day.date}
@@ -1385,8 +1364,119 @@ export default function AuditCalendar() {
   );
 }
 
+// Function to generate a random action
+const generateRandomAction = (username) => {
+  const actions = [
+    'Logged in to the system',
+    'Added new file',
+    'Deleted a record',
+    'Updated user permissions',
+    'Viewed audit log',
+    'Changed system settings',
+    'Logged out',
+    'Generated report'
+  ];
+  const action = actions[Math.floor(Math.random() * actions.length)];
+  return `${action} by ${username}`;
+};
 
+// Function to generate a random date/time
+const generateRandomDateTime = (index) => {
+  const randomDate = subDays(new Date(), index);
+  return format(randomDate, 'yyyy-MM-dd HH:mm:ss');
+};
 
+const items = Array.from({ length: 100 }, (_, index) => ({
+  id: index + 1,
+  dateTime: generateRandomDateTime(index),
+  username: index % 2 === 0 ? 'Admin' : 'Super Admin',
+  action: generateRandomAction(index % 2 === 0 ? 'Admin' : 'Super Admin')
+}));
+
+const ITEMS_PER_PAGE = 25;
+
+function AuditTrailTable() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= Math.ceil(items.length / ITEMS_PER_PAGE)) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const selectedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  return (
+    <div className="flex flex-col px-5 py-4 bg-white rounded-2xl mt-5 shadow-custom w-10/12">
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 table-fixed border border-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" className="w-1/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+                #
+              </th>
+              <th scope="col" className="w-2/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+                Date/Time
+              </th>
+              <th scope="col" className="w-2/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+                Username
+              </th>
+              <th scope="col" className="w-7/12 px-2 py-3 text-left text-md font-medium text-neutral-900 border border-gray-300">
+                Action made
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {selectedItems.map((item) => (
+              <tr key={item.id}>
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.id}</td>
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.dateTime}</td>
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.username}</td>
+                <td className="px-2 py-4 whitespace-nowrap text-sm text-neutral-900 border border-gray-300">{item.action}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0 mt-4">
+        <div className="-mt-px flex w-0 flex-1">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-neutral-900 hover:border-gray-300 hover:text-gray-700"
+          >
+            <ArrowLongLeftIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+            Previous
+          </button>
+        </div>
+        <div className="hidden md:-mt-px md:flex">
+          {[...Array(Math.ceil(items.length / ITEMS_PER_PAGE)).keys()].map((page) => (
+            <button
+              key={page + 1}
+              onClick={() => handlePageChange(page + 1)}
+              className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium ${
+                currentPage === page + 1 ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-neutral-900 hover:text-gray-700 hover:border-gray-300'
+              }`}
+              aria-current={currentPage === page + 1 ? 'page' : undefined}
+            >
+              {page + 1}
+            </button>
+          ))}
+        </div>
+        <div className="-mt-px flex w-0 flex-1 justify-end">
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-neutral-900 hover:border-gray-300 hover:text-gray-700"
+          >
+            Next
+            <ArrowLongRightIcon className="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+          </button>
+        </div>
+      </nav>
+    </div>
+  );
+}
 
 
 
@@ -1426,6 +1516,7 @@ const SettingsPage = ({ currentPage }) => {
       {currentPage === 'Audit Trail' &&
         <>
           <AuditSearch onSave={handleSave} />
+          <AuditTrailTable onSave={handleSave} />
         </>}
       {currentPage === 'Feedback' && <div></div>}
       {currentPage === 'Birthday Template' && <div></div>}
@@ -1434,4 +1525,4 @@ const SettingsPage = ({ currentPage }) => {
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable };

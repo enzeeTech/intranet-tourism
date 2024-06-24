@@ -225,10 +225,5 @@ export default PopupContent;
 //             )}
 //         </div>
 //     );
-<<<<<<< HEAD
-=======
-
->>>>>>> cff323d985c51d062207df36907acee8020e16ad
-// };
 
 // export default UserFilePopup;
