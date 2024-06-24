@@ -9,9 +9,7 @@ class RouteServiceProvider extends ServiceProvider
 {
     public function map(): void
     {
-        // Route::middleware('web')
-        //     ->prefix('auth')
-        //     ->group(module_path('Auth', '/routes/web.php'));
+
 
         $this->mapWebRoutes();
     }
