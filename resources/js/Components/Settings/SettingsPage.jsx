@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import axios from 'axios';
 import {
   format,
@@ -1220,6 +1220,7 @@ export default function AuditCalendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [today, setToday] = useState(new Date());
+  const calendarRef = useRef(null);
 
   const fetchCurrentTime = async () => {
     try {
@@ -1240,6 +1241,28 @@ export default function AuditCalendar() {
 
     const interval = setInterval(fetchCurrentTime, 1000 * 60); // Update every minute to keep the calendar live
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape') {
+        setShowCalendar(false);
+      }
+    };
+
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscKey);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const days = generateDays(currentMonth, currentYear, startDate, endDate, today);
@@ -1290,7 +1313,7 @@ export default function AuditCalendar() {
         onClick={handleDateRangeClick}
       />
       {showCalendar && (
-        <div className="absolute top-12 left-0 z-50 w-[300px] h-auto bg-white border border-gray-300 rounded-md shadow-custom">
+        <div ref={calendarRef} className="absolute top-12 left-0 z-50 w-[300px] h-auto bg-white border border-gray-300 rounded-md shadow-custom">
           <div className="text-center lg:mt-2">
             <div className="flex items-center text-gray-900">
               <button
@@ -1322,7 +1345,7 @@ export default function AuditCalendar() {
               <div>S</div>
               <div>S</div>
             </div>
-            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow-custom ring-1 ring-gray-200">
+            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
               {days.map((day, dayIdx) => (
                 <button
                   key={day.date}
@@ -1347,7 +1370,7 @@ export default function AuditCalendar() {
                     dateTime={day.date}
                     className={classNames(
                       'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
-                      day.isToday && 'bg-indigo-600 text-white', // Styling for today
+                      day.isToday && 'bg-black text-white', // Styling for today
                       day.isSelected && !day.isToday && 'bg-indigo-500 text-white', // Styling for selected date
                       !day.isSelected && isSelectedDate(day.date) && 'bg-indigo-200', // Highlight selected range with lighter color
                     )}
