@@ -13,35 +13,43 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('polls', function (Blueprint $table) {
-            $table->id('poll_id');
+            $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
             $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('expires_at')->nullable();
+            $table->auditable();
+
         });
 
 
         Schema::create('questions', function (Blueprint $table) {
-            $table->id('question_id');
-            $table->foreignId('poll_id')->constrained('polls');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('poll_id')->constrained('polls');
             $table->text('question_text');
             $table->string('question_type', 50)->nullable();
+            $table->auditable();
+
         });
 
 
         Schema::create('options', function (Blueprint $table) {
-            $table->id('option_id');
-            $table->foreignId('question_id')->constrained('questions');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('question_id')->constrained('questions');
             $table->text('option_text');
+            $table->auditable();
+
         });
 
         Schema::create('responses', function (Blueprint $table) {
-            $table->id('response_id');
+            $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('poll_id')->constrained('polls');
-            $table->foreignId('question_id')->constrained('questions');
+            $table->foreignUuid('poll_id')->constrained('polls');
+            $table->foreignUuid('question_id')->constrained('questions');
+            $table->foreignUuid('option_id')->constrained('options');
             $table->timestamp('response_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->auditable();
+
         });
     }
 
