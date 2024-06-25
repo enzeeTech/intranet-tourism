@@ -20,7 +20,6 @@ export default function Login({ status, canResetPassword }) {
         };
     }, []);
 
-    const goToAD = () => window.location.href('/auth/razer/redirect');
     const submit = (e) => {
         e.preventDefault();
         post(route('login'));
@@ -97,7 +96,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
                 <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
 
-                <a type="button"
+                {/* <a type="button"
                     className={
                         `inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
                             processing && 'opacity-25'
@@ -106,7 +105,7 @@ export default function Login({ status, canResetPassword }) {
                     disabled={processing}
                     href="/auth/azure/redirect">
                     Log in Using AD
-                </a>
+                </a> */}
             </form>
         </GuestLayout>
     );

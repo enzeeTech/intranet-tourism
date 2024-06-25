@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82e1094c8d7d7f354f3a4d0f33804fec",
+    "content-hash": "4f5fd9dd6e5e2383828f8d8058e9db06",
     "packages": [
         {
             "name": "brick/math",
@@ -9838,54 +9838,6 @@
             "time": "2023-09-13T16:42:03+00:00"
         },
         {
-            "name": "rekamy/kikof",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../packages/kikof",
-                "reference": "555bf4023e80743c271d25754aee1f476deb6c3e"
-            },
-            "require": {
-                "illuminate/console": ">=11.0",
-                "illuminate/database": ">=11.0",
-                "illuminate/filesystem": ">=11.0",
-                "illuminate/support": ">=11.0",
-                "php": ">=8.0",
-                "symfony/console": "^7.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.2",
-                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^8.0|^9.0|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Rekamy\\Kikof\\KikofServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Rekamy\\Kikof\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Zahrin Azam",
-                    "email": "zahrin.azam@gmail.com"
-                }
-            ],
-            "description": "Opinionated laravel generator",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "sebastian/cli-parser",
             "version": "2.0.1",
             "source": {
@@ -11425,8 +11377,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "laravel/reverb": 10,
-        "rekamy/kikof": 20
+        "laravel/reverb": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -11434,5 +11385,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }
