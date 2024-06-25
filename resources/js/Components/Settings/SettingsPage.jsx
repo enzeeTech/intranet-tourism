@@ -1938,26 +1938,7 @@ const Pautan = () => {
           </div>
         </div>
       )}
-      {/* {isDeleteModalVisible && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm "
-          onClick={() => setIsDeleteModalVisible(false)}
-        >
-          <div
-            className="relative p-8 bg-white rounded-lg shadow-custom w-96"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="text-center ">
-              <h2 className="mb-4 text-lg font-bold">Delete the feedback permanently?</h2>
-              <div className="flex justify-center space-x-4">
-                <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 border border-blue-500 rounded-full" onClick={handleDelete}>Yes</button>
-                <button className="px-8 py-2 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeleteModalVisible(false)}>No</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
-
+      
       <section className="flex justify-end mt-5 max-w-[900px]">
         <button className="px-4 py-1 font-bold text-white bg-[#FF5436] rounded-full shadow-custom" onClick={handleSave}>
           Save
