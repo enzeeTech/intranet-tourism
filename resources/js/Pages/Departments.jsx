@@ -142,8 +142,8 @@ const StaffDirectory = () => {
 
   return (
     <Example>
-        <main className="xl:pl-96 w-full">
-        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <main className="xl:pl-96 w-[900px] m-ml-16 mr-24 relative">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
         <SearchMembers />
             <DepartmentDropdown
               departments={departments}

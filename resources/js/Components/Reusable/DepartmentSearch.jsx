@@ -12,7 +12,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="staff-search-bar-container">
+    <div className="staff-search-bar-container w-[875px]">
         <div className="staff-search-bar-title">
             <h2>Search Department...</h2>
         </div>
