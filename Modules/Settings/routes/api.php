@@ -9,6 +9,7 @@ use Modules\Settings\Http\Controllers\PreferenceSchemaController;
 use Modules\Settings\Http\Controllers\SettingController;
 use Modules\Settings\Http\Controllers\UserPreferenceController;
 
+
 /*
  *--------------------------------------------------------------------------
  * API Routes
@@ -25,6 +26,8 @@ use Modules\Settings\Http\Controllers\UserPreferenceController;
 // });
 
 // require_once 'crud.php';
+Route::get('/search', [SettingController::class, 'search'])->name('search');
+
 Route::apiResources([
 
     'community_preferences' => CommunityPreferenceController::class,
@@ -34,3 +37,5 @@ Route::apiResources([
     'settings' => SettingController::class,
     'user_preferences' => UserPreferenceController::class,
 ]);
+
+

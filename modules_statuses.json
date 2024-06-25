@@ -8,5 +8,6 @@
     "Polls" : true,
     "Events" : true,
     "Resources" : true,
-    "Profile": true
+    "Profile": true,
+    "User": true
 }
