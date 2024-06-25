@@ -39,8 +39,6 @@ return new class extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->id('response_id');
             $table->foreignId('user_id')->constrained('users');
-
-            $table->unsignedBigInteger('poll_id');
             $table->foreignId('poll_id')->constrained('polls');
             $table->foreignId('question_id')->constrained('questions');
             $table->timestamp('response_date')->default(DB::raw('CURRENT_TIMESTAMP'));

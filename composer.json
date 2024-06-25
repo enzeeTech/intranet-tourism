@@ -21,12 +21,13 @@
         "nwidart/laravel-modules": "^11.0",
         "owen-it/laravel-auditing": "^13.6",
         "socialiteproviders/microsoft-azure": "^5.2",
-        "spatie/laravel-permission": "^6.7",
-        "tightenco/ziggy": "^2.0"
+        "spatie/laravel-permission": "^6.9",
+        "tightenco/ziggy": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.0",
+        "rekamy/kikof": "dev-main",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
@@ -93,5 +94,11 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../packages/kikof"
+        }
+    ]
 }
