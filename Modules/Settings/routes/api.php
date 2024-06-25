@@ -1,11 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Crud\Http\Controllers\CrudController;
-use Modules\Crud\Http\Controllers\ExternalLinkController;
-use Modules\Crud\Http\Controllers\PostController;
+
 use Modules\Settings\Http\Controllers\CommunityPreferenceController;
 use Modules\Settings\Http\Controllers\DepartmentPreferenceController;
+use Modules\Settings\Http\Controllers\ExternalLinkController as ControllersExternalLinkController;
 use Modules\Settings\Http\Controllers\PreferenceSchemaController;
 use Modules\Settings\Http\Controllers\SettingController;
 use Modules\Settings\Http\Controllers\UserPreferenceController;
@@ -30,7 +29,7 @@ Route::apiResources([
 
     'community_preferences' => CommunityPreferenceController::class,
     'department_preferences' => DepartmentPreferenceController::class,
-    'external_links' => ExternalLinkController::class,
+    'external_links' => ControllersExternalLinkController::class,
     'preference_schemas' => PreferenceSchemaController::class,
     'settings' => SettingController::class,
     'user_preferences' => UserPreferenceController::class,
