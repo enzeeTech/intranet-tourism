@@ -85,7 +85,7 @@ const FeedbackRow = ({ feedback, onRead, onDelete }) => {
           <p className="pl-20 text-sm font-semibold text-center text-black ">"{truncatedFeedback}"</p>
         </div>
         <div className="flex items-center justify-end w-1/4">
-          {!feedback.read && <div className="w-3 h-3 mr-10 bg-red-500 rounded-full"></div>}
+          {!feedback.read && <div className="w-3 h-3 mr-10 bg-[#FF5436] rounded-full"></div>}
           <img
             className="w-6 h-6 mr-3 cursor-pointer"
             src={blueCheckmarkIcon}

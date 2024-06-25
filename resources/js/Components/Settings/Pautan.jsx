@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 const initialApps = [
   { id: 1, name: 'e-library', url: 'https://bag.example.com/' },
   { id: 2, name: 'ERMS (Electronic Records)', url: 'https://babies.example.com/bag/bottle.aspx' },
-  { id: 3, name: 'Executive Information Sys...', url: 'https://www.example.com/?believe=bottle&belief=apparel' },
+  { id: 3, name: 'Executive Information Systems', url: 'https://www.example.com/?believe=bottle&belief=apparel' },
   { id: 4, name: 'HRMIS', url: 'https://www.example.com/' },
   { id: 5, name: 'MyFIS 2.0', url: 'http://boy.example.net/apparel/balance' },
   { id: 6, name: 'MyFIS: Tuntutan', url: 'http://example.com/actor/baby' },
@@ -190,11 +190,11 @@ const Pautan = () => {
               onChange={(e) => setNewAppUrl(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
             />
-            <div className="flex justify-end space-x-4">
-              <button className="px-6 py-1 font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
+            <div className="flex justify-end space-x-3">
+              <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
                 Add
               </button>
-              <button className="px-4 py-1 text-white font-bold bg-[#FF5436] rounded-full" onClick={() => setIsAddModalVisible(false)}>
+              <button className="px-6 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsAddModalVisible(false)}>
                 Cancel
               </button>
             </div>
