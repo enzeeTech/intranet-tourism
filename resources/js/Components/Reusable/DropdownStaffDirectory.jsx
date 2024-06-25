@@ -5,8 +5,9 @@ import addPersonButton from '../../../../public/assets/addPersonButton.png';
 import visitDepartment from '../../../../public/assets/visitDepartmentButton.png'; 
 import threeDotButton from '../../../../public/assets/threeDotButton.png';
 import './css/DropdownStaffDirectory.css';
+import { set } from 'date-fns';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
@@ -18,9 +19,21 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
   };
 
   // Popup for showing reporting structure option which closes when clicked outside
-  const toggleReportingPopup = () => setIsReportingPopupOpen(!isReportingPopupOpen);
+  const toggleReportingPopup = () => {
+    setIsReportingPopupOpen(!isReportingPopupOpen);
+    setIsOpen(false);
+  }
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => {
+    setIsReportingPopupOpen(false);
+    if (isOpen) {
+      setIsOpen(false);
+    }
+    else {
+        setIsOpen(true);
+        }
+  }
+
 
   return (
     <div className="department-dropdown-container max-w-[1100px]">
@@ -41,33 +54,23 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
         <button className="add-person-btn">
             <img src={addPersonButton} alt="Add Person" />
         </button>
-        <button 
-                onClick={toggleReportingPopup} 
-                className="bg-blue-500 text-slate-100 staff-popup"
-                // style={{
-                    //     top: `25px`, 
-                    //     right: `-200px`, 
-                    // }}
-                    >
-            Reporting Structure
-        </button>
 
-        {/* <button className="three-dot-btn" onClick={toggleReportingPopup}>
+        <button className="three-dot-btn" onClick={toggleReportingPopup}>
             <img src={threeDotButton} alt="More Options" />
-        </button> */}
+        </button>
         
-        {/* {isReportingPopupOpen && (
+        {isReportingPopupOpen && (
             <button 
                 onClick={toggleReportingPopup} 
                 className="staff-popup"
-                // style={{
-                //     top: `25px`, 
-                //     right: `-200px`, 
-                // }}
+                style={{
+                    marginTop: `60px`,
+                    marginRight: `20px`,
+                }}
             >
             Reporting Structure
             </button>
-        )} */}
+        )}
         {isOpen && (
             <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
             {departments.map((dept, index) => (

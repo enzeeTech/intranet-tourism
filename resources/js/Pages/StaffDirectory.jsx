@@ -38,7 +38,7 @@ const StaffDirectory = () => {
       name: 'Mr Asyraf Jalil',
       role: 'Design and Development Lead',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',  
       phoneNo: '+60175165175',
       isDeactivated: 'false'
     },
@@ -47,7 +47,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -56,7 +56,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -65,7 +65,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -74,7 +74,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -83,7 +83,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -92,7 +92,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -101,7 +101,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -110,7 +110,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -119,7 +119,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -128,7 +128,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -137,7 +137,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -146,7 +146,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -155,7 +155,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -164,7 +164,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -173,7 +173,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
       isDeactivated: 'false'
     },
@@ -228,8 +228,14 @@ const StaffDirectory = () => {
       <div className="flex ">
         {/* <Sidebar /> */}
 
-        <main className="w-full xl:pl-96">
-                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <main className="w-full xl:pl-96"
+        >
+                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6"
+                //   onClick={() => {
+                //     setIsOpen(false);
+                //   }
+                // }
+                >
                   <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
                   <DepartmentDropdown
                     departments={departments}
