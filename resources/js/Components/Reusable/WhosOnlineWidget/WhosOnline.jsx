@@ -29,7 +29,7 @@ const WhosOnline = () => {
     }, []);
 
     return (
-        <div className="whos-online-container">
+        <div className="whos-online-container border-2 shadow-2xl">
             <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '4px', fontFamily: "Nunito Sans" }}>
                 Who's Online
             </h2>
