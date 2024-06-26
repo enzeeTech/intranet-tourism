@@ -13,11 +13,13 @@ import Example from '@/Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
   const [isStaffListActive, setStaffListActive] = useState(true);
   const [isOrgChartActive, setOrgChartActive] = useState(false);
   const [activePopupId, setActivePopupId] = useState(null);
   const [activePopupRef, setActivePopupRef] = useState(null);
+  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+  const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
+  const [currentMemberId, setCurrentMemberId] = useState(null);
 
   // Dummy departments
   const departments = [
@@ -32,7 +34,7 @@ const StaffDirectory = () => {
   ];
 
   // Dummy staff members
-  const staffMembers = [
+  const [staffMembers, setStaffMembers] = useState([
     {
       id: 1,
       name: 'Mr Asyraf Jalil',
@@ -40,7 +42,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',  
       phoneNo: '+60175165175',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 2,
@@ -49,7 +51,7 @@ const StaffDirectory = () => {
       status: 'Offline',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 3,
@@ -58,7 +60,7 @@ const StaffDirectory = () => {
       status: 'Away',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 4,
@@ -67,7 +69,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 5,
@@ -76,7 +78,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 6,
@@ -85,7 +87,7 @@ const StaffDirectory = () => {
       status: 'Offline',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 7,
@@ -94,7 +96,7 @@ const StaffDirectory = () => {
       status: 'Away',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 8,
@@ -103,7 +105,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 9,
@@ -112,7 +114,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 10,
@@ -121,7 +123,7 @@ const StaffDirectory = () => {
       status: 'Offline',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 11,
@@ -130,7 +132,7 @@ const StaffDirectory = () => {
       status: 'Away',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 12,
@@ -139,7 +141,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 13,
@@ -148,7 +150,7 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 14,
@@ -157,7 +159,7 @@ const StaffDirectory = () => {
       status: 'Offline',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 15,
@@ -166,7 +168,7 @@ const StaffDirectory = () => {
       status: 'Away',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
     {
       id: 16,
@@ -175,10 +177,10 @@ const StaffDirectory = () => {
       status: 'Online',
       imageUrl: '/assets/dummyStaffImage.png',
       phoneNo: '',
-      isDeactivated: 'false'
+      isDeactivated: false
     },
 
-  ];
+  ]);
 
   const handleOutsideClick = (event) => {
     if (activePopupRef && !activePopupRef.contains(event.target)) {
@@ -203,14 +205,6 @@ const StaffDirectory = () => {
     setSelectedDepartment(department);
   };
 
-  const openDeactivateModal = () => {
-    setIsDeactivateModalOpen(true);
-  };
-
-  const closeDeactivateModal = () => {
-    setIsDeactivateModalOpen(false);
-  };
-
   const handleStaffListButton = () => {
     setStaffListActive(true);
     setOrgChartActive(false);
@@ -221,117 +215,121 @@ const StaffDirectory = () => {
     setOrgChartActive(true);
   }
 
-  return (
-    <Example>
+  const handleDeactivateClick = (id) => {
+    setCurrentMemberId(id);
+    setIsDeactivateModalOpen(true);
+  };
+
+  const handleActivateClick = (id) => {
+    setCurrentMemberId(id);
+    setIsActivateModalOpen(true);
+  };
+
+  const handleDeactivate = () => {
+    setStaffMembers(staffMembers.map(member =>
+      member.id === currentMemberId ? { ...member, isDeactivated: true } : member
+    ));
+    setIsDeactivateModalOpen(false);
+  };
+
+  const handleActivate = () => {
+    setStaffMembers(staffMembers.map(member =>
+      member.id === currentMemberId ? { ...member, isDeactivated: false } : member
+    ));
+    setIsActivateModalOpen(false);
+  };
+
+return (
+  <Example>
     <div className="flex-row">
-      {/* <Header /> */}
       <div className="flex ">
-        {/* <Sidebar /> */}
-
-        <main className="w-full xl:pl-96"
-        >
-                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6"
-                //   onClick={() => {
-                //     setIsOpen(false);
-                //   }
-                // }
-                >
-                  <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
-                  <DepartmentDropdown
-                    departments={departments}
-                    onSelectDepartment={handleSelectDepartment}
-                  />
-                  {selectedDepartment === 'Some Department 1' && (
-                    <div className="staff-member-grid-container max-w-[1200px]">
-                      {staffMembers.map((member) => (
-                          <StaffMemberCard
-                            key={member.id}
-                            name={member.name}
-                            role={member.role}
-                            status={member.status}
-                            imageUrl={member.imageUrl}
-                            phoneNo={member.phoneNo}
-                            onDeactivateClick={() => {
-                              setIsDeactivateModalOpen(true)
-                              setActivePopupId(null);
-                              setActivePopupRef(null);
-                            }}
-                            isPopupOpen={activePopupId === member.id}
-                            setActivePopup={() => {
-                              setActivePopupId(member.id);
-                              setActivePopupRef(document.getElementById(`staff-popup-${member.id}`));
-                              console.log('Active Popup ID:', activePopupRef);
-                            }}
-                            closePopup={() => {
-                              setActivePopupId(null);
-                              setActivePopupRef(null);
-                            }}
-                          />
-                        ))}
-                    </div>
-                  )}
-                </div>
-                </main>
-
-                {/* <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
-        <div className="file-directory-header">
-          <PageTitle title="Staff Directory" />
-        </div>
-        <hr className="file-directory-underline" />
-        <div>
-          <FeaturedEvents />
-          <WhosOnline />
-        </div>
-      </aside> */}
-        <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
-            <style>
-                {`
-                aside::-webkit-scrollbar {
-                    width: 0px;
-                    background: transparent;
-                }
-                `}
-            </style>
-            <div className="file-directory-header">
-            <PageTitle title="Staff Directory" />
-            </div>
-            <hr className="file-directory-underline" />
-
-            <div>
-                <FeaturedEvents />
-                <WhosOnline />
-            </div>
-        </aside>
-
-        {/* <main style={{width: '100%'}}>
-          <div className="staff-directory" style={{marginLeft: '30px'}}>
-            <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
-              <div className="staff-directory-header">
-                <PageTitle title="Staff Directory" />
-              </div>
-              <hr className="staff-directory-underline" />
-              <div className="widgets-container">
-                <div className="left-widget">
-                  <FeaturedEvents />
-                  <WhosOnline />
-                </div>
-                <div className="right-widget">
-
-              </div>
-            </div>
-            <DeactivateModal
-              isOpen={isDeactivateModalOpen}
-              onClose={closeDeactivateModal}
-              onConfirm={() => console.log('Deactivated')}
+        <main className="w-full xl:pl-96">
+          <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
+            <DepartmentDropdown
+              departments={departments}
+              onSelectDepartment={handleSelectDepartment}
             />
+            {selectedDepartment === 'Some Department 1' && (
+              <div className="staff-member-grid-container max-w-[1200px]">
+                {staffMembers.map((member) => (
+                  <StaffMemberCard
+                    key={member.id}
+                    name={member.name}
+                    role={member.role}
+                    status={member.status}
+                    imageUrl={member.imageUrl}
+                    phoneNo={member.phoneNo}
+                    isDeactivated={member.isDeactivated}
+                    onDeactivateClick={() => handleDeactivateClick(member.id)}
+                    onActivateClick={() => handleActivateClick(member.id)}
+                    isPopupOpen={activePopupId === member.id}
+                    setActivePopup={() => {
+                      setActivePopupId(member.id);
+                      setActivePopupRef(document.getElementById(`staff-popup-${member.id}`));
+                    }}
+                    closePopup={() => {
+                      setActivePopupId(null);
+                      setActivePopupRef(null);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </main>
+        <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
+          <style>
+            {`
+              aside::-webkit-scrollbar {
+                width: 0px;
+                background: transparent;
+              }
+            `}
+          </style>
+          <div className="file-directory-header">
+            <PageTitle title="Staff Directory" />
+          </div>
+          <hr className="file-directory-underline" />
+          <div>
+            <FeaturedEvents />
+            <WhosOnline />
+          </div>
+        </aside>
       </div>
-    </div> */}
     </div>
-    </div>
-    </Example>
-  );
+    {isDeactivateModalOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+        <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
+          <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
+          <div className="flex justify-center space-x-4">
+            <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={handleDeactivate}>
+              Yes
+            </button>
+            <button className="px-8 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeactivateModalOpen(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    {isActivateModalOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+        <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
+          <h2 className="mb-4 text-xl font-bold text-center">Activate?</h2>
+          <div className="flex justify-center space-x-4">
+            <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={handleActivate}>
+              Yes
+            </button>
+            <button className="px-8 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsActivateModalOpen(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </Example>
+);
 };
 
 export default StaffDirectory;

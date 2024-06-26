@@ -74,6 +74,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
             style={{
               marginTop: `95px`,
               marginRight: `20px`,
+              zIndex: 10,
             }}
           >
             <button 
