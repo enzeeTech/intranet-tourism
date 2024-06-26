@@ -70,9 +70,9 @@
     );
     }
 
-    function IconButton({ src, alt }) {
-    return <img loading="lazy" src={src} alt={alt} className="shrink-0 w-7 aspect-square" />;
-    }
+    // function IconButton({ src, alt }) {
+    // return <img loading="lazy" src={src} alt={alt} className="shrink-0 w-7 aspect-square" />;
+    // }
 
     function OutputDataDepart({ polls }) {
         const [postData, setPostData] = useState([]);
@@ -168,6 +168,7 @@
         ))}
         {postData && postData.map((post, index) => (
             <div key={post.id} className="">
+                
             <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] relative">
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                 <div className="flex gap-1 mt-2">

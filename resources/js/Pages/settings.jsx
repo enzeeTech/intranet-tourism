@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import Example from '@/Layouts/DashboardLayoutNew';
 import SettingNavigation from '@/Components/Settings/SettingsComponent';
-import { SettingsPage, LogoUploader } from '@/Components/Settings/SettingsPage';
+import { SettingsPage } from '@/Components/Settings/SettingsPage';
 
 const Settings = () => {
     const [currentPage, setCurrentPage] = useState('Basic Settings');

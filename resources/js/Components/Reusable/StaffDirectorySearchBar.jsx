@@ -16,7 +16,7 @@ const SearchBar = ({ onSearch, handleStaffListButton, handleOrgChartButton, isSt
 
 
   return (
-    <div className="staff-search-bar-container">
+    <div className="staff-search-bar-container max-w-[1100px]">
         <div className="staff-search-bar-title ">
             <h2>Search Members...</h2>
         </div>

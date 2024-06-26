@@ -3,7 +3,13 @@
 namespace Modules\Settings\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Modules\Posts\Models\Post;
 use Modules\Settings\Models\Setting;
+use Illuminate\Support\Str;
+use Modules\Communities\Models\Community;
+use Modules\Crud\Models\User;
+use Modules\Department\Models\Department;
 
 class SettingController extends Controller
 {
@@ -42,5 +48,35 @@ class SettingController extends Controller
         $setting->delete();
 
         return response()->noContent();
+    }
+
+    public function search(Request $request)
+    {
+
+        if ($request->has('search') && Str::startsWith($request->input('search'), '#')) {
+
+            $tag = $request->input('search');
+            $posts = Post::whereJsonContains('tag', $tag)->get();
+
+            return response()->json($posts);
+        } else {
+            $departments = [];
+            $users = [];
+            $communities = [];
+
+            if ($request->has('search')) {
+                $departments = Department::where('name', 'like', '%' . $request->input('search') . '%')->get();
+                $users = User::where('name', 'like', '%' . $request->input('search') . '%')->get();
+                $communities = Community::where('name', 'like', '%' . $request->input('search') . '%')->get();
+            }
+
+            $response = [
+                'departments' => $departments,
+                'users' => $users,
+                'communities' => $communities,
+            ];
+
+            return response()->json($response);
+        }
     }
 }

@@ -5,7 +5,9 @@
     "Settings" : true,
     "Department" : true,
     "Posts" : true,
+    "Polls" : true,
     "Events" : true,
     "Resources" : true,
-    "Profile": true
+    "Profile": true,
+    "User": true
 }

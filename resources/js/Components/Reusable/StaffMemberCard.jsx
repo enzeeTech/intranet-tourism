@@ -71,7 +71,7 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
     return (
         <div className="staff-member-card">
             <div className="card-header">
-                <img src={dummyStaffImage} alt={name} className="staff-member-image" />
+                <img src={imageUrl} alt={name} className="staff-member-image" />
                 <button 
                     className="three-dot-button" 
                     // onClick={toggleThreeDotButton}

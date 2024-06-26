@@ -43,9 +43,9 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
       <button className="add-person-btn" onClick={toggleCreateCommunity}>
         <img src={AddCommunity} alt="Add Community" />
       </button>
-      <button className="three-dot-btn" onClick={toggleReportingPopup}>
-        <img src={threeDotButton} alt="More Options" />
-      </button>
+        {/* <button className="three-dot-btn" onClick={toggleReportingPopup}>
+          <img src={threeDotButton} alt="More Options" />
+        </button> */}
       {isReportingPopupOpen && (
         <button 
           onClick={toggleReportingPopup} 

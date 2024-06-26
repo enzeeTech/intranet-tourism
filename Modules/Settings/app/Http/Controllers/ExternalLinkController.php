@@ -16,6 +16,8 @@ class ExternalLinkController extends Controller
 
     public function show($id)
     {
+       dd('s');
+
         return response()->json([
             'data' => ExternalLink::where('id', $id)->queryable()->firstOrFail(),
         ]);
@@ -29,17 +31,17 @@ class ExternalLinkController extends Controller
         return response()->noContent();
     }
 
-    public function update(ExternalLink $business_grade)
+    public function update(ExternalLink $external_link)
     {
         $validated = request()->validate(...ExternalLink::rules('update'));
-        $business_grade->update($validated);
+        $external_link->update($validated);
 
         return response()->noContent();
     }
 
-    public function destroy(ExternalLink $business_grade)
+    public function destroy(ExternalLink $external_link)
     {
-        $business_grade->delete();
+        $external_link->delete();
 
         return response()->noContent();
     }

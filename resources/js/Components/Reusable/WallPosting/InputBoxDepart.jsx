@@ -171,8 +171,7 @@ function ShareYourThoughtsDepart() {
 
   // Inline styles for responsiveness
   const inputBoxContainerStyle = {
-    width: '100%',
-    maxWidth: '875px',
+    Width: '875px',
     margin: '0 auto',
     display: 'flex',
     justifyContent: 'space-between',
@@ -182,7 +181,7 @@ function ShareYourThoughtsDepart() {
   };
 
   const textAreaStyle = {
-    width: '100%',
+    width: '800px',
     height: '100px',
     outline: 'none',
     border: 'none',
@@ -198,9 +197,11 @@ function ShareYourThoughtsDepart() {
   };
 
   return (
-    <section className="flex flex-col mb-10">
-      <div className="input-box-container border-2 shadow-sm border-slate-200" style={inputBoxContainerStyle}>
-        <div style={responsiveStyles}>
+  <section className="flex relative flex-col mb-10  w-[875px]">
+
+      <div className=" mt-4 p-4 border rounded-2xl bg-white shadow-xl w-[875px] relative" >
+ 
+        <div className="relative flex flex-row justify-between " style={responsiveStyles}>
           <textarea
             ref={textAreaRef}
             value={inputValue}
@@ -208,7 +209,17 @@ function ShareYourThoughtsDepart() {
             placeholder="Share Your Thoughts..."
             style={textAreaStyle}
           />
-          <div className="flex gap-3">
+          
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+            alt="Submit"
+            className="absolute right-0 top-0 mt-2 mr-2 w-6 h-6 cursor-pointer"
+            onClick={handleClickSend}
+          />
+
+          <div className="flex flex-row gap-3 ">
+
             <img
               loading="lazy"
               src="assets/inputpolls.svg"
@@ -243,18 +254,17 @@ function ShareYourThoughtsDepart() {
               alt="Icon 5"
               className="w-[10px] h-auto"
               onClick={handleClickPeople}
-            />
+            />  
+
+          
+            
           </div>
+          
+          
         </div>
-        <div className="flex flex-col space-y-2 h-23 w-8 -mt-4">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-            alt="Submit"
-            className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer"
-            onClick={handleClickSend}
-          />
-        </div>
+
+        
+
       </div>
 
       <TagInput tags={tags} setTags={setTags} />
@@ -303,6 +313,7 @@ function ShareYourThoughtsDepart() {
               <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
               <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
             </div> */}
+            
           </div>
         ))}
       </div>

@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function Avatar({ src, alt }) {
   return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -46,7 +45,8 @@ function FeedbackForm() {
     setInputValue(event.target.value);
   };
 
-  const HandleFeedbackClick = () => {
+  const HandleFeedbackClick = (event) => {
+    event.preventDefault(); // Prevents the default form submission
     console.log('Sending Form...');
   };
 
@@ -68,13 +68,17 @@ function FeedbackForm() {
   );
 }
 
-function IconButton({ src, alt }) {
-  return <img loading="lazy" src={src} alt={alt} className="shrink-0 w-7 aspect-square" />;
-}
-
 function OutputData({ polls }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState({});
+
+  const togglePopup = (index) => {
+    setIsPopupOpen((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
 
   useEffect(() => {
     fetch("/api/crud/posts?with[]=attachments", {
@@ -112,10 +116,10 @@ function OutputData({ polls }) {
   return (
     <>
       {polls.map((poll, index) => (
-        <div className="input-box-container" style={{ height: "auto", marginTop: "-10px" }}>
+        <div key={index} className="input-box-container" style={{ height: "auto", marginTop: "-10px" }}>
           <article className="flex flex-col px-5 py-4 bg-white rounded-xl shadow-sm max-w-[610px] max-md:pl-5">
             <ProfileHeader name="Fareez Hishamuddin" timeAgo="1 day ago" profileImageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" profileImageAlt="Profile image of Thomas" />
-            <div key={index} className="poll">
+            <div className="poll">
               <h3>{poll.content}</h3>
               <ul>
                 {poll.options.map((option, i) => (
@@ -128,29 +132,48 @@ function OutputData({ polls }) {
           </article>
         </div>
       ))}
-      {postData && postData.map((post) => (
+      {postData.map((post, index) => (
         <div key={post.id} className="input-box-container" style={{ height: "auto", marginTop: "-10px" }}>
           <article className="flex flex-col px-5 pb-2.5 bg-white rounded-2xl shadow-sm max-w-[610px]">
-            <header className="flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
+            <header className="relative flex gap-5 justify-between items-start px-px w-full max-md:flex-wrap max-md:max-w-full">
               <div className="flex gap-1 mt-2">
                 {/* <Avatar src={post.user.avatar} alt={`${post.user.name}'s avatar`} /> */}
                 {/* <UserInfo name={post.user.name} timestamp={post.timestamp} /> */}
               </div>
-              <div className="flex gap-5 justify-between">
-                {icons.map((icon, index) => (
-                  <IconButton key={index} src={icon.src} alt={icon.alt} />
-                ))}
+              <div className="relative">
+                <img
+                  loading="lazy"
+                  src="assets/wallpost-dotbutton.svg"
+                  alt="Options"
+                  className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer"
+                  onClick={() => togglePopup(index)}
+                />
+                {isPopupOpen[index] && (
+                  <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-2 ml-20   right-0 w-[160px] h-auto z-10 ">
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleEdit(index)}>
+                      <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit
+                    </p>
+                    <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}>
+                      <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete
+                    </p>
+                    <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}>
+                      <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement
+                    </p>
+                  </div>
+                )}
               </div>
             </header>
-            <p className="mt-2.5 text-base leading-6 text-neutral-800 max-md:max-w-full">
+            <div className="post-content break-words overflow-hidden" style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
               {post.content}
-            </p>
+            </div>
             <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
               {post.tag}
             </p>
             <div className="grid grid-cols-3 gap-2 mt-2">
-              {post.attachments.map((attachment, index) => (
-                <div key={index} className="attachment">
+              {post.attachments.map((attachment, i) => (
+                <div key={i} className="attachment">
                   {attachment.mime_type.startsWith("image/") ? (
                     <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-32 object-cover" />
                   ) : attachment.mime_type.startsWith("video/") ? (
