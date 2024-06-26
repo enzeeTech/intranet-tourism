@@ -100,11 +100,11 @@ export default function Header({ setSidebarOpen }) {
 
     const getIconSrc = () => {
         if (isActive) {
-            return "/Assets/bell-active.svg";
+            return "/assets/bell-active.svg";
         } else if (isHovered) {
-            return "/Assets/bell-hover.svg";
+            return "/assets/bell-hover.svg";
         } else {
-            return "/Assets/bell.svg";
+            return "/assets/bell.svg";
         }
     };
 
