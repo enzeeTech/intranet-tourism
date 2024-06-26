@@ -4,11 +4,6 @@ import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/reac
 import { usePage } from '@inertiajs/react';
 import NotificationPopup from '../Components/Noti-popup-test';
 
-const userNavigation = [
-    { name: 'Your profile', href: '../profile' },
-    { name: 'Sign out', href: '#' },
-];
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -24,6 +19,7 @@ export default function Header({ setSidebarOpen }) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [csrfToken, setCsrfToken] = useState(null);
 
     const notificationRef = useRef();
 
@@ -55,6 +51,11 @@ export default function Header({ setSidebarOpen }) {
     }, []);
 
     useEffect(() => {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        setCsrfToken(token);
+    }, []);
+
+    useEffect(() => {
         console.log("Fetching user data...");
         fetch(`/api/crud/users/${id}?with[]=profile`, {
             method: "GET",
@@ -76,6 +77,26 @@ export default function Header({ setSidebarOpen }) {
                 console.error("Error fetching user data:", error);
             });
     }, [id]);
+
+    const handleLogout = (event) => {
+        event.preventDefault();
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
+        })
+            .then(() => {
+                window.location.href = '/';
+            })
+            .catch((err) => console.error(err));
+    };
+
+    const userNavigation = [
+        { name: 'Your profile', href: '../profile' },
+        { name: 'Log out', href: '/logout', onClick: handleLogout },
+    ];
 
     const getIconSrc = () => {
         if (isActive) {
@@ -173,6 +194,7 @@ export default function Header({ setSidebarOpen }) {
                                                     active ? 'bg-gray-50' : '',
                                                     'block px-3 py-1 text-sm leading-6 text-gray-900'
                                                 )}
+                                                onClick={item.name === 'Log out' ? handleLogout : null}
                                             >
                                                 {item.name}
                                             </a>
