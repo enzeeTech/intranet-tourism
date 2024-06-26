@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Stories from 'react-insta-stories';
 import Popup from './CreateStoryPopup';
 import CreateImageStory from './CreateImageStory';
+import { usePage } from '@inertiajs/react';
+import './styles.css'
 
 const StoryViewer = ({ stories, onClose, user, onViewed }) => {
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -94,7 +96,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     </button>
                     {/* User info */}
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <img src={user.src} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit:'cover' }} />
+                        <img src={user.src} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }} />
                         <div style={{ fontSize: '14px' }}>{user.name}</div>
                     </div>
                     {/* Stories */}
@@ -187,6 +189,34 @@ const StoryNew = () => {
         },
     ]);
 
+    const { props } = usePage();
+    const { id } = props; // Access the user ID from props
+    const [userData, setUserData] = useState({});
+
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        console.log("Fetching user data...");
+        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+            method: "GET",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(({ data }) => {
+                setUserData({
+                    ...data,
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching user data:", error);
+            });
+    }, [id]);
+
     useEffect(() => {
         // Add a "viewed" flag to each user
         setAvatars(avatars.map(avatar => ({
@@ -201,32 +231,43 @@ const StoryNew = () => {
                 const updatedAvatars = prevAvatars.map(avatar => ({
                     ...avatar,
                     stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000) // Filter stories older than 24 hours
-                    // stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 8000) // Filter stories older than 8 second
+                    // stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 8000) // Filter stories older than 8 seconds
                 }));
                 return updatedAvatars;
             });
         }, 60 * 1000); // Check every minute
-    // }, 8000); // Check every 8 second
+        // }, 8000); // Check every 8 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, []);
 
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            const onWheel = (e) => {
+                if (e.deltaY !== 0) {
+                    container.scrollLeft += e.deltaY;
+                    e.preventDefault();
+                }
+            };
+            container.addEventListener('wheel', onWheel);
+            return () => container.removeEventListener('wheel', onWheel);
+        }
+    }, []);
 
     const handleAvatarClick = (avatar) => {
-        if (avatar === firstAvatar) { // Check if the clicked avatar is the first avatar
-            if (avatar.stories && avatar.stories.length === 0) {
+        if (avatar === loggedInUserAvatar) { // Check if the clicked avatar is the logged-in user's avatar
+            if (avatar.stories.length === 0) {
                 setIsPopupOpen(true); // Open the popup if the first avatar has no stories
             } else {
                 setSelectedStory(avatar.stories);
                 setSelectedUser(avatar);
-                setShowStoryViewer(true); // Open the story viewer if the first avatar has stories
+                setShowStoryViewer(true);
             }
         } else {
-            if (avatar.stories && avatar.stories.length > 0) {
-                setSelectedStory(avatar.stories);
-                setSelectedUser(avatar);
-                setShowStoryViewer(true); // Open the story viewer for other users
-            }
+            setSelectedStory(avatar.stories);
+            setSelectedUser(avatar);
+            setShowStoryViewer(true);
         }
     };
 
@@ -262,15 +303,22 @@ const StoryNew = () => {
     };
 
     const sortedAvatars = [
-        ...avatars.slice(1).sort((a, b) => a.viewed - b.viewed) // Sort
+        avatars[0],
+        ...avatars.slice(1).sort((a, b) => a.viewed - b.viewed) // Sort other avatars excluding the first one
     ];
 
-    const firstAvatar = avatars[0];
+    const loggedInUserAvatar = {
+        src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
+        alt: "Avatar of logged in user",
+        name: userData.name || "User Name",
+        stories: avatars[0].stories
+    };
+
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
             <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
-                <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(firstAvatar)} >
+                <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(loggedInUserAvatar)} >
                     <div style={{
                         borderRadius: '50%',
                         width: '104px',
@@ -278,12 +326,12 @@ const StoryNew = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        background: firstAvatar.stories.length > 0 ? 'linear-gradient(45deg, #FCAF45, #FF3559, #FF9C33, #FF3559)' : 'transparent',
+                        background: loggedInUserAvatar.stories.length > 0 ? 'linear-gradient(45deg, #FCAF45, #FF3559, #FF9C33, #FF3559)' : 'transparent',
                         padding: '2px'
                     }}>
                         <img
-                            src={firstAvatar.src}
-                            alt={firstAvatar.alt}
+                            src={loggedInUserAvatar.src}
+                            alt={loggedInUserAvatar.alt}
                             style={{
                                 borderRadius: '50%',
                                 width: '100px',
@@ -311,12 +359,12 @@ const StoryNew = () => {
                     }}>+</span>
                 </button>
                 <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
-                    {firstAvatar.stories.length} {firstAvatar.stories.length === 1 ? 'story' : 'stories'}
+                    {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
                 </div>
-                <div style={{ textAlign: 'center', marginTop: '-5px' }}>{firstAvatar.name}</div>
+                <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
             </div>
-            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                {sortedAvatars.map((avatar, index) => (
+            <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                {sortedAvatars.slice(1).map((avatar, index) => (
                     <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
                         <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
                             <div style={{

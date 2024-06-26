@@ -10,5 +10,10 @@ class departments extends Controller
     {
         return Inertia::render('Departments', ['id' => auth()->id()]);
     }
+    public function output()
+    {
+        return Inertia::render('OutputBoxDepart', ['id' => auth()->id()]);
+    }
+   
    
 }

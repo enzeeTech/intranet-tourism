@@ -1,13 +1,13 @@
 import React from 'react';
 import NotificationPopup from '../Components/Noti-popup-test';
 
-const Notification = () => {
+const NotificationDy = () => {
     return (
-      
+
         <div className="custom-notification-container flex flex-colum">
           <div>My Notifications</div>
             <div><NotificationPopup /></div>
-            
+
             <style jsx>{`
                 .custom-notification-container {
 
@@ -17,7 +17,7 @@ const Notification = () => {
                     height: 100vh; /* Full viewport height */
                     width: 100%;
                     background-color: rgb(226 232 240);
-                    
+
 
                      /* Optional: background color for the container */
                 }
@@ -27,7 +27,7 @@ const Notification = () => {
                   }
 
                 .custom-notification-container .notification-box{
-                
+
                     margin-top:100px;
                     width:900px;
                     height: 80vh;
@@ -43,4 +43,4 @@ const Notification = () => {
     );
 }
 
-export default Notification;
+export default NotificationDy;

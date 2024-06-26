@@ -1,40 +1,197 @@
+// import React, { useState } from 'react';
+// import TextOverlay from './TextOverlay';
+// import { ChromePicker } from 'react-color';
+
+// const CreateImageStory = ({ onPostStory }) => {
+//     const [image, setImage] = useState(null);
+//     const [textData, setTextData] = useState(null);
+//     const [selectedColor, setSelectedColor] = useState('#ffffff'); // Initial color
+
+//     const handleImageChange = (e) => {
+//         const file = e.target.files[0];
+//         const reader = new FileReader();
+//         reader.onloadend = () => {
+//             setImage(reader.result);
+//         };
+//         reader.readAsDataURL(file);
+//     };
+
+//     const handleSaveText = (text, x, y) => {
+//         setTextData({ text, x, y });
+//     };
+
+//     const handlePost = () => {
+//         if (image && textData) {
+//             const newStory = {
+//                 url: image,
+//                 text: textData.text,
+//                 x: textData.x,
+//                 y: textData.y,
+//                 color: selectedColor, // Include selected color
+//                 type: 'image'
+//             };
+//             onPostStory(newStory);
+//         }
+//     };
+
+//     const handleColorChange = (color) => {
+//         setSelectedColor(color.hex);
+//     };
+
+//     return (
+//         <div>
+//             <input type="file" accept="image/*" onChange={handleImageChange} />
+//             {image && (
+//                 <>
+//                     <TextOverlay
+//                         imageUrl={image}
+//                         onSave={handleSaveText}
+//                         selectedColor={selectedColor} // Pass selected color
+//                     />
+//                     <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+//                         <button onClick={handlePost} style={{ marginRight: '10px' }}>Post Story</button>
+//                         <ChromePicker
+//                             color={selectedColor}
+//                             onChange={handleColorChange}
+//                             onChangeComplete={handleColorChange}
+//                         />
+//                     </div>
+//                 </>
+//             )}
+//         </div>
+//     );
+// };
+
+// export default CreateImageStory;
+
+
+// import React, { useState } from 'react';
+// import TextOverlay from './TextOverlay';
+// import { ChromePicker } from 'react-color';
+
+// const CreateImageStory = ({ onPostStory }) => {
+//     const [image, setImage] = useState(null);
+//     const [textData, setTextData] = useState(null);
+//     const [selectedColor, setSelectedColor] = useState('#ffffff'); // Initial color
+
+//     const handleImageChange = (e) => {
+//         const file = e.target.files[0];
+//         const reader = new FileReader();
+//         reader.onloadend = () => {
+//             setImage(reader.result);
+//         };
+//         reader.readAsDataURL(file);
+//     };
+
+//     const handleSaveText = (text, x, y) => {
+//         setTextData({ text, x, y, color: selectedColor });
+//     };
+
+//     const handlePost = () => {
+//         if (image && textData) {
+//             const newStory = {
+//                 url: image,
+//                 text: textData.text,
+//                 x: textData.x,
+//                 y: textData.y,
+//                 color: textData.color, // Include selected color
+//                 type: 'image'
+//             };
+//             onPostStory(newStory);
+//         }
+//     };
+
+//     const handleColorChange = (color) => {
+//         setSelectedColor(color.hex);
+//     };
+
+//     return (
+//         <div>
+//             <input type="file" accept="image/*" onChange={handleImageChange} />
+//             {image && (
+//                 <>
+//                     <TextOverlay
+//                         imageUrl={image}
+//                         onSave={handleSaveText}
+//                         selectedColor={selectedColor} // Pass selected color
+//                     />
+//                     <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+//                         <button onClick={handlePost} style={{ marginRight: '10px' }}>Post Story</button>
+//                         <ChromePicker
+//                             color={selectedColor}
+//                             onChange={handleColorChange}
+//                             onChangeComplete={handleColorChange}
+//                         />
+//                     </div>
+//                 </>
+//             )}
+//         </div>
+//     );
+// };
+
+// export default CreateImageStory;
+
+
 import React, { useState } from 'react';
+import TextOverlay from './TextOverlay';
+import { ChromePicker } from 'react-color';
 
 const CreateImageStory = ({ onPostStory }) => {
-    const [media, setMedia] = useState(null);
-    const [mediaType, setMediaType] = useState(null);
+    const [image, setImage] = useState(null);
+    const [textData, setTextData] = useState(null);
+    const [selectedColor, setSelectedColor] = useState('#ffffff'); // Initial color
 
-    const handleMediaChange = (e) => {
+    const handleImageChange = (e) => {
         const file = e.target.files[0];
-        const fileType = file.type.startsWith('video') ? 'video' : 'image';
-        setMediaType(fileType);
-        setMedia(URL.createObjectURL(file));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(reader.result);
+        };
+        reader.readAsDataURL(file);
     };
 
-    const handlePostStory = () => {
-        if (media) {
+    const handleSaveText = (text, x, y) => {
+        setTextData({ text, x, y, color: selectedColor });
+    };
+
+    const handlePost = () => {
+        if (image && textData) {
             const newStory = {
-                url: media,
-                type: mediaType,
-                caption: 'New story',
-                timestamp: Date.now() // Add timestamp
+                url: image,
+                text: textData.text,
+                x: textData.x,
+                y: textData.y,
+                color: textData.color, // Include selected color
+                type: 'image'
             };
             onPostStory(newStory);
         }
     };
 
+    const handleColorChange = (color) => {
+        setSelectedColor(color.hex);
+    };
+
     return (
         <div>
-            <h2>Create Media Story</h2>
-            <input type="file" accept="image/*,video/*" onChange={handleMediaChange} />
-            {media && (
-                mediaType === 'video' ? (
-                    <video src={media} controls style={{ width: '100%', marginTop: '10px' }} />
-                ) : (
-                    <img src={media} alt="Story preview" style={{ width: '100%', marginTop: '10px' }} />
-                )
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {image && (
+                <>
+                    <TextOverlay
+                        imageUrl={image}
+                        onSave={handleSaveText}
+                        selectedColor={selectedColor} // Pass selected color
+                    />
+                    <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                        <button onClick={handlePost} style={{ marginRight: '10px' }}>Post Story</button>
+                        <ChromePicker
+                            color={selectedColor}
+                            onChange={handleColorChange}
+                            onChangeComplete={handleColorChange}
+                        />
+                    </div>
+                </>
             )}
-            <button onClick={handlePostStory}>Post Story</button>
         </div>
     );
 };

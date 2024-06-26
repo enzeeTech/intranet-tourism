@@ -1,6 +1,6 @@
     import React from 'react';
 
-    function ProfileBio({ photo, email, department, position, grade, location, phone, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
+    function ProfileBio({ photo, email, department, unit, jobtitle, position, grade, location, phone, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             onFormDataChange((prevData) => ({
@@ -60,8 +60,10 @@
                                     </td>
                                 </tr>
                                 {[
-                                    { label: 'e-mail', name: 'email', value: email, type: 'email' },
+                                    { label: 'e-mail', name: 'email', value: email, type: 'email', editable: false },
                                     { label: 'department', name: 'department', value: department, type: 'text' },
+                                    { label: 'unit', name: 'unit', value: unit, type: 'text' },
+                                    { label: 'job title', name: 'job title', value: jobtitle, type: 'text', editable: false },
                                     { label: 'position', name: 'position', value: position, type: 'text', editable: false },
                                     { label: 'grade', name: 'grade', value: grade, type: 'text', editable: false },
                                     { label: 'location', name: 'location', value: location, type: 'text' },

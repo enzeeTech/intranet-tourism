@@ -1,4 +1,5 @@
 import React from 'react';
+import NotiComp from './NotiComp';
 
 const handleClick = () => {
     window.location.href = '../notification';
@@ -110,7 +111,7 @@ class NotificationPopup extends React.Component {
                 ? notifications.slice(0, 4) // Only display the first 4 notifications for 'all' tab
                 : notifications.filter(notification => !notification.read);
 
-        
+
         return (
             <div className="notification-box absolute right-0 mt-2 w-[360px] bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <style>{`
@@ -173,17 +174,17 @@ class NotificationPopup extends React.Component {
                     </li>
                 </ul>
                 <br />
-                <div className="notification-list px-2 ">
+                {/* <div className="notification-list px-2 ">
                     <ul>
                         {filteredNotifications.map(notification => (
                             <div className="flex flex-row h-[104px] mb-2 hover:bg-blue-100 items-center rounded-xl" key={notification.id}>
                                 <div className="flex items-center bg-gray h-16">
-                                    <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt="" 
+                                    <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt=""
                                         style={{
                                             height: "80px",
                                             width: "80px",
                                             borderRadius: "100%"
-                                        }} 
+                                        }}
                                     />
                                     {notification.status === 1 && (
                                         <img className="absolute h-5 w-5 left-20 mt-14" src="/assets/noti-icon-react/birthday_I.png" alt="" />
@@ -244,7 +245,8 @@ class NotificationPopup extends React.Component {
                             </div>
                         ))}
                     </ul>
-                </div>
+                </div> */}
+                <NotiComp />
                 <div onClick={handleClick} className="flex flex-row font-bold bg-slaute-400 h-10 px-2 w-full gap-2 cursor-pointer hover:bg-slate-200 rounded-lg items-center">
                     VIEW ALL
                     <img className="h-6 w-6" src="/assets/viewall.svg" />

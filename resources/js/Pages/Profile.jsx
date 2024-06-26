@@ -32,6 +32,8 @@ export default function Profile() {
         name: "",
         email: "",
         department: "",
+        unit: "",
+        jobtitle: "",
         position: "",
         grade: "",
         location: "",
@@ -76,11 +78,13 @@ export default function Profile() {
                     name: data.name,
                     email: data.email,
                     department: data.department ?? 'Please set', // maybe in diff attr
-                    position: data.position, // maybe in diff attr
-                    grade: data.grade, // maybe in diff attr
-                    location: data.location, // maybe in diff attr
+                    unit: data.unit ?? 'Please set', // maybe in diff attr
+                    jobtitle: data.jobtitile ?? 'Please set', // maybe in diff attr
+                    position: data.position ?? 'Please set', // maybe in diff attr
+                    grade: data.grade ?? 'Please set', // maybe in diff attr
+                    location: data.location ?? 'Please set', // maybe in diff attr
                     phone: data.profile && data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp,
+                    whatsapp: data.whatsapp ?? 'Please set', // maybe in diff attr
                 }));
             })
             .catch((error) => {
@@ -156,6 +160,8 @@ export default function Profile() {
                                                 photo={photo}
                                                 email={formData.email}
                                                 department={formData.department}
+                                                unit={formData.unit}
+                                                jobtitle={formData.jobtitle}
                                                 position={formData.position}
                                                 grade={formData.grade}
                                                 location={formData.location}

@@ -4,11 +4,6 @@ import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/reac
 import { usePage } from '@inertiajs/react';
 import NotificationPopup from '../Components/Noti-popup-test';
 
-const userNavigation = [
-    { name: 'Your profile', href: '../profile' },
-    { name: 'Sign out', href: '#' },
-];
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -24,6 +19,7 @@ export default function Header({ setSidebarOpen }) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isActive, setIsActive] = useState(false);
+    const [csrfToken, setCsrfToken] = useState(null);
 
     const notificationRef = useRef();
 
@@ -55,6 +51,11 @@ export default function Header({ setSidebarOpen }) {
     }, []);
 
     useEffect(() => {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        setCsrfToken(token);
+    }, []);
+
+    useEffect(() => {
         console.log("Fetching user data...");
         fetch(`/api/crud/users/${id}?with[]=profile`, {
             method: "GET",
@@ -77,6 +78,26 @@ export default function Header({ setSidebarOpen }) {
             });
     }, [id]);
 
+    const handleLogout = (event) => {
+        event.preventDefault();
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
+        })
+            .then(() => {
+                window.location.href = '/';
+            })
+            .catch((err) => console.error(err));
+    };
+
+    const userNavigation = [
+        { name: 'Your profile', href: '../profile' },
+        { name: 'Log out', href: '/logout', onClick: handleLogout },
+    ];
+
     const getIconSrc = () => {
         if (isActive) {
             return "/Assets/bell-active.svg";
@@ -88,16 +109,16 @@ export default function Header({ setSidebarOpen }) {
     };
 
     return (
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">
             <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
                 <span className="sr-only">Open sidebar</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                <Bars3Icon className="w-6 h-6" aria-hidden="true" />
             </button>
 
             {/* Separator */}
-            <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+            <div className="w-px h-6 bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
-            <div className="flex flex-1 items-center gap-x-4 self-stretch lg:gap-x-6">
+            <div className="flex items-center self-stretch flex-1 gap-x-4 lg:gap-x-6">
                 <img
                     className="h-8 w-[70px] hidden lg:block"
                     src="assets/Jomla logo red.svg"
@@ -108,12 +129,12 @@ export default function Header({ setSidebarOpen }) {
                         Search
                     </label>
                     <MagnifyingGlassIcon
-                        className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
+                        className="absolute inset-y-0 left-0 w-5 h-full text-gray-400 pointer-events-none"
                         aria-hidden="true"
                     />
                     <input
                         id="search-field"
-                        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 outline-none sm:text-sm"
+                        className="block w-full h-full py-0 pl-8 pr-0 text-gray-900 border-0 outline-none placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                         placeholder="Search..."
                         type="search"
                         name="search"
@@ -123,12 +144,12 @@ export default function Header({ setSidebarOpen }) {
                     <div className="relative" ref={notificationRef}>
                         <button
                             type="button"
-                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
                             onClick={togglePopup}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                         >
-                            <img src={getIconSrc()} className="h-6 w-6" aria-hidden="true" />
+                            <img src={getIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
                         {isPopupVisible && (
                             <NotificationPopup />
@@ -143,7 +164,7 @@ export default function Header({ setSidebarOpen }) {
                         <Menu.Button className="-m-1.5 flex items-center p-1.5">
                             <span className="sr-only">Open user menu</span>
                             <img
-                                className="h-8 w-8 rounded-full bg-gray-50"
+                                className="w-8 h-8 rounded-full bg-gray-50"
                                 src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
                                 alt=""
                             />
@@ -151,7 +172,7 @@ export default function Header({ setSidebarOpen }) {
                                 <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
                                     {userData.name}
                                 </span>
-                                <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" aria-hidden="true" />
                             </span>
                         </Menu.Button>
                         <Transition
@@ -173,6 +194,7 @@ export default function Header({ setSidebarOpen }) {
                                                     active ? 'bg-gray-50' : '',
                                                     'block px-3 py-1 text-sm leading-6 text-gray-900'
                                                 )}
+                                                onClick={item.name === 'Log out' ? handleLogout : null}
                                             >
                                                 {item.name}
                                             </a>
