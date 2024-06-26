@@ -12,22 +12,3 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? "https") === "https",
     enabledTransports: ["ws", "wss"],
 });
-
-let onlineUsers = [];
-window.Echo.join("online")
-    .here((users) => {
-        onlineUsers = users
-        console.log("Online users:", onlineUsers);
-    })
-    .joining((user) => {
-        onlineUsers.push(user);
-        console.log(user.name + " is online");
-        console.log("Online users:", onlineUsers);
-        // Add user to the online users list
-    })
-    .leaving((user) => {
-        onlineUsers = onlineUsers.filter((onlineUser) => onlineUser.id != user.id);
-        console.log(user.name + " is offline");
-        console.log("Online users:", onlineUsers);
-        // Remove user from the online users list
-    });

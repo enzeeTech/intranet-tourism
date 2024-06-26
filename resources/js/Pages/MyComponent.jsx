@@ -29,7 +29,7 @@ export default function MyComponent() {
       time: "January 19, 2024, 12:30 PM",
     },
     {
-      date: "21", 
+      date: "21",
       month: "Jan",
       title: "Corporate event",
       time: "January 21, 2024, 08:00 AM",
@@ -37,7 +37,7 @@ export default function MyComponent() {
     {
       date: "12",
       month: "FRB",
-      title: "Exhibition", 
+      title: "Exhibition",
       time: "February 12, 2024, 07:00 PM",
     },
   ];
@@ -49,6 +49,24 @@ export default function MyComponent() {
     { name: "Sarah", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/703ed66f657f29789d0fc1ca84f07aac610d11426e71037cf2ae395564110303?apiKey=285d536833cc4168a8fbec258311d77b&" },
     { name: "Nik", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/710b307500c73f0cff73a432dbf4465a2b71f35e6c26d98857a688e45692354f?apiKey=285d536833cc4168a8fbec258311d77b&" },
   ];
+
+//   window.Echo.join("online")
+//     .here((users) => {
+//         onlineUsers = users
+//         console.log("Online users:", onlineUsers);
+//     })
+//     .joining((user) => {
+//         onlineUsers.push(user);
+//         console.log(user.name + " is online");
+//         console.log("Online users:", onlineUsers);
+//         // Add user to the online users list
+//     })
+//     .leaving((user) => {
+//         onlineUsers = onlineUsers.filter((onlineUser) => onlineUser.id != user.id);
+//         console.log(user.name + " is offline");
+//         console.log("Online users:", onlineUsers);
+//         // Remove user from the online users list
+//     });
 
   return (
     <div className="flex flex-col max-w-[291px]">
@@ -76,7 +94,8 @@ export default function MyComponent() {
             <img
               key={user.name}
               loading="lazy"
-              src={user.image}
+            //   src={user.image}
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b4ed9ba869d00a18a26f8a9dc5da9055196b1fcac8727d85b2ea5e30ab2b1b6?apiKey=285d536833cc4168a8fbec258311d77b&"
               alt={`${user.name}'s avatar`}
               className="shrink-0 w-11 aspect-[0.95]"
             />

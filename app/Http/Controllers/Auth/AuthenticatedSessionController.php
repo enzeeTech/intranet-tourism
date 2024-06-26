@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        broadcast(new OnlineUsers(auth()->user()));
+        // broadcast(new OnlineUsers(auth()->user()));
 
         return redirect('/');
     }
