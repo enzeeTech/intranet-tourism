@@ -129,14 +129,14 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, onDeactivateCl
                 </button>
             )}
             {isCallPopupOpen && (
-                <div className="popup-backdrop" onClick={closeCallPopup}>
+                <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
                     <div className="popup" onClick={(e) => e.stopPropagation()}>
                         <p style={{fontSize: '25px'}}>Call is available only on mobile.</p>
                     </div>
                 </div>
             )}
             {isWhatsAppPopupOpen && (
-                <div className="popup-backdrop" onClick={closeWhatsAppPopup}>
+                <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
                     <div className="popup" onClick={(e) => e.stopPropagation()}>
                         <p style={{fontSize: '20px', marginBottom: '15px', fontWeight: 'bold'}}>Redirect to WhatsApp Web?</p>
                         <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
