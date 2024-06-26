@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\UserOnline;
+use App\Events\OnlineUsers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        broadcast(new UserOnline(auth()->user()));
+        broadcast(new OnlineUsers(auth()->user()));
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        broadcast(new UserOnline(auth()->user(), false));
+        broadcast(new OnlineUsers(auth()->user()));
 
         return redirect('/');
     }
