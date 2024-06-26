@@ -1724,13 +1724,13 @@ const Feedback = () => {
 
 // Sample data for demo purpose
 const initialApps = [
-  { id: 1, name: 'e-library', url: 'https://bag.example.com/' },
-  { id: 2, name: 'ERMS (Electronic Records)', url: 'https://babies.example.com/bag/bottle.aspx' },
-  { id: 3, name: 'Executive Information Sys...', url: 'https://www.example.com/?believe=bottle&belief=apparel' },
-  { id: 4, name: 'HRMIS', url: 'https://www.example.com/' },
-  { id: 5, name: 'MyFIS 2.0', url: 'http://boy.example.net/apparel/balance' },
-  { id: 6, name: 'MyFIS: Tuntutan', url: 'http://example.com/actor/baby' },
-  { id: 7, name: 'MyFIS Lite 2.0: Pejabat', url: 'http://www.example.com/' }
+  { id: 1, label: 'e-library', url: 'https://bag.example.com/' },
+  { id: 2, label: 'ERMS (Electronic Records)', url: 'https://babies.example.com/bag/bottle.aspx' },
+  { id: 3, label: 'Executive Information Sys...', url: 'https://www.example.com/?believe=bottle&belief=apparel' },
+  { id: 4, label: 'HRMIS', url: 'https://www.example.com/' },
+  { id: 5, label: 'MyFIS 2.0', url: 'http://boy.example.net/apparel/balance' },
+  { id: 6, label: 'MyFIS: Tuntutan', url: 'http://example.com/actor/baby' },
+  { id: 7, label: 'MyFIS Lite 2.0: Pejabat', url: 'http://www.example.com/' }
 ];
 
 const Pautan = () => {
@@ -1753,7 +1753,7 @@ const Pautan = () => {
 
   const PautanHandleAddApp = () => {
     const newId = apps.length > 0 ? Math.max(...apps.map(app => app.id)) + 1 : 1;
-    setApps([...apps, { id: newId, name: newAppName, url: newAppUrl }]);
+    setApps([...apps, { id: newId, label: newAppName, url: newAppUrl }]);
     setNewAppName('');
     setNewAppUrl('');
     setIsAddModalVisible(false);
@@ -1820,10 +1820,10 @@ const Pautan = () => {
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap "{...provided.dragHandleProps}>
                             <input
                               type="text"
-                              value={app.name}
+                              value={app.label}
                               onChange={(e) => {
                                 const newApps = [...apps];
-                                newApps[index].name = e.target.value;
+                                newApps[index].label = e.target.value;
                                 setApps(newApps);
                               }}
                               className="w-full p-1 border rounded-md outline-none border-E4E4E4"
