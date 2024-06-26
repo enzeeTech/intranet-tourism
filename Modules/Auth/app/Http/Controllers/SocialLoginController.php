@@ -29,6 +29,7 @@ class SocialLoginController extends Controller
                     'email' => $socialiteUser->email,
                     'password' => bcrypt('password'),
                 ]);
+                $user->assignRole('user');
             }
 
             SocialAccount::query()->updateOrCreate(
