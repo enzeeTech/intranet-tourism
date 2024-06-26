@@ -1,59 +1,7 @@
-// import React, { useState } from 'react';
-// import { Stage, Layer, Text } from 'react-konva';
-
-// const TextOverlay = ({ imageUrl, onSave }) => {
-//     const [text, setText] = useState('');
-//     const [x, setX] = useState(50);
-//     const [y, setY] = useState(50);
-//     const [draggable, setDraggable] = useState(true);
-
-//     const handleDragEnd = (e) => {
-//         setX(e.target.x());
-//         setY(e.target.y());
-//     };
-
-//     const handleSave = () => {
-//         onSave(text, x, y);
-//     };
-
-//     return (
-//         <div>
-//             <div style={{ position: 'relative', width: '100%', height: '400px' }}>
-//                 <img src={imageUrl} alt="Story" style={{ width: '100%', height: '100%', position: 'absolute' }} />
-//                 <Stage width={window.innerWidth} height={400} style={{ position: 'absolute', top: 0, left: 0 }}>
-//                     <Layer>
-//                         <Text
-//                             text={text}
-//                             x={x}
-//                             y={y}
-//                             draggable={draggable}
-//                             fontSize={30}
-//                             fill="white"
-//                             onDragEnd={handleDragEnd}
-//                         />
-//                     </Layer>
-//                 </Stage>
-//             </div>
-//             <input
-//                 type="text"
-//                 placeholder="Enter your text"
-//                 value={text}
-//                 onChange={(e) => setText(e.target.value)}
-//                 style={{ display: 'block', margin: '10px 0' }}
-//             />
-//             <button onClick={handleSave}>Save</button>
-//         </div>
-//     );
-// };
-
-// export default TextOverlay;
-
-
 // import React, { useState, useRef, useEffect } from 'react';
 // import { Stage, Layer, Text } from 'react-konva';
-// import { ChromePicker } from 'react-color';
 
-// const TextOverlay = ({ imageUrl, onSave }) => {
+// const TextOverlay = ({ imageUrl, onSave, selectedColor }) => {
 //     const [text, setText] = useState('Double-click to edit');
 //     const [x, setX] = useState(50);
 //     const [y, setY] = useState(50);
@@ -64,15 +12,10 @@
 //         position: 'absolute',
 //         display: 'none'
 //     });
-//     const [selectedColor, setSelectedColor] = useState('#ffffff'); // Initial color
 
 //     const handleDragEnd = (e) => {
 //         setX(e.target.x());
 //         setY(e.target.y());
-//     };
-
-//     const handleSave = () => {
-//         onSave(text, x, y);
 //     };
 
 //     const handleDoubleClick = () => {
@@ -86,10 +29,6 @@
 
 //     const handleInputChange = (e) => {
 //         setText(e.target.value);
-//     };
-
-//     const handleColorChange = (color) => {
-//         setSelectedColor(color.hex);
 //     };
 
 //     const applyStyles = () => {
@@ -107,8 +46,8 @@
 
 //         setInputStyle({
 //             position: 'absolute',
-//             left: `${absPosition.x}px`,
-//             top: `${absPosition.y}px`,
+//             left: `${absPosition.x + 20}px`,
+//             top: `${absPosition.y + 48}px`,
 //             width: `${textPosition.width}px`,
 //             height: `${textPosition.height}px`,
 //             fontSize: `${textNode.fontSize()}px`,
@@ -140,7 +79,7 @@
 //                             x={x}
 //                             y={y}
 //                             draggable
-//                             fontSize={30}
+//                             fontSize={25}
 //                             fill={selectedColor} // Use selected color for text fill
 //                             onDragEnd={handleDragEnd}
 //                             onDblClick={handleDoubleClick}
@@ -162,16 +101,6 @@
 //                     />
 //                 </div>
 //             )}
-//             <div style={{ marginTop: '10px' }}>
-//                 <button className="post-story-button" onClick={handleSave}>
-//                     Post Story
-//                 </button>
-//                 <ChromePicker
-//                     color={selectedColor}
-//                     onChange={handleColorChange}
-//                     onChangeComplete={handleColorChange}
-//                 />
-//             </div>
 //         </div>
 //     );
 // };
@@ -179,11 +108,122 @@
 // export default TextOverlay;
 
 
+
+// import React, { useState, useRef, useEffect } from 'react';
+// import { Stage, Layer, Text } from 'react-konva';
+
+// const TextOverlay = ({ imageUrl, onSave, selectedColor }) => {
+//     const [text, setText] = useState('Double-click to edit');
+//     const [x, setX] = useState(50);
+//     const [y, setY] = useState(50);
+//     const [editable, setEditable] = useState(false);
+//     const textRef = useRef(null);
+//     const inputRef = useRef(null);
+//     const [inputStyle, setInputStyle] = useState({
+//         position: 'absolute',
+//         display: 'none'
+//     });
+
+//     const handleDragEnd = (e) => {
+//         setX(e.target.x());
+//         setY(e.target.y());
+//     };
+
+//     const handleDoubleClick = () => {
+//         setEditable(true);
+//     };
+
+//     const handleBlur = () => {
+//         setEditable(false);
+//         onSave(text, x, y); // Call onSave with updated text position
+//     };
+
+//     const handleInputChange = (e) => {
+//         setText(e.target.value);
+//     };
+
+//     const applyStyles = () => {
+//         const stage = textRef.current.getStage();
+//         const textNode = textRef.current;
+
+//         if (!stage || !textNode) return;
+
+//         const textPosition = textNode.getClientRect({ skipTransform: true });
+//         const layerPosition = stage.getClientRect();
+//         const absPosition = {
+//             x: layerPosition.x + textPosition.x,
+//             y: layerPosition.y + textPosition.y
+//         };
+
+//         setInputStyle({
+//             position: 'absolute',
+//             left: `${absPosition.x + 20}px`,
+//             top: `${absPosition.y + 48}px`,
+//             width: `${textPosition.width}px`,
+//             height: `${textPosition.height}px`,
+//             fontSize: `${textNode.fontSize()}px`,
+//             fontFamily: textNode.fontFamily(),
+//             color: selectedColor, // Use selected color for text
+//             backgroundColor: 'transparent',
+//             border: 'none',
+//             outline: 'none',
+//             padding: '0',
+//             margin: '0',
+//             resize: 'none',
+//             transformOrigin: 'top left',
+//             transform: `scale(${stage.scaleX()}, ${stage.scaleY()}) rotate(${textNode.rotation()}deg)`
+//         });
+//     };
+
+//     useEffect(() => {
+//         applyStyles();
+//     }, [text, x, y, selectedColor]);
+
+//     return (
+//         <div>
+//             <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+//                 <img src={imageUrl} alt="Story" style={{ width: '100%', height: '100%', position: 'absolute' }} />
+//                 <Stage width={500} height={400} style={{ position: 'absolute', top: 0, left: 0 }}>
+//                     <Layer>
+//                         <Text
+//                             text={text}
+//                             x={x}
+//                             y={y}
+//                             draggable
+//                             fontSize={25}
+//                             fill={selectedColor} // Use selected color for text fill
+//                             onDragEnd={handleDragEnd}
+//                             onDblClick={handleDoubleClick}
+//                             ref={textRef}
+//                         />
+//                     </Layer>
+//                 </Stage>
+//             </div>
+//             {editable && (
+//                 <div>
+//                     <input
+//                         ref={inputRef}
+//                         type="text"
+//                         value={text}
+//                         onChange={handleInputChange}
+//                         onBlur={handleBlur}
+//                         style={inputStyle}
+//                         autoFocus
+//                     />
+//                 </div>
+//             )}
+//         </div>
+//     );
+// };
+
+// export default TextOverlay;
+
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Text } from 'react-konva';
-import { ChromePicker } from 'react-color';
 
-const TextOverlay = ({ imageUrl, onSave }) => {
+const TextOverlay = ({ imageUrl, onSave, selectedColor }) => {
     const [text, setText] = useState('Double-click to edit');
     const [x, setX] = useState(50);
     const [y, setY] = useState(50);
@@ -194,15 +234,10 @@ const TextOverlay = ({ imageUrl, onSave }) => {
         position: 'absolute',
         display: 'none'
     });
-    const [selectedColor, setSelectedColor] = useState('#ffffff'); // Initial color
 
     const handleDragEnd = (e) => {
         setX(e.target.x());
         setY(e.target.y());
-    };
-
-    const handleSave = () => {
-        onSave(text, x, y);
     };
 
     const handleDoubleClick = () => {
@@ -211,15 +246,11 @@ const TextOverlay = ({ imageUrl, onSave }) => {
 
     const handleBlur = () => {
         setEditable(false);
-        onSave(text, x, y);
+        onSave(text, x, y); // Call onSave with updated text position
     };
 
     const handleInputChange = (e) => {
         setText(e.target.value);
-    };
-
-    const handleColorChange = (color) => {
-        setSelectedColor(color.hex);
     };
 
     const applyStyles = () => {
@@ -237,8 +268,8 @@ const TextOverlay = ({ imageUrl, onSave }) => {
 
         setInputStyle({
             position: 'absolute',
-            left: `${absPosition.x}px`,
-            top: `${absPosition.y}px`,
+            left: `${absPosition.x + 20}px`,
+            top: `${absPosition.y + 48}px`,
             width: `${textPosition.width}px`,
             height: `${textPosition.height}px`,
             fontSize: `${textNode.fontSize()}px`,
@@ -270,7 +301,7 @@ const TextOverlay = ({ imageUrl, onSave }) => {
                             x={x}
                             y={y}
                             draggable
-                            fontSize={30}
+                            fontSize={25}
                             fill={selectedColor} // Use selected color for text fill
                             onDragEnd={handleDragEnd}
                             onDblClick={handleDoubleClick}
@@ -292,16 +323,8 @@ const TextOverlay = ({ imageUrl, onSave }) => {
                     />
                 </div>
             )}
-            <div style={{ marginTop: '10px' }}>
-                <ChromePicker
-                    color={selectedColor}
-                    onChange={handleColorChange}
-                    onChangeComplete={handleColorChange}
-                />
-            </div>
         </div>
     );
 };
 
 export default TextOverlay;
-

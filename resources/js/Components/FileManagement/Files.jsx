@@ -39,12 +39,12 @@ const FileTable = () => {
           const filesData = responseData.data.data;
 
           // Filter the files based on their extensions
-          const documentFiles = filesData.filter(file => {
-            const fileExtension = file.extension.toLowerCase();
-            return ['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(fileExtension);
-          });
+        //   const documentFiles = filesData.filter(file => {
+        //     const fileExtension = file.extension.toLowerCase();
+        //     return [].includes(fileExtension);
+        //   });
 
-          setFiles(documentFiles);
+          setFiles(filesData);
           setLoading(false);
         } catch (error) {
           console.error('Error fetching files:', error);

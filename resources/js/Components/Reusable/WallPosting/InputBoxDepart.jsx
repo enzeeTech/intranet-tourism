@@ -200,7 +200,7 @@ function ShareYourThoughtsDepart() {
   <section className="flex relative flex-col mb-10  w-[875px]">
 
       <div className=" mt-4 p-4 border rounded-2xl bg-white shadow-xl w-[875px] relative" >
- 
+
         <div className="relative flex flex-row justify-between " style={responsiveStyles}>
           <textarea
             ref={textAreaRef}
@@ -209,7 +209,7 @@ function ShareYourThoughtsDepart() {
             placeholder="Share Your Thoughts..."
             style={textAreaStyle}
           />
-          
+
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
@@ -254,16 +254,16 @@ function ShareYourThoughtsDepart() {
               alt="Icon 5"
               className="w-[10px] h-auto"
               onClick={handleClickPeople}
-            />  
+            />
 
-          
-            
+
+
           </div>
-          
-          
+
+
         </div>
 
-        
+
 
       </div>
 
@@ -313,7 +313,7 @@ function ShareYourThoughtsDepart() {
               <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
               <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
             </div> */}
-            
+
           </div>
         ))}
       </div>

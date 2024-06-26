@@ -24,7 +24,7 @@ const FeaturedEvents = () => {
         ))}
       </ul>
       <button className="view-all-btn">
-        VIEW ALL 
+        VIEW ALL
         <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
       </button>
     </div>

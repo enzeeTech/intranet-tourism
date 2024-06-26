@@ -79,7 +79,7 @@
         const [loading, setLoading] = useState(true);
         const [votes, setVotes] = useState({}); // Track votes for each poll
         const [isPopupOpen, setIsPopupOpen] = useState({});
-    
+
         useEffect(() => {
             fetch("/api/crud/posts?with[]=attachments", {
                 method: "GET",
@@ -168,12 +168,12 @@
         ))}
         {postData && postData.map((post, index) => (
             <div key={post.id} className="">
-                
+
             <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] relative">
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                 <div className="flex gap-1 mt-2">
 
-                
+
                 </div>
 
                 {/* icon speaker & 3 dot*/}
@@ -185,7 +185,7 @@
                         <img src="assets/person.svg"
                         className="border-2 w-14 h-14 rounded-full" ></img>
                         <div className="flex flex-col">
-                        <p className="username">Shah</p>  
+                        <p className="username">Shah</p>
                         <p className="a few minute ago">2 hours ago</p></div>
 
                         </div>
