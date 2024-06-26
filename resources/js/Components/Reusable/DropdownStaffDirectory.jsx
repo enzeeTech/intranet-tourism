@@ -46,31 +46,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
                 <img style={{width: '15px'}} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
             </div>
         </button>
-        {selectedDepartment && (
-            <button className="visit-department-btn">
-            <img src={visitDepartment} alt="Visit Department" />
-            </button>
-        )}
-        <button className="add-person-btn">
-            <img src={addPersonButton} alt="Add Person" />
-        </button>
-
-        <button className="three-dot-btn" onClick={toggleReportingPopup}>
-            <img src={threeDotButton} alt="More Options" />
-        </button>
-        
-        {isReportingPopupOpen && (
-            <button 
-                onClick={toggleReportingPopup} 
-                className="staff-popup"
-                style={{
-                    marginTop: `60px`,
-                    marginRight: `20px`,
-                }}
-            >
-            Reporting Structure
-            </button>
-        )}
         {isOpen && (
             <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
             {departments.map((dept, index) => (
@@ -80,6 +55,43 @@ const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
             ))}
             </ul>
         )}
+        {selectedDepartment && (
+            <button className="visit-department-btn">
+            <img src={visitDepartment} alt="Visit Department" />
+            </button>
+        )}
+        <button className="add-person-btn">
+            <img src={addPersonButton} alt="Add Person" />
+        </button>
+
+        <button className="hidden three-dot-btn sm:block" onClick={toggleReportingPopup}>
+            <img src={threeDotButton} alt="More Options" />
+        </button>
+        
+        {isReportingPopupOpen && (
+          <div 
+            className="staff-popup"
+            style={{
+              marginTop: `95px`,
+              marginRight: `20px`,
+            }}
+          >
+            <button 
+              onClick={toggleReportingPopup} 
+              className="popup-button"
+            >
+              Reporting Structure
+            </button>
+            <hr className="popup-divider" />
+            <button 
+              onClick={toggleReportingPopup} 
+              className="popup-button"
+            >
+              Manage Members
+            </button>
+          </div>
+        )}
+        
     </div>
   );
 };
