@@ -12,7 +12,7 @@ const featuredEvents = [
 
 const FeaturedEvents = () => {
   return (
-    <div className="featured-events-container">
+    <div className="featured-events-container border-2 shadow-2xl">
       <h2 style={{fontWeight: 'bold', fontSize: '24px', marginBottom: '4px'}}>Featured Events</h2>
       <hr className="underline" />
       <ul className="featured-events-list">
