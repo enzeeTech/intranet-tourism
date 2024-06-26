@@ -28,13 +28,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store2(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        // broadcast(new UserOnline(auth()->user()));
+        broadcast(new UserOnline(auth()->user()));
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        // broadcast(new UserOnline(auth()->user(), false));
+        broadcast(new UserOnline(auth()->user(), false));
 
         return redirect('/');
     }
