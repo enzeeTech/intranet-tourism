@@ -27,7 +27,7 @@ const Dashboard = () => {
             </div>
         </main>
 
-<aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+<aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
     <style>
         {`
         aside::-webkit-scrollbar {
@@ -50,7 +50,8 @@ const Dashboard = () => {
     </div>
 </aside>
 
-        <aside className="fixed bottom-0 right-0 top-16 hidden w-1/4 border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <aside className="fixed bottom-0 right-0 top-16 hidden w-1/5 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-4 xl:block">
+
             <div>
                 <MyComponent />
             </div>
