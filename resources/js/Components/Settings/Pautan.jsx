@@ -234,15 +234,18 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
-const API_URL = 'http://127.0.0.1:8000/api/crud/external_links';
+const API_URL = 'http://127.0.0.1:8000/api/settings/external_links';
+const urlTemplate = 'http://127.0.0.1:8000/api/settings/external_links/{id}';
 
 const Pautan = () => {
   const [apps, setApps] = useState([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [currentDeleteId, setCurrentDeleteId] = useState(null);
+  const [currentApp, setCurrentApp] = useState(null);
   const [newAppName, setNewAppName] = useState('');
   const [newAppUrl, setNewAppUrl] = useState('');
+
 
   useEffect(() => {
     // Fetch the existing apps from the backend
@@ -254,6 +257,16 @@ const Pautan = () => {
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
+
+  // const fetchApps = () => {
+  //   fetch(API_URL)
+  //     .then(response => response.json())
+  //     .then(responseData => {
+  //       const appsData = Array.isArray(responseData.data) ? responseData.data : [];
+  //       setApps(appsData);
+  //     })
+  //     .catch(error => console.error('Error fetching data:', error));
+  // };
 
   const PautanHandleDragEnd = (result) => {
     if (!result.destination) return;
@@ -267,6 +280,8 @@ const Pautan = () => {
 
   const PautanHandleAddApp = () => {
     const newApp = { label: newAppName, url: newAppUrl };
+    console.log('Adding new app:', newApp);
+
     fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -282,26 +297,82 @@ const Pautan = () => {
         return response.json();
       })
       .then(data => {
+        console.log('Response data:', data);
         setApps([...apps, data]);
         setNewAppName('');
         setNewAppUrl('');
         setIsAddModalVisible(false);
       })
       .catch(error => {
-        console.error('Error adding app:', error.message);
-        // alert(`Error adding app: ${error.message}`);
+        // console.error('Error adding app:', error.message);
+        // alert('Failed to add app: ' + error.message);
         window.location.reload();
       });
   };
-  
+
+  const PautanHandleEditApp = (app) => {
+    setCurrentApp(app);
+    setNewAppName(app.label);
+    setNewAppUrl(app.url);
+    setIsEditModalVisible(true);
+  };
+
+  const PautanHandleUpdateApp = () => {
+    const updatedApp = { label: newAppName, url: newAppUrl };
+    const updateUrl = urlTemplate.replace('{id}', currentApp.id);
+
+    console.log('Updating app:', updateUrl, updatedApp);
+
+    fetch(updateUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedApp)
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(errorText => {
+            console.error('Error response text:', errorText);
+            throw new Error(`Server error: ${errorText}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response data:', data);
+        setApps(apps.map(app => (app.id === data.id ? data : app)));
+        setCurrentApp(null);
+        setNewAppName('');
+        setNewAppUrl('');
+        setIsEditModalVisible(false);
+      })
+      .catch(error => {
+        // console.error('Error updating app:', error.message);
+        // alert('Failed to update app: ' + error.message);
+        window.location.reload();
+      });
+  };
 
   const PautanHandleDeleteApp = () => {
-    fetch(`${API_URL}/${currentDeleteId}`, {
+    const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
+
+    console.log('Deleting URL:', deleteUrl);
+
+    fetch(deleteUrl, {
       method: 'DELETE'
     })
-      .then(() => {
-        setApps(apps.filter(app => app.id !== currentDeleteId));
-        setIsDeleteModalVisible(false);
+      .then(response => {
+        console.log('Response status:', response.status);
+        if (response.status === 204) {
+          console.log('Delete successful');
+          setApps(apps.filter(app => app.id !== currentApp.id));
+          setIsDeleteModalVisible(false);
+          setCurrentApp(null);
+        } else {
+          return response.text().then(errorText => {
+            console.error('Error response text:', errorText);
+            throw new Error(`Server error: ${errorText}`);
+          });
+        }
       })
       .catch(error => console.error('Error deleting app:', error));
   };
@@ -322,7 +393,6 @@ const Pautan = () => {
 
   const handleSave = () => {
     console.log("Changes saved", apps);
-    // Here you might want to send the reordered apps to the backend
   };
 
   return (
@@ -346,6 +416,7 @@ const Pautan = () => {
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">App name</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">URL</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Order</th>
+                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Edit</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Delete</th>
                   </tr>
                 </thead>
@@ -413,10 +484,23 @@ const Pautan = () => {
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <button
+                                className="text-blue-500"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  PautanHandleEditApp(app);
+                                }}
+                              >
+                                <img src="assets/editIcon.svg" alt="Edit" />
+                              </button>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                            <div className="flex items-center justify-center">
+                              <button
                                 className="text-red-500"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setCurrentDeleteId(app.id);
+                                  setCurrentApp(app);
                                   setIsDeleteModalVisible(true);
                                 }}
                               >
@@ -466,6 +550,36 @@ const Pautan = () => {
         </div>
       )}
 
+      {isEditModalVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+          <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
+            <h2 className="mb-4 text-2xl font-bold">Edit App</h2>
+            <input
+              type="text"
+              placeholder="App Name"
+              value={newAppName}
+              onChange={(e) => setNewAppName(e.target.value)}
+              className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
+            />
+            <input
+              type="text"
+              placeholder="URL"
+              value={newAppUrl}
+              onChange={(e) => setNewAppUrl(e.target.value)}
+              className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
+            />
+            <div className="flex justify-end space-x-3">
+              <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleUpdateApp}>
+                Update
+              </button>
+              <button className="px-6 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsEditModalVisible(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isDeleteModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
           <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
@@ -492,3 +606,13 @@ const Pautan = () => {
 };
 
 export default Pautan;
+
+
+
+
+
+
+
+
+
+
