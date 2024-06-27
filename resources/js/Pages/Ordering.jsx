@@ -58,8 +58,8 @@ const Ordering = () => {
                                         <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-base font-bold text-left text-gray-900">Name</th>
-                                                    <th className="px-6 py-3 text-base font-bold text-left text-gray-900">Ordering</th>
+                                                    <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
+                                                    <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -71,11 +71,11 @@ const Ordering = () => {
                                                                 {...provided.draggableProps}
                                                                 className="bg-white border-t border-gray-200"
                                                             >
-                                                                <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.image} alt={item.name} className="inline-block object-cover w-10 mr-4 rounded-full h-11 " />
+                                                                <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                    <img src={item.image} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                 </td>
-                                                                <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
                                                                     <div className="flex items-center">
                                                                         <button
                                                                             className="px-2"
