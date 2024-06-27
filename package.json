@@ -44,7 +44,7 @@
         "react-insta-stories": "^2.7.0",
         "react-konva": "^18.2.10",
         "react-modal": "^3.16.1",
-        "react-router-dom": "^6.23.1",
+        "react-router-dom": "^6.24.0",
         "react-switch": "^7.0.0"
     }
 }

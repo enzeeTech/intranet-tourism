@@ -439,6 +439,7 @@ const Pautan = () => {
                                 setApps(newApps);
                               }}
                               className="w-full p-1 border rounded-md outline-none border-E4E4E4"
+                              style={{borderColor: '#E4E4E4' , borderRadius: '0.375rem', borderWidth: '1px', }}
                             />
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
@@ -450,7 +451,8 @@ const Pautan = () => {
                                 newApps[index].url = e.target.value;
                                 setApps(newApps);
                               }}
-                              className="w-full p-1 border rounded-md outline-none border-E4E4E4"
+                              className="w-full p-1 border rounded-md outline-none border-E4E4E4 "
+                              style={{borderColor: '#E4E4E4' , borderRadius: '0.375rem', borderWidth: '1px', }}
                             />
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
