@@ -4,6 +4,7 @@ import Example from '@/Layouts/DashboardLayoutNew';
 import SettingNavigation from '@/Components/Settings/SettingsComponent';
 import { SettingsPage } from '@/Components/Settings/SettingsPage';
 
+
 const Settings = () => {
     const [currentPage, setCurrentPage] = useState('Basic Settings');
 

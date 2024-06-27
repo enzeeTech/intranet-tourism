@@ -114,7 +114,7 @@ function Dropdown({ label }) {
 
 function AuditSearch() {
   return (
-    <main className="flex flex-col w-10/12 px-8 py-6 bg-white rounded-2xl shadow-custom max-md:px-5">
+    <main className="flex flex-col w-full px-8 py-6 bg-white rounded-2xl shadow-custom max-md:px-5">
       <form className="flex gap-5 text-sm whitespace-nowrap max-md:flex-wrap max-md:max-w-full">
         <label htmlFor="searchInput" className="sr-only">
           Search
@@ -324,7 +324,7 @@ function AuditTrailTable() {
   const selectedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
-    <div className="flex flex-col w-10/12 px-5 py-4 mt-5 bg-white rounded-2xl shadow-custom">
+    <div className="flex flex-col w-full px-5 py-4 mt-5 bg-white rounded-2xl shadow-custom">
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300 divide-y divide-gray-200 table-fixed">
           <thead>
