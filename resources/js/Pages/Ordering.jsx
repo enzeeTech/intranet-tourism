@@ -9,14 +9,17 @@ const Ordering = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const department = "Some Department 1"; // Replace with the actual department logic
     const [data, setData] = useState([
-        { id: 1, name: 'Iskander Mirza', image: '/assets/dummyStaffImage.png' },
+        { id: 1, name: 'Mr Asyraf Jalil', image: '/assets/dummyImage1.jpg' },
         { id: 2, name: 'Nor Rahimah Binti Ariffin', image: '/assets/dummyImage2.png' },
         { id: 3, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage3.png' },
         { id: 4, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage4.png' },
         { id: 5, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage5.png' },
         { id: 6, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage6.png'  },
         { id: 7, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage7.png' },
-        { id: 8, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage8.png' },
+        { id: 8, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyStaffImage.png' },
+        { id: 9, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage2.png' },
+        { id: 10, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage3.png' },
+        { id: 11, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage4.png' },
     ]);
 
     const handleDragEnd = (result) => {
