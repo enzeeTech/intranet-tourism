@@ -40,7 +40,7 @@ const StaffDirectory = () => {
       name: 'Mr Asyraf Jalil',
       role: 'Design and Development Lead',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',  
+      imageUrl: '/assets/dummyImage1.jpg',  
       phoneNo: '+60175165175',
       isDeactivated: false
     },
@@ -49,7 +49,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage2.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -58,7 +58,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage3.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -67,7 +67,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage4.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -76,7 +76,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage5.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -85,7 +85,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage6.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -94,7 +94,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage7.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -103,7 +103,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage8.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -121,7 +121,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage2.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -130,7 +130,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage3.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -139,7 +139,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage4.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -148,7 +148,7 @@ const StaffDirectory = () => {
       name: 'Iskander Mirza',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage5.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -157,7 +157,7 @@ const StaffDirectory = () => {
       name: 'Nor Rahimah Binti Ariffin',
       role: 'Setiausaha Pejabat',
       status: 'Offline',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage6.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -166,7 +166,7 @@ const StaffDirectory = () => {
       name: 'Eduzar Zar Bin Ayob Azari',
       role: 'Timbalan Pengarah Kanan',
       status: 'Away',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage7.png',
       phoneNo: '',
       isDeactivated: false
     },
@@ -175,7 +175,7 @@ const StaffDirectory = () => {
       name: 'Hishamuddin Mustafa',
       role: 'Pengarah Kanan',
       status: 'Online',
-      imageUrl: '/assets/dummyStaffImage.png',
+      imageUrl: '/assets/dummyImage8.png',
       phoneNo: '',
       isDeactivated: false
     },

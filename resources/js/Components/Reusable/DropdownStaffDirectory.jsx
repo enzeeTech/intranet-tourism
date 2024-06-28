@@ -60,9 +60,9 @@ const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
             <img src={visitDepartment} alt="Visit Department" />
             </button>
         )}
-        <button className="add-person-btn">
+        {/* <button className="add-person-btn">
             <img src={addPersonButton} alt="Add Person" />
-        </button>
+        </button> */}
 
         <button className="hidden three-dot-btn sm:block" onClick={toggleReportingPopup}>
             <img src={threeDotButton} alt="More Options" />
@@ -70,26 +70,26 @@ const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
         
         {isReportingPopupOpen && (
           <div 
-            className="staff-popup"
-            style={{
-              marginTop: `95px`,
-              marginRight: `20px`,
-              zIndex: 10,
-            }}
+              className="staff-popup"
+              style={{
+                  marginTop: `95px`,
+                  marginRight: `20px`,
+                  zIndex: 10,
+              }}
           >
-            <button 
-              onClick={toggleReportingPopup} 
-              className="popup-button"
-            >
-              Reporting Structure
-            </button>
-            <hr className="popup-divider" />
-            <button 
-              onClick={toggleReportingPopup} 
-              className="popup-button"
-            >
-              Manage Members
-            </button>
+              <button 
+                  onClick={toggleReportingPopup} 
+                  className="popup-button"
+              >
+                  Reporting Structure
+              </button>
+              <hr className="popup-divider" />
+              <a 
+                  href="/ordering" 
+                  className="popup-button"
+              >
+                  Ordering
+              </a>
           </div>
         )}
         
