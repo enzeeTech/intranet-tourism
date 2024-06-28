@@ -93,7 +93,7 @@
 //                       {(provided) => (
 //                         <tr
 //                           ref={provided.innerRef}
-//                           className="bg-white border-t border-gray-200" 
+//                           className="bg-white border-t border-gray-200"
 //                           {...provided.draggableProps}
 //                         >
 //                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap "{...provided.dragHandleProps}>
@@ -217,7 +217,7 @@
 //           </div>
 //         </div>
 //       )}
-      
+
 //       <section className="flex justify-end mt-5 max-w-[900px]">
 //         <button className="px-4 py-1 font-bold text-white bg-[#FF5436] rounded-full shadow-custom" onClick={handleSave}>
 //           Save
@@ -246,27 +246,40 @@ const Pautan = () => {
   const [newAppName, setNewAppName] = useState('');
   const [newAppUrl, setNewAppUrl] = useState('');
 
-
   useEffect(() => {
-    // Fetch the existing apps from the backend
     fetch(API_URL)
       .then(response => response.json())
       .then(responseData => {
         const appsData = responseData.data?.data || [];
-        setApps(appsData);
+        const sortedAppsData = appsData.sort((a, b) => a.order - b.order);
+        setApps(sortedAppsData);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  // const fetchApps = () => {
-  //   fetch(API_URL)
-  //     .then(response => response.json())
-  //     .then(responseData => {
-  //       const appsData = Array.isArray(responseData.data) ? responseData.data : [];
-  //       setApps(appsData);
-  //     })
-  //     .catch(error => console.error('Error fetching data:', error));
-  // };
+  const updateOrder = (newApps) => {
+    const updatedApps = newApps.map((app, idx) => ({
+      ...app,
+      order: idx + 1
+    }));
+
+    setApps(updatedApps);
+
+    const updatePromises = updatedApps.map((app) => {
+      const updateUrl = urlTemplate.replace('{id}', app.id);
+      return fetch(updateUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(app)
+      })
+        .then(response => response.ok ? response.json() : response.text().then(errorText => { throw new Error(`Server error: ${errorText}`); }))
+        .catch(error => console.error(`Error updating app with id ${app.id}:`, error.message));
+    });
+
+    Promise.all(updatePromises)
+      .then(results => console.log('Order update successful', results))
+      .catch(error => console.error('Error updating order:', error.message));
+  };
 
   const PautanHandleDragEnd = (result) => {
     if (!result.destination) return;
@@ -275,40 +288,44 @@ const Pautan = () => {
     const [reorderedItem] = reorderedApps.splice(result.source.index, 1);
     reorderedApps.splice(result.destination.index, 0, reorderedItem);
 
-    setApps(reorderedApps);
+    updateOrder(reorderedApps);
   };
 
-  const PautanHandleAddApp = () => {
-    const newApp = { label: newAppName, url: newAppUrl };
-    console.log('Adding new app:', newApp);
+  const handleMoveUp = (index) => {
+    if (index === 0) return;
+    const newApps = [...apps];
+    [newApps[index - 1], newApps[index]] = [newApps[index], newApps[index - 1]];
 
-    fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newApp)
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.text().then(errorText => {
-            console.error('Error response text:', errorText);
-            throw new Error(`Server error: ${errorText}`);
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Response data:', data);
-        setApps([...apps, data]);
-        setNewAppName('');
-        setNewAppUrl('');
-        setIsAddModalVisible(false);
-      })
-      .catch(error => {
-        // console.error('Error adding app:', error.message);
-        // alert('Failed to add app: ' + error.message);
+    updateOrder(newApps);
+  };
+
+  const handleMoveDown = (index) => {
+    if (index === apps.length - 1) return;
+    const newApps = [...apps];
+    [newApps[index + 1], newApps[index]] = [newApps[index], newApps[index + 1]];
+
+    updateOrder(newApps);
+  };
+
+    const PautanHandleAddApp = () => {
+        const newApp = { label: newAppName, url: newAppUrl };
+
+        fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApp)
+        })
+        .then(response => response.json())
+        .then(data => {
+            setApps([...apps, data]);
+            setNewAppName('');
+            setNewAppUrl('');
+            setIsAddModalVisible(false);
+        })
+        // .catch(error => console.error('Error adding app:', error));
         window.location.reload();
-      });
-  };
+    };
+
 
   const PautanHandleEditApp = (app) => {
     setCurrentApp(app);
@@ -321,74 +338,38 @@ const Pautan = () => {
     const updatedApp = { label: newAppName, url: newAppUrl };
     const updateUrl = urlTemplate.replace('{id}', currentApp.id);
 
-    console.log('Updating app:', updateUrl, updatedApp);
-
     fetch(updateUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedApp)
     })
-      .then(response => {
-        if (!response.ok) {
-          return response.text().then(errorText => {
-            console.error('Error response text:', errorText);
-            throw new Error(`Server error: ${errorText}`);
-          });
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
-        console.log('Response data:', data);
         setApps(apps.map(app => (app.id === data.id ? data : app)));
         setCurrentApp(null);
         setNewAppName('');
         setNewAppUrl('');
         setIsEditModalVisible(false);
       })
-      .catch(error => {
-        // console.error('Error updating app:', error.message);
-        // alert('Failed to update app: ' + error.message);
-        window.location.reload();
-      });
+      .catch(error => console.error('Error updating app:', error));
   };
 
   const PautanHandleDeleteApp = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
 
-    console.log('Deleting URL:', deleteUrl);
-
     fetch(deleteUrl, {
       method: 'DELETE'
     })
       .then(response => {
-        console.log('Response status:', response.status);
         if (response.status === 204) {
-          console.log('Delete successful');
           setApps(apps.filter(app => app.id !== currentApp.id));
           setIsDeleteModalVisible(false);
           setCurrentApp(null);
         } else {
-          return response.text().then(errorText => {
-            console.error('Error response text:', errorText);
-            throw new Error(`Server error: ${errorText}`);
-          });
+          return response.text().then(errorText => { throw new Error(`Server error: ${errorText}`); });
         }
       })
       .catch(error => console.error('Error deleting app:', error));
-  };
-
-  const handleMoveUp = (index) => {
-    if (index === 0) return;
-    const newApps = [...apps];
-    [newApps[index - 1], newApps[index]] = [newApps[index], newApps[index - 1]];
-    setApps(newApps);
-  };
-
-  const handleMoveDown = (index) => {
-    if (index === apps.length - 1) return;
-    const newApps = [...apps];
-    [newApps[index + 1], newApps[index]] = [newApps[index], newApps[index + 1]];
-    setApps(newApps);
   };
 
   const handleSave = () => {
@@ -400,12 +381,7 @@ const Pautan = () => {
       <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-10">
         <div className="flex items-center justify-between mb-2 border-b border-gray-200">
           <h2 className="mb-3 text-2xl font-bold text-blue-500 ">External Apps</h2>
-          <button
-            className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full"
-            onClick={() => setIsAddModalVisible(true)}
-          >
-            + Add
-          </button>
+          <button className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full" onClick={() => setIsAddModalVisible(true)}>+ Add</button>
         </div>
         <DragDropContext onDragEnd={PautanHandleDragEnd}>
           <Droppable droppableId="apps">
@@ -424,11 +400,7 @@ const Pautan = () => {
                   {apps.map((app, index) => (
                     <Draggable key={app.id} draggableId={String(app.id)} index={index}>
                       {(provided) => (
-                        <tr
-                          ref={provided.innerRef}
-                          className="bg-white border-t border-gray-200" 
-                          {...provided.draggableProps}
-                        >
+                        <tr ref={provided.innerRef} className="bg-white border-t border-gray-200" {...provided.draggableProps}>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap" {...provided.dragHandleProps}>
                             <input
                               type="text"
@@ -439,7 +411,7 @@ const Pautan = () => {
                                 setApps(newApps);
                               }}
                               className="w-full p-1 border rounded-md outline-none border-E4E4E4"
-                              style={{borderColor: '#E4E4E4' , borderRadius: '0.375rem', borderWidth: '1px', }}
+                              style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                             />
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
@@ -451,8 +423,8 @@ const Pautan = () => {
                                 newApps[index].url = e.target.value;
                                 setApps(newApps);
                               }}
-                              className="w-full p-1 border rounded-md outline-none border-E4E4E4 "
-                              style={{borderColor: '#E4E4E4' , borderRadius: '0.375rem', borderWidth: '1px', }}
+                              className="w-full p-1 border rounded-md outline-none border-E4E4E4"
+                              style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                             />
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
@@ -483,27 +455,14 @@ const Pautan = () => {
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
                             <div className="flex items-center justify-center">
-                              <button
-                                className="text-blue-500"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  PautanHandleEditApp(app);
-                                }}
-                              >
+                              <button className="text-blue-500" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
                                 <img src="assets/editIcon.svg" alt="Edit" />
                               </button>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
                             <div className="flex items-center justify-center">
-                              <button
-                                className="text-red-500"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setCurrentApp(app);
-                                  setIsDeleteModalVisible(true);
-                                }}
-                              >
+                              <button className="text-red-500" onClick={(e) => { e.stopPropagation(); setCurrentApp(app); setIsDeleteModalVisible(true); }}>
                                 <img src="assets/redDeleteIcon.svg" alt="Delete" />
                               </button>
                             </div>
@@ -595,7 +554,7 @@ const Pautan = () => {
           </div>
         </div>
       )}
-      
+
       <section className="flex justify-end mt-5 max-w-[900px]">
         <button className="px-4 py-1 font-bold text-white bg-[#FF5436] rounded-full shadow-custom" onClick={handleSave}>
           Save
@@ -606,6 +565,7 @@ const Pautan = () => {
 };
 
 export default Pautan;
+
 
 
 
