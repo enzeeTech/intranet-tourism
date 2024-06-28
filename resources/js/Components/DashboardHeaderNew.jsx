@@ -66,13 +66,14 @@ export default function Header({ setSidebarOpen }) {
                     throw new Error("Network response was not ok");
                 }
                 return response.json();
-            }) 
+            })
             //-----------------------------//
             .then(({ data }) => {
+                const firstName = data.name.split(' ')[0];
                 setUserData(pv => ({
                     ...pv, ...data,
-                    name: data.name,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    name: firstName,
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${firstName}&rounded=true`
                 }));
             })
             .catch((error) => {
