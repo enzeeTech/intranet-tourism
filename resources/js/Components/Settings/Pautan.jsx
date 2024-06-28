@@ -93,7 +93,7 @@
 //                       {(provided) => (
 //                         <tr
 //                           ref={provided.innerRef}
-//                           className="bg-white border-t border-gray-200" 
+//                           className="bg-white border-t border-gray-200"
 //                           {...provided.draggableProps}
 //                         >
 //                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap "{...provided.dragHandleProps}>
@@ -217,7 +217,7 @@
 //           </div>
 //         </div>
 //       )}
-      
+
 //       <section className="flex justify-end mt-5 max-w-[900px]">
 //         <button className="px-4 py-1 font-bold text-white bg-[#FF5436] rounded-full shadow-custom" onClick={handleSave}>
 //           Save
@@ -307,23 +307,25 @@ const Pautan = () => {
     updateOrder(newApps);
   };
 
-  const PautanHandleAddApp = () => {
-    const newApp = { label: newAppName, url: newAppUrl };
+    const PautanHandleAddApp = () => {
+        const newApp = { label: newAppName, url: newAppUrl };
 
-    fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newApp)
-    })
-      .then(response => response.json())
-      .then(data => {
-        setApps([...apps, data]);
-        setNewAppName('');
-        setNewAppUrl('');
-        setIsAddModalVisible(false);
-      })
-      .catch(error => console.error('Error adding app:', error));
-  };
+        fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApp)
+        })
+        .then(response => response.json())
+        .then(data => {
+            setApps([...apps, data]);
+            setNewAppName('');
+            setNewAppUrl('');
+            setIsAddModalVisible(false);
+        })
+        // .catch(error => console.error('Error adding app:', error));
+        window.location.reload();
+    };
+
 
   const PautanHandleEditApp = (app) => {
     setCurrentApp(app);
