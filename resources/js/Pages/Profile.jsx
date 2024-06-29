@@ -30,6 +30,7 @@ export default function Profile() {
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
+        username: "",
         email: "",
         department: "",
         unit: "",
@@ -76,6 +77,7 @@ export default function Profile() {
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
+                    username: data.username ?? 'Please set', // maybe in diff attr
                     email: data.email,
                     department: data.department ?? 'Please set', // maybe in diff attr
                     unit: data.unit ?? 'Please set', // maybe in diff attr
@@ -158,6 +160,7 @@ export default function Profile() {
                                             <ProfileBio
                                                 name={formData.name} // Add name field
                                                 photo={photo}
+                                                username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
                                                 unit={formData.unit}

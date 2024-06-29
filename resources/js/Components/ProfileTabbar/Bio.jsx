@@ -1,6 +1,6 @@
     import React from 'react';
 
-    function ProfileBio({ photo, email, department, unit, jobtitle, position, grade, location, phone, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
+    function ProfileBio({ photo, username, email, department, unit, jobtitle, position, grade, location, phone, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             onFormDataChange((prevData) => ({
@@ -60,12 +60,13 @@
                                     </td>
                                 </tr>
                                 {[
-                                    { label: 'e-mail', name: 'email', value: email, type: 'email', editable: false },
+                                    { label: 'username', name: 'username', value: username, type: 'username' },
+                                    { label: 'e-mail', name: 'email', value: email, type: 'email' },
                                     { label: 'department', name: 'department', value: department, type: 'text' },
                                     { label: 'unit', name: 'unit', value: unit, type: 'text' },
-                                    { label: 'job title', name: 'job title', value: jobtitle, type: 'text', editable: false },
-                                    { label: 'position', name: 'position', value: position, type: 'text', editable: false },
-                                    { label: 'grade', name: 'grade', value: grade, type: 'text', editable: false },
+                                    { label: 'job title', name: 'job title', value: jobtitle, type: 'text' },
+                                    { label: 'position', name: 'position', value: position, type: 'text' },
+                                    { label: 'grade', name: 'grade', value: grade, type: 'text' },
                                     { label: 'location', name: 'location', value: location, type: 'text' },
                                     { label: 'office number', name: 'phone', value: phone, type: 'text' },
                                     { label: 'whatsapp number', name: 'whatsapp', value: whatsapp, type: 'text' },
