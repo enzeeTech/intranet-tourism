@@ -13,15 +13,17 @@ trait QueryableApi
         });
 
         $query->when(request()->has('filter'), function ($query) {
-            if (current(request('filter'))) {
+            if (is_string(current(request('filter')))) {
                 $scope = current(request('filter'));
                 $query->$scope();
             } else {
                 foreach (request('filter') as $filter) {
                     foreach ($filter as $filterBy => $value) {
-                        // dd($filterBy, ...$value);
-                        // dd($value);
-                        $query->$filterBy(key($value), 'like', '%'.current($value).'%');
+                        if (is_array($value)) {
+                            $query->$filterBy(...$value);
+                        } else {
+                            $query->$filterBy(key($value), 'like', '%' . current($value) . '%');
+                        }
                     }
                 }
             }
