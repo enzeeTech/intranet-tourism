@@ -1,9 +1,9 @@
 import * as React from "react";
 
 const CommunityItem = ({ name, category, followers, imgSrc, altText }) => (
-  <article className="flex items-start gap-2 mt-2 px-4 py-1 w-full">
+  <article className="flex items-start w-full gap-2 px-4 py-1 mt-2">
 
-    <div className="flex flex-col items-center text-xs font-semibold uppercase mt-2 ">
+    <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase ">
       <img src={imgSrc} alt={altText} className="aspect-square w-[53px] rounded-full " />
 
     </div>
@@ -67,8 +67,8 @@ const communitiesData = [
 function MyComponent() {
   return (
     <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20 ">
-      <section className="flex flex-col items-start py-2   border-2 bg-white rounded-2xl shadow-custom">
-        <h1 className="text-2xl font-bold ml-4 ">Communities</h1>
+      <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
+        <h1 className="ml-4 text-2xl font-bold ">Communities</h1>
         {communitiesData.map((community, index) => (
           <CommunityItem
             key={index}
@@ -79,8 +79,8 @@ function MyComponent() {
             altText={community.altText}
           />
         ))}
-        <div className="hover:bg-slate-200 w-full h-8">
-        <a href="#view-all" className=" flex self-stretch mt-1.5 ml-4 font-bold items-center">
+        <div className="w-full h-8 hover:bg-slate-200">
+        <a href="/community" className=" flex self-stretch mt-1.5 ml-4 font-bold items-center">
           VIEW ALL
         </a></div>
       </section>
