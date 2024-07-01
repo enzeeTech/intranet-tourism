@@ -156,9 +156,9 @@ function Navigation() {
 
 function Adminsection() {
   return (
-    <div className='w-[875px]'> 
+    <div className='w-[875px]'>
       <HeaderSection />
-      <Navigation /> 
+      <Navigation />
     </div>
   );
 }

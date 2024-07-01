@@ -4,9 +4,6 @@ import Sidebar from '../Components/SideNavBarNew';
 import { useState } from 'react';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
 
-
-
-
 const Example = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 

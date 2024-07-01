@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 

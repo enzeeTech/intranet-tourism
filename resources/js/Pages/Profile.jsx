@@ -30,8 +30,11 @@ export default function Profile() {
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
+        username: "",
         email: "",
         department: "",
+        unit: "",
+        jobtitle: "",
         position: "",
         grade: "",
         location: "",
@@ -74,13 +77,16 @@ export default function Profile() {
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
+                    username: data.username ?? 'Please set', // maybe in diff attr
                     email: data.email,
                     department: data.department ?? 'Please set', // maybe in diff attr
-                    position: data.position, // maybe in diff attr
-                    grade: data.grade, // maybe in diff attr
-                    location: data.location, // maybe in diff attr
+                    unit: data.unit ?? 'Please set', // maybe in diff attr
+                    jobtitle: data.jobtitile ?? 'Please set', // maybe in diff attr
+                    position: data.position ?? 'Please set', // maybe in diff attr
+                    grade: data.grade ?? 'Please set', // maybe in diff attr
+                    location: data.location ?? 'Please set', // maybe in diff attr
                     phone: data.profile && data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp,
+                    whatsapp: data.whatsapp ?? 'Please set', // maybe in diff attr
                 }));
             })
             .catch((error) => {
@@ -154,8 +160,11 @@ export default function Profile() {
                                             <ProfileBio
                                                 name={formData.name} // Add name field
                                                 photo={photo}
+                                                username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
+                                                unit={formData.unit}
+                                                jobtitle={formData.jobtitle}
                                                 position={formData.position}
                                                 grade={formData.grade}
                                                 location={formData.location}

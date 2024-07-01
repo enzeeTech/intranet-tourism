@@ -3,7 +3,7 @@
     align-items: center;
     position: relative;
     flex-direction: row;
-    z-index: 1000;
+    /* z-index: 1000; */
   }
   
   .dropdown-header {

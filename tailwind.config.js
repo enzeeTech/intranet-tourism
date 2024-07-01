@@ -1,3 +1,45 @@
+// import defaultTheme from 'tailwindcss/defaultTheme';
+// import forms from '@tailwindcss/forms';
+
+// /** @type {import('tailwindcss').Config} */
+// export default {
+//   content: [
+//     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+//     './storage/framework/views/*.php',
+//     './resources/views/**/*.blade.php',
+//     './resources/js/**/*.jsx',
+//   ],
+
+//   theme: {
+//     extend: {
+//       fontFamily: {
+//         sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+//       },
+
+//       boxShadow: {
+//         'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+//       },
+//     theme: {
+//         extend: {
+//             fontFamily: {
+//                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+//             },
+//             boxShadow: {
+//                 custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+//             },
+//         },
+//     },
+//   },
+
+//     plugins: [
+//         forms,
+//         require('@tailwindcss/aspect-ratio'),
+//     ],
+// }
+// };
+
+
+
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 
@@ -17,23 +59,17 @@ export default {
       },
 
       boxShadow: {
-        'custom': '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
+        custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
       },
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-            boxShadow: {
-                custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
-            },
-        },
+
+      gridTemplateColumns: {
+        layout: '1fr 3fr 1fr', // Custom grid template for layout
+      },
     },
   },
 
-    plugins: [
-        forms,
-        require('@tailwindcss/aspect-ratio'),
-    ],
-}
+  plugins: [
+    forms,
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };

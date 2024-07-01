@@ -6,97 +6,97 @@ const handleClick = () => {
 };
 
 class NotificationPopup extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         activeTab: 'all', // Default active tab is 'all'
-    //         notifications: [
-    //             // ... Your notifications array
-    //             {
-    //                 id: 1,
-    //                 imageSrc: "/assets/smile.jpg",
-    //                 miniIcon: "",
-    //                 users: "Jonathan and sarep",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 message: "also commented on your post hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee. ",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 3,
-    //                 read: true
-    //             },
-    //             {
-    //                 id: 2,
-    //                 imageSrc: "/assets/smile.jpg",
-    //                 miniIcon: "",
-    //                 users: "Nicky, Zucky & others",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 message: "also wish your birthday on wall posting",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 1,
-    //                 read: false
-    //             },
-    //             {
-    //                 id: 3,
-    //                 imageSrc: "/assets/smile.jpg",
-    //                 miniIcon: "",
-    //                 users: "Ahmad & Emir ",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 message: "also wish your birthday on wall posting",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 1,
-    //                 read: true
-    //             },
-    //             {
-    //                 id: 4,
-    //                 imageSrc: "/assets/smile.jpg",
-    //                 miniIcon: "",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 users: "Yahya",
-    //                 message: "Your request to change the Organisational chart picture was 4 ",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 6,
-    //                 read: false
-    //             },
-    //             {
-    //                 id: 5,
-    //                 imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 users: "Nyet",
-    //                 message: "Your request to change the Organisational chart picture was 5 ",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 6,
-    //                 read: true
-    //             },
-    //             {
-    //                 id: 6,
-    //                 imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-    //                 miniIcon: "",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 users: "Baihaqi",
-    //                 message: "request to change the Organisational chart picture was 6 ",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 7,
-    //                 read: false
-    //             },
-    //             {
-    //                 id: 7,
-    //                 imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
-    //                 users: "Ahmad",
-    //                 message: "request to change the Organisational chart picture was 7 ",
-    //                 orangeball: "/assets/orangeball.png",
-    //                 timeAgo: "10 mins ago",
-    //                 notiView: 0,
-    //                 status: 8,
-    //                 read: false
-    //             },
-    //         ]
-    //     };
-    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeTab: 'all', // Default active tab is 'all'
+            notifications: [
+                // ... Your notifications array
+                {
+                    id: 1,
+                    imageSrc: "/assets/smile.jpg",
+                    miniIcon: "",
+                    users: "Jonathan and sarep",
+                    orangeball: "/assets/orangeball.png",
+                    message: "also commented on your post hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee. ",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 3,
+                    read: true
+                },
+                {
+                    id: 2,
+                    imageSrc: "/assets/smile.jpg",
+                    miniIcon: "",
+                    users: "Nicky, Zucky & others",
+                    orangeball: "/assets/orangeball.png",
+                    message: "also wish your birthday on wall posting",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 1,
+                    read: false
+                },
+                {
+                    id: 3,
+                    imageSrc: "/assets/smile.jpg",
+                    miniIcon: "",
+                    users: "Ahmad & Emir ",
+                    orangeball: "/assets/orangeball.png",
+                    message: "also wish your birthday on wall posting",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 1,
+                    read: true
+                },
+                {
+                    id: 4,
+                    imageSrc: "/assets/smile.jpg",
+                    miniIcon: "",
+                    orangeball: "/assets/orangeball.png",
+                    users: "Yahya",
+                    message: "Your request to change the Organisational chart picture was 4 ",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 6,
+                    read: false
+                },
+                {
+                    id: 5,
+                    imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
+                    orangeball: "/assets/orangeball.png",
+                    users: "Nyet",
+                    message: "Your request to change the Organisational chart picture was 5 ",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 6,
+                    read: true
+                },
+                {
+                    id: 6,
+                    imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
+                    miniIcon: "",
+                    orangeball: "/assets/orangeball.png",
+                    users: "Baihaqi",
+                    message: "request to change the Organisational chart picture was 6 ",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 7,
+                    read: false
+                },
+                {
+                    id: 7,
+                    imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/7b6f6bf1eeb125463a1c05e53bf549eaa33b1ed997272606c9c73c94482930ce?apiKey=89326418e2a6429c92d097cb006bb6c8&",
+                    users: "Ahmad",
+                    message: "request to change the Organisational chart picture was 7 ",
+                    orangeball: "/assets/orangeball.png",
+                    timeAgo: "10 mins ago",
+                    notiView: 0,
+                    status: 8,
+                    read: false
+                },
+            ]
+        };
+    }
 
     handleTabChange = tab => {
         this.setState({ activeTab: tab });

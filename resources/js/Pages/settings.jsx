@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import Example from '@/Layouts/DashboardLayoutNew';
 import SettingNavigation from '@/Components/Settings/SettingsComponent';
@@ -6,6 +6,18 @@ import { SettingsPage } from '@/Components/Settings/SettingsPage';
 
 const Settings = () => {
     const [currentPage, setCurrentPage] = useState('Basic Settings');
+
+    useEffect(() => {
+        const savedPage = localStorage.getItem('currentSettingsPage');
+        if (savedPage) {
+            setCurrentPage(savedPage);
+        }
+    }, []);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        localStorage.setItem('currentSettingsPage', page);
+    };
 
     return (
         <Example>
@@ -20,7 +32,7 @@ const Settings = () => {
                 <div className="file-directory-header"></div>
                 <PageTitle title="Settings" />
                 <hr className="file-directory-underline" />
-                <SettingNavigation current={currentPage} setCurrent={setCurrentPage} />
+                <SettingNavigation current={currentPage} setCurrent={handlePageChange} />
                 <div></div>
             </aside>
         </Example>

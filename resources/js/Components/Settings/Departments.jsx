@@ -46,17 +46,15 @@ const Departments = () => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[844px]">
+      <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom w-[844px]">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="w-full divide-y divide-gray-200">
             <thead>
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
-                >
-                  #
-                </th>
+                  className="px-0 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
+                ></th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
@@ -65,7 +63,7 @@ const Departments = () => {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
+                  className="px-0 py-3 text-2xl font-bold tracking-wider text-left text-gray-900"
                 >
                   Ordering
                 </th>
@@ -86,14 +84,24 @@ const Departments = () => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            {department.id}
+                          <td className="px-0 py-4 text-sm font-medium text-gray-500 whitespace-nowrap">
+                            <div className="flex items-center justify-center h-full">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-10 h-10 cursor-grab"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M7 5a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                             <div className="flex items-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 pt-2 -ml-10 cursor-grab" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M7 5a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm-6 4a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2zm3 0a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                              </svg>
                               <input
                                 type="text"
                                 name={`name-${department.id}`}
@@ -103,18 +111,22 @@ const Departments = () => {
                               />
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
+                          <td className="px-0 py-4 text-sm text-gray-900 whitespace-nowrap">
                             <div className="flex items-center justify-left">
                               <img
                                 src="assets/orderingup.svg"
                                 alt="Up Arrow"
-                                className="mr-3 cursor-pointer h-7 w-7"
+                                className={`mr-3 cursor-pointer h-7 w-7 ${
+                                  index === 0 ? 'opacity-50' : ''
+                                }`}
                                 onClick={() => handleSortUp(index)}
                               />
                               <img
                                 src="assets/orderingdown.svg"
                                 alt="Down Arrow"
-                                className="ml-1 cursor-pointer h-7 w-7"
+                                className={`ml-1 cursor-pointer h-7 w-7 ${
+                                  index === data.length - 1 ? 'opacity-50' : ''
+                                }`}
                                 onClick={() => handleSortDown(index)}
                               />
                             </div>
