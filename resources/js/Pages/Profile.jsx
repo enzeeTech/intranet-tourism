@@ -39,6 +39,7 @@ export default function Profile() {
         grade: "",
         location: "",
         phone: "",
+        dateofbirth: "",
         whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
@@ -59,6 +60,7 @@ export default function Profile() {
 
     useEffect(() => {
         console.log("Fetching user data...");
+        // fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, 
         fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
@@ -85,6 +87,7 @@ export default function Profile() {
                     position: data.position ?? 'Please set', // maybe in diff attr
                     grade: data.grade ?? 'Please set', // maybe in diff attr
                     location: data.location ?? 'Please set', // maybe in diff attr
+                    dateofbirth: data.dateofbirth ?? 'Please set', // maybe in diff attr
                     phone: data.profile && data.profile?.phone_no || "",
                     whatsapp: data.whatsapp ?? 'Please set', // maybe in diff attr
                 }));
@@ -169,6 +172,7 @@ export default function Profile() {
                                                 grade={formData.grade}
                                                 location={formData.location}
                                                 phone={formData.phone}
+                                                dateofbirth={formData.dateofbirth}
                                                 whatsapp={formData.whatsapp}
                                                 isEditing={isEditing}
                                                 onFormDataChange={handleFormDataChange}
