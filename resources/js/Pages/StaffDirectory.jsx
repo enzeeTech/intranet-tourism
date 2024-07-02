@@ -22,38 +22,38 @@ const StaffDirectory = () => {
   const [currentMemberId, setCurrentMemberId] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [staffMembers, setStaffMembers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
 
   // Getting departments from api
-  const fetchDepartments = async (url) => {
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { Accept: 'application/json' }
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      const departmentData = data.data.data.map((department) => ({
-        id: department.id,
-        name: department.name
-      }));
+    const fetchDepartments = async (url) => {
+        try {
+            const response = await fetch(url, {
+            method: "GET",
+            headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) {
+            throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            const departmentData = data.data.data.map((department) => ({
+            id: department.id,
+            name: department.name
+            }));
 
-      // Combine with previous departments and sort alphabetically
-      setDepartments((prevDepartments) => {
-        const allDepartments = [...prevDepartments, ...departmentData];
-        return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
-      });
+            // Combine with previous departments and sort alphabetically
+            setDepartments((prevDepartments) => {
+            const allDepartments = [...prevDepartments, ...departmentData];
+            return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+            });
 
-      if (data.data.next_page_url) {
-        fetchDepartments(data.data.next_page_url);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+            if (data.data.next_page_url) {
+            fetchDepartments(data.data.next_page_url);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
   // Fetch employment posts and user data
   const fetchStaffMembers = async (departmentId) => {
@@ -68,7 +68,7 @@ const StaffDirectory = () => {
       }
       const data = await response.json();
       const employmentPosts = data.data.data;
-  
+
       const userPromises = employmentPosts.map(post =>
         fetch(`/api/crud/users/${post.user_id}`, {
           method: "GET",
@@ -83,9 +83,9 @@ const StaffDirectory = () => {
           return { userData, title: post.title };
         })
       );
-  
+
       const users = await Promise.all(userPromises);
-  
+
       const members = users.map(({ userData, title }) => ({
         id: userData.data.id,
         name: userData.data.name,
@@ -95,16 +95,16 @@ const StaffDirectory = () => {
         phoneNo: ' ',
         isDeactivated: false
       }));
-  
+
       console.log('Members:', members);
-  
+
       setStaffMembers(members);
     } catch (error) {
       console.error("Error:", error);
     }
     setIsLoading(false); // End loading
   };
-  
+
   useEffect(() => {
     fetchDepartments("/api/department/departments");
   }, []);
@@ -135,7 +135,7 @@ const StaffDirectory = () => {
   //     name: 'Mr Asyraf Jalil',
   //     role: 'Design and Development Lead',
   //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage1.jpg',  
+  //     imageUrl: '/assets/dummyImage1.jpg',
   //     phoneNo: '+60175165175',
   //     isDeactivated: false
   //   },

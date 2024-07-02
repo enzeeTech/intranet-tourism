@@ -138,44 +138,44 @@
 
 @media (max-width: 2000px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(4, 1fr); 
+      grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 1456px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(4, 1fr); 
+      grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 1330px) {
     .staff-member-grid-container {
-        grid-template-columns: repeat(3, 1fr); 
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 
 @media (max-width: 1279px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(5, 1fr); 
+      grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (max-width: 1158px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(4, 1fr); 
+      grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 852px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(3, 1fr); 
+      grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 767px) {
     .staff-member-grid-container {
-        grid-template-columns: repeat(3, 1fr); 
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
