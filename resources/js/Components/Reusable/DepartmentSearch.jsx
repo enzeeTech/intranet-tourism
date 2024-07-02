@@ -25,8 +25,8 @@ const SearchBar = ({ onSearch }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ paddingLeft: '1.2rem' }}
             />
-            <button onClick={handleSearch}>
-                <img src={searchIcon} alt="Search" className="staff-search-btn-img" />
+            <button onClick={handleSearch} style={{ height: 'auto', width: '123px'}}>
+                  <img src={searchIcon} alt="Search" />
             </button>
         </div>
     </div>
