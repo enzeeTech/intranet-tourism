@@ -8,6 +8,7 @@ import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+import '../Components/Profile/profile.css'
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -71,9 +72,10 @@ export default function Profile() {
                 return response.json();
             })
             .then(({ data }) => {
+                console.log('dada', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`
                 }));
 
                 setFormData((pv) => ({
@@ -148,12 +150,21 @@ export default function Profile() {
                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                     <div>
                         <div className="w-full bg-white h-[485px] shadow-custom">
+                            {/* <ProfileHeader
+                                backgroundImage={profileData.backgroundImage}
+                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                                name={profileData.name}
+                                status={profileData.status}
+                                onEditBanner={() => setIsPopupOpen(true)}
+                            /> */}
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
                                 profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
+                                // className="rounded-image"
+                                rounded={true}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "bio" && (
@@ -162,7 +173,7 @@ export default function Profile() {
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
                                                 name={formData.name} // Add name field
-                                                photo={photo}
+                                                photo={profileData.profileImage}
                                                 username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
