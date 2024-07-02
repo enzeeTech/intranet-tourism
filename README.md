@@ -75,3 +75,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 5 In your terminal run php artisan key:generate
 6 Run php artisan migrate --seed to create the database tables and seed the roles and users tables
 7 Run php artisan storage:link to create the storage symlink (if you are using Vagrant with Homestead for development, remember to ssh into your virtual machine and run the command from there).
+8.php artisan serve
+9.npm run dev
+10.php artisan queue:listen
+11.php artisan reverb:start
