@@ -118,7 +118,8 @@ const Pautan = () => {
         setNewAppUrl('');
         setIsEditModalVisible(false);
       })
-      .catch(error => console.error('Error updating app:', error));
+      // .catch(error => console.error('Error updating app:', error));
+      window.location.reload();
   };
 
   const PautanHandleDeleteApp = () => {
@@ -252,14 +253,14 @@ const Pautan = () => {
             <h2 className="mb-4 text-2xl font-bold">Add New App</h2>
             <input
               type="text"
-              placeholder="App Name"
+              placeholder="Example.com"
               value={newAppName}
               onChange={(e) => setNewAppName(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
             />
             <input
               type="text"
-              placeholder="URL"
+              placeholder="https://example.com"
               value={newAppUrl}
               onChange={(e) => setNewAppUrl(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
@@ -282,14 +283,14 @@ const Pautan = () => {
             <h2 className="mb-4 text-2xl font-bold">Edit App</h2>
             <input
               type="text"
-              placeholder="App Name"
+              placeholder="Example.com"
               value={newAppName}
               onChange={(e) => setNewAppName(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
             />
             <input
               type="text"
-              placeholder="URL"
+              placeholder="https://example.com"
               value={newAppUrl}
               onChange={(e) => setNewAppUrl(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
@@ -322,11 +323,11 @@ const Pautan = () => {
         </div>
       )}
 
-      <section className="flex justify-end mt-5 max-w-[900px]">
+      {/* <section className="flex justify-end mt-5 max-w-[900px]">
         <button className="px-4 py-1 font-bold text-white bg-[#FF5436] rounded-full shadow-custom" onClick={handleSave}>
           Save
         </button>
-      </section>
+      </section> */}
     </>
   );
 };
