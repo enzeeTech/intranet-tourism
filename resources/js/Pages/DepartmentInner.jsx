@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
-import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
+// import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 // import SearchMembers from '../Components/Reusable/CommunitySearch';
 // import SearchMembers from '../Components/Reusable/DepartmentSearch'
 import Adminsection from '../Components/Adminwall';
-import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
-import StaffMemberCard from '../Components/Reusable/CommunityCard';
-import DeactivateModal from '../Components/Reusable/DeactivateModal';
+// import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
+// import StaffMemberCard from '../Components/Reusable/CommunityCard';
+// import DeactivateModal from '../Components/Reusable/DeactivateModal';
 // import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
 import './css/StaffDirectory.css';  
 import Example from '@/Layouts/DashboardLayoutNew';
