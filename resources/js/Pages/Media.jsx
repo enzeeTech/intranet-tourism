@@ -21,7 +21,7 @@ const Media = () => {
 
     useEffect(() => {
       const fetchData = async () => {
-        const url = 'http://localhost:8000/api/crud/posts';
+        const url = '/api/crud/posts';
         const options = {
           method: 'GET',
           headers: { Accept: 'application/json' }
@@ -56,7 +56,7 @@ const Media = () => {
     const renderImages = () => {
       return filteredPosts.map(post => (
         post.attachments.filter(attachment => attachment.mime_type.startsWith('image/')).map(imageAttachment => (
-          <img key={imageAttachment.id} src={`http://localhost:8000/storage/${imageAttachment.path}`} alt="Image Attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full object-cover"/>
+          <img key={imageAttachment.id} src={`/storage/${imageAttachment.path}`} alt="Image Attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full object-cover"/>
         ))
       ));
     };
@@ -64,7 +64,7 @@ const Media = () => {
     const renderVideos = () => {
       return filteredPosts.map(post => (
         post.attachments.filter(attachment => attachment.mime_type.startsWith('video/')).map(videoAttachment => (
-          <video key={videoAttachment.id} controls src={`http://localhost:8000/storage/${videoAttachment.path}`} className="grow shrink-0 max-w-full aspect-[1.19] w-full"/>
+          <video key={videoAttachment.id} controls src={`/storage/${videoAttachment.path}`} className="grow shrink-0 max-w-full aspect-[1.19] w-full"/>
         ))
       ));
     };

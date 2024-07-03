@@ -81,7 +81,7 @@ function Image({ selectedItem }) {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/crud/resources")
+    fetch("/api/crud/resources")
       .then((response) => response.json())
       .then((data) => {
         const imagePaths = data.data.data
@@ -91,7 +91,7 @@ function Image({ selectedItem }) {
             return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
           })
           .map((item) => ({
-            src: `http://127.0.0.1:8000/storage/${item.path}`,
+            src: `/storage/${item.path}`,
             alt: `Description ${item.id}`,
             category: item.attachable_type // Adjust as per your condition
           }));

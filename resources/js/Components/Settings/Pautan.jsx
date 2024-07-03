@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
-const API_URL = 'http://127.0.0.1:8000/api/settings/external_links';
-const urlTemplate = 'http://127.0.0.1:8000/api/settings/external_links/{id}';
+const API_URL = '/api/settings/external_links';
+const urlTemplate = '/api/settings/external_links/{id}';
 
 const Pautan = () => {
   const [apps, setApps] = useState([]);
@@ -224,7 +224,7 @@ const Pautan = () => {
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <button className="text-blue-500" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
-                                <img src="assets/editIcon.svg" alt="Edit" />
+                                <img src="assets/EditIcon.svg" alt="Edit" />
                               </button>
                             </div>
                           </td>

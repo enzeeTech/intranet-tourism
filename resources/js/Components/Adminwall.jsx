@@ -19,29 +19,31 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription }
     setIsEditing(true);
   };
 
-  const handleInputChange = async (e) => {
+  const handleInputChange = (e) => {
     const newDescription = e.target.value;
     setTextContent(newDescription);
+  };
 
+  const handleSaveClick = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/department/departments/${departmentID}`, {
+      const updatedDescription = textContent;
+
+      const response = await fetch(`/api/crud/departments/${departmentID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: newDescription }),
+        body: JSON.stringify({ description: updatedDescription }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to update description');
       }
+
+      setIsEditing(false);
     } catch (error) {
       console.error('Error updating description:', error);
     }
-  };
-
-  const handleSaveClick = () => {
-    setIsEditing(false);
   };
 
   return (
