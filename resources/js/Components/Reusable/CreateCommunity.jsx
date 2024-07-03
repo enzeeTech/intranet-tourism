@@ -72,7 +72,7 @@ function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invite
 
     const options = {
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/communities/communities',
+      url: '/api/communities/communities',
       headers: {'Content-Type': 'application/json', Accept: 'application/json'},
       data: data
     };
@@ -98,7 +98,7 @@ function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invite
           className="self-stretch mt-7 text-3xl font-extrabold text-neutral-800 border-transparent"
         />
         <UserInfo name={user.name} role={user.role} src={user.src} />
-        <select 
+        <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
           className="flex gap-5 justify-between items-start px-4 py-7 mt-5 text-base font-semibold whitespace-nowrap rounded-md border border-solid border-neutral-300 text-neutral-500 cursor-pointer w-full"
@@ -107,26 +107,26 @@ function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invite
           <option value="public">Public</option>
           <option value="private">Private</option>
         </select>
-        <input 
-          type="text" 
-          placeholder={description} 
+        <input
+          type="text"
+          placeholder={description}
           value={communityDescription}
           onChange={(e) => setCommunityDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300" 
+          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <input 
-          type="text" 
-          placeholder={addAdmin} 
+        <input
+          type="text"
+          placeholder={addAdmin}
           value={adminName}
           onChange={(e) => setAdminName(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold bg-white text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300" 
+          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold bg-white text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <input 
-          type="text" 
-          placeholder={invitePeople} 
+        <input
+          type="text"
+          placeholder={invitePeople}
           value={inviteName}
           onChange={(e) => setInviteName(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold rounded-md text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300" 
+          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold rounded-md text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
         <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>

@@ -14,7 +14,7 @@ const ImageProfile = ({ selectedItem }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/crud/resources")
+    fetch("/api/crud/resources")
       .then((response) => response.json())
       .then((data) => {
         const imagePaths = data.data.data
@@ -24,7 +24,7 @@ const ImageProfile = ({ selectedItem }) => {
             return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
           })
           .map((item) => ({
-            src: `http://127.0.0.1:8000/storage/${item.path}`,
+            src: `/storage/${item.path}`,
             alt: `Description ${item.id}`,
             category: item.attachable_type // Adjust as per your condition
           }));
@@ -76,7 +76,7 @@ const VideoProfile = ({ selectedItem }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/crud/resources")
+    fetch("/api/crud/resources")
       .then((response) => response.json())
       .then((data) => {
         const videoPaths = data.data.data
@@ -86,7 +86,7 @@ const VideoProfile = ({ selectedItem }) => {
             return ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension);
           })
           .map((item) => ({
-            src: `http://127.0.0.1:8000/storage/${item.path}`,
+            src: `/storage/${item.path}`,
             alt: `Description ${item.id}`,
             category: item.attachable_type // Adjust as per your condition
           }));

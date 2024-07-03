@@ -62,7 +62,7 @@ const SearchFile = ({ onSearch, requiredData }) => {
 
     const options = {
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/crud/resources',
+      url: '/api/crud/resources',
       headers: {
         'Accept': 'application/json'
       },

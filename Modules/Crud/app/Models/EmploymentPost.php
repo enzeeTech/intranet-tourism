@@ -76,6 +76,11 @@ class EmploymentPost extends Model implements AuditableContract
         return $this->belongsTo(BusinessPost::class);
     }
 
+    public function businessUnit()
+    {
+        return $this->belongsTo(BusinessUnit::class);
+    }
+
     public function businessScheme()
     {
         return $this->belongsTo(BusinessScheme::class);

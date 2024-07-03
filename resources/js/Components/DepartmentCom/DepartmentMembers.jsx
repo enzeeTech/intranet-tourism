@@ -54,7 +54,7 @@ function DpMembers() {
     const fetchData = async () => {
       const options = {
         method: 'GET',
-        url: 'http://127.0.0.1:8000/api/crud/employment_posts',
+        url: '/api/crud/employment_posts',
         headers: { Accept: 'application/json' },
       };
 
