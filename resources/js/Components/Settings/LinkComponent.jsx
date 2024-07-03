@@ -6,7 +6,7 @@ export default function Pautan() {
 
   useEffect(() => {
     const fetchExtlink = async () => {
-      const url = 'http://localhost:8000/api/crud/external_links';
+      const url = '/api/crud/external_links';
       const options = {
         method: 'GET',
         headers: {
