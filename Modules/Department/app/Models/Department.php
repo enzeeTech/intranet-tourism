@@ -7,6 +7,7 @@ use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Database\Factories\DepartmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Settings\Models\DepartmentPreference;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
@@ -33,19 +34,19 @@ class Department extends Model implements AuditableContract
         $rules = [
             'create' => [
                 [
-                    'name' => ['string'],
+                    'name' => ['string' , 'required'],
                     'banner' => ['string', 'nullable'],
-                    'description' => ['string', 'nullable'],
-                    'order' => ['integer'],
+                    'description' => ['string' , 'nullable'],
+                    'order' => ['integer' ,'nullable'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'name' => ['string'],
+                    'name' => ['string','required'],
                     'banner' => ['string', 'nullable'],
-                    'description' => ['string', 'nullable'],
-                    'order' => ['integer', 'nullable'],
+                    'description' => ['string' , 'nullable'],
+                    'order' => ['integer' ,'nullable'],
                 ],
                 // [],
             ],

@@ -8,6 +8,7 @@ import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+import '../Components/Profile/profile.css';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -30,12 +31,16 @@ export default function Profile() {
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
+        username: "",
         email: "",
         department: "",
+        unit: "",
+        jobtitle: "",
         position: "",
         grade: "",
         location: "",
         phone: "",
+        dateofbirth: "",
         whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
@@ -56,7 +61,7 @@ export default function Profile() {
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
             method: "GET",
         })
             .then((response) => {
@@ -66,21 +71,26 @@ export default function Profile() {
                 return response.json();
             })
             .then(({ data }) => {
+                console.log('data', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`
                 }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
+                    username: data.username,
                     email: data.email,
-                    department: data.department ?? 'Please set', // maybe in diff attr
-                    position: data.position, // maybe in diff attr
-                    grade: data.grade, // maybe in diff attr
-                    location: data.location, // maybe in diff attr
-                    phone: data.profile && data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp,
+                    department: data.employment_post?.department?.name || "",
+                    unit: data.employment_post?.business_unit?.name || "N/A",
+                    jobtitle: data.employment_post?.title || "",
+                    position: data.employment_post?.business_post?.title || "",
+                    grade: data.employment_post?.schema_grade || "",
+                    location: data.employment_post?.location || "",
+                    dateofbirth: data.profile?.dob || "",
+                    phone: data.profile?.phone_no || "",
+                    whatsapp: data.profile?.office_no || "N/A",
                 }));
             })
             .catch((error) => {
@@ -145,6 +155,7 @@ export default function Profile() {
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
+                                rounded={true}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "bio" && (
@@ -153,13 +164,17 @@ export default function Profile() {
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
                                                 name={formData.name} // Add name field
-                                                photo={photo}
+                                                photo={profileData.profileImage}
+                                                username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
+                                                unit={formData.unit}
+                                                jobtitle={formData.jobtitle}
                                                 position={formData.position}
                                                 grade={formData.grade}
                                                 location={formData.location}
                                                 phone={formData.phone}
+                                                dateofbirth={formData.dateofbirth}
                                                 whatsapp={formData.whatsapp}
                                                 isEditing={isEditing}
                                                 onFormDataChange={handleFormDataChange}
@@ -199,7 +214,19 @@ export default function Profile() {
                     </div>
                 </div>
             </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <style>
+                {`
+                    aside::-webkit-scrollbar {
+                    width: 0px !important;
+                    background: transparent !important;
+                    }
+                    aside {
+                    scrollbar-width: none !important; /* For Firefox */
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    }
+                `}
+                </style>
                 <div className="file-directory-header">
                     <PageTitle title="My Profile" />
                 </div>

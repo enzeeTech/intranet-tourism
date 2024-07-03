@@ -1,4 +1,6 @@
-import * as React from "react";
+// CreateCommunity.jsx
+import React, { useState } from "react";
+import axios from 'axios';
 
 function Header({ title }) {
   return (
@@ -9,10 +11,23 @@ function Header({ title }) {
   );
 }
 
-function Avatar({ src, alt }) {
+function Avatar({ src, alt, onImageChange }) {
+  const handleClick = () => {
+    document.getElementById('avatarInput').click();
+  };
+
   return (
-    <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl">
-      <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+    <div className="flex flex-col items-center">
+      <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl cursor-pointer" onClick={handleClick}>
+        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      </div>
+      <input
+        type="file"
+        accept="image/*"
+        id="avatarInput"
+        onChange={(e) => onImageChange(e.target.files[0])}
+        className="hidden"
+      />
     </div>
   );
 }
@@ -29,41 +44,95 @@ function UserInfo({ name, role, src }) {
   );
 }
 
-function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invitePeople, cancelText, createText }) {
+function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invitePeople, cancelText, createText, onCancel }) {
+  const [communityName, setCommunityName] = useState('');
+  const [imageSrc, setImageSrc] = useState(imgSrc);
+  const [selectedType, setSelectedType] = useState('');
+  const [communityDescription, setCommunityDescription] = useState('');
+  const [adminName, setAdminName] = useState('');
+  const [inviteName, setInviteName] = useState('');
+
+  const handleImageChange = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = async () => {
+    const data = {
+      name: communityName,
+      banner: imageSrc,
+      description: communityDescription,
+      type: selectedType,
+      created_by: user.name,
+      updated_by: user.name,
+    };
+
+    const options = {
+      method: 'POST',
+      url: '/api/communities/communities',
+      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      data: data
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center px-6 mt-3 w-full">
-        <Avatar src={imgSrc} alt={imgAlt} />
-        <p className="self-stretch mt-7 text-3xl font-extrabold text-neutral-800">
-          Tourism Malaysia
-        </p>
+        <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
+        <input
+          type="text"
+          placeholder="Community name"
+          value={communityName}
+          onChange={(e) => setCommunityName(e.target.value)}
+          className="self-stretch mt-7 text-3xl font-extrabold text-neutral-800 border-transparent"
+        />
         <UserInfo name={user.name} role={user.role} src={user.src} />
-        <select className="flex gap-5 justify-between items-start px-4 py-7 mt-5 text-base font-semibold whitespace-nowrap rounded-md border border-solid border-neutral-300 text-neutral-500 cursor-pointer w-full">
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+          className="flex gap-5 justify-between items-start px-4 py-7 mt-5 text-base font-semibold whitespace-nowrap rounded-md border border-solid border-neutral-300 text-neutral-500 cursor-pointer w-full"
+        >
           <option value="">Select Type</option>
           <option value="public">Public</option>
           <option value="private">Private</option>
         </select>
-        <input 
-          type="text" 
-          placeholder={description} 
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap rounded-md border border-solid border-neutral-300 text-neutral-500 w-[383px]" 
+        <input
+          type="text"
+          placeholder={description}
+          value={communityDescription}
+          onChange={(e) => setCommunityDescription(e.target.value)}
+          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <input 
-          type="text" 
-          placeholder={addAdmin} 
-          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold bg-white rounded-md border border-solid border-neutral-300 text-neutral-500 w-[383px]" 
+        <input
+          type="text"
+          placeholder={addAdmin}
+          value={adminName}
+          onChange={(e) => setAdminName(e.target.value)}
+          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold bg-white text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <input 
-          type="text" 
-          placeholder={invitePeople} 
-          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold rounded-md border border-solid border-neutral-300 text-neutral-500 w-[383px]" 
+        <input
+          type="text"
+          placeholder={invitePeople}
+          value={inviteName}
+          onChange={(e) => setInviteName(e.target.value)}
+          className="justifycenter itemsstart px-3.5 py-7 mt-5 max-w-full text-base font-semibold rounded-md text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
         <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
-          <button className="my-auto font-semibold text-neutral-800">
+          <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-7 py-4 font-bold text-white bg-red-500 rounded-3xl">
+          <button className="justify-center px-7 py-4 font-bold text-white bg-red-500 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -72,7 +141,7 @@ function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invite
   );
 }
 
-export default function CreateCommunity() {
+export default function CreateCommunity({ onCancel }) {
   const user = {
     name: "Aisyah binte Musa",
     role: "Admin",
@@ -81,7 +150,7 @@ export default function CreateCommunity() {
 
   return (
     <Card
-      title="Create Community"
+      title="Tourism Malaysia"
       imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
       imgAlt="Community Logo"
       user={user}
@@ -91,6 +160,7 @@ export default function CreateCommunity() {
       invitePeople="Invite People"
       cancelText="Cancel"
       createText="Create"
+      onCancel={onCancel}
     />
   );
 }

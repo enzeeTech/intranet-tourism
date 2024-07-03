@@ -1,5 +1,16 @@
     import * as React from "react";
     import { useState, useEffect, useRef } from "react";
+    import { usePage } from '@inertiajs/react';
+
+
+    // function userid({ setSidebarOpen }) {
+    //     const { props } = usePage();
+    //     const { id } = props; // Access the user ID from props
+    //     const [userData, setUserData] = useState({
+    //         name: "",
+    //         profileImage: "",
+    //     });}
+    
 
     function Avatar({ src, alt }) {
     return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -79,7 +90,53 @@
         const [loading, setLoading] = useState(true);
         const [votes, setVotes] = useState({}); // Track votes for each poll
         const [isPopupOpen, setIsPopupOpen] = useState({});
+        
+        const { props } = usePage();
+        const { id } = props; // Access the user ID from props
+        const [userData, setUserData] = useState({
+            name: "",
+            profileImage: "",
+        });
+
+        useEffect(() => {
+            console.log("Fetching user data...");
+            fetch(`/api/crud/users/${id}?with[]=profile`, {
+                method: "GET",
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                }) 
+                //-----------------------------//
+                .then(({ data }) => {
+                    setUserData(pv => ({
+                        ...pv, ...data,
+                        name: data.name,
+                        profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    }));
+                })
+                .catch((error) => {
+                    console.error("Error fetching user data:", error);
+                });
+        }, [id]);
     
+        const handleLogout = (event) => {
+            event.preventDefault();
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+            })
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch((err) => console.error(err));
+        }; //------------------------//
+
         useEffect(() => {
             fetch("/api/crud/posts?with[]=attachments", {
                 method: "GET",
@@ -105,6 +162,7 @@
                 console.error("Error fetching posts:", error);
                 setLoading(false);
             });
+            
         }, []);
     const handleVote = (pollId, optionIndex) => {
         const updatedVotes = { ...votes };
@@ -168,12 +226,12 @@
         ))}
         {postData && postData.map((post, index) => (
             <div key={post.id} className="">
-                
+
             <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] relative">
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                 <div className="flex gap-1 mt-2">
 
-                
+
                 </div>
 
                 {/* icon speaker & 3 dot*/}
@@ -182,10 +240,18 @@
 
                     <div className="flex flex-col ">
                     <div className="flex flex-row items-center gap-2">
-                        <img src="assets/person.svg"
-                        className="border-2 w-14 h-14 rounded-full" ></img>
+                    <img
+                                className="w-8 h-8 rounded-full bg-gray-50"
+                                src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
+                                alt=""
+                            />
                         <div className="flex flex-col">
-                        <p className="username">Shah</p>  
+
+                     <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
+                                    {userData.name}
+                    </span>
+
+
                         <p className="a few minute ago">2 hours ago</p></div>
 
                         </div>

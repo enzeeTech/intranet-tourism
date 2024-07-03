@@ -9,6 +9,7 @@ use Modules\Department\Http\Controllers\BusinessUnitController;
 use Modules\Department\Http\Controllers\DepartmentController;
 use Modules\Department\Http\Controllers\EmploymentPostController;
 use Modules\Department\Http\Controllers\SupervisorController;
+use Modules\User\Http\Controllers\BirthdayReminderController;
 
 /*
  *--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ use Modules\Department\Http\Controllers\SupervisorController;
 // require_once 'crud.php';
 Route::apiResources([
     'users' => UserController::class,
+    'birthday_reminders' => BirthdayReminderController::class,
 ]);

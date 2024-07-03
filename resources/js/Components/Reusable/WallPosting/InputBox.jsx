@@ -5,7 +5,7 @@ import TagInput from "./AlbumTag";
 import '../css/InputBox.css';
 import '../../../Pages/Calendar/index.css';
 
-function ShareYourThoughts({ onCreatePoll }) {
+function ShareYourThoughts({ userId, onCreatePoll }) {
   const [inputValue, setInputValue] = useState("");
   const [showPollPopup, setShowPollPopup] = useState(false);
   const [showPeoplePopup, setShowPeoplePopup] = useState(false);
@@ -20,7 +20,7 @@ function ShareYourThoughts({ onCreatePoll }) {
 
   const handleClickSend = () => {
     const formData = new FormData();
-    formData.append('user_id', '1');
+    formData.append('user_id', userId); // Use the userId prop here
     formData.append('type', 'post');
     formData.append('visibility', 'public');
     formData.append('content', inputValue);

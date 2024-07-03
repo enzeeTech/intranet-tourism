@@ -10,6 +10,7 @@ import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
 import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
 
+
 const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
 
     const [isThreeDotPopupOpen, setIsThreeDotPopupOpen] = useState(false);
@@ -56,9 +57,14 @@ const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
                 <p className={`staff-member-status ${status.toLowerCase()}`}>{status}</p>
             </div>
             <div className="card-footer">
-            <button className="justify-center px-5 bg-white rounded-3xl border border-solid border-neutral-400" aria-label="Visit">
-                Visit
-            </button>
+            <a href="/departmentInner">
+                <button
+                    className="justify-center px-5 bg-white rounded-3xl border border-solid border-neutral-400"
+                    aria-label="Visit"
+                >
+                    Visit
+                </button>
+            </a>
             </div>
             {isThreeDotPopupOpen && (
             <button 

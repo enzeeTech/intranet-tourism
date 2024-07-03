@@ -26,7 +26,7 @@ const FileTable = () => {
     useEffect(() => {
       const fetchFiles = async () => {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/api/crud/resources');
+          const response = await axios.get('/api/crud/resources');
           const responseData = response.data;
 
           // Check if responseData.data.data is an array
@@ -39,12 +39,12 @@ const FileTable = () => {
           const filesData = responseData.data.data;
 
           // Filter the files based on their extensions
-          const documentFiles = filesData.filter(file => {
-            const fileExtension = file.extension.toLowerCase();
-            return ['pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(fileExtension);
-          });
+        //   const documentFiles = filesData.filter(file => {
+        //     const fileExtension = file.extension.toLowerCase();
+        //     return [].includes(fileExtension);
+        //   });
 
-          setFiles(documentFiles);
+          setFiles(filesData);
           setLoading(false);
         } catch (error) {
           console.error('Error fetching files:', error);

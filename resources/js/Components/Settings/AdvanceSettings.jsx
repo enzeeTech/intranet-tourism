@@ -116,18 +116,17 @@ const SizeLimit = () => {
                   <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       {['1 GB', '3 GB', '5 GB'].map(option => (
-                        <Menu.Item key={option}>
+                        <Menu.Item key={option} as="div">
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <button
                               onClick={(event) => handleSelect(option, type, event)}
                               className={classNames(
                                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
+                                'block w-full text-left px-4 py-2 text-sm'
                               )}
                             >
                               {option}
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       ))}
@@ -327,19 +326,18 @@ const MailSettings = () => {
                 <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Mail 1', 'Mail 2', 'Mail 3'].map(option => (
-                      <Menu.Item key={option}>
+                      <Menu.Item key={option} as="div">
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <button
                             onClick={(event) => handleSelect(option, 'mail', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
+                              'block w-full text-left px-4 py-2 text-sm'
                             )}
                           >
                             {option}
-                          </a>
-                        )}{'}'}
+                          </button>
+                        )}
                       </Menu.Item>
                     ))}
                   </div>
@@ -441,19 +439,18 @@ const MailSettings = () => {
                 <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-custom ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {['Security 1', 'Security 2', 'Security 3'].map(option => (
-                      <Menu.Item key={option}>
+                      <Menu.Item key={option} as="div">
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <button
                             onClick={(event) => handleSelect(option, 'security', event)}
                             className={classNames(
                               active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                              'block px-4 py-2 text-sm'
+                              'block w-full text-left px-4 py-2 text-sm'
                             )}
                           >
                             {option}
-                          </a>
-                        )}{'}'}
+                          </button>
+                        )}
                       </Menu.Item>
                     ))}
                   </div>

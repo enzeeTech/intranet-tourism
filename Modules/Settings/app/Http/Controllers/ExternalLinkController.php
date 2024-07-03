@@ -16,7 +16,7 @@ class ExternalLinkController extends Controller
 
     public function show($id)
     {
-       dd('s');
+        
 
         return response()->json([
             'data' => ExternalLink::where('id', $id)->queryable()->firstOrFail(),
