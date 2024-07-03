@@ -7,10 +7,15 @@ import { ImageProfile, VideoProfile } from "../Components/ProfileTabbar/Gallery"
 import { Filter } from '@/Components/Reusable/WallPosting';
 // import { OutputData } from '@/Components/Reusable/WallPosting';
 import OutputDataDepart from './Reusable/WallPosting/OutputBoxDepart';
+import { set } from 'date-fns';
 
-function HeaderSection() {
+function HeaderSection({ departmentID, departmentHeader, departmentDescription}) {
   const [isEditing, setIsEditing] = useState(false);
-  const [textContent, setTextContent] = useState('Horem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.');
+  const [textContent, setTextContent] = useState(null);
+
+  React.useEffect(() => {
+    setTextContent(departmentDescription);
+  }, [departmentDescription]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -29,20 +34,20 @@ function HeaderSection() {
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
-        className="object-cover absolute inset-0 size-full"
+        className="absolute inset-0 object-cover size-full"
         alt=""
       />
-      <div className="flex relative gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+      <div className="relative flex justify-between w-full gap-5 max-md:flex-wrap max-md:max-w-full">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-extrabold">Bahagian Pentadbiran</h1>
-          <h2 className="mt-4 text-lg font-medium">Department</h2>
+          <h1 className="text-3xl font-extrabold">{departmentHeader}</h1>
+          {/* <h2 className="mt-4 text-lg font-medium">Department</h2> */}
         </div>
-        <div className="flex gap-5 justify-between self-start text-sm font-medium content-center">
-          <button className="my-auto flex flex-row gap-4">Group Admin
+        <div className="flex content-center self-start justify-between gap-5 text-sm font-medium">
+          <button className="flex flex-row gap-4 my-auto">Group Admin
             <img
               loading="lazy"
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/599b835164fff4e10552e23d04cdbdcfdb56df70e81b9264a82c878534e22499?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
-              className="shrink-0 w-8 aspect-square"
+              className="w-8 shrink-0 aspect-square"
               alt="Admin Avatar"
             />
           </button>
@@ -65,13 +70,13 @@ function HeaderSection() {
         className="mt-6 aspect-square w-[30px]"
         alt="Section Icon"
       />
-      <div className="absolute inset-x-0 bottom-0 flex justify-start items-center gap-4 px-11 py-4 max-md:px-5">
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-start gap-4 py-4 px-11 max-md:px-5">
         {isEditing ? (
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center" onClick={handleSaveClick}>
+          <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md" onClick={handleSaveClick}>
             Save
           </button>
         ) : (
-          <button className="w-8 h-8 px-1 py-1 bg-blue-500 text-white rounded-full flex items-center justify-center" onClick={handleEditClick}>
+          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 text-white bg-blue-500 rounded-full" onClick={handleEditClick}>
             <img
               src="/assets/pencil.svg"
               alt="Edit Icon"
@@ -109,7 +114,7 @@ function Navigation() {
 
   return (
     <div>
-      <nav className="flex  gap-5 items-start px-9 py-6  w-full text-sm font-semibold text-center bg-white rounded-b-2xl shadow-xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+      <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-xl px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
         <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
@@ -126,7 +131,7 @@ function Navigation() {
 
       {activeTab === "Files" && (
         <div>
-          <div className="flex gap-4 whitespace-nowrap ml-12">
+          <div className="flex gap-4 ml-12 whitespace-nowrap">
             <SearchInput />
             <SearchButton />
           </div>
@@ -154,10 +159,13 @@ function Navigation() {
   );
 }
 
-function Adminsection() {
+function Adminsection({departmentHeader, departmentDescription}) {
   return (
     <div className='w-[875px]'>
-      <HeaderSection />
+      <HeaderSection
+        departmentHeader={departmentHeader}
+        departmentDescription={departmentDescription}
+       />
       <Navigation />
     </div>
   );

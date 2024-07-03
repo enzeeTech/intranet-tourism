@@ -63,6 +63,7 @@ const StaffDirectory = () => {
                   name={department.name}
                   // imageUrl={department.banner || '../../../public/assets/dummyStaffImage.png'} // Default image
                   imageUrl={'assets/departmentsDefault.jpg'} // Default image
+                  departmentID={department.id}
                   // Add other props as needed
                 />
               ))
