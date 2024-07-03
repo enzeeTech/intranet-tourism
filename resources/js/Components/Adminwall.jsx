@@ -26,9 +26,9 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription }
 
   const handleSaveClick = async () => {
     try {
-      const updatedDescription = textContent.trim() === '' ? null : textContent;
+      const updatedDescription = textContent;
 
-      const response = await fetch(`/api/department/departments/${departmentID}`, {
+      const response = await fetch(`/api/crud/departments/${departmentID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
