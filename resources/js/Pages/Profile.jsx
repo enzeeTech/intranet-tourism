@@ -214,7 +214,7 @@ export default function Profile() {
                     </div>
                 </div>
             </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
                 <style>
                 {`
                     aside::-webkit-scrollbar {
