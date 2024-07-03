@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/CommunityCard.css';
+import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
 
 const DepartmentsCard = ({ name, role, imageUrl, onDeactivateClick }) => {
@@ -10,7 +10,6 @@ const DepartmentsCard = ({ name, role, imageUrl, onDeactivateClick }) => {
       </div>
       <div className="card-body">
         <h3 className="staff-member-name">{name}</h3>
-        <p className="staff-member-role">Followed by</p>
       </div>
       <div className="card-footer">
       <a href="/departmentInner">
