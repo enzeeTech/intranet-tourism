@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 // import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
@@ -14,9 +14,38 @@ import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
 
-const StaffDirectory = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+const DepartmentInner = () => {
+  const [departmentData, setDepartmentData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Function to extract the departmentId from the URL query parameters
+  const getDepartmentIdFromQuery = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('departmentId');
+  };
+
+  const fetchDepartmentData = async (departmentId) => {
+    try {
+      const response = await fetch(`/api/department/departments/${departmentId}`);
+      const result = await response.json();
+      if (result.data) {
+        setDepartmentData(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching department data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const departmentId = getDepartmentIdFromQuery();
+    if (departmentId) {
+      fetchDepartmentData(departmentId);
+    }
+  }, []);
+
+  console.log('Department Data:', departmentData);
 
   // Dummy departments
   const departments = [
@@ -142,11 +171,15 @@ const StaffDirectory = () => {
     <Example>
         <main className="xl:pl-96 w-[900px] m-ml-16 mr-24 relative">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
-            <Adminsection />
+            <Adminsection 
+                departmentID= {getDepartmentIdFromQuery()}
+                departmentHeader={departmentData?.name || 'Department Name'}
+                departmentDescription={departmentData?.description}
+            />
             </div>
             </main>
 
-            {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            {/* <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
                 <div className="file-directory-header">
                     <PageTitle title="My Profile" />
                 </div>
@@ -157,7 +190,7 @@ const StaffDirectory = () => {
                     <WhosOnline className='mb-4'/>
                 </div>
             </aside> */}
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
                 <style>
                     {`
                     aside::-webkit-scrollbar {
@@ -180,4 +213,4 @@ const StaffDirectory = () => {
   );
 };
 
-export default StaffDirectory;
+export default DepartmentInner;
