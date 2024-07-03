@@ -80,7 +80,7 @@ const fetchStaffMembers = async (departmentId) => {
 
       // Create an array of promises for fetching user data
       const userPromises = allEmploymentPosts.map(post =>
-          fetch(`/api/crud/users/${post.user_id}`, {
+          fetch(`/api/crud/users/${post.user_id}?with[]=profile`, {
               method: "GET",
               headers: { Accept: 'application/json' }
           }).then(response => {
@@ -96,6 +96,8 @@ const fetchStaffMembers = async (departmentId) => {
           })
       );
 
+      console.log('User Promises:', userPromises);
+
       // Wait for all user data promises to settle
       const users = await Promise.allSettled(userPromises);
 
@@ -110,7 +112,7 @@ const fetchStaffMembers = async (departmentId) => {
                   role: title,
                   status: 'Online',
                   imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
-                  phoneNo: userData.data.phone_no,
+                  phoneNo: userData.data.profile.phone_no,
                   isDeactivated: false
               };
           });
