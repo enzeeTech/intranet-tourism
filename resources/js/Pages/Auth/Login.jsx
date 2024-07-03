@@ -44,9 +44,6 @@ export default function Login({ status, canResetPassword }) {
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
-                    <div className="mt-2 h-6">
-                        <InputError message={errors.email} className="text-sm text-red-500" />
-                    </div>
                 </div>
 
                 <div className="mb-2.5">
@@ -61,9 +58,6 @@ export default function Login({ status, canResetPassword }) {
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
-                    <div className="mt-2 h-6">
-                        <InputError message={errors.password} className="text-sm text-red-500" />
-                    </div>
                 </div>
 
                 <div className="mt-4 flex items-center mb-2.5">
@@ -87,13 +81,6 @@ export default function Login({ status, canResetPassword }) {
                 <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
                     Log in
                 </PrimaryButton>
-                <div className="mt-2 h-1">
-                 <InputError message={
-                    errors.email ? "Username and/or password is wrong" :
-                    errors.password ? "Username and/or password is wrong" :
-                    ""}
-                    className="text-sm text-red-500" />
-                </div>
                 <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
 
                 <a type="button"
@@ -106,6 +93,13 @@ export default function Login({ status, canResetPassword }) {
                     href="/auth/azure/redirect">
                     Log in Using AD
                 </a>
+                <div className="mt-2 h-1">
+                 <InputError message={
+                    errors.email ? "Email and/or password is wrong" :
+                    errors.password ? "Email and/or password is wrong" :
+                    ""}
+                    className="text-sm text-red-500" />
+                </div>
             </form>
         </GuestLayout>
     );

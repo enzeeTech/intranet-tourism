@@ -8,6 +8,7 @@ import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+import '../Components/Profile/profile.css';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -30,6 +31,7 @@ export default function Profile() {
     const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
+        username: "",
         email: "",
         department: "",
         unit: "",
@@ -38,6 +40,7 @@ export default function Profile() {
         grade: "",
         location: "",
         phone: "",
+        dateofbirth: "",
         whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
@@ -68,23 +71,26 @@ export default function Profile() {
                 return response.json();
             })
             .then(({ data }) => {
+                console.log('data', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`
                 }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
+                    username: data.username,
                     email: data.email,
-                    department: data.department ?? 'Please set', // maybe in diff attr
-                    unit: data.unit ?? 'Please set', // maybe in diff attr
-                    jobtitle: data.jobtitile ?? 'Please set', // maybe in diff attr
-                    position: data.position ?? 'Please set', // maybe in diff attr
-                    grade: data.grade ?? 'Please set', // maybe in diff attr
-                    location: data.location ?? 'Please set', // maybe in diff attr
-                    phone: data.profile && data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp ?? 'Please set', // maybe in diff attr
+                    department: data.employmentPost?.department?.name || "",
+                    unit: data.unit,
+                    jobtitle: data.employmentPost?.job_title || "",
+                    position: data.employmentPost?.position || "",
+                    grade: data.grade,
+                    location: data.location,
+                    dateofbirth: data.date_of_birth,
+                    phone: data.profile?.phone_no || "",
+                    whatsapp: data.whatsapp,
                 }));
             })
             .catch((error) => {
@@ -149,6 +155,7 @@ export default function Profile() {
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
+                                rounded={true}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "bio" && (
@@ -157,7 +164,8 @@ export default function Profile() {
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
                                                 name={formData.name} // Add name field
-                                                photo={photo}
+                                                photo={profileData.profileImage}
+                                                username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
                                                 unit={formData.unit}
@@ -166,6 +174,7 @@ export default function Profile() {
                                                 grade={formData.grade}
                                                 location={formData.location}
                                                 phone={formData.phone}
+                                                dateofbirth={formData.dateofbirth}
                                                 whatsapp={formData.whatsapp}
                                                 isEditing={isEditing}
                                                 onFormDataChange={handleFormDataChange}

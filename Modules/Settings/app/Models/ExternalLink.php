@@ -6,13 +6,13 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+// use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class ExternalLink extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi, HasUuids;
+    use Auditable, Authorizable, HasFactory, QueryableApi;
 
     protected $table = 'external_links';
 

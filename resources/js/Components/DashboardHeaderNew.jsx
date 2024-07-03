@@ -8,6 +8,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
+// ----------------------------//
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
@@ -66,7 +67,9 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
+            //-----------------------------//
             .then(({ data }) => {
+                // const firstName = data.name.split(' ')[0];
                 setUserData(pv => ({
                     ...pv, ...data,
                     name: data.name,
@@ -100,11 +103,11 @@ export default function Header({ setSidebarOpen }) {
 
     const getIconSrc = () => {
         if (isActive) {
-            return "/Assets/bell-active.svg";
+            return "/assets/bell-active.svg";
         } else if (isHovered) {
-            return "/Assets/bell-hover.svg";
+            return "/assets/bell-hover.svg";
         } else {
-            return "/Assets/bell.svg";
+            return "/assets/bell.svg";
         }
     };
 
@@ -159,7 +162,7 @@ export default function Header({ setSidebarOpen }) {
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                    {/* Profile dropdown */}
+                    {/* Profile dropdown */} {/*//------------------------//*/}
                     <Menu as="div" className="relative">
                         <Menu.Button className="-m-1.5 flex items-center p-1.5">
                             <span className="sr-only">Open user menu</span>

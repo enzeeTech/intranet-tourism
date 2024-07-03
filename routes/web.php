@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\OrderingController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -46,18 +47,21 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/calendar/event/{id}', [CalendarController::class, 'updateEvent'])->name('calendar.update');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
+    Route::get('/ordering', [OrderingController::class, 'index'])->name('ordering');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
+    Route::get('/departmentInner', [departments::class, 'renderinner'])->name('DepartmentInner');
+
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');
     Route::get('/link', [LinkController::class, 'index'])->name('link');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

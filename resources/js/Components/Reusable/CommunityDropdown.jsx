@@ -1,3 +1,4 @@
+// CommunityDropdown.jsx
 import React, { useState } from 'react';
 import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png';
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png';
@@ -77,7 +78,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
             >
               &times;
             </button>
-            <CreateCommunity />
+            <CreateCommunity onCancel={toggleCreateCommunity} />
           </div>
         </div>
       )}
