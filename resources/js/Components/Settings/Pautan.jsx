@@ -224,7 +224,7 @@ const Pautan = () => {
                           <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
                             <div className="flex items-center justify-center">
                               <button className="text-blue-500" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
-                                <img src="assets/editIcon.svg" alt="Edit" />
+                                <img src="assets/EditIcon.svg" alt="Edit" />
                               </button>
                             </div>
                           </td>
