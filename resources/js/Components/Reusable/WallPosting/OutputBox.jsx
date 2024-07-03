@@ -240,12 +240,6 @@ useEffect(() => {
             {post.tag}
             </p>
 
-            <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-            <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-            <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-            <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-            </div>
-
             <div className="grid grid-cols-3 gap-2 mt-2">
                 {post.attachments.map((attachment, index) => (
                     <div key={index} className="attachment">
@@ -259,6 +253,13 @@ useEffect(() => {
                     </div>
                 ))}
             </div>
+
+            <div className="flex justify-start gap-2 w-5 h-5 mt-2">
+                <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
+                <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
+                <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
+            </div>
+
         </article>
         </div>
     ))}
