@@ -24,7 +24,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription }
     setTextContent(newDescription);
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/department/departments/${departmentID}`, {
+      const response = await fetch(`/api/department/departments/${departmentID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
