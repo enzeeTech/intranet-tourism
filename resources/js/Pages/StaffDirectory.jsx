@@ -25,95 +25,115 @@ const StaffDirectory = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  // Getting departments from api
-    const fetchDepartments = async (url) => {
-        try {
-            const response = await fetch(url, {
-            method: "GET",
-            headers: { Accept: 'application/json' }
-            });
-            if (!response.ok) {
-            throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            const departmentData = data.data.data.map((department) => ({
-            id: department.id,
-            name: department.name
-            }));
-
-            // Combine with previous departments and sort alphabetically
-            setDepartments((prevDepartments) => {
-            const allDepartments = [...prevDepartments, ...departmentData];
-            return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
-            });
-
-            if (data.data.next_page_url) {
-            fetchDepartments(data.data.next_page_url);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-  // Fetch employment posts and user data
-  const fetchStaffMembers = async (departmentId) => {
-    setIsLoading(true); // Start loading
-    try {
-      const response = await fetch(`/api/department/employment_posts?filter[0][where][0]=department_id&filter[0][where][1]=${departmentId}`, {
-        method: "GET",
-        headers: { Accept: 'application/json' }
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      const employmentPosts = data.data.data;
-
-      const userPromises = employmentPosts.map(post =>
-        fetch(`/api/crud/users/${post.user_id}`, {
+  // Getting departments from API
+const fetchDepartments = async (url) => {
+  try {
+      const response = await fetch(url, {
           method: "GET",
           headers: { Accept: 'application/json' }
-        }).then(response => {
+      });
+      if (!response.ok) {
+          throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      const departmentData = data.data.data.map((department) => ({
+          id: department.id,
+          name: department.name
+      }));
+
+      // Combine with previous departments and sort alphabetically
+      setDepartments((prevDepartments) => {
+          const allDepartments = [...prevDepartments, ...departmentData];
+          return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+      });
+
+      if (data.data.next_page_url) {
+          fetchDepartments(data.data.next_page_url);
+      }
+  } catch (error) {
+      console.error("Error:", error);
+  }
+};
+
+// Fetch employment posts and user data
+const fetchStaffMembers = async (departmentId) => {
+  setIsLoading(true); // Start loading
+  let allEmploymentPosts = [];
+  let currentPage = 1;
+  let lastPage = 1;
+
+  try {
+      // Loop through all pages to fetch employment posts
+      while (currentPage <= lastPage) {
+          const response = await fetch(`/api/department/employment_posts?filter[0][where][0]=department_id&filter[0][where][1]=${departmentId}&page=${currentPage}`, {
+              method: "GET",
+              headers: { Accept: 'application/json' }
+          });
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+              throw new Error("Network response was not ok");
           }
-          return response.json();
-        }).then(userData => {
-          console.log('User Data for user_id', post.user_id, ':', userData);
-          return { userData, title: post.title };
-        })
+          const data = await response.json();
+          allEmploymentPosts = allEmploymentPosts.concat(data.data.data);
+          lastPage = data.data.last_page;
+          currentPage++;
+      }
+
+      // Create an array of promises for fetching user data
+      const userPromises = allEmploymentPosts.map(post =>
+          fetch(`/api/crud/users/${post.user_id}`, {
+              method: "GET",
+              headers: { Accept: 'application/json' }
+          }).then(response => {
+              if (!response.ok) {
+                  throw new Error("Network response was not ok");
+              }
+              return response.json();
+          }).then(userData => {
+              return { userData, title: post.title };
+          }).catch(error => {
+              console.error("Error fetching user data:", error);
+              return null; 
+          })
       );
 
-      const users = await Promise.all(userPromises);
+      // Wait for all user data promises to settle
+      const users = await Promise.allSettled(userPromises);
 
-      const members = users.map(({ userData, title }) => ({
-        id: userData.data.id,
-        name: userData.data.name,
-        role: title,
-        status: 'Online',
-        imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
-        phoneNo: ' ',
-        isDeactivated: false
-      }));
+      // Filter out the successful promises
+      const members = users
+          .filter(result => result.status === 'fulfilled' && result.value !== null)
+          .map(({ value }) => {
+              const { userData, title } = value;
+              return {
+                  id: userData.data.id,
+                  name: userData.data.name,
+                  role: title,
+                  status: 'Online',
+                  imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
+                  phoneNo: ' ',
+                  isDeactivated: false
+              };
+          });
 
       console.log('Members:', members);
 
       setStaffMembers(members);
-    } catch (error) {
+  } catch (error) {
       console.error("Error:", error);
-    }
-    setIsLoading(false); // End loading
-  };
+  }
+  setIsLoading(false); // End loading
+};
 
-  useEffect(() => {
-    fetchDepartments("/api/department/departments");
-  }, []);
+useEffect(() => {
+  fetchDepartments("/api/department/departments");
+}, []);
 
-  useEffect(() => {
-    if (selectedDepartmentId) {
+useEffect(() => {
+  if (selectedDepartmentId) {
       fetchStaffMembers(selectedDepartmentId);
-    }
-  }, [selectedDepartmentId]);
+  }
+}, [selectedDepartmentId]);
+
 
   // console.log(staffMembers);
 
