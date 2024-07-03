@@ -26,7 +26,7 @@ const FileTable = () => {
     useEffect(() => {
       const fetchFiles = async () => {
         try {
-          const response = await axios.get('http://127.0.0.1:8000/api/crud/resources');
+          const response = await axios.get('/api/crud/resources');
           const responseData = response.data;
 
           // Check if responseData.data.data is an array

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
-const API_URL = 'http://127.0.0.1:8000/api/settings/external_links';
-const urlTemplate = 'http://127.0.0.1:8000/api/settings/external_links/{id}';
+const API_URL = '/api/settings/external_links';
+const urlTemplate = '/api/settings/external_links/{id}';
 
 const Pautan = () => {
   const [apps, setApps] = useState([]);

@@ -11,13 +11,13 @@ import './css/StaffDirectory.css';
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllDepartments = async () => {
       setIsLoading(true); // Start loading
       let allDepartments = [];
-      let url = 'http://127.0.0.1:8000/api/crud/departments';
+      let url = '/api/crud/departments';
 
       try {
         while (url) {
