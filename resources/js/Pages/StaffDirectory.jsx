@@ -25,7 +25,7 @@ const StaffDirectory = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  // Getting departments from API
+// Getting departments from API
 const fetchDepartments = async (url) => {
   try {
       const response = await fetch(url, {
@@ -110,7 +110,7 @@ const fetchStaffMembers = async (departmentId) => {
                   role: title,
                   status: 'Online',
                   imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
-                  phoneNo: ' ',
+                  phoneNo: userData.data.phone_no,
                   isDeactivated: false
               };
           });
@@ -133,169 +133,6 @@ useEffect(() => {
       fetchStaffMembers(selectedDepartmentId);
   }
 }, [selectedDepartmentId]);
-
-
-  // console.log(staffMembers);
-
-  // Dummy departments
-  // const departments = [
-  //   'Some Department 1',
-  //   'Some Department 2',
-  //   'Some Department 3',
-  //   'Some Department 4',
-  //   'Some Department 5',
-  //   'Some Department 6',
-  //   'Some Department 7',
-  // ];
-
-  // Dummy staff members
-  // const [staffMembers, setStaffMembers] = useState([
-  //   {
-  //     id: 1,
-  //     name: 'Mr Asyraf Jalil',
-  //     role: 'Design and Development Lead',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage1.jpg',
-  //     phoneNo: '+60175165175',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage2.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage3.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage4.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage5.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 6,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage6.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 7,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage7.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 8,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage8.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 9,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyStaffImage.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 10,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage2.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 11,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage3.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 12,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage4.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 13,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage5.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 14,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage6.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 15,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage7.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 16,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage8.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-
-  // ]);
 
   const handleOutsideClick = (event) => {
     if (activePopupRef && !activePopupRef.contains(event.target)) {

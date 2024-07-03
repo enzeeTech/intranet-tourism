@@ -4,7 +4,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 // import SearchMembers from '../Components/Reusable/CommunitySearch';
-import SearchMembers from '../Components/Reusable/DepartmentSearch'
+// import SearchMembers from '../Components/Reusable/DepartmentSearch'
 import Adminsection from '../Components/Adminwall';
 import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
 import StaffMemberCard from '../Components/Reusable/CommunityCard';
@@ -146,7 +146,7 @@ const StaffDirectory = () => {
             </div>
             </main>
 
-            {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            {/* <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
                 <div className="file-directory-header">
                     <PageTitle title="My Profile" />
                 </div>
@@ -157,7 +157,7 @@ const StaffDirectory = () => {
                     <WhosOnline className='mb-4'/>
                 </div>
             </aside> */}
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
                 <style>
                     {`
                     aside::-webkit-scrollbar {

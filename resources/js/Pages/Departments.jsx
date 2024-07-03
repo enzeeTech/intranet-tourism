@@ -49,13 +49,13 @@ const StaffDirectory = () => {
 
   return (
     <Example>
-      <main className="xl:pl-96 w-full">
+      <main className="w-full xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar />
-          {/* <button className="w-36 mr-4">
+          {/* <button className="mr-4 w-36">
           <img src={visitDepartment} alt="Visit Department" />
         </button> */}
-          <div className="staff-member-grid-container">
+          <div className="staff-member-grid-container max-w-[1230px]">
             {departmentsList.length > 0 ? (
               departmentsList.map((department) => (
                 <DepartmentsCard
@@ -72,7 +72,7 @@ const StaffDirectory = () => {
           </div>
         </div>
       </main>
-      <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+      <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
         <style>
           {`
           aside::-webkit-scrollbar {

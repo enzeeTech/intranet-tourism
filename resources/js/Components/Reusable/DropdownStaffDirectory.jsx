@@ -49,9 +49,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
         </ul>
       )}
       {selectedDepartment.id && (
-        <button className="visit-department-btn">
-          <img src={visitDepartment} alt="Visit Department" />
-        </button>
+        <a href="/departmentInner">
+          <button className="visit-department-btn">
+            <img src={visitDepartment} alt="Visit Department" />
+          </button>
+        </a>
       )}
       {/* <button className="add-person-btn">
           <img src={addPersonButton} alt="Add Person" />
