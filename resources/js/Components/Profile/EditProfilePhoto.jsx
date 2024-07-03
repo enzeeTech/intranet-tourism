@@ -81,7 +81,7 @@ function EditProfilePhoto({ onClose }) {
   ];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={onClose}>
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
         <section className="flex flex-col py-2.5 bg-white rounded-2xl shadow-custom w-[330px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
