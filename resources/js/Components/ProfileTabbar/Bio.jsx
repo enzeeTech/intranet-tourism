@@ -1,6 +1,6 @@
     import React from 'react';
 
-    function ProfileBio({ photo, username, email, department, unit, jobtitle, position, grade, location, phone, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
+    function ProfileBio({ photo, username, email, department, unit, jobtitle, position, grade, location, phone, dateofbirth, whatsapp, isEditing, onFormDataChange, onPhotoChange }) {
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             onFormDataChange((prevData) => ({
@@ -69,6 +69,7 @@
                                     { label: 'grade', name: 'grade', value: grade, type: 'text' },
                                     { label: 'location', name: 'location', value: location, type: 'text' },
                                     { label: 'office number', name: 'phone', value: phone, type: 'text' },
+                                    { label: 'date of birth', name: 'date of birth', value: dateofbirth, type: 'date' },
                                     { label: 'whatsapp number', name: 'whatsapp', value: whatsapp, type: 'text' },
                                 ].map(({ label, name, value, type, editable = true }) => (
                                     <tr key={name}>

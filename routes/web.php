@@ -52,7 +52,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
     Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
+    Route::get('/departmentInner', [departments::class, 'renderinner'])->name('DepartmentInner');
+
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');

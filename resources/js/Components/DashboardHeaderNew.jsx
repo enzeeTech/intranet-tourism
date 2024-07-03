@@ -69,11 +69,11 @@ export default function Header({ setSidebarOpen }) {
             })
             //-----------------------------//
             .then(({ data }) => {
-                const firstName = data.name.split(' ')[0];
+                // const firstName = data.name.split(' ')[0];
                 setUserData(pv => ({
                     ...pv, ...data,
-                    name: firstName,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${firstName}&rounded=true`
+                    name: data.name,
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
                 }));
             })
             .catch((error) => {

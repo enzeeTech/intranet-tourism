@@ -1,201 +1,95 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
-import Birthdaypopup from '../Components/Reusable/Birthdayfunction/birthdayalert';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-// import SearchMembers from '../Components/Reusable/CommunitySearch';
-import SearchMembers from '../Components/Reusable/DepartmentSearch'
-import Adminsection from '../Components/Adminwall';
-import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
-import StaffMemberCard from '../Components/Reusable/CommunityCard';
-import DeactivateModal from '../Components/Reusable/DeactivateModal';
-// import { ShareYourThoughtsDepart } from '@/Components/Reusable/WallPosting';
-
-
-import './css/StaffDirectory.css';
+import DepartmentSearchBar from '../Components/Reusable/Departments/DepartmentSearch';
+import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard';
 import Example from '@/Layouts/DashboardLayoutNew';
-
+//import '../../../public/assets/dummyImage2.png';
+import './css/StaffDirectory.css';
 
 const StaffDirectory = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+  const [departmentsList, setDepartmentsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  // Dummy departments
-  const departments = [
-    'All',
-    'Public',
-    'Private',
-  ];
+  useEffect(() => {
+    const fetchAllDepartments = async () => {
+      setIsLoading(true); // Start loading
+      let allDepartments = [];
+      let url = 'http://127.0.0.1:8000/api/crud/departments';
 
-  // Dummy staff members
-  const staffMembers = [
-    {
-      id: 1,
-      name: 'Puspanita LPPM',
-      role: 'Followed By:',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 2,
-      name: 'Kelab Rekreasi LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 3,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 4,
-      name: 'Kesatuan',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 5,
-      name: 'Jomla V3 Feedback',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 6,
-      name: 'BTM Feedback',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 7,
-      name: 'Urus Tadbir Admin',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 8,
-      name: 'TBC',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 9,
-      name: 'Puspanita LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 10,
-      name: 'Kelab Rekreasi LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 11,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 12,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 13,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 14,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 15,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 16,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
+      try {
+        while (url) {
+          const response = await axios.get(url);
+          console.log('API Response:', response.data);
 
-  ];
+          if (response.data && Array.isArray(response.data.data.data)) {
+            const newDepartments = response.data.data.data;
+            allDepartments = [...allDepartments, ...newDepartments];
+            url = response.data.data.next_page_url;
+          } else {
+            console.error('Unexpected data format:', response.data);
+            break;
+          }
+        }
 
-  const handleSelectDepartment = (department) => {
-    setSelectedDepartment(department);
-  };
+        // Sort departments alphabetically by name
+        const sortedDepartments = allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+        setDepartmentsList(sortedDepartments);
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+        setDepartmentsList([]);
+      }
+    };
 
-  const openDeactivateModal = () => {
-    setIsDeactivateModalOpen(true);
-  };
-
-  const closeDeactivateModal = () => {
-    setIsDeactivateModalOpen(false);
-  };
+    fetchAllDepartments();
+    setIsLoading(false); // End loading
+  }, []);
 
   return (
     <Example>
-        <main className="xl:pl-96 w-[900px] m-ml-16 mr-24 relative">
-        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
-        <SearchMembers />
-            <DepartmentDropdown
-              departments={departments}
-              onSelectDepartment={handleSelectDepartment}
-            />
-            <Adminsection />
-
-            {/* <ShareYourThoughtsDepart/> */}
-
-            {selectedDepartment === 'All' && (
-              <div className="staff-member-grid-container">
-                {staffMembers.map((member) => (
-                    <StaffMemberCard
-                      key={member.id} {...member}
-                      onDeactivateClick={openDeactivateModal}
-                    />
-                  ))}
-              </div>
+      <main className="xl:pl-96 w-full">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+          <DepartmentSearchBar />
+          {/* <button className="w-36 mr-4">
+          <img src={visitDepartment} alt="Visit Department" />
+        </button> */}
+          <div className="staff-member-grid-container">
+            {departmentsList.length > 0 ? (
+              departmentsList.map((department) => (
+                <DepartmentsCard
+                  key={department.id}
+                  name={department.name}
+                  // imageUrl={department.banner || '../../../public/assets/dummyStaffImage.png'} // Default image
+                  imageUrl={'assets/departmentsDefault.jpg'} // Default image
+                  // Add other props as needed
+                />
+              ))
+            ) : (
+              <div className="mt-20 ml-32 loading-spinner"></div>
             )}
-            </div>
-            </main>
-
-            {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-                <div className="file-directory-header">
-                    <PageTitle title="My Profile" />
-                </div>
-                <hr className="file-directory-underline" />
-                <div >
-                    <FeaturedEvents />
-                    <Birthdaypopup className='mb-4'/><br></br>
-                    <WhosOnline className='mb-4'/>
-                </div>
-            </aside> */}
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-                <style>
-                    {`
-                    aside::-webkit-scrollbar {
-                        width: 0px;
-                        background: transparent;
-                    }
-                    `}
-                </style>
-                <div className="file-directory-header">
-                <PageTitle title="Department" />
-                </div>
-                <hr className="file-directory-underline" />
-
-                <div>
-                    <FeaturedEvents />
-                    <WhosOnline />
-                </div>
-            </aside>
+          </div>
+        </div>
+      </main>
+      <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        <style>
+          {`
+          aside::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+          }
+          `}
+        </style>
+        <div className="file-directory-header">
+          <PageTitle title="Departments" />
+        </div>
+        <hr className="file-directory-underline" />
+        <div>
+          <FeaturedEvents />
+          <WhosOnline />
+        </div>
+      </aside>
     </Example>
   );
 };

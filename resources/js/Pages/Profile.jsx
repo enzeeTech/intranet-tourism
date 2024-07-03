@@ -8,6 +8,7 @@ import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+import '../Components/Profile/profile.css';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -39,6 +40,7 @@ export default function Profile() {
         grade: "",
         location: "",
         phone: "",
+        dateofbirth: "",
         whatsapp: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
@@ -69,24 +71,26 @@ export default function Profile() {
                 return response.json();
             })
             .then(({ data }) => {
+                console.log('data', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`
                 }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
-                    username: data.username ?? 'Please set', // maybe in diff attr
+                    username: data.username,
                     email: data.email,
-                    department: data.department ?? 'Please set', // maybe in diff attr
-                    unit: data.unit ?? 'Please set', // maybe in diff attr
-                    jobtitle: data.jobtitile ?? 'Please set', // maybe in diff attr
-                    position: data.position ?? 'Please set', // maybe in diff attr
-                    grade: data.grade ?? 'Please set', // maybe in diff attr
-                    location: data.location ?? 'Please set', // maybe in diff attr
-                    phone: data.profile && data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp ?? 'Please set', // maybe in diff attr
+                    department: data.employmentPost?.department?.name || "",
+                    unit: data.unit,
+                    jobtitle: data.employmentPost?.job_title || "",
+                    position: data.employmentPost?.position || "",
+                    grade: data.grade,
+                    location: data.location,
+                    dateofbirth: data.date_of_birth,
+                    phone: data.profile?.phone_no || "",
+                    whatsapp: data.whatsapp,
                 }));
             })
             .catch((error) => {
@@ -151,6 +155,7 @@ export default function Profile() {
                                 name={profileData.name}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
+                                rounded={true}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "bio" && (
@@ -159,7 +164,7 @@ export default function Profile() {
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                             <ProfileBio
                                                 name={formData.name} // Add name field
-                                                photo={photo}
+                                                photo={profileData.profileImage}
                                                 username={formData.username}
                                                 email={formData.email}
                                                 department={formData.department}
@@ -169,6 +174,7 @@ export default function Profile() {
                                                 grade={formData.grade}
                                                 location={formData.location}
                                                 phone={formData.phone}
+                                                dateofbirth={formData.dateofbirth}
                                                 whatsapp={formData.whatsapp}
                                                 isEditing={isEditing}
                                                 onFormDataChange={handleFormDataChange}
@@ -208,7 +214,19 @@ export default function Profile() {
                     </div>
                 </div>
             </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
+                <style>
+                {`
+                    aside::-webkit-scrollbar {
+                    width: 0px !important;
+                    background: transparent !important;
+                    }
+                    aside {
+                    scrollbar-width: none !important; /* For Firefox */
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    }
+                `}
+                </style>
                 <div className="file-directory-header">
                     <PageTitle title="My Profile" />
                 </div>
