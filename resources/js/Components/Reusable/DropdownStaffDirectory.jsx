@@ -6,7 +6,7 @@ import visitDepartment from '../../../../public/assets/visitDepartmentButton.png
 import threeDotButton from '../../../../public/assets/threeDotButton.png';
 import './css/DropdownStaffDirectory.css';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
@@ -49,9 +49,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
         </ul>
       )}
       {selectedDepartment.id && (
-        <button className="visit-department-btn">
-          <img src={visitDepartment} alt="Visit Department" />
-        </button>
+        <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
+          <button className="visit-department-btn">
+            <img src={visitDepartment} alt="Visit Department" />
+          </button>
+        </a>
       )}
       {/* <button className="add-person-btn">
           <img src={addPersonButton} alt="Add Person" />

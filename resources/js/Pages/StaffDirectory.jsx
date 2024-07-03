@@ -25,257 +25,116 @@ const StaffDirectory = () => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  // Getting departments from api
-    const fetchDepartments = async (url) => {
-        try {
-            const response = await fetch(url, {
-            method: "GET",
-            headers: { Accept: 'application/json' }
-            });
-            if (!response.ok) {
-            throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            const departmentData = data.data.data.map((department) => ({
-            id: department.id,
-            name: department.name
-            }));
-
-            // Combine with previous departments and sort alphabetically
-            setDepartments((prevDepartments) => {
-            const allDepartments = [...prevDepartments, ...departmentData];
-            return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
-            });
-
-            if (data.data.next_page_url) {
-            fetchDepartments(data.data.next_page_url);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-  // Fetch employment posts and user data
-  const fetchStaffMembers = async (departmentId) => {
-    setIsLoading(true); // Start loading
-    try {
-      const response = await fetch(`/api/department/employment_posts?filter[0][where][0]=department_id&filter[0][where][1]=${departmentId}`, {
-        method: "GET",
-        headers: { Accept: 'application/json' }
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      const employmentPosts = data.data.data;
-
-      const userPromises = employmentPosts.map(post =>
-        fetch(`/api/crud/users/${post.user_id}`, {
+// Getting departments from API
+const fetchDepartments = async (url) => {
+  try {
+      const response = await fetch(url, {
           method: "GET",
           headers: { Accept: 'application/json' }
-        }).then(response => {
+      });
+      if (!response.ok) {
+          throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      const departmentData = data.data.data.map((department) => ({
+          id: department.id,
+          name: department.name
+      }));
+
+      // Combine with previous departments and sort alphabetically
+      setDepartments((prevDepartments) => {
+          const allDepartments = [...prevDepartments, ...departmentData];
+          return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+      });
+
+      if (data.data.next_page_url) {
+          fetchDepartments(data.data.next_page_url);
+      }
+  } catch (error) {
+      console.error("Error:", error);
+  }
+};
+
+// Fetch employment posts and user data
+const fetchStaffMembers = async (departmentId) => {
+  setIsLoading(true); // Start loading
+  let allEmploymentPosts = [];
+  let currentPage = 1;
+  let lastPage = 1;
+
+  try {
+      // Loop through all pages to fetch employment posts
+      while (currentPage <= lastPage) {
+          const response = await fetch(`/api/department/employment_posts?filter[0][where][0]=department_id&filter[0][where][1]=${departmentId}&page=${currentPage}`, {
+              method: "GET",
+              headers: { Accept: 'application/json' }
+          });
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+              throw new Error("Network response was not ok");
           }
-          return response.json();
-        }).then(userData => {
-          console.log('User Data for user_id', post.user_id, ':', userData);
-          return { userData, title: post.title };
-        })
+          const data = await response.json();
+          allEmploymentPosts = allEmploymentPosts.concat(data.data.data);
+          lastPage = data.data.last_page;
+          currentPage++;
+      }
+
+      // Create an array of promises for fetching user data
+      const userPromises = allEmploymentPosts.map(post =>
+          fetch(`/api/crud/users/${post.user_id}?with[]=profile`, {
+              method: "GET",
+              headers: { Accept: 'application/json' }
+          }).then(response => {
+              if (!response.ok) {
+                  throw new Error("Network response was not ok");
+              }
+              return response.json();
+          }).then(userData => {
+              return { userData, title: post.title };
+          }).catch(error => {
+              console.error("Error fetching user data:", error);
+              return null; 
+          })
       );
 
-      const users = await Promise.all(userPromises);
+      console.log('User Promises:', userPromises);
 
-      const members = users.map(({ userData, title }) => ({
-        id: userData.data.id,
-        name: userData.data.name,
-        role: title,
-        status: 'Online',
-        imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
-        phoneNo: ' ',
-        isDeactivated: false
-      }));
+      // Wait for all user data promises to settle
+      const users = await Promise.allSettled(userPromises);
+
+      // Filter out the successful promises
+      const members = users
+          .filter(result => result.status === 'fulfilled' && result.value !== null)
+          .map(({ value }) => {
+              const { userData, title } = value;
+              return {
+                  id: userData.data.id,
+                  name: userData.data.name,
+                  role: title,
+                  status: 'Online',
+                  imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
+                  phoneNo: userData.data.profile.phone_no,
+                  isDeactivated: false
+              };
+          });
 
       console.log('Members:', members);
 
       setStaffMembers(members);
-    } catch (error) {
+  } catch (error) {
       console.error("Error:", error);
-    }
-    setIsLoading(false); // End loading
-  };
+  }
+  setIsLoading(false); // End loading
+};
 
-  useEffect(() => {
-    fetchDepartments("/api/department/departments");
-  }, []);
+useEffect(() => {
+  fetchDepartments("/api/department/departments");
+}, []);
 
-  useEffect(() => {
-    if (selectedDepartmentId) {
+useEffect(() => {
+  if (selectedDepartmentId) {
       fetchStaffMembers(selectedDepartmentId);
-    }
-  }, [selectedDepartmentId]);
-
-  // console.log(staffMembers);
-
-  // Dummy departments
-  // const departments = [
-  //   'Some Department 1',
-  //   'Some Department 2',
-  //   'Some Department 3',
-  //   'Some Department 4',
-  //   'Some Department 5',
-  //   'Some Department 6',
-  //   'Some Department 7',
-  // ];
-
-  // Dummy staff members
-  // const [staffMembers, setStaffMembers] = useState([
-  //   {
-  //     id: 1,
-  //     name: 'Mr Asyraf Jalil',
-  //     role: 'Design and Development Lead',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage1.jpg',
-  //     phoneNo: '+60175165175',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage2.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage3.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage4.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage5.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 6,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage6.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 7,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage7.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 8,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage8.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 9,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyStaffImage.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 10,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage2.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 11,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage3.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 12,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage4.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 13,
-  //     name: 'Iskander Mirza',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage5.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 14,
-  //     name: 'Nor Rahimah Binti Ariffin',
-  //     role: 'Setiausaha Pejabat',
-  //     status: 'Offline',
-  //     imageUrl: '/assets/dummyImage6.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 15,
-  //     name: 'Eduzar Zar Bin Ayob Azari',
-  //     role: 'Timbalan Pengarah Kanan',
-  //     status: 'Away',
-  //     imageUrl: '/assets/dummyImage7.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-  //   {
-  //     id: 16,
-  //     name: 'Hishamuddin Mustafa',
-  //     role: 'Pengarah Kanan',
-  //     status: 'Online',
-  //     imageUrl: '/assets/dummyImage8.png',
-  //     phoneNo: '',
-  //     isDeactivated: false
-  //   },
-
-  // ]);
+  }
+}, [selectedDepartmentId]);
 
   const handleOutsideClick = (event) => {
     if (activePopupRef && !activePopupRef.contains(event.target)) {

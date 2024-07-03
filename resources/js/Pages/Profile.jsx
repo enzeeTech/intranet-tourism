@@ -61,7 +61,7 @@ export default function Profile() {
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
             method: "GET",
         })
             .then((response) => {
@@ -82,15 +82,15 @@ export default function Profile() {
                     name: data.name,
                     username: data.username,
                     email: data.email,
-                    department: data.employmentPost?.department?.name || "",
-                    unit: data.unit,
-                    jobtitle: data.employmentPost?.job_title || "",
-                    position: data.employmentPost?.position || "",
-                    grade: data.grade,
-                    location: data.location,
-                    dateofbirth: data.date_of_birth,
+                    department: data.employment_post?.department?.name || "",
+                    unit: data.employment_post?.business_unit?.name || "N/A",
+                    jobtitle: data.employment_post?.title || "",
+                    position: data.employment_post?.business_post?.title || "",
+                    grade: data.employment_post?.schema_grade || "",
+                    location: data.employment_post?.location || "",
+                    dateofbirth: data.profile?.dob || "",
                     phone: data.profile?.phone_no || "",
-                    whatsapp: data.whatsapp,
+                    whatsapp: data.profile?.office_no || "N/A",
                 }));
             })
             .catch((error) => {
@@ -214,7 +214,7 @@ export default function Profile() {
                     </div>
                 </div>
             </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
                 <style>
                 {`
                     aside::-webkit-scrollbar {

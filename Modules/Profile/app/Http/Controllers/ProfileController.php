@@ -9,12 +9,37 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Modules\Profile\Http\Requests\ProfileUpdateRequest;
+use Modules\Profile\Models\Profile;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
+
+
+    public function index()
+    {
+        return response()->json([
+            'data' => Profile::queryable()->paginate(),
+        ]);
+    }
+
+    public function show($id)
+    {
+        return response()->json([
+            'data' => Profile::where('id', $id)->queryable()->firstOrFail(),
+        ]);
+    }
+
+    public function store()
+    {
+        $validated = request()->validate(...Profile::rules());
+        Profile::create($validated);
+
+        return response()->noContent();
+    }
+
     public function edit(Request $request): View
     {
         return view('profile::edit', [

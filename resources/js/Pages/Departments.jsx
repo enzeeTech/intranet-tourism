@@ -3,60 +3,77 @@ import axios from 'axios';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import SearchBar from '../Components/Reusable/DepartmentSearch';
+import DepartmentSearchBar from '../Components/Reusable/Departments/DepartmentSearch';
 import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard';
 import Example from '@/Layouts/DashboardLayoutNew';
+//import '../../../public/assets/dummyImage2.png';
 import './css/StaffDirectory.css';
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); 
 
   useEffect(() => {
-    const fetchDepartments = async () => {
-      const url = 'http://127.0.0.1:8000/api/crud/departments';
+    const fetchAllDepartments = async () => {
+      setIsLoading(true); // Start loading
+      let allDepartments = [];
+      let url = 'http://127.0.0.1:8000/api/crud/departments';
 
       try {
-        const response = await axios.get(url);
-        console.log('API Response:', response.data);
+        while (url) {
+          const response = await axios.get(url);
+          console.log('API Response:', response.data);
 
-        // Check if response.data.data is an array
-        if (response.data && Array.isArray(response.data.data.data)) {
-          setDepartmentsList(response.data.data.data);
-        } else {
-          console.error('Unexpected data format:', response.data);
-          setDepartmentsList([]);
+          if (response.data && Array.isArray(response.data.data.data)) {
+            const newDepartments = response.data.data.data;
+            allDepartments = [...allDepartments, ...newDepartments];
+            url = response.data.data.next_page_url;
+          } else {
+            console.error('Unexpected data format:', response.data);
+            break;
+          }
         }
+
+        // Sort departments alphabetically by name
+        const sortedDepartments = allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+        setDepartmentsList(sortedDepartments);
       } catch (error) {
         console.error('Error fetching departments:', error);
         setDepartmentsList([]);
       }
     };
 
-    fetchDepartments();
+    fetchAllDepartments();
+    setIsLoading(false); // End loading
   }, []);
 
   return (
     <Example>
-      <main className="xl:pl-96 w-full">
+      <main className="w-full xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-          <SearchBar />
-          <div className="staff-member-grid-container">
+          <DepartmentSearchBar />
+          {/* <button className="mr-4 w-36">
+          <img src={visitDepartment} alt="Visit Department" />
+        </button> */}
+          <div className="staff-member-grid-container max-w-[1230px]">
             {departmentsList.length > 0 ? (
               departmentsList.map((department) => (
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={department.banner || '../../../public/assets/dummyStaffImage.png'} // Default image
+                  // imageUrl={department.banner || '../../../public/assets/dummyStaffImage.png'} // Default image
+                  imageUrl={'assets/departmentsDefault.jpg'} // Default image
+                  departmentID={department.id}
                   // Add other props as needed
                 />
               ))
             ) : (
-              <p>No departments available.</p>
+              <div className="mt-20 ml-32 loading-spinner"></div>
             )}
           </div>
         </div>
       </main>
-      <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+      <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
         <style>
           {`
           aside::-webkit-scrollbar {
@@ -66,7 +83,7 @@ const StaffDirectory = () => {
           `}
         </style>
         <div className="file-directory-header">
-          <PageTitle title="Community" />
+          <PageTitle title="Departments" />
         </div>
         <hr className="file-directory-underline" />
         <div>

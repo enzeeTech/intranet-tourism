@@ -1,116 +1,301 @@
 .staff-member-card {
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 189px;
-    width: 178px;
-  }
-  
-  .card-header {
-    position: relative;
-  }
-  
-  .staff-member-image {
-    width: 100%;
-    height: 120px;
-    object-fit: contain; 
-  }
-  
-  .three-dot-button {
-    position: absolute;
-    top: 0px;
-    right: -4px;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .card-body {
-    padding: 5px;
-    height: 59px;
-    text-align: center;
-  }
-  
-  .staff-member-name {
-    font-size: 12px;
-    font-weight: bold;
-  }
-  
-  .staff-member-role {
-    color: #202224;
-    font-size: 10px;
-  }
-  
-  .staff-member-status {
-    font-size: 8px;
-  }
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 189px;
+  width: 178px;
+}
 
-  /* Color for Online Status */
-  .staff-member-status.online {
-    color: #009D06;
-  }
-  
-  /* Color for Offline Status */
-  .staff-member-status.offline {
-    color: #202224;
-  }
-  
-  /* Color for Away Status */
-  .staff-member-status.away {
-    color: #960A0A;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-around;
-    height: 40px;
-    width: 178px;
-  }
-  
-  .call-button{
-    cursor: pointer;
-    background: none;
+.card-header {
+  position: relative;
+}
 
-    height: 40px;
-  }
-  .whatsapp-button {
-    cursor: pointer;
-    background: none;
-    height: 40px;
-  }
+.staff-member-image {
+  width: 100%;
+  height: 95px;
+  object-fit: cover;
+}
 
-  /* Popup Modal */
-  .staff-member-popup {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    height: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    position: absolute;
-    z-index: 1000;
-    width: 150px; 
-    transform: translateX(-50%); 
-    border-radius: 16px; 
-    margin-top: 8px; 
-    font-weight: bolder;
-  }
+.three-dot-button {
+  position: absolute;
+  top: 0px;
+  right: -4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
-  .staff-member-popup-image {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
-    margin-right: 12px;
-  }
+.card-body {
+  padding: 5px;
+  height: 59px;
+  text-align: center;
+}
 
-  .staff-member-popup-name {
-    font-size: 12px;
-    font-weight: bold;
-  }
-  
-  
+.staff-member-name {
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'Nunito Sans';
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.staff-member-role {
+  color: #202224;
+  font-size: 10px;
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-status {
+  font-size: 8px;
+  font-family: 'Nunito Sans';
+}
+
+/* Color for Online Status */
+.staff-member-status.online {
+  color: #009D06;
+}
+
+/* Color for Offline Status */
+.staff-member-status.offline {
+  color: #202224;
+}
+
+/* Color for Away Status */
+.staff-member-status.away {
+  color: #960A0A;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-around;
+  height: 20px;
+  width: 178px;
+}
+
+.call-button {
+  cursor: pointer;
+  background: none;
+  height: 40px;
+}
+
+.whatsapp-button {
+  cursor: pointer;
+  background: none;
+  height: 40px;
+}
+
+/* Popup Modal */
+.staff-member-popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  height: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 150px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 8px;
+  font-weight: bolder;
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-popup2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 180px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 8px;
+  font-weight: normal;
+  border-radius: 0px 0px 0px 0px;
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-popup3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 180px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 8px;
+  font-weight: normal;
+  border-radius: 0px 0px 5px 5px;
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-popup4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 180px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 8px;
+  font-weight: normal;
+  border-radius: 5px 5px 0px 0px;
+  font-family: 'Nunito Sans';
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-popup5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 180px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 8px;
+  font-weight: normal;
+  border-radius: 0px 0px 0px 0px;
+  font-family: 'Nunito Sans';
+}
+
+.profile-files-popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  height: 166px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  z-index: 1000;
+  width: 180px;
+  transform: translateX(-50%);
+  border-radius: 16px;
+  margin-top: 10px;
+  margin-left: 130px;
+  font-weight: bold;
+  font-family: 'Nunito Sans';
+}
+
+.staff-member-popup-image {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  margin-right: 12px;
+}
+
+.staff-member-popup-name {
+  font-size: 12px;
+  font-weight: bold;
+  font-family: 'Nunito Sans';
+}
+
+.popup-backdrop {
+  position: fixed;
+  /* Cover the entire viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  /* Rounded edges */
+  text-align: center;
+  box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  font-family: 'Nunito Sans';
+  font-weight: 500;
+}
+
+.yes-button {
+  width: 30%;
+  height: 35px;
+  margin-right: 20px;
+  border-radius: 16.5px;
+  background-color: #4880FF;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  font-family: 'Nunito Sans';
+}
+
+.no-button {
+  width: 30%;
+  height: 35px;
+  border-radius: 16.5px;
+  border-width: 1px;
+  cursor: pointer;
+  background-color: transparent;
+  border-color: #BDBDBD;
+  color: #979797;
+  font-family: 'Nunito Sans';
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensure it's above other content */
+  backdrop-filter: blur(5px); /* Apply blur effect */
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* Ensure it's above the overlay */
+}
+
+.staff-member-card.deactivated {
+  opacity: 0.6;
+}
