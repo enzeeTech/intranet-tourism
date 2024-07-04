@@ -25,12 +25,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
     setIsOpen(false);
   };
 
-  // const toggleDropdown = () => {
-  //   setIsReportingPopupOpen(false);
-  //   setSearchTerm('');
-  //   setIsOpen(!isOpen);
-  // };
-
   const toggleDropdown = () => {
     setIsReportingPopupOpen(false);
   
