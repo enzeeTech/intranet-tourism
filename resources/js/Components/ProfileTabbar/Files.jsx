@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import UserFilePopup from '../Reusable/UserFilePopup';
 
 const SearchInput = () => (
@@ -47,24 +47,29 @@ const Table = () => {
   useEffect(() => {
     const options = {
       method: 'GET',
-      url: '/api/crud/resources',
       headers: { Accept: 'application/json' }
     };
-
+  
     const fetchFiles = async () => {
       try {
-        const response = await axios.request(options);
-        const filesData = response.data.data.data; // Adjust this path based on the actual structure
+        const response = await fetch('/api/crud/resources', options);
+        if (!response.ok) {
+          throw new Error('Failed to fetch files');
+        }
+        const responseData = await response.json();
+        const filesData = responseData.data.data; // Adjust this path based on the actual structure
+  
         setFiles(filesData);
         setLoading(false);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching files:', error);
         setLoading(false);
       }
     };
-
+  
     fetchFiles();
   }, []);
+  
 
   if (loading) {
     return <div>Loading...</div>;

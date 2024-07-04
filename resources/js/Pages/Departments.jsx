@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
@@ -18,34 +18,40 @@ const StaffDirectory = () => {
       setIsLoading(true); // Start loading
       let allDepartments = [];
       let url = '/api/crud/departments';
-
+  
       try {
         while (url) {
-          const response = await axios.get(url);
-          console.log('API Response:', response.data);
-
-          if (response.data && Array.isArray(response.data.data.data)) {
-            const newDepartments = response.data.data.data;
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error('Failed to fetch departments');
+          }
+          const responseData = await response.json();
+          console.log('API Response:', responseData);
+  
+          if (responseData.data && Array.isArray(responseData.data.data)) {
+            const newDepartments = responseData.data.data;
             allDepartments = [...allDepartments, ...newDepartments];
-            url = response.data.data.next_page_url;
+            url = responseData.data.next_page_url;
           } else {
-            console.error('Unexpected data format:', response.data);
+            console.error('Unexpected data format:', responseData);
             break;
           }
         }
-
+  
         // Sort departments alphabetically by name
         const sortedDepartments = allDepartments.sort((a, b) => a.name.localeCompare(b.name));
         setDepartmentsList(sortedDepartments);
       } catch (error) {
         console.error('Error fetching departments:', error);
         setDepartmentsList([]);
+      } finally {
+        setIsLoading(false); // End loading
       }
     };
-
+  
     fetchAllDepartments();
-    setIsLoading(false); // End loading
   }, []);
+  
 
   return (
     <Example>
