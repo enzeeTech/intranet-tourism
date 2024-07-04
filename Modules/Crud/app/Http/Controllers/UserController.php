@@ -16,7 +16,7 @@ class UserController extends Controller
         } else {
             $data = $modelBuilder->paginate();
         }
-        return response()->json([ 'data' => $data ]);
+        return response()->json(['data' => $data]);
     }
 
     public function show($id)
@@ -34,9 +34,16 @@ class UserController extends Controller
         return response()->noContent();
     }
 
+    // public function update(User $user)
+    // {
+    //     $validated = request()->validate(...User::rules('update'));
+    //     $user->update($validated);
+
+    //     return response()->noContent();
+    // }
     public function update(User $user)
     {
-        $validated = request()->validate(...User::rules('update'));
+        $validated = request()->validate(User::rules('update')[0]);
         $user->update($validated);
 
         return response()->noContent();
