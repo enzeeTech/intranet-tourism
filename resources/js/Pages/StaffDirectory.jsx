@@ -249,7 +249,7 @@ return (
     <div className="flex-row">
       <div className="flex ">
         <main className="w-full xl:pl-96">
-          <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+          <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-[1200px]">
             <SearchMembers {...{ handleStaffListButton, handleOrgChartButton, isStaffListActive, isOrgChartActive }} />
             <DepartmentDropdown
               departments={departments}

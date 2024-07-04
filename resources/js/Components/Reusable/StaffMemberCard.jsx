@@ -103,7 +103,7 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, isDeactivated,
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>
             <p style={{ fontSize: '25px' }}>Call is available only on mobile.
-              phone number: {phoneNo}
+              <br />Phone number: {phoneNo}
             </p>
           </div>
         </div>
