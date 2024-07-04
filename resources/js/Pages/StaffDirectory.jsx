@@ -113,7 +113,7 @@ const fetchStaffMembers = async (departmentId) => {
                   status: 'Online',
                   imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
                   phoneNo: userData.data.profile.phone_no,
-                  isDeactivated: false
+                  isDeactivated: userData.data.is_active
               };
           });
 
@@ -125,6 +125,8 @@ const fetchStaffMembers = async (departmentId) => {
   }
   setIsLoading(false); // End loading
 };
+
+console.log('Staff Members:', staffMembers);
 
 useEffect(() => {
   fetchDepartments("/api/department/departments");
@@ -179,18 +181,67 @@ useEffect(() => {
     setIsActivateModalOpen(true);
   };
 
-  const handleDeactivate = () => {
-    setStaffMembers(staffMembers.map(member =>
-      member.id === currentMemberId ? { ...member, isDeactivated: true } : member
-    ));
-    setIsDeactivateModalOpen(false);
+  // Utitlity function to make API call for deactivating a staff member
+  const updateIsActiveStatus = async (memberId, isActive) => {
+    const response = await fetch(`/api/crud/users/${memberId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ is_active: isActive }),
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to update the status');
+    }
+  
+    // Check if response body is not empty before parsing // DEBUGGING
+    const text = await response.text();
+    if (text) {
+      return JSON.parse(text);
+    }
+  
+    return {}; 
+  };
+  
+  // const handleDeactivate = () => {
+  //   setStaffMembers(staffMembers.map(member =>
+  //     member.id === currentMemberId ? { ...member, isDeactivated: true } : member
+  //   ));
+  //   setIsDeactivateModalOpen(false);
+  // };
+
+  // Handle deactivating a staff member
+  const handleDeactivate = async () => {
+    try {
+      await updateIsActiveStatus(currentMemberId, true);
+      setStaffMembers(staffMembers.map(member =>
+        member.id === currentMemberId ? { ...member, isDeactivated: true } : member
+      ));
+      setIsDeactivateModalOpen(false);
+    } catch (error) {
+      console.error('Error deactivating member:', error);
+    }
   };
 
-  const handleActivate = () => {
-    setStaffMembers(staffMembers.map(member =>
-      member.id === currentMemberId ? { ...member, isDeactivated: false } : member
-    ));
-    setIsActivateModalOpen(false);
+  // const handleActivate = () => {
+  //   setStaffMembers(staffMembers.map(member =>
+  //     member.id === currentMemberId ? { ...member, isDeactivated: false } : member
+  //   ));
+  //   setIsActivateModalOpen(false);
+  // };
+
+  // Handle activating a staff member
+  const handleActivate = async () => {
+    try {
+      await updateIsActiveStatus(currentMemberId, false);
+      setStaffMembers(staffMembers.map(member =>
+        member.id === currentMemberId ? { ...member, isDeactivated: false } : member
+      ));
+      setIsActivateModalOpen(false);
+    } catch (error) {
+      console.error('Error activating member:', error);
+    }
   };
 
 return (
