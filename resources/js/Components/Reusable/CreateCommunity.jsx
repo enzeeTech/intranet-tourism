@@ -1,6 +1,6 @@
 // CreateCommunity.jsx
 import React, { useState } from "react";
-import axios from 'axios';
+// import axios from 'axios';
 
 function Header({ title }) {
   return (
@@ -69,21 +69,28 @@ function Card({ title, imgSrc, imgAlt, user, type, description, addAdmin, invite
       created_by: user.name,
       updated_by: user.name,
     };
-
+  
     const options = {
       method: 'POST',
-      url: '/api/communities/communities',
-      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-      data: data
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
     };
-
+  
     try {
-      const response = await axios.request(options);
-      console.log(response.data);
+      const response = await fetch('/api/communities/communities', options);
+      if (!response.ok) {
+        throw new Error('Failed to create community');
+      }
+      const responseData = await response.json();
+      console.log(responseData);
     } catch (error) {
-      console.error(error);
+      console.error('Error creating community:', error);
     }
   };
+  
 
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">

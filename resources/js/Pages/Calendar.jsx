@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import axios from 'axios';
+// import axios from 'axios';
 import searchIcon from '../../../public/assets/search.png';
 import searchButton from '../../../public/assets/searchButton.png';
 import printIcon from '../../../public/assets/printButton.png';
@@ -26,7 +26,7 @@ function Calendar() {
     }, []);
 
     const fetchEvents = () => {
-        axios.get('/api/crud/events')
+      fetch('/api/crud/events')
             .then(response => {
                 console.log(response.data.data.data);
                 setEvents(response.data.data.data);
@@ -52,7 +52,7 @@ function Calendar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('/api/crud/events', eventData)
+        fetch('/api/crud/events', eventData)
             .then(response => {
                 setEvents([...events, eventData]);
                 closeModal();

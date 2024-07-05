@@ -5,16 +5,16 @@ import { createPortal } from 'react-dom';
 import classNames from 'classnames';
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", inactive: "assets/Dashboard Inactive.svg", active: "assets/Dashboard Active.svg" },
-  { name: "Staff Directory", href: '/staffDirectory', inactive: "assets/Staff Directory Inactive.svg", active: "assets/Staff Directory Active.svg" },
-  { name: "Calendar", href: '/calendar', inactive: "assets/Calendar Inactive.svg", active: "assets/Calendar Active.svg" },
-  { name: "Departments", href: '/departments', inactive: "assets/Group Department Inactive.svg", active: "assets/Group Department Active.svg" },
-  { name: "Community", href: '/community', inactive: "assets/Group Community Inactive.svg", active: "assets/Group Community Active.svg" },
-  { name: "File Management", href: '/fileManagement', inactive: "assets/File Management Inactive.svg", active: "assets/File Management Active.svg" },
-  { name: "Link", href: '/link', inactive: "assets/Link Inactive.svg", active: "assets/Link Active.svg" },
-  { name: "Settings", href: '/settings', inactive: "assets/Settings Inactive.svg", active: "assets/Settings Active.svg" },
-  { name: "Media", href: '/media', inactive: "assets/Media Inactive.svg", active: "assets/Media Active.svg" },
-  { name: "Logout", href: '/logout', inactive: "assets/Logout Inactive.svg", active: "assets/Logout Active.svg" }
+  { name: "Dashboard", href: "/dashboard", inactive: "/assets/Dashboard Inactive.svg", active: "/assets/Dashboard Active.svg" },
+  { name: "Staff Directory", href: '/staffDirectory', inactive: "/assets/Staff Directory Inactive.svg", active: "/assets/Staff Directory Active.svg" },
+  { name: "Calendar", href: '/calendar', inactive: "/assets/Calendar Inactive.svg", active: "/assets/Calendar Active.svg" },
+  { name: "Departments", href: '/departments', inactive: "/assets/Group Department Inactive.svg", active: "/assets/Group Department Active.svg" },
+  { name: "Community", href: '/community', inactive: "/assets/Group Community Inactive.svg", active: "/assets/Group Community Active.svg" },
+  { name: "File Management", href: '/fileManagement', inactive: "/assets/File Management Inactive.svg", active: "/assets/File Management Active.svg" },
+  { name: "Link", href: '/link', inactive: "/assets/Link Inactive.svg", active: "/assets/Link Active.svg" },
+  { name: "Settings", href: '/settings', inactive: "/assets/Settings Inactive.svg", active: "/assets/Settings Active.svg" },
+  { name: "Media", href: '/media', inactive: "/assets/Media Inactive.svg", active: "/assets/Media Active.svg" },
+  { name: "Logout", href: '/logout', inactive: "/assets/Logout Inactive.svg", active: "/assets/Logout Active.svg" }
 ];
 
 const Tooltip = ({ item, index, position }) => {

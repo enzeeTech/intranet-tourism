@@ -17,7 +17,7 @@ class ModelHasRoleController extends Controller
     public function show($id)
     {
         return response()->json([
-            'data' => ModelHasRole::where('id', $id)->queryable()->firstOrFail(),
+            'data' => ModelHasRole::where('model_id', $id)->queryable()->firstOrFail(),
         ]);
     }
 

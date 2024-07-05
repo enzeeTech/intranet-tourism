@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import {
   format,
   addMonths,
@@ -146,19 +146,24 @@ export default function AuditCalendar() {
   const [today, setToday] = useState(new Date());
   const calendarRef = useRef(null);
 
-  const fetchCurrentTime = async () => {
-    try {
-      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Asia/Kuala_Lumpur');
-      console.log('API response:', response.data); // Log the API response
-      const localDate = new Date(response.data.datetime);
-      setToday(localDate);
-      setCurrentMonth(localDate.getMonth());
-      setCurrentYear(localDate.getFullYear());
-      console.log('State updated:', localDate); // Log the updated date
-    } catch (error) {
-      console.error('Error fetching current time:', error);
+const fetchCurrentTime = async () => {
+  try {
+    const response = await fetch('https://cors-anywhere.herokuapp.com/http://worldtimeapi.org/api/timezone/Asia/Kuala_Lumpur');
+    if (!response.ok) {
+      throw new Error('Failed to fetch current time');
     }
-  };
+    const responseData = await response.json();
+    console.log('API response:', responseData); // Log the API response
+    const localDate = new Date(responseData.datetime);
+    setToday(localDate);
+    setCurrentMonth(localDate.getMonth());
+    setCurrentYear(localDate.getFullYear());
+    console.log('State updated:', localDate); // Log the updated date
+  } catch (error) {
+    console.error('Error fetching current time:', error);
+  }
+};
+
 
   useEffect(() => {
     fetchCurrentTime();

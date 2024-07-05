@@ -46,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/calendar/event', [CalendarController::class, 'handleDateSelect'])->name('calendar.event');
     Route::put('/calendar/event/{id}', [CalendarController::class, 'updateEvent'])->name('calendar.update');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    // Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/user/{id}', [ProfileController::class, 'show'])->name('UserDetail');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/ordering', [OrderingController::class, 'index'])->name('ordering');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
