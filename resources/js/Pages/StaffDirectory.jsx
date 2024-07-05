@@ -253,6 +253,7 @@ const StaffDirectory = () => {
                   {filteredStaffMembers.map((member) => (
                     <StaffMemberCard
                       key={member.id}
+                      id={member.id}
                       name={member.name}
                       role={member.role}
                       status={member.status}
