@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import searchIcon from '../../../../public/assets/searchStaffButton.png';
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
@@ -38,14 +38,14 @@ const SearchFile = ({ onSearch, requiredData }) => {
       console.log('No file selected.');
       return;
     }
-
+  
     if (!requiredData) {
       console.log('Required data is not available.');
       return;
     }
-
+  
     console.log('Uploading file:', file);
-
+  
     const formData = new FormData();
     formData.append('file', file);
     formData.append('user_id', requiredData.user_id);
@@ -57,26 +57,30 @@ const SearchFile = ({ onSearch, requiredData }) => {
     formData.append('mime_type', requiredData.mime_type);
     formData.append('filesize', requiredData.filesize);
     formData.append('metadata', requiredData.metadata);
-
+  
     console.log('FormData:', formData);
-
+  
     const options = {
       method: 'POST',
-      url: '/api/crud/resources',
       headers: {
         'Accept': 'application/json'
       },
-      data: formData
+      body: formData
     };
-
+  
     try {
-      const { data } = await axios.request(options);
-      console.log('File uploaded successfully:', data);
+      const response = await fetch('/api/crud/resources', options);
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+      const responseData = await response.json();
+      console.log('File uploaded successfully:', responseData);
       setShowPopup(false);
     } catch (error) {
       console.error('Error uploading file:', error);
     }
   };
+  
 
   const handleFileDelete = () => {
     setFile(null);

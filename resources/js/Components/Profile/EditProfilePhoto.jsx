@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import PhotoAndAvatarPopup from './PhotoAndAvatarPopup';
 import UpdatePhotoButton from './UpdatePhoto';
@@ -20,8 +19,7 @@ function ListItem({ icon, alt, text, onClick }) {
   );
 }
 
-
-function EditProfilePhoto({ onClose }) {
+function EditProfilePhoto({ onClose, onSelectFile }) {
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -35,24 +33,19 @@ function EditProfilePhoto({ onClose }) {
       if (file) {
         setSelectedFile(file);
         setShowUpdatePopup(true); // Set state to open the update popup
-        onClose(); // Close the modal after the file is selected
-      } else {
-        onClose(); // Optionally close the modal even if no file is selected
+        onSelectFile(file); // Pass the selected file to the parent component
       }
     };
     fileInput.click();
   };
 
-
   const handleClickAvt = () => {
     setShowPopup(true);
-    onClose(); // Close the modal immediately
   };
 
   useEffect(() => {
     console.log("showUpdatePopup changed to:", showUpdatePopup);
   }, [showUpdatePopup]);
-
 
   const handleAvatarClose = (e) => {
     e.stopPropagation();
@@ -98,10 +91,9 @@ function EditProfilePhoto({ onClose }) {
         </section>
       </div>
       {showPopup && <PhotoAndAvatarPopup onClose={handleCloseUpdatePopup} />}
-      {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} />}
+      {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={selectedFile} />}
     </div>
   );
 }
-
 
 export default EditProfilePhoto;

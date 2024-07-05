@@ -8,6 +8,7 @@ import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
+import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import '../Components/Profile/profile.css';
 
 function SaveNotification({ title, content, onClose }) {
@@ -25,6 +26,11 @@ function SaveNotification({ title, content, onClose }) {
 }
 
 export default function Profile() {
+    const [polls, setPolls] = useState([]);
+
+    const handleCreatePoll = (poll) => {
+      setPolls((prevPolls) => [...prevPolls, poll]);
+    };
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -48,8 +54,9 @@ export default function Profile() {
     const [isEditing, setIsEditing] = useState(false);
     const [profileData, setProfileData] = useState({
         backgroundImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?",
-        profileImage: "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?",
+        profileImage: "",
         name: "", // Initialize with empty string or placeholder
+        username: "",
         status: "Online",
         icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
@@ -74,23 +81,24 @@ export default function Profile() {
                 console.log('data', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`
+                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`,
+                    username: "@" + data.employment_post?.username,
                 }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
-                    username: data.username,
+                    username: data.employment_post?.username || "N/A",
                     email: data.email,
-                    department: data.employment_post?.department?.name || "",
+                    department: data.employment_post?.department?.name || "N/A",
                     unit: data.employment_post?.business_unit?.name || "N/A",
-                    jobtitle: data.employment_post?.title || "",
-                    position: data.employment_post?.business_post?.title || "",
-                    grade: data.employment_post?.schema_grade || "",
-                    location: data.employment_post?.location || "",
-                    dateofbirth: data.profile?.dob || "",
-                    phone: data.profile?.phone_no || "",
-                    whatsapp: data.profile?.office_no || "N/A",
+                    jobtitle: data.employment_post?.title || "N/A",
+                    position: data.employment_post?.business_post?.title || "N/A",
+                    grade: data.employment_post?.schema_grade || "N/A",
+                    location: data.employment_post?.location || "N/A",
+                    dateofbirth: data.profile?.dob || "N/A",
+                    phone: data.profile?.work_phone + " " + data.profile?.phone_no || "",
+                    whatsapp: data.profile?.phone_no || "N/A",
                 }));
             })
             .catch((error) => {
@@ -153,11 +161,20 @@ export default function Profile() {
                                 backgroundImage={profileData.backgroundImage}
                                 profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
                                 name={profileData.name}
+                                username={profileData.username}
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
                                 rounded={true}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                            {activeTab === "activities" && (
+                                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
+                                    <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
+                                    <Filter className="mr-10" />
+                                    <div className="mb-20"></div>
+                                    <OutputData polls={polls} showUserPosts={true} />
+                                </div>
+                            )}
                             {activeTab === "bio" && (
                                 <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                     <div className="flex-auto my-auto max-md:max-w-full">
