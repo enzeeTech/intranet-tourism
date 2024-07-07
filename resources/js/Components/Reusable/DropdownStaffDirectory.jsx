@@ -6,12 +6,14 @@ import threeDotButton from '../../../../public/assets/threeDotButton.png';
 import './css/DropdownStaffDirectory.css';
 import { set } from 'date-fns';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
+
+  console.log('staffMembers', staffMembers)
 
   const handleSelect = (department) => {
     setSelectedDepartment(department);
@@ -96,9 +98,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
           </button>
         </a>
       )}
+      {selectedDepartment.id && (
       <button className="hidden three-dot-btn sm:block" onClick={toggleReportingPopup}>
         <img src={threeDotButton} alt="More Options" />
       </button>
+      )}
       {isReportingPopupOpen && (
         <div
           className="staff-popup"
@@ -116,7 +120,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment }) => {
           </button>
           <hr className="popup-divider" />
           <a
-            href="/ordering"
+            href={`/ordering?staffMembers=${encodeURIComponent(JSON.stringify(staffMembers))}`}
             className="popup-button"
           >
             Ordering
