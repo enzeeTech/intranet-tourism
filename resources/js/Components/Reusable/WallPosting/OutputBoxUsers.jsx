@@ -86,7 +86,7 @@ function OutputDataUsers({ userId }) {
     if (allPosts.length > 0) {
       const filtered = allPosts.filter((post) => post.user_id === userId);
       console.log('Filtered Post', filtered);
-      setFilteredPosts(filtered);
+      setFilteredPosts(filtered.reverse());
     }
   }, [allPosts, userId]);
 
@@ -108,23 +108,7 @@ function OutputDataUsers({ userId }) {
   return (
     <>
       {filteredPosts.map((post, index) => (
-    //     <div key={post.id} className="">
-    //       <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
-    //         {/* <img loading="lazy" src={post.user.profileImage ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px]" /> */}
-    //         <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
-    //         <div className=" post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-    //           {post.content}
-    //         </div>
-    //         <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-    //           {/* Like, comment, share icons */}
-    //           <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-    //           <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-    //           <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-    //         </div>
-    //       </article>
-    //     </div>
-    //   ))}
-    <div key={post.id} className="">
+        <div key={post.id} className="">
           <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
             <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
             <div className="flex gap-1 mt-2">

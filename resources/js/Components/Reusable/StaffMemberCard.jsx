@@ -232,17 +232,21 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
       )}
       {isCallPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
-          <div className="popup" onClick={(e) => e.stopPropagation()}>
-            <p style={{ fontSize: '25px' }}>Call is available only on mobile.
-              <br />Phone number: {phoneNo}
+          <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
+            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
+            <p style={{ fontSize: '25px', marginTop: '15px', marginBottom: '5px' }}>
+              Call is available only on mobile.
+              <br />
+              Phone number: {phoneNo}
             </p>
           </div>
         </div>
       )}
       {isWhatsAppPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
-          <div className="popup" onClick={(e) => e.stopPropagation()}>
-            <p style={{ fontSize: '20px', marginBottom: '15px', fontWeight: 'bold' }}>Redirect to WhatsApp Web?</p>
+          <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
+            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" />
+            <p style={{ fontSize: '20px', marginBottom: '15px', fontWeight: 'bold', marginTop: '10px' }}>Redirect to WhatsApp Web?</p>
             <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
             <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
           </div>

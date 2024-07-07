@@ -7,8 +7,12 @@ use Inertia\Inertia;
 
 class OrderingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Ordering', ['id' => auth()->id()]);
+        $staffMembers = $request->query('staffMembers', '[]'); // Get staffMembers from the query, default to an empty array if not present
+        return Inertia::render('Ordering', [
+            'id' => auth()->id(),
+            'staffMembers' => $staffMembers,
+        ]);
     }
 }

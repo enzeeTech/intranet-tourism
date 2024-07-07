@@ -1,40 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import Example from '../Layouts/DashboardLayoutNew';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
+import { usePage } from '@inertiajs/react';
 
 const Ordering = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const department = "Some Department 1"; // Replace with the actual department logic
-    const [data, setData] = useState([
-        { id: 1, name: 'Mr Asyraf Jalil', image: '/assets/dummyImage1.jpg' },
-        { id: 2, name: 'Nor Rahimah Binti Ariffin', image: '/assets/dummyImage2.png' },
-        { id: 3, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage3.png' },
-        { id: 4, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage4.png' },
-        { id: 5, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage5.png' },
-        { id: 6, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage6.png'  },
-        { id: 7, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage7.png' },
-        { id: 8, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyStaffImage.png' },
-        { id: 9, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage2.png' },
-        { id: 10, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage3.png' },
-        { id: 11, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage4.png' },
-    ]);
+    const { props } = usePage();
+    const [staffMembers, setStaffMembers] = useState([]);
+    const [notificationMessage, setNotificationMessage] = useState("");
+
+    useEffect(() => {
+        console.log(props);
+        if (props.staffMembers) {
+            try {
+                const staffArray = JSON.parse(props.staffMembers);
+                // Sort staff members by the order attribute
+                const sortedStaffArray = staffArray.sort((a, b) => parseInt(a.order) - parseInt(b.order));
+                setStaffMembers(sortedStaffArray);
+            } catch (error) {
+                console.error('Failed to parse staffMembers:', error);
+            }
+        }
+    }, [props.staffMembers]);
+    
+
+    console.log('staffMembers:', staffMembers);
+
+    const updateOrderAttributes = (members) => {
+        return members.map((member, index) => ({
+            ...member,
+            order: index.toString(),
+        }));
+    };
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
 
-        const reorderedData = Array.from(data);
+        const reorderedData = Array.from(staffMembers);
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
 
-        setData(reorderedData);
+        setStaffMembers(updateOrderAttributes(reorderedData));
     };
 
-    const handleSave = () => {
-        console.log("Updated data:", data);
+    const handleMoveUp = (index) => {
+        if (index === 0) return;
+        const newData = [...staffMembers];
+        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
+        setStaffMembers(updateOrderAttributes(newData));
+    };
+
+    const handleMoveDown = (index) => {
+        if (index === staffMembers.length - 1) return;
+        const newData = [...staffMembers];
+        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
+        setStaffMembers(updateOrderAttributes(newData));
+    };
+
+    const updateOrderInDatabase = async (id, order) => {
+        try {
+            const response = await fetch(`/api/crud/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ order: order }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to update order for user with ID ${id}`);
+            }
+
+            const responseBody = await response.text();
+            return responseBody ? JSON.parse(responseBody) : {};
+        } catch (error) {
+            console.error('Error updating order:', error);
+            return null;
+        }
+    };
+
+    const handleSave = async () => {
         setIsNotificationVisible(true);
+        setNotificationMessage("Saving changes...");
+        
+        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member.id, member.order));
+        
+        const results = await Promise.all(updatePromises);
+
+        const success = results.every(result => result !== null);
+        if (success) {
+            setNotificationMessage("Changes saved successfully!");
+        } else {
+            setNotificationMessage("Failed to save some changes.");
+        }
+
         setTimeout(() => {
             setIsNotificationVisible(false);
         }, 1500);
@@ -66,7 +128,7 @@ const Ordering = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {data.map((item, index) => (
+                                                {staffMembers.map((item, index) => (
                                                     <Draggable key={item.id} draggableId={String(item.id)} index={index}>
                                                         {(provided) => (
                                                             <tr
@@ -75,7 +137,7 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.image} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                 </td>
                                                                 <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
@@ -84,10 +146,7 @@ const Ordering = () => {
                                                                             className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                if (index === 0) return;
-                                                                                const newData = [...data];
-                                                                                [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
-                                                                                setData(newData);
+                                                                                handleMoveUp(index);
                                                                             }}
                                                                             disabled={index === 0}
                                                                             style={{ opacity: index === 0 ? 0.6 : 1 }}
@@ -98,13 +157,10 @@ const Ordering = () => {
                                                                             className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                if (index === data.length - 1) return;
-                                                                                const newData = [...data];
-                                                                                [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
-                                                                                setData(newData);
+                                                                                handleMoveDown(index);
                                                                             }}
-                                                                            disabled={index === data.length - 1}
-                                                                            style={{ opacity: index === data.length - 1 ? 0.6 : 1 }}
+                                                                            disabled={index === staffMembers.length - 1}
+                                                                            style={{ opacity: index === staffMembers.length - 1 ? 0.6 : 1 }}
                                                                         >
                                                                             <img src="assets/orderingdown.svg" alt="Down" />
                                                                         </button>
@@ -142,10 +198,17 @@ const Ordering = () => {
                     </aside>
                 </div>
             </div>
-            {isNotificationVisible && (
+            {/* {isNotificationVisible && (
                 <div className="fixed z-50 flex items-center justify-center w-full top-20">
                     <div className="p-4 mb-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">Data saved successfully!</p>
+                        <p className="text-lg font-semibold">{notificationMessage}</p>
+                    </div>
+                </div>
+            )} */}
+            {isNotificationVisible && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                    <div className="p-4 bg-white rounded-lg shadow-lg">
+                        <p className="text-lg font-semibold">{notificationMessage}</p>
                     </div>
                 </div>
             )}

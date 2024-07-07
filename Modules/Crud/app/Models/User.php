@@ -22,6 +22,7 @@ class User extends Model implements AuditableContract
         'password',
         'remember_token',
         'is_active',
+        'order',
     ];
 
     public static function rules($scenario = 'create')
@@ -35,6 +36,7 @@ class User extends Model implements AuditableContract
                     'password' => ['string', 'required'],
                     'remember_token' => ['string'],
                     'is_active' => ['boolean'],
+                    'order' => ['integer'],
                 ],
                 // [],
             ],
@@ -57,6 +59,7 @@ class User extends Model implements AuditableContract
                     'password' => ['sometimes', 'string'],
                     'remember_token' => ['nullable', 'string'],
                     'is_active' => ['sometimes', 'boolean'],
+                    'order' => ['sometimes', 'integer'],
                 ],
             ],
         ];

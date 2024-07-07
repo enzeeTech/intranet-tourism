@@ -104,7 +104,8 @@ const StaffDirectory = () => {
             status: 'Online',
             imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
             phoneNo: userData.data.profile.phone_no,
-            isDeactivated: userData.data.is_active
+            isDeactivated: userData.data.is_active,
+            order: userData.data.order,
           };
         });
 
@@ -176,9 +177,9 @@ const StaffDirectory = () => {
     setSearchTerm(term);
   };
 
-  const filteredStaffMembers = staffMembers.filter((member) =>
-    member.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredStaffMembers = staffMembers
+    .filter((member) => member.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => parseInt(a.order) - parseInt(b.order));
 
   const updateIsActiveStatus = async (memberId, isActive) => {
     const response = await fetch(`/api/crud/users/${memberId}`, {
@@ -225,6 +226,8 @@ const StaffDirectory = () => {
     }
   };
 
+  console.log('staffMembers', staffMembers);
+
   return (
     <Example>
       <div className="flex-row">
@@ -243,6 +246,7 @@ const StaffDirectory = () => {
               <DepartmentDropdown
                 departments={departments}
                 onSelectDepartment={handleSelectDepartment}
+                staffMembers={staffMembers}
               />
               {isLoading ? (
                 <div className="staff-member-grid-container max-w-[1200px]">

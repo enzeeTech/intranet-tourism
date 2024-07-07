@@ -184,7 +184,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
         departmentHeader={departmentHeader}
         departmentDescription={departmentDescription}
       />
-      <Navigation userId={userId} />
+      <Navigation departmentID={departmentID} userId={userId} />
     </div>
   );
 }

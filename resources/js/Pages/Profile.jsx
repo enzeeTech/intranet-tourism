@@ -172,7 +172,7 @@ export default function Profile() {
                                     <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
                                     <Filter className="mr-10" />
                                     <div className="mb-20"></div>
-                                    <OutputData polls={polls} showUserPosts={true} />
+                                    <OutputData polls={polls} showUserPosts={true} userId={id} />
                                 </div>
                             )}
                             {activeTab === "bio" && (
