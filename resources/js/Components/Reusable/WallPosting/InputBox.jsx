@@ -5,7 +5,7 @@ import TagInput from "./AlbumTag";
 import '../css/InputBox.css';
 import '../../../Pages/Calendar/index.css';
 
-function ShareYourThoughts({ userId, onCreatePoll }) {
+function ShareYourThoughts({ userId, onCreatePoll, postType }) {
   const [inputValue, setInputValue] = useState("");
   const [showPollPopup, setShowPollPopup] = useState(false);
   const [showPeoplePopup, setShowPeoplePopup] = useState(false);
@@ -21,7 +21,8 @@ function ShareYourThoughts({ userId, onCreatePoll }) {
   const handleClickSend = () => {
     const formData = new FormData();
     formData.append('user_id', userId); // Use the userId prop here
-    formData.append('type', 'post');
+    // formData.append('type', 'post');
+    formData.append('type', postType);
     formData.append('visibility', 'public');
     formData.append('content', inputValue);
     formData.append('tag', JSON.stringify(tags));
@@ -30,7 +31,8 @@ function ShareYourThoughts({ userId, onCreatePoll }) {
       formData.append(`attachments[${index}]`, file);
     });
 
-    fetch("/api/crud/posts", {
+    // fetch("/api/crud/posts", {
+    fetch("/api/posts/posts", {
       method: "POST",
       body: formData,
       headers: { Accept: 'application/json' }
@@ -50,7 +52,7 @@ function ShareYourThoughts({ userId, onCreatePoll }) {
       })
       .catch((error) => {
         console.error("Error:", error);
-        window.location.reload();
+        // window.location.reload();
       });
   };
 

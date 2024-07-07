@@ -575,168 +575,139 @@ function FeedbackForm() {
   );
 }
 
-function OutputData({ polls, showUserPosts }) {
-  const [postData, setPostData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isPopupOpen, setIsPopupOpen] = useState({});
+function OutputData({ polls, filterType }) {
+    const [postData, setPostData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isPopupOpen, setIsPopupOpen] = useState({});
 
-  const { props } = usePage();
-  const { id } = props; // Access the user ID from props
+    const { props } = usePage();
+    const { id } = props;
 
-  useEffect(() => {
-    fetch("/api/crud/posts?with[]=user&with[]=attachments", {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    useEffect(() => {
+      fetch("/api/posts/posts?with[]=user&with[]=attachments", {
+        method: "GET",
       })
-      .then((data) => {
-        console.log('Fetched posts:', data.data.data);
-        const posts = data.data.data.map((post) => {
-          post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
-          return post;
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const posts = data.data.data.map((post) => {
+            post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
+            return post;
+          });
+          setPostData(posts);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching posts:", error);
+          setLoading(false);
         });
+    }, []);
 
-        // Filter posts based on context
-        const filteredPosts = showUserPosts ? posts.filter(post => post.user.id === id) : posts;
 
-        console.log('Filtered', filteredPosts);
+    const togglePopup = (index) => {
+      setIsPopupOpen((prevState) => ({
+        ...prevState,
+        [index]: !prevState[index],
+      }));
+    };
 
-        setPostData(filteredPosts);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching posts:", error);
-        setLoading(false);
-      });
-  }, [id, showUserPosts]);
+    const formatTimeAgo = (date) => {
+      return formatDistanceToNow(new Date(date), { addSuffix: true });
+    };
 
-  const togglePopup = (index) => {
-    setIsPopupOpen((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
-  };
+    if (loading) {
+      return <div>Loading...</div>;
+    }
 
-  const formatTimeAgo = (date) => {
-    return formatDistanceToNow(new Date(date), { addSuffix: true });
-  };
+    const filteredPostData = filterType
+    ? postData.filter((post) => post.type === filterType)
+    : postData;
 
-  if (loading) {
-    return <div>Loading...</div>;
+
+    console.log('TYPE', postData);
+
+    return (
+      <>
+        {polls.map((poll, index) => (
+          <div className="input-box-container" style={{ height: "auto", marginTop: "-10px" }} key={poll.id}>
+            <article className="flex flex-col px-5 py-4 bg-white rounded-xl shadow-sm max-w-[610px] max-md:pl-5">
+              <ProfileHeader name="Fareez Hishamuddin" timeAgo="1 day ago" profileImageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" profileImageAlt="Profile image of Thomas" />
+              <div className="poll">
+                <h3>{poll.content}</h3>
+                <ul>
+                  {poll.options.map((option, i) => (
+                    <li key={i}>
+                      <FeedbackOption optionText={`${option} (${calculatePercentage(poll.id, i)}%)`} onVote={() => handleVote(poll.id, i)} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <FeedbackForm />
+              <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36c4e55abf5012ece1a90ed95737b46c9b6970a05e3182fdd6248adca09028e?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="mt-6 aspect-[4.55] w-[76px]" />
+            </article>
+          </div>
+        ))}
+        {filteredPostData.map((post, index) => (
+          <div key={post.id} className="">
+            <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
+              <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
+                <div className="flex gap-1 mt-2">
+                </div>
+                <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                  <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+                    <div className="flex gap-1.5 -mt-1">
+                      <img loading="lazy" src={post.user.profileImage ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px]" />
+                      <div className="flex flex-col my-auto">
+                        <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
+                        <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
+                      </div>
+                    </div>
+                    <img loading="lazy" src="assets/wallpost-dotbutton.svg" alt="Options" className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer -mt-2" onClick={() => togglePopup(index)} />
+                  </div>
+                </div>
+                {isPopupOpen[index] && (
+                  <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10 ">
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
+                    <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
+                    <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
+                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
+                  </div>
+                )}
+              </header>
+              <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                {post.content}
+              </div>
+              <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
+                {post.tag}
+              </p>
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {post.attachments.map((attachment, index) => (
+                  <div key={index} className="attachment">
+                    {attachment.mime_type.startsWith("image/") ? (
+                      <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
+                    ) : (
+                      <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
+                        Download {attachment.file_name}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-start gap-2 w-5 h-5 mt-2">
+                <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
+                <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
+                <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
+              </div>
+            </article>
+          </div>
+        ))}
+      </>
+    );
   }
 
-  return (
-    <>
-      {polls.map((poll, index) => (
-        <div className="input-box-container" style={{ height: "auto", marginTop: "-10px" }} key={poll.id}>
-          <article className="flex flex-col px-5 py-4 bg-white rounded-xl shadow-sm max-w-[610px] max-md:pl-5">
-            {/* ProfileHeader component here */}
-            <ProfileHeader name="Fareez Hishamuddin" timeAgo="1 day ago" profileImageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" profileImageAlt="Profile image of Thomas" />
-            <div className="poll">
-              <h3>{poll.content}</h3>
-              <ul>
-                {poll.options.map((option, i) => (
-                  <li key={i}>
-                    {/* FeedbackOption component here */}
-                    <FeedbackOption optionText={`${option} (${calculatePercentage(poll.id, i)}%)`} onVote={() => handleVote(poll.id, i)} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* FeedbackForm component here */}
-            <FeedbackForm />
-            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36c4e55abf5012ece1a90ed95737b46c9b6970a05e3182fdd6248adca09028e?" alt="" className="mt-6 aspect-[4.55] w-[76px]" />
-          </article>
-        </div>
-      ))}
-      {postData && postData.map((post, index) => (
-        <div key={post.id} className="">
-          <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
-            <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
-            <div className="flex gap-1 mt-2">
-            </div>
-
-             {/* icon speaker & 3 dot*/}
-            <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
-                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                     <div className="flex gap-1.5 -mt-1">
-                            <img loading="lazy" src={post.user.profileImage ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px]" />
-                         <div className="flex flex-col my-auto">
-                            <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
-                            <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
-                         </div>
-                     </div>
-                     <img
-                        loading="lazy"
-                        src="assets/wallpost-dotbutton.svg"
-                        alt="Options"
-                        className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer"
-                        style={{marginTop: '7px'}}
-                        onClick={() => togglePopup(index)}
-                    />
-                </div>
-            </div>
-
-            {isPopupOpen[index] && (
-                <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10 ">
-                <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
-                <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-
-                <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
-                <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
-
-                <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
-                </div>
-            )}
-
-            </header>
-
-            <div
-              className=" post-content break-words overflow-hidden"
-              style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}
-            >
-              {post.content}
-            </div>
-
-            <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
-              {post.tag}
-            </p>
-
-            <div className="grid grid-cols-3 gap-2 mt-2">
-              {post.attachments.map((attachment, index) => (
-                <div key={index} className="attachment">
-                  {attachment.mime_type.startsWith("image/") ? (
-                    <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
-                  ) : attachment.mime_type.startsWith("video/") ? (
-                    <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
-                      <source src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
-                      Download {attachment.file_name}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-              {/* Like, comment, share icons */}
-              <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-              <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-              <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-            </div>
-          </article>
-        </div>
-      ))}
-    </>
-  );
-}
-
-export default OutputData;
-
+  export default OutputData;
