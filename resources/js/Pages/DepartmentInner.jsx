@@ -40,7 +40,7 @@ const DepartmentInner = () => {
     }
   }, []);
 
-  console.log('Department Data:', departmentData);
+  console.log('Department Data:', getDepartmentIdFromQuery());
 
   return (
     <Example>
