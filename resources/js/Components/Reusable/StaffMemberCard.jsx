@@ -127,8 +127,8 @@ import './css/StaffMemberCard.css';
 import callIcon from '../../../../public/assets/callIcon.png';
 import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
 import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
-import deactivateButton from '../../../../public/assets/deactivateButton.png';
-import activateButton from '../../../../public/assets/deactivateButton.png';
+import deactivateButton from '../../../../public/assets/activatedButton.png';
+import activateButton from '../../../../public/assets/deactivatedButton.png';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
 const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
@@ -182,7 +182,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
           <img src={imageUrl} alt={name} className="staff-member-image" />
           </a>
         {/* </InertiaLink> */}
-        <button
+        {/* <button
           className="three-dot-button"
           onClick={() => {
             if (isPopupOpen) {
@@ -194,6 +194,20 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
           ref={threeDotButtonRef}
         >
           <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" />
+        </button> */}
+        <button
+          className="status-button"
+          onClick={() => {
+            if (isDeactivated) {
+              onActivateClick();
+            }
+            else {
+              onDeactivateClick();
+            }
+          }}
+          ref={threeDotButtonRef}
+        >
+          <img style={{ width: '40px' }} src={isDeactivated ? activateButton : deactivateButton} alt="Indicator Button" />
         </button>
       </div>
       <div className="card-body">
@@ -209,7 +223,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
           <img style={{ width: '20px', height: '20px' }} src={whatsappIcon} alt="WhatsApp" />
         </button>
       </div>
-      {isPopupOpen && (
+      {/* {isPopupOpen && (
         <button
           id={`staff-popup-${name}`}
           onClick={() => {
@@ -229,7 +243,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
           <img src={isDeactivated ? activateButton : deactivateButton} alt={name} className="staff-member-popup-image" />
           <p className="staff-member-popup-text">{isDeactivated ? 'Activate' : 'Deactivate'}</p>
         </button>
-      )}
+      )} */}
       {isCallPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
           <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
