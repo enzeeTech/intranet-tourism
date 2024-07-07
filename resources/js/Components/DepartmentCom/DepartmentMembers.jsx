@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
 
 function Avatar({ src, alt, className, status }) {
@@ -54,22 +54,26 @@ function DpMembers() {
     const fetchData = async () => {
       const options = {
         method: 'GET',
-        url: '/api/crud/employment_posts',
         headers: { Accept: 'application/json' },
       };
-
+  
       try {
-        const { data } = await axios.request(options);
+        const response = await fetch('/api/crud/employment_posts', options);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+  
         const fetchedMembers = data.members || [];
         const fetchedAdmins = data.admins || [];
-
+  
         setMembers(fetchedMembers);
         setAdmins(fetchedAdmins);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchData();
   }, []);
 

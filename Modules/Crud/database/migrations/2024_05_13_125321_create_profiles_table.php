@@ -15,10 +15,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('cover_photo')->nullable();
             $table->string('phone_no')->nullable();
-            // $table->string('office_no')->nullable();
-            // $table->string('job_title')->nullable();
-            // $table->foreignId('position_id')->constrained('positions');
-            // $table->foreignId('grade_id')->constrained('grades');
             $table->date('dob')->nullable();
             $table->auditable();
         });

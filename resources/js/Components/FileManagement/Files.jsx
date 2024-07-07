@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import PopupContent from '../Reusable/PopupContent';
 import { data } from 'autoprefixer';
 
@@ -27,24 +27,27 @@ const FileTable = () => {
     useEffect(() => {
       const fetchFiles = async () => {
         try {
-          const response = await axios.get('/api/crud/resources');
-          const responseData = response.data;
-
-          // Check if responseData.data.data is an array
-          if (!Array.isArray(responseData.data.data)) {
-            console.error('Expected an array of files, but received:', responseData.data.data);
+          const response = await fetch('/api/crud/resources');
+          if (!response.ok) {
+            throw new Error('Failed to fetch files');
+          }
+          const responseData = await response.json();
+    
+          // Check if responseData.data is an object with a data property that is an array
+          if (!Array.isArray(responseData.data?.data)) {
+            console.error('Expected an array of files, but received:', responseData.data?.data);
             setLoading(false);
             return;
           }
-
+    
           const filesData = responseData.data.data;
-
-          // Filter the files based on their extensions
-        //   const documentFiles = filesData.filter(file => {
-        //     const fileExtension = file.extension.toLowerCase();
-        //     return [].includes(fileExtension);
-        //   });
-
+    
+          // Filter the files based on their extensions (example commented out)
+          // const documentFiles = filesData.filter(file => {
+          //   const fileExtension = file.extension.toLowerCase();
+          //   return ['.pdf', '.doc', '.docx'].includes(fileExtension);
+          // });
+    
           setFiles(filesData);
           setLoading(false);
         } catch (error) {
@@ -52,9 +55,10 @@ const FileTable = () => {
           setLoading(false);
         }
       };
-
+    
       fetchFiles();
     }, []);
+    
 
     if (loading) {
       return <div>Loading...</div>;

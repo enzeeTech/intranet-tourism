@@ -124,7 +124,7 @@ export default function Header({ setSidebarOpen }) {
             <div className="flex items-center self-stretch flex-1 gap-x-4 lg:gap-x-6">
                 <img
                     className="h-8 w-[70px] hidden lg:block"
-                    src="assets/Jomla logo red.svg"
+                    src="/assets/Jomla logo red.svg"
                     alt="Jomla Logo"
                 />
                 <form className="relative flex flex-1" action="#" method="GET">

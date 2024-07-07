@@ -22,7 +22,7 @@ function UpdatePhotoButton({ onClose }) {
   };
 
   const handleIconClick = (e) => {
-    e.stopPropagation(e); // Stop event propagation to prevent unintended interactions
+    e.stopPropagation(); // Stop event propagation to prevent unintended interactions
     openPopup(e); // Open the RequestSentMessage popup or perform any action
     // Assuming action takes little to no time, we schedule the close
     setTimeout(() => { // Use setTimeout to simulate delay if needed
@@ -30,7 +30,6 @@ function UpdatePhotoButton({ onClose }) {
       setIsPopupOpen(false); // Close the RequestSentMessage popup
       onClose(e); // Close the main popup
     }, 1200); // Set timeout for 3000 ms or adjust based on actual needs
-
   };
 
   const handleCloseClick = (e) => {
@@ -40,7 +39,7 @@ function UpdatePhotoButton({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={handleCloseClick}>
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
         <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-xl shadow-custom w-[380px]">
           <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff" 
@@ -58,8 +57,8 @@ function UpdatePhotoButton({ onClose }) {
         </section>
       </div>
       {isPopupOpen && (
-          <RequestSentMessage onClose={handleCloseClick} />
-        )}
+        <RequestSentMessage onClose={handleCloseClick} />
+      )}
     </div>
   );
 }

@@ -21,10 +21,11 @@ use Modules\Posts\Http\Controllers\PostController;
 // });
 
 // require_once 'crud.php';
-Route::apiResources([
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::apiResources([
+        'posts' => PostController::class,
+        'post_accessibilities' => PostAccessibilityController::class,
+        'post_comment' => PostCommentController::class,
+    ]);
+});
 
-    'posts' => PostController::class,
-    'post_accessibilities' => PostAccessibilityController::class,
-    'post_comment' => PostCommentController::class,
-
-]);
