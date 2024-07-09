@@ -50,8 +50,9 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateUser(ProfileUpdateRequest $request)
     {
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -59,8 +60,17 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+        return response()->noContent();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function update(Profile $profile)
+    {
+        $validated = request()->validate(...Profile::rules('update'));
+        $profile->update($validated);
+
+        return response()->noContent();
     }
 
     /**
