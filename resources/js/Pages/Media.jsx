@@ -21,7 +21,7 @@ const Media = () => {
 
     useEffect(() => {
       const fetchData = async () => {
-        const url = '/api/crud/posts';
+        const url = '/api/posts/posts';
         const options = {
           method: 'GET',
           headers: { Accept: 'application/json' }

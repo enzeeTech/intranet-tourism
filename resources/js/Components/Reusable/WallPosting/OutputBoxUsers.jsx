@@ -63,7 +63,7 @@ function OutputDataUsers({ userId }) {
 
   useEffect(() => {
     // Fetch all posts
-    fetch('/api/crud/posts?with[]=user&with[]=attachments')
+    fetch('/api/posts/posts?with[]=user&with[]=attachments')
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");

@@ -77,7 +77,7 @@ function OutputData({ polls, filterType, userId }) {
   const [isPopupOpen, setIsPopupOpen] = useState({});
 
   useEffect(() => {
-    fetch("/api/crud/posts?with[]=user&with[]=attachments", {
+    fetch("/api/posts/posts?with[]=user&with[]=attachments", {
       method: "GET",
     })
       .then((response) => {
