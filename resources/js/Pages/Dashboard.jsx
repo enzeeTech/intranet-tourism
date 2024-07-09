@@ -20,7 +20,7 @@ const Dashboard = () => {
   return (
     <Example>
       <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)]">
-        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
+        <div className="absolute px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
           <StoryNew />
           <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
           <Filter className="mr-10" />

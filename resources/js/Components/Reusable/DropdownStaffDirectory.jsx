@@ -99,7 +99,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </a>
       )}
       {selectedDepartment.id && (
-      <button className="hidden three-dot-btn sm:block" onClick={toggleReportingPopup}>
+      <button className="three-dot-btn" onClick={toggleReportingPopup}>
         <img src={threeDotButton} alt="More Options" />
       </button>
       )}
