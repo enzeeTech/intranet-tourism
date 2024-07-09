@@ -23,6 +23,7 @@ class User extends Model implements AuditableContract
         'remember_token',
         'is_active',
         'order',
+        'username',
     ];
 
     public static function rules($scenario = 'create')
@@ -37,6 +38,7 @@ class User extends Model implements AuditableContract
                     'remember_token' => ['string'],
                     'is_active' => ['boolean'],
                     'order' => ['integer'],
+                    'username' => ['string', 'nullable']
                 ],
                 // [],
             ],
@@ -60,6 +62,7 @@ class User extends Model implements AuditableContract
                     'remember_token' => ['nullable', 'string'],
                     'is_active' => ['sometimes', 'boolean'],
                     'order' => ['sometimes', 'integer'],
+                    'username' => ['sometimes', 'string']
                 ],
             ],
         ];
