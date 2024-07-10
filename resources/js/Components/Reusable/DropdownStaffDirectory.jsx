@@ -3,6 +3,9 @@ import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png';
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
 import visitDepartment from '../../../../public/assets/visitDepartmentButton.png'; 
 import threeDotButton from '../../../../public/assets/threeDotButton.png';
+import addMemberButton from '../../../../public/assets/addPersonButton.png';
+import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
+import SearchPopup from './AddMemberPopup';
 import './css/DropdownStaffDirectory.css';
 import { set } from 'date-fns';
 
@@ -10,8 +13,19 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
+  const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
+
+  const people = [
+    { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },
+    { name: 'Ben Tan', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
+    { name: 'Nick', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
+    { name: 'Sarah', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
+    { name: 'Thomas', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
+    { name: 'Zack', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
+    { name: 'Zara', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
+];
 
   console.log('staffMembers', staffMembers)
 
@@ -24,6 +38,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
 
   const toggleReportingPopup = () => {
     setIsReportingPopupOpen(!isReportingPopupOpen);
+    setIsOpen(false);
+  };
+
+  const toggleAddMemberPopup = () => {
+    setIsAddMemberPopupOpen(!isAddMemberPopupOpen);
     setIsOpen(false);
   };
 
@@ -99,6 +118,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </a>
       )}
       {selectedDepartment.id && (
+        <button className="add-person-btn" onClick={toggleAddMemberPopup}>
+          <img src={addMemberButton} alt="Add Member" />
+        </button>
+      )}
+      {selectedDepartment.id && (
       <button className="three-dot-btn" onClick={toggleReportingPopup}>
         <img src={threeDotButton} alt="More Options" />
       </button>
@@ -126,6 +150,13 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
             Ordering
           </a>
         </div>
+      )}
+      {isAddMemberPopupOpen && (
+        <SearchPopup
+          isAddMemberPopupOpen={isAddMemberPopupOpen}
+          setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
+          people={people}
+        />
       )}
     </div>
   );

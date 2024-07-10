@@ -110,9 +110,10 @@
 }
 
 .add-person-btn {
-  width: 35px;
+  width: 40px;
   height: auto;
 }
+
 
 .dropdown-header img {
   position: absolute;
@@ -167,7 +168,7 @@
   margin-left: -6px;
 }
 
-@media (max-width: 480px){
+@media (max-width: 752px){
   .department-dropdown-container {
     flex-direction: column;
     justify-content: space-evenly;
@@ -232,8 +233,16 @@
   }
 
   .three-dot-btn {
-    left: 0px;
-    top: 90px;
+    left: -3px;
+    top: 130px;
+  }
+
+  .add-person-btn {
+    width: 41px;
+    height: auto;
+    margin-right: 310px;
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
 
   .visit-department-btn {
@@ -244,7 +253,7 @@
 
   .staff-popup {
     left: 0;
-    top: 28px;
+    top: 68px;
     width: 160px;
   }
 
