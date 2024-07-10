@@ -82,13 +82,13 @@ export default function Profile() {
                 setProfileData(pv => ({
                     ...pv, ...data,
                     profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`,
-                    username: "@" + data.employment_post?.username,
+                    username: "@" + data.username,
                 }));
 
                 setFormData((pv) => ({
                     ...pv,
                     name: data.name,
-                    username: data.employment_post?.username || "N/A",
+                    username: data.username || "N/A",
                     email: data.email,
                     department: data.employment_post?.department?.name || "N/A",
                     unit: data.employment_post?.business_unit?.name || "N/A",
@@ -149,7 +149,6 @@ export default function Profile() {
         // Handle media selection logic here
     };
 
-    console.log("DDD", profileData);
 
     return (
         <Example>
@@ -214,8 +213,8 @@ export default function Profile() {
                             )}
                             {activeTab === "gallery" && (
                                 <section>
-                                    <ImageProfile selectedItem="All" />
-                                    <VideoProfile selectedItem="All" />
+                                    <ImageProfile selectedItem="All" userId={id} />
+                                    <VideoProfile selectedItem="All" userId={id} />
                                 </section>
                             )}
                             {activeTab === "files" && (
@@ -224,7 +223,7 @@ export default function Profile() {
                                         <SearchInput />
                                         <SearchButton />
                                     </div>
-                                    <Table />
+                                    <Table userId={id} />
                                 </div>
                             )}
                         </div>

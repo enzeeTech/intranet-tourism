@@ -45,7 +45,7 @@ function UserDetail({ user }) {
                                 backgroundImage={userData.backgroundImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?'}
                                 profileImage={userData.profilePictureUrl ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
                                 name={userData.name}
-                                username={"@" + userData.employment_post?.username || "N/A"}
+                                username={"@" + userData.username || "N/A"}
                                 status={userData.status ?? "Online"}
                                 rounded={true}
                             />
@@ -62,7 +62,7 @@ function UserDetail({ user }) {
                                             <ProfileBio
                                                 name={userData.name}
                                                 photo={userData.profilePictureUrl ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
-                                                username={userData.employment_post?.username || "N/A"}
+                                                username={userData.username || "N/A"}
                                                 email={userData.email}
                                                 department={userData.employment_post?.department?.name || "N/A"}
                                                 unit={userData.employment_post?.business_unit?.name || "N/A"}
@@ -84,8 +84,8 @@ function UserDetail({ user }) {
                             )}
                             {activeTab === "gallery" && (
                                 <section>
-                                    <ImageProfile selectedItem="All" />
-                                    <VideoProfile selectedItem="All" />
+                                    <ImageProfile selectedItem="All" userId={user.id} />
+                                    <VideoProfile selectedItem="All" userId={user.id} />
                                 </section>
                             )}
                             {activeTab === "files" && (
@@ -94,7 +94,7 @@ function UserDetail({ user }) {
                                         <SearchInput />
                                         <SearchButton />
                                     </div>
-                                    <Table />
+                                    <Table userId={user.id} />
                                 </div>
                             )}
                         </div>

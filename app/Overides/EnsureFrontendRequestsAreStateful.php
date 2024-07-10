@@ -19,17 +19,17 @@ class EnsureFrontendRequestsAreStateful extends BaseEnsureFrontendRequestsAreSta
     public static function fromFrontend($request)
     {
         $domain = $request->headers->get('referer') ?: $request->headers->get('origin');
-
         if (is_null($domain) || Str::contains($domain, 'docs/api')) {
             return false;
         }
-
+        
         $domain = Str::replaceFirst('https://', '', $domain);
         $domain = Str::replaceFirst('http://', '', $domain);
         $domain = Str::endsWith($domain, '/') ? $domain : "{$domain}/";
-
+        
         $stateful = array_filter(config('sanctum.stateful', []));
-
+        
+        // dd($domain, $stateful);
         return Str::is(Collection::make($stateful)->map(function ($uri) {
             return trim($uri) . '/*';
         })->all(), $domain);

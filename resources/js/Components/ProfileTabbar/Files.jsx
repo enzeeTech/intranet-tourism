@@ -38,37 +38,74 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
   </div>
 );
 
-const Table = () => {
+// const Table = (userId) => {
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const itemsPerPage = 10;
+//   const [files, setFiles] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const options = {
+//       method: 'GET',
+//       headers: { Accept: 'application/json' }
+//     };
+  
+//     const fetchFiles = async () => {
+//       try {
+//         const response = await fetch('/api/crud/resources', options);
+//         if (!response.ok) {
+//           throw new Error('Failed to fetch files');
+//         }
+//         const responseData = await response.json();
+//         const filesData = responseData.data.data; // Adjust this path based on the actual structure
+  
+//         setFiles(filesData);
+//         setLoading(false);
+//       } catch (error) {
+//         console.error('Error fetching files:', error);
+//         setLoading(false);
+//       }
+//     };
+  
+//     fetchFiles();
+//   }, []);
+
+
+const Table = ({ userId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: { Accept: 'application/json' }
-    };
-  
     const fetchFiles = async () => {
       try {
-        const response = await fetch('/api/crud/resources', options);
+        const response = await fetch(`/api/crud/resources`);
         if (!response.ok) {
           throw new Error('Failed to fetch files');
         }
         const responseData = await response.json();
-        const filesData = responseData.data.data; // Adjust this path based on the actual structure
-  
-        setFiles(filesData);
+        const filesData = responseData.data.data;
+
+        // Filter the files based on the document types and userId
+        const documentFiles = filesData.filter(file => {
+          const ext = file.extension.toLowerCase();
+          return (
+            ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext) &&
+            file.user_id === userId
+          );
+        });
+
+        setFiles(documentFiles);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching files:', error);
         setLoading(false);
       }
     };
-  
+
     fetchFiles();
-  }, []);
+  }, [userId]);
   
 
   if (loading) {

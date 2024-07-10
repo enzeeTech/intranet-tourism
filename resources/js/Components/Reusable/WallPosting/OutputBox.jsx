@@ -187,7 +187,12 @@ function OutputData({ polls, filterType, userId }) {
                 <div key={index} className="attachment">
                   {attachment.mime_type.startsWith("image/") ? (
                     <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
-                  ) : (
+                  ) : attachment.mime_type.startsWith("video/") ? (
+                    <video controls className="max-w-full h-auto rounded-md">
+                      <source src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) :  (
                     <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
                       Download {attachment.file_name}
                     </a>
@@ -241,6 +246,11 @@ function OutputData({ polls, filterType, userId }) {
                 <div key={index} className="attachment">
                   {attachment.mime_type.startsWith("image/") ? (
                     <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
+                  ) : attachment.mime_type.startsWith("video/") ? (
+                    <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
+                      <source src={`/storage/${attachment.path}`} alt="attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full" />
+                      Your browser does not support the video tag.
+                    </video>
                   ) : (
                     <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
                       Download {attachment.file_name}

@@ -4,7 +4,8 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
-import Example from '../Layouts/DashboardLayoutNew';
+// import Example from '../Layouts/DashboardLayoutNew';
+import Example from '@/Layouts/DashboardLayoutNew';
 import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import MyComponent from '@/Components/Reusable/CommunitySide';
@@ -18,9 +19,11 @@ const Dashboard = () => {
   };
 
   return (
-    <Example>
+    <Example className="fixed">
+      <div className="flex-row">
+        <div className="flex ">
       <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)]">
-        <div className="absolute px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
+        <div className=" px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
           <StoryNew />
           <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
           <Filter className="mr-10" />
@@ -57,6 +60,8 @@ const Dashboard = () => {
           <MyComponent />
         </div>
       </aside>
+      </div>
+      </div>
     </Example>
   );
 };

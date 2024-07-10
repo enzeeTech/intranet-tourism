@@ -10,7 +10,31 @@ const ImageComponent = ({ src, alt, className }) => (
   />
 );
 
-const ImageProfile = ({ selectedItem }) => {
+// const ImageProfile = ({ selectedItem, userId }) => {
+//   const [images, setImages] = useState([]);
+
+//   useEffect(() => {
+//     fetch("/api/crud/resources")
+//       .then((response) => response.json())
+//       .then((data) => {
+//         const imagePaths = data.data.data
+//           .filter((item) => {
+//             // Check if the item is an image, you can adjust the condition based on your API response
+//             const fileExtension = item.path.split('.').pop().toLowerCase();
+//             return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+//           })
+//           .map((item) => ({
+//             src: `/storage/${item.path}`,
+//             alt: `Description ${item.id}`,
+//             category: item.attachable_type // Adjust as per your condition
+//           }));
+//         setImages(imagePaths);
+//       })
+//       .catch((error) => console.error("Error fetching images:", error));
+//   }, []);
+
+
+const ImageProfile = ({ selectedItem, userId }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -19,9 +43,12 @@ const ImageProfile = ({ selectedItem }) => {
       .then((data) => {
         const imagePaths = data.data.data
           .filter((item) => {
-            // Check if the item is an image, you can adjust the condition based on your API response
+            // Check if the item is an image and belongs to the specified user
             const fileExtension = item.path.split('.').pop().toLowerCase();
-            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+            return (
+              ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension) &&
+              item.user_id === userId
+            );
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
@@ -31,7 +58,7 @@ const ImageProfile = ({ selectedItem }) => {
         setImages(imagePaths);
       })
       .catch((error) => console.error("Error fetching images:", error));
-  }, []);
+  }, [userId]);
 
   // Filter images based on selectedItem
   const filteredImages = selectedItem === "All" ? images : images.filter((image) => image.category === selectedItem);
@@ -72,7 +99,7 @@ const VideoComponent = ({ src, alt, className }) => (
   </video>
 );
 
-const VideoProfile = ({ selectedItem }) => {
+const VideoProfile = ({ selectedItem, userId }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
@@ -83,7 +110,10 @@ const VideoProfile = ({ selectedItem }) => {
           .filter((item) => {
             // Check if the item is a video, you can adjust the condition based on your API response
             const fileExtension = item.path.split('.').pop().toLowerCase();
-            return ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension);
+            return (
+              ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension) &&
+              item.user_id === userId
+            );
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
@@ -93,7 +123,7 @@ const VideoProfile = ({ selectedItem }) => {
         setVideos(videoPaths);
       })
       .catch((error) => console.error("Error fetching videos:", error));
-  }, []);
+  }, [userId]);
 
   // Filter videos based on selectedItem
   const filteredVideos = selectedItem === "All" ? videos : videos.filter((video) => video.category === selectedItem);
