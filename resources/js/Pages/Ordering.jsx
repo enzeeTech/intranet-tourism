@@ -139,6 +139,7 @@ const Ordering = () => {
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
                                                                     <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
+                                                                    {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>
                                                                 <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
                                                                     <div className="flex items-center">
