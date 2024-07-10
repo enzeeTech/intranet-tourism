@@ -156,14 +156,12 @@ function ProfileImage({ src, alt, className, rounded }) {
   );
 }
 
-function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username }) {
+function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const { props } = usePage();
-  const { id } = props;
   const csrfToken = useCsrf();
   const authToken = localStorage.getItem('authToken'); // Assuming the token is stored in localStorage
 
@@ -196,7 +194,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     setSelectedFile(file);
     setIsPopupOpen(false);
     setIsUpdatePopupOpen(true);
-    uploadProfilePhoto(file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken);
+    uploadProfilePhoto(file, userId, setCurrentProfileImage, setSelectedFile, csrfToken, authToken);
   };
 
   const handleCloseUpdatePopup = (e) => {
@@ -206,22 +204,38 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
   };
 
   const uploadProfilePhoto = async (file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken) => {
-    const url = `http://127.0.0.1:8000/api/profile/profiles/${id}`;
-    
+    const url = `http://127.0.0.1:8000/api/crud/profiles/${id}`;
+  
+    // Create a FormData object to handle file upload
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('user_id', String(userId)); // Convert user_id to string
+  
+    // Log FormData entries
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+  
     const options = {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
         'Authorization': `Bearer ${authToken}`,
       },
-      body: JSON.stringify({ image: file.name }), // Assuming the API expects the file name in JSON format
+      body: formData,
     };
-
+  
     try {
+      console.log('Uploading profile photo with payload:', {
+        image: file,
+        user_id: String(userId), // Log user_id as string
+      });
+  
       const response = await fetch(url, options);
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response from server:', errorData);
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
@@ -234,6 +248,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       console.error('Error uploading profile photo:', error);
     }
   };
+  
 
   return (
     <header
