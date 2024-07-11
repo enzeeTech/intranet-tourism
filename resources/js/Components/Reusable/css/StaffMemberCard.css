@@ -66,6 +66,7 @@
   font-family: 'Nunito Sans';
 }
 
+
 /* Color for Online Status */
 .staff-member-status.online {
   color: #009D06;
@@ -79,6 +80,10 @@
 /* Color for Away Status */
 .staff-member-status.away {
   color: #960A0A;
+}
+
+.staff-member-status.deactivated-offline{
+  color: #202224;
 }
 
 .card-footer {

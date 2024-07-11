@@ -53,6 +53,7 @@ const StaffDirectory = () => {
     }
   };
 
+
   const fetchStaffMembers = async (departmentId) => {
     setIsLoading(true);
     let allEmploymentPosts = [];

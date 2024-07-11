@@ -1,127 +1,3 @@
-// import React, { useState, useRef } from 'react';
-// import './css/StaffMemberCard.css';
-// import callIcon from '../../../../public/assets/callIcon.png';
-// import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
-// import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
-// import deactivateButton from '../../../../public/assets/deactivateButton.png';
-// import activateButton from '../../../../public/assets/deactivateButton.png';
-
-// const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
-//   const threeDotButtonRef = useRef(null);
-//   const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
-//   const [isWhatsAppPopupOpen, setIsWhatsAppPopupOpen] = useState(false);
-
-//   const handleCall = () => {
-//     if (!phoneNo || isDeactivated) return;
-//     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-//     if (isMobile) {
-//       window.location.href = `tel:${phoneNo}`;
-//     } else {
-//       setIsCallPopupOpen(true);
-//     }
-//   };
-
-//   const handleWhatsApp = () => {
-//     if (!phoneNo || isDeactivated) return;
-//     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-//     if (isMobile) {
-//       window.location.href = `https://wa.me/${phoneNo}`;
-//     } else {
-//       setIsWhatsAppPopupOpen(true);
-//     }
-//   };
-
-//   const closeCallPopup = () => setIsCallPopupOpen(false);
-//   const closeWhatsAppPopup = () => setIsWhatsAppPopupOpen(false);
-
-//   const redirectToWhatsAppWeb = () => {
-//     window.open(`https://web.whatsapp.com/send?phone=${phoneNo}`, '_blank');
-//     closeWhatsAppPopup();
-//   };
-
-//   const getPopupPosition = () => {
-//     const buttonRect = threeDotButtonRef.current.getBoundingClientRect();
-//     return {
-//       top: buttonRect.bottom + window.scrollY - 13,
-//       left: buttonRect.left + window.scrollX + 75,
-//     };
-//   };
-
-//   return (
-//     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
-//       <div className="card-header">
-//         <img src={imageUrl} alt={name} className="staff-member-image" />
-//         <button
-//           className="three-dot-button"
-//           onClick={() => {
-//             if (isPopupOpen) {
-//               closePopup();
-//             } else {
-//               setActivePopup();
-//             }
-//           }}
-//           ref={threeDotButtonRef}
-//         >
-//           <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" />
-//         </button>
-//       </div>
-//       <div className="card-body">
-//         <h3 className="staff-member-name">{name}</h3>
-//         <p className="staff-member-role">{role}</p>
-//         <p className={`staff-member-status ${status.toLowerCase()}`}>{status}</p>
-//       </div>
-//       <div className="card-footer">
-//         <button className="call-button" onClick={handleCall} disabled={isDeactivated}>
-//           <img style={{ width: '20px', height: '20px' }} src={callIcon} alt="Call" />
-//         </button>
-//         <button className="whatsapp-button" onClick={handleWhatsApp} disabled={isDeactivated}>
-//           <img style={{ width: '20px', height: '20px' }} src={whatsappIcon} alt="WhatsApp" />
-//         </button>
-//       </div>
-//       {isPopupOpen && (
-//         <button
-//           id={`staff-popup-${name}`}
-//           onClick={() => {
-//             closePopup();
-//             if (isDeactivated) {
-//               onActivateClick();
-//             } else {
-//               onDeactivateClick();
-//             }
-//           }}
-//           className="staff-member-popup"
-//           style={{
-//             top: `${getPopupPosition().top}px`,
-//             left: `${getPopupPosition().left}px`,
-//           }}
-//         >
-//           <img src={isDeactivated ? activateButton : deactivateButton} alt={name} className="staff-member-popup-image" />
-//           <p className="staff-member-popup-text">{isDeactivated ? 'Activate' : 'Deactivate'}</p>
-//         </button>
-//       )}
-//       {isCallPopupOpen && (
-//         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
-//           <div className="popup" onClick={(e) => e.stopPropagation()}>
-//             <p style={{ fontSize: '25px' }}>Call is available only on mobile.</p>
-//           </div>
-//         </div>
-//       )}
-//       {isWhatsAppPopupOpen && (
-//         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
-//           <div className="popup" onClick={(e) => e.stopPropagation()}>
-//             <p style={{ fontSize: '20px', marginBottom: '15px', fontWeight: 'bold' }}>Redirect to WhatsApp Web?</p>
-//             <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
-//             <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default StaffMemberCard;
-
-
 import React, { useState, useRef } from 'react';
 import './css/StaffMemberCard.css';
 import callIcon from '../../../../public/assets/callIcon.png';
@@ -172,6 +48,8 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
     };
   };
 
+  console.log('isDeactivated', isDeactivated);
+
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
       <div className="card-header">
@@ -183,7 +61,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
           </a>
         {/* </InertiaLink> */}
         {/* <button
-          className="three-dot-button"
+          className="three-dot-button"  
           onClick={() => {
             if (isPopupOpen) {
               closePopup();
@@ -213,7 +91,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
       <div className="card-body">
         <h3 className="staff-member-name">{name}</h3>
         <p className="staff-member-role">{role}</p>
-        <p className={`staff-member-status ${status.toLowerCase()}`}>{status}</p>
+        <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p>
       </div>
       <div className="card-footer">
         <button className="call-button" onClick={handleCall} disabled={isDeactivated}>
