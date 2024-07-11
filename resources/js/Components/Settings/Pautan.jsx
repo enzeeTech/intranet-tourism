@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid';
 import './Pautan.css';
+import { useCsrf } from "@/composables";
 
-const API_URL = '/api/settings/external_links';
-const urlTemplate = '/api/settings/external_links/{id}';
+
+const API_URL = "/api/settings/external_links";
+const urlTemplate = "/api/settings/external_links/{id}";
 const PAGE_SIZE = 15;
 
 const Pautan = () => {
@@ -16,6 +18,8 @@ const Pautan = () => {
   const [newAppName, setNewAppName] = useState('');
   const [newAppUrl, setNewAppUrl] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const csrfToken = useCsrf();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +31,8 @@ const Pautan = () => {
         while (currentPage <= lastPage) {
           const response = await fetch(`${API_URL}?page=${currentPage}`, {
             method: "GET",
-            headers: { Accept: 'application/json' }
+            // headers: { Accept: 'application/json' }
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
           });
           if (!response.ok) {
             throw new Error("Network response was not ok");
