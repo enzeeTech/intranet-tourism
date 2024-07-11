@@ -99,7 +99,23 @@ const Pautan = () => {
     updateOrder(newApps);
   };
 
+  const isDuplicateApp = (name, url, existingApps) => {
+    const isNameDuplicate = existingApps.some(app => app.label === name);
+    const isUrlDuplicate = existingApps.some(app => app.url === url);
+
+    return { isNameDuplicate, isUrlDuplicate };
+  };
+
   const PautanHandleAddApp = () => {
+    const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
+    if (isNameDuplicate) {
+      alert('App name already exists.');
+      return;
+    } else if (isUrlDuplicate) {
+      alert('App URL already exists.');
+      return;
+    }
+
     const newApp = { label: newAppName, url: newAppUrl };
 
     fetch(API_URL, {
@@ -114,8 +130,8 @@ const Pautan = () => {
         setNewAppUrl('');
         setIsAddModalVisible(false);
       })
-      // .catch(error => console.error('Error adding app:', error));
-      window.location.reload();
+      .catch(error => console.error('Error adding app:', error));
+      // window.location.reload();
   };
 
   const PautanHandleEditApp = (app) => {
@@ -126,6 +142,15 @@ const Pautan = () => {
   };
 
   const PautanHandleUpdateApp = () => {
+    const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
+    if (isNameDuplicate) {
+      alert('App name already exists.');
+      return;
+    } else if (isUrlDuplicate) {
+      alert('App URL already exists.');
+      return;
+    }
+
     const updatedApp = { label: newAppName, url: newAppUrl };
     const updateUrl = urlTemplate.replace('{id}', currentApp.id);
 
@@ -142,8 +167,8 @@ const Pautan = () => {
         setNewAppUrl('');
         setIsEditModalVisible(false);
       })
-      // .catch(error => console.error('Error updating app:', error));
-      window.location.reload();
+      .catch(error => console.error('Error updating app:', error));
+      // window.location.reload();
   };
 
   const PautanHandleDeleteApp = () => {
