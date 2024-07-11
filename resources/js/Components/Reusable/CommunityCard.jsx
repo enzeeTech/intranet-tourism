@@ -1,13 +1,13 @@
 import React, {useState, useRef} from 'react';
 import './css/CommunityCard.css'; 
-import DeactivateModal from './DeactivateModal';
-import callIcon from '../../../../public/assets/callIcon.png'; 
-import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
+// import DeactivateModal from './DeactivateModal';
+// import callIcon from '../../../../public/assets/callIcon.png'; 
+// import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
 import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 import Image from '../../../../public/assets/Image.png';
-import Massage from '../../../../public/assets/Massage.png'
-import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
-import deactivateButton from '../../../../public/assets/deactivateButton.png';
+// import Massage from '../../../../public/assets/Massage.png'
+// import dummyStaffImage from '../../../../public/assets/dummyStaffImage.png';
+// import deactivateButton from '../../../../public/assets/deactivateButton.png';
 
 
 
@@ -75,7 +75,7 @@ const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
                     left: `${getPopupPosition().left}px`,
                 }}
             >
-                <img src={deactivateButton} alt={name} className="staff-member-popup-image" />
+                {/* <img src={deactivateButton} alt={name} className="staff-member-popup-image" /> */}
                 <p className="staff-member-popup-text">Deactivate</p>
             </button>
             )}

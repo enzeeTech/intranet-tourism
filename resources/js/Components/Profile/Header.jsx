@@ -204,7 +204,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
   };
 
   const uploadProfilePhoto = async (file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken) => {
-    const url = `http://127.0.0.1:8000/api/crud/profiles/${id}`;
+    const url = `http://127.0.0.1:8000/api/profile/profiles/${id}`;
   
     // Create a FormData object to handle file upload
     const formData = new FormData();
