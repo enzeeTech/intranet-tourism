@@ -1,0 +1,32 @@
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.label-column {
+  width: 25%; /* Adjust this value to make the label column wider */
+}
+
+.url-column {
+  width: 35%; /* Adjust this value to make the URL column wider */
+}
+
+.order-column {
+  width: 15%; /* Adjust this value to make the order column narrower */
+}
+
+.fixed-size-row {
+  height: 60px; /* Adjust this value to match your desired row height */
+}
+
+.fixed-size-row td {
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dragging {
+  background: #f0f0f0; /* Add some visual indication while dragging */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
