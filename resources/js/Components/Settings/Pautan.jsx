@@ -133,7 +133,7 @@ const Pautan = () => {
         setNewAppUrl('');
         setIsAddModalVisible(false);
       })
-      // .catch(error => console.error('Error adding app:', error));
+      .catch(error => console.error('Error adding app:', error));
       window.location.reload();
   };
 
@@ -171,6 +171,7 @@ const Pautan = () => {
         setIsEditModalVisible(false);
       })
       .catch(error => console.error('Error updating app:', error));
+      window.location.reload();
   };
 
   const PautanHandleDeleteApp = () => {
