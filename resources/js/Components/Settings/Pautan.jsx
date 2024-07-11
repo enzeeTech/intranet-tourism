@@ -37,7 +37,9 @@ const Pautan = () => {
           lastPage = data.data.last_page;
           currentPage++;
         }
-        const sortedAppsData = allApps.sort((a, b) => a.order - b.order);
+        const sortedAppsData = allApps
+          .sort((a, b) => a.order - b.order)
+          .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
         setApps(sortedAppsData);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -48,7 +50,7 @@ const Pautan = () => {
   }, []);
 
   const sortAlphabetically = (apps) => {
-    return apps.sort((a, b) => a.label.localeCompare(b.label));
+    return apps.sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
   };
 
   const updateOrder = (newApps) => {
@@ -125,13 +127,14 @@ const Pautan = () => {
     })
       .then(response => response.json())
       .then(data => {
-        setApps(sortAlphabetically([...apps, data]));
+        // setApps(sortAlphabetically([...apps, data]));
+        setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
         setNewAppName('');
         setNewAppUrl('');
         setIsAddModalVisible(false);
       })
-      .catch(error => console.error('Error adding app:', error));
-      // window.location.reload();
+      // .catch(error => console.error('Error adding app:', error));
+      window.location.reload();
   };
 
   const PautanHandleEditApp = (app) => {
@@ -168,7 +171,6 @@ const Pautan = () => {
         setIsEditModalVisible(false);
       })
       .catch(error => console.error('Error updating app:', error));
-      // window.location.reload();
   };
 
   const PautanHandleDeleteApp = () => {
