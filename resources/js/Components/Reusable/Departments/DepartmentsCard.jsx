@@ -2,7 +2,7 @@ import React from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
 
-const DepartmentsCard = ({ name, role, imageUrl, onDeactivateClick, departmentID }) => {
+const DepartmentsCard = ({ name, imageUrl, onDeactivateClick, departmentID }) => {
   return (
     <div className="staff-member-card">
       <div className="card-header">
