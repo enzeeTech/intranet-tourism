@@ -7,7 +7,7 @@
 
 // const API_URL = "/api/settings/external_links";
 // const urlTemplate = "/api/settings/external_links/{id}";
-// const PAGE_SIZE = 25;
+// const PAGE_SIZE = 15;
 
 // const Pautan = () => {
 //   const [apps, setApps] = useState([]);
@@ -440,7 +440,6 @@ import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid
 import './Pautan.css';
 import { useCsrf } from "@/composables";
 
-
 const API_URL = "/api/settings/external_links";
 const urlTemplate = "/api/settings/external_links/{id}";
 
@@ -457,15 +456,20 @@ const Pautan = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_URL, {
-          method: "GET",
-          headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        while (currentPage <= lastPage) {
+          const response = await fetch(`${API_URL}?page=${currentPage}`, {
+            method: "GET",
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          allApps = allApps.concat(data.data.data);
+          lastPage = data.data.last_page;
+          currentPage++;
         }
-        const data = await response.json();
-        const sortedAppsData = data.data.data
+        const sortedAppsData = allApps
           .sort((a, b) => a.order - b.order)
           .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
         setApps(sortedAppsData);
@@ -811,4 +815,5 @@ const Pautan = () => {
 };
 
 export default Pautan;
+
 

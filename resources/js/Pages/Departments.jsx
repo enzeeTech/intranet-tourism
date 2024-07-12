@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
+import DepartmentDropdown from '@/Components/Reusable/Departments/DepartmentsDropdown';
 import DepartmentSearchBar from '../Components/Reusable/Departments/DepartmentSearch';
 import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard';
 import Example from '@/Layouts/DashboardLayoutNew';
-//import '../../../public/assets/dummyImage2.png';
 import './css/StaffDirectory.css';
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchAllDepartments = async () => {
       setIsLoading(true); // Start loading
       let allDepartments = [];
       let url = '/api/crud/departments';
-  
+
       try {
         while (url) {
           const response = await fetch(url);
@@ -27,7 +27,7 @@ const StaffDirectory = () => {
           }
           const responseData = await response.json();
           console.log('API Response:', responseData);
-  
+
           if (responseData.data && Array.isArray(responseData.data.data)) {
             const newDepartments = responseData.data.data;
             allDepartments = [...allDepartments, ...newDepartments];
@@ -37,7 +37,7 @@ const StaffDirectory = () => {
             break;
           }
         }
-  
+
         // Sort departments alphabetically by name
         const sortedDepartments = allDepartments.sort((a, b) => a.name.localeCompare(b.name));
         setDepartmentsList(sortedDepartments);
@@ -48,33 +48,43 @@ const StaffDirectory = () => {
         setIsLoading(false); // End loading
       }
     };
-  
+
     fetchAllDepartments();
   }, []);
-  
+
+  const handleNewDepartment = (newDepartment) => {
+    setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
+  };
+
+  // Filter departments based on search term
+  const filteredDepartments = departmentsList.filter((department) =>
+    department.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Example>
       <main className="w-full xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-          <DepartmentSearchBar />
-          {/* <button className="mr-4 w-36">
-          <img src={visitDepartment} alt="Visit Department" />
-        </button> */}
+          <DepartmentSearchBar onSearch={(value) => setSearchTerm(value)} />
+          <DepartmentDropdown
+            departments={filteredDepartments}
+            onSelectDepartment={() => {}}
+            onCreateDepartment={handleNewDepartment}
+          />
           <div className="staff-member-grid-container max-w-[1230px]">
-            {departmentsList.length > 0 ? (
-              departmentsList.map((department) => (
+            {isLoading ? (
+              <div className="mt-20 ml-32 loading-spinner"></div>
+            ) : filteredDepartments.length === 0 ? (
+              <p>No departments found.</p>
+            ) : (
+              filteredDepartments.map((department) => (
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  // imageUrl={department.banner || '../../../public/assets/dummyStaffImage.png'} // Default image
                   imageUrl={'assets/departmentsDefault.jpg'} // Default image
                   departmentID={department.id}
-                  // Add other props as needed
                 />
               ))
-            ) : (
-              <div className="mt-20 ml-32 loading-spinner"></div>
             )}
           </div>
         </div>
