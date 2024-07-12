@@ -114,16 +114,25 @@ export default function Pautan() {
 
   useEffect(() => {
     const fetchExtlink = async () => {
+      let allLinks = [];
+      let currentPage = 1;
+      let lastPage = 1;
+
       try {
-        const response = await fetch(`/api/crud/external_links`, {
-          method: "GET",
-          headers: { Accept: 'application/json' }
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        while (currentPage <= lastPage) {
+          const response = await fetch(`/api/crud/external_links?page=${currentPage}`, {
+            method: "GET",
+            headers: { Accept: 'application/json' }
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          allLinks = allLinks.concat(data.data.data);
+          lastPage = data.data.last_page;
+          currentPage++;
         }
-        const data = await response.json();
-        const sortedLinks = data.data.data.sort((a, b) => a.label.localeCompare(b.label));
+        const sortedLinks = allLinks.sort((a, b) => a.label.localeCompare(b.label));
         setExtlink(sortedLinks);
       } catch (error) {
         console.error('Error fetching links:', error);
@@ -157,6 +166,7 @@ export default function Pautan() {
     </>
   );
 }
+
 
 
 

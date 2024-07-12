@@ -455,6 +455,10 @@ const Pautan = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      let allApps = [];
+      let currentPage = 1;
+      let lastPage = 1;
+
       try {
         while (currentPage <= lastPage) {
           const response = await fetch(`${API_URL}?page=${currentPage}`, {
@@ -815,5 +819,3 @@ const Pautan = () => {
 };
 
 export default Pautan;
-
-
