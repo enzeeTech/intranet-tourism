@@ -77,12 +77,6 @@ export default function Login({ status, canResetPassword }) {
                     />
                     <span className="ml-2 text-sm text-neutral-500">Remember me?</span>
                 </div>
-
-                <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
-                    Log in
-                </PrimaryButton>
-                <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
-
                 <a type="button"
                     className={
                         `inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
@@ -93,6 +87,10 @@ export default function Login({ status, canResetPassword }) {
                     href="/auth/azure/redirect">
                     Log in Using AD
                 </a>
+                <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
+                <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
+                    Log in
+                </PrimaryButton>
                 <div className="mt-2 h-1">
                  <InputError message={
                     errors.email ? "Email and/or password is wrong" :
