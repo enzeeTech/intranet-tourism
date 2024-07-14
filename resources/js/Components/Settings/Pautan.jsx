@@ -463,7 +463,7 @@ const Pautan = () => {
         while (currentPage <= lastPage) {
           const response = await fetch(`${API_URL}?page=${currentPage}`, {
             method: "GET",
-            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+            headers: { Accept: "application/json" },
           });
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -558,7 +558,7 @@ const Pautan = () => {
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(newApp)
     })
       .then(response => response.json())
@@ -819,5 +819,3 @@ const Pautan = () => {
 };
 
 export default Pautan;
-
-
