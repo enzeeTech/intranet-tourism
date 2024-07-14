@@ -24,13 +24,17 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::queryable()->paginate();
+        $queryParams = request()->query();
+        $limit = request()->query('perpage', 15);
+
+        $posts = Post::queryable()->paginate($limit);
 
         // Transform the attachments field to always be an array
         $posts->getCollection()->transform(function ($post) {
             $post->attachments = [$post->attachments];
             return $post;
         });
+        $posts->appends($queryParams);
 
         return response()->json([
             'data' => $posts,
