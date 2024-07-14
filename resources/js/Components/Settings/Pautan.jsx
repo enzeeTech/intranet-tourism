@@ -594,7 +594,7 @@ const Pautan = () => {
 
     fetch(updateUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(updatedApp)
     })
       .then(response => response.json())
@@ -613,7 +613,8 @@ const Pautan = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
 
     fetch(deleteUrl, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },     
     })
       .then(response => {
         if (response.status === 204) {
