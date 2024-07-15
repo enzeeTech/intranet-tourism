@@ -159,7 +159,12 @@ export default function Pautan() {
               }`}
             >
               <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
-                <div className="min-w-0 flex-auto">
+                <img
+                  src={`https://icons.duckduckgo.com/ip2/${new URL(refer.url).hostname}.ico`}
+                  alt={`${refer.label} favicon`}
+                  className="h-6 w-6 flex-none"
+                />
+                <div className="min-w-0 flex-auto self-center">
                   <p className="text-sm font-semibold leading-5 text-gray-900">
                     {refer.label}
                   </p>
@@ -175,6 +180,8 @@ export default function Pautan() {
     </>
   );
 }
+
+
 
 
 

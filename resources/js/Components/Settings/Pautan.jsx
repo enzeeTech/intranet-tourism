@@ -463,7 +463,7 @@ const Pautan = () => {
         while (currentPage <= lastPage) {
           const response = await fetch(`${API_URL}?page=${currentPage}`, {
             method: "GET",
-            headers: { Accept: "application/json" },
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
           });
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -558,7 +558,7 @@ const Pautan = () => {
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newApp)
     })
       .then(response => response.json())
@@ -594,7 +594,7 @@ const Pautan = () => {
 
     fetch(updateUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedApp)
     })
       .then(response => response.json())
@@ -613,8 +613,7 @@ const Pautan = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
 
     fetch(deleteUrl, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },     
+      method: 'DELETE'
     })
       .then(response => {
         if (response.status === 204) {
@@ -820,3 +819,5 @@ const Pautan = () => {
 };
 
 export default Pautan;
+
+

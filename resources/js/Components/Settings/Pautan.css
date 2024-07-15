@@ -4,11 +4,11 @@ table {
 }
 
 .label-column {
-  width: 25%; /* Adjust this value to make the label column wider */
+  width: 40%; /* Adjust this value to make the label column wider */
 }
 
 .url-column {
-  width: 35%; /* Adjust this value to make the URL column wider */
+  width: 20%; /* Adjust this value to make the URL column wider */
 }
 
 .order-column {
