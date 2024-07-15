@@ -1,124 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Stories from 'react-insta-stories';
 import Popup from './CreateStoryPopup';
 import CreateImageStory from './CreateImageStory';
 import { usePage } from '@inertiajs/react';
-import './styles.css'
+import StoryViewer from './StoryViewer';
+import './styles.css';
 
-const StoryViewer = ({ stories, onClose, user, onViewed }) => {
-    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
-
-    const handleStoryEnd = () => {
-        if (currentStoryIndex === stories.length - 1) {
-            onViewed(user); // Notify parent component that stories have been viewed
-            onClose(); // Close the story viewer only when all stories are played
-        } else {
-            setCurrentStoryIndex(currentStoryIndex + 1); // Play the next story
-        }
-    };
-
-    const handlePrevStory = () => {
-        if (currentStoryIndex > 0) {
-            setCurrentStoryIndex(currentStoryIndex - 1);
-        }
-    };
-
-    return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            pointerEvents: 'none',
-        }}>
-            {/* Overlay */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 9998,
-                }}
-            ></div>
-            {/* Story viewer */}
-            <div
-                style={{
-                    position: 'relative',
-                    zIndex: 9999,
-                    pointerEvents: 'auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}
-                onClick={(e) => {
-                    if (e.clientX < window.innerWidth / 2) {
-                        handlePrevStory();
-                    }
-                }}
-            >
-                <div style={{
-                    position: 'relative',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
-                    maxWidth: '400px',
-                    maxHeight: '700px',
-                    overflow: 'hidden',
-                }}>
-                    {/* Close button */}
-                    <button
-                        style={{
-                            position: 'absolute',
-                            top: '8px',
-                            right: '8px',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '0',
-                        }}
-                        onClick={onClose}
-                    >
-                        <img
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
-                            alt="Close icon"
-                            style={{ width: '24px', height: '24px' }}
-                        />
-                    </button>
-                    {/* User info */}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <img src={user.src} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }} />
-                        <div style={{ fontSize: '14px' }}>{user.name}</div>
-                    </div>
-                    {/* Stories */}
-                    <Stories
-                        stories={stories}
-                        defaultInterval={1500}
-                        width={360}
-                        height={596}
-                        onStoryEnd={handleStoryEnd}
-                        currentIndex={currentStoryIndex}
-                    />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const StoryNew = () => {
+const StoryNew = ({ userId }) => {
     const [showStoryViewer, setShowStoryViewer] = useState(false);
     const [selectedStory, setSelectedStory] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
     const [avatars, setAvatars] = useState([
         {
             src: "assets/user4.jpeg",
@@ -142,51 +35,6 @@ const StoryNew = () => {
                 },
             ]
         },
-        {
-            src: "assets/user1.webp",
-            alt: "Avatar of Dan",
-            name: "Dan",
-            stories: [
-                { url: 'assets/lambo4.avif', caption: 'Story 1' },
-                { url: 'assets/lambo5.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user2.jpeg",
-            alt: "Avatar of Musa",
-            name: "Julie",
-            stories: [
-                { url: 'assets/gtr.jpeg', caption: 'Story 1' },
-                { url: 'assets/gtr2.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user5.jpeg",
-            alt: "Avatar of Safwan",
-            name: "Safwan",
-            stories: [
-            { url: 'assets/gtr1.jpeg', caption: 'Story 1' },
-            { url: 'assets/gtr3.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user6.webp",
-            alt: "Avatar of Hazmi",
-            name: "Hazmi",
-            stories: [
-            { url: 'assets/gtr4.jpeg', caption: 'Story 1' },
-            { url: 'assets/tesla.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user7.png",
-            alt: "Avatar of Jai",
-            name: "Jai",
-            stories: [
-            { url: 'assets/lambo3.webp', caption: 'Story 1' },
-            { url: 'assets/lambo2.jpeg', caption: 'Story 2' },
-            ]
-        },
     ]);
 
     const { props } = usePage();
@@ -197,25 +45,29 @@ const StoryNew = () => {
 
     useEffect(() => {
         console.log("Fetching user data...");
+        fetchUserData(id);
+    }, [id]);
+
+    const fetchUserData = (id) => {
         fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(({ data }) => {
-                setUserData({
-                    ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-                });
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error);
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(({ data }) => {
+            setUserData({
+                ...data,
+                profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
             });
-    }, [id]);
+        })
+        .catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
+    };
 
     useEffect(() => {
         // Add a "viewed" flag to each user
@@ -226,39 +78,39 @@ const StoryNew = () => {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        fetch(`/api/posts/posts`, {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(({ data }) => {
+            console.log("Fetched stories data:", data.data);
+            // Assuming data is an array of stories
+            const formattedStories = data.data.map(story => ({
+                url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
+                type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
+                duration: story.attachments.length > 0 && story.attachments[0].duration ? story.attachments[0].duration : null,
+                timestamp: Date.now() // Add timestamp for filtering later
+            }));
             setAvatars(prevAvatars => {
-                const updatedAvatars = prevAvatars.map(avatar => ({
-                    ...avatar,
-                    stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000) // Filter stories older than 24 hours
-                    // stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 8000) // Filter stories older than 8 seconds
-                }));
+                const updatedAvatars = [...prevAvatars];
+                updatedAvatars[0].stories = formattedStories.filter(story => story.url !== ''); // Filter out empty URLs
                 return updatedAvatars;
             });
-        }, 60 * 1000); // Check every minute
-        // }, 8000); // Check every 8 seconds
-
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (container) {
-            const onWheel = (e) => {
-                if (e.deltaY !== 0) {
-                    container.scrollLeft += e.deltaY;
-                    e.preventDefault();
-                }
-            };
-            container.addEventListener('wheel', onWheel);
-            return () => container.removeEventListener('wheel', onWheel);
-        }
+        })
+        .catch((error) => {
+            console.error("Error fetching stories:", error);
+        });
     }, []);
 
     const handleAvatarClick = (avatar) => {
-        if (avatar === loggedInUserAvatar) { // Check if the clicked avatar is the logged-in user's avatar
+        if (avatar === loggedInUserAvatar) {
             if (avatar.stories.length === 0) {
-                setIsPopupOpen(true); // Open the popup if the first avatar has no stories
+                fileInputRef.current.click();
             } else {
                 setSelectedStory(avatar.stories);
                 setSelectedUser(avatar);
@@ -272,7 +124,15 @@ const StoryNew = () => {
     };
 
     const handlePlusButtonClick = () => {
-        setIsPopupOpen(true);
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setIsPopupOpen(true);
+        }
     };
 
     const handleCloseViewer = () => {
@@ -313,7 +173,6 @@ const StoryNew = () => {
         name: userData.name || "User Name",
         stories: avatars[0].stories
     };
-
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
@@ -358,13 +217,20 @@ const StoryNew = () => {
                         border: '2px solid white',
                     }}>+</span>
                 </button>
-                <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
-                    {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
-                </div>
-                <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
+                <input
+                    type="file"
+                    accept="image/*, video/*"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                />
+                 <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
+                     {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
+                 </div>
+                 <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
             </div>
-            <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                {sortedAvatars.slice(1).map((avatar, index) => (
+             <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                 {sortedAvatars.slice(1).map((avatar, index) => (
                     <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
                         <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
                             <div style={{
@@ -399,7 +265,7 @@ const StoryNew = () => {
             )}
             {isPopupOpen && (
                 <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-                    <CreateImageStory onPostStory={handlePostStory} />
+                    <CreateImageStory userId={userId} onPostStory={handlePostStory} file={selectedFile} />
                 </Popup>
             )}
         </div>

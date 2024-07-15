@@ -148,24 +148,41 @@ export default function Pautan() {
         role="list"
         className="divide-y divide-gray-100 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
       >
-        {extlink.map((refer) => (
-          <li key={refer.id} className="relative flex justify-between gap-x-4 px-2 py-2 hover:bg-gray-50 sm:px-4">
-            <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
-              <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-5 text-gray-900">
-                  {refer.label}
-                </p>
-              </div>
-              <div className="flex shrink-0 items-center gap-x-2">
-                <ChevronRightIcon className="h-4 w-4 flex-none text-gray-400" aria-hidden="true" />
-              </div>
-            </a>
-          </li>
-        ))}
+        {extlink.map((refer, index) => {
+          const isTop = index === 0;
+          const isBottom = index === extlink.length - 1;
+          return (
+            <li
+              key={refer.id}
+              className={`relative flex justify-between gap-x-4 px-2 py-2 hover:bg-blue-100 sm:px-4 ${
+                isTop ? 'rounded-t-lg' : isBottom ? 'rounded-b-lg' : ''
+              }`}
+            >
+              <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
+                <img
+                  src={`https://icons.duckduckgo.com/ip2/${new URL(refer.url).hostname}.ico`}
+                  alt={`${refer.label} favicon`}
+                  className="h-6 w-6 flex-none"
+                />
+                <div className="min-w-0 flex-auto self-center">
+                  <p className="text-sm font-semibold leading-5 text-gray-900">
+                    {refer.label}
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-x-2">
+                  <ChevronRightIcon className="h-4 w-4 flex-none text-gray-400" aria-hidden="true" />
+                </div>
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </>
   );
 }
+
+
+
 
 
 

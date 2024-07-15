@@ -10,30 +10,6 @@ const ImageComponent = ({ src, alt, className }) => (
   />
 );
 
-// const ImageProfile = ({ selectedItem, userId }) => {
-//   const [images, setImages] = useState([]);
-
-//   useEffect(() => {
-//     fetch("/api/crud/resources")
-//       .then((response) => response.json())
-//       .then((data) => {
-//         const imagePaths = data.data.data
-//           .filter((item) => {
-//             // Check if the item is an image, you can adjust the condition based on your API response
-//             const fileExtension = item.path.split('.').pop().toLowerCase();
-//             return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
-//           })
-//           .map((item) => ({
-//             src: `/storage/${item.path}`,
-//             alt: `Description ${item.id}`,
-//             category: item.attachable_type // Adjust as per your condition
-//           }));
-//         setImages(imagePaths);
-//       })
-//       .catch((error) => console.error("Error fetching images:", error));
-//   }, []);
-
-
 const ImageProfile = ({ selectedItem, userId }) => {
   const [images, setImages] = useState([]);
 

@@ -50,6 +50,11 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
 
   console.log('isDeactivated', isDeactivated);
 
+  // function to return true or false if phone number is available
+  const isPhoneNumberAvailable = () => {
+    return phoneNo != null;
+  };
+
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
       <div className="card-header">
@@ -94,10 +99,11 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
         <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p>
       </div>
       <div className="card-footer">
-        <button className="call-button" onClick={handleCall} disabled={isDeactivated}>
+        {/* <button className={`call-button ${isPhoneNumberAvailable() ? 'opacity-20' : 'opacity-100'}`} onClick={handleCall} disabled={isDeactivated}> */}
+        <button className='call-button' onClick={handleCall} disabled={isDeactivated}>
           <img style={{ width: '20px', height: '20px' }} src={callIcon} alt="Call" />
         </button>
-        <button className="whatsapp-button" onClick={handleWhatsApp} disabled={isDeactivated}>
+        <button className={`whatsapp-button ${isPhoneNumberAvailable() ? 'opacity-20' : 'opacity-100'}`} onClick={handleWhatsApp} disabled={isDeactivated}>
           <img style={{ width: '20px', height: '20px' }} src={whatsappIcon} alt="WhatsApp" />
         </button>
       </div>

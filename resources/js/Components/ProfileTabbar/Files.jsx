@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 import UserFilePopup from '../Reusable/UserFilePopup';
-
+import Pagination from '../Paginator';
 const SearchInput = () => (
   <div className="flex min-w-72 gap-2 px-5 py-1.5 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
     <img
@@ -24,19 +24,6 @@ const SearchButton = () => (
   </button>
 );
 
-const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
-  <div className="py-3">
-    {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => (
-      <button
-        key={i}
-        onClick={() => paginate(i + 1)}
-        className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i + 1 ? 'bg-blue-200 text-blue-500' : 'bg-white text-blue-500'}`}
-      >
-        {i + 1}
-      </button>
-    ))}
-  </div>
-);
 
 // const Table = ({ userId }) => {
 //   const [currentPage, setCurrentPage] = useState(1);

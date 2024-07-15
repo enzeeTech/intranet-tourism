@@ -501,7 +501,7 @@ const Pautan = () => {
       const updateUrl = urlTemplate.replace('{id}', app.id);
       return fetch(updateUrl, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
         body: JSON.stringify(app)
       }).catch(error => console.error(`Error updating app with id ${app.id}:`, error.message));
     });
@@ -558,7 +558,7 @@ const Pautan = () => {
 
     fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(newApp)
     })
       .then(response => response.json())
@@ -594,7 +594,7 @@ const Pautan = () => {
 
     fetch(updateUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(updatedApp)
     })
       .then(response => response.json())
@@ -613,7 +613,9 @@ const Pautan = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
 
     fetch(deleteUrl, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+      body: JSON.stringify(deleteUrl)
     })
       .then(response => {
         if (response.status === 204) {
