@@ -18,33 +18,17 @@ const StoryNew = ({ userId }) => {
             alt: "Avatar of Thomas",
             name: "Musa",
             stories: []
-        },
-        {
-            src: "assets/women.avif",
-            alt: "Avatar of Aisha",
-            name: "Aisha",
-            stories: [
-                {
-                    url: 'assets/car2.mp4',
-                    type: 'video',
-                    duration: 10000
-                },
-                {
-                    url: 'assets/lambo2.jpeg',
-                    caption: 'Story 2'
-                },
-            ]
-        },
+        }
     ]);
 
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
     const [userData, setUserData] = useState({});
+    const [userStories, setUserStories] = useState([]);
 
     const containerRef = useRef(null);
 
     useEffect(() => {
-        console.log("Fetching user data...");
         fetchUserData(id);
     }, [id]);
 
@@ -70,42 +54,87 @@ const StoryNew = ({ userId }) => {
     };
 
     useEffect(() => {
-        // Add a "viewed" flag to each user
         setAvatars(avatars.map(avatar => ({
             ...avatar,
             viewed: false
         })));
     }, []);
 
+    const API_URL = "/api/posts/posts";
+    const USERS_API_URL = "/api/crud/users/";
+
     useEffect(() => {
-        fetch(`/api/posts/posts`, {
-            method: "GET",
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
+        const fetchStories = async () => {
+            let allStories = [];
+            let currentPage = 1;
+            let lastPage = 1;
+
+            try {
+                while (currentPage <= lastPage) {
+                    const response = await fetch(`${API_URL}?page=${currentPage}`, {
+                        method: "GET",
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+
+                    const data = await response.json();
+                    const storiesToAdd = data.data.data
+                        .filter(story => story.type === 'story')
+                        .map(story => ({
+                            url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
+                            type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
+                            text: story.content,
+                            userId: story.user_id,
+                            timestamp: Date.now()
+                        }));
+
+                    allStories = allStories.concat(storiesToAdd);
+
+                    setAvatars(prevAvatars => {
+                        const updatedAvatars = prevAvatars.map(avatar => ({
+                            ...avatar,
+                            stories: avatar.stories.concat(allStories.filter(story => story.url !== '' && story.userId === id))
+                        }));
+                        return updatedAvatars;
+                    });
+
+                    lastPage = data.data.last_page;
+                    currentPage++;
+                }
+
+                setUserStories(allStories);
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-            return response.json();
-        })
-        .then(({ data }) => {
-            console.log("Fetched stories data:", data.data);
-            // Assuming data is an array of stories
-            const formattedStories = data.data.map(story => ({
-                url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
-                type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
-                duration: story.attachments.length > 0 && story.attachments[0].duration ? story.attachments[0].duration : null,
-                timestamp: Date.now() // Add timestamp for filtering later
+        };
+
+        fetchStories();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const uniqueUserIds = [...new Set(userStories.map(story => story.userId))];
+            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}`));
+            const userResponses = await Promise.all(userPromises);
+            const userJsonPromises = userResponses.map(response => response.json());
+            const users = await Promise.all(userJsonPromises);
+
+            const userAvatars = users.map(user => ({
+                src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
+                alt: `Avatar of ${user.data.name}`,
+                name: user.data.username,
+                stories: userStories.filter(story => story.userId === user.data.id)
             }));
-            setAvatars(prevAvatars => {
-                const updatedAvatars = [...prevAvatars];
-                updatedAvatars[0].stories = formattedStories.filter(story => story.url !== ''); // Filter out empty URLs
-                return updatedAvatars;
-            });
-        })
-        .catch((error) => {
-            console.error("Error fetching stories:", error);
-        });
-    }, []);
+
+            setAvatars(prevAvatars => [...prevAvatars, ...userAvatars]);
+        };
+
+        if (userStories.length > 0) {
+            fetchUsers();
+        }
+    }, [userStories]);
 
     const handleAvatarClick = (avatar) => {
         if (avatar === loggedInUserAvatar) {
@@ -162,20 +191,19 @@ const StoryNew = ({ userId }) => {
         });
     };
 
-    const sortedAvatars = [
-        avatars[0],
-        ...avatars.slice(1).sort((a, b) => a.viewed - b.viewed) // Sort other avatars excluding the first one
-    ];
-
     const loggedInUserAvatar = {
         src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
         name: userData.name || "User Name",
-        stories: avatars[0].stories
+        stories: avatars[0].stories.filter(story => story.userId === id)
     };
 
+    const sortedAvatars = avatars
+        .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
+        .sort((a, b) => a.viewed - b.viewed);
+
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
             <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
                 <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(loggedInUserAvatar)} >
                     <div style={{
@@ -224,14 +252,14 @@ const StoryNew = ({ userId }) => {
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                 />
-                 <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
-                     {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
-                 </div>
-                 <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
+                <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
+                    {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
+                </div>
+                <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
             </div>
-             <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                 {sortedAvatars.slice(1).map((avatar, index) => (
-                    <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
+            <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                {sortedAvatars.map((avatar, index) => (
+                <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
                         <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
                             <div style={{
                                 borderRadius: '50%',
@@ -257,7 +285,7 @@ const StoryNew = ({ userId }) => {
                             {avatar.stories.length} {avatar.stories.length === 1 ? 'story' : 'stories'}
                         </div>
                         <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.name}</div>
-                    </div>
+                </div>
                 ))}
             </div>
             {showStoryViewer && selectedStory && (

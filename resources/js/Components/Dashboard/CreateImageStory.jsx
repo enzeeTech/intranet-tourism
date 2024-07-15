@@ -56,6 +56,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId }) => {
         };
         onPostStory(newStory);
         // onClose();
+        window.location.reload();
       } else {
         throw new Error('Network response was not ok');
       }
