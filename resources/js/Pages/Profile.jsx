@@ -164,6 +164,7 @@ export default function Profile() {
                                 status={profileData.status}
                                 onEditBanner={() => setIsPopupOpen(true)}
                                 rounded={true}
+                                userId={id}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
