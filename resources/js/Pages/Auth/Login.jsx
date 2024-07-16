@@ -31,6 +31,34 @@ export default function Login({ status, canResetPassword }) {
             <form onSubmit={submit} className="w-full p-4 sm:p -6 sm:py-8 ">
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
+                {/* <a type="button"
+                    className={
+                        `inline-flex items-center px-4 py-2 bg-white-500 border border-transparent rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
+                            processing && 'opacity-25'
+                        } flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50`
+                    }
+                    disabled={processing}
+                    href="/auth/azure/redirect">
+                    Login with Azure AD
+                </a> */}
+
+                <a
+                  type="button"
+                  className={`inline-flex items-center px-4 py-2 bg-white border border-solid border-black rounded-md font-semibold text-xs text-neutral-950 uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
+                    processing && 'opacity-25'
+                  } flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50`}
+                  disabled={processing}
+                  href="/auth/azure/redirect"
+                >
+                  <span
+                    className="mr-2 w-4 h-4"
+                    dangerouslySetInnerHTML={{ __html: '<svg enable-background="new 0 0 2499.6 2500" viewBox="0 0 2499.6 2500" xmlns="http://www.w3.org/2000/svg"><path d="m1187.9 1187.9h-1187.9v-1187.9h1187.9z" fill="#f1511b"/><path d="m2499.6 1187.9h-1188v-1187.9h1187.9v1187.9z" fill="#80cc28"/><path d="m1187.9 2500h-1187.9v-1187.9h1187.9z" fill="#00adef"/><path d="m2499.6 2500h-1188v-1187.9h1187.9v1187.9z" fill="#fbbc09"/></svg>' }}
+                  />
+                  Login with Azure AD
+                </a>
+
+                <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
+
                 <div className="mb-2.5">
                     <InputLabel htmlFor="email" value="Email" />
                     <TextInput
@@ -77,17 +105,6 @@ export default function Login({ status, canResetPassword }) {
                     />
                     <span className="ml-2 text-sm text-neutral-500">Remember me?</span>
                 </div>
-                <a type="button"
-                    className={
-                        `inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
-                            processing && 'opacity-25'
-                        } flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50`
-                    }
-                    disabled={processing}
-                    href="/auth/azure/redirect">
-                    Log in Using AD
-                </a>
-                <div className="block w-full text-center text-gray-700 text-sm py-2">OR</div>
                 <PrimaryButton className="flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50" disabled={processing}>
                     Log in
                 </PrimaryButton>
