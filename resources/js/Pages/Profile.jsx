@@ -97,7 +97,7 @@ export default function Profile() {
                     grade: data.employment_post?.schema_grade || "N/A",
                     location: data.employment_post?.location || "N/A",
                     dateofbirth: data.profile?.dob || "N/A",
-                    phone: data.profile?.work_phone + " " + data.profile?.phone_no || "",
+                    phone: data.profile?.work_phone || "N/A",
                     whatsapp: data.profile?.phone_no || "N/A",
                 }));
             })
@@ -168,7 +168,7 @@ export default function Profile() {
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
                                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                    <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
+                                    <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
                                     <Filter className="mr-10" />
                                     <div className="mb-20"></div>
                                     <OutputData polls={polls} showUserPosts={true} userId={id} />
