@@ -1,21 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AddMemberPopup.css';
+import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 
 const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const debounceTimeout = setTimeout(() => {
+          if (searchTerm) {
+            fetchAllSearchResults(searchTerm);
+          } else {
+            setSearchResults([]);
+          }
+        }, 300); 
+    
+        return () => clearTimeout(debounceTimeout);
+    }, [searchTerm]);
+
+    console.log('searchResults', searchResults);
+
+    const fetchAllSearchResults = async (query) => {
+        setLoading(true);
+        let allResults = [];
+        let currentPage = 1;
+        let hasMorePages = true;
+
+        try {
+            while (hasMorePages) {
+            const response = await fetch(`http://127.0.0.1:8000/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+            const data = await response.json();
+            allResults = [...allResults, ...data.data.data];
+            currentPage++;
+            hasMorePages = data.data.next_page_url !== null;
+            }
+            setSearchResults(allResults);
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+            setSearchResults([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const topShadowStyle = {
         boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)'
     };
 
-    const handleSearchChange = (event) => {
-        setSearchTerm(event.target.value);
+    const handleSearch = () => {
+        fetchAllSearchResults(searchTerm);
     };
 
-    const filteredPeople = people.filter(person =>
-        person.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredPeople = people.filter(person =>
+    //     person.name.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
 
     const handleSelectPerson = (person) => {
         if (!selectedPeople.includes(person)) {
@@ -31,6 +71,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
         setIsAddMemberPopupOpen(false);
     };
 
+    const handleAdd = () => {
+        console.log('Selected people:', selectedPeople);
+        setIsAddMemberPopupOpen(false);
+    }
+
     return (
         <div>
             {isAddMemberPopupOpen && (
@@ -40,7 +85,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
                             type="text"
                             placeholder="Search people"
                             value={searchTerm}
-                            onChange={handleSearchChange}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-[95%] p-2 mb-4 ml-[2.5%] border border-gray-300 rounded-full"
                         />
                         <div className="flex flex-wrap gap-2 px-2 mb-4 ml-1 ">
@@ -57,19 +102,23 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
                             ))}
                         </div>
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
-                            {filteredPeople.map((person, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center p-2 cursor-pointer"
-                                    onClick={() => handleSelectPerson(person)}
-                                >
-                                    <img src={person.avatar} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
-                                    <div>
-                                        <div className="text-lg font-bold">{person.name}</div>
-                                        <div className="font-light text-gray-600">{person.position}</div>
+                            {loading ? (
+                                <div>Loading...</div>
+                            ) : (
+                                searchResults.map((person, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center p-2 cursor-pointer"
+                                        onClick={() => handleSelectPerson(person)}
+                                    >
+                                        <img src={person.profile?.image1 || defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <div>
+                                            <div className="text-lg font-bold">{person.name}</div>
+                                            <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            )}
                         </div>
                         <div className="flex justify-end pt-3 h-[70px] border-t" style={{...topShadowStyle}}>
                             <button 
@@ -80,7 +129,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
                             </button>
                             <button 
                                 className="w-[100px] px-4 mb-4 mr-4 text-white bg-[#FF5437] rounded-full"
-                                onClick={handleClose}
+                                onClick={handleAdd}
                             >
                                 Add
                             </button>
