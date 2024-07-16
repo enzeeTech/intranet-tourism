@@ -667,7 +667,7 @@ const Pautan = () => {
                   <tr>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 label-column">App name</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 url-column">URL</th>
-                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900 order-column">Order</th>
+                    {/* <th className="px-6 py-3 text-base font-bold text-center text-gray-900 order-column">Order</th> */}
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Edit</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Delete</th>
                   </tr>
@@ -712,7 +712,7 @@ const Pautan = () => {
                               style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                             />
                           </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap order-column">
+                          {/* <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap order-column">
                             <div className="flex items-center justify-center">
                               <button
                                 className="px-2"
@@ -737,15 +737,15 @@ const Pautan = () => {
                                 <img src="assets/orderingdown.svg" alt="Down" />
                               </button>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                          </td> */}
+                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap edit-column">
                             <div className="flex items-center justify-center">
                               <button className="text-blue-100" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
                                 <img className="w-7" src="assets/EditIcon.svg" alt="Edit" />
                               </button>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap delete-column">
                             <div className="flex items-center justify-center">
                               <button className="text-red-500" onClick={(e) => { e.stopPropagation(); setCurrentApp(app); setIsDeleteModalVisible(true); }}>
                                 <img className="w-7" src="assets/redDeleteIcon.svg" alt="Delete" />
