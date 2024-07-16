@@ -104,6 +104,7 @@ const StaffDirectory = () => {
             role: title,
             status: 'Online',
             imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
+            workNo: userData.data.profile.work_phone,
             phoneNo: userData.data.profile.phone_no,
             isDeactivated: userData.data.is_active,
             order: userData.data.order,
@@ -263,6 +264,7 @@ const StaffDirectory = () => {
                       role={member.role}
                       status={member.status}
                       imageUrl={member.imageUrl}
+                      workNo={member.workNo}
                       phoneNo={member.phoneNo}
                       isDeactivated={member.isDeactivated}
                       onDeactivateClick={() => handleDeactivateClick(member.id)}

@@ -9,16 +9,19 @@ import phoneActiveIcon from '../../../../public/assets/phoneActiveIcon.png';
 import whatsappActiveIcon from '../../../../public/assets/whatsappActiveIcon.png';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
-const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
+const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
   const threeDotButtonRef = useRef(null);
   const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
   const [isWhatsAppPopupOpen, setIsWhatsAppPopupOpen] = useState(false);
 
   const handleCall = () => {
-    if (!phoneNo || isDeactivated) return;
+    if (!workNo || isDeactivated) return;
+  
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const fullNumber = `+6038891${workNo}`;
+  
     if (isMobile) {
-      window.location.href = `tel:${phoneNo}`;
+      window.location.href = `tel:${fullNumber}`;
     } else {
       setIsCallPopupOpen(true);
     }
@@ -51,8 +54,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
   };
 
   const isPhoneNumberAvailable = () => phoneNo != null;
-  const testNumber = null;
-  const isTestNumber = () => testNumber != null;
+  const isWorkNumberAvailable = () => workNo != null;
 
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
@@ -80,8 +82,8 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
         <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p>
       </div>
       <div className="card-footer">
-        <button className={`call-button ${isPhoneNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleCall} disabled={isDeactivated || !isPhoneNumberAvailable()}>
-          <img src={isDeactivated ? callIcon : isPhoneNumberAvailable() ? phoneActiveIcon : callIcon} alt="Call" />
+        <button className={`call-button ${isWorkNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleCall} disabled={isDeactivated || !isWorkNumberAvailable()}>
+          <img src={isDeactivated ? callIcon : isWorkNumberAvailable() ? phoneActiveIcon : callIcon} alt="Call" />
         </button>
         <button className={`whatsapp-button ${isPhoneNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleWhatsApp} disabled={isDeactivated || !isPhoneNumberAvailable()}>
           <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" />
@@ -94,7 +96,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, isDeactiva
             <p style={{ fontSize: '25px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
               <br />
-              Phone number: {phoneNo}
+              Work No: +603-8891 {workNo}
             </p>
           </div>
         </div>
