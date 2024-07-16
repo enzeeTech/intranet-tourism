@@ -209,7 +209,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     // Create a FormData object to handle file upload
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('user_id', String(userId)); // Convert user_id to string
+    formData.append('user_id', id); // Ensure user_id is appended correctly
   
     // Log FormData entries
     for (let [key, value] of formData.entries()) {
@@ -229,7 +229,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     try {
       console.log('Uploading profile photo with payload:', {
         image: file,
-        user_id: String(userId), // Log user_id as string
+        user_id: id, // Log user_id
       });
   
       const response = await fetch(url, options);
@@ -249,7 +249,6 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     }
   };
   
-
   return (
     <header
       className="flex overflow-hidden relative z-999 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[400px] max-md:px-5 max-md:max-w-full"
