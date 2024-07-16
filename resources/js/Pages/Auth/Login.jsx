@@ -44,9 +44,9 @@ export default function Login({ status, canResetPassword }) {
 
                 <a
                   type="button"
-                  className={`inline-flex items-center px-4 py-2 bg-white border border-solid border-black rounded-md font-semibold text-xs text-neutral-950 uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
+                  className={`inline-flex items-center px-4 py-2 bg-white border border-solid border-black rounded-md font-semibold text-xs uppercase tracking-widest focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${
                     processing && 'opacity-25'
-                  } flex justify-center w-full py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 disabled:opacity-50`}
+                  } flex justify-center w-full py-2 bg-blue-500 font-bold rounded hover:bg-gray-700 hover:text-white text-black disabled:opacity-50`}
                   disabled={processing}
                   href="/auth/azure/redirect"
                 >
