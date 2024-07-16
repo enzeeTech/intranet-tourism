@@ -8,11 +8,19 @@ table {
 }
 
 .url-column {
-  width: 20%; /* Adjust this value to make the URL column wider */
+  width: 25%; /* Adjust this value to make the URL column wider */
 }
 
 .order-column {
   width: 15%; /* Adjust this value to make the order column narrower */
+}
+
+.edit-column {
+  width: 18%; /* Adjust this value to make the order column narrower */
+}
+
+.delete-column {
+  width: 18%; /* Adjust this value to make the order column narrower */
 }
 
 .fixed-size-row {
