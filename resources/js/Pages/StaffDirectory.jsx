@@ -103,7 +103,7 @@ const StaffDirectory = () => {
             name: userData.data.name,
             role: title,
             status: 'Online',
-            imageUrl: '/assets/dummyStaffPlaceHolder.jpg',
+            imageUrl: userData.data.profile.image,
             workNo: userData.data.profile.work_phone,
             phoneNo: userData.data.profile.phone_no,
             isDeactivated: userData.data.is_active,

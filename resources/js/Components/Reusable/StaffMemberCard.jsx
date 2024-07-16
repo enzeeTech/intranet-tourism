@@ -60,7 +60,11 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
       <div className="card-header">
         <a href={`/user/${id}`}>
-          <img src={imageUrl} alt={name} className="staff-member-image" />
+        <img 
+          src={imageUrl ? `/avatar/full/${imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} 
+          alt={name} 
+          className="staff-member-image" 
+        />
         </a>
         <button
           className="status-button"
