@@ -103,7 +103,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription }
   );
 }
 
-function Navigation({userId, departmentID}) {
+function Navigation({userId, departmentID, departmentName}) {
   const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
   const [polls, setPolls] = useState([]);
 
@@ -164,9 +164,10 @@ function Navigation({userId, departmentID}) {
         <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
           <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
             {/* <ShareYourThoughtsDepart /> */}
+            {/* <ShareYourThoughts userId={userId} postType={`department_${departmentID}`} onCreatePoll={handleCreatePoll} /> */}
             <ShareYourThoughts userId={userId} postType={`department_${departmentID}`} onCreatePoll={handleCreatePoll} />
             <Filter /><br />
-            <OutputData polls={polls} filterType={`department_${departmentID}`} />
+            <OutputData polls={polls} filterType={`department_${departmentID}`} departmentName={departmentName} />
           </div>
         </div>
       )}
@@ -182,7 +183,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
         departmentHeader={departmentHeader}
         departmentDescription={departmentDescription}
       />
-      <Navigation departmentID={departmentID} userId={userId} />
+      <Navigation departmentID={departmentID} userId={userId} departmentName={departmentHeader} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
   background: #fff;
   border-radius: 15px;
   box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #eeeeee;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -92,6 +93,7 @@
   height: 40px;
   width: 200px;
   background: #F9FAFC;
+  border-top: 1px solid #eeeeee;
 }
 
 .call-button {
@@ -324,4 +326,29 @@
 
 .staff-member-card.deactivated {
   opacity: 0.6;
+}
+
+.call-button, .whatsapp-button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F9FAFC;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.call-button {
+  border-right: 1px solid #E4E4E4;
+}
+
+.call-button img, .whatsapp-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.call-button.disabled, .whatsapp-button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
