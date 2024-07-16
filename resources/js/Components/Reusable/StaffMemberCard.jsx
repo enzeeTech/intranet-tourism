@@ -61,7 +61,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
       <div className="card-header">
         <a href={`/user/${id}`}>
         <img 
-          src={imageUrl ? `/avatar/full/${imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} 
+          src={imageUrl ? `/avatar/${imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} 
           alt={name} 
           className="staff-member-image" 
         />
