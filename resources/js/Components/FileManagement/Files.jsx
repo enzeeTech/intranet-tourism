@@ -2,21 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 import PopupContent from '../Reusable/PopupContent';
 import { data } from 'autoprefixer';
-
-const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage }) => (
-  <div className="py-3">
-    {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => (
-      <button
-        key={i}
-        onClick={() => paginate(i + 1)}
-        className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i + 1 ? 'bg-blue-200 text-blue-500' : 'bg-white text-blue-500'}`}
-      >
-        {i + 1}
-      </button>
-    ))}
-  </div>
-);
-
+import Pagination from '../Paginator';
 
 const FileTable = () => {
     const [currentPage, setCurrentPage] = useState(1);

@@ -4,15 +4,23 @@ table {
 }
 
 .label-column {
-  width: 25%; /* Adjust this value to make the label column wider */
+  width: 40%; /* Adjust this value to make the label column wider */
 }
 
 .url-column {
-  width: 35%; /* Adjust this value to make the URL column wider */
+  width: 25%; /* Adjust this value to make the URL column wider */
 }
 
 .order-column {
   width: 15%; /* Adjust this value to make the order column narrower */
+}
+
+.edit-column {
+  width: 18%; /* Adjust this value to make the order column narrower */
+}
+
+.delete-column {
+  width: 18%; /* Adjust this value to make the order column narrower */
 }
 
 .fixed-size-row {

@@ -2,11 +2,12 @@
   background: #fff;
   border-radius: 15px;
   box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #eeeeee;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 200px;
-  width: 200px;
+  height: 300px;
+  width: 180px;
 }
 
 .card-header {
@@ -15,8 +16,8 @@
 
 .staff-member-image {
   width: 100%;
-  height: 95px;
-  object-fit: contain;
+  height: 195px;
+  object-fit: fill;
 }
 
 .three-dot-button {
@@ -32,8 +33,8 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
   background: none;
   border: none;
   cursor: pointer;
@@ -90,8 +91,9 @@
   display: flex;
   justify-content: space-around;
   height: 40px;
-  width: 200px;
+  width: 180px;
   background: #F9FAFC;
+  border-top: 1px solid #eeeeee;
 }
 
 .call-button {
@@ -324,4 +326,29 @@
 
 .staff-member-card.deactivated {
   opacity: 0.6;
+}
+
+.call-button, .whatsapp-button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F9FAFC;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.call-button {
+  border-right: 1px solid #E4E4E4;
+}
+
+.call-button img, .whatsapp-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.call-button.disabled, .whatsapp-button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

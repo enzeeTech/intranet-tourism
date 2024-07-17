@@ -24,6 +24,7 @@ const DepartmentInner = () => {
       const response = await fetch(`/api/department/departments/${departmentId}`);
       const result = await response.json();
       if (result.data) {
+        console.log("DATA", result.data);
         setDepartmentData(result.data);
       }
     } catch (error) {
@@ -40,7 +41,7 @@ const DepartmentInner = () => {
     }
   }, []);
 
-  console.log('Department Data:', getDepartmentIdFromQuery());
+  // console.log('Department Data:', departmentData);
 
   return (
     <Example>

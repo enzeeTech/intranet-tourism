@@ -11,6 +11,7 @@ const Ordering = () => {
     const { props } = usePage();
     const [staffMembers, setStaffMembers] = useState([]);
     const [notificationMessage, setNotificationMessage] = useState("");
+    const departmentId = props.departmentId;
 
     useEffect(() => {
         console.log(props);
@@ -25,7 +26,6 @@ const Ordering = () => {
             }
         }
     }, [props.staffMembers]);
-    
 
     console.log('staffMembers:', staffMembers);
 
@@ -99,7 +99,12 @@ const Ordering = () => {
 
         setTimeout(() => {
             setIsNotificationVisible(false);
+            window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
         }, 1500);
+    };
+
+    const handleBack = () => {
+        window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
     };
 
     return (
@@ -111,7 +116,7 @@ const Ordering = () => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <a href="/staffDirectory" className="text-lg font-semibold text-black">Back</a>
+                                    <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
                                     <button className="px-6 py-1 text-base font-bold text-white bg-[#FF5436] rounded-full" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
@@ -137,7 +142,7 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={item.imageUrl ? `/avatar/${item.imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                     {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>
@@ -199,13 +204,6 @@ const Ordering = () => {
                     </aside>
                 </div>
             </div>
-            {/* {isNotificationVisible && (
-                <div className="fixed z-50 flex items-center justify-center w-full top-20">
-                    <div className="p-4 mb-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">{notificationMessage}</p>
-                    </div>
-                </div>
-            )} */}
             {isNotificationVisible && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
                     <div className="p-4 bg-white rounded-lg shadow-lg">

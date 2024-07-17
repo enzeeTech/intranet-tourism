@@ -19,7 +19,7 @@ function ListItem({ icon, alt, text, onClick }) {
   );
 }
 
-function EditProfilePhoto({ onClose, onSelectFile }) {
+function EditProfilePhoto({ onClose, onSelectFile, userId }) {
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -32,8 +32,8 @@ function EditProfilePhoto({ onClose, onSelectFile }) {
       const file = event.target.files[0];
       if (file) {
         setSelectedFile(file);
-        setShowUpdatePopup(true); // Set state to open the update popup
-        onSelectFile(file); // Pass the selected file to the parent component
+        setShowUpdatePopup(true);
+        onSelectFile(file);
       }
     };
     fileInput.click();
@@ -55,7 +55,7 @@ function EditProfilePhoto({ onClose, onSelectFile }) {
   const handleCloseUpdatePopup = (e) => {
     e.stopPropagation();
     setShowUpdatePopup(false);
-    onClose(e); // Optionally close the entire modal if needed
+    onClose(e);
   };
 
   const listItems = [
@@ -90,7 +90,7 @@ function EditProfilePhoto({ onClose, onSelectFile }) {
           </div>
         </section>
       </div>
-      {showPopup && <PhotoAndAvatarPopup onClose={handleCloseUpdatePopup} />}
+      {showPopup && <PhotoAndAvatarPopup onClose={handleAvatarClose} />}
       {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={selectedFile} />}
     </div>
   );

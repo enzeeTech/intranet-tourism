@@ -19,12 +19,12 @@ const Dashboard = () => {
   };
 
   return (
-    <Example className="fixed">
+    <Example>
       <div className="flex-row">
-        <div className="flex ">
+        <div className="">
       <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)]">
         <div className=" px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-          <StoryNew />
+          <StoryNew userId={id} />
           <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
           <Filter className="mr-10" />
           <div className="mb-20"></div>

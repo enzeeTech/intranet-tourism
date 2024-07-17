@@ -70,7 +70,6 @@ function FeedbackForm() {
   );
 }
 
-
 function OutputData({ polls, filterType, userId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -115,17 +114,19 @@ function OutputData({ polls, filterType, userId }) {
     return <div>Loading...</div>;
   }
 
-  let filteredPostData = postData;
+  // Filter out posts with type 'story'
+  let filteredPostData = postData.filter(post => post.type !== 'story');
 
   if (filterType !== null) {
-    filteredPostData = postData.filter((post) => post.type === filterType);
+    filteredPostData = filteredPostData.filter((post) => post.type === filterType);
   }
 
-  const userPosts = userId ? postData.filter(post => post.user.id === userId) : [];
+    const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
 
   // Reverse the order of posts to display latest first
   const reversedUserPosts = userId ? [...userPosts].reverse() : [];
-  const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...postData].reverse();
+  const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...filteredPostData].reverse();
+
 
   return (
     <>
@@ -222,7 +223,10 @@ function OutputData({ polls, filterType, userId }) {
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                     </div>
                   </div>
-                  <img loading="lazy" src="assets/wallpost-dotbutton.svg" alt="Options" className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer -mt-2" onClick={() => togglePopup(index)} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1">{post.type}</span>
+                    <button className="shrink-0 self-start aspect-[3.85] w-[19px]" onClick={() => togglePopup(index)}>⋮</button>
+                  </div>
                 </div>
               </div>
               {isPopupOpen[index] && (

@@ -451,6 +451,7 @@ const Pautan = () => {
   const [currentApp, setCurrentApp] = useState(null);
   const [newAppName, setNewAppName] = useState('');
   const [newAppUrl, setNewAppUrl] = useState('');
+  const [urlError, setUrlError] = useState('');
   const csrfToken = useCsrf();
 
   useEffect(() => {
@@ -463,7 +464,7 @@ const Pautan = () => {
         while (currentPage <= lastPage) {
           const response = await fetch(`${API_URL}?page=${currentPage}`, {
             method: "GET",
-            headers: { Accept: "application/json" },
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
           });
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -501,7 +502,7 @@ const Pautan = () => {
       const updateUrl = urlTemplate.replace('{id}', app.id);
       return fetch(updateUrl, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
         body: JSON.stringify(app)
       }).catch(error => console.error(`Error updating app with id ${app.id}:`, error.message));
     });
@@ -544,7 +545,24 @@ const Pautan = () => {
     return { isNameDuplicate, isUrlDuplicate };
   };
 
+  const isValidUrl = (url) => {
+    return url.startsWith('http://') || url.startsWith('https://');
+  };
+
+  const resetForm = () => {
+    setNewAppName('');
+    setNewAppUrl('');
+    setUrlError('');
+  };
+
   const PautanHandleAddApp = () => {
+    if (!isValidUrl(newAppUrl)) {
+      setUrlError('URL must start with http:// or https://');
+      return;
+    } else {
+      setUrlError('');
+    }
+
     const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
     if (isNameDuplicate) {
       alert('App name already exists.');
@@ -564,9 +582,8 @@ const Pautan = () => {
       .then(response => response.json())
       .then(data => {
         setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
-        setNewAppName('');
-        setNewAppUrl('');
         setIsAddModalVisible(false);
+        resetForm();
       })
       .catch(error => console.error('Error adding app:', error));
       window.location.reload();
@@ -576,10 +593,18 @@ const Pautan = () => {
     setCurrentApp(app);
     setNewAppName(app.label);
     setNewAppUrl(app.url);
+    setUrlError('');
     setIsEditModalVisible(true);
   };
 
   const PautanHandleUpdateApp = () => {
+    if (!isValidUrl(newAppUrl)) {
+      setUrlError('URL must start with http:// or https://');
+      return;
+    } else {
+      setUrlError('');
+    }
+
     const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
     if (isNameDuplicate) {
       alert('App name already exists.');
@@ -594,16 +619,14 @@ const Pautan = () => {
 
     fetch(updateUrl, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(updatedApp)
     })
       .then(response => response.json())
       .then(data => {
         setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
-        setCurrentApp(null);
-        setNewAppName('');
-        setNewAppUrl('');
         setIsEditModalVisible(false);
+        resetForm();
       })
       .catch(error => console.error('Error updating app:', error));
       window.location.reload();
@@ -613,7 +636,9 @@ const Pautan = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
 
     fetch(deleteUrl, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+      body: JSON.stringify(deleteUrl)
     })
       .then(response => {
         if (response.status === 204) {
@@ -632,7 +657,7 @@ const Pautan = () => {
       <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-10">
         <div className="flex items-center justify-between mb-2 border-b border-gray-200">
           <h2 className="mb-3 text-2xl font-bold text-blue-500">External Apps</h2>
-          <button className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full" onClick={() => setIsAddModalVisible(true)}>+ Add</button>
+          <button className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full" onClick={() => { resetForm(); setIsAddModalVisible(true); }}>+ Add</button>
         </div>
         <DragDropContext onDragEnd={PautanHandleDragEnd}>
           <Droppable droppableId="apps">
@@ -642,7 +667,7 @@ const Pautan = () => {
                   <tr>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 label-column">App name</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 url-column">URL</th>
-                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900 order-column">Order</th>
+                    {/* <th className="px-6 py-3 text-base font-bold text-center text-gray-900 order-column">Order</th> */}
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Edit</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Delete</th>
                   </tr>
@@ -687,7 +712,7 @@ const Pautan = () => {
                               style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                             />
                           </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap order-column">
+                          {/* <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap order-column">
                             <div className="flex items-center justify-center">
                               <button
                                 className="px-2"
@@ -712,15 +737,15 @@ const Pautan = () => {
                                 <img src="assets/orderingdown.svg" alt="Down" />
                               </button>
                             </div>
-                          </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                          </td> */}
+                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap edit-column">
                             <div className="flex items-center justify-center">
                               <button className="text-blue-100" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
                                 <img className="w-7" src="assets/EditIcon.svg" alt="Edit" />
                               </button>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                          <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap delete-column">
                             <div className="flex items-center justify-center">
                               <button className="text-red-500" onClick={(e) => { e.stopPropagation(); setCurrentApp(app); setIsDeleteModalVisible(true); }}>
                                 <img className="w-7" src="assets/redDeleteIcon.svg" alt="Delete" />
@@ -757,6 +782,7 @@ const Pautan = () => {
               onChange={(e) => setNewAppUrl(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
             />
+            {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3">
               <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
                 Add
@@ -787,6 +813,7 @@ const Pautan = () => {
               onChange={(e) => setNewAppUrl(e.target.value)}
               className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
             />
+            {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3">
               <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleUpdateApp}>
                 Update

@@ -90,7 +90,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
                   className="flex items-center justify-between p-2 cursor-pointer search-result-item hover:bg-gray-100"
                 >
                   <div className="flex items-center cursor-pointer">
-                    <img src={result.profile?.image1 || defaultImage} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
+                  <img src={result.profile.image ? `/avatar/${result.profile.image}` : defaultImage} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
                     <p className="font-semibold cursor-pointer">{result.name}</p>
                   </div>
                   <p className="text-gray-600">{result.employment_post?.title || 'No title available'}</p>
