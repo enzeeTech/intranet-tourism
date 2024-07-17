@@ -68,7 +68,9 @@ class ProfileController extends Controller
     public function update(Profile $profile)
     {
         $validated = request()->validate(...Profile::rules('update'));
-        $profile->update($validated);
+        $resourceRef = uploadFile(request()->file('image'), null, 'avatar');
+
+        $profile->update(array_merge($validated, ['image' => $resourceRef['path']]));
 
         return response()->noContent();
     }
@@ -76,7 +78,7 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function deleteAccount(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
@@ -92,5 +94,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function destroy(Profile $profile)
+    {
+        $profile->delete();
+        return response()->noContent();
     }
 }
