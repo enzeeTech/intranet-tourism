@@ -142,7 +142,7 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={item.imageUrl ? `/avatar/${item.imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                     {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>
