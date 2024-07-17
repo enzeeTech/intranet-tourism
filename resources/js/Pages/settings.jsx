@@ -128,7 +128,7 @@ const Settings = () => {
                 </button>
 
                 {isOpen && (
-                    <div className="fixed left-4 bottom-12 bg-white shadow-lg rounded-md border border-gray-200 w-52">
+                    <div className="fixed left-4 bottom-12 bg-white shadow-lg rounded-md border border-gray-200 w-52 max-h-screen sm:max-h-64 overflow-y-auto">
                         <ul className="divide-y divide-gray-200">
                             {navigation.map((item) => (
                                 <li key={item.name}>
