@@ -766,8 +766,8 @@ const Pautan = () => {
 
       {isAddModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-          <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
-            <h2 className="mb-4 text-2xl font-bold">Add New App</h2>
+          <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
+            <h2 className="mb-4 text-xl font-bold">Add New App</h2>
             <input
               type="text"
               placeholder="Example.com"
@@ -780,15 +780,15 @@ const Pautan = () => {
               placeholder="https://example.com"
               value={newAppUrl}
               onChange={(e) => setNewAppUrl(e.target.value)}
-              className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
+              className="w-full p-2 mb-4 border rounded-3xl outline-none border-E4E4E4"
             />
             {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3">
-              <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
-                Add
-              </button>
-              <button className="px-6 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsAddModalVisible(false)}>
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsAddModalVisible(false)}>
                 Cancel
+              </button>
+              <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
+                Add
               </button>
             </div>
           </div>
@@ -797,8 +797,8 @@ const Pautan = () => {
 
       {isEditModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-          <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
-            <h2 className="mb-4 text-2xl font-bold">Edit App</h2>
+          <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
+            <h2 className="mb-4 text-xl font-bold">Edit App</h2>
             <input
               type="text"
               placeholder="Example.com"
@@ -815,11 +815,11 @@ const Pautan = () => {
             />
             {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3">
-              <button className="px-8 py-1 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleUpdateApp}>
-                Update
-              </button>
-              <button className="px-6 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsEditModalVisible(false)}>
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsEditModalVisible(false)}>
                 Cancel
+              </button>
+              <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleUpdateApp}>
+                Update
               </button>
             </div>
           </div>
@@ -828,14 +828,14 @@ const Pautan = () => {
 
       {isDeleteModalVisible && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-          <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
+          <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
             <h2 className="mb-4 text-xl font-bold text-center">Delete the link?</h2>
             <div className="flex justify-center space-x-4">
-              <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={PautanHandleDeleteApp}>
-                Yes
-              </button>
-              <button className="px-8 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeleteModalVisible(false)}>
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsDeleteModalVisible(false)}>
                 No
+              </button>
+              <button className="px-8 py-2 text-white font-bold bg-[#4880FF] rounded-full" onClick={PautanHandleDeleteApp}>
+                Yes
               </button>
             </div>
           </div>
