@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 // SearchBar Component
 function SearchBar({ onChange }) {
   return (
-    <form className="flex justify-center items-center px-0 py-3.5 text-lg rounded-md text-neutral-800 text-opacity-50 w-full">
+    <form className="flex justify-center items-center text-lg rounded-md text-neutral-800 text-opacity-50 w-full">
       <label className="sr-only" htmlFor="searchInput">Search people</label>
       <input
         id="searchInput"
@@ -69,17 +69,17 @@ function Invite({ onClose }) {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <section ref={popupRef} className="flex flex-col pt-6 pb-5 bg-white rounded-2xl shadow-sm max-w-[431px]">
         <header className="flex gap-5 self-center max-w-full text-lg font-extrabold text-center text-neutral-800 w-[431px] px-2">
-          <div className="flex-auto font-bold">Invite people</div>
+          <div className="flex-auto text-xl mb-4 font-bold">Invite people</div>
           {/* <button onClick={onClose} className="s">
             <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&" alt="" className="shrink-0 w-6 aspect-square" />
           </button> */}
         </header>
-        <main className="flex flex-col items-center px-4 mt-5 w-full">
+        <main className="flex flex-col items-center px-4 w-full">
           <SearchBar onChange={handleSearchChange} />
           {filteredUsers.map((user, index) => (
             <UserItem key={index} imgSrc={user.imgSrc} name={user.name} department={user.department} />
           ))}
-          <div className="flex gap-5 self-end mt-6 text-sm text-center">
+          <div className="flex gap-5 mt-6 self-end text-sm text-center">
             <button className="my-auto font-semibold text-neutral-800" onClick={onClose}>Cancel</button>
             <button className="justify-center px-6 py-2.5 bg-blue-500 rounded-full font-bold text-white">Save</button>
           </div>

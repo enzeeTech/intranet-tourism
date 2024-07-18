@@ -6,7 +6,7 @@ function Popup({ title, content, onClose, onSave }) {
             <div className="w-[350px] bg-white p-6 rounded-2xl shadow-custom max-w-md" onClick={(e) => e.stopPropagation()}>
                 <h2 className="text-xl font-bold mb-4 text-center">{title}</h2>
                 <p className="mb-2">{content}</p>
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center mt-4 text-sm">
                     <button onClick={onClose} className="mr-2 bg-white text-gray-400 border border-gray-400 px-4 py-2 rounded-3xl">Cancel</button>
                     <button onClick={onSave} className="bg-blue-500 text-white px-4 py-2 rounded-3xl">Save</button>
                 </div>

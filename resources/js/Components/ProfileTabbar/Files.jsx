@@ -3,23 +3,23 @@ import React, { useState, useEffect } from 'react';
 import UserFilePopup from '../Reusable/UserFilePopup';
 import Pagination from '../Paginator';
 const SearchInput = () => (
-  <div className="flex min-w-72 gap-2 px-5 py-1.5 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
+  <div className="flex min-w-72 gap-0 px-5 py-0 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8">
     <img
       loading="lazy"
       src="https://cdn.builder.io/api/v1/image/assets/TEMP/e9a74adec558c689d2c2036311d5dad5a1cc1d44aea0cf5f88c1bd1bafeea3ce?apiKey=285d536833cc4168a8fbec258311d77b&"
       alt="Search Icon"
-      className="shrink-0 w-6 aspect-square"
+      className="shrink-0 w-4 aspect-square"
     />
     <input
       type="text"
-      className="w-full py-2 pr-4 text-black border-none focus:outline-none"
+      className="w-full py-0 px-2 text-black border-none focus:outline-none"
       placeholder="Search"
     />
   </div>
 );
 
 const SearchButton = () => (
-  <button className="justify-center px-5 py-1.5 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-10">
+  <button className="justify-center px-5 py-2 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-8">
     Search
   </button>
 );

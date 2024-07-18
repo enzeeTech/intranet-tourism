@@ -149,20 +149,20 @@ function DpMembers() {
           type="text"
           value={searchInput}
           onChange={handleSearchChange}
-          className="flex-grow px-7 py-4 bg-gray-100 rounded-3xl border-gray-100 text-neutral-800 max-md:px-5 max-md:max-w-full"
+          className="text-md flex-grow px-4 py-2 bg-gray-100 rounded-full border-gray-100 text-neutral-800 max-md:px-5 max-md:max-w-full"
           style={{ width: '581px', color: 'rgba(128, 128, 128, 0.5)' }}
           placeholder="Search Member"
         />
         <button
           onClick={handleSearch}
-          className="justify-center items-center text-center whitespace-nowrap w-[96px] h-[45px] rounded-3xl max-md:px-5"
+          className=" text-md justify-center items-center text-center whitespace-nowrap padding: px-4 py-2 rounded-full max-md:px-5"
           style={{ backgroundColor: 'rgb(72, 128, 255)' }}
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="justify-center items-center text-center whitespace-nowrap w-[122px] h-[45px] rounded-3xl max-md:px-2"
+          className="text-md justify-center items-center text-center whitespace-nowrap px-4 py-2 rounded-full max-md:px-2"
           style={{ backgroundColor: 'rgb(255, 84, 54)' }}
         >
           Invite
