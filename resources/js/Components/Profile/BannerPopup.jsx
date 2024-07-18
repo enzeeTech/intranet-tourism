@@ -1,18 +1,18 @@
 import React from 'react';
 
-function Popup ({ title, content, onClose, onSave }) {
+function Popup({ title, content, onClose, onSave }) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={onClose}>
-        <div className="bg-white p-8 rounded-lg shadow-custom max-w-md" onClick={(e) => e.stopPropagation()}>
-          <h2 className="text-2xl font-bold mb-6">{title}</h2>
-          <p className="mb-4">{content}</p>
-          <div className="flex justify-end">
-            <button onClick={onClose} className="mr-4 bg-gray-200 px-4 py-2 rounded-md">Cancel</button>
-            <button onClick={onSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-          </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={onClose}>
+            <div className="w-[350px] bg-white p-6 rounded-2xl shadow-custom max-w-md" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-xl font-bold mb-4 text-center">{title}</h2>
+                <p className="mb-2">{content}</p>
+                <div className="flex justify-center mt-4">
+                    <button onClick={onClose} className="mr-2 bg-white text-gray-400 border border-gray-400 px-4 py-2 rounded-3xl">Cancel</button>
+                    <button onClick={onSave} className="bg-blue-500 text-white px-4 py-2 rounded-3xl">Save</button>
+                </div>
+            </div>
         </div>
-      </div>
     );
 }
 
-export default Popup; 
+export default Popup;
