@@ -14,7 +14,7 @@ const DepartmentsCard = ({ name, imageUrl, onDeactivateClick, departmentID }) =>
       <div className="card-footer">
       <a href={`/departmentInner?departmentId=${departmentID}`}>
         <button
-          className="justify-center px-5 bg-white border border-solid rounded-3xl border-neutral-400"
+          className="justify-center text-blue-500 font-semibold px-5 rounded-3xl border border-blue-500 bg-transparent hover:bg-blue-700 hover:text-white"
           aria-label="Visit"
           onClick={onDeactivateClick}
         >
