@@ -470,8 +470,8 @@ export default function Profile() {
                                             </div>
                                             {isEditing && (
                                                 <div className="flex justify-end mt-4">
-                                                    <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-                                                    <button onClick={handleCancel} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                                                    <button onClick={handleCancel} className=" bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                                                    <button onClick={handleSave} className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
                                                 </div>
                                             )}
                                         </div>
@@ -500,8 +500,8 @@ export default function Profile() {
                                                 </div>
                                                 {isEditing && (
                                                     <div className="flex justify-end mt-4">
-                                                        <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-                                                        <button onClick={handleCancel} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                                                        <button onClick={handleCancel} className=" bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
                                                     </div>
                                                 )}
                                             </div>
