@@ -28,7 +28,7 @@ function UserItem({ imgSrc, name, department }) {
         <img loading="lazy" src={imgSrc} alt={`${name} (${department})`} className="shrink-0 aspect-square w-[51px]" />
         <div className="flex-auto my-auto">{name} ({department})</div>
       </div>
-      <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/afd4cff5615c81e4549bbff7d3511d39799f17675eb7bff11c31371818aff1f8?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&" alt="" className="shrink-0 my-auto w-4 aspect-square" />
+      <img loading="lazy" src="/assets/pangkah.svg" alt="" className="shrink-0 my-auto w-6 aspect-square" />
     </div>
   );
 }
@@ -81,7 +81,7 @@ function Invite({ onClose }) {
           ))}
           <div className="flex gap-5 mt-6 self-end text-sm text-center">
             <button className="my-auto font-semibold text-neutral-800" onClick={onClose}>Cancel</button>
-            <button className="justify-center px-6 py-2.5 bg-blue-500 rounded-full font-bold text-white">Save</button>
+            <button className="justify-center px-6 py-2.5 bg-blue-500 hover:bg-blue-700 rounded-full font-bold text-white">Save</button>
           </div>
         </main>
       </section>

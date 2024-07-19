@@ -155,15 +155,15 @@ function DpMembers() {
         />
         <button
           onClick={handleSearch}
-          className=" text-md justify-center items-center text-center whitespace-nowrap padding: px-4 py-2 rounded-full max-md:px-5"
-          style={{ backgroundColor: 'rgb(72, 128, 255)' }}
+          className="bg-blue-500 hover:bg-blue-700 text-md justify-center items-center text-center whitespace-nowrap padding: px-4 py-2 rounded-full max-md:px-5"
+          // style={{ backgroundColor: 'rgb(72, 128, 255)' }}
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="text-md justify-center items-center text-center whitespace-nowrap px-4 py-2 rounded-full max-md:px-2"
-          style={{ backgroundColor: 'rgb(255, 84, 54)' }}
+          className="bg-red-600 hover:bg-red-700 text-md justify-center items-center text-center whitespace-nowrap px-4 py-2 rounded-full max-md:px-2"
+          // style={{ backgroundColor: 'rgb(255, 84, 54)' }}
         >
           Invite
         </button>
