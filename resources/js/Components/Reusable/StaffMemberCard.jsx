@@ -111,8 +111,8 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
             {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
             <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>
             <div className="flex justify-center space-x-4 text-sm">
-              <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
-              <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
+              <button className="no-button hover:bg-gray-400 hover:text-white" onClick={closeWhatsAppPopup}>No</button>
+              <button className="yes-button hover:bg-blue-700" onClick={redirectToWhatsAppWeb}>Yes</button>
             </div>
           </div>
         </div>

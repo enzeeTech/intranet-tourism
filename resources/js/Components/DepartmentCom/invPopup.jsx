@@ -28,7 +28,7 @@ function UserItem({ imgSrc, name, department }) {
         <img loading="lazy" src={imgSrc} alt={`${name} (${department})`} className="shrink-0 aspect-square w-[51px]" />
         <div className="flex-auto my-auto">{name} ({department})</div>
       </div>
-      <img loading="lazy" src="/assets/pangkah.svg" alt="" className="shrink-0 my-auto w-6 aspect-square" />
+      <img loading="lazy" src="/assets/pangkah.svg" alt="" className="shrink-0 my-auto w-5 aspect-square" />
     </div>
   );
 }
