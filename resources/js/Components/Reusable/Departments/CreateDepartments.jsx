@@ -118,7 +118,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>

@@ -347,10 +347,10 @@ const Pautan = () => {
             />
             {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3 text-sm">
-              <button className="px-6 py-2 font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsAddModalVisible(false)}>
+              <button className="px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsAddModalVisible(false)}>
                 Cancel
               </button>
-              <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
+              <button className="px-8 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full" onClick={PautanHandleAddApp}>
                 Add
               </button>
             </div>
@@ -378,10 +378,10 @@ const Pautan = () => {
             />
             {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
             <div className="flex justify-end space-x-3">
-              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsEditModalVisible(false)}>
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsEditModalVisible(false)}>
                 Cancel
               </button>
-              <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleUpdateApp}>
+              <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full" onClick={PautanHandleUpdateApp}>
                 Update
               </button>
             </div>
@@ -394,10 +394,10 @@ const Pautan = () => {
           <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
             <h2 className="mb-4 text-xl font-bold text-center">Delete the link?</h2>
             <div className="flex justify-center space-x-4">
-              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white rounded-full border border-gray-400" onClick={() => setIsDeleteModalVisible(false)}>
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsDeleteModalVisible(false)}>
                 No
               </button>
-              <button className="px-8 py-2 text-white font-bold bg-[#4880FF] rounded-full" onClick={PautanHandleDeleteApp}>
+              <button className="px-8 py-2 text-white font-bold bg-blue-500 hover:bg-blue-700 rounded-full" onClick={PautanHandleDeleteApp}>
                 Yes
               </button>
             </div>
