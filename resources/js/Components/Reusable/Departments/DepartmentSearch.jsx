@@ -26,9 +26,9 @@ const DepartmentSearchBar = ({ onSearch }) => {
           onChange={handleSearch}
         />
         <div className="flex w-full space-x-3 sm:justify-end sm:w-auto">
-          <button onClick={handleSearch} style={{ height: 'auto', width: '123px' }}>
-            <img src={searchIcon} alt="Search" />
-          </button>
+          <button onClick={handleSearch} className="text-md px-4 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-700">
+          Search
+        </button>
         </div>
       </div>
     </div>

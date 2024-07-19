@@ -40,7 +40,7 @@ class Profile extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'bio' => ['string'],
-                    'image' => ['string'],
+                    'image' => ['file'],
                     'cover_photo' => ['string'],
                     'phone_no' => ['string'],
                     'dob' => ['string'],
@@ -51,7 +51,7 @@ class Profile extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'bio' => ['string'],
-                    'image' => ['string'],
+                    'image' => ['file'],
                     'cover_photo' => ['string'],
                     'phone_no' => ['string'],
                     'dob' => ['string'],

@@ -128,7 +128,7 @@ function Navigation({userId, departmentID, departmentName}) {
 
   return (
     <div>
-      <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-xl px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+      <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
         <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>

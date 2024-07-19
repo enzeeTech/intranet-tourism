@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './css/DepartmentsDropdown.css';
 import AddCommunity from '../../../../../public/assets/AddCommunity.png';
+import CreateDepartment from '../../../../../public/assets/CreateDepartment.png';
 import CreateDepartments from './CreateDepartments'; // Adjust the path as necessary
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartment }) => {
@@ -21,8 +22,8 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartmen
 
   return (
     <div className="department-dropdown-container">
-      <button className="add-person-btn" onClick={toggleCreateCommunity}>
-        <img src={AddCommunity} alt="Add Community" />
+      <button className="text-sm px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700" onClick={toggleCreateCommunity}>
+        Create Department +
       </button>
       {isReportingPopupOpen && (
         <button
@@ -49,7 +50,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartmen
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-lg shadow-lg relative">
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full  w-10 h-10 flex justify-center items-center"
               onClick={toggleCreateCommunity}
             >
               &times;

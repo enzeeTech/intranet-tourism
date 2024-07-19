@@ -38,3 +38,9 @@
 .relative::-webkit-scrollbar-thumb:hover {
   background: #555; /* Scrollbar color on hover */
 }
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}

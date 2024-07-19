@@ -90,12 +90,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
 
   return (
     <div className="department-dropdown-container" ref={dropdownRef}>
-      <div className={`dropdown-header ${isOpen ? 'open' : ''}`}>
+      <div className={`dropdown-header ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
         <input
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          onClick={toggleDropdown}
+          // onClick={toggleDropdown}
           placeholder="Select Department"
           className="dropdown-header-input"
         />
@@ -112,10 +112,10 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
       )}
       {selectedDepartment.id && (
         <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
-          <button className="visit-department-btn">
-            <img src={visitDepartment} alt="Visit Department" />
+          <button className="visit-department-btn text-sm rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700">
+            Visit Department
           </button>
-        </a>
+        </a>      
       )}
       {selectedDepartment.id && (
         <button className="add-person-btn" onClick={toggleAddMemberPopup}>
