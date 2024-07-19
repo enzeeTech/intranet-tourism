@@ -12,14 +12,14 @@ const SearchInput = () => (
     />
     <input
       type="text"
-      className="w-full py-0 px-2 text-black border-none focus:outline-none"
+      className="w-full py-2 px-2 text-black border-none focus:outline-none"
       placeholder="Search"
     />
   </div>
 );
 
 const SearchButton = () => (
-  <button className="justify-center px-5 py-2 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-8">
+  <button className="justify-center px-4 py-2 my-auto text-sm font-bold text-center text-white bg-blue-500 rounded-3xl mt-8">
     Search
   </button>
 );
