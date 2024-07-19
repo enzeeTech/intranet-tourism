@@ -231,8 +231,8 @@ const Pautan = () => {
                   <tr>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 label-column">App name</th>
                     <th className="px-6 py-3 text-base font-bold text-center text-gray-900 url-column">URL</th>
-                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Edit</th>
-                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900">Delete</th>
+                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900 edit-column">Edit</th>
+                    <th className="px-6 py-3 text-base font-bold text-center text-gray-900 delete-column">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
