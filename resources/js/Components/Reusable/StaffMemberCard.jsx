@@ -108,12 +108,16 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
       {isWhatsAppPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
           <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
-            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" />
-            <p style={{ fontSize: '16px', marginBottom: '15px', fontWeight: 'bold', marginTop: '10px' }}>Redirect to WhatsApp Web?</p>
-            <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
-            <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
+            {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
+            <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>
+            <div className="flex justify-center space-x-4 text-sm">
+              <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
+              <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
+            </div>
           </div>
         </div>
+      
+      
       )}
     </div>
   );

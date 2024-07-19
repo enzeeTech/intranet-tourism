@@ -55,21 +55,21 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
   return (
     <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 relative">
       <div className="mb-1 staff-search-bar-title">
-        <h2 className="text-xl font-semibold">Search Members...</h2>
+        <h2 className="text-xl font-semibold">Search Members</h2>
       </div>
       <div className={`flex flex-col items-center space-y-3 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3 ${searchResults.length > 0 ? 'open-dropdown' : ''}`}>
         <input
           type="text"
-          className={`flex-grow w-full p-3 border border-[#E4E4E4] rounded-full search-input sm:w-auto ${searchResults.length > 0 ? 'dropdown-open' : ''}`}
+          className={`text-md flex-grow w-full p-3 border border-[#E4E4E4] rounded-full search-input sm:w-auto ${searchResults.length > 0 ? 'dropdown-open' : ''}`}
           placeholder="Search Name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         
         <div className="flex w-full space-x-3 sm:justify-end sm:w-auto">
-          <button onClick={handleSearch} style={{ height: 'auto', width: '123px'}}>
-            <img src={searchIcon} alt="Search" />
-          </button>
+          <button onClick={handleSearch} className="mt-3 text-md px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700 h-[43px]">
+          Search
+        </button>
           <button onClick={handleStaffListButton} style={{ width: '60px', paddingTop: '3px', marginLeft: '-5px'}}>
             <img src={isStaffListActive ? staffListIconActive : staffListIconInactive} alt="Staff List" />
           </button>
