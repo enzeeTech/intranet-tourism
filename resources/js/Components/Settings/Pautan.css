@@ -15,12 +15,9 @@ table {
   width: 15%; /* Adjust this value to make the order column narrower */
 }
 
-.edit-column {
+.edit-column, .delete-column {
   width: 18%; /* Adjust this value to make the order column narrower */
-}
-
-.delete-column {
-  width: 18%; /* Adjust this value to make the order column narrower */
+  text-align: center; /* Center align the content */
 }
 
 .fixed-size-row {
@@ -37,4 +34,17 @@ table {
 .dragging {
   background: #f0f0f0; /* Add some visual indication while dragging */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fixed-size {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.fixed-size-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
 }
