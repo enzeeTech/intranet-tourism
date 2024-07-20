@@ -9,7 +9,7 @@ import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import Header from '../Components/DashboardHeader';
 import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
-import Example from '@/Layouts/DashboardLayoutNew';
+import Example from '../Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
@@ -309,11 +309,11 @@ const StaffDirectory = () => {
       <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
         <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
         <div className="flex justify-center space-x-4">
-          <button className="px-8 py-1 text-base text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeactivateModalOpen(false)}>
-            No
-          </button>
-          <button className="px-8 py-1 text-white bg-[#4880FF] rounded-full" onClick={handleDeactivate}>
+          <button className="px-8 py-1 text-base text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={handleDeactivate}>
             Yes
+          </button>
+          <button className="px-8 py-1 text-white bg-red-500 hover:bg-red-700 rounded-full" onClick={() => setIsDeactivateModalOpen(false)}>
+            No
           </button>
         </div>
       </div>
