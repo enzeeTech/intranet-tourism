@@ -90,6 +90,10 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartmen
 
   return (
     <div className="department-dropdown-container">
+      <button className="flex items-center text-sm px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700" onClick={toggleCreateCommunity}>
+        <img src="/assets/plus.svg" alt="Plus icon" className="h-3 w-3 mr-2" />
+        Department
+      </button>
       {isReportingPopupOpen && (
         <button
           onClick={toggleReportingPopup}

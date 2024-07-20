@@ -111,13 +111,13 @@ const Ordering = () => {
         <Example>
             <div className="flex-row ">
                 <div className="flex">
-                    <main className="w-full mt-5 xl:pl-96 max-w-[1500px]">
+                    <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
-                                    <button className="px-6 py-1 text-base font-bold text-white bg-[#FF5436] rounded-full" onClick={handleSave}>Save</button>
+                                    <button className="px-4 py-2 text-lg font-semibold text-white bg-red-500 hover:bg-red-700 rounded-full" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>

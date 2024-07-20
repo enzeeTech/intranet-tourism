@@ -80,7 +80,7 @@ function EditProfilePhoto({ onClose, onSelectFile, userId }) {
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 justify-between items-start text-xl font-bold text-neutral-800">
               <h1 className="flex-auto mt-3">Edit Profile Photo</h1>
-              <IconButton icon="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&" alt="Close icon" onClick={onClose} />
+              <IconButton icon="/assets/cancel.svg" alt="Close icon" onClick={onClose} />
             </header>
             <div className="flex flex-col mt-3">
               {listItems.map((item, index) => (

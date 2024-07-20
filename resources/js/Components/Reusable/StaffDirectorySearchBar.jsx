@@ -23,7 +23,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
 
     try {
       while (hasMorePages) {
-        const response = await fetch(`http://127.0.0.1:8000/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+        const response = await fetch(`/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
         const data = await response.json();
         allResults = [...allResults, ...data.data.data];
         currentPage++;

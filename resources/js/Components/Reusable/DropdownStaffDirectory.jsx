@@ -7,7 +7,6 @@ import addMemberButton from '../../../../public/assets/addPersonButton.png';
 import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import SearchPopup from './AddMemberPopup';
 import './css/DropdownStaffDirectory.css';
-import { set } from 'date-fns';
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,18 +16,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
 
-  const people = [
-    { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-    { name: 'Ben Tan', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-    { name: 'Nick', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
-    { name: 'Sarah', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
-    { name: 'Thomas', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-    { name: 'Zack', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
-    { name: 'Zara', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
-];
-
-  console.log('staffMembers', staffMembers)
-
   const handleSelect = (department) => {
     setSelectedDepartment(department);
     onSelectDepartment(department.id);
@@ -37,25 +24,25 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   };
 
   const toggleReportingPopup = () => {
-    setIsReportingPopupOpen(!isReportingPopupOpen);
+    setIsReportingPopupOpen(prev => !prev);
     setIsOpen(false);
   };
 
   const toggleAddMemberPopup = () => {
-    setIsAddMemberPopupOpen(!isAddMemberPopupOpen);
+    setIsAddMemberPopupOpen(prev => !prev);
     setIsOpen(false);
   };
 
   const toggleDropdown = () => {
     setIsReportingPopupOpen(false);
-  
-    if (isOpen && selectedDepartment.id) {
-      setSearchTerm(selectedDepartment.name);
-    } else {
-      setSearchTerm('');
-    }
-  
-    setIsOpen(!isOpen);
+    setIsOpen(prev => {
+      if (prev && selectedDepartment.id) {
+        setSearchTerm(selectedDepartment.name);
+      } else {
+        setSearchTerm('');
+      }
+      return !prev;
+    });
   };
 
   const handleSearchChange = (e) => {
@@ -65,11 +52,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
-      if (selectedDepartment.name) {
-        setSearchTerm(selectedDepartment.name);
-      } else {
-        setSearchTerm('');
-      }
+      setSearchTerm(selectedDepartment.name || '');
     }
   };
 
@@ -95,11 +78,14 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          // onClick={toggleDropdown}
           placeholder="Select Department"
           className="dropdown-header-input"
         />
-        <img style={{ width: '15px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
+        <img 
+          style={{ width: '15px' }} 
+          src={isOpen ? dropDownUpArrow : dropDownDownArrow} 
+          alt="Toggle Dropdown" 
+        />
       </div>
       {isOpen && (
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
@@ -118,14 +104,18 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </a>      
       )}
       {selectedDepartment.id && (
-        <button className="add-person-btn" onClick={toggleAddMemberPopup}>
-          <img src={addMemberButton} alt="Add Member" />
+      <button 
+        className="flex items-center text-sm px-4 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 mt-1" 
+        onClick={toggleAddMemberPopup}
+        >
+          <img src="/assets/plus.svg" alt="Plus icon" className="h-3 w-3 mr-2" />
+          Member
         </button>
       )}
       {selectedDepartment.id && (
-      <button className="three-dot-btn" onClick={toggleReportingPopup}>
-        <img src={threeDotButton} alt="More Options" />
-      </button>
+        <button className="three-dot-btn" onClick={toggleReportingPopup}>
+          <img src={threeDotButton} alt="More Options" />
+        </button>
       )}
       {isReportingPopupOpen && (
         <div
@@ -138,24 +128,28 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         >
           <button
             onClick={toggleReportingPopup}
-            className="popup-button"
+            className="popup-button hover:bg-gray-100"
           >
             Reporting Structure
           </button>
           <hr className="popup-divider" />
           <a
             href={`/ordering?staffMembers=${encodeURIComponent(JSON.stringify(staffMembers))}`}
-            className="popup-button"
+            className="popup-button hover:bg-gray-100"
           >
             Ordering
           </a>
         </div>
       )}
       {isAddMemberPopupOpen && (
-        <SearchPopup
-          isAddMemberPopupOpen={isAddMemberPopupOpen}
-          setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
-          people={people}
+        <SearchPopup 
+          isAddMemberPopupOpen={isAddMemberPopupOpen} 
+          setIsAddMemberPopupOpen={setIsAddMemberPopupOpen} 
+          departmentId={selectedDepartment.id} 
+          onAddMembers={(addedMembers) => {
+            // Handle added members here if needed
+            console.log('Added Members:', addedMembers);
+          }}
         />
       )}
     </div>

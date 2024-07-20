@@ -101,7 +101,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
             <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
               <br />
-              Work No: +603-8891 {workNo}
+              Office No: +603-8891 {workNo}
             </p>
           </div>
         </div>
