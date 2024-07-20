@@ -159,13 +159,11 @@ function DpMembers() {
 
   const handleAssign = (id) => {
     console.log(`Assign file manager for member with id: ${id}`);
-    // Add your logic for assigning a file manager
     closePopup();
   };
 
   const handleRemove = (id) => {
     console.log(`Remove member with id: ${id}`);
-    // Add your logic for removing a member
     closePopup();
   };
 
