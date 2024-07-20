@@ -83,7 +83,7 @@ function DpMembers() {
 
   useEffect(() => {
     const filteredMembers = members.filter((member) =>
-      member.bio.toLowerCase().includes(searchInput.toLowerCase())
+      member.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(filteredMembers);
   }, [searchInput, members]);
@@ -94,7 +94,7 @@ function DpMembers() {
 
   const handleSearch = () => {
     const filteredMembers = members.filter((member) =>
-      member.bio.toLowerCase().includes(searchInput.toLowerCase())
+      member.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(filteredMembers);
   };
@@ -129,7 +129,7 @@ function DpMembers() {
           onClick={handleInviteClick}
           className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
-          Invite
+          Add Member
         </button>
       </div>
 
@@ -151,7 +151,7 @@ function DpMembers() {
             </h2>
           </div>
           {displayedMembers.map((member, index) => (
-            <MemberCard key={index} imageUrl={member.image} name={member.bio} title={member.title} />
+            <MemberCard key={index} imageUrl={member.image} name={member.name} title={member.title} />
           ))}
         </section>
       </div>
