@@ -6,7 +6,7 @@ import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 import deactivateButton from '../../../../public/assets/activatedButton.png';
 import activateButton from '../../../../public/assets/deactivatedButton.png';
 import phoneActiveIcon from '../../../../public/assets/phoneActiveIcon.png';
-import whatsappActiveIcon from '../../../../public/assets/whatsappActiveIcon.png';
+import whatsappActiveIcon from '../../../../public/assets/whatsappGreen.png';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
 const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
@@ -90,7 +90,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
           <img src={isDeactivated ? callIcon : isWorkNumberAvailable() ? phoneActiveIcon : callIcon} alt="Call" />
         </button>
         <button className={`whatsapp-button ${isPhoneNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleWhatsApp} disabled={isDeactivated || !isPhoneNumberAvailable()}>
-          <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" />
+          <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" style={{height:'23px', width:'23px', marginBottom: '2px'}} />
         </button>
       </div>
       {isCallPopupOpen && (
