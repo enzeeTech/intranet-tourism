@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 
-const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) => {
+const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState([]);
@@ -10,17 +10,15 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
 
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
-          if (searchTerm) {
-            fetchAllSearchResults(searchTerm);
-          } else {
-            setSearchResults([]);
-          }
-        }, 300); 
-    
+            if (searchTerm) {
+                fetchAllSearchResults(searchTerm);
+            } else {
+                setSearchResults([]);
+            }
+        }, 300);
+
         return () => clearTimeout(debounceTimeout);
     }, [searchTerm]);
-
-    console.log('searchResults', searchResults);
 
     const fetchAllSearchResults = async (query) => {
         setLoading(true);
@@ -30,11 +28,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
 
         try {
             while (hasMorePages) {
-            const response = await fetch(`http://127.0.0.1:8000/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-            const data = await response.json();
-            allResults = [...allResults, ...data.data.data];
-            currentPage++;
-            hasMorePages = data.data.next_page_url !== null;
+                const response = await fetch(`http://127.0.0.1:8000/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+                const data = await response.json();
+                allResults = [...allResults, ...data.data.data];
+                currentPage++;
+                hasMorePages = data.data.next_page_url !== null;
             }
             setSearchResults(allResults);
         } catch (error) {
@@ -44,18 +42,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
             setLoading(false);
         }
     };
-
-    const topShadowStyle = {
-        boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)'
-    };
-
-    const handleSearch = () => {
-        fetchAllSearchResults(searchTerm);
-    };
-
-    // const filteredPeople = people.filter(person =>
-    //     person.name.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
 
     const handleSelectPerson = (person) => {
         if (!selectedPeople.includes(person)) {
@@ -74,7 +60,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
     const handleAdd = () => {
         console.log('Selected people:', selectedPeople);
         setIsAddMemberPopupOpen(false);
-    }
+    };
 
     return (
         <div>
@@ -111,7 +97,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
                                         className="flex items-center p-2 cursor-pointer"
                                         onClick={() => handleSelectPerson(person)}
                                     >
-                                        <img src={person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <img src={person.profile && person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
                                             <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
@@ -120,7 +106,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, people }) 
                                 ))
                             )}
                         </div>
-                        <div className="flex justify-end pt-3 h-[70px] border-t" style={{...topShadowStyle}}>
+                        <div className="flex justify-end pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button 
                                 className="px-4 mb-4 mr-2 rounded-full text-[#222222]"
                                 onClick={handleClose}

@@ -73,7 +73,10 @@ class EmploymentPost extends Model implements AuditableContract
 
     public function getFullGradeAttribute()
     {
-        return "{$this->businessScheme->code}{$this->businessGrade->code}";
+        $businessSchemeCode = $this->businessScheme ? $this->businessScheme->code : '';
+        $businessGradeCode = $this->businessGrade ? $this->businessGrade->code : '';
+
+        return "{$businessSchemeCode}{$businessGradeCode}";
     }
 
     public function businessGrade()
