@@ -103,7 +103,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription }
   );
 }
 
-function Navigation({userId, departmentID, departmentName}) {
+function Navigation({ userId, departmentID, departmentName }) {
   const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
   const [polls, setPolls] = useState([]);
 
@@ -115,65 +115,55 @@ function Navigation({userId, departmentID, departmentName}) {
     setActiveTab(tab);
   };
 
-  const photoData = [
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?", alt: "Photo 1" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Photo 2" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/fc01566f85a165f9e8c89da57eaa7e81212a8fa1e58ed53877c900bf64c5baf1?", alt: "Photo 3" },
-  ];
-
-  const videoData = [
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cdbbaca5c344dcb79e33b324a787c8c2119e2929aebc1bda0bf551ae62ef74fc?", alt: "Video 1" },
-    { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/ff48e71a83368a201973d09bb65d5bec5cda3d234d40d8216049d60b55179fe1?", alt: "Video 2" },
-  ];
-
   return (
-    <div>
-      <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+    <div className="flex flex-col">
+      <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:max-w-full">
         <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
         <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
       </nav>
 
-      {activeTab === 'Members' && (
-        <div className="flex justify-center w-full mt-4 ">
-          <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
-            <DpMembers />
+      <div className="relative">
+        {activeTab === 'Members' && (
+          <div className="flex justify-center w-full mt-4">
+            <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
+              <DpMembers />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {activeTab === "Files" && (
-        <div>
-          <div className="flex gap-4 ml-12 whitespace-nowrap">
-            <SearchInput />
-            <SearchButton />
+        {activeTab === "Files" && (
+          <div>
+            <div className="flex gap-4 ml-12 whitespace-nowrap">
+              <SearchInput />
+              <SearchButton />
+            </div>
+            <Table departmentID={departmentID} />
           </div>
-          <Table departmentID={departmentID} />
-        </div>
-      )}
+        )}
 
-      {activeTab === "Gallery" && (
-        <section>
-          <ImageProfile selectedItem="All" />
-          <VideoProfile selectedItem="All" />
-        </section>
-      )}
+        {activeTab === "Gallery" && (
+          <section>
+            <ImageProfile selectedItem="All" />
+            <VideoProfile selectedItem="All" />
+          </section>
+        )}
 
-      {activeTab === 'Post' && (
-        <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-          <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
-            {/* <ShareYourThoughtsDepart /> */}
-            {/* <ShareYourThoughts userId={userId} postType={`department_${departmentID}`} onCreatePoll={handleCreatePoll} /> */}
-            <ShareYourThoughts userId={userId} postType={`department_${departmentID}`} onCreatePoll={handleCreatePoll} />
-            <Filter /><br />
-            <OutputData polls={polls} filterType={`department_${departmentID}`} departmentName={departmentName} />
+        {activeTab === 'Post' && (
+          <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
+            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
+              <ShareYourThoughts userId={userId} postType={`department_${departmentID}`} onCreatePoll={handleCreatePoll} />
+              <Filter /><br />
+              <OutputData polls={polls} filterType={`department_${departmentID}`} departmentName={departmentName} />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
+
 
 function Adminsection({ departmentID, departmentHeader, departmentDescription, userId }) {
   return (

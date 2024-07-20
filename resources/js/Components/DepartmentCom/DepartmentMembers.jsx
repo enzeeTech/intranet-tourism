@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
 import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
 
 function Avatar({ src, alt, className, status }) {
@@ -27,7 +26,7 @@ function UserInfo({ name, role }) {
 
 function UserCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
+    <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
       <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
@@ -36,7 +35,7 @@ function UserCard({ src, alt, name, role, status }) {
 
 function MemberCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
+    <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
       <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
@@ -99,77 +98,30 @@ function DpMembers() {
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    <section className="flex flex-col p-6 rounded-3xl shadow-sm max-w-[870px] h-auto max-md:px-5">
-      <style>
-        {`
-          .relative {
-            position: relative;
-            display: inline-block;
-          }
-
-          .absolute {
-            position: absolute;
-          }
-
-          .bottom-0 {
-            bottom: 0;
-          }
-
-          .right-0 {
-            right: 0;
-          }
-
-          .bg-red-500 {
-            background-color: #f56565;
-          }
-
-          .bg-green-500 {
-            background-color: #48bb78;
-          }
-
-          .rounded-full {
-            border-radius: 9999px;
-          }
-
-          .w-2 {
-            width: 0.5rem;
-          }
-
-          .h-2 {
-            height: 0.5rem;
-          }
-
-          .mb-2 {
-            margin-bottom: 20px;
-          }
-        `}
-      </style>
+    <section className="flex flex-col h-auto max-w-full p-6 shadow-sm rounded-3xl max-md:px-5">
       <div className="flex items-center gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
           value={searchInput}
           onChange={handleSearchChange}
-          className="text-md flex-grow px-4 py-2 bg-gray-100 rounded-full border-gray-100 text-neutral-800 max-md:px-5 max-md:max-w-full"
-          style={{ width: '581px', color: 'rgba(128, 128, 128, 0.5)' }}
+          className="flex-grow px-4 py-2 bg-gray-100 border-gray-100 rounded-full text-md text-neutral-800 max-md:px-5 max-md:max-w-full"
           placeholder="Search Member"
         />
         <button
           onClick={handleSearch}
-          className="bg-blue-500 hover:bg-blue-700 text-md justify-center items-center text-center whitespace-nowrap padding: px-4 py-2 rounded-full max-md:px-5"
-          // style={{ backgroundColor: 'rgb(72, 128, 255)' }}
+          className="items-center justify-center px-4 py-2 text-center bg-blue-500 rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="bg-red-600 hover:bg-red-700 text-md justify-center items-center text-center whitespace-nowrap px-4 py-2 rounded-full max-md:px-2"
-          // style={{ backgroundColor: 'rgb(255, 84, 54)' }}
+          className="items-center justify-center px-4 py-2 text-center bg-red-600 rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
           Invite
         </button>
       </div>
 
-      <header className="flex gap-5 self-start mt-6 whitespace-nowrap">
+      <header className="flex self-start gap-5 mt-6 whitespace-nowrap">
         <h1 className="text-2xl font-bold text-black">Admin</h1>
         <span className="text-lg font-semibold text-stone-300">{admins.length}</span>
       </header>
@@ -178,10 +130,10 @@ function DpMembers() {
         <UserCard key={index} src={admin.src} alt={admin.alt} name={admin.name} role={admin.role} status={admin.status} />
       ))}
 
-      <div className="flex gap-5 justify-between mt-10 max-md:flex-wrap max-md:max-w-full">
-        <section className="flex flex-col w-[870px]">
+      <div className="flex justify-between gap-5 mt-10 max-md:flex-wrap max-md:max-w-full">
+        <section className="flex flex-col w-full">
           <div className="flex gap-5 whitespace-nowrap">
-            <h2 className="grow text-2xl font-bold text-black">
+            <h2 className="text-2xl font-bold text-black grow">
               Members
               <span className="ml-4 text-lg font-semibold text-stone-300">{displayedMembers.length}</span>
             </h2>
