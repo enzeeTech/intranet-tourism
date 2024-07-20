@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
 
 function Avatar({ src, alt, className, status }) {
+  const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
   return (
     <div className="relative items-center justify-end h-16">
-      <img loading="lazy" src={src} alt={alt} className={className} />
+      <img loading="lazy" src={imageUrl} alt={alt} className={className} />
       {status === 1 && (
         <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-1"></div>
       )}
@@ -33,11 +34,11 @@ function UserCard({ src, alt, name, role, status }) {
   );
 }
 
-function MemberCard({ src, alt, name, role, status }) {
+function MemberCard({ imageUrl, name, title, status }) {
   return (
     <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
-      <UserInfo name={name} role={role} />
+      <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
+      <UserInfo name={name} role={title} />
     </div>
   );
 }
@@ -49,32 +50,43 @@ function DpMembers() {
   const [admins, setAdmins] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
 
+  const getDepartmentIdFromQuery = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('departmentId');
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const options = {
-        method: 'GET',
-        headers: { Accept: 'application/json' },
-      };
-  
+      const departmentId = getDepartmentIdFromQuery();
+      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+
       try {
-        const response = await fetch('/api/crud/employment_posts', options);
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-  
+        
         const fetchedMembers = data.members || [];
-        const fetchedAdmins = data.admins || [];
-  
+        
         setMembers(fetchedMembers);
-        setAdmins(fetchedAdmins);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-  
+
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const filteredMembers = members.filter((member) =>
+      member.bio.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setSearchResults(filteredMembers);
+  }, [searchInput, members]);
 
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value);
@@ -82,7 +94,7 @@ function DpMembers() {
 
   const handleSearch = () => {
     const filteredMembers = members.filter((member) =>
-      member.name.toLowerCase().includes(searchInput.toLowerCase())
+      member.bio.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(filteredMembers);
   };
@@ -109,13 +121,13 @@ function DpMembers() {
         />
         <button
           onClick={handleSearch}
-          className="items-center justify-center px-4 py-2 text-center bg-blue-500 rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
+          className="items-center justify-center px-4 py-2 text-center bg-[#4780FF] rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="items-center justify-center px-4 py-2 text-center bg-red-600 rounded-full hover:bg-red-700 text-md whitespace-nowrap"
+          className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
           Invite
         </button>
@@ -123,7 +135,7 @@ function DpMembers() {
 
       <header className="flex self-start gap-5 mt-6 whitespace-nowrap">
         <h1 className="text-2xl font-bold text-black">Admin</h1>
-        <span className="text-lg font-semibold text-stone-300">{admins.length}</span>
+        <span className="text-xl mt-0.5 font-semibold text-stone-300">{admins.length}</span>
       </header>
 
       {admins.map((admin, index) => (
@@ -132,14 +144,14 @@ function DpMembers() {
 
       <div className="flex justify-between gap-5 mt-10 max-md:flex-wrap max-md:max-w-full">
         <section className="flex flex-col w-full">
-          <div className="flex gap-5 whitespace-nowrap">
+          <div className="flex gap-5 mb-2 whitespace-nowrap">
             <h2 className="text-2xl font-bold text-black grow">
               Members
-              <span className="ml-4 text-lg font-semibold text-stone-300">{displayedMembers.length}</span>
+              <span className="ml-4 text-xl mt-0.5 font-semibold text-stone-300">{displayedMembers.length}</span>
             </h2>
           </div>
           {displayedMembers.map((member, index) => (
-            <MemberCard key={index} src={member.src} alt={member.alt} name={member.name} role={member.role} status={member.status} />
+            <MemberCard key={index} imageUrl={member.image} name={member.bio} title={member.title} />
           ))}
         </section>
       </div>
