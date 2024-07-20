@@ -422,7 +422,7 @@ export default function Profile() {
 
     return (
         <Example>
-            <main className="xl:pl-96 w-full ">
+            <main className="xl:pl-96 w-full">
                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                     <div>
                         <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
