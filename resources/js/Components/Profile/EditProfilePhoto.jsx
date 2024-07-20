@@ -28,13 +28,8 @@ function EditProfilePhoto({ onClose, onSelectFile, userId }) {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
-    fileInput.onchange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setSelectedFile(file);
-        setShowUpdatePopup(true);
-        onSelectFile(file);
-      }
+    fileInput.onchange = (event) => {
+      onSelectFile(event); // Pass the event to the onSelectFile function
     };
     fileInput.click();
   };

@@ -138,14 +138,13 @@ import React, { useState } from 'react';
 import EditProfilePhoto from './EditProfilePhoto';
 import UpdatePhotoButton from './UpdatePhoto';
 import './profile.css';
-import { usePage } from '@inertiajs/react';
 import { useCsrf } from '@/composables';
 
 function ProfileImage({ src, alt, className, rounded }) {
   return (
     <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-24 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className} max-md:w-32 max-md:mt-10`}>
       <img
-        src={src}
+        src={`/storage/${src}`}
         alt={alt}
         className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-32 max-md:h-32 max-md:bottom-0`}
       />
@@ -188,13 +187,16 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     }
   };
 
-  const handleSelectFile = (file) => {
-    const fileUrl = URL.createObjectURL(file);
-    setCurrentProfileImage(fileUrl);
-    setSelectedFile(file);
-    setIsPopupOpen(false);
-    setIsUpdatePopupOpen(true);
-    uploadProfilePhoto(file, userId, setCurrentProfileImage, setSelectedFile, csrfToken, authToken);
+  const handleSelectFile = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      setCurrentProfileImage(fileUrl);
+      setSelectedFile(file);
+      setIsPopupOpen(false);
+      setIsUpdatePopupOpen(true);
+      uploadProfilePhoto(file, userId, setCurrentProfileImage, setSelectedFile, csrfToken, authToken);
+    }
   };
 
   const handleCloseUpdatePopup = (e) => {
@@ -204,20 +206,15 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
   };
 
   const uploadProfilePhoto = async (file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken) => {
-    const url = `http://127.0.0.1:8000/api/profile/profiles/${id}`;
-  
-    // Create a FormData object to handle file upload
+    const url = `/api/profile/profiles/${id}`;
+
     const formData = new FormData();
     formData.append('image', file);
-    formData.append('user_id', id); // Ensure user_id is appended correctly
-  
-    // Log FormData entries
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-  
+    formData.append('user_id', id);
+    formData.append('_method', 'PUT');
+
     const options = {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
@@ -225,30 +222,32 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       },
       body: formData,
     };
-  
+
     try {
       console.log('Uploading profile photo with payload:', {
         image: file,
-        user_id: id, // Log user_id
+        user_id: id,
       });
-  
+
       const response = await fetch(url, options);
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error response from server:', errorData);
+        console.error('Error response from server:', data);
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
+
       console.log('Profile photo updated successfully:', data);
       if (data.profile && data.profile.image) {
-        setCurrentProfileImage(data.profile.image);
-        setSelectedFile(data.profile.image);
+        const fullPath = data.profile.image;
+        setCurrentProfileImage(fullPath);
+        setSelectedFile(fullPath);
       }
     } catch (error) {
-      console.error('Error uploading profile photo:', error);
+      // console.error('Error uploading profile photo:', error);
     }
   };
-  
+
   return (
     <header
       className="flex overflow-hidden relative z-999 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[400px] max-md:px-5 max-md:max-w-full"
@@ -256,11 +255,12 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     >
       <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 max-md:h-3/5 rounded-lg shadow-custom" />
       <div onClick={handleIconClick}>
-        <ProfileImage src={currentProfileImage} alt={`${name}'s profile picture`} rounded={rounded} />
+        <ProfileImage src={profileImage} alt={`${name}'s profile picture`} rounded={rounded} />
         {isPopupOpen && (
           <EditProfilePhoto
             onClose={handleCloseClick}
             onSelectFile={handleSelectFile}
+            userId={userId}
           />
         )}
         {isUpdatePopupOpen && (
@@ -279,4 +279,3 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 }
 
 export default ProfileHeader;
-

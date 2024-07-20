@@ -185,7 +185,7 @@
                                              <div className="flex items-center gap-4">
                                                  <img
                                                      loading="lazy"
-                                                     src={photo}
+                                                     src={`/storage/${photo}`}
                                                      className="aspect-square rounded-md w-[99px]"
                                                      alt="Staff's photo"
                                                  />
