@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
+import React, { useState, useEffect, useRef } from 'react';
+import Invite from '../DepartmentCom/invPopup'; 
 
 function Avatar({ src, alt, className, status }) {
   const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
@@ -34,14 +34,70 @@ function UserCard({ src, alt, name, role, status }) {
   );
 }
 
-function MemberCard({ imageUrl, name, title, status }) {
+const PopupMenu = ({ onAssign, onRemove }) => (
+  <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
+    <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
+      <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" /> 
+      Assign file manager
+    </button>
+    <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
+      <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" /> 
+      Remove
+    </button>
+  </div>
+);
+
+
+const MemberCard = ({ id, imageUrl, name, title, status, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+  const popupRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const handleDotClick = () => {
+    if (activePopupId === id) {
+      closePopup();
+    } else {
+      setActivePopupId(id);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        closePopup();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [popupRef, closePopup]);
+
   return (
-    <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
+    <div className="relative flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={title} />
+      <div className="ml-auto">
+        <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
+          <img src="/assets/threedots.svg" alt="Menu" className="h-6 w-13" />
+        </button>
+        {activePopupId === id && (
+          <div ref={popupRef}>
+            <PopupMenu
+              onAssign={() => onAssign(id)}
+              onRemove={() => onRemove(id)}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 function DpMembers() {
   const [searchInput, setSearchInput] = useState('');
@@ -49,6 +105,7 @@ function DpMembers() {
   const [members, setMembers] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
+  const [activePopupId, setActivePopupId] = useState(null);
 
   const getDepartmentIdFromQuery = () => {
     const params = new URLSearchParams(location.search);
@@ -83,7 +140,7 @@ function DpMembers() {
 
   useEffect(() => {
     const filteredMembers = members.filter((member) =>
-      member.bio.toLowerCase().includes(searchInput.toLowerCase())
+      member.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(filteredMembers);
   }, [searchInput, members]);
@@ -92,19 +149,26 @@ function DpMembers() {
     setSearchInput(e.target.value);
   };
 
-  const handleSearch = () => {
-    const filteredMembers = members.filter((member) =>
-      member.bio.toLowerCase().includes(searchInput.toLowerCase())
-    );
-    setSearchResults(filteredMembers);
-  };
-
   const handleInviteClick = () => {
     setShowInvite(true);
   };
 
   const handleCloseInvite = () => {
     setShowInvite(false);
+  };
+
+  const handleAssign = (id) => {
+    console.log(`Assign file manager for member with id: ${id}`);
+    closePopup();
+  };
+
+  const handleRemove = (id) => {
+    console.log(`Remove member with id: ${id}`);
+    closePopup();
+  };
+
+  const closePopup = () => {
+    setActivePopupId(null);
   };
 
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
@@ -120,7 +184,7 @@ function DpMembers() {
           placeholder="Search Member"
         />
         <button
-          onClick={handleSearch}
+          onClick={handleSearchChange}
           className="items-center justify-center px-4 py-2 text-center bg-[#4780FF] rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
         >
           Search
@@ -129,7 +193,7 @@ function DpMembers() {
           onClick={handleInviteClick}
           className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
-          Invite
+          Add Member
         </button>
       </div>
 
@@ -151,7 +215,18 @@ function DpMembers() {
             </h2>
           </div>
           {displayedMembers.map((member, index) => (
-            <MemberCard key={index} imageUrl={member.image} name={member.bio} title={member.title} />
+            <MemberCard
+              key={index}
+              id={member.user_id}
+              imageUrl={member.image}
+              name={member.name}
+              title={member.title}
+              activePopupId={activePopupId}
+              setActivePopupId={setActivePopupId}
+              onAssign={handleAssign}
+              onRemove={handleRemove}
+              closePopup={closePopup}
+            />
           ))}
         </section>
       </div>

@@ -16,7 +16,7 @@ const Settings = () => {
             <div className="flex items-center justify-between mb-4">
               <PageTitle title="Pautan" />
               <button 
-                className="px-4 py-1 font-bold text-white bg-blue-500 rounded-full"
+                className="px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                 onClick={handleNavigation}
               >
                 Manage Pautan

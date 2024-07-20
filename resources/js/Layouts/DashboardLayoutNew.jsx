@@ -10,6 +10,7 @@ const Example = ({ children }) => {
   return (
     <div>
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      {/* <div className="lg:pl-20" style={{backgroundColor: '#F3F4F6'}}> */}
       <div className="lg:pl-20">
         <Header setSidebarOpen={setSidebarOpen} />
         <main>{children}</main>

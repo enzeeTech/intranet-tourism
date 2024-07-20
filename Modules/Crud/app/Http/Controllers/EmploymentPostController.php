@@ -4,20 +4,27 @@ namespace Modules\Crud\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Crud\Models\EmploymentPost;
-use Modules\Crud\Models\Profile;
 use Illuminate\Http\Request;
 
 class EmploymentPostController extends Controller
 {
     public function index(Request $request)
     {
-        $query = EmploymentPost::query();
-
         if ($request->has('department_id')) {
             $departmentId = $request->get('department_id');
             $members = EmploymentPost::where('department_id', $departmentId)
-                ->join('profiles', 'employment_posts.user_id', '=', 'profiles.user_id')
-                ->select('profiles.user_id', 'profiles.bio', 'employment_posts.title', 'profiles.image')
+                ->join('users', 'employment_posts.user_id', '=', 'users.id')
+                ->join('profiles', 'users.id', '=', 'profiles.user_id')
+                ->select(
+                    'users.id as user_id',
+                    'users.order',
+                    'users.is_active',
+                    'profiles.bio as name',
+                    'profiles.image',
+                    'profiles.work_phone',
+                    'profiles.phone_no',
+                    'employment_posts.title'
+                )
                 ->get()
                 ->map(function ($member) {
                     if (is_null($member->image)) {
@@ -32,7 +39,7 @@ class EmploymentPostController extends Controller
         }
 
         return response()->json([
-            'data' => $query->paginate(),
+            'data' => EmploymentPost::paginate(),
         ]);
     }
 
