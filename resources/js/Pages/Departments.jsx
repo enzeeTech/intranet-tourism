@@ -7,11 +7,16 @@ import DepartmentSearchBar from '../Components/Reusable/Departments/DepartmentSe
 import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard';
 import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
+import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
+
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
+
+  const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
   useEffect(() => {
     const fetchAllDepartments = async () => {
@@ -65,7 +70,10 @@ const StaffDirectory = () => {
     <Example>
       <main className="w-full xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-          <DepartmentSearchBar onSearch={(value) => setSearchTerm(value)} />
+          <DepartmentSearchBar
+            onSearch={(value) => setSearchTerm(value)}
+            toggleCreateCommunity={toggleCreateCommunity}
+          />
           <DepartmentDropdown
             departments={filteredDepartments}
             onSelectDepartment={() => {}}
@@ -107,6 +115,19 @@ const StaffDirectory = () => {
           <WhosOnline />
         </div>
       </aside>
+      {isCreateCommunityOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+              onClick={toggleCreateCommunity}
+            >
+              &times;
+            </button>
+            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
+          </div>
+        </div>
+      )}
     </Example>
   );
 };
