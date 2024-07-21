@@ -186,7 +186,7 @@
                                                  <img
                                                      loading="lazy"
                                                      src={`/storage/${photo}`}
-                                                     className="aspect-square rounded-md w-[99px]"
+                                                     className="aspect-square rounded-md w-[90px] h-[90px]"
                                                      alt="Staff's photo"
                                                  />
                                                  {isEditing && (
