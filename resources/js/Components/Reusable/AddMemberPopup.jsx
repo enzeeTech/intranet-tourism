@@ -23,7 +23,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     }, [searchTerm]);
 
     const fetchAllSearchResults = async (query) => {
-        setLoading(true);
         setError('');
         let allResults = [];
         let currentPage = 1;
@@ -48,8 +47,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         } catch (error) {
             console.error('Error fetching search results:', error);
             setError('Failed to fetch search results. Please try again.');
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -158,26 +155,23 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             ))}
                         </div>
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
-                            {loading ? (
-                                <div className="mt-20 ml-32 loading-spinner"></div>
-                            ) : (
-                                searchResults.map((person, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center p-2 cursor-pointer"
-                                        onClick={() => handleSelectPerson(person)}
-                                    >
-                                        <img src={person.profile && person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
-                                        <div>
-                                            <div className="text-lg font-bold">{person.name}</div>
-                                            <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
-                                        </div>
+                            {searchResults.map((person, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-center p-2 cursor-pointer"
+                                    onClick={() => handleSelectPerson(person)}
+                                >
+                                    <img src={person.profile && person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                    <div>
+                                        <div className="text-lg font-bold">{person.name}</div>
+                                        <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
                                     </div>
-                                ))
-                            )}
-                            {error && <div className="text-red-500 mt-2">{error}</div>}
+                                </div>
+                            ))}
+                            {error && <div className="mt-2 text-red-500">{error}</div>}
+
                         </div>
-                        {success && <div className="text-green-500 mt-2">{success}</div>} {/* Success message */}
+                        {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
                         <div className="flex justify-end pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
                                 className="px-4 mb-4 mr-2 rounded-full text-[#222222]"

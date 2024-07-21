@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './css/DepartmentsDropdown.css';
 import AddCommunity from '../../../../../public/assets/AddCommunity.png';
 import CreateDepartment from '../../../../../public/assets/CreateDepartment.png';
-import CreateDepartments from './CreateDepartments'; // Adjust the path as necessary
+import CreateDepartments from './CreateDepartments'; 
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartment }) => {
   const [isOpen, setIsOpen] = useState(false);
