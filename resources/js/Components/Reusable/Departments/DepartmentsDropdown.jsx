@@ -22,10 +22,10 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, onCreateDepartmen
 
   return (
     <div className="department-dropdown-container">
-      <button className="flex items-center px-4 py-2 text-sm text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={toggleCreateCommunity}>
+      {/* <button className="flex items-center px-4 py-2 text-sm text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={toggleCreateCommunity}>
         <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
         Department
-      </button>
+      </button> */}
       {isReportingPopupOpen && (
         <button
           onClick={toggleReportingPopup}
