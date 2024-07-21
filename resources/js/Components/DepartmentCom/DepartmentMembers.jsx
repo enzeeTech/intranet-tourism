@@ -16,10 +16,13 @@ function Avatar({ src, alt, className, status }) {
   );
 }
 
-function UserInfo({ name, role }) {
+function UserInfo({ name, role, isActive }) {
   return (
     <div className="flex flex-col ml-2">
-      <h2 className="text-xl font-bold">{name}</h2>
+      <div className="flex items-center gap-3">
+        <h2 className="text-xl font-bold">{name} </h2>
+        {isActive && <span className="font-semibold text-red-500 text-l">(Deactivated)</span>}
+      </div>
       <p className="text-xs font-medium">{role}</p>
     </div>
   );
@@ -48,7 +51,7 @@ const PopupMenu = ({ onAssign, onRemove }) => (
 );
 
 
-const MemberCard = ({ id, imageUrl, name, title, status, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+const MemberCard = ({ id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -79,9 +82,9 @@ const MemberCard = ({ id, imageUrl, name, title, status, onAssign, onRemove, act
   }, [popupRef, closePopup]);
 
   return (
-    <div className="relative flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
+    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
-      <UserInfo name={name} role={title} />
+      <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
           <img src="/assets/threedots.svg" alt="Menu" className="h-6 w-13" />
@@ -221,6 +224,7 @@ function DpMembers() {
               imageUrl={member.image}
               name={member.name}
               title={member.title}
+              isActive={member.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
               onAssign={handleAssign}
