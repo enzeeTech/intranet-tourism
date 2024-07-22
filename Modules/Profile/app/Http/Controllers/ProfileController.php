@@ -65,12 +65,34 @@ class ProfileController extends Controller
         // return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    // public function update(Profile $profile)
+    // {
+    //     $validated = request()->validate(...Profile::rules('update'));
+    //     $resourceRef = uploadFile(request()->file('image'), null, 'avatar');
+
+    //     $profile->update(array_merge($validated, ['image' => $resourceRef['path']]));
+
+    //     return response()->noContent();
+    // }
+
     public function update(Profile $profile)
     {
         $validated = request()->validate(...Profile::rules('update'));
-        $resourceRef = uploadFile(request()->file('image'), null, 'avatar');
 
-        $profile->update(array_merge($validated, ['image' => $resourceRef['path']]));
+        $imagePath = $profile->image;
+        if (request()->hasFile('image')) {
+            $imagePath = uploadFile(request()->file('image'), null, 'avatar')['path'];
+        }
+
+        $coverPhotoPath = $profile->cover_photo;
+        if (request()->hasFile('cover_photo')) {
+            $coverPhotoPath = uploadFile(request()->file('cover_photo'), null, 'cover_photo')['path'];
+        }
+
+        $profile->update(array_merge($validated, [
+            'image' => $imagePath,
+            'cover_photo' => $coverPhotoPath,
+        ]));
 
         return response()->noContent();
     }
