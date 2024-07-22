@@ -221,7 +221,7 @@ const Pautan = () => {
       <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-10">
         <div className="flex items-center justify-between mb-2 border-b border-gray-200">
           <h2 className="mb-3 text-2xl font-bold text-blue-500">External Apps</h2>
-          <button className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full" onClick={() => { resetForm(); setIsAddModalVisible(true); }}>+ Add</button>
+          <button className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full" onClick={() => { resetForm(); setIsAddModalVisible(true); }}>+ Add</button>
         </div>
         <DragDropContext onDragEnd={PautanHandleDragEnd}>
           <Droppable droppableId="apps">

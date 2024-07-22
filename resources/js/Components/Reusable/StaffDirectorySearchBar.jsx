@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import searchIcon from '../../../../public/assets/searchStaffButton.png';
-import staffListIconActive from '../../../../public/assets/staffListButton.png';
-import staffListIconInactive from '../../../../public/assets/staffListButtonInactive.png';
-import orgChartIconInactive from '../../../../public/assets/orgChartInactive.png';
-import orgChartIconActive from '../../../../public/assets/orgChartActive.png';
+import staffListIconActive from '../../../../public/assets/staffListButton.svg';
+import staffListIconInactive from '../../../../public/assets/staffListButtonInactive.svg';
+import orgChartIconInactive from '../../../../public/assets/orgChartInactive.svg';
+import orgChartIconActive from '../../../../public/assets/orgChartActive.svg';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import './css/StaffDirectorySearchBar.css';
 import './css/General.css';
@@ -73,13 +73,13 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="flex w-full space-x-3 sm:justify-end sm:w-auto">
-          <button onClick={handleSearch} className="mt-3 text-md px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700 h-[43px]">
+          <button onClick={handleSearch} className="mt-0 text-md px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700 h-[43px]">
             Search
           </button>
-          <button onClick={handleStaffListButton} style={{ width: '60px', paddingTop: '3px', marginLeft: '-5px' }}>
+          <button onClick={handleStaffListButton} className="shrink=0 w-10 aspect-square">
             <img src={isStaffListActive ? staffListIconActive : staffListIconInactive} alt="Staff List" />
           </button>
-          <button onClick={handleOrgChartButton} style={{ width: '60px', paddingTop: '3px', marginLeft: '-15px' }}>
+          <button onClick={handleOrgChartButton} className="shrink=0 w-10 aspect-square">
             <img src={isOrgChartActive ? orgChartIconActive : orgChartIconInactive} alt="Org Chart" />
           </button>
         </div>
