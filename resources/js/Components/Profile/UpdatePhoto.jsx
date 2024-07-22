@@ -36,6 +36,7 @@ function UpdatePhotoButton({ onClose }) {
     console.log("Closing popup via internal close"); // Debug log
     setIsPopupOpen(false);
     onClose(e);
+    window.location.reload();
   };
 
   return (

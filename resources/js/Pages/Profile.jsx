@@ -323,7 +323,7 @@ export default function Profile() {
         name: "", // Initialize with empty string or placeholder
         username: "",
         status: "Online",
-        icon1: "https://cdn.builder.io/api/v1/image/assets/TEMP/a0d746200134b6c0b2b351a65359ead31f7593bfb6991980b20df113b691a7de?",
+        icon1: "/assets/EditButton.svg",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
     });
 
@@ -447,39 +447,59 @@ export default function Profile() {
                             )}
                             {activeTab === "bio" && (
                                 <>
-                                    <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                        <div className="flex-auto my-auto max-md:max-w-full">
-                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                                <ProfileBio
-                                                    name={formData.name}
-                                                    photo={profileData.profileImage}
-                                                    username={formData.username}
-                                                    email={formData.email}
-                                                    grade={formData.grade}
-                                                    dateofbirth={formData.dateofbirth}
-                                                    whatsapp={formData.whatsapp}
-                                                    isEditing={isEditing}
-                                                    onFormDataChange={handleFormDataChange}
-                                                    onPhotoChange={handlePhotoChange}
-                                                />
-                                                <ProfileIcons
-                                                    icon1={profileData.icon1}
-                                                    icon2={profileData.icon2}
-                                                    onEdit={handleEdit}
-                                                />
-                                            </div>
-                                            {isEditing && (
-                                                <div className="flex justify-end mt-4">
-                                                    <button onClick={handleCancel} className=" bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
-                                                    <button onClick={handleSave} className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
-                                                </div>
-                                            )}
+                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                    <div className="flex items-center justify-between">
+                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
+                                        <ProfileIcons
+                                            icon1={profileData.icon1}
+                                            onEdit={handleEdit}
+                                            isFirstIcon
+                                        />
+                                    </div>
+                                    <div className="flex-auto my-auto max-md:max-w-full">
+                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                            <ProfileBio
+                                                name={formData.name}
+                                                photo={profileData.profileImage}
+                                                username={formData.username}
+                                                email={formData.email}
+                                                grade={formData.grade}
+                                                dateofbirth={formData.dateofbirth}
+                                                whatsapp={formData.whatsapp}
+                                                icon2={profileData.icon2}
+                                                isEditing={isEditing}
+                                                onFormDataChange={handleFormDataChange}
+                                                onPhotoChange={handlePhotoChange}
+                                            />
                                         </div>
-                                    </section>
+                                        <div className="flex justify-end">
+                                            <ProfileIcons
+                                                icon2={profileData.icon2}
+                                                onEdit={handleEdit}
+                                                isFirstIcon
+                                            />
+                                        </div>
+                                        {isEditing && (
+                                            <div className="flex justify-end mt-4 pb-3">
+                                                <button onClick={handleCancel} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
+
+
                                     <div className="separator"></div>
                                     {departments.map((dept, index) => (
-                                        <section key={index} className="flex flex-col w-full gap-5 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                            <div className="separator">{dept.name}</div>
+                                        <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                            <div className="flex items-center justify-between">
+                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{dept.name}</div>
+                                        <ProfileIcons
+                                            icon1={profileData.icon1}
+                                            onEdit={handleEdit}
+                                            isFirstIcon
+                                        />
+                                    </div>
                                             <div className="flex-auto my-auto max-md:max-w-full">
                                                 <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                                     <ProfileBio
@@ -492,16 +512,11 @@ export default function Profile() {
                                                         isEditing={isEditing}
                                                         onFormDataChange={handleFormDataChange}
                                                     />
-                                                    <ProfileIcons
-                                                        icon1={profileData.icon1}
-                                                        icon2={profileData.icon2}
-                                                        onEdit={handleEdit}
-                                                    />
                                                 </div>
                                                 {isEditing && (
                                                     <div className="flex justify-end mt-4">
-                                                        <button onClick={handleCancel} className=" bg-gray-500 text-white px-4 py-2 rounded-md">Cancel</button>
-                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-md">Save</button>
+                                                        <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                                                     </div>
                                                 )}
                                             </div>

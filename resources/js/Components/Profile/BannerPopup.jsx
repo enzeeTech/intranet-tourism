@@ -7,8 +7,8 @@ function Popup({ title, content, onClose, onSave }) {
                 <h2 className="text-xl font-bold mb-4 text-center">{title}</h2>
                 <p className="mb-2">{content}</p>
                 <div className="flex justify-center mt-4 text-sm">
-                    <button onClick={onClose} className="mr-2 bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-3xl">Cancel</button>
-                    <button onClick={onSave} className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-3xl">Save</button>
+                    <button onClick={onClose} className="mr-2 bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                    <button onClick={onSave} className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                 </div>
             </div>
         </div>

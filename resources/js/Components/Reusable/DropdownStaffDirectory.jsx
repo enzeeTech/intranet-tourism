@@ -118,8 +118,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </a>      
       )}
       {selectedDepartment.id && (
-        <button className="add-person-btn" onClick={toggleAddMemberPopup}>
-          <img src={addMemberButton} alt="Add Member" />
+      <button 
+        className="flex items-center text-sm px-4 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 mt-1" 
+        onClick={toggleAddMemberPopup}
+        >
+          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
+          Member
         </button>
       )}
       {selectedDepartment.id && (
@@ -138,14 +142,14 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         >
           <button
             onClick={toggleReportingPopup}
-            className="popup-button"
+            className="popup-button hover:bg-gray-100"
           >
             Reporting Structure
           </button>
           <hr className="popup-divider" />
           <a
-            href={`/ordering?staffMembers=${encodeURIComponent(JSON.stringify(staffMembers))}`}
-            className="popup-button"
+            href={`/ordering?departmentId=${selectedDepartment.id}`}
+            className="popup-button hover:bg-gray-100"
           >
             Ordering
           </a>
