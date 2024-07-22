@@ -11,9 +11,9 @@ const Settings = () => {
   return (
     <Example>
       <main className="">
-        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 ">
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex  items-center justify-between mb-4">
               <PageTitle title="Pautan" />
               <button 
                 className="px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"

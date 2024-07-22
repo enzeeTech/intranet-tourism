@@ -65,7 +65,7 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
           onChange={handleSearch}
         />
         <button
-          className="text-sm px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700"
+          className="text-sm px-4 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-700 md:justify-start"
           onClick={toggleCreateCommunity}
         >
           Create Department +
