@@ -110,7 +110,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           ))}
         </ul>
       )}
-      <div className="flex justify-start items-center space-x-0">
+      <div className="flex justify-start items-center space-x-0 ">
         {selectedDepartment.id && (
           <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
             <button className="visit-department-btn text-sm rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
@@ -120,7 +120,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         )}
         {selectedDepartment.id && (
         <button 
-          className="flex items-center text-sm px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1" 
+          className="flex items-center text-sm px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
           onClick={toggleAddMemberPopup}
           >
             <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
