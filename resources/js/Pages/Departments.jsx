@@ -243,6 +243,8 @@ import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard'
 import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
+// import './BackgroundPage.css';
+
 
 
 const StaffDirectory = () => {
@@ -303,7 +305,7 @@ const StaffDirectory = () => {
 
   return (
     <Example>
-      <main className="w-full xl:pl-96">
+      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen"> {/* Added bg-gray-100 */}
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar
             onSearch={(value) => setSearchTerm(value)}
@@ -314,7 +316,7 @@ const StaffDirectory = () => {
             onSelectDepartment={() => {}}
             onCreateDepartment={handleNewDepartment}
           />
-          <div className="staff-member-grid-container max-w-[1230px]">
+          <div className="staff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 sm:p-4 md:p-6 lg:p-8">
             {isLoading ? (
               <div className="mt-20 ml-32 loading-spinner"></div>
             ) : filteredDepartments.length === 0 ? (
@@ -351,7 +353,7 @@ const StaffDirectory = () => {
         </div>
       </aside>
       {isCreateCommunityOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
           <div className="bg-white p-4 rounded-lg shadow-lg relative">
             <button
               className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"

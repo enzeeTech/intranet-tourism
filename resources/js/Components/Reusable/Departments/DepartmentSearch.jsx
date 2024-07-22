@@ -52,9 +52,9 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
   };
 
   return (
-    <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5">
+    <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 sm:left">
       <div className="mb-1 staff-search-bar-title">
-        <h2 className="text-xl font-semibold">Search Departments</h2>
+        <h2 className="lg:text-xl font-semibold sm:text-sm md:text-md">Search Departments</h2>
       </div>
       <div className="flex flex-col items-center space-y-3 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3">
         <input
