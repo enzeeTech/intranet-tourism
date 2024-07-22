@@ -119,7 +119,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
       )}
       {selectedDepartment.id && (
       <button 
-        className="flex items-center text-sm px-4 py-2.5 bg-blue-500 text-white rounded-full hover:bg-blue-700 mt-1" 
+        className="flex items-center text-sm px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 mt-1 " 
         onClick={toggleAddMemberPopup}
         >
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
