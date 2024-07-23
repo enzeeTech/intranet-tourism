@@ -476,7 +476,7 @@ export default function Profile() {
 
     const closeSaveNotification = () => {
         setIsSaveNotificationOpen(false);
-        window.location.reload();
+        // window.location.reload();
     };
 
     const handleSaveNotification = () => {
@@ -492,9 +492,15 @@ export default function Profile() {
     };
 
     const handleSave = async () => {
+        const payload = {
+            ...formData,
+            image: photo,
+            user_id: id
+        };
+    
+        console.log("Payload being sent to the server:", payload);
+    
         try {
-            console.log('Saving data:', { ...formData, image: photo, user_id: user_id });
-
             const response = await fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
                 method: "PUT",
                 headers: {
@@ -502,16 +508,8 @@ export default function Profile() {
                     'X-CSRF-TOKEN': csrfToken,
                     'Authorization': `Bearer ${authToken}`,
                 },
-                body: JSON.stringify({
-                    ...formData,
-                    image: photo,
-                    user_id: user_id
-                })
+                body: JSON.stringify(payload)
             });
-
-            const data = await response.json();
-            console.log('Server response:', data);
-
             if (!response.ok) throw new Error("Network response was not ok");
             setOriginalFormData(formData);
             setOriginalPhoto(photo);
@@ -522,6 +520,7 @@ export default function Profile() {
             console.error("Error saving user data:", error);
         }
     };
+    
 
     const handleCancel = () => {
         setFormData(originalFormData);
@@ -540,7 +539,7 @@ export default function Profile() {
             setPhoto(fileUrl);
             setSelectedFile(file);
             setIsPopupOpen(false);
-            setIsUpdatePopupOpen(true);
+            setIsPopupOpen(true);
         }
     };
 
@@ -617,7 +616,6 @@ export default function Profile() {
                                         )}
                                     </div>
                                 </section>
-
                                     <div className="separator"></div>
                                     {departments.map((dept, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
@@ -628,28 +626,28 @@ export default function Profile() {
                                             onEdit={handleEdit}
                                             isFirstIcon
                                         />
-                                    </div>
-                                            <div className="flex-auto my-auto max-md:max-w-full">
-                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                                    <ProfileBio
-                                                        department={dept.name}
-                                                        unit={dept.unit}
-                                                        jobtitle={dept.jobtitle}
-                                                        position={dept.position}
-                                                        location={dept.location}
-                                                        phone={dept.phone}
-                                                        isEditing={isEditing}
-                                                        onFormDataChange={handleFormDataChange}
-                                                    />
-                                                </div>
-                                                {isEditing && (
-                                                    <div className="flex justify-end mt-4">
-                                                        <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
-                                                    </div>
-                                                )}
+                                        </div>
+                                        <div className="flex-auto my-auto max-md:max-w-full">
+                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                <ProfileBio
+                                                    // department={dept.name}
+                                                    unit={dept.unit}
+                                                    jobtitle={dept.jobtitle}
+                                                    position={dept.position}
+                                                    location={dept.location}
+                                                    phone={dept.phone}
+                                                    isEditing={isEditing}
+                                                    onFormDataChange={handleFormDataChange}
+                                                />
                                             </div>
-                                        </section>
+                                            {isEditing && (
+                                                <div className="flex justify-end mt-4">
+                                                    <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                    <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </section>
                                     ))}
                                 </>
                             )}
@@ -708,5 +706,4 @@ export default function Profile() {
         </Example>
     );
 }
-
 
