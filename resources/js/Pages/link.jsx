@@ -19,7 +19,7 @@ const Settings = () => {
                 className="px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                 onClick={handleNavigation}
               >
-                Manage Pautan
+                Manage Links
               </button>
             </div>
             <hr className="file-directory-underline" />
