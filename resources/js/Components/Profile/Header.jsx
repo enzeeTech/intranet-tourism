@@ -155,7 +155,7 @@ function ProfileImage({ src, alt, className, rounded }) {
   );
 }
 
-function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId }) {
+function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
@@ -163,6 +163,8 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 
   const csrfToken = useCsrf();
   const authToken = localStorage.getItem('authToken'); // Assuming the token is stored in localStorage
+
+  console.log("profileId", profileId)
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -206,7 +208,8 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
   };
 
   const uploadProfilePhoto = async (file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken) => {
-    const url = `/api/profile/profiles/${id}`;
+    console.log("id", id)
+    const url = `/api/profile/profiles/${profileId}`;
 
     const formData = new FormData();
     formData.append('image', file);
