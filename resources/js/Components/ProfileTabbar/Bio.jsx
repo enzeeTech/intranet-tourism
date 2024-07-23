@@ -149,7 +149,7 @@
                              name={name}
                              value={value}
                              onChange={handleInputChange}
-                             className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300"
+                             className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
                          />
                      ) : (
                          <div className={`text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent ${editable ? 'text-neutral-800 text-opacity-80' : 'text-neutral-500'}`}>
@@ -181,12 +181,12 @@
                                              </div>
                                              <div className="text-xs text-blue-500">Maximum size: 1MB</div>
                                          </td>
-                                         <td className="py-2 align-center w-2/3">
+                                         <td className="py-2 align-start w-2/3">
                                              <div className="flex items-center gap-4">
                                                  <img
                                                      loading="lazy"
                                                      src={`/storage/${photo}`}
-                                                     className="aspect-square rounded-md w-[90px] h-[90px]"
+                                                     className="aspect-square rounded-md w-[90px] h-[90px] ml-4"
                                                      alt="Staff's photo"
                                                  />
                                                  {isEditing && (

@@ -191,19 +191,19 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 rounded-3xl shadow-custom">
       <div className="p-2 rounded-3xl w-2xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col py-2.5 bg-white rounded-2xl w-[700px]">
+        <section className="flex flex-col py-2.5 bg-white rounded-3xl w-[700px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 items-start text-2xl font-bold text-neutral-800">
               <h1 className="flex-auto mt-5">Pick an Avatar</h1>
-              <img
+              {/* <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
                 alt="Close icon"
                 className="shrink-0 w-6 aspect-square cursor-pointer"
                 onClick={onClose}
-              />
+              /> */}
             </header>
-            <div className="grid grid-cols-6 gap-3 mt-9">
+            <div className="grid grid-cols-6 gap-3 mt-9 px-2">
               {avatars.map((avatar) => (
                 <div className="w-[90px] h-[90px]" key={avatar.src}>
                   <Avatar
@@ -216,12 +216,12 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
               ))}
             </div>
           </div>
-          <footer className="flex gap-2.5 self-end mt-3.5 mr-6 text-sm font-bold text-center">
-            <button onClick={onClose} className="justify-center px-4 py-2.5 whitespace-nowrap bg-white rounded-2xl border border-solid border-stone-300 text-neutral-400">
+          <footer className="flex gap-2.5 self-end m-4 mr-6 text-sm font-bold text-center">
+            <button onClick={onClose} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">
               Cancel
             </button>
             <button onClick={handleSaveClick} className="flex flex-col justify-center text-white">
-              <span className="justify-center px-6 py-2.5 bg-blue-500 rounded-2xl">Save</span>
+              <span className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</span>
             </button>
           </footer>
         </section>
