@@ -10,8 +10,8 @@ function ProfileNav({ activeTab, setActiveTab }) {
 
     return (
         <>
-            <hr className="mt-10 ml-10 mr-10" />
-            <nav className="flex gap-5 justify-between mt-3 ml-28 mr-28 max-w-full text-sm font-semibold text-center whitespace-nowrap text-neutral-800 text-opacity-30 w-auto max-md:flex-wrap max-md:mt-2">
+            <hr className="mt-10 mx-10 max-md:mx-4 max-md:mt-4 max-md:mb-6" />
+            <nav className="flex gap-5 justify-between mt-3 ml-28 mr-28 max-w-full text-sm font-semibold text-center whitespace-nowrap text-neutral-800 text-opacity-30 w-auto max-md:flex-wrap max-md:mt-2 max-md:mb-10 max-md:mx-10">
                 {tabs.map(tab => (
                     <span
                         key={tab.key}

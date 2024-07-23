@@ -851,8 +851,6 @@ export default function Profile() {
                                         )}
                                     </div>
                                 </section>
-
-
                                     <div className="separator"></div>
                                     {departments.map((dept, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
@@ -863,28 +861,28 @@ export default function Profile() {
                                             onEdit={handleEdit}
                                             isFirstIcon
                                         />
-                                    </div>
-                                            <div className="flex-auto my-auto max-md:max-w-full">
-                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                                    <ProfileBio
-                                                        department={dept.name}
-                                                        unit={dept.unit}
-                                                        jobtitle={dept.jobtitle}
-                                                        position={dept.position}
-                                                        location={dept.location}
-                                                        phone={dept.phone}
-                                                        isEditing={isEditing}
-                                                        onFormDataChange={handleFormDataChange}
-                                                    />
-                                                </div>
-                                                {isEditing && (
-                                                    <div className="flex justify-end mt-4">
-                                                        <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
-                                                    </div>
-                                                )}
+                                        </div>
+                                        <div className="flex-auto my-auto max-md:max-w-full">
+                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                <ProfileBio
+                                                    department={dept.name}
+                                                    unit={dept.unit}
+                                                    jobtitle={dept.jobtitle}
+                                                    position={dept.position}
+                                                    location={dept.location}
+                                                    phone={dept.phone}
+                                                    isEditing={isEditing}
+                                                    onFormDataChange={handleFormDataChange}
+                                                />
                                             </div>
-                                        </section>
+                                            {isEditing && (
+                                                <div className="flex justify-end mt-4">
+                                                    <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                    <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </section>
                                     ))}
                                 </>
                             )}

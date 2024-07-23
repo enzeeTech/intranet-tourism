@@ -168,7 +168,7 @@ function EditProfilePhoto({ onClose, onSelectFile, userId }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={onClose}>
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col py-2.5 bg-white rounded-2xl shadow-custom w-[330px]">
+        <section className="flex flex-col py-2.5 bg-white rounded-3xl shadow-custom w-[330px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 justify-between items-start text-xl font-bold text-neutral-800">
               <h1 className="flex-auto mt-3">Edit Profile Photo</h1>

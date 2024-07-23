@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import Adminsection from '../Components/Adminwall';
+import Adminwall from '../Components/Adminwall';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
@@ -45,9 +45,9 @@ const DepartmentInner = () => {
 
   return (
     <Example>
-        <main className="xl:pl-96 w-[900px] m-ml-16 mr-24 relative">
+        <main className="xl:pl-96 w-[900px] m-ml-16 mr-24 relative bottom-10">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
-            <Adminsection
+            <Adminwall
                 departmentID= {getDepartmentIdFromQuery()}
                 departmentHeader={departmentData?.name || 'Department Name'}
                 departmentDescription={departmentData?.description}
