@@ -203,7 +203,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
                 onClick={onClose}
               /> */}
             </header>
-            <div className="grid grid-cols-6 gap-3 mt-9 px-2">
+            <div className="grid grid-cols-6 gap-3 mt-9  px-2">
               {avatars.map((avatar) => (
                 <div className="w-[90px] h-[90px]" key={avatar.src}>
                   <Avatar

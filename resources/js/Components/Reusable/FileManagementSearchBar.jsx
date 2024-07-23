@@ -91,7 +91,7 @@ const SearchFile = ({ onSearch, requiredData }) => {
   return (
     <div className="file-search-bar-container">
       <div className="file-search-bar-title">
-        <h2>Search Files...</h2>
+        <h2>Search Files</h2>
       </div>
       <div className="file-search-bar">
         <input
@@ -102,17 +102,17 @@ const SearchFile = ({ onSearch, requiredData }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ paddingLeft: '1.2rem' }}
         />
-        <button onClick={handleSearch}>
-          <img src="assets/filesearchbutton.svg" alt="filesearchbutton" className="" />
+        <button
+          onClick={handleSearch}
+          className="visit-department-btn text-sm rounded-full px-4 py-3 bg-blue-500 text-white hover:bg-blue-700">
+          Search
         </button>
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/09e8f0029fa709f52ac7d218876a28da6904c7ef7108cbb12df1fb413678c59c?apiKey=285d536833cc4168a8fbec258311d77b&"
-            alt=""
-            className="shrink-0 my-auto aspect-[1.45] w-[49px] ml-2"
-          />
+          <button
+            className="flex items-center shrink-0 ml-2 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
+            <img src="/assets/addFile.svg" alt="add new file" className="w-10 h-8" />
+          </button>
         </label>
       </div>
       {showPopup && (
@@ -131,7 +131,7 @@ const SearchFile = ({ onSearch, requiredData }) => {
                   </div>
                 </div>
                 <div className="flex gap-1.5 self-end mt-1 max-w-full font-bold whitespace-nowrap w-[164px]">
-                  <button className="justify-center text-sm text-white px-6 py-3 bg-blue-500 rounded-3xl" onClick={handleFileUpload}>
+                  <button className="justify-center text-sm text-white px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleFileUpload}>
                     Save
                   </button>
                   <button className="justify-center px-4 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400" onClick={handleFileDelete}>
