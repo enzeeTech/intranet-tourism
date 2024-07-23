@@ -653,7 +653,7 @@ export default function Profile() {
                 return response.json();
             })
             .then(({ data }) => {
-                console.log('data', data);
+                console.log('hello', data);
                 setProfileData(pv => ({
                     ...pv, ...data,
                     backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
@@ -721,6 +721,8 @@ export default function Profile() {
         setIsEditing(true);
     };
 
+    console.log("profileData", profileData.profile?.id)
+
     const handleSelectFile = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -729,7 +731,7 @@ export default function Profile() {
             formData.append('user_id', id); // Add user_id to the form data
             formData.append('_method', 'PUT'); // Add _method to the form data
     
-            const url = `/api/profile/profiles/${id}`;
+            const url = `/api/profile/profiles/${profileData.profile?.id}`;
     
             console.log("CSRF Token:", csrfToken);
             console.log("Auth Token:", authToken);
@@ -796,6 +798,7 @@ export default function Profile() {
                                 onEditBanner={() => setIsPopupOpen(true)}
                                 rounded={true}
                                 userId={id}
+                                profileId={profileData.profile?.id}
                             />
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
