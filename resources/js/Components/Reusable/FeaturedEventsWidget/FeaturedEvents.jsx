@@ -1,8 +1,6 @@
 import React from 'react';
 import EventItem from './EventItem';
 import '../css/FeaturedEvents.css';
-import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
-import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import arrowRight from '../../../../../public/assets/viewAllArrow.png';
 
 const featuredEvents = [
