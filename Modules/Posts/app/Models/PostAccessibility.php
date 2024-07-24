@@ -5,13 +5,14 @@ namespace Modules\Posts\Models;
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class PostAccessibility extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi;
+    use Auditable, Authorizable, HasFactory, QueryableApi, HasUuids;
 
     protected $table = 'post_accessibilities';
 
@@ -27,6 +28,13 @@ class PostAccessibility extends Model implements AuditableContract
             'create' => [
                 [
                     'post_id' => ['string', 'required'],
+                    'accessable_type' => ['string', 'required'],
+                    'accessable_id' => ['string', 'required'],
+                ],
+                // [],
+            ],
+            'createFromPost' => [
+                [
                     'accessable_type' => ['string', 'required'],
                     'accessable_id' => ['string', 'required'],
                 ],

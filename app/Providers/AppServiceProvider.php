@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Modules\Communities\Models\Community;
+use Modules\Department\Models\Department;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerMacros();
+        $this->relationMapping();
 
         Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
             $event->extendSocialite('azure', \SocialiteProviders\Azure\Provider::class);
@@ -37,5 +42,14 @@ class AppServiceProvider extends ServiceProvider
             $this->softDeletes();
             $this->string('deleted_by')->nullable();
         });
+    }
+
+    private function relationMapping()
+    {
+        Relation::morphMap([
+            'departments' => Department::class,
+            'communities' => Community::class,
+            'users' => User::class,
+        ]);
     }
 }
