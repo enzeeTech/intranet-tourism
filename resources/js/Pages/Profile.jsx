@@ -543,6 +543,10 @@ export default function Profile() {
         }
     };
 
+    const handleCreatePoll = (newPoll) => {
+        setPolls([...polls, newPoll]);
+    };
+
     const departments = [
         { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
         { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
