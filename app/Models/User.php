@@ -63,6 +63,12 @@ class User extends Authenticatable implements MustVerifyEmail
                     'password' => 'required',
                 ],
             ],
+            'default' => [
+                [
+                    'name' => 'string',
+                    'email' => 'email',
+                ],
+            ],
             'register' => [
                 [
                     'name' => ['required', 'string', 'max:255'],
@@ -75,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
             ],
         ];
 
-        return $rules[$scenario];
+        return !empty($rules[$scenario]) ? $rules[$scenario] : $rules['default'];
     }
 
 

@@ -81,6 +81,7 @@ class ProfileController extends Controller
     {
         DB::beginTransaction();
         try {
+            request()->merge(['bio' => request('name')]);
             $validated = request()->validate(...Profile::rules('update'));
             $validatedUser = request()->validate(...User::rules('update'));
 
