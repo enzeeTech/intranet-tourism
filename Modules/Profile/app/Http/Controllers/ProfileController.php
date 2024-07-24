@@ -3,9 +3,11 @@
 namespace Modules\Profile\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Modules\Profile\Http\Requests\ProfileUpdateRequest;
@@ -77,22 +79,32 @@ class ProfileController extends Controller
 
     public function update(Profile $profile)
     {
-        $validated = request()->validate(...Profile::rules('update'));
+        DB::beginTransaction();
+        try {
+            $validated = request()->validate(...Profile::rules('update'));
+            $validatedUser = request()->validate(...User::rules('update'));
 
-        $imagePath = $profile->image;
-        if (request()->hasFile('image')) {
-            $imagePath = uploadFile(request()->file('image'), null, 'avatar')['path'];
+            $imagePath = $profile->image;
+            if (request()->hasFile('image')) {
+                $imagePath = uploadFile(request()->file('image'), null, 'avatar')['path'];
+            }
+
+            $coverPhotoPath = $profile->cover_photo;
+            if (request()->hasFile('cover_photo')) {
+                $coverPhotoPath = uploadFile(request()->file('cover_photo'), null, 'cover_photo')['path'];
+            }
+
+            $profile->update(array_merge($validated, [
+                'image' => $imagePath,
+                'cover_photo' => $coverPhotoPath,
+            ]));
+
+            $profile->user()->update($validatedUser);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
-
-        $coverPhotoPath = $profile->cover_photo;
-        if (request()->hasFile('cover_photo')) {
-            $coverPhotoPath = uploadFile(request()->file('cover_photo'), null, 'cover_photo')['path'];
-        }
-
-        $profile->update(array_merge($validated, [
-            'image' => $imagePath,
-            'cover_photo' => $coverPhotoPath,
-        ]));
 
         return response()->noContent();
     }
