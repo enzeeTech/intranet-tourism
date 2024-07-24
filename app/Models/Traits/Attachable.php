@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-use Modules\Crud\Models\Resource;
+use Modules\Resources\Models\Resource;
 
 trait Attachable
 {

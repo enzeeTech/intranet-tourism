@@ -15,7 +15,7 @@ trait QueryableApi
             $query->with(request('with'));
         });
 
-        $query->when(request()->has('filter'), function (Builder $query) {
+        $query->when(request()->has('filter') || request()->has('filters'), function (Builder $query) {
             $filters = request('filter') ?? request('filters');
             if (!is_array($filters)) {
                 return;
@@ -52,13 +52,18 @@ trait QueryableApi
             }
         });
 
-        $query->when(request()->has('scope'), function ($query) {
-            foreach (request('scope') as $scope) {
+        $query->when(request()->has('scope') || request()->has('scopes'), function ($query) {
+            $scopes = request('scope') ?? request('scopes');
+            foreach ($scopes as $scope) {
                 foreach ($scope as $scopeBy => $value) {
                     if ($value == null || is_bool($value)) {
                         $query->$scopeBy();
                     } else {
-                        $query->$scopeBy($value);
+                        if(is_array($value)) {
+                            $query->$scopeBy(...$value);
+                        } else {
+                            $query->$scopeBy($value);
+                        }
                     }
                 }
             }

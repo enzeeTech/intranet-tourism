@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Modules\Communities\Models\Community;
 use Modules\Department\Models\Department;
+use Modules\Posts\Models\Post;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
             'departments' => Department::class,
             'communities' => Community::class,
             'users' => User::class,
+            'posts' => Post::class,
         ]);
     }
 }
