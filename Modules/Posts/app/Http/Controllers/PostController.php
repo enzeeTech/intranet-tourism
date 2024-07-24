@@ -8,48 +8,17 @@ use Modules\Posts\Models\Post;
 
 class PostController extends Controller
 {
-    // public function index()
-    // {
-    //     return response()->json([
-    //         'data' => Post::queryable()->paginate(),
-    //     ]);
-    // }
-
-    // public function show($id)
-    // {
-    //     return response()->json([
-    //         'data' => Post::where('id', $id)->queryable()->firstOrFail(),
-    //     ]);
-    // }
-
     public function index()
     {
-        $queryParams = request()->query();
-        $limit = request()->query('perpage', 15);
-
-        $posts = Post::queryable()->paginate($limit);
-
-        // Transform the attachments field to always be an array
-        $posts->getCollection()->transform(function ($post) {
-            $post->attachments = [$post->attachments];
-            return $post;
-        });
-        $posts->appends($queryParams);
-
         return response()->json([
-            'data' => $posts,
+            'data' => $this->shouldPaginate(Post::queryable()),
         ]);
     }
 
     public function show($id)
     {
-        $post = Post::where('id', $id)->queryable()->firstOrFail();
-
-        // Transform the attachments field to always be an array
-        $post->attachments = [$post->attachments];
-
         return response()->json([
-            'data' => $post,
+            'data' => Post::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 

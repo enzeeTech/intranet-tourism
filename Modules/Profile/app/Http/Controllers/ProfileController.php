@@ -23,7 +23,7 @@ class ProfileController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => Profile::queryable()->paginate(),
+            'data' => $this->shouldPaginate(Profile::queryable()),
         ]);
     }
 

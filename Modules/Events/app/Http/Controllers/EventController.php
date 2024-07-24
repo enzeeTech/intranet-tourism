@@ -10,7 +10,7 @@ class EventController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => Event::queryable()->paginate(),
+            'data' => $this->shouldpaginate(Event::queryable()),
         ]);
     }
 

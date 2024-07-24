@@ -7,6 +7,11 @@ use Modules\Crud\Models\Resource;
 trait Attachable
 {
 
+    public function attachment()
+    {
+        return $this->morphOne(Resource::class, 'attachable')->latestOfMany();
+    }
+
     public function attachments()
     {
         return $this->morphMany(Resource::class, 'attachable');
@@ -20,7 +25,7 @@ trait Attachable
                 $this->attachments()->create(array_merge($resourceRef, [
                     'user_id' => auth()->id() ?? '1',
                     'for' => $for,
-                    'metadata' => json_encode($resourceRef)
+                    'metadata' => $resourceRef
                     // 'duration' => '1',
                 ]));
             }

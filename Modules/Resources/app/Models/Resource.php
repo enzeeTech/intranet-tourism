@@ -30,6 +30,10 @@ class Resource extends Model implements AuditableContract
         'metadata',
     ];
 
+    protected $casts = [
+        'metadata' => 'array'
+    ];
+
     public static function rules($scenario = 'create')
     {
         $rules = [
