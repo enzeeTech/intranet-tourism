@@ -115,7 +115,8 @@ function ListItem({ icon, alt, text, onClick }) {
   );
 }
 
-function EditProfilePhoto({ onClose, onSelectFile, userId }) {
+function EditProfilePhoto({ onClose, onSelectFile, userId, userName }) {
+  console.log("yuyu", userName);
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -182,7 +183,7 @@ function EditProfilePhoto({ onClose, onSelectFile, userId }) {
           </div>
         </section>
       </div>
-      {showPopup && <PhotoAndAvatarPopup onClose={handleAvatarClose} userId={userId} csrfToken={csrfToken} />} {/* Ensure CSRF token is passed */}
+      {showPopup && <PhotoAndAvatarPopup onClose={handleAvatarClose} userId={userId} csrfToken={csrfToken} userName={userName} />} {/* Ensure CSRF token is passed */}
       {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={selectedFile} />}
     </div>
   );

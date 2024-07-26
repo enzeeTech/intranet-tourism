@@ -119,29 +119,54 @@
      
     //  export default ProfileBio;
 
-    import React from 'react';
+    import React, { useState, useEffect, useRef } from 'react';
 
-    function ProfileBio({ 
-        photo, 
-        username, 
-        email, 
-        department, 
-        unit, 
-        jobtitle, 
-        position, 
-        grade, 
-        location, 
-        phone, 
-        dateofbirth, 
-        whatsapp, 
-        isEditing, 
-        onFormDataChange, 
-        onPhotoChange 
+    function ProfileBio({
+        photo,
+        username,
+        email,
+        dateofbirth,
+        whatsapp,
+        isEditing,
+        onFormDataChange,
+        onPhotoChange,
+        originalFormData,
+        onEditBio,
+        onCancelBio,
+        onSaveBio
     }) {
+        const [localFormData, setLocalFormData] = useState({});
+        const formRef = useRef(null);
+    
+        useEffect(() => {
+            setLocalFormData({
+                username,
+                email,
+                dateofbirth,
+                whatsapp
+            });
+        }, [username, email, dateofbirth, whatsapp]);
+    
+        useEffect(() => {
+            if (isEditing) {
+                document.addEventListener('mousedown', handleClickOutside);
+            } else {
+                document.removeEventListener('mousedown', handleClickOutside);
+            }
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [isEditing]);
+    
+        const handleClickOutside = (event) => {
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                onCancelBio();
+            }
+        };
+    
         const handleInputChange = (e) => {
             const { name, value } = e.target;
-            console.log(`Changing ${name} to ${value}`); // Debug logging
-            onFormDataChange((prevData) => ({
+            setLocalFormData((prevData) => ({
                 ...prevData,
                 [name]: value,
             }));
@@ -158,20 +183,20 @@
             }
         };
     
-        const renderField = (label, name, value, type, editable = true) => (
+        const renderField = (label, name, value, type) => (
             <tr key={name}>
                 <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">{label}</td>
                 <td className="py-2 align-center w-2/3">
-                    {isEditing && editable ? (
+                    {isEditing ? (
                         <input
                             type={type}
                             name={name}
-                            value={value}
+                            value={localFormData[name]}
                             onChange={handleInputChange}
                             className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
                         />
                     ) : (
-                        <div className={`text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent ${editable ? 'text-neutral-800 text-opacity-80' : 'text-neutral-500'}`}>
+                        <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
                             {value}
                         </div>
                     )}
@@ -180,7 +205,7 @@
         );
     
         return (
-            <div className="flex-auto my-auto p-4">
+            <div ref={formRef} className="flex-auto my-auto p-4">
                 <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6">
                     <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                         <table className="table-auto w-full text-left border-collapse">
@@ -204,7 +229,7 @@
                                             <div className="flex items-center gap-4">
                                                 <img
                                                     loading="lazy"
-                                                    src={`/storage/${photo}`}
+                                                    src={photo}
                                                     className="aspect-square rounded-md w-[90px] h-[90px] ml-4"
                                                     alt="Staff's photo"
                                                 />
@@ -220,26 +245,32 @@
                                         </td>
                                     </tr>
                                 )}
-                                {username && renderField('username', 'username', username, 'username')}
-                                {email && renderField('e-mail', 'email', email, 'email')}
-                                {department && renderField('department', 'department', department, 'text')}
-                                {unit && renderField('unit', 'unit', unit, 'text')}
-                                {jobtitle && renderField('job title', 'jobtitle', jobtitle, 'text')}
-                                {position && renderField('position', 'position', position, 'text')}
-                                {grade && renderField('grade', 'grade', grade, 'text')}
-                                {location && renderField('location', 'location', location, 'text')}
-                                {phone && renderField('office number', 'phone', phone, 'text')}
-                                {dateofbirth && renderField('date of birth', 'dateofbirth', dateofbirth, 'date')}
-                                {whatsapp && renderField('whatsapp number', 'whatsapp', whatsapp, 'text')}
+                                {username && renderField('Username', 'username', localFormData.username, 'text')}
+                                {email && renderField('E-mail', 'email', localFormData.email, 'email')}
+                                {dateofbirth && renderField('Date of Birth', 'dateofbirth', localFormData.dateofbirth, 'date')}
+                                {whatsapp && renderField('Whatsapp Number', 'whatsapp', localFormData.whatsapp, 'text')}
                             </tbody>
                         </table>
                     </div>
                 </div>
+                {/* {isEditing && (
+                    <div className="flex justify-end mt-4 pb-3">
+                        <button onClick={onCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                        <button onClick={() => onSaveBio(localFormData)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                    </div>
+                )} */}
             </div>
         );
     }
     
     export default ProfileBio;
+    
+    
+    
+    
+    
+    
+
     
 
 

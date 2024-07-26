@@ -718,12 +718,13 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
-import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileIcons, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import '../Components/Profile/profile.css';
 import { useCsrf } from '@/composables';
+import { ProfileDepartment } from '@/Components/ProfileTabbar';
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -761,10 +762,19 @@ export default function Profile() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
+        department2: "",
+        unit2: "",
+        jobtitle2: "",
+        position2: "",
+        grade2: "",
+        location2: "",
+        phone2: "",
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [originalPhoto, setOriginalPhoto] = useState(photo);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditingBio, setIsEditingBio] = useState(false);
+    const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
+    const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
     const [profileData, setProfileData] = useState({
         backgroundImage: "",
         profileImage: "",
@@ -794,10 +804,25 @@ export default function Profile() {
                     backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
                     profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`,
                     username: "@" + data.username,
-                    // name: data.name,
                 }));
 
                 setFormData((pv) => ({
+                    ...pv,
+                    name: data.name,
+                    username: data.username || "N/A",
+                    email: data.email,
+                    department: data.employment_post?.department?.name || "N/A",
+                    unit: data.employment_post?.business_unit?.name || "N/A",
+                    jobtitle: data.employment_post?.title || "N/A",
+                    position: data.employment_post?.business_post?.title || "N/A",
+                    grade: data.employment_post?.schema_grade || "N/A",
+                    location: data.employment_post?.location || "N/A",
+                    dateofbirth: data.profile?.dob || "N/A",
+                    phone: data.profile?.work_phone || "N/A",
+                    whatsapp: data.profile?.phone_no || "N/A",
+                }));
+
+                setOriginalFormData((pv) => ({
                     ...pv,
                     name: data.name,
                     username: data.username || "N/A",
@@ -816,7 +841,7 @@ export default function Profile() {
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
-    }, [id, formData.name]);
+    }, [id]);
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -839,22 +864,58 @@ export default function Profile() {
         setPhoto(newPhoto);
     };
 
-    const handleSave = () => {
+    const handleSaveBio = () => {
         setOriginalFormData(formData);
         setOriginalPhoto(photo);
-        setIsEditing(false);
+        setIsEditingBio(false);
         openSaveNotification();
         setTimeout(closeSaveNotification, 1200);
     };
 
-    const handleCancel = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
-        setIsEditing(false);
+    const handleSaveDepartment1 = () => {
+        setOriginalFormData(formData);
+        setOriginalPhoto(photo);
+        setIsEditingDepartment1(false);
+        openSaveNotification();
+        setTimeout(closeSaveNotification, 1200);
     };
 
-    const handleEdit = () => {
-        setIsEditing(true);
+    const handleSaveDepartment2 = () => {
+        setOriginalFormData(formData);
+        setOriginalPhoto(photo);
+        setIsEditingDepartment2(false);
+        openSaveNotification();
+        setTimeout(closeSaveNotification, 1200);
+    };
+
+    const handleCancelBio = () => {
+        setFormData(originalFormData);
+        setPhoto(originalPhoto);
+        setIsEditingBio(false);
+    };
+
+    const handleCancelDepartment1 = () => {
+        setFormData(originalFormData);
+        setPhoto(originalPhoto);
+        setIsEditingDepartment1(false);
+    };
+
+    const handleCancelDepartment2 = () => {
+        setFormData(originalFormData);
+        setPhoto(originalPhoto);
+        setIsEditingDepartment2(false);
+    };
+
+    const handleEditBio = () => {
+        setIsEditingBio(true);
+    };
+
+    const handleEditDepartment1 = () => {
+        setIsEditingDepartment1(true);
+    };
+
+    const handleEditDepartment2 = () => {
+        setIsEditingDepartment2(true);
     };
 
     console.log("profileData", profileData.profile?.id)
@@ -909,20 +970,13 @@ export default function Profile() {
                     }
                 })
                 .catch(error => {
-                    // console.error('Error uploading file:', error);
+                    console.error('Error uploading file:', error);
                 });
             } catch (error) {
                 console.error('Error:', error);
             }
         }
     };
-    
-
-    // Dummy departments data
-    const departments = [
-        { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-        { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-    ];
 
     return (
         <Example>
@@ -957,76 +1011,101 @@ export default function Profile() {
                                         <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
                                         <ProfileIcons
                                             icon1={profileData.icon1}
-                                            onEdit={handleEdit}
+                                            onEdit={handleEditBio}
                                             isFirstIcon
                                         />
                                     </div>
                                     <div className="flex-auto my-auto max-md:max-w-full">
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileBio
-                                                name={formData.name}
-                                                photo={profileData.profileImage}
-                                                username={formData.username}
-                                                email={formData.email}
-                                                grade={formData.grade}
-                                                dateofbirth={formData.dateofbirth}
-                                                whatsapp={formData.whatsapp}
-                                                icon2={profileData.icon2}
-                                                isEditing={isEditing}
-                                                onFormDataChange={handleFormDataChange}
-                                                onPhotoChange={handlePhotoChange}
-                                            />
+                                        <ProfileBio
+                                            photo={photo}
+                                            username={formData.username}
+                                            email={formData.email}
+                                            dateofbirth={formData.dateofbirth}
+                                            whatsapp={formData.whatsapp}
+                                            isEditing={isEditingBio}
+                                            onFormDataChange={setFormData}
+                                            onPhotoChange={handlePhotoChange}
+                                            originalFormData={originalFormData}
+                                            onEditBio={handleEditBio}
+                                            onCancelBio={handleCancelBio}
+                                            onSaveBio={handleSaveBio}
+                                        />
                                         </div>
-                                        <div className="flex justify-end">
-                                            <ProfileIcons
-                                                icon2={profileData.icon2}
-                                                onEdit={handleEdit}
-                                                isFirstIcon
-                                            />
-                                        </div>
-                                        {isEditing && (
+                                        {isEditingBio && (
                                             <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancel} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                <button onClick={handleCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                <button onClick={handleSaveBio} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                                             </div>
                                         )}
                                     </div>
                                 </section>
-
-
-                                    <div className="separator"></div>
-                                    {departments.map((dept, index) => (
-                                        <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                            <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{dept.name}</div>
+                                <div className="separator"></div>
+                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                    <div className="flex items-center justify-between">
+                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 1 Information</div>
                                         <ProfileIcons
                                             icon1={profileData.icon1}
-                                            onEdit={handleEdit}
+                                            onEdit={handleEditDepartment1}
                                             isFirstIcon
                                         />
                                     </div>
-                                            <div className="flex-auto my-auto max-md:max-w-full">
-                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                                    <ProfileBio
-                                                        department={dept.name}
-                                                        unit={dept.unit}
-                                                        jobtitle={dept.jobtitle}
-                                                        position={dept.position}
-                                                        location={dept.location}
-                                                        phone={dept.phone}
-                                                        isEditing={isEditing}
-                                                        onFormDataChange={handleFormDataChange}
-                                                    />
-                                                </div>
-                                                {isEditing && (
-                                                    <div className="flex justify-end mt-4">
-                                                        <button onClick={handleCancel} className=" bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                        <button onClick={handleSave} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
-                                                    </div>
-                                                )}
+                                    <div className="flex-auto my-auto max-md:max-w-full">
+                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                            <ProfileDepartment
+                                                department={formData.department}
+                                                unit={formData.unit}
+                                                jobtitle={formData.jobtitle}
+                                                position={formData.position}
+                                                grade={formData.grade}
+                                                location={formData.location}
+                                                phone={formData.phone}
+                                                isEditing={isEditingDepartment1}
+                                                onFormDataChange={handleFormDataChange}
+                                                originalFormData={originalFormData}
+                                            />
+                                        </div>
+                                        {isEditingDepartment1 && (
+                                            <div className="flex justify-end mt-4 pb-3">
+                                                <button onClick={handleCancelDepartment1} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                <button onClick={handleSaveDepartment1} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                                             </div>
-                                        </section>
-                                    ))}
+                                        )}
+                                    </div>
+                                </section>
+                                <div className="separator"></div>
+                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                    <div className="flex items-center justify-between">
+                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 2 Information</div>
+                                        <ProfileIcons
+                                            icon1={profileData.icon1}
+                                            onEdit={handleEditDepartment2}
+                                            isFirstIcon
+                                        />
+                                    </div>
+                                    <div className="flex-auto my-auto max-md:max-w-full">
+                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                            <ProfileDepartment
+                                                department={formData.department2}
+                                                unit={formData.unit2}
+                                                jobtitle={formData.jobtitle2}
+                                                position={formData.position2}
+                                                grade={formData.grade2}
+                                                location={formData.location2}
+                                                phone={formData.phone2}
+                                                isEditing={isEditingDepartment2}
+                                                onFormDataChange={handleFormDataChange}
+                                                originalFormData={originalFormData}
+                                            />
+                                        </div>
+                                        {isEditingDepartment2 && (
+                                            <div className="flex justify-end mt-4 pb-3">
+                                                <button onClick={handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                <button onClick={handleSaveDepartment2} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
                                 </>
                             )}
                             {activeTab === "gallery" && (
@@ -1077,10 +1156,13 @@ export default function Profile() {
                 <Popup 
                     title="Edit Banner Photo" 
                     onClose={() => setIsPopupOpen(false)} 
-                    onSave={handleSave}
+                    onSave={handleSaveBio}
                     onSelectFile={handleSelectFile}
                 />
             )}
         </Example>
     );
 }
+
+
+
