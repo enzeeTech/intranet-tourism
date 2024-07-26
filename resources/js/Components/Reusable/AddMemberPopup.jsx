@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
+import { useCsrf } from "@/composables";
 
 const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +10,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(''); // New state for success message
+    const csrfToken = useCsrf();
 
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
@@ -30,7 +32,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         try {
             while (hasMorePages) {
-                const response = await fetch(`http://127.0.0.1:8000/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+                const response = await fetch(`/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
                 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -65,40 +67,46 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         setSuccess(''); // Clear success message on close
     };
 
+    console.log('selectedPeople', selectedPeople);
+
     const handleAdd = async () => {
-        const url = 'http://localhost:8000/api/crud/employment_posts';
+        const url = '/api/crud/employment_posts';
         const options = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
         };
 
         let hasError = false;
 
         for (const person of selectedPeople) {
-            const employmentPost = person.employment_post;
-            if (!employmentPost) {
-                console.error('Missing employment post for:', person);
-                setError(prev => `${prev} Missing employment post for ${person.name}. `);
-                hasError = true;
-                continue;
-            }
 
-            const businessPostId = String(employmentPost.business_post_id || '');
-            const businessGradeId = String(employmentPost.business_grade_id || '');
-            const businessSchemeId = String(employmentPost.business_scheme_id || '');
+            // if (!employmentPost) {
+            //     console.error('Missing employment post for:', person);
+            //     setError(prev => `${prev} Missing employment post for ${person.name}. `);
+            //     hasError = true;
+            //     continue;
+            // }
+            
+            const userId = person.id;
+            console.log('userId', userId);
+            const businessPostId = String(person.employmentPost? person.employmentPost.business_post_id : '1');
+            const businessGradeId = String(person.employmentPost? person.employmentPost.business_grade_id : '1');
+            const businessSchemeId = String(person.employmentPost? person.employmentPost.business_scheme_id : '1');
 
-            if (!businessPostId || !businessGradeId || !businessSchemeId) {
-                console.error('Missing required fields for:', person);
-                setError(prev => `${prev} Missing required fields for ${person.name}. `);
-                hasError = true;
-                continue;
-            }
+            // if (!businessPostId || !businessGradeId || !businessSchemeId) {
+            //     console.error('Missing required fields for:', person);
+            //     setError(prev => `${prev} Missing required fields for ${person.name}. `);
+            //     hasError = true;
+            //     continue;
+            // }
+                
 
             const body = JSON.stringify({
                 department_id: String(departmentId),
                 business_post_id: businessPostId,
                 business_grade_id: businessGradeId,
                 business_scheme_id: businessSchemeId,
+                user_id : String(userId),
             });
 
             try {
