@@ -3,6 +3,7 @@
 namespace Modules\Department\Models;
 
 use App\Models\BaseModel as Model;
+use App\Models\Traits\Attachable;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Database\Factories\DepartmentFactory;
@@ -13,7 +14,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Department extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi;
+    use Auditable, Authorizable, HasFactory, QueryableApi , Attachable;
 
     protected static function newFactory()
     {
@@ -35,7 +36,7 @@ class Department extends Model implements AuditableContract
             'create' => [
                 [
                     'name' => ['string' , 'required'],
-                    'banner' => ['string', 'nullable'],
+                    'banner' => [ 'nullable'],
                     'description' => ['string' , 'nullable'],
                     'order' => ['integer' ,'nullable'],
                 ],
@@ -44,7 +45,7 @@ class Department extends Model implements AuditableContract
             'update' => [
                 [
                     'name' => ['string','required'],
-                    'banner' => ['string', 'nullable'],
+                    'banner' => ['nullable'],
                     'description' => ['string' , 'nullable'],
                     'order' => ['integer' ,'nullable'],
                 ],

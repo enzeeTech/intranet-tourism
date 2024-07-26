@@ -4,6 +4,8 @@ namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Department\Models\Department;
+use Illuminate\Support\Facades\DB;
+
 
 class DepartmentController extends Controller
 {
@@ -23,19 +25,50 @@ class DepartmentController extends Controller
 
     public function store()
     {
+
         $validated = request()->validate(...Department::rules());
-        Department::create($validated);
+
+        DB::beginTransaction();
+        try {
+
+            $department = new Department();
+            $department->fill($validated);
+
+            $department->save();
+
+            $department->storeBanner();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
 
         return response()->noContent();
     }
 
     public function update(Department $department)
     {
+
         $validated = request()->validate(...Department::rules('update'));
-        $department->update($validated);
+        DB::beginTransaction();
+        try {
+
+            $department->update($validated);
+
+            $department->storeBanner();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+
+            DB::rollback();
+            throw $th;
+        }
+
 
         return response()->noContent();
     }
+
 
     public function destroy(Department $department)
     {
