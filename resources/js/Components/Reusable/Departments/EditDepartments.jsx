@@ -190,18 +190,6 @@ function Avatar({ src, alt, onImageChange }) {
   );
 }
 
-function UserInfo({ name, role, src }) {
-  return (
-    <div className="flex gap-4 self-stretch mt-5 text-neutral-800">
-      <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
-      <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
-        <p className="text-lg font-bold">{name}</p>
-        <p className="-mt-1 text-sm">{role}</p>
-      </div>
-    </div>
-  );
-}
-
 function Card({ 
   title, 
   imgSrc, 
@@ -375,3 +363,5 @@ export default function EditDepartments({ department, onCancel, onSave }) {
     />
   );
 }
+
+

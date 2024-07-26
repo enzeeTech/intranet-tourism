@@ -108,11 +108,11 @@ import EditDepartments from '../Components/Reusable/Departments/EditDepartments'
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
-
 const DepartmentInner = () => {
-    const { id } = usePage().props; // Retrieve the user_id from the Inertia view
-    const [departmentData, setDepartmentData] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+  const { id } = usePage().props; // Retrieve the user_id from the Inertia view
+  const [departmentData, setDepartmentData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
 
   const getDepartmentIdFromQuery = () => {
     const params = new URLSearchParams(location.search);
