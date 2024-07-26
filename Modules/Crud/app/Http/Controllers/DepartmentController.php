@@ -19,7 +19,6 @@ class DepartmentController extends Controller
         return response()->json([
             'data' => $department,
         ]);
-
     }
 
     public function show($id)
