@@ -3,18 +3,19 @@ import PopupContent from '../Reusable/PopupContent';
 import Pagination from '../Paginator';
 import { useCsrf } from "@/composables";
 
+const excludedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'];
+
 const FileTable = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const csrfToken = useCsrf();
-  
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('/api/crud/resources');
+        const response = await fetch('/api/resources/resources');
         if (!response.ok) {
           throw new Error('Failed to fetch files');
         }
@@ -28,7 +29,8 @@ const FileTable = ({ searchTerm }) => {
 
         const filesData = responseData.data.data.map(file => ({
           ...file,
-          uploader: file.uploader // Assuming the API provides an 'uploader' field with the uploader's name
+          uploader: file.uploader, // Assuming the API provides an 'uploader' field with the uploader's name
+          metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
         }));
 
         setFiles(filesData);
@@ -46,11 +48,17 @@ const FileTable = ({ searchTerm }) => {
     return <div>Loading...</div>;
   }
 
-  // Filter files based on search term
+  // Filter files based on search term and exclude media files
   const filteredFiles = files.filter(file => {
-    const metadata = typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata;
-    const fileName = metadata.name.toLowerCase();
-    return fileName.includes(searchTerm.toLowerCase());
+    const metadata = file.metadata || {};
+    const fileExtension = metadata.extension ? metadata.extension.toLowerCase() : '';
+    const fileName = metadata.original_name ? metadata.original_name.toLowerCase() : '';
+
+    // Check if file extension is in the excluded list
+    const isExcluded = excludedExtensions.includes(fileExtension);
+
+    // Return true if not excluded and if name matches search term
+    return !isExcluded && fileName.includes(searchTerm.toLowerCase());
   });
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -60,7 +68,7 @@ const FileTable = ({ searchTerm }) => {
   const handleRename = (index, newName) => {
     const updatedFiles = files.map((file, i) => {
       if (i === index) {
-        const metadata = typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata;
+        const metadata = file.metadata || {};
         metadata.name = newName;
         return { ...file, metadata: JSON.stringify(metadata) };
       }
@@ -73,7 +81,7 @@ const FileTable = ({ searchTerm }) => {
     const url = `/api/crud/resources/${fileId}`;
     const options = {
       method: 'DELETE',
-       headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+      headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
     };
 
     try {
@@ -110,12 +118,11 @@ const FileTable = ({ searchTerm }) => {
               </thead>
               <tbody className="text-center divide-y-reverse rounded-full divide-neutral-300">
                 {currentItems.map((item, index) => {
-                  const metadata = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
-                  const fileName = `${metadata.name}${item.extension.toLowerCase()}`;
+                  const metadata = item.metadata || {};
                   return (
                     <tr key={index}>
-                      <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 sm:pl-1 text-ellipsis">
-                        {fileName}
+                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
+                        {metadata.original_name || 'Unknown'}
                       </td>
                       <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 text-ellipsis">
                         {item.uploader || 'Unknown'} {/* Display 'Unknown' if uploader is not provided */}
@@ -125,7 +132,7 @@ const FileTable = ({ searchTerm }) => {
                       </td>
                       <td className="flex relative mt-3.5">
                         <PopupContent
-                          name={metadata.name}
+                          name={metadata.original_name || 'Unknown'}
                           file={item} // Pass the current file directly
                           onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
                           onDelete={() => handleDelete(item.id, indexOfFirstItem + index)} // Pass file ID and index
