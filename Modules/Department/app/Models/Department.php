@@ -36,7 +36,7 @@ class Department extends Model implements AuditableContract
             'create' => [
                 [
                     'name' => ['string' , 'required'],
-                    'banner' => [ 'nullable'],
+                    'banner' => [ 'file'],
                     'description' => ['string' , 'nullable'],
                     'order' => ['integer' ,'nullable'],
                 ],
@@ -45,7 +45,7 @@ class Department extends Model implements AuditableContract
             'update' => [
                 [
                     'name' => ['string','required'],
-                    'banner' => ['nullable'],
+                    'banner' => ['file'],
                     'description' => ['string' , 'nullable'],
                     'order' => ['integer' ,'nullable'],
                 ],

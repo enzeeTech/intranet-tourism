@@ -25,46 +25,16 @@ class DepartmentController extends Controller
 
     public function store()
     {
-
         $validated = request()->validate(...Department::rules());
-
-        DB::beginTransaction();
-        try {
-
-            $department = new Department();
-            $department->fill($validated);
-
-            $department->save();
-
-            $department->storeBanner();
-
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollback();
-            throw $th;
-        }
+        Department::create($validated);
 
         return response()->noContent();
     }
 
     public function update(Department $department)
     {
-
         $validated = request()->validate(...Department::rules('update'));
-        DB::beginTransaction();
-        try {
-
-            $department->update($validated);
-
-            $department->storeBanner();
-
-            DB::commit();
-        } catch (\Throwable $th) {
-
-            DB::rollback();
-            throw $th;
-        }
-
+        $department->update($validated);
 
         return response()->noContent();
     }
