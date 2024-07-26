@@ -214,7 +214,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription, 
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description: updatedDescription }),
+        body: JSON.stringify({ description: updatedDescription || '' }),
       });
 
       if (!response.ok) {
