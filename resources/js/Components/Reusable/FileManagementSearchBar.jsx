@@ -30,6 +30,15 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
     setShowPopup(false);
   };
 
+  const CancelButton = ({ onClick }) => (
+    <button
+      className="self-end px-4 py-3 text-base font-bold whitespace-nowrap rounded-2xl border border-solid border-stone-300 text-neutral-400"
+      onClick={onClick}
+    >
+      Cancel
+    </button>
+  );
+
   return (
     <div className="file-search-bar-container">
       <div className="file-search-bar-title">
@@ -46,15 +55,27 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
         />
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
-          <div className="flex items-center shrink-0 ml-2 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
-            <img src="/assets/addFile.svg" alt="add new file" className="w-10 h-8" />
+          <div className="file-filter-btn bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
+            <img src="/assets/addFile.svg" alt="add new file" className="file-filter-btn-img" />
           </div>
         </label>
       </div>
       {showPopup && (
-        <div className="file-popup-container">
-          <div className="file-popup">
-            {/* Popup content here... */}
+        <div className="file-popup">
+          <div className="file-popup-content">
+            <div className="popup-header">
+              <h3>Upload File</h3>
+              <button onClick={handleFileDelete} className="close-popup-btn">
+                &times;
+              </button>
+            </div>
+            <div className="popup-body">
+              <p>Selected file: {file ? file.name : 'No file selected'}</p>
+              <button onClick={handleFileUpload} className="upload-btn">
+                Upload
+              </button>
+              <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+            </div>
           </div>
         </div>
       )}
