@@ -17,6 +17,7 @@ class EmploymentPostController extends Controller
                 ->join('profiles', 'users.id', '=', 'profiles.user_id')
                 ->select(
                     'users.id as user_id',
+                    'employment_posts.id as employment_post_id',
                     'users.order',
                     'users.is_active',
                     'profiles.bio as name',

@@ -8,10 +8,12 @@ import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
 
+
 const DepartmentInner = () => {
     const { id } = usePage().props; // Retrieve the user_id from the Inertia view
     const [departmentData, setDepartmentData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+  
 
   // Function to extract the departmentId from the URL query parameters
   const getDepartmentIdFromQuery = () => {

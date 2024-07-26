@@ -70,7 +70,7 @@ const FileTable = ({ searchTerm }) => {
   };
 
   const handleDelete = async (fileId, index) => {
-    const url = `http://127.0.0.1:8000/api/crud/resources/${fileId}`;
+    const url = `/api/crud/resources/${fileId}`;
     const options = {
       method: 'DELETE',
        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
@@ -95,11 +95,11 @@ const FileTable = ({ searchTerm }) => {
   };
 
   return (
-    <div className="w-full px-4 sm:px-0 lg:px-0 overflow-visible">
-      <div className="mt-8 flow-root">
+    <div className="w-full px-4 overflow-visible sm:px-0 lg:px-0">
+      <div className="flow-root mt-8">
         <div className="overflow-visible">
           <div className="w-full h-[715px] px-8 py-8 rounded-2xl shadow-custom overflow-visible bg-white">
-            <table className="w-full rounded-2xl bg-white table-fixed border-separate border-spacing-1">
+            <table className="w-full bg-white border-separate table-fixed rounded-2xl border-spacing-1">
               <thead>
                 <tr>
                   <th className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
@@ -108,19 +108,19 @@ const FileTable = ({ searchTerm }) => {
                   <th className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
                 </tr>
               </thead>
-              <tbody className="divide-y-reverse divide-neutral-300 text-center rounded-full">
+              <tbody className="text-center divide-y-reverse rounded-full divide-neutral-300">
                 {currentItems.map((item, index) => {
                   const metadata = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata;
                   const fileName = `${metadata.name}${item.extension.toLowerCase()}`;
                   return (
                     <tr key={index}>
-                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
+                      <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 sm:pl-1 text-ellipsis">
                         {fileName}
                       </td>
-                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                      <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 text-ellipsis">
                         {item.uploader || 'Unknown'} {/* Display 'Unknown' if uploader is not provided */}
                       </td>
-                      <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
+                      <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 text-ellipsis">
                         {new Date(item.created_at).toLocaleDateString()}
                       </td>
                       <td className="flex relative mt-3.5">
