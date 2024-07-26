@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PopupContent from '../Reusable/PopupContent';
 import Pagination from '../Paginator';
+import { useCsrf } from "@/composables";
 
 const FileTable = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
+  const csrfToken = useCsrf();
+  
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -67,13 +69,29 @@ const FileTable = ({ searchTerm }) => {
     setFiles(updatedFiles);
   };
 
-  const handleDelete = (index) => {
-    const updatedFiles = files.filter((_, i) => i !== index);
-    setFiles(updatedFiles);
-  };
+  const handleDelete = async (fileId, index) => {
+    const url = `http://127.0.0.1:8000/api/crud/resources/${fileId}`;
+    const options = {
+      method: 'DELETE',
+       headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+    };
 
-  const handleFileSelect = (file) => {
-    setSelectedFile(file);
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log('Delete response:', data);
+
+      // Remove the file from the state only if the deletion was successful
+      if (response.ok) {
+        const updatedFiles = files.filter((_, i) => i !== index);
+        setFiles(updatedFiles);
+        window.location.reload();
+      } else {
+        console.error('Failed to delete file:', data);
+      }
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
   };
 
   return (
@@ -108,9 +126,9 @@ const FileTable = ({ searchTerm }) => {
                       <td className="flex relative mt-3.5">
                         <PopupContent
                           name={metadata.name}
-                          onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
                           file={item} // Pass the current file directly
-                          onDelete={() => handleDelete(indexOfFirstItem + index)}
+                          onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
+                          onDelete={() => handleDelete(item.id, indexOfFirstItem + index)} // Pass file ID and index
                         />
                       </td>
                     </tr>

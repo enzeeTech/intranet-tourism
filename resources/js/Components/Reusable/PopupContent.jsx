@@ -11,6 +11,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
@@ -21,7 +22,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
     e.preventDefault();
     const newFileName = prompt("Enter the new name for the file:", file.metadata.name);
     if (newFileName) {
-      onRename(file.id, newFileName);
+      onRename(newFileName);
     }
   };
 
@@ -50,8 +51,8 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
             <img src={threeDotsIcon} alt="Options" className="h-auto w-auto" />
           </MenuButton>
         </div>
-
         <Transition
+          as={React.Fragment}
           enter="transition ease-out duration-100"
           enterFrom="transform opacity-0 scale-95"
           enterTo="transform opacity-100 scale-100"
@@ -59,7 +60,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <MenuItems className="absolute right-0 z-10 -mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
               <MenuItem>
                 {({ active }) => (
