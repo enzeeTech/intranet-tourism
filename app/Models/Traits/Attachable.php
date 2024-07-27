@@ -2,10 +2,15 @@
 
 namespace App\Models\Traits;
 
-use Modules\Crud\Models\Resource;
+use Modules\Resources\Models\Resource;
 
 trait Attachable
 {
+
+    public function attachment()
+    {
+        return $this->morphOne(Resource::class, 'attachable')->latestOfMany();
+    }
 
     public function attachments()
     {
@@ -14,13 +19,35 @@ trait Attachable
 
     public function storeAttachments($for = 'attachment')
     {
+
         if ($resources = request()->file('attachments')) {
             foreach ($resources as $resource) {
                 $resourceRef = uploadFile($resource);
                 $this->attachments()->create(array_merge($resourceRef, [
                     'user_id' => auth()->id() ?? '1',
                     'for' => $for,
-                    'metadata' => json_encode($resourceRef)
+                    'metadata' => $resourceRef
+                    // 'duration' => '1',
+                ]));
+            }
+        }
+    }
+
+    public function storeBanner($for = 'banner')
+    {
+
+
+        if ($resources = request()->file('banner')) {
+
+            $resources = is_array($resources) ? $resources : [$resources];
+
+            foreach ($resources as $resource) {
+                $resourceRef = uploadFile($resource);
+
+                $this->attachments()->create(array_merge($resourceRef, [
+                    'user_id' => auth()->id() ?? '1',
+                    'for' => $for,
+                    'metadata' => $resourceRef,
                     // 'duration' => '1',
                 ]));
             }

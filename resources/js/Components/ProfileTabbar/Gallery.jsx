@@ -47,7 +47,7 @@ const ImageProfile = ({ selectedItem, userId }) => {
         </h1>
         <hr className="underline" />
       </header>
-      <section className="mt-8 max-md:max-w-full">
+      <section className="mt-8 max-md:max-w-full sm::max-s-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {filteredImages.length > 0 ? (
             filteredImages.map((img, index) => (

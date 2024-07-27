@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Modules\User\Models\User;;
+
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
@@ -28,6 +29,10 @@ class Resource extends Model implements AuditableContract
         'filesize',
         'duration',
         'metadata',
+    ];
+
+    protected $casts = [
+        'metadata' => 'array'
     ];
 
     public static function rules($scenario = 'create')
@@ -86,5 +91,22 @@ class Resource extends Model implements AuditableContract
     public function scopeSearchByTag($query, $tags)
     {
         $query->whereRelation('attachable', 'tag', 'like', '%' . $tags . '%');
+    }
+
+    public function scopeAccessFor($query, $for)
+    {
+        $query->where('attachable_type', $for);
+    }
+
+    public function scopeAccessableBy($query, $accessableType, $accessableId)
+    {
+        $query->whereHas('attachable', function ($query) use ($accessableType, $accessableId) {
+            $query->whereHas('accessibilities', function ($query) use ($accessableType, $accessableId) {
+                $query
+                    ->where('accessable_type', $accessableType)
+                    ->where('accessable_id', $accessableId);
+                ;
+            });
+        });
     }
 }

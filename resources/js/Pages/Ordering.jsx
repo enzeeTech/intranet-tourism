@@ -12,22 +12,46 @@ const Ordering = () => {
     const [staffMembers, setStaffMembers] = useState([]);
     const [notificationMessage, setNotificationMessage] = useState("");
     const departmentId = props.departmentId;
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        console.log(props);
-        if (props.staffMembers) {
-            try {
-                const staffArray = JSON.parse(props.staffMembers);
-                // Sort staff members by the order attribute
-                const sortedStaffArray = staffArray.sort((a, b) => parseInt(a.order) - parseInt(b.order));
-                setStaffMembers(sortedStaffArray);
-            } catch (error) {
-                console.error('Failed to parse staffMembers:', error);
+    const fetchStaffMembers = async (departmentId) => {
+        setIsLoading(true);
+
+        try {
+            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+            method: "GET",
+            headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) {
+            throw new Error("Network response was not ok");
             }
-        }
-    }, [props.staffMembers]);
+            const data = await response.json();
 
-    console.log('staffMembers:', staffMembers);
+            const members = data.members.map(member => ({
+            id: member.user_id,
+            name: member.name,
+            role: member.title,
+            status: 'Online',
+            imageUrl: member.image,
+            workNo: member.work_phone,
+            phoneNo: member.phone_no,
+            isDeactivated: member.is_active,
+            order: member.order,
+            }));
+
+            setStaffMembers(members);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+        setIsLoading(false);
+    };
+    
+    useEffect(() => {
+        if (departmentId) {
+          fetchStaffMembers(departmentId);
+        }
+      }, [departmentId]);
+
 
     const updateOrderAttributes = (members) => {
         return members.map((member, index) => ({
@@ -111,13 +135,13 @@ const Ordering = () => {
         <Example>
             <div className="flex-row ">
                 <div className="flex">
-                    <main className="w-full mt-5 xl:pl-96 max-w-[1500px]">
+                    <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
-                                    <button className="px-6 py-1 text-base font-bold text-white bg-[#FF5436] rounded-full" onClick={handleSave}>Save</button>
+                                    <button className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +166,7 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl ? `/avatar/${item.imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={item.imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? '/assets/dummyStaffPlaceHolder.jpg' : `/avatar/full/${item.imageUrl}`} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                     {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>

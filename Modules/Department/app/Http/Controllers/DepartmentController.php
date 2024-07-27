@@ -4,6 +4,8 @@ namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Department\Models\Department;
+use Illuminate\Support\Facades\DB;
+
 
 class DepartmentController extends Controller
 {
@@ -36,6 +38,7 @@ class DepartmentController extends Controller
 
         return response()->noContent();
     }
+
 
     public function destroy(Department $department)
     {

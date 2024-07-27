@@ -168,7 +168,7 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="w-8 h-8 rounded-full bg-gray-50"
-                                src={userData.profileImage ?? "https://cdn.builder.io/api/v1/image/assets/TEMP/b68c042fe15637d83658e190705206009d4017b640a612fd4286280043e4c258?"}
+                                src={`/storage/${userData.profileImage}`}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">

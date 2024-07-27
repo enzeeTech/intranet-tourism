@@ -9,7 +9,7 @@ import DeactivateModal from '../Components/Reusable/DeactivateModal';
 import Header from '../Components/DashboardHeader';
 import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
-import Example from '@/Layouts/DashboardLayoutNew';
+import Example from '../Layouts/DashboardLayoutNew';
 
 const StaffDirectory = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
@@ -56,60 +56,28 @@ const StaffDirectory = () => {
 
   const fetchStaffMembers = async (departmentId) => {
     setIsLoading(true);
-    let allEmploymentPosts = [];
-    let currentPage = 1;
-    let lastPage = 1;
 
     try {
-      while (currentPage <= lastPage) {
-        const response = await fetch(`/api/department/employment_posts?filter[0][where][0]=department_id&filter[0][where][1]=${departmentId}&page=${currentPage}`, {
-          method: "GET",
-          headers: { Accept: 'application/json' }
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        allEmploymentPosts = allEmploymentPosts.concat(data.data.data);
-        lastPage = data.data.last_page;
-        currentPage++;
+      const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+        method: "GET",
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
+      const data = await response.json();
 
-      const userPromises = allEmploymentPosts.map(post =>
-        fetch(`/api/crud/users/${post.user_id}?with[]=profile`, {
-          method: "GET",
-          headers: { Accept: 'application/json' }
-        }).then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        }).then(userData => {
-          return { userData, title: post.title };
-        }).catch(error => {
-          console.error("Error fetching user data:", error);
-          return null;
-        })
-      );
-
-      const users = await Promise.allSettled(userPromises);
-
-      const members = users
-        .filter(result => result.status === 'fulfilled' && result.value !== null)
-        .map(({ value }) => {
-          const { userData, title } = value;
-          return {
-            id: userData.data.id,
-            name: userData.data.name,
-            role: title,
-            status: 'Online',
-            imageUrl: userData.data.profile.image,
-            workNo: userData.data.profile.work_phone,
-            phoneNo: userData.data.profile.phone_no,
-            isDeactivated: userData.data.is_active,
-            order: userData.data.order,
-          };
-        });
+      const members = data.members.map(member => ({
+        id: member.user_id,
+        name: member.name,
+        role: member.title,
+        status: 'Online',
+        imageUrl: member.image,
+        workNo: member.work_phone,
+        phoneNo: member.phone_no,
+        isDeactivated: member.is_active,
+        order: member.order,
+      }));
 
       setStaffMembers(members);
     } catch (error) {
@@ -306,14 +274,14 @@ const StaffDirectory = () => {
   </div>
   {isDeactivateModalOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-      <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
+      <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
         <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
         <div className="flex justify-center space-x-4">
-          <button className="px-8 py-1 text-base text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeactivateModalOpen(false)}>
-            No
-          </button>
-          <button className="px-8 py-1 text-white bg-[#4880FF] rounded-full" onClick={handleDeactivate}>
+          <button className="px-8 py-1 text-base text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={handleDeactivate}>
             Yes
+          </button>
+          <button className="px-8 py-1 text-white bg-red-500 hover:bg-red-700 rounded-full" onClick={() => setIsDeactivateModalOpen(false)}>
+            No
           </button>
         </div>
       </div>
@@ -322,7 +290,7 @@ const StaffDirectory = () => {
   {isActivateModalOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
         <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
-          <h2 className="mb-4 text-l font-bold text-center">Activate?</h2>
+          <h2 className="mb-4 font-bold text-center text-l">Activate?</h2>
           <div className="flex justify-center space-x-4">
             <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={handleActivate}>
               Yes

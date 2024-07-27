@@ -5,64 +5,43 @@ namespace Modules\Posts\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Posts\Models\Post;
+use Modules\Posts\Models\PostAccessibility;
 
 class PostController extends Controller
 {
-    // public function index()
-    // {
-    //     return response()->json([
-    //         'data' => Post::queryable()->paginate(),
-    //     ]);
-    // }
-
-    // public function show($id)
-    // {
-    //     return response()->json([
-    //         'data' => Post::where('id', $id)->queryable()->firstOrFail(),
-    //     ]);
-    // }
-
     public function index()
     {
-        $queryParams = request()->query();
-        $limit = request()->query('perpage', 15);
-
-        $posts = Post::queryable()->paginate($limit);
-
-        // Transform the attachments field to always be an array
-        $posts->getCollection()->transform(function ($post) {
-            $post->attachments = [$post->attachments];
-            return $post;
-        });
-        $posts->appends($queryParams);
-
         return response()->json([
-            'data' => $posts,
+            'data' => $this->shouldPaginate(Post::queryable()),
         ]);
     }
 
     public function show($id)
     {
-        $post = Post::where('id', $id)->queryable()->firstOrFail();
-
-        // Transform the attachments field to always be an array
-        $post->attachments = [$post->attachments];
-
         return response()->json([
-            'data' => $post,
+            'data' => Post::where('id', $id)->queryable()->firstOrFail(),
         ]);
     }
 
 
-    public function store()
+    public function store(Post $post)
     {
         $validated = request()->validate(...Post::rules());
+        $validatedAccessibilities = [];
+        if (request()->has('accessibilities')) {
+            $accessibilities = request('accessibilities');
+            foreach ($accessibilities as $accessibility) {
+                $validatedAccessibilities[] = validator($accessibility, ...PostAccessibility::rules('createFromPost'))->validated();
+            }
+        }
 
         DB::beginTransaction();
         try {
-            $post = new Post;
             $post->fill($validated)->save();
             $post->storeAttachments();
+            if (request()->has('accessibilities')) {
+                $post->accessibilities()->createMany($validatedAccessibilities);
+            }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();

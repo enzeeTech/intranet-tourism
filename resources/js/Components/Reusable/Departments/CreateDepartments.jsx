@@ -104,7 +104,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder="Department name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
-          className="self-stretch mt-7 text-3xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
+          className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
         />
         <UserInfo name={user.name} role={user.role} src={user.src} />
         <input
@@ -118,7 +118,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-7 py-4 font-bold text-white bg-red-500 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>

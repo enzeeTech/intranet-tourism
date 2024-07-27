@@ -16,7 +16,7 @@ table {
 }
 
 .edit-column, .delete-column {
-  width: 18%; /* Adjust this value to make the order column narrower */
+  width: 10%; /* Adjust this value to make the order column narrower */
   text-align: center; /* Center align the content */
 }
 
@@ -39,12 +39,19 @@ table {
 .fixed-size {
   width: 28px !important;
   height: 28px !important;
+  flex-shrink: 0; /* Prevent the image from shrinking */
 }
 
 .fixed-size-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  width: 28px;
+  height: 28px;
+  margin: auto;
+}
+
+td img {
   width: 28px;
   height: 28px;
 }
