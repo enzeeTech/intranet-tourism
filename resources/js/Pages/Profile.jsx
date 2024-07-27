@@ -718,7 +718,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
-import { ProfileBio, ProfileIcons, Table } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
@@ -988,9 +988,9 @@ export default function Profile() {
     ];
 
 
-    // const handleCreatePoll = (poll) => {
-    //   setPolls((prevPolls) => [...prevPolls, poll]);
-    // };
+    const handleCreatePoll = (poll) => {
+      setPolls((prevPolls) => [...prevPolls, poll]);
+    };
 
     console.log("PROFILEDATA", profileData.profile?.id);
 
