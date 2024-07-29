@@ -1,0 +1,31 @@
+stages:
+  - deploy
+
+variables:
+  DEPLOY_SERVER: "your_server_ip_or_hostname"
+  DEPLOY_USER: "jomla-admin"
+  DEPLOY_PATH: "/var/www"
+  REPO_URL: "https://github.com/wasabid3v/intranet-tourism.git"
+
+deploy:
+  stage: deploy
+  script:
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo rm -rf $DEPLOY_PATH/intranet-tourism"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo git clone $REPO_URL $DEPLOY_PATH/intranet-tourism"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo cp /home/$DEPLOY_USER/workspace/intranet-tourism/.env $DEPLOY_PATH/intranet-tourism/.env"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo composer install"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo php artisan key:generate"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo php artisan migrate:fresh --seed"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo chown -R www-data:www-data $DEPLOY_PATH/intranet-tourism/storage"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo chown -R www-data:www-data $DEPLOY_PATH/intranet-tourism/bootstrap/cache"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo chmod -R 775 $DEPLOY_PATH/intranet-tourism/storage"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo chmod -R 775 $DEPLOY_PATH/intranet-tourism/bootstrap/cache"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo php artisan storage:link"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo npm install"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo npm run build"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart nginx"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart artisan-queue"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart artisan-reverb"
+
+  only:
+    - master
