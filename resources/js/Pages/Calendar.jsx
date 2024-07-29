@@ -258,7 +258,7 @@ function Calendar() {
                 <h1 className="mb-2 font-sans text-4xl font-bold text-left" >Calendar</h1>
                 <hr className="mx-auto mt-6" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
                 <div className="flex justify-center mt-3 mb-4">
-                <div className="flex justify-center mt-4 mb-5 rounded-full" style={{ border: '2px solid #E4E4E4', width: '100%' }}>
+                <div className="flex justify-center mt-4 mb-5 rounded-full border-2 w-full" >
                     <div className="flex items-center" style={{ width: '100%' }}>
                     <input
                         type="search"
@@ -268,41 +268,42 @@ function Calendar() {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={{ outline: 'none' }}
-                    />
+                    /> 
                     </div>
                 </div>
                 <button
                     onClick={() => { alert('Clicked the find events button!') }}
-                    className="flex items-center justify-center my-4 mx-6 px-4 py-0 rounded-full text-white bg-blue-500 hover:bg-blue-700 whitespace-nowrap">
+                    className="flex items-center justify-center my-4 mx-6 px-4 py-0 rounded-full text-white bg-blue-500 hover:bg-blue-700 whitespace-nowrap max-md:text-sm max-md:mx-2">
                     Find Event
                 </button>
                 <button
                     onClick={() => { alert('Clicked the print button!') }}
                     className="flex items-center justify-center">
-                    <img src={PrintButton} alt="Print" className="w-12 h-12" />
+                    <img src={PrintButton} alt="Print" className="w-12 h-12 max-md:w-20 max-md:h-20" />
                 </button>
                 </div>
 
-                <FullCalendar
-                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
-                    initialView="dayGridMonth"
-                    selectable={true}
-                    selectHelper={true}
-                    select={handleDateSelect}
-                    headerToolbar={{
+                <div className="mb-8">
+                    <FullCalendar
+                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                        initialView="dayGridMonth"
+                        selectable={true}
+                        selectHelper={true}
+                        select={handleDateSelect}
+                        headerToolbar={{
                         start: 'prev,next today',
                         center: 'title',
                         end: 'dayGridYear,dayGridMonth,timeGridDay',
-                    }}
-                    height={650}
-                    buttonText={{
+                        }}
+                        height={650}
+                        buttonText={{
                         today: 'Today',
                         year: 'Year',
                         month: 'Month',
                         day: 'Day',
-                    }}
-                    events={events}
-                    eventDidMount={(info) => {
+                        }}
+                        events={events}
+                        eventDidMount={(info) => {
                         return new bootstrap.Popover(info.el, {
                             title: info.event.title,
                             placement: "auto",
@@ -311,77 +312,78 @@ function Calendar() {
                             content: "<p>Come to Oval Room</p>",
                             html: true,
                         });
-                    }}
-                />
+                        }}
+                    />
+                    </div>
 
-                {isModalOpen && (
+                    {isModalOpen && (
                     <div
                         style={{
-                            position: 'fixed',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            backgroundColor: 'white',
-                            border: '1px solid #ccc',
-                            padding: '20px',
-                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                            zIndex: '1050',
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        border: '1px solid #ccc',
+                        padding: '20px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                        zIndex: '1050',
                         }}
                     >
                         <button
-                            onClick={closeModal}
-                            style={{
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                border: 'none',
-                                background: 'none',
-                                cursor: 'pointer',
-                            }}
+                        onClick={closeModal}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '20px',
+                            border: 'none',
+                            background: 'none',
+                            cursor: 'pointer',
+                        }}
                         >
-                            X
+                        X
                         </button>
                         <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                name="title"
-                                value={eventData.title}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Event Title"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="venue"
-                                value={eventData.venue}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Venue"
-                                required
-                            />
-                            <input
-                                type="datetime-local"
-                                name="start"
-                                value={eventData.start}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Date and Time"
-                                required
-                            />
-                            <input
-                                type="datetime-local"
-                                name="end"
-                                value={eventData.end}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date and Time"
-                                required
-                            />
-                            <button type="submit">Confirm</button>
+                        <input
+                            type="text"
+                            name="title"
+                            value={eventData.title}
+                            onChange={handleChange}
+                            className="form-control"
+                            placeholder="Event Title"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="venue"
+                            value={eventData.venue}
+                            onChange={handleChange}
+                            className="form-control"
+                            placeholder="Venue"
+                            required
+                        />
+                        <input
+                            type="datetime-local"
+                            name="start"
+                            value={eventData.start}
+                            onChange={handleChange}
+                            className="form-control"
+                            placeholder="Start Date and Time"
+                            required
+                        />
+                        <input
+                            type="datetime-local"
+                            name="end"
+                            value={eventData.end}
+                            onChange={handleChange}
+                            className="form-control"
+                            placeholder="End Date and Time"
+                            required
+                        />
+                        <button type="submit" className="mx-4">Confirm</button>
                         </form>
                     </div>
-                )}
+                    )}
             </div>
         </Example>
     );
