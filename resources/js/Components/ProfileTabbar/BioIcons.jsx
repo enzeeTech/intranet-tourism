@@ -58,16 +58,18 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
     };
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-row gap-2 items-center">
             <button onClick={handleIcon1Click}>
-                <img src={icon1} alt="" className="aspect-square w-[30px]" />
+                <img src={icon1} alt="Edit Icon" className="aspect-square w-[30px]" />
             </button>
-            <img
-                src={icon2}
-                alt=""
-                className="self-center mt-auto aspect-square w-[30px] max-md:mt-10 cursor-pointer"
-                onClick={handleIcon2Click}
-            />
+            {icon2 && (
+                <img
+                    src={icon2}
+                    alt="QR Code Icon"
+                    className="aspect-square w-[30px] cursor-pointer"
+                    onClick={handleIcon2Click}
+                />
+            )}
             {isPopupOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={closePopup}>
                     <div className="bg-white p-2 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
@@ -93,4 +95,4 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
     );
 }
 
-export default ProfileIcons;
+export default ProfileIcons

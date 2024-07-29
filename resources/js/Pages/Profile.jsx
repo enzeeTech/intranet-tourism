@@ -981,11 +981,11 @@ export default function Profile() {
     };
     
 
-    // Dummy departments data
-    const departments = [
-        { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-        { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-    ];
+    // // Dummy departments data
+    // const departments = [
+    //     { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
+    //     { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
+    // ];
 
 
     const handleCreatePoll = (poll) => {
@@ -1027,6 +1027,7 @@ export default function Profile() {
                                         <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
                                         <ProfileIcons
                                             icon1={profileData.icon1}
+                                            icon2={profileData.icon2}
                                             onEdit={handleEditBio}
                                             isFirstIcon
                                         />
@@ -1048,12 +1049,12 @@ export default function Profile() {
                                             onSaveBio={handleSaveBio}
                                         />
                                         </div>
-                                        {isEditingBio && (
+                                        {/* {isEditingBio && (
                                             <div className="flex justify-end mt-4 pb-3">
                                                 <button onClick={handleCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
                                                 <button onClick={handleSaveBio} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 </section>
                                 <div className="separator"></div>
