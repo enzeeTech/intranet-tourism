@@ -188,7 +188,7 @@ import { SearchInput, SearchButton, Table } from "../Components/ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../Components/ProfileTabbar/Gallery";
 import EditDepartments from '../Components/Reusable/Departments/EditDepartments'; // Import EditDepartments
 
-function HeaderSection({ departmentID, departmentHeader, departmentDescription, onEditClick }) {
+function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
   const [textContent, setTextContent] = useState('');
 
@@ -209,7 +209,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription, 
     try {
       const updatedDescription = textContent;
 
-      const response = await fetch(`/api/crud/departments/${departmentID}`, {
+      const response = await fetch(`/api/department/departments/${departmentID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -232,6 +232,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentDescription, 
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
+        // src={departmentBanner}
         className="absolute inset-0 object-cover size-full"
         alt=""
       />
@@ -340,7 +341,7 @@ function Navigation({ userId, departmentID, departmentName }) {
 }
 
 
-function Adminsection({ departmentID, departmentHeader, departmentDescription, userId }) {
+function Adminsection({ departmentID, departmentHeader, departmentDescription, userId, departmentBanner }) {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [departmentData, setDepartmentData] = useState({
     id: departmentID,
@@ -356,17 +357,23 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
   const handleSave = (updatedDepartment) => {
     setDepartmentData(updatedDepartment);
     setIsEditPopupOpen(false);
+    window.location.reload(true);
   };
 
   const handleCancel = () => {
     setIsEditPopupOpen(false);
   };
 
+  useEffect(() => {
+    // Fetch the latest department data if required
+  }, [isEditPopupOpen]);
+
   return (
     <div className='w-[875px]'>
       <HeaderSection
         departmentID={departmentID}
         departmentHeader={departmentHeader}
+        departmentBanner={departmentBanner}
         departmentDescription={departmentDescription}
         onEditClick={handleEditClick}
       />
@@ -384,12 +391,13 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
   );
 }
 
-export default function Adminwall({ departmentID, departmentHeader, departmentDescription, userId }) {
+export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
-    <div className="flex flex-wrap justify-left py-10 w-[875px] max-md:flex-col max-md:px-0">
+    <div className="flex flex-wrap justify-left py-10 w-[875px] max-md:flex-col max-md:px-0 sm:w-sm">
       <Adminsection
         departmentID={departmentID}
         departmentHeader={departmentHeader}
+        departmentBanner={departmentBanner}
         departmentDescription={departmentDescription}
         userId={userId}
       />

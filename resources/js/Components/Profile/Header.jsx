@@ -158,6 +158,8 @@ function ProfileImage({ src, alt, className, rounded }) {
 }
 
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId }) {
+  console.log("hai", name);
+  
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
@@ -230,7 +232,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       }
     } catch (e) {
       console.error('Error saving cropped image:', e);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -247,6 +249,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     formData.append('image', file);
     formData.append('user_id', id);
     formData.append('_method', 'PUT');
+    formData.append('name', name); // Add _method to the form data
   
     const options = {
       method: 'POST',
@@ -283,8 +286,8 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         throw new Error('Response is not JSON');
       }
     } catch (error) {
-      // console.error('Error uploading profile photo:', error);
-      window.location.reload();
+      console.error('Error uploading profile photo:', error);
+      // window.location.reload();
     }
   };
   
@@ -303,6 +306,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
               onClose={handleCloseClick}
               onSelectFile={handleSelectFile}
               userId={userId}
+              userName={name}
             />
           )}
         </div>

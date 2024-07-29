@@ -8,9 +8,6 @@ import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard'
 import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
-// import './BackgroundPage.css';
-
-
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -20,57 +17,51 @@ const StaffDirectory = () => {
 
   const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
-  useEffect(() => {
-    const fetchAllDepartments = async () => {
-      setIsLoading(true); // Start loading
-      let allDepartments = [];
-      let url = '/api/crud/departments';
-
-      try {
-        while (url) {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Failed to fetch departments');
-          }
-          const responseData = await response.json();
-          console.log('API Response:', responseData);
-
-          if (responseData.data && Array.isArray(responseData.data.data)) {
-            const newDepartments = responseData.data.data;
-            allDepartments = [...allDepartments, ...newDepartments];
-            url = responseData.data.next_page_url;
-          } else {
-            console.error('Unexpected data format:', responseData);
-            break;
-          }
-        }
-
-        // Sort departments alphabetically by name
-        const sortedDepartments = allDepartments.sort((a, b) => a.name.localeCompare(b.name));
-        setDepartmentsList(sortedDepartments);
-      } catch (error) {
-        console.error('Error fetching departments:', error);
-        setDepartmentsList([]);
-      } finally {
-        setIsLoading(false); // End loading
+  const fetchDepartments = async (url) => {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
+      const data = await response.json();
+      const departmentData = data.data.data.map((department) => ({
+        id: department.id,
+        name: department.name,
+      }));
 
-    fetchAllDepartments();
+      setDepartmentsList((prevDepartments) => {
+        const allDepartments = [...prevDepartments, ...departmentData];
+        return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+      });
+
+      if (data.data.next_page_url) {
+        fetchDepartments(data.data.next_page_url);
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchDepartments('/api/crud/departments');
   }, []);
 
   const handleNewDepartment = (newDepartment) => {
     setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
-  // Filter departments based on search term
   const filteredDepartments = departmentsList.filter((department) =>
     department.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Example>
-      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen"> {/* Added bg-gray-100 */}
+      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar
             onSearch={(value) => setSearchTerm(value)}
@@ -91,7 +82,7 @@ const StaffDirectory = () => {
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={'assets/departmentsDefault.jpg'} // Default image
+                  imageUrl={'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
                 />
               ))

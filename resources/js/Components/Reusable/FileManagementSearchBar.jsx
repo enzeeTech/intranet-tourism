@@ -1,92 +1,43 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
 import searchIcon from '../../../../public/assets/searchStaffButton.png';
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
-const IconButton = ({ src, alt, className, onClick }) => {
-  return <img loading="lazy" src={src} alt={alt} className={className} onClick={onClick} />;
-};
-
-const truncateFileName = (fileName, maxLength) => {
-  if (fileName.length <= maxLength) {
-    return fileName;
-  }
-  const truncated = fileName.substring(0, maxLength - 3) + '...';
-  return truncated;
-};
-
-const SearchFile = ({ onSearch, requiredData }) => {
+const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [file, setFile] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleSearch = () => {
-    console.log(searchTerm);
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    onSearch(term); // Call the parent's setSearchTerm to filter the table
   };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
     setShowPopup(true);
-    console.log('File selected:', selectedFile);
-    event.target.value = null;  // Clear the input value to allow re-selecting the same file
+    event.target.value = null;
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
-      console.log('No file selected.');
-      return;
-    }
-  
-    if (!requiredData) {
-      console.log('Required data is not available.');
-      return;
-    }
-  
-    console.log('Uploading file:', file);
-  
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('user_id', requiredData.user_id);
-    formData.append('attachable_type', requiredData.attachable_type);
-    formData.append('attachable_id', requiredData.attachable_id);
-    formData.append('for', requiredData.for);
-    formData.append('path', requiredData.path);
-    formData.append('extension', requiredData.extension);
-    formData.append('mime_type', requiredData.mime_type);
-    formData.append('filesize', requiredData.filesize);
-    formData.append('metadata', requiredData.metadata);
-  
-    console.log('FormData:', formData);
-  
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json'
-      },
-      body: formData
-    };
-  
-    try {
-      const response = await fetch('/api/crud/resources', options);
-      if (!response.ok) {
-        throw new Error('Failed to upload file');
-      }
-      const responseData = await response.json();
-      console.log('File uploaded successfully:', responseData);
-      setShowPopup(false);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
+    // Handle file upload logic here...
   };
-  
 
   const handleFileDelete = () => {
     setFile(null);
     setShowPopup(false);
-    console.log('File deleted');
   };
+
+  const CancelButton = ({ onClick }) => (
+    <button
+      className="self-end px-4 py-3 text-base font-bold whitespace-nowrap rounded-2xl border border-solid border-stone-300 text-neutral-400"
+      onClick={onClick}
+    >
+      Cancel
+    </button>
+  );
 
   return (
     <div className="file-search-bar-container">
@@ -99,7 +50,7 @@ const SearchFile = ({ onSearch, requiredData }) => {
           className="search-input"
           placeholder="Search Name"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
           style={{ paddingLeft: '1.2rem' }}
         />
         <button
@@ -123,30 +74,21 @@ const SearchFile = ({ onSearch, requiredData }) => {
         </label>
       </div>
       {showPopup && (
-        <div className="file-popup-container">
-          <div className="file-popup">
-            <section className="flex flex-col py-2.5 text-center bg-white rounded-xl shadow-custom max-w-[500px]">
-              <header className="flex gap-5 self-center px-5 max-w-full text-2xl font-bold text-neutral-800 w-auto">
-                <h1 className="flex-auto">Attached file</h1>
-              </header>
-              <main className="flex flex-col px-2.5 mt-2 w-full">
-                <div className="flex gap-5 font-medium text-xs text-neutral-800">
-                  <div className="flex flex-auto gap-2 items-center">
-                    <IconButton src="https://cdn.builder.io/api/v1/image/assets/TEMP/10a36c1619d2a1399b98302d863cb36625dfcebb4eafe9253b73746ca1169112?apiKey=285d536833cc4168a8fbec258311d77b&" alt="" className="shrink-0 self-stretch aspect-square w-[52px]" />
-                    <p className="flex-auto self-stretch my-auto text-sm">{file ? truncateFileName(file.name, 30) : ''}</p>
-                    <p className="self-stretch my-auto text-xs">{file ? (file.size / 1024 / 1024).toFixed(2) + ' MB' : ''}</p>
-                  </div>
-                </div>
-                <div className="flex gap-1.5 self-end mt-1 max-w-full font-bold whitespace-nowrap w-[164px]">
-                  <button className="justify-center text-sm text-white px-6 py-3 bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleFileUpload}>
-                    Save
-                  </button>
-                  <button className="justify-center px-4 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400" onClick={handleFileDelete}>
-                    Cancel
-                  </button>
-                </div>
-              </main>
-            </section>
+        <div className="file-popup">
+          <div className="file-popup-content">
+            <div className="popup-header">
+              <h3>Upload File</h3>
+              <button onClick={handleFileDelete} className="close-popup-btn">
+                &times;
+              </button>
+            </div>
+            <div className="popup-body">
+              <p>Selected file: {file ? file.name : 'No file selected'}</p>
+              <button onClick={handleFileUpload} className="upload-btn">
+                Upload
+              </button>
+              <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+            </div>
           </div>
         </div>
       )}

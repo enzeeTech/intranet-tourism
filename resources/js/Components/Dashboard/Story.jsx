@@ -71,7 +71,7 @@ const StoryNew = ({ userId }) => {
 
             try {
                 while (currentPage <= lastPage) {
-                    const response = await fetch(`${API_URL}?page=${currentPage}`, {
+                    const response = await fetch(`${API_URL}?with[]=author&with[]=attachments&page=${currentPage}`, {
                         method: "GET",
                     });
 
@@ -80,14 +80,16 @@ const StoryNew = ({ userId }) => {
                     }
 
                     const data = await response.json();
+                    console.log("data", data.data.data);
                     const storiesToAdd = data.data.data
-                        .filter(story => story.type === 'story')
+                        .filter(story => story.type === 'story' && (Date.now() - new Date(story.created_at).getTime()) < 24 * 60 * 60 * 1000) // Filter out stories older than 24 hours
+                        // .filter(story => story.type === 'story' && (Date.now() - new Date(story.created_at).getTime()) < 10 * 1000) // Filter out stories older than 10 seconds
                         .map(story => ({
                             url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
                             type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
                             text: story.content,
                             userId: story.user_id,
-                            timestamp: Date.now()
+                            timestamp: new Date(story.created_at).getTime()
                         }));
 
                     allStories = allStories.concat(storiesToAdd);
@@ -116,10 +118,11 @@ const StoryNew = ({ userId }) => {
     useEffect(() => {
         const fetchUsers = async () => {
             const uniqueUserIds = [...new Set(userStories.map(story => story.userId))];
-            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}`));
+            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}?with[]=profile`));
             const userResponses = await Promise.all(userPromises);
             const userJsonPromises = userResponses.map(response => response.json());
             const users = await Promise.all(userJsonPromises);
+            
 
             const userAvatars = users.map(user => ({
                 src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
@@ -171,6 +174,8 @@ const StoryNew = ({ userId }) => {
     };
 
     const handlePostStory = (newStory) => {
+        newStory.timestamp = Date.now(); // Add current timestamp to new story
+
         setAvatars(prevAvatars => {
             const updatedAvatars = [...prevAvatars];
             updatedAvatars[0].stories.push(newStory);
@@ -202,6 +207,7 @@ const StoryNew = ({ userId }) => {
         .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
         .sort((a, b) => a.viewed - b.viewed);
 
+
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '30px', marginLeft: '-20px', width: '610px', }}>
             <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
@@ -217,7 +223,8 @@ const StoryNew = ({ userId }) => {
                         padding: '2px'
                     }}>
                         <img
-                            src={loggedInUserAvatar.src}
+                            // src={loggedInUserAvatar.src}
+                            src={`/storage/${loggedInUserAvatar.src}`}
                             alt={loggedInUserAvatar.alt}
                             style={{
                                 borderRadius: '50%',
@@ -268,7 +275,8 @@ const StoryNew = ({ userId }) => {
                                 filter: avatar.viewed ? 'grayscale(100%)' : 'none' // Apply grayscale filter if the stories have been viewed
                             }}>
                                 <img
-                                    src={avatar.src}
+                                    // src={avatar.src}
+                                    src={`/storage/${avatar.src}`}
                                     alt={avatar.alt}
                                     style={{
                                         borderRadius: '50%',

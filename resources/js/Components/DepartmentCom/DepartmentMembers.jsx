@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Invite from '../DepartmentCom/invPopup'; 
+import { useCsrf } from "@/composables";
 
 function Avatar({ src, alt, className, status }) {
   const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
@@ -39,11 +40,11 @@ function UserCard({ src, alt, name, role, status }) {
 
 const PopupMenu = ({ onAssign, onRemove }) => (
   <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
-    <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
+    {/* <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
       <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" /> 
       Assign file manager
-    </button>
-    <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
+    </button> */}
+    <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-xl">
       <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" /> 
       Remove
     </button>
@@ -51,7 +52,7 @@ const PopupMenu = ({ onAssign, onRemove }) => (
 );
 
 
-const MemberCard = ({ id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -93,7 +94,7 @@ const MemberCard = ({ id, imageUrl, name, title, status, isActive, onAssign, onR
           <div ref={popupRef}>
             <PopupMenu
               onAssign={() => onAssign(id)}
-              onRemove={() => onRemove(id)}
+              onRemove={() => onRemove(employment_post_id)}
             />
           </div>
         )}
@@ -109,6 +110,7 @@ function DpMembers() {
   const [admins, setAdmins] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
   const [activePopupId, setActivePopupId] = useState(null);
+  const csrfToken = useCsrf();
 
   const getDepartmentIdFromQuery = () => {
     const params = new URLSearchParams(location.search);
@@ -123,7 +125,7 @@ function DpMembers() {
       try {
         const response = await fetch(url, {
           method: 'GET',
-          headers: { Accept: 'application/json' },
+          headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
         });
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -166,7 +168,31 @@ function DpMembers() {
   };
 
   const handleRemove = (id) => {
-    console.log(`Remove member with id: ${id}`);
+    handleDelete(id);
+  };
+
+  const handleDelete = async (id) => {
+    const url = `/api/crud/employment_posts/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      setMembers((prevMembers) => prevMembers.filter((member) => member.employment_post_id !== id));
+      setSearchResults((prevResults) => prevResults.filter((member) => member.employment_post_id !== id));
+    } catch (error) {
+      console.error('Error deleting member:', error);
+    }
+
     closePopup();
   };
 
@@ -221,6 +247,7 @@ function DpMembers() {
             <MemberCard
               key={index}
               id={member.user_id}
+              employment_post_id={member.employment_post_id}
               imageUrl={member.image}
               name={member.name}
               title={member.title}

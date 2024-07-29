@@ -142,6 +142,7 @@ import OutputDataUsers from '@/Components/Reusable/WallPosting/OutputBoxUsers';
 import '../Components/Profile/profile.css';
 
 function UserDetail({ user }) {
+    console.log("hello", user);
     const [userData, setUserData] = useState({});
     const [activeTab, setActiveTab] = useState("bio");
     const [loading, setLoading] = useState(true);
