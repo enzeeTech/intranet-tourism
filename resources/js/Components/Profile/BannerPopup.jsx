@@ -40,7 +40,7 @@ function Popup({ title, onClose, onSave, onSelectFile }) {
             onClick={onClose}
           /> */}
         </div>
-        <div className="flex gap-2 self-end mt-3.5 font-bold text-center">
+        <div className="flex gap-2 self-end mt-3.5 mb-4 font-bold text-center">
           <button 
             className="bg-white text-sm text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full"
             onClick={onClose}
