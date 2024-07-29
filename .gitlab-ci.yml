@@ -28,4 +28,4 @@ deploy:
     - ssh $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart artisan-reverb"
 
   only:
-    - master
+    - main
