@@ -864,14 +864,46 @@ export default function Profile() {
         setPhoto(newPhoto);
     };
 
+    const handleSaveBio = (newFormData) => {
+            const FfData = new FormData();
+        FfData.append('_method', 'PUT'); // Add _method to the form data
+        FfData.append('username', newFormData.username);
+        FfData.append('email', newFormData.email);
+        FfData.append('dateofbirth', newFormData.dateofbirth);
+        FfData.append('whatsapp', newFormData.whatsapp);
+        FfData.append('user_id', id); // Add user_id to the form data
+        FfData.append('name', formData.name); // Add name to the form data
 
-
-    const handleSaveBio = () => {
-        setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        setIsEditingBio(false);
-        openSaveNotification();
-        setTimeout(closeSaveNotification, 1200);
+        fetch(`/api/profile/profiles/${id}?with[]=user`, {
+            method: 'POST',
+            body: FfData,
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                'Authorization': `Bearer ${authToken}`,
+            },
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const error = await response.json();
+                return await Promise.reject(error);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                setOriginalFormData(newFormData);
+                setIsEditingBio(false);
+                openSaveNotification();
+                setTimeout(closeSaveNotification, 1200);
+                console.log('Data updated successfully:', data);
+            } else {
+                console.error('Error updating data:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating data:', error);
+        });
     };
 
     const handleSaveDepartment1 = () => {
@@ -920,79 +952,51 @@ export default function Profile() {
         setIsEditingDepartment2(true);
     };
 
-    console.log("profileData", profileData.profile?.id)
-    console.log("DD", formData.name);
-
     const handleSelectFile = (event) => {
-        console.log("HH", event);
         const file = event.target.files[0];
         if (file) {
             const FfData = new FormData();
-            console.log("LL", formData.name);
             FfData.append('cover_photo', file);
             FfData.append('user_id', id); // Add user_id to the form data
             FfData.append('_method', 'PUT'); // Add _method to the form data
-            FfData.append('name', formData.name); // Add _method to the form data
+            FfData.append('name', formData.name); // Add name to the form data
     
-            // const url = `/api/profile/profiles/${profileData.profile?.id}`;
             const url = `/api/profile/profiles/${id}?with[]=user`;
     
-            console.log("CSRF Token:", csrfToken);
-            console.log("Auth Token:", authToken);
-    
-            try {
-                console.log('Uploading profile photo with payload:', {
-                    cover_photo: file,
-                    user_id: id,
-                });
-    
-                fetch(url, {
-                    method: 'POST',
-                    body: FfData,
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
-                        'Authorization': `Bearer ${authToken}`,
-                    },
-                })
-                .then(async response => {
-                    if (!response.ok) {
-                        const error = await response.json();
-                        return await Promise.reject(error);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        setPhoto(URL.createObjectURL(file));
-                        setIsPopupOpen(false);
-                        console.log('File uploaded successfully:', data);
-                    } else {
-                        console.error('Error uploading file:', data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error uploading file:', error);
-                });
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            fetch(url, {
+                method: 'POST',
+                body: FfData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const error = await response.json();
+                    return await Promise.reject(error);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    setPhoto(URL.createObjectURL(file));
+                    setIsPopupOpen(false);
+                    console.log('File uploaded successfully:', data);
+                } else {
+                    console.error('Error uploading file:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
         }
     };
-    
-
-    // // Dummy departments data
-    // const departments = [
-    //     { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-    //     { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
-    // ];
-
 
     const handleCreatePoll = (poll) => {
       setPolls((prevPolls) => [...prevPolls, poll]);
     };
-
-    console.log("PROFILEDATA", profileData.profile?.id);
 
     return (
         <Example>
@@ -1047,14 +1051,9 @@ export default function Profile() {
                                             onEditBio={handleEditBio}
                                             onCancelBio={handleCancelBio}
                                             onSaveBio={handleSaveBio}
+                                            userId={id} // Pass userId as a prop
                                         />
                                         </div>
-                                        {/* {isEditingBio && (
-                                            <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSaveBio} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
-                                            </div>
-                                        )} */}
                                     </div>
                                 </section>
                                 <div className="separator"></div>
@@ -1180,6 +1179,8 @@ export default function Profile() {
         </Example>
     );
 }
+
+
 
 
 

@@ -133,7 +133,8 @@
         originalFormData,
         onEditBio,
         onCancelBio,
-        onSaveBio
+        onSaveBio,
+        userId // Add userId as a prop
     }) {
         const [localFormData, setLocalFormData] = useState({});
         const formRef = useRef(null);
@@ -256,7 +257,7 @@
                 {isEditing && (
                     <div className="flex justify-end mt-4 pb-3">
                         <button onClick={onCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                        <button onClick={() => onSaveBio(localFormData)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                        <button onClick={() => onSaveBio({ ...localFormData, user_id: userId })} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                     </div>
                 )}
             </div>
@@ -264,6 +265,9 @@
     }
     
     export default ProfileBio;
+    
+    
+    
     
     
     
