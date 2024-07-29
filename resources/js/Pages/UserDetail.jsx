@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Example from '../Layouts/DashboardLayoutNew';
+import Example from '@/Layouts/DashboardLayoutNew';
 import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import { ProfileHeader, ProfileNav } from "@/Components/Profile";
+import { OutputData } from '@/Components/Reusable/WallPosting';
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
-import OutputDataUsers from '@/Components/Reusable/WallPosting/OutputBoxUsers';
+// import OutputDataUsers from '@/Components/Reusable/WallPosting/OutputBoxUsers';
 import '../Components/Profile/profile.css';
 
 function UserDetail({ user }) {
@@ -15,6 +16,8 @@ function UserDetail({ user }) {
     const [userData, setUserData] = useState({});
     const [activeTab, setActiveTab] = useState("bio");
     const [loading, setLoading] = useState(true);
+    const [polls, setPolls] = useState([]);
+
 
     useEffect(() => {
         // Fetch user data using user ID (assuming user.id exists in props)
@@ -36,6 +39,8 @@ function UserDetail({ user }) {
         setLoading(false); // Assuming user data loading is complete
     }, [user.id]);
 
+    console.log("UD", userData);
+
     return (
         <Example>
             <main className="xl:pl-96 w-full">
@@ -44,7 +49,7 @@ function UserDetail({ user }) {
                         <div className="w-full bg-white h-[485px] shadow-custom">
                             <ProfileHeader
                                 backgroundImage={userData.backgroundImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?'}
-                                profileImage={userData.profilePictureUrl ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
+                                profileImage={userData.profile?.image ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
                                 name={userData.name}
                                 username={"@" + userData.username || "N/A"}
                                 status={userData.status ?? "Online"}
@@ -53,7 +58,8 @@ function UserDetail({ user }) {
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
                                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                <OutputDataUsers userId={user.id} />
+                                {/* <OutputDataUsers userId={user.id} /> */}
+                                <OutputData polls={polls} userId={user.id} />
                                 </div>
                             )}
                             {activeTab === "bio" && (

@@ -54,7 +54,7 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
           style={{ paddingLeft: '1.2rem' }}
         />
         <button
-          onClick={handleSearch}
+          onClick={handleSearchChange}
           className="visit-department-btn text-sm rounded-full px-4 py-3 bg-blue-500 text-white hover:bg-blue-700">
           Search
         </button>

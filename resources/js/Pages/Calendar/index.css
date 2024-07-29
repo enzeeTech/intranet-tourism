@@ -117,6 +117,8 @@ a {
     margin-bottom: 10px; /* Optional: add some space below the title */
 }
 
+
+/* General styles for printing */
 @media print {
     body * {
         visibility: hidden;
@@ -130,4 +132,50 @@ a {
         top: 0;
         width: 100%;
     }
+}
+
+/* Table styles */
+.print-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.print-container img {
+    display: block; /* Temporarily set to 'block' for testing */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.events-table th, .events-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.events-table th {
+    background-color: #f2f2f2;
+    color: black;
+    font-weight: bold;
+}
+
+.events-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.events-table tr:hover {
+    background-color: #ddd;
+}
+
+.events-table th, .events-table td {
+    padding: 12px;
 }
