@@ -11,7 +11,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
@@ -35,7 +34,8 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
 
   const handleDownload = (e) => {
     e.preventDefault();
-    window.location.href = `/api/downloadFile/${file.id}`;
+    const fileUrl = `/api/downloadFile/${file.id}`;
+    window.open(fileUrl, '_blank');
   };
 
   const handleManageAdminClick = (e) => {

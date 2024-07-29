@@ -160,6 +160,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
+import { usePage } from '@inertiajs/react';
 
 function Header({ title }) {
   return (
@@ -208,6 +209,8 @@ function Card({
   const [departmentDescription, setDepartmentDescription] = useState(department.description || '');
   const [error, setError] = useState('');
   const csrfToken = useCsrf();
+  const { props } = usePage();
+  const { id, authToken } = props;
 
   useEffect(() => {
     setDepartmentName(department.name || '');
@@ -216,20 +219,21 @@ function Card({
     setDepartmentDescription(department.description || '');
   }, [department, imgSrc]);
 
-//   const handleImageChange = (file) => {
-//     const reader = new FileReader();
-//     reader.onload = () => {
-//       setImageSrc(reader.result);
-//     };
-//     reader.readAsDataURL(file);
-//   };
 const handleImageChange = (file) => {
     const formData = new FormData();
     formData.append('banner', file);
+    formData.append('user_id', id); // Add user_id to the form data
+    formData.append('_method', 'PUT'); // Add _method to the form data
+    formData.append('name', formData.name); // Add _method to the form data
   
     fetch('', {
       method: 'POST',
       body: formData,
+      headers: {
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+        'Authorization': `Bearer ${authToken}`,
+    },
     })
     .then(response => response.json())
     .then(data => {
@@ -363,5 +367,4 @@ export default function EditDepartments({ department, onCancel, onSave }) {
     />
   );
 }
-
 

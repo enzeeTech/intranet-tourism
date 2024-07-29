@@ -98,7 +98,6 @@
 
 
 import * as React from "react";
-import { useCsrf } from '@/composables';
 
 function Avatar({ src, alt, isSelected, onClick }) {
   return (
@@ -112,11 +111,7 @@ function Avatar({ src, alt, isSelected, onClick }) {
   );
 }
 
-function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileImage, setProfileImage }) {
-  console.log("User ID: ", userId);  // Debugging line to check if userId is passed correctly
-  console.log("CSRF Token: ", csrfToken);  // Debugging line to check CSRF token
-  console.log("Auth Token: ", authToken);  // Debugging line to check Auth token
-
+function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileImage, setProfileImage, userName }) {
   const [selectedAvatar, setSelectedAvatar] = React.useState(null);
 
   const avatars = [
@@ -139,7 +134,6 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
 
   const handleAvatarClick = (avatar) => {
     setSelectedAvatar(avatar.src);
-    console.log(`Avatar clicked: ${avatar.alt}`);
   };
 
   const handleSaveClick = async () => {
@@ -160,6 +154,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
       formData.append('image', file);
       formData.append('user_id', userId);
       formData.append('_method', 'PUT');
+      formData.append('name', userName);
 
       const options = {
         method: 'POST',
@@ -183,25 +178,18 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
       setProfileImage(selectedAvatar); // Update the profile image in the parent component
       onClose(); // Close the popup
     } catch (error) {
-      // console.error('Error updating avatar:', error);
-      window.location.reload();
+      console.error('Error updating avatar:', error);
+      // window.location.reload();
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 rounded-3xl shadow-custom">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 shadow-custom">
       <div className="p-2 rounded-3xl w-2xl" onClick={(e) => e.stopPropagation()}>
         <section className="flex flex-col py-2.5 bg-white rounded-3xl w-[700px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 items-start text-2xl font-bold text-neutral-800">
               <h1 className="flex-auto mt-5">Pick an Avatar</h1>
-              {/* <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
-                alt="Close icon"
-                className="shrink-0 w-6 aspect-square cursor-pointer"
-                onClick={onClose}
-              /> */}
             </header>
             <div className="grid grid-cols-6 gap-3 mt-9  px-2">
               {avatars.map((avatar) => (
@@ -231,5 +219,3 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
 }
 
 export default PhotoAndAvatarPopup;
-
-

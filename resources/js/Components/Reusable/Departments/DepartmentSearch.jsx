@@ -38,7 +38,6 @@
 // export default DepartmentSearchBar;
 
 import React, { useState } from 'react';
-import searchIcon from '../../../../../public/assets/searchStaffButton.png';
 import '../css/StaffDirectorySearchBar.css';
 import '../css/General.css';
 
@@ -65,10 +64,10 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
           onChange={handleSearch}
         />
         <button
-          className="text-sm px-4 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-700 md:justify-start"
-          onClick={toggleCreateCommunity}
-        >
-          Create Department +
+          className="flex items-center text-sm px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700 md:justify-start"
+          onClick={toggleCreateCommunity}>
+          Create Department
+          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 ml-2" />
         </button>
       </div>
     </div>

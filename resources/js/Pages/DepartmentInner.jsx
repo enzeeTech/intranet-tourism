@@ -124,6 +124,7 @@ const DepartmentInner = () => {
       const response = await fetch(`/api/department/departments/${departmentId}`);
       const result = await response.json();
       if (result.data) {
+        console.log("DATA", result.data);
         setDepartmentData(result.data);
       }
     } catch (error) {
@@ -150,14 +151,17 @@ const DepartmentInner = () => {
     }
   }, []);
 
+  console.log("UPDATED_DATA", departmentData);
+
   return (
     <Example>
-      <main className="xl:pl-96 w-full max-w-[900px] ml-4 mr-4 lg:ml-16 lg:mr-24 relative bottom-10">
+      <main className="xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 w-full ml-4 mr-4 lg:ml-10 lg:mr-24 relative bottom-10"> 
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
           <Adminwall
             departmentID={getDepartmentIdFromQuery()}
             departmentHeader={departmentData?.name}
             departmentDescription={departmentData?.description}
+            departmentBanner={departmentData?.banner}
             userId={id}
             onEditClick={handleEditClick} // Add edit button click handler
           />
