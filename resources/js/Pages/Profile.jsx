@@ -718,7 +718,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
 import { ProfileHeader, ProfileNav, Popup } from "@/Components/Profile";
-import { ProfileBio, ProfileIcons, Table } from "@/Components/ProfileTabbar";
+import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import Example from '@/Layouts/DashboardLayoutNew';
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
@@ -864,6 +864,8 @@ export default function Profile() {
         setPhoto(newPhoto);
     };
 
+
+
     const handleSaveBio = () => {
         setOriginalFormData(formData);
         setOriginalPhoto(photo);
@@ -977,6 +979,20 @@ export default function Profile() {
             }
         }
     };
+    
+
+    // Dummy departments data
+    const departments = [
+        { name: "Department 1", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
+        { name: "Department 2", unit: formData.unit, jobtitle: formData.jobtitle, position: formData.position, location: formData.location, phone: formData.phone },
+    ];
+
+
+    const handleCreatePoll = (poll) => {
+      setPolls((prevPolls) => [...prevPolls, poll]);
+    };
+
+    console.log("PROFILEDATA", profileData.profile?.id);
 
     return (
         <Example>

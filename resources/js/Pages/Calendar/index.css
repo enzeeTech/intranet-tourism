@@ -6,6 +6,35 @@ a {
     color: black !important;
 }
 
+.fc-event-title {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-title {
+    flex: 1; /* Ensures the span takes up the remaining space in the flex container */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fc-print-pdf-button {
+    background-image: url('/assets/PrintPDF.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 24px; /* Adjust size as needed */
+    height: 24px; /* Adjust size as needed */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+
+
+
 .fc .fc-button-primary {
     background-color: white;
     color: black;
@@ -18,5 +47,87 @@ a {
 
 .input-no-outline:focus {
     outline: none !important;
-    box-shadow: none !important; 
+    /* box-shadow: none !important;  */
+}
+
+.fc-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  
+  .fc-toolbar .fc-toolbar-chunk {
+    display: flex;
+    align-items: center;
+  }
+  
+  .fc-toolbar-title {
+    cursor: pointer;
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+}
+
+.dropdown-menu.visible {
+    display: block;
+}
+
+  
+
+.custom-popover {
+    z-index: 99999 !important;
+    width: auto;
+}
+
+/* .custom-popover .popover-header {
+    background-color: #4a90e2;
+    color: #fff;
+    font-weight: bold;
+    padding: 0px 10px 0px 10px;
+} */
+
+.custom-popover .popover-body {
+    background-color: #FFC0CB;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 0px 10px 0px 10px;
+    border-radius: 10px;
+}
+
+.custom-popover .popover-arrow {
+    display: none;
+}
+
+.custom-popover .event-title {
+    font-size: 1.5em; /* Adjust the size as needed */
+    font-weight: bold;
+    margin-bottom: 10px; /* Optional: add some space below the title */
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .print-container, .print-container * {
+        visibility: visible;
+    }
+    .print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
 }
