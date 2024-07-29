@@ -38,7 +38,6 @@
 // export default DepartmentSearchBar;
 
 import React, { useState } from 'react';
-import searchIcon from '../../../../../public/assets/searchStaffButton.png';
 import '../css/StaffDirectorySearchBar.css';
 import '../css/General.css';
 
