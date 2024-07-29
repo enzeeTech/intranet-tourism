@@ -142,6 +142,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
                     <div className="bg-white rounded-lg pt-7 w-[400px]">
+                        <h1 className="text-2xl font-bold mb-4 mx-4 text-neutral-800">Invite People</h1>
                         <input
                             type="text"
                             placeholder="Search people"
