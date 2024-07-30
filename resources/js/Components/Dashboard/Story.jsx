@@ -4,6 +4,8 @@ import CreateImageStory from './CreateImageStory';
 import { usePage } from '@inertiajs/react';
 import StoryViewer from './StoryViewer';
 import './styles.css';
+import { useCsrf } from "@/composables";
+
 
 const StoryNew = ({ userId }) => {
     const [showStoryViewer, setShowStoryViewer] = useState(false);
@@ -25,6 +27,7 @@ const StoryNew = ({ userId }) => {
     const { id } = props; // Access the user ID from props
     const [userData, setUserData] = useState({});
     const [userStories, setUserStories] = useState([]);
+    const csrfToken = useCsrf();
 
     const containerRef = useRef(null);
 
@@ -33,7 +36,7 @@ const StoryNew = ({ userId }) => {
     }, [id]);
 
     const fetchUserData = (id) => {
-        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
         .then((response) => {
@@ -61,9 +64,8 @@ const StoryNew = ({ userId }) => {
     }, []);
 
     const API_URL = "/api/posts/posts";
-    const USERS_API_URL = "/api/crud/users/";
+    const USERS_API_URL = "/api/users/users/";
 
-    useEffect(() => {
         const fetchStories = async () => {
             let allStories = [];
             let currentPage = 1;
@@ -80,15 +82,15 @@ const StoryNew = ({ userId }) => {
                     }
 
                     const data = await response.json();
-                    console.log("data", data.data.data);
                     const storiesToAdd = data.data.data
-                        .filter(story => story.type === 'story' && (Date.now() - new Date(story.created_at).getTime()) < 24 * 60 * 60 * 1000) // Filter out stories older than 24 hours
-                        // .filter(story => story.type === 'story' && (Date.now() - new Date(story.created_at).getTime()) < 10 * 1000) // Filter out stories older than 10 seconds
-                        .map(story => ({
+                    .filter(story => story.type === 'story')
+                    .map(story => ({
                             url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
                             type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
                             text: story.content,
                             userId: story.user_id,
+                            postId: story.id,
+                            imageName: story.attachments.length > 0 ? story.attachments[0].metadata?.original_name : '',
                             timestamp: new Date(story.created_at).getTime()
                         }));
 
@@ -107,11 +109,13 @@ const StoryNew = ({ userId }) => {
                 }
 
                 setUserStories(allStories);
+                deleteOldStories(allStories); // Initial check on fetch
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
+        
+    useEffect(() => {
         fetchStories();
     }, [id]);
 
@@ -137,6 +141,43 @@ const StoryNew = ({ userId }) => {
         if (userStories.length > 0) {
             fetchUsers();
         }
+    }, [userStories]);
+
+    const deleteOldStories = async (stories) => {
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        // const oneDay = 5 * 1000; // 5 seconds
+
+        for (const story of stories) {
+            if (now - story.timestamp > oneDay) {
+                try {
+                    const response = await fetch(`${API_URL}/${story.postId}`, {
+                        method: 'DELETE',
+                        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                    });
+
+                    if (response.ok) {
+                        console.log(`Post with ID ${story.postId} deleted successfully.`);
+                        // window.location.reload();
+                    } else {
+                        console.error(`Failed to delete post with ID ${story.postId}.`);
+                    }
+                } catch (error) {
+                    console.error(`Error deleting post with ID ${story.postId}:`, error);
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        // Set an interval to check for old stories every hour
+        const intervalId = setInterval(() => {
+            deleteOldStories(userStories);
+        }, 60 * 60 * 1000); // 60 minutes
+        // }, 10 * 1000); // 10 seconds
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
     }, [userStories]);
 
     const handleAvatarClick = (avatar) => {

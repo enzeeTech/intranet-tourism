@@ -5,13 +5,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import searchIcon from '../../../public/assets/search.png';
-import searchButton from '../../../public/assets/searchButton.png';
 import printIcon from '../../../public/assets/PrintPDF.svg';
 import pencilIcon from '../../../public/assets/EditIcon.svg'
 import * as bootstrap from "bootstrap";
 import "./Calendar/index.css";
 import Example from '@/Layouts/DashboardLayoutNew';
-import PageTitle from '@/Components/Reusable/PageTitle';
+import './Calendar/index.css'
 import PrintCalendar from './Calendar/PrintCalendar';
 import { useCsrf } from "@/composables";
 
@@ -19,13 +18,25 @@ function Calendar() {
     const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [eventData, setEventData] = useState({ title: '', venue: '', date: '', startTime: '', endTime: '', color: 'purple', url: '' });
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [eventData, setEventData] = useState({ 
+        title: '', 
+        venue: '', 
+        startDate: '', 
+        endDate: '', 
+        startTime: '', 
+        endTime: '', 
+        color: 'purple', 
+        url: '' 
+    });
     const [includeUrl, setIncludeUrl] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const csrfToken = useCsrf();
     const [showPrint, setShowPrint] = useState(false);
     const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
     const [printRange, setPrintRange] = useState({ startDate: '', endDate: '' });
+    const [isUrlFieldVisible, setIsUrlFieldVisible] = useState(false);
+    const [eventId, setEventId] = useState(null);
     const calendarRef = useRef(null);
 
     useEffect(() => {
@@ -53,11 +64,9 @@ function Calendar() {
                 }));
                 setEvents(formattedEvents);
                 setFilteredEvents(formattedEvents);
-                // Set the calendar to the current date
                 if (calendarRef.current) {
                     calendarRef.current.getApi().gotoDate(new Date());
                 }
-                console.log("KK", formattedEvents);
             })
             .catch(error => {
                 console.error('Error fetching events: ', error);
@@ -95,16 +104,41 @@ function Calendar() {
         setEventData({
             title: '',
             venue: '',
-            date: formatDate(selectedDate),
+            startDate: formatDate(selectedDate),
+            endDate: '',
             startTime: '',
             endTime: '',
-            color: 'purple'
+            color: 'purple',
+            url: ''
         });
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setEventData({ title: '', venue: '', date: '', startTime: '', endTime: '', color: 'purple', url: '' });
+        setEventData({ 
+            title: '', 
+            venue: '', 
+            startDate: '', 
+            endDate: '', 
+            startTime: '', 
+            endTime: '', 
+            color: 'purple', 
+            url: '' 
+        });
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+        setEventData({ 
+            title: '', 
+            venue: '', 
+            startDate: '', 
+            endDate: '', 
+            startTime: '', 
+            endTime: '', 
+            color: 'purple', 
+            url: '' 
+        });
     };
 
     const closePrintModal = () => {
@@ -126,11 +160,10 @@ function Calendar() {
         const eventPayload = {
             title: eventData.title,
             venue: eventData.venue,
-            start_at: formatDateTime(eventData.date, eventData.startTime),
-            end_at: formatDateTime(eventData.date, eventData.endTime),
+            start_at: formatDateTime(eventData.startDate, eventData.startTime),
+            end_at: formatDateTime(eventData.endDate, eventData.endTime),
             color: eventData.color,
             url: includeUrl ? eventData.url : null,
-
         };
         fetch('/api/events/events', {
             method: 'POST',
@@ -155,7 +188,9 @@ function Calendar() {
                 closeModal();
             })
             .catch(error => {
-                console.error('Error creating event: ', error);
+                console.error('Error creatinssg event: ', error);
+                setIsModalOpen(false);
+                fetchEvents()
             });
     };
 
@@ -182,36 +217,105 @@ function Calendar() {
     };
 
     const handleEventClick = (info) => {
-        // Prevent default behavior
         info.jsEvent.preventDefault();
         info.jsEvent.stopPropagation();
-        
-        // Check if the event has a URL
         if (info.event.url && info.event.url.trim() && info.event.url !== 'null') {
-            // Open the URL in a new tab
             window.open(info.event.url, '_blank');
         } else {
-            // Optionally, display a message or take other actions if no URL is present
             alert('This event does not have a URL.');
         }
     };
     
     const handleEditClick = (event) => {
-        // Logic to handle the edit action, e.g., opening a modal with event details for editing
-        console.log('Editing event:', event);
-        // You can set state to show an edit modal here
+        const formatTime = (date) => {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        };
+    
+        const url = event.url !== 'null' ? event.url : ''; // Handle 'null' or undefined
+    
+        console.log('Event URL:', url); // Debugging line
+        console.log('Include URL:', url !== ''); // Debugging line
+    
+        setEventId(event.id); // Set the event ID
         setEventData({
             title: event.title,
-            venue: event.venue,
-            date: event.start,
-            startTime: event.startTime,
-            endTime: event.endTime,
-            color: event.color,
-            url: event.url || '',
+            venue: event.extendedProps.venue,
+            startDate: event.start.toISOString().split('T')[0],
+            endDate: event.end ? event.end.toISOString().split('T')[0] : '',
+            startTime: formatTime(event.start),
+            endTime: event.end ? formatTime(event.end) : '',
+            color: event.backgroundColor,
+            url: url
         });
-        setIsModalOpen(true);
+    
+        setIncludeUrl(url !== ''); // Only set to true if URL is not an empty string
+        setIsEditModalOpen(true);
     };
     
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+            const FfData = new FormData();
+            FfData.append('_method', 'PUT');
+            FfData.append('title', eventData.title);
+            FfData.append('venue', eventData.venue);
+            FfData.append('start_at', `${eventData.startDate}T${eventData.startTime}`);
+            FfData.append('end_at', `${eventData.endDate}T${eventData.endTime}`);
+            FfData.append('color', eventData.color);
+            FfData.append('url', eventData.url || '');
+    
+            const response = await fetch(`/api/events/events/${eventId}`, {
+                method: 'POST',
+                body: FfData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+            });
+    
+            if (response.ok) {
+                const updatedEvent = await response.json();
+                setEvents((prevEvents) =>
+                    prevEvents.map((event) => (event.id === eventId ? updatedEvent : event))
+                );
+                setIsEditModalOpen(false);
+                fetchEvents()
+            } else {
+                const errorData = await response.json();
+                console.error('Error updating esssvent:', errorData);
+            }
+        } catch (error) {
+            console.error('Error updating event:', error);
+            setIsEditModalOpen(false);
+            fetchEvents()
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`/api/events/events/${eventId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+            });
+    
+            if (response.ok) {
+                setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+                setIsEditModalOpen(false);
+            } else {
+                const errorData = await response.json();
+                console.error('Error deleting event:', errorData);
+            }
+        } catch (error) {
+            console.error('Error deleting event:', error);
+        }
+    };
     
 
     return (
@@ -235,17 +339,12 @@ function Calendar() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 // style={{ outline: 'none', marginRight: '850px' }}
                             />
-                            {/* <button
-                                onClick={filterEvents}
-                                className="flex items-center justify-center py-2 mr-2">
-                                <img src={searchButton} alt="Find Events" className="w-30 h-11" />
-                            </button> */}
                         </div>
                     </div>
                     <button
                         onClick={handlePrint}
-                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 rounded-full ml-3 my-2">
-                        <img src={printIcon} alt="Print" className="w-6 h-6" />
+                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 rounded-full ml-3">
+                        <img src={printIcon} alt="Print" className="w-5 h-6" />
                     </button>
                 </div>
 
@@ -286,9 +385,7 @@ function Calendar() {
                             hour: 'numeric',
                             minute: 'numeric',
                             hour12: true
-                        });
-                    
-                        // Sanitize URL and check for empty or 'null' string
+                        });                    
                         const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
                             ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
                             : '';
@@ -310,37 +407,6 @@ function Calendar() {
                             html: true,
                         });
                     }}                    
-                    // eventContent={(eventInfo) => {
-                    //     return (
-                    //         <div
-                    //             style={{
-                    //                 backgroundColor: eventInfo.event.backgroundColor,
-                    //                 padding: '0 5px',
-                    //                 borderRadius: '2px',
-                    //                 display: 'flex',
-                    //                 alignItems: 'center',
-                    //                 height: '100%',
-                    //                 width: '100%',
-                    //                 whiteSpace: 'nowrap', // Ensure the title doesn't wrap
-                    //                 overflow: 'hidden', // Hide overflow text
-                    //                 textOverflow: 'ellipsis', // Add ellipsis for overflow text
-                    //             }}
-                    //             className="fc-event-title"
-                    //         >
-                    //             <div
-                    //                 style={{
-                    //                     borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
-                    //                     height: '100%',
-                    //                     opacity: '50%',
-                    //                 }}
-                    //             />
-                    //             <span className="event-title" style={{ color: 'white' }}>
-                    //                 {eventInfo.event.title}
-                    //             </span>
-                    //         </div>
-                    //     );
-                    // }}
-
                     eventContent={(eventInfo) => {
                         return (
                             <div
@@ -382,108 +448,230 @@ function Calendar() {
                         );
                     }}
                 />
+
                 <div className='pb-10'></div>
+                
                 {isModalOpen && (
                     <div className="modal-container">
-                    <div className="flex flex-col items-center">
-                    <div className="flex justify-start items-center w-full">
-                        <h2 className="text-xl font-bold pb-4">Create New Event</h2>
-                        <button className="modal-close-button mt-2 pr-2" onClick={closeModal}>
+                        <button className="modal-close-button" onClick={closeModal}>
                         X
                         </button>
-                    </div>
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                      <input
-                        type="text"
-                        name="title"
-                        value={eventData.title}
-                        onChange={handleChange}
-                        className="form-control"
-                        placeholder="Event Title"
-                        required
-                      />
-                      <input
-                        type="text"
-                        name="venue"
-                        value={eventData.venue}
-                        onChange={handleChange}
-                        className="form-control"
-                        placeholder="Venue"
-                        required
-                      />
-                      <input
-                        type="date"
-                        name="date"
-                        value={eventData.date}
-                        onChange={handleChange}
-                        className="form-control"
-                        placeholder="Date"
-                        required
-                      />
-                      <input
-                        type="time"
-                        name="startTime"
-                        value={eventData.startTime}
-                        onChange={handleChange}
-                        className="form-control"
-                        placeholder="Start Time"
-                        required
-                      />
-                      <input
-                        type="time"
-                        name="endTime"
-                        value={eventData.endTime}
-                        onChange={handleChange}
-                        className="form-control"
-                        placeholder="End Time"
-                        required
-                      />
-                        <div className="form-group">
-                            <label>
+                        <form onSubmit={handleSubmit}>
                             <input
-                                type="checkbox"
-                                className='mx-2'
-                                name="includeUrl"
-                                checked={includeUrl}
-                                onChange={(e) => setIncludeUrl(e.target.checked)}
-                            />
-                            Include URL
-                            </label>
-                            {includeUrl && (
-                            <input
-                                type="url"
-                                className="form-control mt-2"
-                                name="url"
-                                value={eventData.url}
+                                type="text"
+                                name="title"
+                                value={eventData.title}
                                 onChange={handleChange}
-                                placeholder="Enter event URL"
+                                className="form-control"
+                                placeholder="Event Title"
+                                required
                             />
-                            )}
-                        </div>
-                      <select
-                        name="color"
-                        value={eventData.color}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                      >
-                        <option value="red">Red</option>
-                        <option value="blue">Blue</option>
-                        <option value="green">Green</option>
-                        <option value="orange">Orange</option>
-                        <option value="purple">Purple</option>
-                        <option value="DeepPink">Pink</option>
-                        <option value="black">Black</option>
-                        <option value="gray">Gray</option>
-                      </select>
-                      <button type="submit" className="modal-submit-button">
-                        Confirm
-                      </button>
-                    </form>
-                  </div>
-                  
+                            <input
+                                type="text"
+                                name="venue"
+                                value={eventData.venue}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Venue"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={eventData.startDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Date"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={eventData.endDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Date"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="startTime"
+                                value={eventData.startTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Time"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="endTime"
+                                value={eventData.endTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Time"
+                                required
+                            />
+                            <div className="form-group">
+                                <label>
+                                <input
+                                    type="checkbox"
+                                    className='mr-2'
+                                    name="includeUrl"
+                                    checked={includeUrl}
+                                    onChange={(e) => setIncludeUrl(e.target.checked)}
+                                />
+                                Include URL
+                                </label>
+                                {includeUrl && (
+                                <input
+                                    type="url"
+                                    className="form-control mt-2"
+                                    name="url"
+                                    value={eventData.url}
+                                    onChange={handleChange}
+                                    placeholder="Enter event URL"
+                                />
+                                )}
+                            </div>
+                            <select
+                                name="color"
+                                value={eventData.color}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            >
+                                <option value="red">Red</option>
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="orange">Orange</option>
+                                <option value="purple">Purple</option>
+                                <option value="DeepPink">Pink</option>
+                                <option value="black">Black</option>
+                                <option value="gray">Gray</option>
+                            </select>
+                            <button type="submit" className="modal-submit-button">
+                                Confirm
+                            </button>
+                        </form>
+                    </div>
                 )}
+
+                {isEditModalOpen && (
+                    <div className="modal-container">
+                        <button className="modal-close-button" onClick={closeEditModal}>
+                            X
+                        </button>
+                        <form onSubmit={handleEditSubmit}>
+                            <input
+                                type="text"
+                                name="title"
+                                value={eventData.title}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Event Title"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="venue"
+                                value={eventData.venue}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Venue"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={eventData.startDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Date"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={eventData.endDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Date"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="startTime"
+                                value={eventData.startTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Time"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="endTime"
+                                value={eventData.endTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Time"
+                                required
+                            />
+                            <div className="form-group">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        className='mr-2'
+                                        name="includeUrl"
+                                        checked={includeUrl}
+                                        onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setIncludeUrl(isChecked);
+                                            if (!isChecked) {
+                                                setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
+                                            }
+                                        }}
+                                    />
+                                    Include URL
+                                </label>
+                                {includeUrl && (
+                                    <input
+                                        type="url"
+                                        className="form-control mt-2"
+                                        name="url"
+                                        value={eventData.url}
+                                        onChange={handleChange}
+                                        placeholder="Enter event URL"
+                                    />
+                                )}
+                            </div>
+                            <select
+                                name="color"
+                                value={eventData.color}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            >
+                                <option value="red">Red</option>
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="orange">Orange</option>
+                                <option value="purple">Purple</option>
+                                <option value="DeepPink">Pink</option>
+                                <option value="black">Black</option>
+                                <option value="gray">Gray</option>
+                            </select>
+                            <div className="button-container">
+                                <button type="submit" className="modal-save-button">
+                                    Save
+                                </button>
+                                <button type="button" className="modal-delete-button" onClick={handleDelete}>
+                                    Delete
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
                 {isPrintModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                         <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
