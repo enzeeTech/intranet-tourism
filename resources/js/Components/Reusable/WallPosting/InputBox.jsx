@@ -6,7 +6,7 @@ import "../css/InputBox.css";
 import "../../../Pages/Calendar/index.css";
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, postType }) {
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showPeoplePopup, setShowPeoplePopup] = useState(false);
@@ -24,7 +24,7 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
         const formData = new FormData();
         formData.append("user_id", userId); // Use the userId prop here
         // formData.append('type', 'post');
-        formData.append("type", postType);
+        formData.append("type", "post");
         formData.append("visibility", "public");
         formData.append("content", inputValue);
         formData.append("tag", JSON.stringify(tags));
@@ -32,6 +32,11 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
         attachments.forEach((file, index) => {
             formData.append(`attachments[${index}]`, file);
         });
+
+        if (includeAccessibilities) {
+            formData.append("accessibilities[0][accessable_type]", filterType);
+            formData.append("accessibilities[0][accessable_id]", filterId);
+        }
 
         fetch("/api/posts/posts", {
             method: "POST",
@@ -92,18 +97,18 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
     };
 
     return (
-        <section className="flex flex-col justify-center text-sm max-w-[610px] text-neutral-800">
-            <div className="input-box-container mt-16 flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                <div className="flex flex-col w-full">
+        <section className="flex flex-col justify-center text-sm text-neutral-800">
+            <div className="input-box-container  flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full">
+                <div className="flex flex-col w-[875px] " >
                     <textarea
                         ref={textAreaRef}
                         value={inputValue}
                         onChange={handleChange}
                         placeholder="Share Your Thoughts..."
-                        className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline"
+                        className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline "
                     />
-                    <div className="flex mt-7 items-center">
-                        <div className="flex gap-3">
+                    <div className="flex mt-7 items-center  justify-between ">
+                        <div className="flex gap-3 ">
                             <button>
                                 <img
                                     loading="lazy"
@@ -165,10 +170,8 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                </div>
-                <button onClick={handleClickSend} className="send-button">
-                    <div className="send-button-icon">
+                        <button onClick={handleClickSend} className="flex justify-center ">
+                    <div className="">
                         <img
                             loading="lazy"
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
@@ -176,6 +179,8 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
                         />
                     </div>
                 </button>
+                    </div>
+                </div>
             </div>
             <TagInput tags={tags} setTags={setTags} />
             {showPollPopup && (

@@ -4,6 +4,8 @@ import CreateImageStory from './CreateImageStory';
 import { usePage } from '@inertiajs/react';
 import StoryViewer from './StoryViewer';
 import './styles.css';
+import { useCsrf } from "@/composables";
+
 
 const StoryNew = ({ userId }) => {
     const [showStoryViewer, setShowStoryViewer] = useState(false);
@@ -25,6 +27,7 @@ const StoryNew = ({ userId }) => {
     const { id } = props; // Access the user ID from props
     const [userData, setUserData] = useState({});
     const [userStories, setUserStories] = useState([]);
+    const csrfToken = useCsrf();
 
     const containerRef = useRef(null);
 
@@ -33,7 +36,7 @@ const StoryNew = ({ userId }) => {
     }, [id]);
 
     const fetchUserData = (id) => {
-        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
             method: "GET",
         })
         .then((response) => {
@@ -61,9 +64,8 @@ const StoryNew = ({ userId }) => {
     }, []);
 
     const API_URL = "/api/posts/posts";
-    const USERS_API_URL = "/api/crud/users/";
+    const USERS_API_URL = "/api/users/users/";
 
-    useEffect(() => {
         const fetchStories = async () => {
             let allStories = [];
             let currentPage = 1;
@@ -71,7 +73,7 @@ const StoryNew = ({ userId }) => {
 
             try {
                 while (currentPage <= lastPage) {
-                    const response = await fetch(`${API_URL}?page=${currentPage}`, {
+                    const response = await fetch(`${API_URL}?with[]=author&with[]=attachments&page=${currentPage}`, {
                         method: "GET",
                     });
 
@@ -81,13 +83,15 @@ const StoryNew = ({ userId }) => {
 
                     const data = await response.json();
                     const storiesToAdd = data.data.data
-                        .filter(story => story.type === 'story')
-                        .map(story => ({
+                    .filter(story => story.type === 'story')
+                    .map(story => ({
                             url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
                             type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
                             text: story.content,
                             userId: story.user_id,
-                            timestamp: Date.now()
+                            postId: story.id,
+                            imageName: story.attachments.length > 0 ? story.attachments[0].metadata?.original_name : '',
+                            timestamp: new Date(story.created_at).getTime()
                         }));
 
                     allStories = allStories.concat(storiesToAdd);
@@ -105,21 +109,24 @@ const StoryNew = ({ userId }) => {
                 }
 
                 setUserStories(allStories);
+                deleteOldStories(allStories); // Initial check on fetch
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-
+        
+    useEffect(() => {
         fetchStories();
     }, [id]);
 
     useEffect(() => {
         const fetchUsers = async () => {
             const uniqueUserIds = [...new Set(userStories.map(story => story.userId))];
-            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}`));
+            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}?with[]=profile`));
             const userResponses = await Promise.all(userPromises);
             const userJsonPromises = userResponses.map(response => response.json());
             const users = await Promise.all(userJsonPromises);
+            
 
             const userAvatars = users.map(user => ({
                 src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
@@ -134,6 +141,43 @@ const StoryNew = ({ userId }) => {
         if (userStories.length > 0) {
             fetchUsers();
         }
+    }, [userStories]);
+
+    const deleteOldStories = async (stories) => {
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        // const oneDay = 5 * 1000; // 5 seconds
+
+        for (const story of stories) {
+            if (now - story.timestamp > oneDay) {
+                try {
+                    const response = await fetch(`${API_URL}/${story.postId}`, {
+                        method: 'DELETE',
+                        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                    });
+
+                    if (response.ok) {
+                        console.log(`Post with ID ${story.postId} deleted successfully.`);
+                        // window.location.reload();
+                    } else {
+                        console.error(`Failed to delete post with ID ${story.postId}.`);
+                    }
+                } catch (error) {
+                    console.error(`Error deleting post with ID ${story.postId}:`, error);
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        // Set an interval to check for old stories every hour
+        const intervalId = setInterval(() => {
+            deleteOldStories(userStories);
+        }, 60 * 60 * 1000); // 60 minutes
+        // }, 10 * 1000); // 10 seconds
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
     }, [userStories]);
 
     const handleAvatarClick = (avatar) => {
@@ -171,6 +215,8 @@ const StoryNew = ({ userId }) => {
     };
 
     const handlePostStory = (newStory) => {
+        newStory.timestamp = Date.now(); // Add current timestamp to new story
+
         setAvatars(prevAvatars => {
             const updatedAvatars = [...prevAvatars];
             updatedAvatars[0].stories.push(newStory);
@@ -190,11 +236,12 @@ const StoryNew = ({ userId }) => {
             return updatedAvatars;
         });
     };
+    // console.log("LL", userData);
 
     const loggedInUserAvatar = {
         src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
-        name: userData.name || "User Name",
+        name: "Your Story",
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
 
@@ -202,8 +249,9 @@ const StoryNew = ({ userId }) => {
         .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
         .sort((a, b) => a.viewed - b.viewed);
 
+
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '30px', marginLeft: '-20px', width: '610px', }}>
             <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
                 <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(loggedInUserAvatar)} >
                     <div style={{
@@ -217,7 +265,8 @@ const StoryNew = ({ userId }) => {
                         padding: '2px'
                     }}>
                         <img
-                            src={loggedInUserAvatar.src}
+                            // src={loggedInUserAvatar.src}
+                            src={`/storage/${loggedInUserAvatar.src}`}
                             alt={loggedInUserAvatar.alt}
                             style={{
                                 borderRadius: '50%',
@@ -268,7 +317,8 @@ const StoryNew = ({ userId }) => {
                                 filter: avatar.viewed ? 'grayscale(100%)' : 'none' // Apply grayscale filter if the stories have been viewed
                             }}>
                                 <img
-                                    src={avatar.src}
+                                    // src={avatar.src}
+                                    src={`/storage/${avatar.src}`}
                                     alt={avatar.alt}
                                     style={{
                                         borderRadius: '50%',

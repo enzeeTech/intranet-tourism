@@ -10,7 +10,7 @@ class ResourceController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => Resource::queryable()->paginate(),
+            'data' => $this->shouldPaginate(Resource::queryable()),
         ]);
     }
 

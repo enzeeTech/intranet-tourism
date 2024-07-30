@@ -6,7 +6,7 @@ import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
 import deactivateButton from '../../../../public/assets/activatedButton.png';
 import activateButton from '../../../../public/assets/deactivatedButton.png';
 import phoneActiveIcon from '../../../../public/assets/phoneActiveIcon.png';
-import whatsappActiveIcon from '../../../../public/assets/whatsappActiveIcon.png';
+import whatsappActiveIcon from '../../../../public/assets/whatsappGreen.png';
 import { InertiaLink } from '@inertiajs/inertia-react';
 
 const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
@@ -55,13 +55,14 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
 
   const isPhoneNumberAvailable = () => phoneNo != null;
   const isWorkNumberAvailable = () => workNo != null;
+  const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/full/${imageUrl}`;
 
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
       <div className="card-header">
         <a href={`/user/${id}`}>
         <img 
-          src={imageUrl ? `/avatar/${imageUrl}` : '/assets/dummyStaffPlaceHolder.jpg'} 
+          src={source} 
           alt={name} 
           className="staff-member-image" 
         />
@@ -90,17 +91,17 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
           <img src={isDeactivated ? callIcon : isWorkNumberAvailable() ? phoneActiveIcon : callIcon} alt="Call" />
         </button>
         <button className={`whatsapp-button ${isPhoneNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleWhatsApp} disabled={isDeactivated || !isPhoneNumberAvailable()}>
-          <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" />
+          <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" style={{height:'23px', width:'23px', marginBottom: '2px'}} />
         </button>
       </div>
       {isCallPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
           <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
             <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
-            <p style={{ fontSize: '25px', marginTop: '15px', marginBottom: '5px' }}>
+            <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
               <br />
-              Work No: +603-8891 {workNo}
+              Office No: +603-8891 {workNo}
             </p>
           </div>
         </div>
@@ -108,12 +109,16 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
       {isWhatsAppPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
           <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
-            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" />
-            <p style={{ fontSize: '20px', marginBottom: '15px', fontWeight: 'bold', marginTop: '10px' }}>Redirect to WhatsApp Web?</p>
-            <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
-            <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
+            {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
+            <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>
+            <div className="flex justify-center space-x-4 text-sm">
+              <button className="no-button hover:bg-gray-400 hover:text-white" onClick={closeWhatsAppPopup}>No</button>
+              <button className="yes-button hover:bg-blue-700" onClick={redirectToWhatsAppWeb}>Yes</button>
+            </div>
           </div>
         </div>
+      
+      
       )}
     </div>
   );

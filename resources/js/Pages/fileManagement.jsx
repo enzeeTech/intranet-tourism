@@ -10,16 +10,21 @@ import Example from '@/Layouts/DashboardLayoutNew';
 
 
 
-const FileManage = () => {
+const FileManage = ({requiredData, onFileUploaded}) => {
 
+    const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
 
   return (
     <Example>
         <main className="xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <div>
-                <SearchFile />
-                <FileTable />
+                <SearchFile onSearch={setSearchTerm} requiredData={requiredData} onFileUploaded={onFileUploaded} />
+                <FileTable searchTerm={searchTerm} />
                 </div>
             </div>
         </main>

@@ -8,6 +8,10 @@ class StaffDirectoryController extends Controller
 {
     public function index()
     {
-        return Inertia::render('StaffDirectory', ['id' => auth()->id()]);
+        $departmentId = request('departmentId');
+        return Inertia::render('StaffDirectory', [
+            'id' => auth()->id(),
+            'departmentId' => $departmentId
+        ]);
     }
 }

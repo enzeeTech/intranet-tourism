@@ -1,0 +1,7 @@
+.rounded-image {
+    border-radius: 50%; /* Makes the image round */
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    object-fit: cover; /* Ensures the image covers the container without stretching */
+  }
+  

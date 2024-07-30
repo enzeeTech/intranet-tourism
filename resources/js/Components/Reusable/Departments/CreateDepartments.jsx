@@ -36,7 +36,7 @@ function UserInfo({ name, role, src }) {
       <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
-        <p className="mt-2.5 text-sm">{role}</p>
+        <p className="-mt-1 text-sm">{role}</p>
       </div>
     </div>
   );
@@ -104,7 +104,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder="Department name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
-          className="self-stretch mt-7 text-3xl font-extrabold text-neutral-800 border-transparent"
+          className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
         />
         <UserInfo name={user.name} role={user.role} src={user.src} />
         <input
@@ -118,7 +118,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-7 py-4 font-bold text-white bg-red-500 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -136,7 +136,7 @@ export default function CreateDepartments({ onCancel, onCreate }) {
 
   return (
     <Card
-      title="Tourism Malaysia"
+      title="Create Department"
       imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
       imgAlt="Departments Logo"
       user={user}

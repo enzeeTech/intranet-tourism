@@ -158,19 +158,19 @@ export default function Pautan() {
                 isTop ? 'rounded-t-lg' : isBottom ? 'rounded-b-lg' : ''
               }`}
             >
-              <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full">
+              <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full px-4">
                 <img
                   src={`https://icons.duckduckgo.com/ip2/${new URL(refer.url).hostname}.ico`}
                   alt={`${refer.label} favicon`}
                   className="h-6 w-6 flex-none"
                 />
-                <div className="min-w-0 flex-auto self-center">
-                  <p className="text-sm font-semibold leading-5 text-gray-900">
+                <div className="min-w-0 flex-auto self-center pl-2">
+                  <p className="text-xl font-semibold leading-5 text-gray-900">
                     {refer.label}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-x-2">
-                  <ChevronRightIcon className="h-4 w-4 flex-none text-gray-400" aria-hidden="true" />
+                  <ChevronRightIcon className="h-6 w-6 flex-none text-gray-400" aria-hidden="true" />
                 </div>
               </a>
             </li>

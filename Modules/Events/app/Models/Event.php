@@ -5,6 +5,7 @@ namespace Modules\Events\Models;
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
@@ -33,7 +34,7 @@ class Event extends Model implements AuditableContract
                 [
                     'title' => ['string', 'required'],
                     'venue' => ['string', 'required'],
-                    'url' => ['string'],
+                    'url' => ['nullable', 'string'],
                     'description' => ['string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
@@ -46,7 +47,7 @@ class Event extends Model implements AuditableContract
                     'title' => ['string', 'required'],
                     'venue' => ['string', 'required'],
                     'description' => ['string'],
-                    'url' => ['string'],
+                    'url' => ['nullable', 'string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
                     'end_at' => ['string', 'required'],
@@ -58,8 +59,15 @@ class Event extends Model implements AuditableContract
         return $rules[$scenario];
     }
 
-    public function attendances()
-    {
-        return $this->hasMany(EventAttendance::class);
-    }
+    // TODO: missing relations
+    // public function attendances()
+    // {
+    //     return $this->hasManyThrough(User::class, EventInvitation::class);
+    //     return $this->hasManyThrough(User::class, EventAttendance::class);
+    // }
+
+    // public function attendance()
+    // {
+    //     return $this->hasOneThrough(User::class, EventAttendance::class)->latestOfMany();
+    // }
 }

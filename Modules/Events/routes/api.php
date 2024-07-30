@@ -31,4 +31,6 @@ Route::apiResources([
     'tasks' => TaskController::class,
     'task_items' => TaskItemController::class,
 
+], [
+    'middleware' => 'auth:sanctum'
 ]);

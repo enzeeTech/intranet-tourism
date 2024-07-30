@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-import Invite from '../DepartmentCom/invPopup'; // Adjust the import path as needed
+import React, { useState, useEffect, useRef } from 'react';
+import Invite from '../DepartmentCom/invPopup'; 
+import { useCsrf } from "@/composables";
+import { set } from 'date-fns';
 
 function Avatar({ src, alt, className, status }) {
+  const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
   return (
     <div className="relative items-center justify-end h-16">
-      <img loading="lazy" src={src} alt={alt} className={className} />
+      <img loading="lazy" src={imageUrl} alt={alt} className={className} />
       {status === 1 && (
         <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-1"></div>
       )}
@@ -16,10 +18,13 @@ function Avatar({ src, alt, className, status }) {
   );
 }
 
-function UserInfo({ name, role }) {
+function UserInfo({ name, role, isActive }) {
   return (
     <div className="flex flex-col ml-2">
-      <h2 className="text-xl font-bold">{name}</h2>
+      <div className="flex items-center gap-3">
+        <h2 className="text-xl font-bold">{name} </h2>
+        {isActive && <span className="font-semibold text-red-500 text-l">(Deactivated)</span>}
+      </div>
       <p className="text-xs font-medium">{role}</p>
     </div>
   );
@@ -27,21 +32,91 @@ function UserInfo({ name, role }) {
 
 function UserCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
+    <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
       <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
   );
 }
 
-function MemberCard({ src, alt, name, role, status }) {
+const PopupMenu = ({ closePopup, onRemove, onAssign }) => (
+  <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
+    <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
+      <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" /> 
+      Assign as Admin
+    </button>
+    <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-xl">
+      <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" /> 
+      Remove
+    </button>
+  </div>
+  // <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+  //   <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
+  //     <h2 className="mb-4 text-xl font-bold text-center">Delete member?</h2>
+  //     <div className="flex justify-center space-x-4">
+  //       <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={closePopup}>
+  //         No
+  //       </button>
+  //       <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={onRemove}>
+  //         Yes
+  //       </button>
+  //     </div>
+  //   </div>
+  // </div>
+);
+
+
+const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+  const popupRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const handleDotClick = () => {
+    if (activePopupId === id) {
+      closePopup();
+    } else {
+      setActivePopupId(id);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        closePopup();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [popupRef, closePopup]);
+
   return (
-    <div className="flex text-neutral-800 hover:bg-blue-100 rounded-2xl align-center p-2">
-      <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
-      <UserInfo name={name} role={role} />
+    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center">
+      <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
+      <UserInfo name={name} role={title} isActive={isActive} />
+      <div className="ml-auto">
+        <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
+          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-13" />
+        </button>
+        {activePopupId === id && (
+          <div ref={popupRef}>
+            <PopupMenu
+              onRemove={() => onRemove(employment_post_id)}
+              onAssign={() => onAssign(employment_post_id)}
+              closePopup={closePopup}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 function DpMembers() {
   const [searchInput, setSearchInput] = useState('');
@@ -49,43 +124,49 @@ function DpMembers() {
   const [members, setMembers] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [showInvite, setShowInvite] = useState(false);
+  const [activePopupId, setActivePopupId] = useState(null);
+  const csrfToken = useCsrf();
+
+  const getDepartmentIdFromQuery = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('departmentId');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const options = {
-        method: 'GET',
-        headers: { Accept: 'application/json' },
-      };
-  
+      const departmentId = getDepartmentIdFromQuery();
+      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+
       try {
-        const response = await fetch('/api/crud/employment_posts', options);
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-  
+        
         const fetchedMembers = data.members || [];
-        const fetchedAdmins = data.admins || [];
-  
+        
         setMembers(fetchedMembers);
-        setAdmins(fetchedAdmins);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-  
+
     fetchData();
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-
-  const handleSearch = () => {
+  useEffect(() => {
     const filteredMembers = members.filter((member) =>
       member.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setSearchResults(filteredMembers);
+  }, [searchInput, members]);
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
   };
 
   const handleInviteClick = () => {
@@ -96,102 +177,130 @@ function DpMembers() {
     setShowInvite(false);
   };
 
+  const handleAssign = (id) => {
+    console.log(`Assign file manager for member with id: ${id}`);
+    closePopup();
+  };
+
+  const handleRemove = (id) => {
+    handleDelete(id);
+  };
+
+  const handleDelete = async (id) => {
+    const url = `/api/crud/employment_posts/${id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      setMembers((prevMembers) => prevMembers.filter((member) => member.employment_post_id !== id));
+      setSearchResults((prevResults) => prevResults.filter((member) => member.employment_post_id !== id));
+    } catch (error) {
+      console.error('Error deleting member:', error);
+    }
+
+    closePopup();
+  };
+
+  const closePopup = () => {
+    setActivePopupId(null);
+  };
+
+  const handleNewMemberAdded = (newMember) => {
+    setMembers((prevMembers) => [...prevMembers, newMember]);
+  };
+
+  const handleAddMember = (newMemberData) => {
+    const newMember = {
+      user_id: newMemberData.user_id,
+      employment_post_id: newMemberData.employment_post_id,
+      image: newMemberData.profile?.image || '/assets/dummyStaffPlaceHolder.jpg',
+      name: newMemberData.profile?.bio || '',
+      title: newMemberData.employment_post?.title || '',
+      is_active: newMemberData.user?.is_active || false,
+    };
+  
+    handleNewMemberAdded(newMember);
+  };
+
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    <section className="flex flex-col p-6 rounded-3xl shadow-sm max-w-[870px] h-auto max-md:px-5">
-      <style>
-        {`
-          .relative {
-            position: relative;
-            display: inline-block;
-          }
-
-          .absolute {
-            position: absolute;
-          }
-
-          .bottom-0 {
-            bottom: 0;
-          }
-
-          .right-0 {
-            right: 0;
-          }
-
-          .bg-red-500 {
-            background-color: #f56565;
-          }
-
-          .bg-green-500 {
-            background-color: #48bb78;
-          }
-
-          .rounded-full {
-            border-radius: 9999px;
-          }
-
-          .w-2 {
-            width: 0.5rem;
-          }
-
-          .h-2 {
-            height: 0.5rem;
-          }
-
-          .mb-2 {
-            margin-bottom: 20px;
-          }
-        `}
-      </style>
+    <section className="flex flex-col h-auto max-w-full p-6 shadow-sm rounded-3xl max-md:px-5">
       <div className="flex items-center gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
           value={searchInput}
           onChange={handleSearchChange}
-          className="flex-grow px-7 py-4 bg-gray-100 rounded-3xl border-gray-100 text-neutral-800 max-md:px-5 max-md:max-w-full"
-          style={{ width: '581px', color: 'rgba(128, 128, 128, 0.5)' }}
+          className="flex-grow px-4 py-2 bg-gray-100 border-gray-100 rounded-full text-md text-neutral-800 max-md:px-5 max-md:max-w-full"
           placeholder="Search Member"
         />
         <button
-          onClick={handleSearch}
-          className="justify-center items-center text-center whitespace-nowrap w-[96px] h-[45px] rounded-3xl max-md:px-5"
-          style={{ backgroundColor: 'rgb(72, 128, 255)' }}
+          onClick={handleSearchChange}
+          className="items-center justify-center px-4 py-2 text-center bg-[#4780FF] rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
         >
           Search
         </button>
         <button
           onClick={handleInviteClick}
-          className="justify-center items-center text-center whitespace-nowrap w-[122px] h-[45px] rounded-3xl max-md:px-2"
-          style={{ backgroundColor: 'rgb(255, 84, 54)' }}
+          className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
-          Invite
+          Add Member
         </button>
       </div>
 
-      <header className="flex gap-5 self-start mt-6 whitespace-nowrap">
+      <header className="flex self-start gap-5 mt-6 whitespace-nowrap">
         <h1 className="text-2xl font-bold text-black">Admin</h1>
-        <span className="text-lg font-semibold text-stone-300">{admins.length}</span>
+        <span className="text-xl mt-0.5 font-semibold text-stone-300">{admins.length}</span>
       </header>
 
       {admins.map((admin, index) => (
         <UserCard key={index} src={admin.src} alt={admin.alt} name={admin.name} role={admin.role} status={admin.status} />
       ))}
 
-      <div className="flex gap-5 justify-between mt-10 max-md:flex-wrap max-md:max-w-full">
-        <section className="flex flex-col w-[870px]">
-          <div className="flex gap-5 whitespace-nowrap">
-            <h2 className="grow text-2xl font-bold text-black">
+      <div className="flex justify-between gap-5 mt-10 max-md:flex-wrap max-md:max-w-full">
+        <section className="flex flex-col w-full">
+          <div className="flex gap-5 mb-2 whitespace-nowrap">
+            <h2 className="text-2xl font-bold text-black grow">
               Members
-              <span className="ml-4 text-lg font-semibold text-stone-300">{displayedMembers.length}</span>
+              <span className="ml-4 text-xl mt-0.5 font-semibold text-stone-300">{displayedMembers.length}</span>
             </h2>
           </div>
           {displayedMembers.map((member, index) => (
-            <MemberCard key={index} src={member.src} alt={member.alt} name={member.name} role={member.role} status={member.status} />
+            <MemberCard
+              key={index}
+              id={member.user_id}
+              employment_post_id={member.employment_post_id}
+              imageUrl={member.image}
+              name={member.name}
+              title={member.title}
+              isActive={member.is_active}
+              activePopupId={activePopupId}
+              setActivePopupId={setActivePopupId}
+              onAssign={handleAssign}
+              onRemove={handleRemove}
+              closePopup={closePopup}
+            />
           ))}
         </section>
       </div>
-      {showInvite && <Invite onClose={handleCloseInvite} />}
+      {showInvite && 
+        <Invite 
+          isAddMemberPopupOpen={showInvite}
+          setIsAddMemberPopupOpen={setShowInvite}
+          departmentId={getDepartmentIdFromQuery()}
+          onNewMemberAdded={handleAddMember}
+        />
+      }
     </section>
   );
 }

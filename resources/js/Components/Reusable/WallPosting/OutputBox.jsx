@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePage } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
+import './index.css'
 
 function Avatar({ src, alt }) {
   return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -70,34 +71,83 @@ function FeedbackForm() {
   );
 }
 
-function OutputData({ polls, filterType, userId }) {
+function OutputData({ polls, filterType, filterId, userId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState({});
-
+  
   useEffect(() => {
-    fetch("/api/posts/posts?with[]=user&with[]=attachments", {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
+    async function fetchData() {
+      try {
+        const postsResponse = await fetch("/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities", {
+          method: "GET",
+        });
+        if (!postsResponse.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then((data) => {
-        const posts = data.data.data.map((post) => {
+        const postsData = await postsResponse.json();
+
+        const posts = postsData.data.data.map((post) => {
           post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
           return post;
         });
-        setPostData(posts);
-        setLoading(false);
-      })
-      .catch((error) => {
+
+        const postsWithUserProfiles = await Promise.all(posts.map(async (post) => {
+          const userProfileResponse = await fetch(`/api/users/users/${post.user_id}?with[]=profile`, {
+            method: "GET",
+          });
+          const userProfileData = await userProfileResponse.json();
+          post.userProfile = userProfileData.data; // Attach user profile to the post
+
+          // Fetch department names if post has accessibilities
+          if (Array.isArray(post.accessibilities) && post.accessibilities.length > 0) {
+            const departmentNames = await Promise.all(post.accessibilities.map(async (accessibility) => {
+              if (accessibility.accessable_type === accessibility.accessable_type) {
+                const departmentResponse = await fetch(`/api/department/departments/${accessibility.accessable_id}`);
+                const departmentData = await departmentResponse.json();
+                return departmentData.data.name;
+              }
+              return null;
+            }));
+            console.log("DD", departmentNames);
+            post.departmentNames = departmentNames.filter(name => name !== null).join(', '); // Combine department names
+          } else {
+            post.departmentNames = null;
+          }
+          
+          return post;
+        }));
+
+        setPostData(postsWithUserProfiles);
+      } catch (error) {
         console.error("Error fetching posts:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    }
+
+    fetchData();
   }, []);
+
+  // Filter posts based on accessable_type and accessable_id
+  let filteredPostData = postData.filter(post => post.type !== 'story');
+
+  if (filterType !== null && filterId !== null) {
+    filteredPostData = filteredPostData.filter((post) => {
+      if (Array.isArray(post.accessibilities) && post.accessibilities.length > 0) {
+        return post.accessibilities.some(accessibility => 
+          accessibility.accessable_type === filterType && accessibility.accessable_id == filterId
+        );
+      }
+      return false;
+    });
+  }
+  
+  const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
+
+  // Reverse the order of posts to display latest first
+  const reversedUserPosts = userId ? [...userPosts].reverse() : [];
+  const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...filteredPostData].reverse();
 
   const togglePopup = (index) => {
     setIsPopupOpen((prevState) => ({
@@ -114,18 +164,9 @@ function OutputData({ polls, filterType, userId }) {
     return <div>Loading...</div>;
   }
 
-  // Filter out posts with type 'story'
-  let filteredPostData = postData.filter(post => post.type !== 'story');
 
-  if (filterType !== null) {
-    filteredPostData = filteredPostData.filter((post) => post.type === filterType);
-  }
 
-    const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
-
-  // Reverse the order of posts to display latest first
-  const reversedUserPosts = userId ? [...userPosts].reverse() : [];
-  const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...filteredPostData].reverse();
+  console.log("RR", reversedFilteredPosts);
 
 
   return (
@@ -158,13 +199,23 @@ function OutputData({ polls, filterType, userId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    <img loading="lazy" src={post.user.profileImage ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px]" />
+                    <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                     </div>
                   </div>
-                  <img loading="lazy" src="assets/wallpost-dotbutton.svg" alt="Options" className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer -mt-2" onClick={() => togglePopup(index)} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                      {post.accessibilities?.map((accessibility, index) => (
+                        <span key={index}>
+                          {accessibility.accessable_type}{": "}
+                        </span>
+                      ))}
+                      {post.departmentNames ? post.departmentNames : post.type}
+                    </span>
+                    <img loading="lazy" src="/assets/wallpost-dotbutton.svg" alt="Options" className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" onClick={() => togglePopup(index)} />
+                  </div>
                 </div>
               </div>
               {isPopupOpen[index] && (
@@ -217,15 +268,22 @@ function OutputData({ polls, filterType, userId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    <img loading="lazy" src={post.user.profileImage ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px]" />
+                    <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1">{post.type}</span>
-                    <button className="shrink-0 self-start aspect-[3.85] w-[19px]" onClick={() => togglePopup(index)}>⋮</button>
+                    <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                      {post.accessibilities?.map((accessibility, index) => (
+                        <span key={index}>
+                          {accessibility.accessable_type}{": "}
+                        </span>
+                      ))}
+                      {post.departmentNames ? post.departmentNames : post.type}
+                    </span>
+                    <img loading="lazy" src="/assets/wallpost-dotbutton.svg" alt="Options" className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" onClick={() => togglePopup(index)} />
                   </div>
                 </div>
               </div>
