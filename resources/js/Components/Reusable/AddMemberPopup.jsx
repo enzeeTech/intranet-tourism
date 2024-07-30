@@ -7,10 +7,15 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState([]);
+    const [currentMembers, setCurrentMembers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(''); // New state for success message
     const csrfToken = useCsrf();
+
+    useEffect(() => {
+        fetchCurrentMembers();
+    }, [departmentId]);
 
     useEffect(() => {
         const debounceTimeout = setTimeout(() => {
@@ -23,6 +28,20 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         return () => clearTimeout(debounceTimeout);
     }, [searchTerm]);
+
+    const fetchCurrentMembers = async () => {
+        try {
+            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch: ${response.statusText}`);
+            }
+            const data = await response.json();
+            const fetchedMembers = data.members || [];
+            setCurrentMembers(fetchedMembers.map(member => member.user_id));
+        } catch (error) {
+            console.error('Error fetching current members:', error);
+        }
+    };
 
     const fetchAllSearchResults = async (query) => {
         setError('');
@@ -53,9 +72,16 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const handleSelectPerson = (person) => {
-        if (!selectedPeople.includes(person)) {
-            setSelectedPeople([...selectedPeople, person]);
+        if (currentMembers.includes(person.id)) {
+            setError('This user is already in the department.');
+            return;
         }
+        if (selectedPeople.find(p => p.id === person.id)) {
+            setError('This user is already selected.');
+            return;
+        }
+        setSelectedPeople([...selectedPeople, person]);
+        setError('');  
     };
 
     const handleDeselectPerson = (person) => {
@@ -142,7 +168,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
                     <div className="bg-white rounded-lg pt-7 w-[400px]">
-                        <h1 className="text-2xl font-bold mb-4 mx-4 text-neutral-800">Invite People</h1>
+                        <h1 className="mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
                         <input
                             type="text"
                             placeholder="Search people"
