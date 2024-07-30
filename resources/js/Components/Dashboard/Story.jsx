@@ -195,11 +195,12 @@ const StoryNew = ({ userId }) => {
             return updatedAvatars;
         });
     };
+    // console.log("LL", userData);
 
     const loggedInUserAvatar = {
         src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
-        name: userData.name || "User Name",
+        name: "Your Story",
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
 

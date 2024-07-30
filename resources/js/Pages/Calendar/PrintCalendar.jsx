@@ -1,21 +1,62 @@
 import React from 'react';
 import "./index.css";
 
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+};
+
+const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    });
+};
+
 
 const PrintCalendar = ({ events }) => {
+    console.log("GG", events);
     return (
         <div className="print-container">
-            <h1>Calendar Events</h1>
-            <ul>
-                {events.map(event => (
-                    <li key={event.id}>
-                        <h2>{event.title}</h2>
-                        <p><strong>Venue:</strong> {event.venue}</p>
-                        <p><strong>Start:</strong> {new Date(event.start).toLocaleString()}</p>
-                        <p><strong>End:</strong> {new Date(event.end).toLocaleString()}</p>
-                    </li>
-                ))}
-            </ul>
+            <img
+                    className="h-8 w-[70px] hidden lg:block"
+                    src="/assets/Jomla logo red.svg"
+                    alt="Jomla Logo"
+                />
+            <h1>Jomla! Events</h1>
+            <table className="events-table">
+                <thead>
+                    <tr>
+                        <th>DATE & TIME</th>
+                        <th>EVENT NAME</th>
+                        <th>VENUE</th>
+                        <th>CREATED BY</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {events.map(event => (
+                        <tr key={event.id}>
+                            <td className='w-56'>
+                                {/* {new Date(event.start).toLocaleDateString()} - {new Date(event.end).toLocaleDateString()}<br />
+                                {new Date(event.start).toLocaleTimeString()} - {new Date(event.end).toLocaleTimeString()} */}
+                                {formatDate(event.start)} - {formatDate(event.end)}<br />
+                                {formatTime(event.start)} - {formatTime(event.end)}
+                            </td>
+                            <td>{event.title}</td>
+                            <td>{event.venue}</td>
+                            <td>{event.userName}</td>
+                            <td>{event.url ? <a href={event.url}>{event.url}</a> : "N/A"}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

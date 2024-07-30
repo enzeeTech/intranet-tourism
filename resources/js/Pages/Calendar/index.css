@@ -1,56 +1,115 @@
-.popoverStyle {
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    width: 300px; /* Adjust width as needed */
+    border-radius: 8px; /* Rounded corners */
+  }
+  
+  .modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .modal-close-button:hover {
+    color: #ff5c5c; /* Change color on hover */
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .modal-submit-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-submit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Additional styles for the rest of the page */
+  .popoverStyle {
     z-index: 99999 !important;
-}
-
-a {
+  }
+  
+  a {
     color: black !important;
-}
-
-.fc-event-title {
+  }
+  
+  .fc-event-title {
     display: flex;
     align-items: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.event-title {
-    flex: 1; /* Ensures the span takes up the remaining space in the flex container */
+  }
+  
+  .event-title {
+    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.fc-print-pdf-button {
+  }
+  
+  .fc-print-pdf-button {
     background-image: url('/assets/PrintPDF.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    width: 24px; /* Adjust size as needed */
-    height: 24px; /* Adjust size as needed */
-    border: none; /* Remove default border */
-    cursor: pointer; /* Change cursor to pointer */
-}
-
-
-
-
-.fc .fc-button-primary {
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .fc .fc-button-primary {
     background-color: white;
     color: black;
-    border-color: white; 
-    border-radius: 15px; 
+    border-color: white;
+    border-radius: 15px;
     background-image: none;
-}
-
-.fc .fc-button-primary
-
-.input-no-outline:focus {
+  }
+  
+  .fc .fc-button-primary.input-no-outline:focus {
     outline: none !important;
-    /* box-shadow: none !important;  */
-}
-
-.fc-toolbar {
+  }
+  
+  .fc-toolbar {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -64,9 +123,9 @@ a {
   .fc-toolbar-title {
     cursor: pointer;
     position: relative;
-}
-
-.dropdown-menu {
+  }
+  
+  .dropdown-menu {
     display: none;
     position: absolute;
     top: 100%;
@@ -79,55 +138,97 @@ a {
     list-style-type: none;
     margin: 0;
     padding: 10px;
-}
-
-.dropdown-menu.visible {
-    display: block;
-}
-
+  }
   
-
-.custom-popover {
+  .dropdown-menu.visible {
+    display: block;
+  }
+  
+  .custom-popover {
     z-index: 99999 !important;
     width: auto;
-}
-
-/* .custom-popover .popover-header {
-    background-color: #4a90e2;
-    color: #fff;
-    font-weight: bold;
-    padding: 0px 10px 0px 10px;
-} */
-
-.custom-popover .popover-body {
+  }
+  
+  .custom-popover .popover-body {
     background-color: #FFC0CB;
     color: #333;
     border: 1px solid #ddd;
     padding: 0px 10px 0px 10px;
     border-radius: 10px;
-}
-
-.custom-popover .popover-arrow {
+  }
+  
+  .custom-popover .popover-arrow {
     display: none;
-}
-
-.custom-popover .event-title {
-    font-size: 1.5em; /* Adjust the size as needed */
+  }
+  
+  .custom-popover .event-title {
+    font-size: 1.5em;
     font-weight: bold;
-    margin-bottom: 10px; /* Optional: add some space below the title */
-}
-
-@media print {
+    margin-bottom: 10px;
+  }
+  
+  @media print {
     body * {
-        visibility: hidden;
+      visibility: hidden;
     }
-    .print-container, .print-container * {
-        visibility: visible;
+  
+    .print-container,
+    .print-container * {
+      visibility: visible;
     }
+  
     .print-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
     }
-}
+  }
+  
+  .print-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .print-container img {
+    display: block;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .events-table th,
+  .events-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .events-table th {
+    background-color: #f2f2f2;
+    color: black;
+    font-weight: bold;
+  }
+  
+  .events-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .events-table tr:hover {
+    background-color: #ddd;
+  }
+  
+  .events-table th,
+  .events-table td {
+    padding: 12px;
+  }
+  

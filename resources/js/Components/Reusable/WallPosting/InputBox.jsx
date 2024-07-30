@@ -6,7 +6,7 @@ import "../css/InputBox.css";
 import "../../../Pages/Calendar/index.css";
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, postType }) {
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showPeoplePopup, setShowPeoplePopup] = useState(false);
@@ -24,7 +24,7 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
         const formData = new FormData();
         formData.append("user_id", userId); // Use the userId prop here
         // formData.append('type', 'post');
-        formData.append("type", postType);
+        formData.append("type", "post");
         formData.append("visibility", "public");
         formData.append("content", inputValue);
         formData.append("tag", JSON.stringify(tags));
@@ -32,6 +32,11 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
         attachments.forEach((file, index) => {
             formData.append(`attachments[${index}]`, file);
         });
+
+        if (includeAccessibilities) {
+            formData.append("accessibilities[0][accessable_type]", filterType);
+            formData.append("accessibilities[0][accessable_id]", filterId);
+        }
 
         fetch("/api/posts/posts", {
             method: "POST",
@@ -176,15 +181,6 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
                 </button>
                     </div>
                 </div>
-                {/* <button onClick={handleClickSend} className="send-button">
-                    <div className="send-button-icon">
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                            alt=""
-                        />
-                    </div>
-                </button> */}
             </div>
             <TagInput tags={tags} setTags={setTags} />
             {showPollPopup && (

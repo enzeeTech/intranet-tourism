@@ -25,7 +25,7 @@ const Dashboard = () => {
           <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)]">
             <div className=" px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
               <StoryNew userId={id} />
-              <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
+              <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
               <Filter className="mr-10" />
               <div className="mb-20"></div>
               <OutputData polls={polls} filterType={null} />
