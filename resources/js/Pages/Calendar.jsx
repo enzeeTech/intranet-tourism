@@ -217,14 +217,14 @@ function Calendar() {
     return (
         <Example>
             <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
-                <h1 className="mb-2 font-sans text-4xl font-bold text-left">Calendar</h1>
-                <hr className="mx-auto" style={{ borderColor: '#E4E4E4', borderWidth: '2px' }} />
+                <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
+                <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
                 <div className="flex justify-center mt-3 mb-4">
 
-                    <div className="flex justify-center rounded-full" style={{ border: '2px solid #E4E4E4', width: '90%' }}>
-                        <div className="flex items-center">
-                            <span className="flex items-center justify-center p-2 bg-white rounded-l-full">
-                                <img src={searchIcon} alt="Search" className="w-8 h-8 ml-4" />
+                    <div className="flex justify-start rounded-full py-1 pl-6 my-2 " style={{ border: '2px solid #E4E4E4', width: '100%' }}>
+                        <div className="flex items-center justify-start">
+                            <span className="flex items-center justify-center bg-white rounded-l-full">
+                                <img src={searchIcon} alt="Search" className="w-6 h-6" />
                             </span>
                             <input
                                 type="search"
@@ -233,7 +233,7 @@ function Calendar() {
                                 aria-label="Search"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                style={{ outline: 'none', marginRight: '850px' }}
+                                // style={{ outline: 'none', marginRight: '850px' }}
                             />
                             {/* <button
                                 onClick={filterEvents}
@@ -244,12 +244,12 @@ function Calendar() {
                     </div>
                     <button
                         onClick={handlePrint}
-                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 rounded-full ml-3">
+                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 rounded-full ml-3 my-2">
                         <img src={printIcon} alt="Print" className="w-6 h-6" />
                     </button>
                 </div>
 
-                <div className='flex justify-end mb-3' >
+                <div className='flex justify-end mb-4' >
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full">
@@ -443,7 +443,7 @@ function Calendar() {
                             <label>
                             <input
                                 type="checkbox"
-                                className='mr-2'
+                                className='mx-2'
                                 name="includeUrl"
                                 checked={includeUrl}
                                 onChange={(e) => setIncludeUrl(e.target.checked)}
