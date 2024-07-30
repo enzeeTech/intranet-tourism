@@ -93,7 +93,7 @@ function ShareYourThoughts({ userId, onCreatePoll, postType }) {
 
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800">
-            <div className="input-box-container  flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 ">
+            <div className="input-box-container  flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full">
                 <div className="flex flex-col w-[875px] " >
                     <textarea
                         ref={textAreaRef}
