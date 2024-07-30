@@ -7,6 +7,7 @@ variables:
   DEPLOY_PASSWORD: "6D!S!Wf8Hz7qqyG"
   DEPLOY_PATH: "/var/www"
   REPO_URL: "https://github.com/wasabid3v/intranet-tourism.git"
+  TRIGGER_TOKEN: "glptt-10d63d0b72b82d1d999e5838e2bd324e0c62c6ef"  # Replace with your actual trigger token
 
 deploy:
   stage: deploy
@@ -30,5 +31,4 @@ deploy:
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart artisan-queue"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo systemctl restart artisan-reverb"
   only:
-    - master
-
+    - main
