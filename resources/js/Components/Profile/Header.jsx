@@ -176,10 +176,10 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         </div>
         <div className="flex flex-col self-start px-5 -mt-16 -ml-10 max-md:-ml-5 max-md:mt-5">
           <div className="flex items-center ml-48 max-md:ml-0">
-            <h1 className="text-3xl font-extrabold text-neutral-800 relative mt-4 max-md:text-2xl">{name}</h1>
-            <div className="text-lg ml-4 font-semibold text-neutral-800 text-opacity-50 mt-5 max-md:text-sm">{username}</div>
+            <h1 className="text-3xl font-extrabold text-neutral-800 relative mt-6 max-md:text-2xl">{name}</h1>
+            <div className="text-lg ml-4 font-semibold text-neutral-800 text-opacity-50 mt-3 max-md:text-md max-md:mt-1">{username}</div>
           </div>
-          <div className="mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-0">{status}</div>
+          <div className="mt-0 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-0 max-md:-mt-4">{status}</div>
         </div>
       </header>
       {selectedFile && !croppedImage && (
