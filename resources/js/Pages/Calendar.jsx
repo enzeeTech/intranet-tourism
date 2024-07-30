@@ -385,9 +385,14 @@ function Calendar() {
                 <div className='pb-10'></div>
                 {isModalOpen && (
                     <div className="modal-container">
-                    <button className="modal-close-button" onClick={closeModal}>
-                      X
-                    </button>
+                    <div className="flex flex-col items-center">
+                    <div className="flex justify-start items-center w-full">
+                        <h2 className="text-xl font-bold pb-4">Create New Event</h2>
+                        <button className="modal-close-button mt-2 pr-2" onClick={closeModal}>
+                        X
+                        </button>
+                    </div>
+                    </div>
                     <form onSubmit={handleSubmit}>
                       <input
                         type="text"
