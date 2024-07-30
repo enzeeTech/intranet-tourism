@@ -136,7 +136,7 @@ export default function Profile() {
 
     const closeSaveNotification = () => {
         setIsSaveNotificationOpen(false);
-        // window.location.reload();
+        window.location.reload();
     };
 
     const handleSaveNotification = () => {
@@ -179,7 +179,7 @@ export default function Profile() {
             FfData.append('name', formData.name); // Add name to the form data
 
             const [profileResponse, userResponse] = await Promise.all([
-                fetch(`/api/profile/profiles/${id}`, {
+                fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
                     body: FfData,
                     headers: {
@@ -191,21 +191,22 @@ export default function Profile() {
                 updateUsername(newFormData)
             ]);
 
-            const profileData = await profileResponse.json();
-            const userData = await userResponse.json();
+            const profileResponseData = await profileResponse.json();
+            const userResponseData = await userResponse.json();
 
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
                 setIsEditingBio(false);
                 openSaveNotification();
                 setTimeout(closeSaveNotification, 1200);
-                console.log('Data updated successfully:', profileData, userData);
+                console.log('Data updated successfully:', profileResponseData, userResponseData);
             } else {
-                console.error('Error updating data:', profileData, userData);
+                console.error('Error updating data:', profileResponseData, userResponseData);
             }
         } catch (error) {
             console.error('Error updating data:', error);
         }
+        window.location.reload();
     };
 
     const handleSaveDepartment1 = () => {
@@ -263,7 +264,7 @@ export default function Profile() {
             FfData.append('_method', 'PUT'); // Add _method to the form data
             FfData.append('name', formData.name); // Add name to the form data
     
-            const url = `/api/profile/profiles/${id}?with[]=user`;
+            const url = `/api/profile/profiles/${profileData.profile?.id}?with[]=user`;
     
             fetch(url, {
                 method: 'POST',
@@ -320,7 +321,7 @@ export default function Profile() {
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
                                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                    <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
+                                    <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
                                     <Filter className="mr-10" />
                                     <div className="mb-20"></div>
                                     <OutputData polls={polls} showUserPosts={true} userId={id} />
@@ -481,9 +482,3 @@ export default function Profile() {
         </Example>
     );
 }
-
-
-
-
-
-

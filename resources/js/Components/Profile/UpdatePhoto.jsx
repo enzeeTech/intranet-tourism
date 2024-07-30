@@ -1,17 +1,6 @@
 import React from 'react';
 import RequestSentMessage from './RequestAdmin';
 
-const PhotoButton = ({ type, text, onClick }) => {
-  const className = type === "primary"
-    ? "justify-center px-7 py-3 bg-blue-500 text-white rounded-2xl"
-    : "justify-center px-7 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400";
-
-  return (
-    <button className={className} onClick={onClick}>
-      {text}
-    </button>
-  );
-};
 
 function UpdatePhotoButton({ onClose }) {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);

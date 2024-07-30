@@ -1,11 +1,17 @@
 import * as React from "react";
+import { useState } from "react";
 
 function Popup({ title, onClose, onSave, onSelectFile }) {
+  const [fileNames, setFileNames] = useState([]);
+
   const handleClickImg = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
     fileInput.onchange = (event) => {
+      const files = Array.from(event.target.files);
+      setFileNames(files.map(file => file.name));
+
       if (onSelectFile) {
         onSelectFile(event); // Pass the event to the onSelectFile function
       } else {
@@ -33,21 +39,31 @@ function Popup({ title, onClose, onSave, onSelectFile }) {
               </div>
             </div>
           </div>
-          {/* <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d7986dce07599ceb2e5628dea9fdbbf7b0d6801dfeb283d90ffedce0217a1cf?"
-            className="shrink-0 w-5 aspect-square cursor-pointer" 
-            onClick={onClose}
-          /> */}
         </div>
         <div className="flex gap-2 self-end mt-3.5 mb-4 font-bold text-center">
-          <button 
+          <div
+            className="file-names-container flex flex-wrap gap-2"
+            style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            {fileNames.map((name, index) => (
+              <div
+                className="flex items-center px-2 py-1 bg-white rounded-lg shadow"
+                key={index}
+                style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+              >
+                <div className="file-name text-xs truncate">
+                  {name}
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
             className="bg-white text-sm text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full"
             onClick={onClose}
           >
             Cancel
           </button>
-          <div 
+          <div
             className="flex flex-col justify-center text-xs text-white cursor-pointer"
             onClick={onSave}
           >

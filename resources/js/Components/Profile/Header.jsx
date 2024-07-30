@@ -151,7 +151,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       }
     } catch (error) {
       console.error('Error uploading profile photo:', error);
-      // window.location.reload();
+      window.location.reload();
     }
   };
   
