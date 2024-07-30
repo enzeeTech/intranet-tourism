@@ -489,8 +489,8 @@ function Calendar() {
                         <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
                             <h2 className="text-xl font-bold mb-4">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
-                                <div className="mb-4">
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="startDate">Start Date</label>
+                                <div className="mb-2">
+                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="startDate">Start Date</label>
                                     <input
                                         type="date"
                                         name="startDate"
@@ -502,7 +502,7 @@ function Calendar() {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="endDate">End Date</label>
+                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="endDate">End Date</label>
                                     <input
                                         type="date"
                                         name="endDate"
@@ -517,13 +517,13 @@ function Calendar() {
                                     <button
                                         type="button"
                                         onClick={closePrintModal}
-                                        className="mr-2 px-4 py-2 bg-gray-500 text-white rounded"
+                                        className="mr-2 px-4 py-2 border-2 border-gray-500 text-gray rounded-full hover:bg-gray-500 hover:text-white"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded"
+                                        className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700"
                                     >
                                         Print
                                     </button>
