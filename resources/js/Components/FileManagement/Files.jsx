@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PopupContent from '../Reusable/PopupContent';
 import Pagination from '../Paginator';
 import { useCsrf } from "@/composables";
@@ -10,7 +10,10 @@ const FileTable = ({ searchTerm }) => {
   const itemsPerPage = 10;
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingName, setEditingName] = useState("");
   const csrfToken = useCsrf();
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -44,6 +47,19 @@ const FileTable = ({ searchTerm }) => {
     fetchFiles();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setEditingIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -69,12 +85,13 @@ const FileTable = ({ searchTerm }) => {
     const updatedFiles = files.map((file, i) => {
       if (i === index) {
         const metadata = file.metadata || {};
-        metadata.name = newName;
+        metadata.original_name = newName;
         return { ...file, metadata: JSON.stringify(metadata) };
       }
       return file;
     });
     setFiles(updatedFiles);
+    setEditingIndex(null); // Reset editing state
   };
 
   const handleDelete = async (fileId, index) => {
@@ -102,6 +119,15 @@ const FileTable = ({ searchTerm }) => {
     }
   };
 
+  const startEditing = (index, currentName) => {
+    setEditingIndex(index);
+    setEditingName(currentName);
+  };
+
+  const saveEditing = (index) => {
+    handleRename(index, editingName);
+  };
+
   return (
     <div className="w-full px-4 overflow-visible sm:px-0 lg:px-0">
       <div className="flow-root mt-8">
@@ -119,10 +145,34 @@ const FileTable = ({ searchTerm }) => {
               <tbody className="text-center divide-y-reverse rounded-full divide-neutral-300">
                 {currentItems.map((item, index) => {
                   const metadata = item.metadata || {};
+                  const isEditing = editingIndex === indexOfFirstItem + index;
+
                   return (
                     <tr key={index}>
                       <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
-                        {metadata.original_name || 'Unknown'}
+                        {isEditing ? (
+                          <div ref={inputRef} className="flex items-center">
+                            <input
+                              type="text"
+                              value={editingName}
+                              onChange={(e) => setEditingName(e.target.value)}
+                              className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                            />
+                            <button
+                              onClick={() => saveEditing(indexOfFirstItem + index)}
+                              className="ml-2 text-sm text-blue-500"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        ) : (
+                          <div
+                            className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80"
+                            onDoubleClick={() => startEditing(indexOfFirstItem + index, metadata.original_name)}
+                          >
+                            {metadata.original_name || 'Unknown'}
+                          </div>
+                        )}
                       </td>
                       <td className="px-3 py-4 overflow-hidden text-sm border-b border-r border-neutral-300 whitespace-nowrap text-neutral-800 text-ellipsis">
                         {item.uploader || 'Unknown'} {/* Display 'Unknown' if uploader is not provided */}
@@ -134,7 +184,7 @@ const FileTable = ({ searchTerm }) => {
                         <PopupContent
                           name={metadata.original_name || 'Unknown'}
                           file={item} // Pass the current file directly
-                          onRename={(newName) => handleRename(indexOfFirstItem + index, newName)}
+                          onRename={() => startEditing(indexOfFirstItem + index, metadata.original_name)} // Enable renaming via popup
                           onDelete={() => handleDelete(item.id, indexOfFirstItem + index)} // Pass file ID and index
                         />
                       </td>
