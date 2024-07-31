@@ -12,7 +12,7 @@ jobs:
     env:
       DEPLOY_SERVER: "52.237.96.127"
       DEPLOY_USER: "jomla-admin"
-      DEPLOY_PATH: "/var/www"
+      DEPLOY_PATH: "/var/www/intranet-tourism"
 
     steps:
     - name: Checkout code
@@ -38,10 +38,30 @@ jobs:
     - name: Deploy application
       run: |
         ssh ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_SERVER }} << EOF
-          cd ${{ env.DEPLOY_PATH }}/intranet-tourism
-          git reset --hard
-          git clean -df
-          git pull
-          sh ${{ env.DEPLOY_PATH }}/intranet-tourism/update.sh
+          sudo chown -R ${{ env.DEPLOY_USER }}:${{ env.DEPLOY_USER }} ${{ env.DEPLOY_PATH }}
+          cd ${{ env.DEPLOY_PATH }}
+          if [ ! -d ".git" ]; then
+            git clone <your-repository-url> .
+          else
+            git reset --hard
+            git clean -df
+            git pull
+          fi
+          if [ ! -f "update.sh" ]; then
+            echo "update.sh script not found"
+            exit 1
+          fi
+          sh update.sh
+          exit
+        EOF
+
+    - name: Verify deployment
+      run: |
+        ssh ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_SERVER }} << EOF
+          cd ${{ env.DEPLOY_PATH }}
+          if [ ! -f "vendor/autoload.php" ]; then
+            echo "vendor/autoload.php is missing"
+            exit 1
+          fi
           exit
         EOF
