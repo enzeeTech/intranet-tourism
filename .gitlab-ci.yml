@@ -14,8 +14,6 @@ deploy:
   before_script:
     - 'which sshpass || (apt-get update -y && apt-get install sshpass -y)'
   script:
-    - apt-get update -y
-    - apt-get install sshpass -y
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH && sudo rm -rf intranet-tourism"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo git clone https://github.com/wasabid3v/intranet-tourism.git $DEPLOY_PATH/intranet-tourism"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo cp /home/jomla-admin/workspace/intranet-tourism/.env $DEPLOY_PATH/intranet-tourism/.env"
