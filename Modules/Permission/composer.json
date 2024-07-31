@@ -1,0 +1,28 @@
+{
+    "name": "rekamy/permission",
+    "description": "",
+    "authors": [
+        {
+            "name": "Zahrin Azam",
+            "email": "zahrin.azam@rekamy.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": []
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Permission\\": "app",
+            "Modules\\Permission\\Database\\Factories\\": "database/factories/",
+            "Modules\\Permission\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Permission\\Tests\\": "tests/"
+        }
+    }
+}
