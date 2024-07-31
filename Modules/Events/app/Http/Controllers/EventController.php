@@ -4,13 +4,14 @@ namespace Modules\Events\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Events\Models\Event;
+use Modules\Events\Models\EventAttendance;
 
 class EventController extends Controller
 {
     public function index()
     {
         return response()->json([
-            'data' => Event::queryable()->paginate(),
+            'data' => $this->shouldpaginate(Event::queryable()),
         ]);
     }
 
@@ -33,6 +34,16 @@ class EventController extends Controller
     {
         $validated = request()->validate(...Event::rules('update'));
         $event->update($validated);
+
+        return response()->noContent();
+    }
+
+    public function invite(Event $event)
+    {
+        abort_unless(auth()->id() == $event->created_by, 403, 'You are not allowed to invite people to this event.');
+        $validated = request()->validate(...Event::rules('invite'));
+        $attendances = collect(collect($validated)->get('users'))->map(fn ($item) => ['user_id' => $item['id']])->toArray();
+        $event->attendances()->createMany($attendances);
 
         return response()->noContent();
     }

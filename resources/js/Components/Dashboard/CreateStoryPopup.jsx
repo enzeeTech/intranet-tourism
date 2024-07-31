@@ -157,6 +157,50 @@
 
 
 
+// import React from 'react';
+// import Modal from 'react-modal';
+
+// const Popup = ({ isOpen, onClose, children }) => {
+//     return (
+//         <Modal isOpen={isOpen} onRequestClose={onClose} ariaHideApp={false} style={{
+//             content: {
+//                 top: '50%',
+//                 left: '50%',
+//                 right: 'auto',
+//                 bottom: 'auto',
+//                 marginRight: '-50%',
+//                 transform: 'translate(-50%, -50%)',
+//                 width: '80%',
+//                 maxWidth: '500px',
+//                 padding: '20px',
+//                 background: '#fff',
+//                 borderRadius: '10px',
+//                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+//             },
+//             overlay: {
+//                 backgroundColor: 'rgba(0, 0, 0, 0.75)',
+//             },
+//         }}>
+//             <button onClick={onClose} style={{
+//                 position: 'absolute',
+//                 top: '10px',
+//                 right: '10px',
+//                 background: 'none',
+//                 border: 'none',
+//                 fontSize: '16px',
+//                 cursor: 'pointer',
+//             }}>X</button>
+//             {children}
+//         </Modal>
+//     );
+// };
+
+// export default Popup;
+
+
+
+
+
 import React from 'react';
 import Modal from 'react-modal';
 
@@ -171,8 +215,8 @@ const Popup = ({ isOpen, onClose, children }) => {
                 marginRight: '-50%',
                 transform: 'translate(-50%, -50%)',
                 width: '80%',
-                maxWidth: '500px',
-                padding: '20px',
+                maxWidth: '800px',
+                padding: '0',
                 background: '#fff',
                 borderRadius: '10px',
                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
@@ -196,3 +240,4 @@ const Popup = ({ isOpen, onClose, children }) => {
 };
 
 export default Popup;
+

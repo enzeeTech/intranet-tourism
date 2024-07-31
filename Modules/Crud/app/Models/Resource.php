@@ -30,6 +30,10 @@ class Resource extends Model implements AuditableContract
         'metadata',
     ];
 
+    protected $casts = [
+        'metadata' => 'array'
+    ];
+
     public static function rules($scenario = 'create')
     {
         $rules = [
@@ -86,5 +90,22 @@ class Resource extends Model implements AuditableContract
     public function scopeSearchByTag($query, $tags)
     {
         $query->whereRelation('attachable', 'tag', 'like', '%' . $tags . '%');
+    }
+
+    public function scopeAccessFor($query, $for)
+    {
+        $query->where('attachable_type', $for);
+    }
+
+    public function scopeAccessableBy($query, $accessableType, $accessableId)
+    {
+        $query->whereHas('attachable', function ($query) use ($accessableType, $accessableId) {
+            $query->whereHas('accessibilities', function ($query) use ($accessableType, $accessableId) {
+                $query
+                    ->where('accessable_type', $accessableType)
+                    ->where('accessable_id', $accessableId);
+                ;
+            });
+        });
     }
 }

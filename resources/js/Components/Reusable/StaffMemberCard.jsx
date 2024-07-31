@@ -1,21 +1,27 @@
 import React, { useState, useRef } from 'react';
-import './css/StaffMemberCard.css'; 
-import callIcon from '../../../../public/assets/callIcon.png'; 
+import './css/StaffMemberCard.css';
+import callIcon from '../../../../public/assets/callIcon.png';
 import whatsappIcon from '../../../../public/assets/whatsappIcon.png';
 import threeDotsIcon from '../../../../public/assets/threeDotButton.png';
-import deactivateButton from '../../../../public/assets/deactivateButton.png';
-import activateButton from '../../../../public/assets/deactivateButton.png';
+import deactivateButton from '../../../../public/assets/activatedButton.png';
+import activateButton from '../../../../public/assets/deactivatedButton.png';
+import phoneActiveIcon from '../../../../public/assets/phoneActiveIcon.png';
+import whatsappActiveIcon from '../../../../public/assets/whatsappGreen.png';
+import { InertiaLink } from '@inertiajs/inertia-react';
 
-const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
+const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, isDeactivated, onDeactivateClick, onActivateClick, isPopupOpen, setActivePopup, closePopup }) => {
   const threeDotButtonRef = useRef(null);
   const [isCallPopupOpen, setIsCallPopupOpen] = useState(false);
   const [isWhatsAppPopupOpen, setIsWhatsAppPopupOpen] = useState(false);
 
   const handleCall = () => {
-    if (!phoneNo || isDeactivated) return;
+    if (!workNo || isDeactivated) return;
+  
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const fullNumber = `+6038891${workNo}`;
+  
     if (isMobile) {
-      window.location.href = `tel:${phoneNo}`;
+      window.location.href = `tel:${fullNumber}`;
     } else {
       setIsCallPopupOpen(true);
     }
@@ -47,73 +53,72 @@ const StaffMemberCard = ({ name, role, status, imageUrl, phoneNo, isDeactivated,
     };
   };
 
+  const isPhoneNumberAvailable = () => phoneNo != null;
+  const isWorkNumberAvailable = () => workNo != null;
+  const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/full/${imageUrl}`;
+
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
       <div className="card-header">
-        <img src={imageUrl} alt={name} className="staff-member-image" />
-        <button 
-          className="three-dot-button" 
+        <a href={`/user/${id}`}>
+        <img 
+          src={source} 
+          alt={name} 
+          className="staff-member-image" 
+        />
+        </a>
+        <button
+          className="status-button"
           onClick={() => {
-            if (isPopupOpen) {
-              closePopup();
-            } else {
-              setActivePopup();
-            }
-          }}
-          ref={threeDotButtonRef}
-        >
-          <img style={{ width: '40px' }} src={threeDotsIcon} alt="Three dots" />
-        </button>
-      </div>
-      <div className="card-body">
-        <h3 className="staff-member-name">{name}</h3>
-        <p className="staff-member-role">{role}</p>
-        <p className={`staff-member-status ${status.toLowerCase()}`}>{status}</p>
-      </div>
-      <div className="card-footer">
-        <button className="call-button" onClick={handleCall} disabled={isDeactivated}>
-          <img style={{ width: '20px', height: '20px' }} src={callIcon} alt="Call" />
-        </button>
-        <button className="whatsapp-button" onClick={handleWhatsApp} disabled={isDeactivated}>
-          <img style={{ width: '20px', height: '20px' }} src={whatsappIcon} alt="WhatsApp" />
-        </button>
-      </div>
-      {isPopupOpen && (
-        <button 
-          id={`staff-popup-${name}`} 
-          onClick={() => {
-            closePopup();
             if (isDeactivated) {
               onActivateClick();
             } else {
               onDeactivateClick();
             }
-          }} 
-          className="staff-member-popup"
-          style={{
-            top: `${getPopupPosition().top}px`, 
-            left: `${getPopupPosition().left}px`,
           }}
+          ref={threeDotButtonRef}
         >
-          <img src={isDeactivated ? activateButton : deactivateButton} alt={name} className="staff-member-popup-image" />
-          <p className="staff-member-popup-text">{isDeactivated ? 'Activate' : 'Deactivate'}</p>
+          <img style={{ width: '40px' }} src={isDeactivated ? activateButton : deactivateButton} alt="Indicator Button" />
         </button>
-      )}
+      </div>
+      <div className="card-body">
+        <h3 className="staff-member-name">{name}</h3>
+        <p className="staff-member-role">{role}</p>
+        <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p>
+      </div>
+      <div className="card-footer">
+        <button className={`call-button ${isWorkNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleCall} disabled={isDeactivated || !isWorkNumberAvailable()}>
+          <img src={isDeactivated ? callIcon : isWorkNumberAvailable() ? phoneActiveIcon : callIcon} alt="Call" />
+        </button>
+        <button className={`whatsapp-button ${isPhoneNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleWhatsApp} disabled={isDeactivated || !isPhoneNumberAvailable()}>
+          <img src={isDeactivated ? whatsappIcon : isPhoneNumberAvailable() ? whatsappActiveIcon : whatsappIcon} alt="WhatsApp" style={{height:'23px', width:'23px', marginBottom: '2px'}} />
+        </button>
+      </div>
       {isCallPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
-          <div className="popup" onClick={(e) => e.stopPropagation()}>
-            <p style={{ fontSize: '25px' }}>Call is available only on mobile.</p>
+          <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
+            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
+            <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
+              Call is available only on mobile.
+              <br />
+              Office No: +603-8891 {workNo}
+            </p>
           </div>
         </div>
       )}
       {isWhatsAppPopupOpen && (
         <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
-          <div className="popup" onClick={(e) => e.stopPropagation()}>
-            <p style={{ fontSize: '20px', marginBottom: '15px', fontWeight: 'bold' }}>Redirect to WhatsApp Web?</p>
-            <button className="yes-button" onClick={redirectToWhatsAppWeb}>Yes</button>
-            <button className="no-button" onClick={closeWhatsAppPopup}>No</button>
+          <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
+            {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
+            <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>
+            <div className="flex justify-center space-x-4 text-sm">
+              <button className="no-button hover:bg-gray-400 hover:text-white" onClick={closeWhatsAppPopup}>No</button>
+              <button className="yes-button hover:bg-blue-700" onClick={redirectToWhatsAppWeb}>Yes</button>
+            </div>
           </div>
         </div>
+      
+      
       )}
     </div>
   );

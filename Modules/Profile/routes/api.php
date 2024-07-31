@@ -24,12 +24,13 @@ use Modules\Profile\Http\Controllers\ProfileController;
 //     Route::apiResource('crud', CrudController::class)->names('crud');
 // });
 
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::apiResources([
 
-Route::apiResources([
+        'profiles' => ProfileController::class,
+        'invitations' => InvitationController::class,
 
-    'profiles' => ProfileController::class,
-    'invitations' => InvitationController::class,
-
-]);
+    ]);
+});
 
 // require_once 'crud.php';

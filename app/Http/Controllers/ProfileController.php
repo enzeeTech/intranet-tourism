@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -17,5 +18,12 @@ class ProfileController extends Controller
     {
         // dd(auth()->id());
         return Inertia::render('Profile', ['id' => auth()->id()]); // Assuming 'Profile' is the name of your profile view
+    }
+
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return Inertia::render('UserDetail', ['user' => $user, 'id' => auth()->id()]);
     }
 }

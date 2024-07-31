@@ -30,6 +30,7 @@ if (!function_exists('uploadFile')) {
         $fileRef['extension'] = strtolower($uploadedFile->extension() ?? $uploadedFile->clientExtension());
         $fileRef['mime_type'] = $uploadedFile->getMimeType();
         $fileRef['filesize'] = $uploadedFile->getSize();
+        $fileRef['original_name'] = $uploadedFile->getClientOriginalName();
 
         // dd($fileRef);
         $whitelistExtensionList = collect($whitelistExtension)->map(fn ($ext) => strtoupper($ext))->join(' / ');

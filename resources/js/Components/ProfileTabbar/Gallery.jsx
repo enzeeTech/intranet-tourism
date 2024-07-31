@@ -10,7 +10,7 @@ const ImageComponent = ({ src, alt, className }) => (
   />
 );
 
-const ImageProfile = ({ selectedItem }) => {
+const ImageProfile = ({ selectedItem, userId }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -19,9 +19,12 @@ const ImageProfile = ({ selectedItem }) => {
       .then((data) => {
         const imagePaths = data.data.data
           .filter((item) => {
-            // Check if the item is an image, you can adjust the condition based on your API response
+            // Check if the item is an image and belongs to the specified user
             const fileExtension = item.path.split('.').pop().toLowerCase();
-            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+            return (
+              ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension) &&
+              item.user_id === userId
+            );
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
@@ -31,7 +34,7 @@ const ImageProfile = ({ selectedItem }) => {
         setImages(imagePaths);
       })
       .catch((error) => console.error("Error fetching images:", error));
-  }, []);
+  }, [userId]);
 
   // Filter images based on selectedItem
   const filteredImages = selectedItem === "All" ? images : images.filter((image) => image.category === selectedItem);
@@ -44,7 +47,7 @@ const ImageProfile = ({ selectedItem }) => {
         </h1>
         <hr className="underline" />
       </header>
-      <section className="mt-8 max-md:max-w-full">
+      <section className="mt-8 max-md:max-w-full sm::max-s-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {filteredImages.length > 0 ? (
             filteredImages.map((img, index) => (
@@ -72,7 +75,7 @@ const VideoComponent = ({ src, alt, className }) => (
   </video>
 );
 
-const VideoProfile = ({ selectedItem }) => {
+const VideoProfile = ({ selectedItem, userId }) => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
@@ -83,7 +86,10 @@ const VideoProfile = ({ selectedItem }) => {
           .filter((item) => {
             // Check if the item is a video, you can adjust the condition based on your API response
             const fileExtension = item.path.split('.').pop().toLowerCase();
-            return ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension);
+            return (
+              ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'webm'].includes(fileExtension) &&
+              item.user_id === userId
+            );
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
@@ -93,7 +99,7 @@ const VideoProfile = ({ selectedItem }) => {
         setVideos(videoPaths);
       })
       .catch((error) => console.error("Error fetching videos:", error));
-  }, []);
+  }, [userId]);
 
   // Filter videos based on selectedItem
   const filteredVideos = selectedItem === "All" ? videos : videos.filter((video) => video.category === selectedItem);

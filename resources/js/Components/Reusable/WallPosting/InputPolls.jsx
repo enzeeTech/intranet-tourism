@@ -250,19 +250,19 @@ const handlePostPoll = () => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-2 rounded-xl shadow-lg max-w-3xl" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white p-2 rounded-3xl shadow-lg max-w-3xl" onClick={(e) => e.stopPropagation()}>
         <header className="flex gap-5 self-end max-w-full text-2xl font-bold text-center text-neutral-800 w-[392px] max-md:mr-2.5">
-          <h1 className="flex ml-32">Create Poll</h1>
+          <h1 className="flex ml-32 mt-4">Create Poll</h1>
           <button>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
             alt="Close icon"
-            className="shrink-0 self-start w-6 aspect-square ml-24"
+            className="shrink-0 self-start w-6 aspect-square ml-24 mt-4"
             onClick={onClose}
           />
           </button>
         </header>
-        <main className="flex flex-col px-5 mt-9 w-full max-md:pl-5 max-md:max-w-full">
+        <main className="flex flex-col px-5 mt-6 w-full max-md:pl-5 max-md:max-w-full">
           <div className="flex gap-4 self-start text-lg font-bold text-neutral-800">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
@@ -277,12 +277,12 @@ const handlePostPoll = () => {
               value={inputValue}
               onChange={handleChange}
               placeholder="Type something..."
-              className="self-center px-2 text-xl font-bold text-neutral-800 w-full border-none appearance-none resize-none input-no-outline"
+              className="self-center px-2 py-8 text-xl font-bold text-neutral-800 w-full bg-gray-100 border-none rounded-xl appearance-none resize-none input-no-outline"
               rows="4"
               style={{ maxHeight: "30px", overflowY: "auto" }}
             />
           </div>
-          <h2 className="mt-6 ml-1 text-2xl font-bold text-neutral-800 max-md:max-w-full">
+          <h2 className="mt-4 ml-1 text-xl font-bold text-neutral-800 max-md:max-w-full">
             Add Poll
           </h2>
           {options.map((option, index) => (
@@ -322,7 +322,7 @@ const handlePostPoll = () => {
             Choose end date (opt.)
           </div>
           <button
-            className="justify-center items-center px-16 py-3 mt-16 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 rounded-md max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
+            className="justify-center items-center px-16 py-3 mt-10 mb-4 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 hover:bg-blue-700 rounded-2xl max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
             onClick={handlePostPoll}
           >
             Post

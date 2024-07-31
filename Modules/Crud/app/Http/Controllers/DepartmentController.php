@@ -9,8 +9,15 @@ class DepartmentController extends Controller
 {
     public function index()
     {
+        $queryParams = request()->query();
+        $limit = request()->query('perpage', 15);
+
+        $department = Department::queryable()->paginate($limit);
+
+        $department->appends($queryParams);
+
         return response()->json([
-            'data' => Department::queryable()->paginate(),
+            'data' => $department,
         ]);
     }
 

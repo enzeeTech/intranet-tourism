@@ -3,9 +3,11 @@
 namespace Modules\Profile\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Modules\Profile\Http\Requests\ProfileUpdateRequest;
@@ -21,7 +23,7 @@ class ProfileController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => Profile::queryable()->paginate(),
+            'data' => $this->shouldPaginate(Profile::queryable()),
         ]);
     }
 
@@ -50,8 +52,9 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function updateUser(ProfileUpdateRequest $request)
     {
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -59,14 +62,58 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+        return response()->noContent();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    // public function update(Profile $profile)
+    // {
+    //     $validated = request()->validate(...Profile::rules('update'));
+    //     $resourceRef = uploadFile(request()->file('image'), null, 'avatar');
+
+    //     $profile->update(array_merge($validated, ['image' => $resourceRef['path']]));
+
+    //     return response()->noContent();
+    // }
+
+    public function update(Profile $profile)
+    {
+        DB::beginTransaction();
+        try {
+            request()->merge(['bio' => request('name')]);
+            $validated = request()->validate(...Profile::rules('update'));
+            $validatedUser = request()->validate(...User::rules('update'));
+
+            $imagePath = $profile->image;
+            if (request()->hasFile('image')) {
+                $imagePath = uploadFile(request()->file('image'), null, 'avatar')['path'];
+            }
+
+            $coverPhotoPath = $profile->cover_photo;
+            if (request()->hasFile('cover_photo')) {
+                $coverPhotoPath = uploadFile(request()->file('cover_photo'), null, 'cover_photo')['path'];
+            }
+
+            $profile->update(array_merge($validated, [
+                'image' => $imagePath,
+                'cover_photo' => $coverPhotoPath,
+            ]));
+
+            $profile->user()->update($validatedUser);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->noContent();
     }
 
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function deleteAccount(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
@@ -82,5 +129,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function destroy(Profile $profile)
+    {
+        $profile->delete();
+        return response()->noContent();
     }
 }

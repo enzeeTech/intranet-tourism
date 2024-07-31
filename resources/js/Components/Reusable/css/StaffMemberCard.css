@@ -2,11 +2,12 @@
   background: #fff;
   border-radius: 15px;
   box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #eeeeee;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 200px;
-  width: 200px;
+  height: 300px;
+  width: 180px;
 }
 
 .card-header {
@@ -15,14 +16,25 @@
 
 .staff-member-image {
   width: 100%;
-  height: 95px;
-  object-fit: contain;
+  height: 195px;
+  object-fit: fill;
 }
 
 .three-dot-button {
   position: absolute;
   top: 0px;
   right: -4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.status-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 25px;
+  width: 25px;
   background: none;
   border: none;
   cursor: pointer;
@@ -55,6 +67,7 @@
   font-family: 'Nunito Sans';
 }
 
+
 /* Color for Online Status */
 .staff-member-status.online {
   color: #009D06;
@@ -70,12 +83,17 @@
   color: #960A0A;
 }
 
+.staff-member-status.deactivated-offline{
+  color: #202224;
+}
+
 .card-footer {
   display: flex;
   justify-content: space-around;
   height: 40px;
-  width: 200px;
+  width: 180px;
   background: #F9FAFC;
+  border-top: 1px solid #eeeeee;
 }
 
 .call-button {
@@ -246,9 +264,18 @@
   /* Rounded edges */
   text-align: center;
   box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
+  max-width: 600px;
   font-family: 'Nunito Sans';
   font-weight: 500;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px; 
+  height: 24px; 
+  cursor: pointer;
 }
 
 .yes-button {
@@ -299,4 +326,29 @@
 
 .staff-member-card.deactivated {
   opacity: 0.6;
+}
+
+.call-button, .whatsapp-button {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #F9FAFC;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.call-button {
+  border-right: 1px solid #E4E4E4;
+}
+
+.call-button img, .whatsapp-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.call-button.disabled, .whatsapp-button.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }

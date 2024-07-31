@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import PhotoAndAvatarPopup from './PhotoAndAvatarPopup';
 import UpdatePhotoButton from './UpdatePhoto';
+import { useCsrf } from '@/composables';
 
 function IconButton({ icon, alt, onClick }) {
   return (
@@ -20,39 +20,30 @@ function ListItem({ icon, alt, text, onClick }) {
   );
 }
 
-
-function EditProfilePhoto({ onClose }) {
+function EditProfilePhoto({ onClose, onSelectFile, userId, userName }) {
+  console.log("yuyu", userName);
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const csrfToken = useCsrf();
 
   const handleClickImg = () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'image/*';
-    fileInput.onchange = async (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        setSelectedFile(file);
-        setShowUpdatePopup(true); // Set state to open the update popup
-        onClose(); // Close the modal after the file is selected
-      } else {
-        onClose(); // Optionally close the modal even if no file is selected
-      }
+    fileInput.onchange = (event) => {
+      onSelectFile(event); // Pass the event to the onSelectFile function
     };
     fileInput.click();
   };
 
-
   const handleClickAvt = () => {
     setShowPopup(true);
-    onClose(); // Close the modal immediately
   };
 
   useEffect(() => {
     console.log("showUpdatePopup changed to:", showUpdatePopup);
   }, [showUpdatePopup]);
-
 
   const handleAvatarClose = (e) => {
     e.stopPropagation();
@@ -62,7 +53,7 @@ function EditProfilePhoto({ onClose }) {
   const handleCloseUpdatePopup = (e) => {
     e.stopPropagation();
     setShowUpdatePopup(false);
-    onClose(e); // Optionally close the entire modal if needed
+    onClose(e);
   };
 
   const listItems = [
@@ -83,13 +74,13 @@ function EditProfilePhoto({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={onClose}>
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col py-2.5 bg-white rounded-2xl shadow-custom w-[330px]">
+        <section className="flex flex-col py-2.5 bg-white rounded-3xl shadow-custom w-[330px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 justify-between items-start text-xl font-bold text-neutral-800">
-              <h1 className="flex-auto mt-3">Edit Profile Photo</h1>
-              <IconButton icon="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&" alt="Close icon" onClick={onClose} />
+              <h1 className="flex-auto mt-4">Edit Profile Photo</h1>
+              <IconButton icon="/assets/cancel.svg" alt="Close icon" onClick={onClose} />
             </header>
-            <div className="flex flex-col mt-3">
+            <div className="flex flex-col mt-3 mb-4">
               {listItems.map((item, index) => (
                 <ListItem key={index} icon={item.icon} alt={item.alt} text={item.text} onClick={item.onClick} />
               ))}
@@ -97,11 +88,10 @@ function EditProfilePhoto({ onClose }) {
           </div>
         </section>
       </div>
-      {showPopup && <PhotoAndAvatarPopup onClose={handleCloseUpdatePopup} />}
-      {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} />}
+      {showPopup && <PhotoAndAvatarPopup onClose={handleAvatarClose} userId={userId} csrfToken={csrfToken} userName={userName} />} {/* Ensure CSRF token is passed */}
+      {showUpdatePopup && <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={selectedFile} />}
     </div>
   );
 }
-
 
 export default EditProfilePhoto;

@@ -79,7 +79,7 @@ function ShareYourThoughtsDepart() {
       formData.append(`attachments[${index}]`, file);
     });
 
-    fetch("/api/crud/posts", {
+    fetch("/api/posts/posts", {
       method: "POST",
       body: formData,
       headers: { Accept: 'application/json' }

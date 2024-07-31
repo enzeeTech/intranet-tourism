@@ -1,264 +1,189 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Stories from 'react-insta-stories';
 import Popup from './CreateStoryPopup';
 import CreateImageStory from './CreateImageStory';
 import { usePage } from '@inertiajs/react';
-import './styles.css'
+import StoryViewer from './StoryViewer';
+import './styles.css';
+import { useCsrf } from "@/composables";
 
-const StoryViewer = ({ stories, onClose, user, onViewed }) => {
-    const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
-    const handleStoryEnd = () => {
-        if (currentStoryIndex === stories.length - 1) {
-            onViewed(user); // Notify parent component that stories have been viewed
-            onClose(); // Close the story viewer only when all stories are played
-        } else {
-            setCurrentStoryIndex(currentStoryIndex + 1); // Play the next story
-        }
-    };
-
-    const handlePrevStory = () => {
-        if (currentStoryIndex > 0) {
-            setCurrentStoryIndex(currentStoryIndex - 1);
-        }
-    };
-
-    return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            pointerEvents: 'none',
-        }}>
-            {/* Overlay */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    zIndex: 9998,
-                }}
-            ></div>
-            {/* Story viewer */}
-            <div
-                style={{
-                    position: 'relative',
-                    zIndex: 9999,
-                    pointerEvents: 'auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}
-                onClick={(e) => {
-                    if (e.clientX < window.innerWidth / 2) {
-                        handlePrevStory();
-                    }
-                }}
-            >
-                <div style={{
-                    position: 'relative',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
-                    maxWidth: '400px',
-                    maxHeight: '700px',
-                    overflow: 'hidden',
-                }}>
-                    {/* Close button */}
-                    <button
-                        style={{
-                            position: 'absolute',
-                            top: '8px',
-                            right: '8px',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '0',
-                        }}
-                        onClick={onClose}
-                    >
-                        <img
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
-                            alt="Close icon"
-                            style={{ width: '24px', height: '24px' }}
-                        />
-                    </button>
-                    {/* User info */}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <img src={user.src} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }} />
-                        <div style={{ fontSize: '14px' }}>{user.name}</div>
-                    </div>
-                    {/* Stories */}
-                    <Stories
-                        stories={stories}
-                        defaultInterval={1500}
-                        width={360}
-                        height={596}
-                        onStoryEnd={handleStoryEnd}
-                        currentIndex={currentStoryIndex}
-                    />
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const StoryNew = () => {
+const StoryNew = ({ userId }) => {
     const [showStoryViewer, setShowStoryViewer] = useState(false);
     const [selectedStory, setSelectedStory] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
     const [avatars, setAvatars] = useState([
         {
             src: "assets/user4.jpeg",
             alt: "Avatar of Thomas",
             name: "Musa",
             stories: []
-        },
-        {
-            src: "assets/women.avif",
-            alt: "Avatar of Aisha",
-            name: "Aisha",
-            stories: [
-                {
-                    url: 'assets/car2.mp4',
-                    type: 'video',
-                    duration: 10000
-                },
-                {
-                    url: 'assets/lambo2.jpeg',
-                    caption: 'Story 2'
-                },
-            ]
-        },
-        {
-            src: "assets/user1.webp",
-            alt: "Avatar of Dan",
-            name: "Dan",
-            stories: [
-                { url: 'assets/lambo4.avif', caption: 'Story 1' },
-                { url: 'assets/lambo5.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user2.jpeg",
-            alt: "Avatar of Musa",
-            name: "Julie",
-            stories: [
-                { url: 'assets/gtr.jpeg', caption: 'Story 1' },
-                { url: 'assets/gtr2.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user5.jpeg",
-            alt: "Avatar of Safwan",
-            name: "Safwan",
-            stories: [
-            { url: 'assets/gtr1.jpeg', caption: 'Story 1' },
-            { url: 'assets/gtr3.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user6.webp",
-            alt: "Avatar of Hazmi",
-            name: "Hazmi",
-            stories: [
-            { url: 'assets/gtr4.jpeg', caption: 'Story 1' },
-            { url: 'assets/tesla.jpeg', caption: 'Story 2' },
-            ]
-        },
-        {
-            src: "assets/user7.png",
-            alt: "Avatar of Jai",
-            name: "Jai",
-            stories: [
-            { url: 'assets/lambo3.webp', caption: 'Story 1' },
-            { url: 'assets/lambo2.jpeg', caption: 'Story 2' },
-            ]
-        },
+        }
     ]);
 
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
     const [userData, setUserData] = useState({});
+    const [userStories, setUserStories] = useState([]);
+    const csrfToken = useCsrf();
 
     const containerRef = useRef(null);
 
     useEffect(() => {
-        console.log("Fetching user data...");
-        fetch(`/api/crud/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
-            method: "GET",
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(({ data }) => {
-                setUserData({
-                    ...data,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-                });
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error);
-            });
+        fetchUserData(id);
     }, [id]);
 
+    const fetchUserData = (id) => {
+        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost`, {
+            method: "GET",
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(({ data }) => {
+            setUserData({
+                ...data,
+                profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
+    };
+
     useEffect(() => {
-        // Add a "viewed" flag to each user
         setAvatars(avatars.map(avatar => ({
             ...avatar,
             viewed: false
         })));
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setAvatars(prevAvatars => {
-                const updatedAvatars = prevAvatars.map(avatar => ({
-                    ...avatar,
-                    stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000) // Filter stories older than 24 hours
-                    // stories: avatar.stories.filter(story => (Date.now() - story.timestamp) < 8000) // Filter stories older than 8 seconds
-                }));
-                return updatedAvatars;
-            });
-        }, 60 * 1000); // Check every minute
-        // }, 8000); // Check every 8 seconds
+    const API_URL = "/api/posts/posts";
+    const USERS_API_URL = "/api/users/users/";
 
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
+        const fetchStories = async () => {
+            let allStories = [];
+            let currentPage = 1;
+            let lastPage = 1;
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (container) {
-            const onWheel = (e) => {
-                if (e.deltaY !== 0) {
-                    container.scrollLeft += e.deltaY;
-                    e.preventDefault();
+            try {
+                while (currentPage <= lastPage) {
+                    const response = await fetch(`${API_URL}?with[]=author&with[]=attachments&page=${currentPage}`, {
+                        method: "GET",
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+
+                    const data = await response.json();
+                    const storiesToAdd = data.data.data
+                    .filter(story => story.type === 'story')
+                    .map(story => ({
+                            url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
+                            type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
+                            text: story.content,
+                            userId: story.user_id,
+                            postId: story.id,
+                            imageName: story.attachments.length > 0 ? story.attachments[0].metadata?.original_name : '',
+                            timestamp: new Date(story.created_at).getTime()
+                        }));
+
+                    allStories = allStories.concat(storiesToAdd);
+
+                    setAvatars(prevAvatars => {
+                        const updatedAvatars = prevAvatars.map(avatar => ({
+                            ...avatar,
+                            stories: avatar.stories.concat(allStories.filter(story => story.url !== '' && story.userId === id))
+                        }));
+                        return updatedAvatars;
+                    });
+
+                    lastPage = data.data.last_page;
+                    currentPage++;
                 }
-            };
-            container.addEventListener('wheel', onWheel);
-            return () => container.removeEventListener('wheel', onWheel);
+
+                setUserStories(allStories);
+                deleteOldStories(allStories); // Initial check on fetch
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        
+    useEffect(() => {
+        fetchStories();
+    }, [id]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const uniqueUserIds = [...new Set(userStories.map(story => story.userId))];
+            const userPromises = uniqueUserIds.map(userId => fetch(`${USERS_API_URL}${userId}?with[]=profile`));
+            const userResponses = await Promise.all(userPromises);
+            const userJsonPromises = userResponses.map(response => response.json());
+            const users = await Promise.all(userJsonPromises);
+            
+
+            const userAvatars = users.map(user => ({
+                src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
+                alt: `Avatar of ${user.data.name}`,
+                name: user.data.username,
+                stories: userStories.filter(story => story.userId === user.data.id)
+            }));
+
+            setAvatars(prevAvatars => [...prevAvatars, ...userAvatars]);
+        };
+
+        if (userStories.length > 0) {
+            fetchUsers();
         }
-    }, []);
+    }, [userStories]);
+
+    const deleteOldStories = async (stories) => {
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        // const oneDay = 5 * 1000; // 5 seconds
+
+        for (const story of stories) {
+            if (now - story.timestamp > oneDay) {
+                try {
+                    const response = await fetch(`${API_URL}/${story.postId}`, {
+                        method: 'DELETE',
+                        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                    });
+
+                    if (response.ok) {
+                        console.log(`Post with ID ${story.postId} deleted successfully.`);
+                        // window.location.reload();
+                    } else {
+                        console.error(`Failed to delete post with ID ${story.postId}.`);
+                    }
+                } catch (error) {
+                    console.error(`Error deleting post with ID ${story.postId}:`, error);
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        // Set an interval to check for old stories every hour
+        const intervalId = setInterval(() => {
+            deleteOldStories(userStories);
+        }, 60 * 60 * 1000); // 60 minutes
+        // }, 10 * 1000); // 10 seconds
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [userStories]);
 
     const handleAvatarClick = (avatar) => {
-        if (avatar === loggedInUserAvatar) { // Check if the clicked avatar is the logged-in user's avatar
+        if (avatar === loggedInUserAvatar) {
             if (avatar.stories.length === 0) {
-                setIsPopupOpen(true); // Open the popup if the first avatar has no stories
+                fileInputRef.current.click();
             } else {
                 setSelectedStory(avatar.stories);
                 setSelectedUser(avatar);
@@ -272,7 +197,15 @@ const StoryNew = () => {
     };
 
     const handlePlusButtonClick = () => {
-        setIsPopupOpen(true);
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setIsPopupOpen(true);
+        }
     };
 
     const handleCloseViewer = () => {
@@ -282,6 +215,8 @@ const StoryNew = () => {
     };
 
     const handlePostStory = (newStory) => {
+        newStory.timestamp = Date.now(); // Add current timestamp to new story
+
         setAvatars(prevAvatars => {
             const updatedAvatars = [...prevAvatars];
             updatedAvatars[0].stories.push(newStory);
@@ -301,22 +236,22 @@ const StoryNew = () => {
             return updatedAvatars;
         });
     };
-
-    const sortedAvatars = [
-        avatars[0],
-        ...avatars.slice(1).sort((a, b) => a.viewed - b.viewed) // Sort other avatars excluding the first one
-    ];
+    // console.log("LL", userData);
 
     const loggedInUserAvatar = {
         src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
-        name: userData.name || "User Name",
-        stories: avatars[0].stories
+        name: "Your Story",
+        stories: avatars[0].stories.filter(story => story.userId === id)
     };
+
+    const sortedAvatars = avatars
+        .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
+        .sort((a, b) => a.viewed - b.viewed);
 
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '-30px', marginLeft: '-20px', width: '610px', }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '30px', marginLeft: '-20px', width: '610px', }}>
             <div style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '30px', flexShrink: 0 }}>
                 <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }} onClick={() => handleAvatarClick(loggedInUserAvatar)} >
                     <div style={{
@@ -330,7 +265,8 @@ const StoryNew = () => {
                         padding: '2px'
                     }}>
                         <img
-                            src={loggedInUserAvatar.src}
+                            // src={loggedInUserAvatar.src}
+                            src={`/storage/${loggedInUserAvatar.src}`}
                             alt={loggedInUserAvatar.alt}
                             style={{
                                 borderRadius: '50%',
@@ -358,14 +294,21 @@ const StoryNew = () => {
                         border: '2px solid white',
                     }}>+</span>
                 </button>
+                <input
+                    type="file"
+                    accept="image/*, video/*"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                />
                 <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
                     {loggedInUserAvatar.stories.length} {loggedInUserAvatar.stories.length === 1 ? 'story' : 'stories'}
                 </div>
                 <div style={{ textAlign: 'center', marginTop: '-5px' }}>Your Story</div>
             </div>
             <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                {sortedAvatars.slice(1).map((avatar, index) => (
-                    <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
+                {sortedAvatars.map((avatar, index) => (
+                <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
                         <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
                             <div style={{
                                 borderRadius: '50%',
@@ -374,7 +317,8 @@ const StoryNew = () => {
                                 filter: avatar.viewed ? 'grayscale(100%)' : 'none' // Apply grayscale filter if the stories have been viewed
                             }}>
                                 <img
-                                    src={avatar.src}
+                                    // src={avatar.src}
+                                    src={`/storage/${avatar.src}`}
                                     alt={avatar.alt}
                                     style={{
                                         borderRadius: '50%',
@@ -391,7 +335,7 @@ const StoryNew = () => {
                             {avatar.stories.length} {avatar.stories.length === 1 ? 'story' : 'stories'}
                         </div>
                         <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.name}</div>
-                    </div>
+                </div>
                 ))}
             </div>
             {showStoryViewer && selectedStory && (
@@ -399,7 +343,7 @@ const StoryNew = () => {
             )}
             {isPopupOpen && (
                 <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-                    <CreateImageStory onPostStory={handlePostStory} />
+                    <CreateImageStory userId={userId} onPostStory={handlePostStory} file={selectedFile} />
                 </Popup>
             )}
         </div>

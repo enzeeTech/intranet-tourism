@@ -10,7 +10,7 @@
     //         name: "",
     //         profileImage: "",
     //     });}
-    
+
 
     function Avatar({ src, alt }) {
     return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -90,7 +90,7 @@
         const [loading, setLoading] = useState(true);
         const [votes, setVotes] = useState({}); // Track votes for each poll
         const [isPopupOpen, setIsPopupOpen] = useState({});
-        
+
         const { props } = usePage();
         const { id } = props; // Access the user ID from props
         const [userData, setUserData] = useState({
@@ -108,7 +108,7 @@
                         throw new Error("Network response was not ok");
                     }
                     return response.json();
-                }) 
+                })
                 //-----------------------------//
                 .then(({ data }) => {
                     setUserData(pv => ({
@@ -121,7 +121,7 @@
                     console.error("Error fetching user data:", error);
                 });
         }, [id]);
-    
+
         const handleLogout = (event) => {
             event.preventDefault();
             fetch('/logout', {
@@ -138,7 +138,7 @@
         }; //------------------------//
 
         useEffect(() => {
-            fetch("/api/crud/posts?with[]=attachments", {
+            fetch("/api/posts/posts?with[]=attachments", {
                 method: "GET",
             })
             .then((response) => {
@@ -162,7 +162,7 @@
                 console.error("Error fetching posts:", error);
                 setLoading(false);
             });
-            
+
         }, []);
     const handleVote = (pollId, optionIndex) => {
         const updatedVotes = { ...votes };
@@ -230,8 +230,6 @@
             <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] relative">
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                 <div className="flex gap-1 mt-2">
-
-
                 </div>
 
                 {/* icon speaker & 3 dot*/}

@@ -2,6 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Nwidart\Modules\Facades\Module;
 
 trait QueryableApi
@@ -12,17 +15,21 @@ trait QueryableApi
             $query->with(request('with'));
         });
 
-        $query->when(request()->has('filter'), function ($query) {
-            if (is_string(current(request('filter')))) {
-                $scope = current(request('filter'));
-                $query->$scope();
-            } else {
-                foreach (request('filter') as $filter) {
+        $query->when(request()->has('filter') || request()->has('filters'), function (Builder $query) {
+            $filters = request('filter') ?? request('filters');
+            if (!is_array($filters)) {
+                return;
+            }
+            foreach ($filters as $filter) {
+                if (!empty($filter['type']) && $filter['type'] == 'like') {
+                    $query->where($filter['field'], $filter['type'], '%' . $filter['value'] . '%');
+                } else {
                     foreach ($filter as $filterBy => $value) {
+                        // dd($filterBy, ...$value);
                         if (is_array($value)) {
                             $query->$filterBy(...$value);
                         } else {
-                            $query->$filterBy(key($value), 'like', '%' . current($value) . '%');
+                            $query->$filterBy($value);
                         }
                     }
                 }
@@ -45,13 +52,18 @@ trait QueryableApi
             }
         });
 
-        $query->when(request()->has('scope'), function ($query) {
-            foreach (request('scope') as $scope) {
+        $query->when(request()->has('scope') || request()->has('scopes'), function ($query) {
+            $scopes = request('scope') ?? request('scopes');
+            foreach ($scopes as $scope) {
                 foreach ($scope as $scopeBy => $value) {
                     if ($value == null || is_bool($value)) {
                         $query->$scopeBy();
                     } else {
-                        $query->$scopeBy($value);
+                        if(is_array($value)) {
+                            $query->$scopeBy(...$value);
+                        } else {
+                            $query->$scopeBy($value);
+                        }
                     }
                 }
             }
@@ -65,5 +77,25 @@ trait QueryableApi
         } else {
             $query->when(Module::find($module) && Module::isEnabled($module), fn ($query) => $query->with($relation));
         }
+    }
+
+    /**
+     * Get the user that owns the QueryableApi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the user that owns the QueryableApi
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function editor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

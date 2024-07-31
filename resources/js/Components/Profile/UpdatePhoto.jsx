@@ -1,17 +1,6 @@
 import React from 'react';
 import RequestSentMessage from './RequestAdmin';
 
-const PhotoButton = ({ type, text, onClick }) => {
-  const className = type === "primary"
-    ? "justify-center px-7 py-3 bg-blue-500 text-white rounded-2xl"
-    : "justify-center px-7 py-3 text-base rounded-2xl border border-solid border-stone-300 text-neutral-400";
-
-  return (
-    <button className={className} onClick={onClick}>
-      {text}
-    </button>
-  );
-};
 
 function UpdatePhotoButton({ onClose }) {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
@@ -22,7 +11,7 @@ function UpdatePhotoButton({ onClose }) {
   };
 
   const handleIconClick = (e) => {
-    e.stopPropagation(e); // Stop event propagation to prevent unintended interactions
+    e.stopPropagation(); // Stop event propagation to prevent unintended interactions
     openPopup(e); // Open the RequestSentMessage popup or perform any action
     // Assuming action takes little to no time, we schedule the close
     setTimeout(() => { // Use setTimeout to simulate delay if needed
@@ -30,7 +19,6 @@ function UpdatePhotoButton({ onClose }) {
       setIsPopupOpen(false); // Close the RequestSentMessage popup
       onClose(e); // Close the main popup
     }, 1200); // Set timeout for 3000 ms or adjust based on actual needs
-
   };
 
   const handleCloseClick = (e) => {
@@ -40,26 +28,26 @@ function UpdatePhotoButton({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={handleCloseClick}>
       <div className="p-2 rounded-3xl w-4xl" onClick={(e) => e.stopPropagation()}>
-        <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-xl shadow-custom w-[380px]">
-          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff" 
+        <section className="flex flex-col px-2.5 py-1 font-bold text-center bg-white rounded-3xl shadow-custom w-[380px]">
+          {/* <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff" 
                alt="Close icon" 
                className="self-end w-6 my-2 aspect-square cursor-pointer" 
                onClick={handleCloseClick} 
-          />
-          <div className="flex flex-col pr-2.5 pl-2 w-full">
-            <h2 className="text-xl text-neutral-800">Update Photo to Staff Directory?</h2>
-            <div className="flex gap-4 self-center my-5">
-              <PhotoButton type="primary" text="Yes" onClick={handleIconClick} />
-              <PhotoButton type="secondary" text="No" onClick={handleCloseClick} />
+          /> */}
+          <div className="flex flex-col pr-2.5 pl-2 w-full ">
+            <h2 className="text-xl text-neutral-800 font-semibold mt-5">Update Photo to Staff Directory?</h2>
+            <div className="flex justify-center space-x-4 text-sm my-4">
+              <button className="px-4 py-2 bg-white border-2 border-grey-400 hover:bg-gray-400 text-gray-400 hover:text-white rounded-full" onClick={handleCloseClick}>No</button>
+              <button className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full" onClick={handleIconClick}>Yes</button>
             </div>
           </div>
         </section>
       </div>
       {isPopupOpen && (
-          <RequestSentMessage onClose={handleCloseClick} />
-        )}
+        <RequestSentMessage onClose={handleCloseClick} />
+      )}
     </div>
   );
 }

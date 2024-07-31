@@ -21,6 +21,9 @@ class User extends Model implements AuditableContract
         'email_verified_at',
         'password',
         'remember_token',
+        'is_active',
+        'order',
+        'username',
     ];
 
     public static function rules($scenario = 'create')
@@ -33,18 +36,34 @@ class User extends Model implements AuditableContract
                     'email_verified_at' => ['string'],
                     'password' => ['string', 'required'],
                     'remember_token' => ['string'],
+                    'is_active' => ['boolean'],
+                    'order' => ['integer'],
+                    'username' => ['string', 'nullable']
                 ],
                 // [],
             ],
+            // 'update' => [
+            //     [
+            //         'name' => ['string', 'required'],
+            //         'email' => ['string', 'required'],
+            //         'email_verified_at' => ['string'],
+            //         'password' => ['string', 'required'],
+            //         'remember_token' => ['string'],
+            //         'is_active' => ['boolean'],
+            //     ],
+            //     // [],
+            // ],
             'update' => [
                 [
-                    'name' => ['string', 'required'],
-                    'email' => ['string', 'required'],
-                    'email_verified_at' => ['string'],
-                    'password' => ['string', 'required'],
-                    'remember_token' => ['string'],
+                    'name' => ['sometimes', 'string'],
+                    'email' => ['sometimes', 'string'],
+                    'email_verified_at' => ['nullable', 'string'],
+                    'password' => ['sometimes', 'string'],
+                    'remember_token' => ['nullable', 'string'],
+                    'is_active' => ['sometimes', 'boolean'],
+                    'order' => ['sometimes', 'integer'],
+                    'username' => ['sometimes', 'string']
                 ],
-                // [],
             ],
         ];
 
@@ -105,5 +124,4 @@ class User extends Model implements AuditableContract
     {
         return $this->hasMany(UserPreference::class);
     }
-
 }

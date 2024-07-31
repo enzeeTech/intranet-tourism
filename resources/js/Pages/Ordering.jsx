@@ -1,56 +1,147 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import Example from '../Layouts/DashboardLayoutNew';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
+import { usePage } from '@inertiajs/react';
 
 const Ordering = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const department = "Some Department 1"; // Replace with the actual department logic
-    const [data, setData] = useState([
-        { id: 1, name: 'Mr Asyraf Jalil', image: '/assets/dummyImage1.jpg' },
-        { id: 2, name: 'Nor Rahimah Binti Ariffin', image: '/assets/dummyImage2.png' },
-        { id: 3, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage3.png' },
-        { id: 4, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyImage4.png' },
-        { id: 5, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage5.png' },
-        { id: 6, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage6.png'  },
-        { id: 7, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage7.png' },
-        { id: 8, name: 'Edzuar Zar Bin Ayob Azari', image: '/assets/dummyStaffImage.png' },
-        { id: 9, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage2.png' },
-        { id: 10, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage3.png' },
-        { id: 11, name: 'Hishamuddin Mustafa', image: '/assets/dummyImage4.png' },
-    ]);
+    const { props } = usePage();
+    const [staffMembers, setStaffMembers] = useState([]);
+    const [notificationMessage, setNotificationMessage] = useState("");
+    const departmentId = props.departmentId;
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchStaffMembers = async (departmentId) => {
+        setIsLoading(true);
+
+        try {
+            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+            method: "GET",
+            headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) {
+            throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+
+            const members = data.members.map(member => ({
+            id: member.user_id,
+            name: member.name,
+            role: member.title,
+            status: 'Online',
+            imageUrl: member.image,
+            workNo: member.work_phone,
+            phoneNo: member.phone_no,
+            isDeactivated: member.is_active,
+            order: member.order,
+            }));
+
+            setStaffMembers(members);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+        setIsLoading(false);
+    };
+    
+    useEffect(() => {
+        if (departmentId) {
+          fetchStaffMembers(departmentId);
+        }
+      }, [departmentId]);
+
+
+    const updateOrderAttributes = (members) => {
+        return members.map((member, index) => ({
+            ...member,
+            order: index.toString(),
+        }));
+    };
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
 
-        const reorderedData = Array.from(data);
+        const reorderedData = Array.from(staffMembers);
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
 
-        setData(reorderedData);
+        setStaffMembers(updateOrderAttributes(reorderedData));
     };
 
-    const handleSave = () => {
-        console.log("Updated data:", data);
+    const handleMoveUp = (index) => {
+        if (index === 0) return;
+        const newData = [...staffMembers];
+        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
+        setStaffMembers(updateOrderAttributes(newData));
+    };
+
+    const handleMoveDown = (index) => {
+        if (index === staffMembers.length - 1) return;
+        const newData = [...staffMembers];
+        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
+        setStaffMembers(updateOrderAttributes(newData));
+    };
+
+    const updateOrderInDatabase = async (id, order) => {
+        try {
+            const response = await fetch(`/api/crud/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ order: order }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to update order for user with ID ${id}`);
+            }
+
+            const responseBody = await response.text();
+            return responseBody ? JSON.parse(responseBody) : {};
+        } catch (error) {
+            console.error('Error updating order:', error);
+            return null;
+        }
+    };
+
+    const handleSave = async () => {
         setIsNotificationVisible(true);
+        setNotificationMessage("Saving changes...");
+        
+        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member.id, member.order));
+        
+        const results = await Promise.all(updatePromises);
+
+        const success = results.every(result => result !== null);
+        if (success) {
+            setNotificationMessage("Changes saved successfully!");
+        } else {
+            setNotificationMessage("Failed to save some changes.");
+        }
+
         setTimeout(() => {
             setIsNotificationVisible(false);
+            window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
         }, 1500);
+    };
+
+    const handleBack = () => {
+        window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
     };
 
     return (
         <Example>
             <div className="flex-row ">
                 <div className="flex">
-                    <main className="w-full mt-5 xl:pl-96 max-w-[1500px]">
+                    <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <a href="/staffDirectory" className="text-lg font-semibold text-black">Back</a>
-                                    <button className="px-6 py-1 text-base font-bold text-white bg-[#FF5436] rounded-full" onClick={handleSave}>Save</button>
+                                    <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
+                                    <button className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +157,7 @@ const Ordering = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {data.map((item, index) => (
+                                                {staffMembers.map((item, index) => (
                                                     <Draggable key={item.id} draggableId={String(item.id)} index={index}>
                                                         {(provided) => (
                                                             <tr
@@ -75,8 +166,9 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.image} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={item.imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? '/assets/dummyStaffPlaceHolder.jpg' : `/avatar/full/${item.imageUrl}`} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
+                                                                    {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>
                                                                 <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
                                                                     <div className="flex items-center">
@@ -84,10 +176,7 @@ const Ordering = () => {
                                                                             className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                if (index === 0) return;
-                                                                                const newData = [...data];
-                                                                                [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
-                                                                                setData(newData);
+                                                                                handleMoveUp(index);
                                                                             }}
                                                                             disabled={index === 0}
                                                                             style={{ opacity: index === 0 ? 0.6 : 1 }}
@@ -98,13 +187,10 @@ const Ordering = () => {
                                                                             className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                if (index === data.length - 1) return;
-                                                                                const newData = [...data];
-                                                                                [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
-                                                                                setData(newData);
+                                                                                handleMoveDown(index);
                                                                             }}
-                                                                            disabled={index === data.length - 1}
-                                                                            style={{ opacity: index === data.length - 1 ? 0.6 : 1 }}
+                                                                            disabled={index === staffMembers.length - 1}
+                                                                            style={{ opacity: index === staffMembers.length - 1 ? 0.6 : 1 }}
                                                                         >
                                                                             <img src="assets/orderingdown.svg" alt="Down" />
                                                                         </button>
@@ -143,9 +229,9 @@ const Ordering = () => {
                 </div>
             </div>
             {isNotificationVisible && (
-                <div className="fixed z-50 flex items-center justify-center w-full top-20">
-                    <div className="p-4 mb-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">Data saved successfully!</p>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                    <div className="p-4 bg-white rounded-lg shadow-lg">
+                        <p className="text-lg font-semibold">{notificationMessage}</p>
                     </div>
                 </div>
             )}

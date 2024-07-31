@@ -28,6 +28,9 @@ class EmploymentPost extends Model implements AuditableContract
         'business_grade_id',
         'business_scheme_id',
         'user_id',
+        'schema_grade',
+        'title',
+        'location',
     ];
 
     protected $appends = [
@@ -44,6 +47,9 @@ class EmploymentPost extends Model implements AuditableContract
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
                     'user_id' => ['string'],
+                    'schema_grade' => ['string'],
+                    'title' => ['string'],
+                    'location' => ['string'],
                 ],
                 // [],
             ],
@@ -54,6 +60,9 @@ class EmploymentPost extends Model implements AuditableContract
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
                     'user_id' => ['string'],
+                    'schema_grade' => ['string'],
+                    'title' => ['string'],
+                    'location' => ['string'],
                 ],
                 // [],
             ],
@@ -62,8 +71,12 @@ class EmploymentPost extends Model implements AuditableContract
         return $rules[$scenario];
     }
 
-    public function getFullGradeAttribute() {
-        return "{$this->businessScheme->code}{$this->businessGrade->code}";
+    public function getFullGradeAttribute()
+    {
+        $businessSchemeCode = $this->businessScheme ? $this->businessScheme->code : '';
+        $businessGradeCode = $this->businessGrade ? $this->businessGrade->code : '';
+
+        return "{$businessSchemeCode}{$businessGradeCode}";
     }
 
     public function businessGrade()
@@ -100,6 +113,4 @@ class EmploymentPost extends Model implements AuditableContract
     {
         return $this->hasMany(Supervisor::class);
     }
-
-
 }
