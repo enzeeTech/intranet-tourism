@@ -16,7 +16,7 @@ deploy:
   script:
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo rm -rf $DEPLOY_PATH/intranet-tourism"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo mkdir -p $DEPLOY_PATH/intranet-tourism && sudo chown $DEPLOY_USER:$DEPLOY_USER $DEPLOY_PATH/intranet-tourism"
-    - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "git clone https://github.com/wasabid3v/intranet-tourism.git $DEPLOY_PATH/intranet-tourism"
+    - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "git clone --branch main https://github.com/wasabid3v/intranet-tourism.git $DEPLOY_PATH/intranet-tourism"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo cp /home/jomla-admin/workspace/intranet-tourism/.env $DEPLOY_PATH/intranet-tourism/.env"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo chown -R $DEPLOY_USER:$DEPLOY_USER storage bootstrap/cache"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo chmod -R 775 storage bootstrap/cache"
