@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Invite from '../DepartmentCom/invPopup'; 
 import { useCsrf } from "@/composables";
+import { set } from 'date-fns';
 
 function Avatar({ src, alt, className, status }) {
   const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
@@ -38,17 +39,30 @@ function UserCard({ src, alt, name, role, status }) {
   );
 }
 
-const PopupMenu = ({ onAssign, onRemove }) => (
+const PopupMenu = ({ closePopup, onRemove, onAssign }) => (
   <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
-    {/* <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
+    <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
       <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" /> 
-      Assign file manager
-    </button> */}
+      Assign as Admin
+    </button>
     <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-xl">
       <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" /> 
       Remove
     </button>
   </div>
+  // <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+  //   <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
+  //     <h2 className="mb-4 text-xl font-bold text-center">Delete member?</h2>
+  //     <div className="flex justify-center space-x-4">
+  //       <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={closePopup}>
+  //         No
+  //       </button>
+  //       <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={onRemove}>
+  //         Yes
+  //       </button>
+  //     </div>
+  //   </div>
+  // </div>
 );
 
 
@@ -88,13 +102,14 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
-          <img src="/assets/threedots.svg" alt="Menu" className="h-6 w-13" />
+          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-13" />
         </button>
         {activePopupId === id && (
           <div ref={popupRef}>
             <PopupMenu
-              onAssign={() => onAssign(id)}
               onRemove={() => onRemove(employment_post_id)}
+              onAssign={() => onAssign(employment_post_id)}
+              closePopup={closePopup}
             />
           </div>
         )}
@@ -200,6 +215,23 @@ function DpMembers() {
     setActivePopupId(null);
   };
 
+  const handleNewMemberAdded = (newMember) => {
+    setMembers((prevMembers) => [...prevMembers, newMember]);
+  };
+
+  const handleAddMember = (newMemberData) => {
+    const newMember = {
+      user_id: newMemberData.user_id,
+      employment_post_id: newMemberData.employment_post_id,
+      image: newMemberData.profile?.image || '/assets/dummyStaffPlaceHolder.jpg',
+      name: newMemberData.profile?.bio || '',
+      title: newMemberData.employment_post?.title || '',
+      is_active: newMemberData.user?.is_active || false,
+    };
+  
+    handleNewMemberAdded(newMember);
+  };
+
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
@@ -261,7 +293,14 @@ function DpMembers() {
           ))}
         </section>
       </div>
-      {showInvite && <Invite onClose={handleCloseInvite} />}
+      {showInvite && 
+        <Invite 
+          isAddMemberPopupOpen={showInvite}
+          setIsAddMemberPopupOpen={setShowInvite}
+          departmentId={getDepartmentIdFromQuery()}
+          onNewMemberAdded={handleAddMember}
+        />
+      }
     </section>
   );
 }

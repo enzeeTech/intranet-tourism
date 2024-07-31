@@ -34,7 +34,7 @@ class Event extends Model implements AuditableContract
                 [
                     'title' => ['string', 'required'],
                     'venue' => ['string', 'required'],
-                    'url' => ['string'],
+                    'url' => ['nullable', 'string'],
                     'description' => ['string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
@@ -47,7 +47,7 @@ class Event extends Model implements AuditableContract
                     'title' => ['string', 'required'],
                     'venue' => ['string', 'required'],
                     'description' => ['string'],
-                    'url' => ['string'],
+                    'url' => ['nullable', 'string'],
                     'color' => ['string'],
                     'start_at' => ['string', 'required'],
                     'end_at' => ['string', 'required'],
