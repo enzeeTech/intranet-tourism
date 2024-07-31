@@ -2,7 +2,7 @@
 
 php artisan optimize:clear &&
     php artisan config:cache &&
-    composer install &&
+    composer install --no-dev --prefer-dist &&
     php artisan storage:link &&
     npm install &&
     npm run build &&
