@@ -87,28 +87,4 @@ class RoleHasPermissionController extends Controller
     }
 
 
-    public function assignRole($id)
-    {
-        $user = User::with('roles')->findOrFail($id);
-
-        $validated = request()->validate(...ModelHasRole::rules('create'));
-
-        $roleIds = $validated['role_id'];
-        $user->syncRoles([]);
-        
-        foreach ($roleIds as $roleId) {
-
-            $role = Role::findOrFail($roleId);
-            $user->assignRole($role);
-        }
-
-        $assignedRoles = $user->roles()->get();
-        return response()->json([
-            'data' => [
-                'user' => $user,
-                'role' => $assignedRoles,
-            ],
-            'message' => 'User has been assigned for the role.',
-        ]);
-    }
 }
