@@ -79,9 +79,9 @@ class RoleHasPermissionController extends Controller
         ]);
     }
 
-    public function destroy(RoleHasPermission $role_has_permission)
+    public function destroy(RoleHasPermission $roleHasPermission)
     {
-        $role_has_permission->delete();
+        $roleHasPermission->delete();
 
         return response()->noContent();
     }

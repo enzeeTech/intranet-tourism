@@ -57,9 +57,9 @@ class ModelHasRoleController extends Controller
     }
 
 
-    public function destroy(ModelHasRole $model_has_role)
+    public function destroy(ModelHasRole $modelHasRole)
     {
-        $model_has_role->delete();
+        $modelHasRole->delete();
 
         return response()->noContent();
     }
