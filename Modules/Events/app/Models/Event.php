@@ -54,17 +54,24 @@ class Event extends Model implements AuditableContract
                 ],
                 // [],
             ],
+            'invite' => [
+                [
+                    'users' => ['array', 'required'],
+                    'users.*.id' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];
     }
 
     // TODO: missing relations
-    // public function attendances()
-    // {
-    //     return $this->hasManyThrough(User::class, EventInvitation::class);
-    //     return $this->hasManyThrough(User::class, EventAttendance::class);
-    // }
+    public function attendances()
+    {
+        // return $this->hasManyThrough(User::class, EventInvitation::class);
+        return $this->hasMany(EventAttendance::class);
+    }
 
     // public function attendance()
     // {
