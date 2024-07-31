@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DEPLOY_SERVER: "52.237.96.127"
+      DEPLOY_USER: "jomla-admin"
+      DEPLOY_PATH: "/var/www"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Install SSH client
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install openssh-client -y
+
+    - name: Add deploy server to known hosts
+      run: |
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        ssh-keyscan ${{ env.DEPLOY_SERVER }} >> ~/.ssh/known_hosts
+        chmod 644 ~/.ssh/known_hosts
+
+    - name: Deploy application
+      run: |
+        ssh ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_SERVER }} << EOF
+          cd ${{ env.DEPLOY_PATH }}/intranet-tourism
+          git reset --hard
+          git clean -df
+          git pull
+          sh ${{ env.DEPLOY_PATH }}/intranet-tourism/update.sh
+          exit
+        EOF
