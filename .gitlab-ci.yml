@@ -20,6 +20,7 @@ deploy:
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "sudo cp /home/jomla-admin/workspace/intranet-tourism/.env $DEPLOY_PATH/intranet-tourism/.env"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo chown -R $DEPLOY_USER:$DEPLOY_USER storage bootstrap/cache"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo chmod -R 775 storage bootstrap/cache"
+    - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo chown $DEPLOY_USER:$DEPLOY_USER .env"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo -u $DEPLOY_USER composer install"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo -u $DEPLOY_USER php artisan key:generate --force"
     - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH/intranet-tourism && sudo -u $DEPLOY_USER php artisan migrate:fresh --seed --force"
