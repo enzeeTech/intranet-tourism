@@ -49,7 +49,7 @@ const StoryNew = ({ userId }) => {
         .then(({ data }) => {
             setUserData({
                 ...data,
-                profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                profileImage: data.profile.image
             });
         })
         .catch((error) => {
@@ -256,7 +256,8 @@ const StoryNew = ({ userId }) => {
     };
 
     const loggedInUserAvatar = {
-        src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
+        // src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
+        src: userData.profileImage ? `/storage/${userData.profileImage}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
         name: "Your Story",
         stories: avatars[0].stories.filter(story => story.userId === id)
@@ -279,7 +280,8 @@ const StoryNew = ({ userId }) => {
                     }}>
                         <img
                             // src={loggedInUserAvatar.src}
-                            src={`/storage/${loggedInUserAvatar.src}`}
+                            // src={`/storage/${loggedInUserAvatar.src}`}
+                            src={loggedInUserAvatar.src}
                             alt={loggedInUserAvatar.alt}
                             style={{
                                 borderRadius: '50%',
@@ -331,7 +333,8 @@ const StoryNew = ({ userId }) => {
                             }}>
                                 <img
                                     // src={avatar.src}
-                                    src={`/storage/${avatar.src}`}
+                                    // src={`/storage/${avatar.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`}
+                                    src={avatar.src}
                                     alt={avatar.alt}
                                     style={{
                                         borderRadius: '50%',

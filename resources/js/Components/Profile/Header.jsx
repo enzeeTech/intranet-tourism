@@ -6,11 +6,12 @@ import { useCsrf } from '@/composables';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage';
 
-function ProfileImage({ src, alt, className, rounded }) {
+function ProfileImage({ name, src, alt, className, rounded }) {
   return (
     <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-24 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className} max-md:w-32 max-md:mt-10`}>
       <img
-        src={`/storage/${src}`}
+        // src={`/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`}
+        src={src ? `/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
         alt={alt}
         className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-32 max-md:h-32 max-md:bottom-0`}
       />
@@ -22,7 +23,7 @@ function ProfileImage({ src, alt, className, rounded }) {
 }
 
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId }) {
-  console.log("hai", name);
+  console.log("hhhhhhh", name);
   
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
@@ -164,7 +165,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 max-md:h-3/5 rounded-lg shadow-custom" />
         <div onClick={handleIconClick}>
-          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} rounded={rounded} />
+          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} />
           {isPopupOpen && (
             <EditProfilePhoto
               onClose={handleCloseClick}
