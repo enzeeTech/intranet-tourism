@@ -22,6 +22,7 @@ const StoryNew = ({ userId }) => {
             stories: []
         }
     ]);
+    const [sortedAvatars, setSortedAvatars] = useState([]);
 
     const { props } = usePage();
     const { id } = props; // Access the user ID from props
@@ -66,55 +67,55 @@ const StoryNew = ({ userId }) => {
     const API_URL = "/api/posts/posts";
     const USERS_API_URL = "/api/users/users/";
 
-        const fetchStories = async () => {
-            let allStories = [];
-            let currentPage = 1;
-            let lastPage = 1;
+    const fetchStories = async () => {
+        let allStories = [];
+        let currentPage = 1;
+        let lastPage = 1;
 
-            try {
-                while (currentPage <= lastPage) {
-                    const response = await fetch(`${API_URL}?with[]=author&with[]=attachments&page=${currentPage}`, {
-                        method: "GET",
-                    });
+        try {
+            while (currentPage <= lastPage) {
+                const response = await fetch(`${API_URL}?with[]=author&with[]=attachments&page=${currentPage}`, {
+                    method: "GET",
+                });
 
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-
-                    const data = await response.json();
-                    const storiesToAdd = data.data.data
-                    .filter(story => story.type === 'story')
-                    .map(story => ({
-                            url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
-                            type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
-                            text: story.content,
-                            userId: story.user_id,
-                            postId: story.id,
-                            imageName: story.attachments.length > 0 ? story.attachments[0].metadata?.original_name : '',
-                            timestamp: new Date(story.created_at).getTime()
-                        }));
-
-                    allStories = allStories.concat(storiesToAdd);
-
-                    setAvatars(prevAvatars => {
-                        const updatedAvatars = prevAvatars.map(avatar => ({
-                            ...avatar,
-                            stories: avatar.stories.concat(allStories.filter(story => story.url !== '' && story.userId === id))
-                        }));
-                        return updatedAvatars;
-                    });
-
-                    lastPage = data.data.last_page;
-                    currentPage++;
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
                 }
 
-                setUserStories(allStories);
-                deleteOldStories(allStories); // Initial check on fetch
-            } catch (error) {
-                console.error('Error fetching data:', error);
+                const data = await response.json();
+                const storiesToAdd = data.data.data
+                .filter(story => story.type === 'story')
+                .map(story => ({
+                        url: story.attachments.length > 0 ? `${story.attachments[0].path}` : '', 
+                        type: story.attachments.length > 0 ? (story.attachments[0].mime_type.startsWith('image') ? 'image' : 'video') : 'image',
+                        text: story.content,
+                        userId: story.user_id,
+                        postId: story.id,
+                        imageName: story.attachments.length > 0 ? story.attachments[0].metadata?.original_name : '',
+                        timestamp: new Date(story.created_at).getTime()
+                    }));
+
+                allStories = allStories.concat(storiesToAdd);
+
+                setAvatars(prevAvatars => {
+                    const updatedAvatars = prevAvatars.map(avatar => ({
+                        ...avatar,
+                        stories: avatar.stories.concat(allStories.filter(story => story.url !== '' && story.userId === id))
+                    }));
+                    return updatedAvatars;
+                });
+
+                lastPage = data.data.last_page;
+                currentPage++;
             }
-        };
-        
+
+            setUserStories(allStories);
+            deleteOldStories(allStories); // Initial check on fetch
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    
     useEffect(() => {
         fetchStories();
     }, [id]);
@@ -134,6 +135,8 @@ const StoryNew = ({ userId }) => {
                 name: user.data.username,
                 stories: userStories.filter(story => story.userId === user.data.id)
             }));
+
+            // console.log("VV", userAvatars);
 
             setAvatars(prevAvatars => [...prevAvatars, ...userAvatars]);
         };
@@ -158,7 +161,8 @@ const StoryNew = ({ userId }) => {
 
                     if (response.ok) {
                         console.log(`Post with ID ${story.postId} deleted successfully.`);
-                        // window.location.reload();
+                        // Optionally refresh the data or update state
+                        fetchStories(); // Refresh stories after deletion
                     } else {
                         console.error(`Failed to delete post with ID ${story.postId}.`);
                     }
@@ -180,6 +184,14 @@ const StoryNew = ({ userId }) => {
         return () => clearInterval(intervalId);
     }, [userStories]);
 
+    useEffect(() => {
+        // Update sortedAvatars whenever avatars change
+        setSortedAvatars(avatars
+            .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
+            .sort((a, b) => a.viewed - b.viewed)
+        );
+    }, [avatars, id]);
+    
     const handleAvatarClick = (avatar) => {
         if (avatar === loggedInUserAvatar) {
             if (avatar.stories.length === 0) {
@@ -207,6 +219,12 @@ const StoryNew = ({ userId }) => {
             setIsPopupOpen(true);
         }
     };
+
+    const handleGoBack = () => {
+        setSelectedFile(null);
+        setIsPopupOpen(false);
+        handlePlusButtonClick();
+    };    
 
     const handleCloseViewer = () => {
         setShowStoryViewer(false);
@@ -236,7 +254,6 @@ const StoryNew = ({ userId }) => {
             return updatedAvatars;
         });
     };
-    // console.log("LL", userData);
 
     const loggedInUserAvatar = {
         src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
@@ -244,10 +261,6 @@ const StoryNew = ({ userId }) => {
         name: "Your Story",
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
-
-    const sortedAvatars = avatars
-        .filter(avatar => avatar.stories.length > 0 && avatar.stories[0].userId !== id)
-        .sort((a, b) => a.viewed - b.viewed);
 
 
     return (
@@ -343,7 +356,7 @@ const StoryNew = ({ userId }) => {
             )}
             {isPopupOpen && (
                 <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-                    <CreateImageStory userId={userId} onPostStory={handlePostStory} file={selectedFile} />
+                    <CreateImageStory userId={userId} onPostStory={handlePostStory} file={selectedFile} onGoBack={handleGoBack} />
                 </Popup>
             )}
         </div>

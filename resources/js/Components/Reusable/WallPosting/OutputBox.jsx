@@ -75,6 +75,8 @@ function OutputData({ polls, filterType, filterId, userId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState({});
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   
   useEffect(() => {
     async function fetchData() {
@@ -162,6 +164,12 @@ function OutputData({ polls, filterType, filterId, userId }) {
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+
+  const handleEdit = () => {
+    console.log("EDITTING...");
+    setIsEditModalOpen(true);
   }
 
 
@@ -329,6 +337,121 @@ function OutputData({ polls, filterType, filterId, userId }) {
           </article>
         </div>
       ))}
+      {isEditModalOpen && (
+                    <div className="modal-container">
+                        <button className="modal-close-button" onClick={closeEditModal}>
+                            X
+                        </button>
+                        <form onSubmit={handleEditSubmit}>
+                            <input
+                                type="text"
+                                name="title"
+                                value={eventData.title}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Event Title"
+                                required
+                            />
+                            <input
+                                type="text"
+                                name="venue"
+                                value={eventData.venue}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Venue"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={eventData.startDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Date"
+                                required
+                            />
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={eventData.endDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Date"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="startTime"
+                                value={eventData.startTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="Start Time"
+                                required
+                            />
+                            <input
+                                type="time"
+                                name="endTime"
+                                value={eventData.endTime}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Time"
+                                required
+                            />
+                            <div className="form-group">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        className='mr-2'
+                                        name="includeUrl"
+                                        checked={includeUrl}
+                                        onChange={(e) => {
+                                            const isChecked = e.target.checked;
+                                            setIncludeUrl(isChecked);
+                                            if (!isChecked) {
+                                                setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
+                                            }
+                                        }}
+                                    />
+                                    Include URL
+                                </label>
+                                {includeUrl && (
+                                    <input
+                                        type="url"
+                                        className="form-control mt-2"
+                                        name="url"
+                                        value={eventData.url}
+                                        onChange={handleChange}
+                                        placeholder="Enter event URL"
+                                    />
+                                )}
+                            </div>
+                            <select
+                                name="color"
+                                value={eventData.color}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            >
+                                <option value="red">Red</option>
+                                <option value="blue">Blue</option>
+                                <option value="green">Green</option>
+                                <option value="orange">Orange</option>
+                                <option value="purple">Purple</option>
+                                <option value="DeepPink">Pink</option>
+                                <option value="black">Black</option>
+                                <option value="gray">Gray</option>
+                            </select>
+                            <div className="button-container">
+                                <button type="submit" className="modal-save-button">
+                                    Save
+                                </button>
+                                <button type="button" className="modal-delete-button" onClick={handleDelete}>
+                                    Delete
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
     </>
   );
 }
