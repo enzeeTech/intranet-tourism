@@ -16,9 +16,10 @@ function ProfileDepartment({
     const inputRef = useRef(null);
 
     const dummyOptions = ["Option 1", "Option 2", "Option 3"]; // Replace with your API data later
+    // 'http://127.0.0.1:8000/api/department/employment_posts'
 
     useEffect(() => {
-        setLocalFormData({
+        const formData = {
             department,
             unit,
             jobtitle,
@@ -26,7 +27,8 @@ function ProfileDepartment({
             grade,
             location,
             phone
-        });
+        };
+        setLocalFormData(formData);
     }, [department, unit, jobtitle, position, grade, location, phone]);
 
     const handleInputChange = (e) => {
@@ -37,9 +39,14 @@ function ProfileDepartment({
         }));
     };
 
-    const handleSaveField = () => {
-        onFormDataChange(localFormData);
-    };
+    // const handleSaveField = () => {
+    //     onFormDataChange(localFormData); // Pass the updated data back to parent
+    // };
+
+    // const handleCancelChanges = () => {
+    //     // Revert localFormData to originalFormData (the original saved data)
+    //     setLocalFormData(originalFormData);
+    // };
 
     const renderField = (label, name, value, editable = true) => (
         <tr key={name}>
@@ -48,11 +55,12 @@ function ProfileDepartment({
                 {isEditing && editable ? (
                     <select
                         name={name}
-                        value={localFormData[name]}
+                        value={localFormData[name]} // Bind to localFormData to track changes
                         onChange={handleInputChange}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
                         ref={inputRef}
                     >
+                        <option value={value}>{value}</option> {/* Display the current value as an option */}
                         {dummyOptions.map((option, index) => (
                             <option key={index} value={option}>{option}</option>
                         ))}
@@ -72,22 +80,17 @@ function ProfileDepartment({
                 <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                     <table className="table-auto w-full text-left border-collapse">
                         <tbody>
-                            {renderField('Department', 'department', localFormData.department)}
-                            {renderField('Unit', 'unit', localFormData.unit)}
-                            {renderField('Job Title', 'jobtitle', localFormData.jobtitle)}
-                            {renderField('Position', 'position', localFormData.position)}
-                            {renderField('Grade', 'grade', localFormData.grade, false)} {/* Grade is not editable */}
-                            {renderField('Location', 'location', localFormData.location)}
-                            {renderField('Office Number', 'phone', localFormData.phone)}
+                            {renderField('Department', 'department', originalFormData.department)}
+                            {renderField('Unit', 'unit', originalFormData.unit)}
+                            {renderField('Job Title', 'jobtitle', originalFormData.jobtitle)}
+                            {renderField('Position', 'position', originalFormData.position)}
+                            {renderField('Grade', 'grade', originalFormData.grade, false)}
+                            {renderField('Location', 'location', originalFormData.location)}
+                            {renderField('Office Number', 'phone', originalFormData.phone)}
                         </tbody>
                     </table>
                 </div>
             </div>
-            {isEditing && (
-                <div className="flex justify-end mt-4 pb-3">
-                    <button onClick={handleSaveField} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
-                </div>
-            )}
         </div>
     );
 }
