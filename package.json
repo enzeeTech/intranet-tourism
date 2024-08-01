@@ -51,5 +51,7 @@
         "react-modal": "^3.16.1",
         "react-router-dom": "^6.24.0",
         "react-switch": "^7.0.0"
+        "@fullcalendar/core": "^6.0.0",
+        "@fullcalendar/react": "^6.0.0",
     }
 }
