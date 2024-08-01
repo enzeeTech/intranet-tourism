@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import './AddMemberPopup.css';
+import '../Reusable/AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import { useCsrf } from "@/composables";
 
-const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId }) => {
+const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, onNewMemberAdded }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPeople, setSelectedPeople] = useState([]);
-    const [currentMembers, setCurrentMembers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(''); // New state for success message
+    const [success, setSuccess] = useState('');
+    const [currentMembers, setCurrentMembers] = useState([]);
     const csrfToken = useCsrf();
 
     useEffect(() => {
@@ -52,14 +52,10 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         try {
             while (hasMorePages) {
                 const response = await fetch(`/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-                
                 if (!response.ok) {
                     throw new Error(`Failed to fetch: ${response.statusText}`);
                 }
-
-                const responseText = await response.text();
-                const data = responseText ? JSON.parse(responseText) : {};
-
+                const data = await response.json();
                 allResults = [...allResults, ...data.data.data];
                 currentPage++;
                 hasMorePages = data.data.next_page_url !== null;
@@ -85,15 +81,14 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const handleDeselectPerson = (person) => {
-        setSelectedPeople(selectedPeople.filter(p => p !== person));
+        setSelectedPeople(selectedPeople.filter(p => p.id !== person.id));
     };
 
     const handleClose = () => {
         setIsAddMemberPopupOpen(false);
-        setSuccess(''); // Clear success message on close
+        setSuccess('');
+        setError('');
     };
-
-    console.log('selectedPeople', selectedPeople);
 
     const handleAdd = async () => {
         const url = '/api/crud/employment_posts';
@@ -105,34 +100,17 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         let hasError = false;
 
         for (const person of selectedPeople) {
-
-            // if (!employmentPost) {
-            //     console.error('Missing employment post for:', person);
-            //     setError(prev => `${prev} Missing employment post for ${person.name}. `);
-            //     hasError = true;
-            //     continue;
-            // }
-            
             const userId = person.id;
-            console.log('userId', userId);
-            const businessPostId = String(person.employmentPost? person.employmentPost.business_post_id : '1');
-            const businessGradeId = String(person.employmentPost? person.employmentPost.business_grade_id : '1');
-            const businessSchemeId = String(person.employmentPost? person.employmentPost.business_scheme_id : '1');
-
-            // if (!businessPostId || !businessGradeId || !businessSchemeId) {
-            //     console.error('Missing required fields for:', person);
-            //     setError(prev => `${prev} Missing required fields for ${person.name}. `);
-            //     hasError = true;
-            //     continue;
-            // }
-                
+            const businessPostId = String(person.employmentPost ? person.employmentPost.business_post_id : '1');
+            const businessGradeId = String(person.employmentPost ? person.employmentPost.business_grade_id : '1');
+            const businessSchemeId = String(person.employmentPost ? person.employmentPost.business_scheme_id : '1');
 
             const body = JSON.stringify({
                 department_id: String(departmentId),
                 business_post_id: businessPostId,
                 business_grade_id: businessGradeId,
                 business_scheme_id: businessSchemeId,
-                user_id : String(userId),
+                user_id: String(userId),
             });
 
             try {
@@ -145,9 +123,23 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                     continue;
                 }
 
-                const data = responseText ? JSON.parse(responseText) : {};
-                console.log('Successfully added member:', data);
-                setSuccess('Members successfully added!'); // Set success message
+                const newMemberData = {
+                    user_id: userId,
+                    employment_post_id: businessPostId,
+                    profile: {
+                        bio: person.name,
+                        image: person.profile?.image || '/assets/dummyStaffPlaceHolder.jpg',
+                    },
+                    employment_post: {
+                        title: person.employmentPost?.title || '',
+                    },
+                    user: {
+                        is_active: person.is_active,
+                    }
+                };
+
+                onNewMemberAdded(newMemberData);
+                setSuccess('Members successfully added!');
             } catch (error) {
                 console.error('Error adding member to department:', error);
                 setError(prev => `${prev} An error occurred while adding ${person.name}.`);
@@ -158,8 +150,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         if (!hasError) {
             setTimeout(() => {
                 setIsAddMemberPopupOpen(false);
-                setSuccess(''); // Clear success message after closing
-            }, 1000); // Delay closing to show success message
+                setSuccess('');
+            }, 1000);
         }
     };
 
@@ -167,8 +159,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         <div>
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                    <div className="bg-white rounded-3xl pt-7 px-4 w-[400px]">
-                        <h1 className="mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
+                    <div className="bg-white rounded-lg pt-7 w-[400px]">
                         <input
                             type="text"
                             placeholder="Search people"
@@ -204,10 +195,9 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 </div>
                             ))}
                             {error && <div className="mt-2 text-red-500">{error}</div>}
-
                         </div>
-                        {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
-                        <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
+                        {success && <div className="mt-2 text-green-500">{success}</div>}
+                        <div className="flex justify-end pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
                                 className="px-4 mb-4 mr-2 rounded-full text-[#222222]"
                                 onClick={handleClose}
@@ -228,4 +218,4 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     );
 };
 
-export default SearchPopup;
+export default Invite;

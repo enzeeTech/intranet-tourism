@@ -1,217 +1,128 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import SearchMembers from '../Components/Reusable/CommunitySearch';
-import DepartmentDropdown from '../Components/Reusable/CommunityDropdown';
-import StaffMemberCard from '../Components/Reusable/CommunityCard';
-import DeactivateModal from '../Components/Reusable/DeactivateModal';
-import './css/StaffDirectory.css';
+import CommunityDropdown from '@/Components/Reusable/Community/CommunityDropdown';
+import CommunitySearchBar from '../Components/Reusable/Community/CommunitySearch';
+import CommunityCard from '../Components/Reusable/Community/CommunityCard';
 import Example from '@/Layouts/DashboardLayoutNew';
+import './css/StaffDirectory.css';
+import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
 
-const StaffDirectory = () => {
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+const Community = () => {
+  const [departmentsList, setDepartmentsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
 
-  // Dummy departments
-  const departments = [
-    'All',
-    'Public',
-    'Private',
-  ];
+  const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
-  // Dummy staff members
-  const staffMembers = [
-    {
-      id: 1,
-      name: 'Puspanita LPPM',
-      role: 'Followed By:',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 2,
-      name: 'Kelab Rekreasi LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 3,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 4,
-      name: 'Kesatuan',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 5,
-      name: 'Jomla V3 Feedback',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 6,
-      name: 'BTM Feedback',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 7,
-      name: 'Urus Tadbir Admin',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 8,
-      name: 'TBC',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 9,
-      name: 'Puspanita LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 10,
-      name: 'Kelab Rekreasi LPPM',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 11,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 12,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 13,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 14,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 15,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
-    {
-      id: 16,
-      name: 'KOPPEMA',
-      role: 'Followed By',
-      imageUrl: '../../../public/assets/dummyStaffImage.png',
-    },
+  const fetchDepartments = async (url) => {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      const departmentData = data.data.data.map((department) => ({
+        id: department.id,
+        name: department.name,
+      }));
 
-  ];
+      setDepartmentsList((prevDepartments) => {
+        const allDepartments = [...prevDepartments, ...departmentData];
+        return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+      });
 
-  const handleSelectDepartment = (department) => {
-    setSelectedDepartment(department);
+      if (data.data.next_page_url) {
+        fetchDepartments(data.data.next_page_url);
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    }
+    setIsLoading(false);
   };
 
-  const openDeactivateModal = () => {
-    setIsDeactivateModalOpen(true);
+  useEffect(() => {
+    setIsLoading(true);
+    fetchDepartments('/api/communities/communities');
+  }, []);
+
+  const handleNewDepartment = (newDepartment) => {
+    setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
-  const closeDeactivateModal = () => {
-    setIsDeactivateModalOpen(false);
-  };
+  const filteredDepartments = departmentsList.filter((department) =>
+    department.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-  <Example>
-
-<main className="xl:pl-96 w-full">
-<div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-<SearchMembers />
-            <DepartmentDropdown
-              departments={departments}
-              onSelectDepartment={handleSelectDepartment}
-            />
-            {selectedDepartment === 'All' && (
-              <div className="staff-member-grid-container">
-                {staffMembers.map((member) => (
-                    <StaffMemberCard
-                      key={member.id} {...member}
-                      onDeactivateClick={openDeactivateModal}
-                    />
-                  ))}
-              </div>
+    <Example>
+      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+          <CommunitySearchBar
+            onSearch={(value) => setSearchTerm(value)}
+            toggleCreateCommunity={toggleCreateCommunity}
+          />
+          <CommunityDropdown
+            departments={filteredDepartments}
+            onSelectDepartment={() => {}}
+            onCreateDepartment={handleNewDepartment}
+          />
+          <div className="staff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 sm:p-4 md:p-6 lg:p-8">
+            {isLoading ? (
+              <div className="mt-20 ml-32 loading-spinner"></div>
+            ) : filteredDepartments.length === 0 ? (
+              <p>No communities found.</p>
+            ) : (
+              filteredDepartments.map((department) => (
+                <CommunityCard
+                  key={department.id}
+                  name={department.name}
+                  imageUrl={'assets/departmentsDefault.jpg'}
+                  departmentID={department.id}
+                />
+              ))
             )}
-            </div>
-            </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-                <style>
-                    {`
-                    aside::-webkit-scrollbar {
-                        width: 0px;
-                        background: transparent;
-                    }
-                    `}
-                </style>
-                <div className="file-directory-header">
-                <PageTitle title="Community" />
-                </div>
-                <hr className="file-directory-underline" />
-
-                <div>
-                    <FeaturedEvents />
-                    <WhosOnline />
-                </div>
-            </aside>
-    {/* <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-      <div className={isDeactivateModalOpen ? 'content-blur' : ''}>
-        <div className="staff-directory-header">
+          </div>
+        </div>
+      </main>
+      <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
+        <style>
+          {`
+          aside::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+          }
+          `}
+        </style>
+        <div className="file-directory-header">
           <PageTitle title="Community" />
         </div>
-        <hr className="staff-directory-underline" />
-        <div className="widgets-container">
-          <div className="left-widget">
-            <FeaturedEvents />
-            <WhosOnline />
-          </div>
-          <div className="right-widget">
-            <SearchMembers />
-            <DepartmentDropdown
-              departments={departments}
-              onSelectDepartment={handleSelectDepartment}
-            />
-            {selectedDepartment === 'All' && (
-              <div className="staff-member-grid-container">
-                {staffMembers.map((member) => (
-                    <StaffMemberCard
-                      key={member.id} {...member}
-                      onDeactivateClick={openDeactivateModal}
-                    />
-                  ))}
-              </div>
-            )}
+        <hr className="file-directory-underline" />
+        <div>
+          <FeaturedEvents />
+          <WhosOnline />
+        </div>
+      </aside>
+      {isCreateCommunityOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
+          <div className="bg-white p-4 rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+              onClick={toggleCreateCommunity}
+            >
+              &times;
+            </button>
+            <CreateCommunity onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
           </div>
         </div>
-      </div>
-      <DeactivateModal
-        isOpen={isDeactivateModalOpen}
-        onClose={closeDeactivateModal}
-        onConfirm={() => console.log('Deactivated')}
-      />
-    </div> */}
+      )}
     </Example>
   );
 };
 
-export default StaffDirectory;
+export default Community;

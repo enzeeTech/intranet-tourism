@@ -66,7 +66,7 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
                 <img
                     src={icon2}
                     alt="QR Code Icon"
-                    className="aspect-square w-[30px] cursor-pointer"
+                    className="aspect-square w-[30px] h-[30px] cursor-pointer"
                     onClick={handleIcon2Click}
                 />
             )}
@@ -76,16 +76,16 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
                         <img
                             src="assets/qrAcap.jpg"
                             alt="QR Code"
-                            className="mx-auto mt-4"
+                            className="mx-auto mx-4"
                         />
-                        <div className="flex justify-between -mt-1 relative">
-                            <hr className="absolute -top-3 w-full border-t border-gray-300" />
-                            <button onClick={handleDownload} className="text-white px-24 py-2 rounded-md">
-                                <img src="assets/DownloadIcon.png" alt="Download Icon" className="" />
+                        <hr className="mb-4 w-full border-gray-300" />
+                        <div className="flex justify-between -mt-1 mx-20 max-md:mx-12 relative">
+                            <button onClick={handleDownload} className="text-white py-2">
+                                <img src="assets/DownloadIcon.png" alt="Download Icon" className="w-6 h-6 shrink-0" />
                             </button>
-                            <hr className="absolute top-0 right-52 h-full border-l border-gray-300" />
-                            <button onClick={handleCopyLink} className="text-white px-24 py-2 rounded-md">
-                                <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="" />
+                            {/* <hr className="absolute top-0 right-52 h-full border-l border-red-300" /> */}
+                            <button onClick={handleCopyLink} className="text-white py-2">
+                                <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
                             </button>
                         </div>
                     </div>
