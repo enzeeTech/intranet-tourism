@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Stories from 'react-insta-stories';
+import DeleteIcon from '../../../../public/assets/DeleteRedButton.svg';
+import { useCsrf } from "@/composables";
 
 const StoryViewer = ({ stories, onClose, user, onViewed }) => {
+    const csrfToken = useCsrf();
 
-    console.log("USER", user);
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+
+    useEffect(() => {
+        setIsPaused(showDeletePopup);
+    }, [showDeletePopup]);
 
     const handleStoryEnd = () => {
         if (currentStoryIndex === stories.length - 1) {
-            onViewed(user); // Notify parent component that stories have been viewed
-            onClose(); // Close the story viewer only when all stories are played
+            onViewed(user);
+            onClose();
         } else {
-            setCurrentStoryIndex(currentStoryIndex + 1); // Play the next story
+            setCurrentStoryIndex(currentStoryIndex + 1);
         }
     };
 
@@ -20,9 +28,6 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
             setCurrentStoryIndex(currentStoryIndex - 1);
         }
     };
-
-
-    console.log("USER", user);
 
     const handleNextStory = () => {
         if (currentStoryIndex < stories.length - 1) {
@@ -33,6 +38,33 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
     const handleAllStoriesEnd = () => {
         onViewed(user);
         onClose();
+    };
+
+
+    const API_URL = "/api/posts/posts";
+
+    const handleDelete = async () => {
+        const { postId } = stories[currentStoryIndex];
+        try {
+            const response = await fetch(`${API_URL}/${postId}`, {
+                method: 'DELETE',
+                headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+            });
+
+            if (response.ok) {
+                console.log(`Post with ID ${postId} deleted successfully.`);
+                window.location.reload();
+            } else {
+                console.error(`Failed to delete post with ID ${postId}.`);
+            }
+        } catch (error) {
+            console.error(`Error deleting post with ID ${postId}:`, error);
+        }
+        setShowDeletePopup(false);
+    };
+
+    const handleClosePopup = () => {
+        setShowDeletePopup(false);
     };
 
     return (
@@ -46,9 +78,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            pointerEvents: 'none',
         }}>
-            {/* Overlay */}
             <div
                 style={{
                     position: 'absolute',
@@ -60,22 +90,22 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     zIndex: 9998,
                 }}
             ></div>
-            {/* Story viewer */}
             <div
                 style={{
                     position: 'relative',
                     zIndex: 9999,
-                    pointerEvents: 'auto',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}
                 onClick={(e) => {
-                    if (e.clientX < window.innerWidth / 2) {
-                        handlePrevStory();
-                    } else {
-                        handleNextStory();
+                    if (!showDeletePopup) {
+                        if (e.clientX < window.innerWidth / 2) {
+                            handlePrevStory();
+                        } else {
+                            handleNextStory();
+                        }
                     }
                 }}
             >
@@ -89,45 +119,55 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     maxHeight: '700px',
                     overflow: 'hidden',
                 }}>
-                    {/* Close button */}
-                    <button
-                        style={{
-                            position: 'absolute',
-                            top: '8px',
-                            right: '8px',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '0',
-                        }}
-                        onClick={onClose}
-                    >
-                        <img
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
-                            alt="Close icon"
-                            style={{ width: '24px', height: '24px' }}
-                        />
-                    </button>
-                    {/* User info */}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-                        <img src={`/storage/${user.src}`} alt={user.alt} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }} />
-                        <div style={{ fontSize: '14px' }}>{user.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', flex: '1', marginBottom: '5px' }}>
+                            <img
+                                src={`/storage/${user.src}`}
+                                alt={user.alt}
+                                style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
+                            />
+                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.name}</div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowDeletePopup(true)}
+                            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+                        >
+                            <img
+                                src={DeleteIcon}
+                                alt="Delete icon"
+                                style={{ width: '30px', height: '30px', marginTop: '-10px' }}
+                            />
+                        </button>
+                        <button
+                            style={{
+                                border: 'none',
+                                background: 'none',
+                                cursor: 'pointer',
+                            }}
+                            onClick={onClose}
+                        >
+                            <img
+                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
+                                alt="Close icon"
+                                style={{ width: '28px', height: '28px', marginTop: '-10px', marginLeft: '10px' }}
+                            />
+                        </button>
                     </div>
-                    {/* Stories */}
                     <Stories
                         stories={stories.map(story => ({
                             ...story,
-                            url: `/storage/${story.url}`, // View real stories
+                            url: `/storage/${story.url}`,
                             text: story.text
                         }))}
-                        defaultInterval={1500}
+                        defaultInterval={7 * 1000}
                         width={360}
                         height={596}
                         onStoryEnd={handleStoryEnd}
                         currentIndex={currentStoryIndex}
                         onAllStoriesEnd={handleAllStoriesEnd}
+                        isPaused={isPaused}
                     />
-                    {/* Text overlay */}
                     {stories[currentStoryIndex]?.text && (
                         <div style={{
                             position: 'absolute',
@@ -145,6 +185,61 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     )}
                 </div>
             </div>
+            {showDeletePopup && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
+                        zIndex: 10000,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: '400px',
+                    }}
+                >
+                    <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger' }}>
+                        <h2>Delete the Story?</h2>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                        <button
+                            onClick={handleDelete}
+                            style={{
+                                backgroundColor: '#E53935',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                marginRight: '10px',
+                            }}
+                        >
+                            Yes
+                        </button>
+                        <button
+                            onClick={handleClosePopup}
+                            style={{
+                                backgroundColor: 'white',
+                                color: '#333',
+                                border: '1px solid #ccc',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            No
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

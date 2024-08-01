@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Posts\Models\Post;
 use Modules\Posts\Models\PostAccessibility;
+use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
 {
@@ -53,8 +54,55 @@ class PostController extends Controller
 
     public function update(Post $post)
     {
+
         $validated = request()->validate(...Post::rules('update'));
-        $post->update($validated);
+        $validated = request()->validate(...Post::rules());
+        $validatedAccessibilities = [];
+
+        if (request()->has('accessibilities')) {
+            $accessibilities = request('accessibilities');
+            foreach ($accessibilities as $accessibility) {
+                $validatedAccessibilities[] = validator($accessibility, ...PostAccessibility::rules('createFromPost'))->validated();
+            }
+        }
+
+        DB::beginTransaction();
+        try {
+
+            $post->update($validated);
+
+            if (request()->has('attachments')) {
+
+                $resources = Resource::where('attachable_id', $post->id)->first();
+                $post->storeAttachments();
+                $resources->delete();
+                
+            }
+            if (request()->has('accessibilities')) {
+
+                $currentAccessibilities = $post->accessibilities()->get();
+
+                foreach ($validatedAccessibilities as $validatedAccessibility) {
+                    $accessibility = $currentAccessibilities->firstWhere('id', $validatedAccessibility['id'] ?? null);
+                    if ($accessibility) {
+                        $accessibility->update($validatedAccessibility);
+                    } else {
+                        $post->accessibilities()->create($validatedAccessibility);
+                    }
+                }
+
+                $validatedIds = collect($validatedAccessibilities)->pluck('id')->filter()->all();
+
+                // delete if old access does not exist in new data
+                $post->accessibilities()->whereNotIn('id', $validatedIds)->delete();
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
+
 
         return response()->noContent();
     }

@@ -165,7 +165,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                             placeholder="Search people"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-[95%] p-2 mb-4 ml-[2.5%] border border-gray-300 rounded-full"
+                            className="w-[90%] p-2 mb-4 ml-[5%] border border-gray-300 rounded-full"
                         />
                         <div className="flex flex-wrap gap-2 px-2 mb-4 ml-1">
                             {selectedPeople.map((person, index) => (
