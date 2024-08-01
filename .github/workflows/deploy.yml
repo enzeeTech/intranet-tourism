@@ -40,7 +40,7 @@ jobs:
         ssh ${{ env.DEPLOY_USER }}@${{ env.DEPLOY_SERVER }} << EOF
           cd ${{ env.DEPLOY_PATH }}/intranet-tourism
           git reset --hard
-          # git clean -df ##causing the files to be deleted
+          # git clean -df ##causing the files to be deleted 
           git pull
           sh ${{ env.DEPLOY_PATH }}/intranet-tourism/update.sh
           exit
