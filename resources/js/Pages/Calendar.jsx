@@ -343,7 +343,7 @@ function Calendar() {
                     </div>
                     <button
                         onClick={handlePrint}
-                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 rounded-full ml-3">
+                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 my-2 rounded-full ml-3">
                         <img src={printIcon} alt="Print" className="w-5 h-6" />
                     </button>
                 </div>
@@ -453,8 +453,9 @@ function Calendar() {
                 
                 {isModalOpen && (
                     <div className="modal-container">
-                        <button className="modal-close-button" onClick={closeModal}>
-                        X
+                        <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
+                        <button onClick={closeModal} className="modal-close-button mt-2 mr-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleSubmit}>
                             <input
@@ -475,6 +476,7 @@ function Calendar() {
                                 placeholder="Venue"
                                 required
                             />
+                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date and Time</div>
                             <input
                                 type="date"
                                 name="startDate"
@@ -485,21 +487,22 @@ function Calendar() {
                                 required
                             />
                             <input
-                                type="date"
-                                name="endDate"
-                                value={eventData.endDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date"
-                                required
-                            />
-                            <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
                                 onChange={handleChange}
                                 className="form-control"
                                 placeholder="Start Time"
+                                required
+                            />
+                            <div className="flex items-start text-md font-semibold text-neutral-800">End Date and Time</div>
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={eventData.endDate}
+                                onChange={handleChange}
+                                className="form-control"
+                                placeholder="End Date"
                                 required
                             />
                             <input
@@ -558,8 +561,8 @@ function Calendar() {
 
                 {isEditModalOpen && (
                     <div className="modal-container">
-                        <button className="modal-close-button" onClick={closeEditModal}>
-                            X
+                        <button onClick={closeEditModal} className="modal-close-button mt-2 mr-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleEditSubmit}>
                             <input

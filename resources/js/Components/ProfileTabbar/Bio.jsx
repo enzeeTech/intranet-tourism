@@ -109,7 +109,7 @@
                                              <img
                                                  loading="lazy"
                                                  src={photo}
-                                                 className="aspect-square rounded-md w-[90px] h-[90px] ml-4"
+                                                 className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
                                                  alt="Staff's photo"
                                              />
                                              {isEditing && (
