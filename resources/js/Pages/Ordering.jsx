@@ -5,6 +5,7 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import { usePage } from '@inertiajs/react';
+import { useCsrf } from '@/composables';
 
 const Ordering = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
@@ -13,6 +14,7 @@ const Ordering = () => {
     const [notificationMessage, setNotificationMessage] = useState("");
     const departmentId = props.departmentId;
     const [isLoading, setIsLoading] = useState(false);
+    const csrfToken = useCsrf();
 
     const fetchStaffMembers = async (departmentId) => {
         setIsLoading(true);
@@ -90,6 +92,7 @@ const Ordering = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
                 },
                 body: JSON.stringify({ order: order }),
             });
