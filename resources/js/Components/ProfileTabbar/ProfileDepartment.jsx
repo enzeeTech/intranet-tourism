@@ -83,11 +83,11 @@ function ProfileDepartment({
                     </table>
                 </div>
             </div>
-            {isEditing && (
+            {/* {isEditing && (
                 <div className="flex justify-end mt-4 pb-3">
                     <button onClick={handleSaveField} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
