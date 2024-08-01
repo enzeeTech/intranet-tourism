@@ -24,6 +24,7 @@ use Modules\Events\Http\Controllers\TaskItemController;
 // });
 
 // require_once 'crud.php';
+Route::post('events/{event}/invite', [EventController::class, 'invite'])->middleware('auth:sanctum');
 Route::apiResources([
 
     'events' => EventController::class,

@@ -219,12 +219,13 @@ function Card({
     setDepartmentDescription(department.description || '');
   }, [department, imgSrc]);
 
-const handleImageChange = (file) => {
+  const handleImageChange = (file) => {
+    if (!file) return; // Exit if no file is selected
+
     const formData = new FormData();
     formData.append('banner', file);
     formData.append('user_id', id); // Add user_id to the form data
     formData.append('_method', 'PUT'); // Add _method to the form data
-    formData.append('name', formData.name); // Add _method to the form data
   
     fetch('', {
       method: 'POST',
@@ -255,22 +256,25 @@ const handleImageChange = (file) => {
 
     const data = {
       name: departmentName,
-      banner: imageSrc,
       description: departmentDescription,
       type: selectedType,
       created_by: user.name,
       updated_by: user.name,
     };
 
+    if (imageSrc && imageSrc !== department.banner) {
+      data.banner = imageSrc;
+    }
+
     const options = {
       method: 'PUT',
       headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "X-CSRF-Token": csrfToken 
-        },
-        body: JSON.stringify(data)
-     };
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        "X-CSRF-Token": csrfToken 
+      },
+      body: JSON.stringify(data)
+    };
 
     const url = `/api/department/departments/${department.id}`;
 
@@ -326,9 +330,9 @@ const handleImageChange = (file) => {
 }
 
 export default function EditDepartments({ department, onCancel, onSave }) {
-    const [departmentData, setDepartmentData] = useState(null); // Added state to store fetched department data
+  const [departmentData, setDepartmentData] = useState(null); // Added state to store fetched department data
 
-    const user = {
+  const user = {
     name: "Aisyah binte Musa",
     role: "Admin",
     src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
