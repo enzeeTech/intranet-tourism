@@ -77,10 +77,10 @@ function EditProfilePhoto({ onClose, onSelectFile, userId, userName }) {
         <section className="flex flex-col py-2.5 bg-white rounded-3xl shadow-custom w-[330px]">
           <div className="flex flex-col pr-2.5 pl-5 w-full">
             <header className="flex gap-5 justify-between items-start text-xl font-bold text-neutral-800">
-              <h1 className="flex-auto mt-4">Edit Profile Photo</h1>
+              <h1 className="flex-auto mt-4 ml-10">Edit Profile Photo</h1>
               <IconButton icon="/assets/cancel.svg" alt="Close icon" onClick={onClose} />
             </header>
-            <div className="flex flex-col mt-3 mb-4">
+            <div className="flex flex-col -mt-1 mb-4">
               {listItems.map((item, index) => (
                 <ListItem key={index} icon={item.icon} alt={item.alt} text={item.text} onClick={item.onClick} />
               ))}

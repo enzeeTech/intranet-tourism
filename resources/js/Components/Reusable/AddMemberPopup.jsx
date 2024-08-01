@@ -167,7 +167,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         <div>
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                    <div className="bg-white rounded-lg pt-7 w-[400px]">
+                    <div className="bg-white rounded-3xl pt-7 px-4 w-[400px]">
                         <h1 className="mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
                         <input
                             type="text"
@@ -207,7 +207,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
                         </div>
                         {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
-                        <div className="flex justify-end pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
+                        <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
                                 className="px-4 mb-4 mr-2 rounded-full text-[#222222]"
                                 onClick={handleClose}
