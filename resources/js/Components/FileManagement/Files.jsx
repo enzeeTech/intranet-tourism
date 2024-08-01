@@ -15,35 +15,35 @@ const FileTable = ({ searchTerm }) => {
   const csrfToken = useCsrf();
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await fetch('/api/resources/resources');
-        if (!response.ok) {
-          throw new Error('Failed to fetch files');
-        }
-        const responseData = await response.json();
-
-        if (!Array.isArray(responseData.data?.data)) {
-          console.error('Expected an array of files, but received:', responseData.data?.data);
-          setLoading(false);
-          return;
-        }
-
-        const filesData = responseData.data.data.map(file => ({
-          ...file,
-          uploader: file.uploader, // Assuming the API provides an 'uploader' field with the uploader's name
-          metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
-        }));
-
-        setFiles(filesData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching files:', error);
-        setLoading(false);
+  const fetchFiles = async () => {
+    try {
+      const response = await fetch('/api/resources/resources');
+      if (!response.ok) {
+        throw new Error('Failed to fetch files');
       }
-    };
+      const responseData = await response.json();
 
+      if (!Array.isArray(responseData.data?.data)) {
+        console.error('Expected an array of files, but received:', responseData.data?.data);
+        setLoading(false);
+        return;
+      }
+
+      const filesData = responseData.data.data.map(file => ({
+        ...file,
+        uploader: file.uploader, // Assuming the API provides an 'uploader' field with the uploader's name
+        metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
+      }));
+
+      setFiles(filesData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching files:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchFiles();
   }, []);
 
@@ -81,17 +81,61 @@ const FileTable = ({ searchTerm }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredFiles.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleRename = (index, newName) => {
-    const updatedFiles = files.map((file, i) => {
-      if (i === index) {
-        const metadata = file.metadata || {};
-        metadata.original_name = newName;
-        return { ...file, metadata: JSON.stringify(metadata) };
+  const handleRename = async (index, newName) => {
+    const fileToRename = files[index];
+    if (!fileToRename || !fileToRename.id) {
+      console.error("File ID is missing.");
+      return;
+    }
+
+    const userId = String(fileToRename.user_id);
+    const updatedMetadata = {
+      ...fileToRename.metadata,
+      original_name: newName
+    };
+    const metadataString = JSON.stringify(updatedMetadata);
+
+    const payload = {
+      user_id: userId,
+      attachable_id: fileToRename.attachable_id,
+      attachable_type: fileToRename.attachable_type,
+      extension: fileToRename.extension,
+      filesize: fileToRename.filesize,
+      for: fileToRename.for,
+      metadata: metadataString,
+      mime_type: fileToRename.mime_type,
+      path: fileToRename.path,
+    };
+
+    const url = `/api/crud/resources/${fileToRename.id}`;
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        const responseBody = await response.text();
+        console.error('Failed to rename file:', responseBody);
+        throw new Error(`Failed to rename file: ${response.statusText}`);
       }
-      return file;
-    });
-    setFiles(updatedFiles);
-    setEditingIndex(null); // Reset editing state
+
+      console.log('File renamed successfully.');
+      
+      // Refresh the file list to get the updated name
+      await fetchFiles();
+
+    } catch (error) {
+      console.error('Error renaming file:', error);
+    } finally {
+      setEditingIndex(null);
+    }
   };
 
   const handleDelete = async (fileId, index) => {
@@ -110,7 +154,6 @@ const FileTable = ({ searchTerm }) => {
       if (response.ok) {
         const updatedFiles = files.filter((_, i) => i !== index);
         setFiles(updatedFiles);
-        window.location.reload();
       } else {
         console.error('Failed to delete file:', data);
       }
@@ -182,10 +225,8 @@ const FileTable = ({ searchTerm }) => {
                       </td>
                       <td className="flex relative mt-3.5">
                         <PopupContent
-                          name={metadata.original_name || 'Unknown'}
-                          file={item} // Pass the current file directly
-                          onRename={() => startEditing(indexOfFirstItem + index, metadata.original_name)} // Enable renaming via popup
-                          onDelete={() => handleDelete(item.id, indexOfFirstItem + index)} // Pass file ID and index
+                          name={metadata.original_name}
+                          handleDelete={() => handleDelete(item.id, index)}
                         />
                       </td>
                     </tr>
@@ -193,8 +234,15 @@ const FileTable = ({ searchTerm }) => {
                 })}
               </tbody>
             </table>
-            <Pagination totalItems={filteredFiles.length} itemsPerPage={itemsPerPage} paginate={setCurrentPage} currentPage={currentPage} />
           </div>
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredFiles.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>
