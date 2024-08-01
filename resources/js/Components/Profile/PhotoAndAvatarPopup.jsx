@@ -80,7 +80,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
       onClose(); // Close the popup
     } catch (error) {
       console.error('Error updating avatar:', error);
-      // window.location.reload();
+      window.location.reload();
     }
   };
 

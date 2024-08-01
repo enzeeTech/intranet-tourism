@@ -96,7 +96,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       }
     } catch (e) {
       console.error('Error saving cropped image:', e);
-      // window.location.reload();
+      window.location.reload();
     }
   };
 
