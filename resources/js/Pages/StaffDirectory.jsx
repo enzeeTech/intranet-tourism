@@ -10,6 +10,7 @@ import Header from '../Components/DashboardHeader';
 import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
 import Example from '../Layouts/DashboardLayoutNew';
+import { useCsrf } from '@/composables';
 
 const StaffDirectory = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
@@ -24,6 +25,7 @@ const StaffDirectory = () => {
   const [staffMembers, setStaffMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const csrfToken = useCsrf();
 
   const fetchDepartments = async (url) => {
     try {
@@ -156,6 +158,7 @@ const StaffDirectory = () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken || '',
       },
       body: JSON.stringify({ is_active: isActive }),
     });
@@ -277,10 +280,10 @@ const StaffDirectory = () => {
       <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
         <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
         <div className="flex justify-center space-x-4">
-          <button className="px-8 py-1 text-base text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={handleDeactivate}>
+          <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleDeactivate}>
             Yes
           </button>
-          <button className="px-8 py-1 text-white bg-red-500 hover:bg-red-700 rounded-full" onClick={() => setIsDeactivateModalOpen(false)}>
+          <button className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700" onClick={() => setIsDeactivateModalOpen(false)}>
             No
           </button>
         </div>
