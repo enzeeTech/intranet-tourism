@@ -226,20 +226,20 @@ export default function Profile() {
     };
 
     const handleCancelBio = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingBio(false);
     };
 
     const handleCancelDepartment1 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment1(false);
     };
 
     const handleCancelDepartment2 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment2(false);
     };
 
