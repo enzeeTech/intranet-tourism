@@ -3,7 +3,7 @@ import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png';
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
 import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import SearchPopup from './AddMemberPopup';
-import ThreeDotButton from './ThreeDotButton'; // Adjust the import path as necessary
+import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
