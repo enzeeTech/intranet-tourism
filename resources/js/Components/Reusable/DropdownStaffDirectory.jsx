@@ -1,18 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png'; 
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
-import visitDepartment from '../../../../public/assets/visitDepartmentButton.png'; 
-import threeDotButton from '../../../../public/assets/threeDotButton.png';
-import addMemberButton from '../../../../public/assets/addPersonButton.png';
 import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import SearchPopup from './AddMemberPopup';
+import ThreeDotButton from './ThreeDotButton'; // Adjust the import path as necessary
 import './css/DropdownStaffDirectory.css';
-import { set } from 'date-fns';
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
-  const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef(null);
@@ -25,9 +21,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
     { name: 'Thomas', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
     { name: 'Zack', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
     { name: 'Zara', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
-];
-
-  console.log('staffMembers', staffMembers)
+  ];
 
   const handleSelect = (department) => {
     setSelectedDepartment(department);
@@ -36,26 +30,15 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
     setSearchTerm(department.name);
   };
 
-  const toggleReportingPopup = () => {
-    setIsReportingPopupOpen(!isReportingPopupOpen);
-    setIsOpen(false);
-  };
-
-  const toggleAddMemberPopup = () => {
-    setIsAddMemberPopupOpen(!isAddMemberPopupOpen);
+  const toggleAddMemberPopup = (event) => {
+    event.stopPropagation();
+    setIsAddMemberPopupOpen((prev) => !prev);
     setIsOpen(false);
   };
 
   const toggleDropdown = () => {
-    setIsReportingPopupOpen(false);
-  
-    if (isOpen && selectedDepartment.id) {
-      setSearchTerm(selectedDepartment.name);
-    } else {
-      setSearchTerm('');
-    }
-  
-    setIsOpen(!isOpen);
+    setSearchTerm('');
+    setIsOpen((prev) => !prev);
   };
 
   const handleSearchChange = (e) => {
@@ -65,12 +48,13 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
-      if (selectedDepartment.name) {
+      if (selectedDepartment.name){
         setSearchTerm(selectedDepartment.name);
       } else {
         setSearchTerm('');
       }
     }
+    
   };
 
   useEffect(() => {
@@ -95,7 +79,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          // onClick={toggleDropdown}
           placeholder="Select Department"
           className="dropdown-header-input"
         />
@@ -110,7 +93,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           ))}
         </ul>
       )}
-      <div className="flex items-center justify-start space-x-0 ">
+      <div className="relative flex items-center justify-start space-x-0">
         {selectedDepartment.id && (
           <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
             <button className="visit-department-btn text-sm rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
@@ -127,36 +110,10 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           Member
         </button>
         )}
+        {selectedDepartment.id && (
+          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+        )}
       </div>
-      {selectedDepartment.id && (
-      <button className="three-dot-btn" onClick={toggleReportingPopup}>
-        <img src={threeDotButton} alt="More Options" />
-      </button>
-      )}
-      {isReportingPopupOpen && (
-        <div
-          className="staff-popup"
-          style={{
-            marginTop: `95px`,
-            marginRight: `20px`,
-            zIndex: 10,
-          }}
-        >
-          <button
-            onClick={toggleReportingPopup}
-            className="popup-button hover:bg-gray-100"
-          >
-            Reporting Structure
-          </button>
-          <hr className="popup-divider" />
-          <a
-            href={`/ordering?departmentId=${selectedDepartment.id}`}
-            className="popup-button hover:bg-gray-100"
-          >
-            Ordering
-          </a>
-        </div>
-      )}
       {isAddMemberPopupOpen && (
         <SearchPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}
