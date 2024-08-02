@@ -205,11 +205,25 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     }}
                 >
                     <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger' }}>
-                        <h2>Delete the Story?</h2>
+                        <h2>Delete Story?</h2>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                         <button
                             onClick={handleDelete}
+                            style={{
+                                backgroundColor: 'white',
+                                color: '#333',
+                                border: '1px solid #ccc',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Yes
+                        </button>
+                        <button
+                            onClick={handleClosePopup}
                             style={{
                                 backgroundColor: '#E53935',
                                 color: 'white',
@@ -219,20 +233,6 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 padding: '10px 20px',
                                 cursor: 'pointer',
                                 marginRight: '10px',
-                            }}
-                        >
-                            Yes
-                        </button>
-                        <button
-                            onClick={handleClosePopup}
-                            style={{
-                                backgroundColor: 'white',
-                                color: '#333',
-                                border: '1px solid #ccc',
-                                borderRadius: '25px',
-                                width: '80px',
-                                padding: '10px 20px',
-                                cursor: 'pointer',
                             }}
                         >
                             No

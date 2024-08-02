@@ -40,28 +40,29 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   );
 
   return (
-    <div className="file-search-bar-container">
+    <div className="file-search-bar-container shadow-custom">
       <div className="file-search-bar-title">
         <h2>Search Files</h2>
       </div>
       <div className="file-search-bar">
         <input
           type="text"
-          className="search-input"
+          className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
           placeholder="Search Name"
           value={searchTerm}
-          onChange={handleSearchChange}
-          style={{ paddingLeft: '1.2rem' }}
+          onChange={handleSearchChange} 
+          style={{ paddingLeft: '1.5rem' }}
+          // style={{ paddingLeft: '1.2rem' }}
         />
         <button
           onClick={handleSearchChange}
-          className="visit-department-btn text-sm rounded-full px-4 py-3 bg-blue-500 text-white hover:bg-blue-700">
+          className="visit-department-btn text-md font-bold rounded-full px-4 py-3 mx-4 bg-blue-500 text-white hover:bg-blue-700">
           Search
         </button>
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
           <div
-            className="flex items-center shrink-0 ml-2 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
+            className="flex items-center shrink-0 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
             <img src="/assets/addFile.svg" alt="add new file" className="w-10 h-8" />
           </div>
         </label>

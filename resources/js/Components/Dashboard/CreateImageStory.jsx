@@ -77,24 +77,24 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <div>
-                <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} />
+                {/* <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} /> */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <img src="/assets/AaIcon.svg" alt="Add text" className='w-10 mb-3' />
                   <label htmlFor="text" className="label" style={{ marginLeft: '8px' }}>Add text</label>
                 </div>
               </div>
-                <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} />
+                {/* <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} /> */}
               <textarea
                 id="text"
                 value={text}
                 onChange={handleTextChange}
-                placeholder="Enter your text here..."
+                placeholder="Enter caption"
                 className="textarea"
               />
             </div>
             <div className="buttons">
-              <button type="submit" className="post-button">Post</button>
-              <button type="button" className="back-button" onClick={onGoBack}>Go Back</button>
+              <button type="submit" className="post-button font-bold shadow-custom bg-blue-500 hover:bg-blue-700 text-white mb-2">Post</button>
+              <button type="button" className="back-button font-bold shadow-custom border-2 border-gray-400 hover:bg-gray-400 hover:text-white" onClick={onGoBack}>Cancel</button>
             </div>
           </form>
         </div>

@@ -97,7 +97,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           onChange={handleSearchChange}
           // onClick={toggleDropdown}
           placeholder="Select Department"
-          className="dropdown-header-input"
+          className="dropdown-header-input font-bold"
         />
         <img style={{ width: '15px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
       </div>
@@ -113,14 +113,14 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
       <div className="flex items-center justify-start space-x-0 ">
         {selectedDepartment.id && (
           <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
-            <button className="visit-department-btn text-sm rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
+            <button className="visit-department-btn text-sm font-bold rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
               Visit Department
             </button>
           </a>      
         )}
         {selectedDepartment.id && (
         <button 
-          className="flex items-center text-sm px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
+          className="flex items-center text-sm font-bold px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
           onClick={toggleAddMemberPopup}
           >
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
