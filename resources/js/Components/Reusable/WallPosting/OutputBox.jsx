@@ -3,6 +3,8 @@ import { usePage } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
 import EditPost from './EditPost';
 import './index.css'
+import { useCsrf } from "@/composables";
+
 
 function Avatar({ src, alt }) {
   return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -78,7 +80,9 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [isPopupOpen, setIsPopupOpen] = useState({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentEditPost, setCurrentEditPost] = useState(null);
-  
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const csrfToken = useCsrf();
 
   
   useEffect(() => {
@@ -182,10 +186,33 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
     setCurrentEditPost(post);
     setIsEditModalOpen(true);
   };
+  
 
+  const handleDelete = async () => {
+    // console.log("POST_ID", postIdToDelete);
+    try {
+      const response = await fetch(`/api/posts/posts/${postIdToDelete}`, {
+        method: 'DELETE',
+        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+      });
 
+      if (response.ok) {
+        console.log(`Post with ID ${postIdToDelete} deleted successfully.`);
+        setPostData(postData.filter(post => post.id !== postIdToDelete));
+      } else {
+        console.error(`Failed to delete post with ID ${postIdToDelete}.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting post with ID ${postIdToDelete}:`, error);
+    }
+    setShowDeletePopup(false);
+  };
 
-
+  const confirmDelete = (postId) => {
+    console.log("POST_ID", postId);
+    setPostIdToDelete(postId);
+    setShowDeletePopup(true);
+  };
 
   console.log("RR", reversedFilteredPosts);
 
@@ -222,16 +249,15 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                   <div className="flex gap-1.5 -mt-1">
                     {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
                     <img 
-  loading="lazy" 
-  src={
-    post.userProfile?.profile.image 
-      ? `/storage/${post.userProfile.profile.image}` 
-      : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-  } 
-  alt={post.user.name} 
-  className="shrink-0 aspect-square w-[53px] rounded-image" 
-/>
-
+                      loading="lazy" 
+                      src={
+                        post.userProfile?.profile.image 
+                          ? `/storage/${post.userProfile.profile.image}` 
+                          : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                      } 
+                      alt={post.user.name} 
+                      className="shrink-0 aspect-square w-[53px] rounded-image" 
+                    />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
@@ -254,7 +280,7 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                 <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10 ">
                   <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
                   <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
+                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => confirmDelete(post.id)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
                   <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
                   <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
                 </div>
@@ -302,16 +328,15 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                   <div className="flex gap-1.5 -mt-1">
                     {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
                     <img 
-  loading="lazy" 
-  src={
-    post.userProfile?.profile.image 
-      ? `/storage/${post.userProfile.profile.image}` 
-      : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-  } 
-  alt={post.user.name} 
-  className="shrink-0 aspect-square w-[53px] rounded-image" 
-/>
-
+                      loading="lazy" 
+                      src={
+                        post.userProfile?.profile.image 
+                          ? `/storage/${post.userProfile.profile.image}` 
+                          : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                      } 
+                      alt={post.user.name} 
+                      className="shrink-0 aspect-square w-[53px] rounded-image" 
+                    />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
@@ -334,7 +359,8 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                 <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10 ">
                   <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(post)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
                   <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
+                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => confirmDelete(post.id)}>
+                  <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
                   <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
                   <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
                 </div>
@@ -380,6 +406,61 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
           </div>
         </div>
       )}
+      {showDeletePopup && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
+                        zIndex: 10000,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minWidth: '400px',
+                    }}
+                >
+                    <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger' }}>
+                        <h2>Delete the Story?</h2>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                        <button
+                            onClick={handleDelete}
+                            style={{
+                                backgroundColor: '#E53935',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                marginRight: '10px',
+                            }}
+                        >
+                            Yes
+                        </button>
+                        <button
+                            // onClick={handleClosePopup}
+                            style={{
+                                backgroundColor: 'white',
+                                color: '#333',
+                                border: '1px solid #ccc',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            No
+                        </button>
+                    </div>
+                </div>
+            )}
     </>
   );
 }

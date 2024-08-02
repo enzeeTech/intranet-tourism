@@ -255,11 +255,13 @@ const StoryNew = ({ userId }) => {
         });
     };
 
+    // console.log("USERDATA", userData);
+
     const loggedInUserAvatar = {
         // src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         src: userData.profileImage ? `/storage/${userData.profileImage}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
         alt: "Avatar of logged in user",
-        name: "Your Story",
+        name: userData.username,
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
 
@@ -279,8 +281,6 @@ const StoryNew = ({ userId }) => {
                         padding: '2px'
                     }}>
                         <img
-                            // src={loggedInUserAvatar.src}
-                            // src={`/storage/${loggedInUserAvatar.src}`}
                             src={loggedInUserAvatar.src}
                             alt={loggedInUserAvatar.alt}
                             style={{
