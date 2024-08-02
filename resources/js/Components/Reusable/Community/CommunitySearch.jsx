@@ -55,16 +55,16 @@ const CommunitySearchBar = ({ onSearch, toggleCreateCommunity }) => {
       <div className="mb-1 staff-search-bar-title">
         <h2 className="lg:text-xl font-semibold sm:text-sm md:text-md">Search Communities</h2>
       </div>
-      <div className="flex flex-col items-center space-y-3 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3">
+      <div className="flex flex-col items-center max-md:items-start space-y-3 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3">
         <input
           type="text"
-          className="flex-grow w-full p-3 border border-[#E4E4E4] rounded-full search-input sm:w-auto"
+          className="text-md font-bold px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 search-input-staff-search-bar sm:w-auto"
           placeholder="Search Community Name"
           value={searchTerm}
           onChange={handleSearch}
         />
         <button
-          className="flex items-center text-sm px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700 md:justify-start"
+          className="flex items-center text-sm px-4 py-4 bg-red-500 text-white rounded-full font-bold hover:bg-red-700 md:justify-start"
           onClick={toggleCreateCommunity}>
           Create Community
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 ml-2" />
