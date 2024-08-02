@@ -89,7 +89,7 @@ export default function Profile() {
                 setProfileData(pv => ({
                     ...pv, ...data,
                     backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`,
+                    profileImage: data.profile && data.profile.image,
                     username: "@" + data.username,
                 }));
 
@@ -226,20 +226,20 @@ export default function Profile() {
     };
 
     const handleCancelBio = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingBio(false);
     };
 
     const handleCancelDepartment1 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment1(false);
     };
 
     const handleCancelDepartment2 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment2(false);
     };
 
@@ -253,6 +253,48 @@ export default function Profile() {
 
     const handleEditDepartment2 = () => {
         setIsEditingDepartment2(true);
+    };
+
+    const handleSelectFile = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const FfData = new FormData();
+            FfData.append('cover_photo', file);
+            FfData.append('user_id', id); // Add user_id to the form data
+            FfData.append('_method', 'PUT'); // Add _method to the form data
+            FfData.append('name', formData.name); // Add name to the form data
+    
+            const url = `/api/profile/profiles/${profileData.profile?.id}?with[]=user`;
+    
+            fetch(url, {
+                method: 'POST',
+                body: FfData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    const error = await response.json();
+                    return await Promise.reject(error);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    setPhoto(URL.createObjectURL(file));
+                    setIsPopupOpen(false);
+                    console.log('File uploaded successfully:', data);
+                } else {
+                    console.error('Error uploading file:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
+        }
     };
 
     const handleCreatePoll = (poll) => {
@@ -433,17 +475,8 @@ export default function Profile() {
                 <Popup 
                     title="Edit Banner Photo" 
                     onClose={() => setIsPopupOpen(false)} 
-                    onSave={() => {
-                        setIsPopupOpen(false); 
-                        openSaveNotification();
-                        setTimeout(closeSaveNotification, 1200);
-                    }}
-                    profileData={profileData} 
-                    id={id}
-                    formData={formData}
-                    csrfToken={csrfToken}
-                    authToken={authToken}
-                    setPhoto={setPhoto} // Pass the setPhoto function
+                    onSave={handleSaveBio}
+                    onSelectFile={handleSelectFile}
                 />
             )}
         </Example>

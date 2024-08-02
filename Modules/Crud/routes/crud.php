@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Crud\Http\Controllers\FullDistinctGradeController;
+
+Route::get('distinct-schema-grades', [FullDistinctGradeController::class, 'getDistinctGrades']);
+
 
 Route::apiResources([
     'audits' => \Modules\Crud\Http\Controllers\AuditController::class,

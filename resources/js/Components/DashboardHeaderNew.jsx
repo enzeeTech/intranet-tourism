@@ -73,7 +73,7 @@ export default function Header({ setSidebarOpen }) {
                 setUserData(pv => ({
                     ...pv, ...data,
                     name: data.name,
-                    profileImage: data.profile && data.profile.image ? data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
                 }));
             })
             .catch((error) => {
@@ -168,7 +168,7 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="w-8 h-8 rounded-full bg-gray-50"
-                                src={`/storage/${userData.profileImage}`}
+                                src={userData.profileImage}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">
