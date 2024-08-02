@@ -4,6 +4,9 @@ import DeleteIcon from '../../../../public/assets/DeleteRedButton.svg';
 import { useCsrf } from "@/composables";
 
 const StoryViewer = ({ stories, onClose, user, onViewed }) => {
+
+    // console.log("USER", user);
+
     const csrfToken = useCsrf();
 
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -67,6 +70,8 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
         setShowDeletePopup(false);
     };
 
+
+    
     return (
         <div style={{
             position: 'fixed',
@@ -122,11 +127,12 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', flex: '1', marginBottom: '5px' }}>
                             <img
-                                src={`/storage/${user.src}`}
+                                // src={`/storage/${user.src}`}
+                                src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.name}`}
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
-                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.name}</div>
+                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>Your Story</div>
                         </div>
                         <button
                             type="button"

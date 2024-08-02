@@ -49,7 +49,7 @@ function UserDetail({ user }) {
                         <div className="w-full bg-white h-[485px] shadow-custom">
                             <ProfileHeader
                                 backgroundImage={userData.backgroundImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?'}
-                                profileImage={userData.profile?.image ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
+                                // profileImage={userData.profile?.image ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
                                 name={userData.name}
                                 username={"@" + userData.username || "N/A"}
                                 status={userData.status ?? "Online"}
