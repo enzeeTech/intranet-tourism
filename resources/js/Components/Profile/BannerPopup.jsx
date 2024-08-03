@@ -19,8 +19,19 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
 
   const handleSave = () => {
     if (!selectedFile) {
-      console.error("No file selected");
-      return;
+        console.error("No file selected");
+        return;
+    }
+
+    // Add checks for formData and profileData
+    if (!formData || !formData.name) {
+        console.error("formData is undefined or missing 'name' property");
+        return;
+    }
+
+    if (!profileData || !profileData.profile || !profileData.profile.id) {
+        console.error("profileData is undefined or missing 'profile' or 'id' property");
+        return;
     }
 
     const FfData = new FormData();
@@ -29,39 +40,40 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
     FfData.append("_method", "PUT");
     FfData.append("name", formData.name);
 
-    const url = `/api/profile/profiles/${profileData?.profile?.id}?with[]=user`;
+    const url = `/api/profile/profiles/${profileData.profile.id}?with[]=user`;
 
     fetch(url, {
-      method: "POST",
-      body: FfData,
-      headers: {
-        Accept: "application/json",
-        "X-CSRF-TOKEN": csrfToken || "",
-        Authorization: `Bearer ${authToken}`,
-      },
+        method: "POST",
+        body: FfData,
+        headers: {
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrfToken || "",
+            Authorization: `Bearer ${authToken}`,
+        },
     })
-      .then(async (response) => {
+    .then(async (response) => {
         if (!response.ok) {
-          const error = await response.json();
-          return await Promise.reject(error);
+            const error = await response.json();
+            return await Promise.reject(error);
         }
         return response.json();
-      })
-      .then((data) => {
+    })
+    .then((data) => {
         if (data.success) {
-          setPhoto(URL.createObjectURL(selectedFile)); // Update the photo URL
-          onSave(); // Trigger the onSave callback
-          console.log("File uploaded successfully:", data);
-          window.location.reload();
+            setPhoto(URL.createObjectURL(selectedFile)); // Update the photo URL
+            onSave(); // Trigger the onSave callback
+            console.log("File uploaded successfully:", data);
+            window.location.reload();
         } else {
-          console.error("Error uploading file:", data);
+            console.error("Error uploading file:", data);
         }
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         console.error("Error uploading file:", error);
         window.location.reload();
-      });
-  };
+    });
+};
+
 
   return (
     <div

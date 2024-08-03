@@ -323,35 +323,28 @@ function Calendar() {
             <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
-                <div className="flex justify-center mt-3 mb-4">
-
-                    <div className="flex justify-start rounded-full py-1 pl-6 my-2 " style={{ border: '2px solid #E4E4E4', width: '100%' }}>
-                        <div className="flex items-center justify-start">
-                            <span className="flex items-center justify-center bg-white rounded-l-full">
-                                <img src={searchIcon} alt="Search" className="w-6 h-6" />
-                            </span>
-                            <input
-                                type="search"
-                                className="flex-grow px-4 py-2 border-none input-no-outline"
-                                placeholder="Search for events"
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                // style={{ outline: 'none', marginRight: '850px' }}
-                            />
-                        </div>
+                <div className="flex flex-col items-center mt-3 mb-4 w-full">
+                    <div className="flex w-full items-center justify-between">
+                        <input
+                            type="search"
+                            className="flex-grow mt-2 px-6 py-4 rounded-full border-gray-100 bg-gray-100 input-no-outline font-bold"
+                            placeholder="Search for events"
+                            aria-label="Search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <button
+                            onClick={handlePrint}
+                            className="flex items-center justify-center bg-red-500 hover:bg-red-700 mt-2 px-4 py-3 rounded-full ml-3">
+                            <img src={printIcon} alt="Print" className="w-8 h-8" />
+                        </button>
                     </div>
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 my-2 rounded-full ml-3">
-                        <img src={printIcon} alt="Print" className="w-5 h-6" />
-                    </button>
                 </div>
 
                 <div className='flex justify-end mb-4' >
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full">
+                        className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full font-bold">
                         <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
                         Add Event
                     </button>
