@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCsrf } from "@/composables";
 
-
 function EditPost({ post, onClose, loggedInUserId }) {
-    console.log("POST", post);
   const [content, setContent] = useState(post.content || '');
   const [attachments, setAttachments] = useState(post.attachments || []);
   const [tags, setTags] = useState(post.tags || []);
-//   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const csrfToken = useCsrf();
-
 
   useEffect(() => {
     setContent(post.content || '');
@@ -27,28 +23,27 @@ function EditPost({ post, onClose, loggedInUserId }) {
   };
 
   const handleDeleteAttachment = (index) => {
-    const updatedAttachments = attachments.filter((_, i) => i !== index);
-    setAttachments(updatedAttachments);
+    setAttachments(prevAttachments => prevAttachments.filter((_, i) => i !== index));
   };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-        const formData = new FormData();
-        formData.append('_method', 'PUT');
-        formData.append("user_id", loggedInUserId);
-        formData.append("type", "post");
-        formData.append("visibility", "public");
-        formData.append('content', content);
-        formData.append('tag', JSON.stringify(tags));
+      const formData = new FormData();
+      formData.append('_method', 'PUT');
+      formData.append("user_id", loggedInUserId);
+      formData.append("type", "post");
+      formData.append("visibility", "public");
+      formData.append('content', content);
+      formData.append('tag', JSON.stringify(tags));
 
-        attachments.forEach((file, index) => {
-            if (file instanceof File) {
-            formData.append(`attachments[${index}]`, file);
-            } else {
-            formData.append(`existing_attachments[${index}]`, file.id);
-            }
-        });
+      attachments.forEach((file, index) => {
+        if (file instanceof File) {
+          formData.append(`attachments[${index}]`, file);
+        } else {
+          formData.append(`attachments[${index}]`, file);
+        }
+      });
 
       const response = await fetch(`/api/posts/posts/${post.id}`, {
         method: 'POST',
@@ -78,7 +73,6 @@ function EditPost({ post, onClose, loggedInUserId }) {
           <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt="Profile image" className="shrink-0 aspect-square w-[53px] rounded-image" />
           <div className="flex flex-col my-auto">
             <div className="text-base font-semibold text-neutral-800">{post.user?.username}</div>
-            {/* <time className="mt-3 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time> */}
           </div>
         </div>
       </header>

@@ -5,7 +5,7 @@ import Pautan from '@/Components/Settings/LinkComponent';
 
 const Settings = () => {
   const handleNavigation = () => {
-    window.location.href = '../settings';
+    window.location.href = route('manage-links');
   };
 
   return (
