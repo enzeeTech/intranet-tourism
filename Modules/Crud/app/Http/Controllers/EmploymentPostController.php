@@ -12,19 +12,20 @@ class EmploymentPostController extends Controller
     {
         if ($request->has('department_id')) {
             $departmentId = $request->get('department_id');
-            $members = EmploymentPost::where('department_id', $departmentId)
+            $members = EmploymentPost::where('employment_posts.department_id', $departmentId)
                 ->join('users', 'employment_posts.user_id', '=', 'users.id')
                 ->join('profiles', 'users.id', '=', 'profiles.user_id')
+                ->join('business_posts', 'employment_posts.business_post_id', '=', 'business_posts.id')
                 ->select(
                     'users.id as user_id',
                     'employment_posts.id as employment_post_id',
-                    'users.order',
+                    'employment_posts.order',
+                    'business_posts.title as business_post_title',
                     'users.is_active',
                     'profiles.bio as name',
                     'profiles.image',
                     'profiles.work_phone',
-                    'profiles.phone_no',
-                    'employment_posts.title'
+                    'profiles.phone_no'
                 )
                 ->get()
                 ->map(function ($member) {

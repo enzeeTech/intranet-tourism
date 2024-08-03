@@ -80,7 +80,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Select Department"
-          className="dropdown-header-input font-bold"
+          className="font-bold dropdown-header-input"
         />
         <img style={{ width: '15px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
       </div>
@@ -111,7 +111,9 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </button>
         )}
         {selectedDepartment.id && (
-          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+          <div className='relative'>
+            <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+          </div>
         )}
       </div>
       {isAddMemberPopupOpen && (
