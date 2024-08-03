@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import UserFilePopup from '../Reusable/UserFilePopup';
 import Pagination from '../Paginator';
 const SearchInput = () => (
-  <div className="flex min-w-72 gap-0 px-5 py-0 text-md bg-white rounded-full border border-solid border-neutral-200 text-neutral-800 text-opacity-50 mt-8 my-2">
+  <div className="flex w-full gap-0 px-5 py-0 text-md bg-gray-100 rounded-full text-neutral-800 text-opacity-50 mt-8 my-2">
     {/* <img
       loading="lazy"
       src="https://cdn.builder.io/api/v1/image/assets/TEMP/e9a74adec558c689d2c2036311d5dad5a1cc1d44aea0cf5f88c1bd1bafeea3ce?apiKey=285d536833cc4168a8fbec258311d77b&"
@@ -12,7 +12,7 @@ const SearchInput = () => (
     /> */}
     <input
       type="text"
-      className="w-full py-2 px-2 text-black border-none focus:outline-none"
+      className="w-full py-2 px-2 text-neutral-800 bg-gray-100 border-none font-bold focus:outline-none"
       placeholder="Search files"
     />
   </div>
