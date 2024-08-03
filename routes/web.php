@@ -16,6 +16,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\OrderingController;
+use App\Http\Controllers\ManageLinksController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -64,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/link', [LinkController::class, 'index'])->name('link');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
+    Route::get('/manage-links', [ManageLinksController::class, 'index'])->name('manage-links');
 });
 
 require __DIR__ . '/auth.php';
