@@ -15,8 +15,8 @@ const ThreeDotButton = ({ selectedDepartmentId }) => {
 
   return (
     <div className="relative">
-      <button onClick={togglePopup} className="ml-[370px] mt-1 right-0 p-2">
-        <img src="/assets/threeDotButton.png" alt="Menu" className="w-12 h-8" />
+      <button onClick={togglePopup} className="p-2 mt-1">
+        <img src="/assets/threeDotButton.png" alt="Menu" className="h-8 w-[15]" />
       </button>
       {isPopupOpen && (
         <PopupMenu onAssign={handleAssign} selectedDepartmentId={selectedDepartmentId} onClose={() => setIsPopupOpen(false)} />

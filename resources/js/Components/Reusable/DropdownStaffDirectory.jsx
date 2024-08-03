@@ -80,7 +80,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Select Department"
-          className="dropdown-header-input font-bold"
+          className="font-bold dropdown-header-input"
         />
         <img style={{ width: '15px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
       </div>
@@ -103,7 +103,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         )}
         {selectedDepartment.id && (
         <button 
-          className="flex items-center text-sm font-bold px-4 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
+          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
           onClick={toggleAddMemberPopup}
           >
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
@@ -111,7 +111,9 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </button>
         )}
         {selectedDepartment.id && (
-          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+          <div className='relative'>
+            <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+          </div>
         )}
       </div>
       {isAddMemberPopupOpen && (
