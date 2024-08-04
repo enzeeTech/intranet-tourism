@@ -25,10 +25,13 @@ class EmploymentPost extends Model implements AuditableContract
 
     protected $fillable = [
         'department_id',
+        'business_unit_id',
         'business_post_id',
         'business_grade_id',
         'business_scheme_id',
         'user_id',
+        'location',
+        'order',
     ];
 
     protected $appends = [
@@ -41,6 +44,7 @@ class EmploymentPost extends Model implements AuditableContract
             'create' => [
                 [
                     'department_id' => ['string', 'required'],
+                    'business_unit_id' => ['string', 'required'],
                     'business_post_id' => ['string', 'required'],
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
@@ -53,10 +57,12 @@ class EmploymentPost extends Model implements AuditableContract
             'update' => [
                 [
                     'department_id' => ['string', 'required'],
-                    'business_post_id' => ['string'],
-                    'business_grade_id' => ['string'],
-                    'business_scheme_id' => ['string'],
-                    'user_id' => ['string', 'required'],
+                    'business_unit_id' => ['string', 'required'],
+                    'business_post_id' => ['string', 'required'],
+                    'business_grade_id' => ['string', 'required'],
+                    'business_scheme_id' => ['string', 'required'],
+                    'user_id' => ['string'],
+                    'location' => ['string'],
                     'order' => ['string'],
                 ],
                 // [],
@@ -72,6 +78,11 @@ class EmploymentPost extends Model implements AuditableContract
         $businessGradeCode = $this->businessGrade ? $this->businessGrade->code : '';
 
         return "{$businessSchemeCode}{$businessGradeCode}";
+    }
+
+    public function businessUnit()
+    {
+        return $this->belongsTo(BusinessUnit::class);
     }
 
     public function businessGrade()

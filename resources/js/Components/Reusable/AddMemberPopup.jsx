@@ -6,9 +6,15 @@ import { useCsrf } from "@/composables";
 const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [selectedPeople, setSelectedPeople] = useState([]);
+    const [selectedPerson, setSelectedPerson] = useState(null);
     const [currentMembers, setCurrentMembers] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [titles, setTitles] = useState([]);
+    const [units, setUnits] = useState([]);
+    const [title, setTitle] = useState('');
+    const [unit, setUnit] = useState('');
+    const [titleId, setTitleId] = useState('');
+    const [unitId, setUnitId] = useState('');
+    const [location, setLocation] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(''); // New state for success message
     const csrfToken = useCsrf();
@@ -28,6 +34,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         return () => clearTimeout(debounceTimeout);
     }, [searchTerm]);
+
+    useEffect(() => {
+        fetchTitles('/api/department/business_posts?page=1');
+        fetchUnits(`/api/department/business_units?department_id=${departmentId}&page=1`);
+    }, [departmentId]);
 
     const fetchCurrentMembers = async () => {
         try {
@@ -71,29 +82,88 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
     };
 
+    const fetchTitles = async (url) => {
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            const titleData = data.data.data.map((item) => ({
+                id: item.id,
+                title: item.title,
+            }));
+
+            setTitles((prevTitles) => {
+                const allTitles = [...prevTitles, ...titleData];
+                return allTitles.sort((a, b) => a.title.localeCompare(b.title));
+            });
+
+            if (data.data.next_page_url) {
+                fetchTitles(data.data.next_page_url);
+            }
+        } catch (error) {
+            console.error("Error fetching titles:", error);
+        }
+    };
+
+    const fetchUnits = async (url) => {
+        let allUnits = [];
+        let hasMorePages = true;
+
+        try {
+            while (hasMorePages) {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: { Accept: 'application/json' }
+                });
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                const data = await response.json();
+
+                const unitData = data.data.map((unit) => ({
+                    id: unit.id,
+                    name: unit.name
+                }));
+
+                allUnits = [...allUnits, ...unitData];
+
+                if (data.next_page_url) {
+                    url = data.next_page_url;
+                } else {
+                    hasMorePages = false;
+                }
+            }
+            setUnits(allUnits.sort((a, b) => a.name.localeCompare(b.name)));
+        } catch (error) {
+            console.error("Error fetching units:", error);
+        }
+    };
+
     const handleSelectPerson = (person) => {
         if (currentMembers.includes(person.id)) {
             setError('This user is already in the department.');
             return;
         }
-        if (selectedPeople.find(p => p.id === person.id)) {
-            setError('This user is already selected.');
-            return;
-        }
-        setSelectedPeople([...selectedPeople, person]);
+        setSelectedPerson(person);
         setError('');  
-    };
-
-    const handleDeselectPerson = (person) => {
-        setSelectedPeople(selectedPeople.filter(p => p !== person));
     };
 
     const handleClose = () => {
         setIsAddMemberPopupOpen(false);
+        setSelectedPerson(null);
+        setSearchTerm('');
+        setSearchResults([]);
+        setTitle('');
+        setUnit('');
+        setLocation('');
+        setError('');
         setSuccess(''); // Clear success message on close
     };
-
-    console.log('selectedPeople', selectedPeople);
 
     const handleAdd = async () => {
         const url = '/api/crud/employment_posts';
@@ -102,65 +172,45 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
         };
 
-        let hasError = false;
+        const userId = selectedPerson.id;
+        const businessPostId = titleId;
+        const businessUnitId = unitId;
+        const locationValue = location;
+        const order = '1';        
 
-        for (const person of selectedPeople) {
+        const body = JSON.stringify({
+            department_id: String(departmentId),
+            business_post_id: String(businessPostId),
+            business_unit_id: String(businessUnitId),
+            business_grade_id: String(selectedPerson.employment_post.business_grade_id),
+            business_scheme_id: "1",
+            user_id: String(userId),
+            location: locationValue,
+            order: order,
+        });
+        
+        console.log('Body:', body);
 
-            // if (!employmentPost) {
-            //     console.error('Missing employment post for:', person);
-            //     setError(prev => `${prev} Missing employment post for ${person.name}. `);
-            //     hasError = true;
-            //     continue;
-            // }
-            
-            const userId = person.id;
-            console.log('userId', userId);
-            const businessPostId = String(person.employmentPost? person.employmentPost.business_post_id : '1');
-            const businessGradeId = String(person.employmentPost? person.employmentPost.business_grade_id : '1');
-            const businessSchemeId = String(person.employmentPost? person.employmentPost.business_scheme_id : '1');
-
-            // if (!businessPostId || !businessGradeId || !businessSchemeId) {
-            //     console.error('Missing required fields for:', person);
-            //     setError(prev => `${prev} Missing required fields for ${person.name}. `);
-            //     hasError = true;
-            //     continue;
-            // }
-                
-
-            const body = JSON.stringify({
-                department_id: String(departmentId),
-                business_post_id: businessPostId,
-                business_grade_id: businessGradeId,
-                business_scheme_id: businessSchemeId,
-                user_id : String(userId),
-            });
-
-            try {
-                const response = await fetch(url, { ...options, body });
-                const responseText = await response.text();
-                if (!response.ok) {
-                    console.error('Error adding member to department:', responseText);
-                    setError(prev => `${prev} Failed to add ${person.name}.`);
-                    hasError = true;
-                    continue;
-                }
-
-                const data = responseText ? JSON.parse(responseText) : {};
-                console.log('Successfully added member:', data);
-                setSuccess('Members successfully added!'); // Set success message
-            } catch (error) {
-                console.error('Error adding member to department:', error);
-                setError(prev => `${prev} An error occurred while adding ${person.name}.`);
-                hasError = true;
+        try {
+            const response = await fetch(url, { ...options, body });
+            const responseText = await response.text();
+            if (!response.ok) {
+                console.error('Error adding member to department:', responseText);
+                setError(`Failed to add ${selectedPerson.name}.`);
+                return;
             }
+
+            const data = responseText ? JSON.parse(responseText) : {};
+            console.log('Successfully added member:', data);
+            setSuccess('Member successfully added!'); // Set success message
+        } catch (error) {
+            console.error('Error adding member to department:', error);
+            setError(`An error occurred while adding ${selectedPerson.name}.`);
         }
 
-        if (!hasError) {
-            setTimeout(() => {
-                setIsAddMemberPopupOpen(false);
-                setSuccess(''); // Clear success message after closing
-            }, 1000); // Delay closing to show success message
-        }
+        setTimeout(() => {
+            handleClose();
+        }, 1000); // Delay closing to show success message
     };
 
     return (
@@ -172,25 +222,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                         <input
                             type="text"
                             placeholder="Search people"
-                            value={searchTerm}
+                            value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            disabled={!!selectedPerson}
                             className="w-[95%] p-2 mb-4 ml-[2.5%] border border-gray-300 rounded-full"
                         />
-                        <div className="flex flex-wrap gap-2 px-2 mb-4 ml-1">
-                            {selectedPeople.map((person, index) => (
-                                <div key={index} className="flex items-center px-3 py-1 bg-[#EBF5FF] rounded-lg">
-                                    <span className="mr-2 text-[#4780FF]">{person.name}</span>
-                                    <button
-                                        className="text-[#4780FF]"
-                                        onClick={() => handleDeselectPerson(person)}
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
-                            {searchResults.map((person, index) => (
+                            {!selectedPerson && searchResults.map((person, index) => (
                                 <div
                                     key={index}
                                     className="flex items-center p-2 cursor-pointer"
@@ -204,8 +242,52 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 </div>
                             ))}
                             {error && <div className="mt-2 text-red-500">{error}</div>}
-
                         </div>
+                        {selectedPerson && (
+                            <div className="mt-4">
+                                <div className="mb-2">
+                                    <label className="block text-gray-700">Title</label>
+                                    <select
+                                        value={title.title}
+                                        onChange={(e) => {
+                                            setTitle(e.target.options[e.target.selectedIndex].text);
+                                            setTitleId(e.target.value);
+                                        }}
+                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                    >
+                                        <option value="">Select Title</option>
+                                        {titles.map((title) => (
+                                            <option key={title.id} value={title.id}>{title.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-2">
+                                    <label className="block text-gray-700">Unit</label>
+                                    <select
+                                        value={unit.name}
+                                        onChange={(e) => {
+                                            setUnit(e.target.options[e.target.selectedIndex].text);
+                                            setUnitId(e.target.value);
+                                        }}
+                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                    >
+                                        <option value="">Select Unit</option>
+                                        {units.map((unit) => (
+                                            <option key={unit.id} value={unit.id}>{unit.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="mb-2">
+                                    <label className="block text-gray-700">Location</label>
+                                    <input
+                                        type="text"
+                                        value={location}
+                                        onChange={(e) => setLocation(e.target.value)}
+                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                    />
+                                </div>
+                            </div>
+                        )}
                         {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
                         <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
@@ -217,6 +299,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             <button
                                 className="w-[100px] px-4 mb-4 mr-4 text-white bg-red-500 hover:bg-red-700 rounded-full"
                                 onClick={handleAdd}
+                                disabled={!selectedPerson || !title || !unit || !location}
                             >
                                 Add
                             </button>
