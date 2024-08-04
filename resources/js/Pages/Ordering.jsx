@@ -20,7 +20,7 @@ const Ordering = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+            const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
             method: "GET",
             headers: { Accept: 'application/json' }
             });
@@ -30,15 +30,14 @@ const Ordering = () => {
             const data = await response.json();
 
             const members = data.members.map(member => ({
-            id: member.user_id,
-            name: member.name,
-            role: member.title,
-            status: 'Online',
-            imageUrl: member.image,
-            workNo: member.work_phone,
-            phoneNo: member.phone_no,
-            isDeactivated: member.is_active,
-            order: member.order,
+                id: member.user_id,
+                employment_id: member.employment_post_id,
+                name: member.name,
+                role: member.business_post_title,
+                status: 'Online',
+                imageUrl: member.image,
+                isDeactivated: member.is_active,
+                order: member.order,
             }));
 
             setStaffMembers(members);
@@ -58,7 +57,7 @@ const Ordering = () => {
     const updateOrderAttributes = (members) => {
         return members.map((member, index) => ({
             ...member,
-            order: index.toString(),
+            order: index,
         }));
     };
 
@@ -86,19 +85,23 @@ const Ordering = () => {
         setStaffMembers(updateOrderAttributes(newData));
     };
 
-    const updateOrderInDatabase = async (id, order) => {
+    const updateOrderInDatabase = async (employmentPost, department_id) => {
         try {
-            const response = await fetch(`/api/crud/users/${id}`, {
+            const response = await fetch(`/api/department/employment_posts/${employmentPost.employment_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
-                body: JSON.stringify({ order: order }),
+                body: JSON.stringify({
+                    department_id: department_id,
+                    user_id: employmentPost.id,
+                    order: employmentPost.order,
+                }),
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to update order for user with ID ${id}`);
+                throw new Error(`Failed to update order for employment post with ID ${employmentPost.employment_id}`);
             }
 
             const responseBody = await response.text();
@@ -113,7 +116,7 @@ const Ordering = () => {
         setIsNotificationVisible(true);
         setNotificationMessage("Saving changes...");
         
-        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member.id, member.order));
+        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member, departmentId));
         
         const results = await Promise.all(updatePromises);
 
@@ -126,13 +129,15 @@ const Ordering = () => {
 
         setTimeout(() => {
             setIsNotificationVisible(false);
-            window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
+            // window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
         }, 1500);
     };
 
     const handleBack = () => {
         window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
     };
+
+    console.log(staffMembers);
 
     return (
         <Example>

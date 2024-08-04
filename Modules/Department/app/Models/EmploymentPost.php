@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Modules\User\Models\User;;
+
 use Database\Factories\EmploymentPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
@@ -44,16 +45,19 @@ class EmploymentPost extends Model implements AuditableContract
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
                     'user_id' => ['string'],
+                    'location' => ['string'],
+                    'order' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
                     'department_id' => ['string', 'required'],
-                    'business_post_id' => ['string', 'required'],
-                    'business_grade_id' => ['string', 'required'],
-                    'business_scheme_id' => ['string', 'required'],
-                    'user_id' => ['string'],
+                    'business_post_id' => ['string'],
+                    'business_grade_id' => ['string'],
+                    'business_scheme_id' => ['string'],
+                    'user_id' => ['string', 'required'],
+                    'order' => ['string'],
                 ],
                 // [],
             ],
@@ -62,8 +66,12 @@ class EmploymentPost extends Model implements AuditableContract
         return $rules[$scenario];
     }
 
-    public function getFullGradeAttribute() {
-        return "{$this->businessScheme->code}{$this->businessGrade->code}";
+    public function getFullGradeAttribute()
+    {
+        $businessSchemeCode = $this->businessScheme ? $this->businessScheme->code : '';
+        $businessGradeCode = $this->businessGrade ? $this->businessGrade->code : '';
+
+        return "{$businessSchemeCode}{$businessGradeCode}";
     }
 
     public function businessGrade()
@@ -95,6 +103,4 @@ class EmploymentPost extends Model implements AuditableContract
     {
         return $this->hasMany(Supervisor::class);
     }
-
-
 }

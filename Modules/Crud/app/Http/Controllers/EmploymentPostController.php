@@ -16,16 +16,18 @@ class EmploymentPostController extends Controller
                 ->join('users', 'employment_posts.user_id', '=', 'users.id')
                 ->join('profiles', 'users.id', '=', 'profiles.user_id')
                 ->join('business_posts', 'employment_posts.business_post_id', '=', 'business_posts.id')
+                ->join('business_grades', 'employment_posts.business_grade_id', '=', 'business_grades.id')
                 ->select(
                     'users.id as user_id',
                     'employment_posts.id as employment_post_id',
                     'employment_posts.order',
                     'business_posts.title as business_post_title',
+                    'business_grades.code as business_grade',
                     'users.is_active',
                     'profiles.bio as name',
                     'profiles.image',
                     'profiles.work_phone',
-                    'profiles.phone_no'
+                    'profiles.phone_no',
                 )
                 ->get()
                 ->map(function ($member) {
