@@ -18,17 +18,17 @@ const Ordering = () => {
 
     const fetchStaffMembers = async (departmentId) => {
         setIsLoading(true);
-
+    
         try {
             const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
-            method: "GET",
-            headers: { Accept: 'application/json' }
+                method: "GET",
+                headers: { Accept: 'application/json' }
             });
             if (!response.ok) {
-            throw new Error("Network response was not ok");
+                throw new Error("Network response was not ok");
             }
             const data = await response.json();
-
+    
             const members = data.members.map(member => ({
                 id: member.user_id,
                 employment_id: member.employment_post_id,
@@ -39,7 +39,9 @@ const Ordering = () => {
                 isDeactivated: member.is_active,
                 order: member.order,
             }));
-
+    
+            members.sort((a, b) => a.order - b.order);
+    
             setStaffMembers(members);
         } catch (error) {
             console.error("Error:", error);
@@ -88,16 +90,19 @@ const Ordering = () => {
     const updateOrderInDatabase = async (employmentPost, department_id) => {
         try {
             const response = await fetch(`/api/department/employment_posts/${employmentPost.employment_id}`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
                 body: JSON.stringify({
+                    _method: 'PATCH',
                     department_id: department_id,
                     user_id: employmentPost.id,
-                    order: employmentPost.order,
+                    order:  employmentPost.order,
                 }),
+                
             });
 
             if (!response.ok) {
@@ -129,7 +134,7 @@ const Ordering = () => {
 
         setTimeout(() => {
             setIsNotificationVisible(false);
-            // window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
+            window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
         }, 1500);
     };
 
@@ -149,7 +154,7 @@ const Ordering = () => {
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
-                                    <button className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
+                                    <button type="button" className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>

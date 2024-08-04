@@ -113,7 +113,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const fetchUnits = async (url) => {
         let allUnits = [];
         let hasMorePages = true;
-
+    
         try {
             while (hasMorePages) {
                 const response = await fetch(url, {
@@ -124,16 +124,19 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                     throw new Error("Network response was not ok");
                 }
                 const data = await response.json();
-
+    
                 const unitData = data.data.map((unit) => ({
                     id: unit.id,
                     name: unit.name
                 }));
-
+    
                 allUnits = [...allUnits, ...unitData];
-
+    
                 if (data.next_page_url) {
-                    url = data.next_page_url;
+                    const urlObj = new URL(data.next_page_url);
+                    const params = new URLSearchParams(urlObj.search);
+                    params.set('department_id', departmentId);
+                    url = `${urlObj.origin}${urlObj.pathname}?${params.toString()}`;
                 } else {
                     hasMorePages = false;
                 }
@@ -166,7 +169,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const handleAdd = async () => {
-        const url = '/api/crud/employment_posts';
+        const url = '/api/department/employment_posts';
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
