@@ -216,6 +216,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }, 1000); // Delay closing to show success message
     };
 
+    console.log('allMembers:', searchResults);
+
     return (
         <div>
             {isAddMemberPopupOpen && (
@@ -240,7 +242,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     <img src={person.profile && person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
                                     <div>
                                         <div className="text-lg font-bold">{person.name}</div>
-                                        <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
+                                        <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
                                     </div>
                                 </div>
                             ))}
