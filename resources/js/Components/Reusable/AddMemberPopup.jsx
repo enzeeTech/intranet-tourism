@@ -3,7 +3,7 @@ import './AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import { useCsrf } from "@/composables";
 
-const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId }) => {
+const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, onNewMemberAdded }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
@@ -16,7 +16,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [unitId, setUnitId] = useState('');
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(''); // New state for success message
+    const [success, setSuccess] = useState('');
     const csrfToken = useCsrf();
 
     useEffect(() => {
@@ -179,7 +179,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         const businessPostId = titleId;
         const businessUnitId = unitId;
         const locationValue = location;
-        const order = '1';        
+        const order = '0';        
 
         const body = JSON.stringify({
             department_id: String(departmentId),
@@ -192,8 +192,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             order: order,
         });
         
-        console.log('Body:', body);
-
         try {
             const response = await fetch(url, { ...options, body });
             const responseText = await response.text();
@@ -205,6 +203,23 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
             const data = responseText ? JSON.parse(responseText) : {};
             console.log('Successfully added member:', data);
+
+            console.log('selectedPerson from popup:', selectedPerson);
+
+            const newMember = {
+                id: userId,
+                name: selectedPerson.name,  
+                role: title,
+                status: 'Online',
+                imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
+                workNo: selectedPerson.profile.work_phone,
+                phoneNo: selectedPerson.profile.phone_no,
+                isDeactivated: selectedPerson.is_active,
+                order: order,
+            };  
+
+            onNewMemberAdded(newMember);
+
             setSuccess('Member successfully added!'); // Set success message
         } catch (error) {
             console.error('Error adding member to department:', error);
@@ -240,16 +255,16 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     <img src={person.profile && person.profile.image ? `/avatar/${person.profile.image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
                                     <div>
                                         <div className="text-lg font-bold">{person.name}</div>
-                                        <div className="font-light text-gray-600">{person.employment_post?.title || 'No title available'}</div>
+                                        <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
                                     </div>
                                 </div>
                             ))}
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="mt-4">
+                            <div className="mx-2 my-2">
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Title</label>
+                                    <label className="block font-bold text-gray-700">Title</label>
                                     <select
                                         value={title.title}
                                         onChange={(e) => {
@@ -265,7 +280,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     </select>
                                 </div>
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Unit</label>
+                                    <label className="block font-bold text-gray-700">Unit</label>
                                     <select
                                         value={unit.name}
                                         onChange={(e) => {
@@ -280,8 +295,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         ))}
                                     </select>
                                 </div>
-                                <div className="mb-2">
-                                    <label className="block text-gray-700">Location</label>
+                                <div className="mb-4">
+                                    <label className="block font-bold text-gray-700">Location</label>
                                     <input
                                         type="text"
                                         value={location}
@@ -294,13 +309,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                         {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
                         <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
-                                className="px-4 mb-4 mr-2 rounded-full text-[#222222]"
+                                className="px-4 mb-4 mr-2 font-bold rounded-full text-[#222222]"
                                 onClick={handleClose}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-red-500 hover:bg-red-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 font-bold text-white bg-red-500 hover:bg-red-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson || !title || !unit || !location}
                             >

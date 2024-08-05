@@ -323,11 +323,11 @@ function Calendar() {
             <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
-                <div className="flex flex-col items-center mt-3 mb-4 w-full">
+                <div className="flex flex-col items-center mt-3 mb-8 w-full">
                     <div className="flex w-full items-center justify-between">
                         <input
                             type="search"
-                            className="flex-grow mt-2 px-6 py-4 rounded-full border-gray-100 bg-gray-100 input-no-outline font-bold"
+                            className="flex-grow mt-2 px-6 py-3 rounded-full border-gray-100 bg-gray-100 input-no-outline font-bold"
                             placeholder="Search for events"
                             aria-label="Search"
                             value={searchTerm}
@@ -335,20 +335,25 @@ function Calendar() {
                         />
                         <button
                             onClick={handlePrint}
-                            className="flex items-center justify-center bg-red-500 hover:bg-red-700 mt-2 px-4 py-3 rounded-full ml-3">
-                            <img src={printIcon} alt="Print" className="w-8 h-8" />
+                            className="flex items-center justify-center bg-red-500 hover:bg-red-700 mt-2 px-4 py-3 rounded-full mx-3">
+                            <img src={printIcon} alt="Print" className="w-6 h-6" />
+                        </button>
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="flex items-center text-white bg-blue-500 hover:bg-blue-700 mt-2 px-4 py-3.5 rounded-full">
+                            <img src="/assets/plus.svg" alt="Plus icon" className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
 
-                <div className='flex justify-end mb-4' >
+                {/* <div className='flex justify-end mb-4' >
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full font-bold">
                         <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
                         Add Event
                     </button>
-                </div>
+                </div> */}
 
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
@@ -358,11 +363,11 @@ function Calendar() {
                     ref={calendarRef}
                     select={handleDateSelect}
                     eventClick={handleEventClick}
-                    headerToolbar={{
-                        start: 'prev,next today title',
-                        center: '',
-                        end: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    }}
+                    // headerToolbar={{
+                    //     start: 'prev,next today title',
+                    //     center: '',
+                    //     end: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    // }}
                     height={650}
                     buttonText={{
 
@@ -390,22 +395,38 @@ function Calendar() {
                             customClass: "custom-popover",
                             content: `<div>
                                         <p class="event-title"><strong>${info.event.title}</strong></p>
-                                        <p><strong>Start Time:</strong> ${formattedStartTime}</p>
                                         <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
                                         <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
                                         ${urlContent} <!-- Only include if URL is valid -->
                                         <hr style="border: 10px solid #000;" />
-                                        <p><strong>Invited People: </strong></p>
                                     </div>`,
                             html: true,
                         });
+                        
+                        // return new bootstrap.Popover(info.el, {
+                        //     placement: "auto",
+                        //     trigger: "hover",
+                        //     container: 'body',
+                        //     customClass: "custom-popover",
+                        //     content: `<div>
+                        //                 <p class="event-title"><strong>${info.event.title}</strong></p>
+                        //                 // <p><strong>Start Time:</strong> ${formattedStartTime}</p>
+                        //                 <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
+                        //                 <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                        //                 ${urlContent} <!-- Only include if URL is valid -->
+                        //                 <hr style="border: 10px solid #000;" />
+                        //                 <p><strong>Invited People: </strong></p>
+                        //             </div>`,
+                        //     html: true,
+                        // });
                     }}                    
                     eventContent={(eventInfo) => {
                         return (
                             <div
                                 style={{
-                                    backgroundColor: eventInfo.event.backgroundColor,
-                                    padding: '0 5px',
+                                    backgroundColor: white,
+                                    border: gray,
+                                    padding: '0 15px',
                                     borderRadius: '2px',
                                     display: 'flex',
                                     alignItems: 'center',
