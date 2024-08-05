@@ -262,25 +262,26 @@ function ProfileDepartment({
                 {isEditing && editable ? (
                     <select
                         name={name}
-                        value={localFormData[name]} // Bind to localFormData to track changes
+                        value={localFormData[name] || ''} // Ensure value is defined
                         onChange={onChangeHandler}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-y-auto"
                         ref={inputRef}
                         style={{ maxHeight: '150px' }} // Set max height for scrollable options
                     >
                         <option value={value}>{value}</option> {/* Display the current value as an option */}
-                        {options.map((option, index) => (
-                            <option key={index} value={option.id}>{option.title || option.name}</option>
+                        {options && options.map((option, index) => (
+                            <option key={index} value={option?.id || ''}>{option?.title || option?.name || ''}</option>
                         ))}
                     </select>
                 ) : (
-                    <div className={`text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80`}>
+                    <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
                         {value}
                     </div>
                 )}
             </td>
         </tr>
     );
+    
 
     return (
         <div className="flex-auto my-auto p-4">
