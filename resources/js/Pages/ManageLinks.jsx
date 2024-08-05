@@ -222,18 +222,18 @@ const Pautan = () => {
   return (
     <Example>
       <>
-        <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[900px] mb-10">
-          <div className="flex items-center justify-between mb-2 border-b border-gray-200">
-            <h2 className="mb-3 text-2xl font-bold text-blue-500">External Apps</h2>
+        <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1500px] mx-8 my-10">
+          <div className="flex items-start justify-between mb-2 border-b border-gray-200">
+            <h2 className="mb-3 text-3xl font-bold text-blue-500">Manage links</h2>
             <div className="flex space-x-2">
               <button
-                className="px-4 py-1 font-bold text-white bg-gray-500 hover:bg-gray-700 rounded-full"
+                className="px-4 py-2 font-bold text-white bg-gray-500 hover:bg-gray-700 rounded-full"
                 onClick={handleBackNavigation}
               >
                 Back
               </button>
               <button
-                className="px-4 py-1 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
+                className="px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                 onClick={() => { resetForm(); setIsAddModalVisible(true); }}
               >
                 + Add
@@ -246,10 +246,10 @@ const Pautan = () => {
                 <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-base font-bold text-center text-gray-900 label-column">App name</th>
-                      <th className="px-6 py-3 text-base font-bold text-center text-gray-900 url-column">URL</th>
-                      <th className="px-6 py-3 text-base font-bold text-center text-gray-900 edit-column">Edit</th>
-                      <th className="px-6 py-3 text-base font-bold text-center text-gray-900 delete-column">Delete</th>
+                      <th className="px-6 py-3 text-base text-center text-gray-900 label-column">App name</th>
+                      <th className="px-6 py-3 text-base text-center text-gray-900 url-column">URL</th>
+                      <th className="px-6 py-3 text-base text-center text-gray-900 edit-column">Edit</th>
+                      <th className="px-6 py-3 text-base text-center text-gray-900 delete-column">Delete</th>
                     </tr>
                   </thead>
                   <tbody>

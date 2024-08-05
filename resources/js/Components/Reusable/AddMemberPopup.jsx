@@ -247,9 +247,9 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="mt-4">
+                            <div className="my-2 mx-2">
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Title</label>
+                                    <label className="block text-gray-700 font-bold">Title</label>
                                     <select
                                         value={title.title}
                                         onChange={(e) => {
@@ -265,7 +265,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     </select>
                                 </div>
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Unit</label>
+                                    <label className="block text-gray-700 font-bold">Unit</label>
                                     <select
                                         value={unit.name}
                                         onChange={(e) => {
@@ -280,8 +280,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         ))}
                                     </select>
                                 </div>
-                                <div className="mb-2">
-                                    <label className="block text-gray-700">Location</label>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 font-bold">Location</label>
                                     <input
                                         type="text"
                                         value={location}
@@ -294,13 +294,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                         {success && <div className="mt-2 text-green-500">{success}</div>} {/* Success message */}
                         <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t" style={{ boxShadow: '0 -1px 5px rgba(0, 0, 0, 0.18)' }}>
                             <button
-                                className="px-4 mb-4 mr-2 rounded-full text-[#222222]"
+                                className="px-4 mb-4 mr-2 font-bold rounded-full text-[#222222]"
                                 onClick={handleClose}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-red-500 hover:bg-red-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 font-bold text-white bg-red-500 hover:bg-red-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson || !title || !unit || !location}
                             >
