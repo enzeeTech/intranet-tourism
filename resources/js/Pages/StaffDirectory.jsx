@@ -201,6 +201,30 @@ const StaffDirectory = () => {
 
   console.log('staffMembers', staffMembers);
 
+  const handleNewMemberAdded = (newMember) => {
+    const newMembers = [...staffMembers, newMember];
+    newMembers.sort((a, b) => a.order - b.order);
+    setStaffMembers(newMembers);
+  };
+
+  const handleAddMember = (newMemberData) => {
+    const newMember = {
+      id: newMemberData.id,
+      name: newMemberData.name,  
+      role: newMemberData.role,
+      status: 'Online',
+      imageUrl: newMemberData.imageUrl || '/assets/dummyStaffPlaceHolder.jpg',
+      workNo: newMemberData.workNo,
+      phoneNo: newMemberData.phoneNo,
+      isDeactivated: newMemberData.isDeactivated,
+      order: newMemberData.order,
+    };
+
+    console.log('newMember passed from popup', newMember);
+  
+    handleNewMemberAdded(newMember);
+  };
+
   return (
     <Example>
       <div className="flex-row">
@@ -219,7 +243,7 @@ const StaffDirectory = () => {
               <DepartmentDropdown
                 departments={departments}
                 onSelectDepartment={handleSelectDepartment}
-                staffMembers={staffMembers}
+                onNewMemberAdded={handleAddMember}
               />
               {isLoading ? (
                 <div className="staff-member-grid-container max-w-[1200px]">
