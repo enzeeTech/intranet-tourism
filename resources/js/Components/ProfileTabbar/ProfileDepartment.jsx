@@ -321,9 +321,9 @@ function ProfileDepartment({
                         <tbody>
                             {renderField('Department', 'department', originalFormData.department, departmentOptions, true, handleDepartmentChange)}
                             {renderField('Unit', 'unit', originalFormData.unit, unitOptions, true, handleUnitChange)}
-                            {renderField('Job Title', 'jobtitle', originalFormData.position, jobTitleOptions, true, handleJobTitleChange)}
-                            {renderField('Position', 'position', originalFormData.title, positionOptions, true, handlePositionChange)}
-                            {renderField('Grade', 'grade', originalFormData.fullGrade, gradeOptions, true, handleGradeChange)}
+                            {renderField('Job Title', 'jobtitle', originalFormData.jobtitle, jobTitleOptions, true, handleJobTitleChange)}
+                            {renderField('Position', 'position', originalFormData.position, positionOptions, true, handlePositionChange)}
+                            {renderField('Grade', 'grade', originalFormData.grade, gradeOptions, true, handleGradeChange)}
                             {renderField('Location', 'location', originalFormData.location, locationOptions, true, handleLocationChange)}
                             {renderField('Office Number', 'phone', originalFormData.phone, phoneOptions, true, handlePhoneChange)}
                         </tbody>
