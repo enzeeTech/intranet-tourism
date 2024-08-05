@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
 import TagInput from "./AlbumTag";
+import MediaTag from '../../../../../public/assets/Media tag.svg'
 import "../css/InputBox.css";
 import "../../../Pages/Calendar/index.css";
 import { useCsrf } from "@/composables";
@@ -9,6 +10,7 @@ import { useCsrf } from "@/composables";
 function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
+    const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
     const [showPeoplePopup, setShowPeoplePopup] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
@@ -87,6 +89,10 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         setShowPollPopup(true);
     };
 
+    const handleClickMediaTag = () => {
+        setShowMediaTagPopup(true);
+    };
+
     const handleClickPeople = () => {
         setShowPeoplePopup(true);
     };
@@ -94,6 +100,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const closePopup = () => {
         setShowPollPopup(false);
         setShowPeoplePopup(false);
+        setShowMediaTagPopup(false);
     };
 
     return (
@@ -148,6 +155,15 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                             <button>
                                 <img
                                     loading="lazy"
+                                    src={MediaTag}
+                                    alt="Icon 4"
+                                    className="w-[19px] h-auto"
+                                    onClick={handleClickMediaTag}
+                                />
+                            </button>
+                            <button>
+                                <img
+                                    loading="lazy"
                                     src="assets/inputpeople.svg"
                                     alt="Icon 5"
                                     className="w-[10px] h-auto"
@@ -182,7 +198,9 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     </div>
                 </div>
             </div>
-            <TagInput tags={tags} setTags={setTags} />
+            {showMediaTagPopup && (
+            <TagInput tags={tags} setTags={setTags} onClose={closePopup} />
+            )}
             {showPollPopup && (
                 <Polls onClose={closePopup} onCreatePoll={onCreatePoll} />
             )}

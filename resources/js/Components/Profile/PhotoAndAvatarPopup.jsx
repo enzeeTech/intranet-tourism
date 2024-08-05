@@ -12,7 +12,7 @@ function Avatar({ src, alt, isSelected, onClick }) {
   );
 }
 
-function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileImage, setProfileImage, userName }) {
+function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileImage, setProfileImage, userName, profileId }) {
   const [selectedAvatar, setSelectedAvatar] = React.useState(null);
 
   const avatars = [
@@ -67,7 +67,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
         body: formData,
       };
 
-      const saveResponse = await fetch(`/api/profile/profiles/${userId}`, options);
+      const saveResponse = await fetch(`/api/profile/profiles/${profileId}`, options);
       const data = await saveResponse.json();
 
       if (!saveResponse.ok) {

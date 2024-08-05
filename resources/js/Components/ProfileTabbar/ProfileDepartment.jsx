@@ -25,6 +25,9 @@ function ProfileDepartment({
 
     const csrfToken = ''; // Add your CSRF token here if needed
 
+    console.log("GGGG", originalFormData);
+    
+
     useEffect(() => {
         const formData = {
             department,
@@ -69,7 +72,28 @@ function ProfileDepartment({
 
         // Fetch data for departments and units separately
         fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
-        fetchData('/api/department/business_units', setUnitOptions, 'Units');
+
+        const fetchBusinessUnits = async () => {
+            try {
+                const response = await fetch('/api/department/business_units', {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for Positions');
+                }
+                const data = await response.json();
+                console.log('Received data for Units:', data);
+
+                const units = data.data;
+                console.log("UNITSSSS", units);
+                
+                setUnitOptions(units);
+            } catch (error) {
+                console.error('Error fetching Units:', error);
+            }
+        };
+        
 
         // Fetch for job titles, grades, locations, and phones
         const fetchEmploymentPosts = async () => {
@@ -91,7 +115,10 @@ function ProfileDepartment({
                     const locations = employmentPosts.filter(post => post.category === 'location');
                     const phones = employmentPosts.filter(post => post.category === 'phone');
 
-                    setJobTitleOptions(jobTitles);
+                    console.log("POSTTTT", data.data.data);
+                    
+
+                    // setJobTitleOptions(jobTitles);
                     setGradeOptions(grades);
                     setLocationOptions(locations);
                     setPhoneOptions(phones);
@@ -104,7 +131,7 @@ function ProfileDepartment({
         };
 
         // Fetch for positions from the new API endpoint
-        const fetchPositions = async () => {
+        const fetchTitle = async () => {
             try {
                 const response = await fetch('/api/department/business_posts', {
                     method: "GET",
@@ -117,14 +144,15 @@ function ProfileDepartment({
                 console.log('Received data for Positions:', data);
 
                 const positions = data.data.data;
-                setPositionOptions(positions);
+                setJobTitleOptions(positions);
             } catch (error) {
                 console.error('Error fetching positions:', error);
             }
         };
 
+        fetchBusinessUnits();
         fetchEmploymentPosts();
-        fetchPositions();
+        fetchTitle();
     }, []); // Empty dependency array means this effect runs once when the component mounts
 
     const handleInputChange = (e) => {
@@ -156,6 +184,8 @@ function ProfileDepartment({
     const handleUnitChange = (e) => {
         const selectedUnitId = e.target.value;
         const selectedUnit = unitOptions.find(unit => unit.id === parseInt(selectedUnitId));
+        console.log("unitID", selectedUnit);
+        
 
         setLocalFormData((prevData) => ({
             ...prevData,
@@ -262,25 +292,26 @@ function ProfileDepartment({
                 {isEditing && editable ? (
                     <select
                         name={name}
-                        value={localFormData[name]} // Bind to localFormData to track changes
+                        value={localFormData[name] || ''} // Ensure value is defined
                         onChange={onChangeHandler}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-y-auto"
                         ref={inputRef}
                         style={{ maxHeight: '150px' }} // Set max height for scrollable options
                     >
                         <option value={value}>{value}</option> {/* Display the current value as an option */}
-                        {options.map((option, index) => (
-                            <option key={index} value={option.id}>{option.title || option.name}</option>
+                        {options && options.map((option, index) => (
+                            <option key={index} value={option?.id || ''}>{option?.title || option?.name || ''}</option>
                         ))}
                     </select>
                 ) : (
-                    <div className={`text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80`}>
+                    <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
                         {value}
                     </div>
                 )}
             </td>
         </tr>
     );
+    
 
     return (
         <div className="flex-auto my-auto p-4">

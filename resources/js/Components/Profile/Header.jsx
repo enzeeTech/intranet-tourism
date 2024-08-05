@@ -172,6 +172,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
               onSelectFile={handleSelectFile}
               userId={userId}
               userName={name}
+              profileId={profileId}
             />
           )}
         </div>
