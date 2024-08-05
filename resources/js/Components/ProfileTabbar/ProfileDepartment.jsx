@@ -118,7 +118,7 @@ function ProfileDepartment({
                     console.log("POSTTTT", data.data.data);
                     
 
-                    setJobTitleOptions(jobTitles);
+                    // setJobTitleOptions(jobTitles);
                     setGradeOptions(grades);
                     setLocationOptions(locations);
                     setPhoneOptions(phones);
@@ -131,7 +131,7 @@ function ProfileDepartment({
         };
 
         // Fetch for positions from the new API endpoint
-        const fetchPositions = async () => {
+        const fetchTitle = async () => {
             try {
                 const response = await fetch('/api/department/business_posts', {
                     method: "GET",
@@ -144,7 +144,7 @@ function ProfileDepartment({
                 console.log('Received data for Positions:', data);
 
                 const positions = data.data.data;
-                setPositionOptions(positions);
+                setJobTitleOptions(positions);
             } catch (error) {
                 console.error('Error fetching positions:', error);
             }
@@ -152,7 +152,7 @@ function ProfileDepartment({
 
         fetchBusinessUnits();
         fetchEmploymentPosts();
-        fetchPositions();
+        fetchTitle();
     }, []); // Empty dependency array means this effect runs once when the component mounts
 
     const handleInputChange = (e) => {
@@ -321,8 +321,8 @@ function ProfileDepartment({
                         <tbody>
                             {renderField('Department', 'department', originalFormData.department, departmentOptions, true, handleDepartmentChange)}
                             {renderField('Unit', 'unit', originalFormData.unit, unitOptions, true, handleUnitChange)}
-                            {renderField('Job Title', 'jobtitle', originalFormData.title, jobTitleOptions, true, handleJobTitleChange)}
-                            {renderField('Position', 'position', originalFormData.position, positionOptions, true, handlePositionChange)}
+                            {renderField('Job Title', 'jobtitle', originalFormData.position, jobTitleOptions, true, handleJobTitleChange)}
+                            {renderField('Position', 'position', originalFormData.title, positionOptions, true, handlePositionChange)}
                             {renderField('Grade', 'grade', originalFormData.fullGrade, gradeOptions, true, handleGradeChange)}
                             {renderField('Location', 'location', originalFormData.location, locationOptions, true, handleLocationChange)}
                             {renderField('Office Number', 'phone', originalFormData.phone, phoneOptions, true, handlePhoneChange)}
