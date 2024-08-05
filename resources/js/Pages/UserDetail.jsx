@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Example from '@/Layouts/DashboardLayoutNew';
-import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
@@ -8,7 +7,6 @@ import { ProfileHeader, ProfileNav } from "@/Components/Profile";
 import { OutputData } from '@/Components/Reusable/WallPosting';
 import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
 import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
-// import OutputDataUsers from '@/Components/Reusable/WallPosting/OutputBoxUsers';
 import '../Components/Profile/profile.css';
 
 function UserDetail({ user }) {
@@ -17,7 +15,6 @@ function UserDetail({ user }) {
     const [activeTab, setActiveTab] = useState("bio");
     const [loading, setLoading] = useState(true);
     const [polls, setPolls] = useState([]);
-
 
     useEffect(() => {
         // Fetch user data using user ID (assuming user.id exists in props)
@@ -58,7 +55,6 @@ function UserDetail({ user }) {
                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                             {activeTab === "activities" && (
                                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                {/* <OutputDataUsers userId={user.id} /> */}
                                 <OutputData polls={polls} userId={user.id} />
                                 </div>
                             )}

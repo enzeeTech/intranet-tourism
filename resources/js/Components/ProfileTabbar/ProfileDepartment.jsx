@@ -56,7 +56,7 @@ function ProfileDepartment({
                     const data = await response.json();
                     console.log(`Received data for ${label}:`, data);
 
-                    allItems = allItems.concat(data.data.data);
+                    allItems = allItems.concat(data.data.data); // Accessing the array inside the `data` property
                     lastPage = data.data.last_page;
                     currentPage++;
                 }
@@ -67,13 +67,64 @@ function ProfileDepartment({
             }
         };
 
+        // Fetch data for departments and units separately
         fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
         fetchData('/api/department/business_units', setUnitOptions, 'Units');
-        fetchData('/api/department/employment_posts', setJobTitleOptions, 'Job Titles');
-        fetchData('/api/department/business_posts', setPositionOptions, 'Positions');
-        fetchData('/api/department/business_schemes&with[]=business_grades', setGradeOptions, 'Grades');
-        fetchData('/api/department/employment_posts', setLocationOptions, 'Locations');
-        fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
+
+        // Fetch for job titles, grades, locations, and phones
+        const fetchEmploymentPosts = async () => {
+            try {
+                const response = await fetch('/api/department/employment_posts', {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for Employment Posts');
+                }
+                const data = await response.json();
+                console.log('Received data for Employment Posts:', data);
+
+                const employmentPosts = data.data.data;
+                if (Array.isArray(employmentPosts)) {
+                    const jobTitles = employmentPosts.filter(post => post.category === 'job_title');
+                    const grades = employmentPosts.filter(post => post.category === 'grade');
+                    const locations = employmentPosts.filter(post => post.category === 'location');
+                    const phones = employmentPosts.filter(post => post.category === 'phone');
+
+                    setJobTitleOptions(jobTitles);
+                    setGradeOptions(grades);
+                    setLocationOptions(locations);
+                    setPhoneOptions(phones);
+                } else {
+                    console.error('Unexpected data structure:', employmentPosts);
+                }
+            } catch (error) {
+                console.error('Error fetching employment posts:', error);
+            }
+        };
+
+        // Fetch for positions from the new API endpoint
+        const fetchPositions = async () => {
+            try {
+                const response = await fetch('/api/department/business_posts', {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for Positions');
+                }
+                const data = await response.json();
+                console.log('Received data for Positions:', data);
+
+                const positions = data.data.data;
+                setPositionOptions(positions);
+            } catch (error) {
+                console.error('Error fetching positions:', error);
+            }
+        };
+
+        fetchEmploymentPosts();
+        fetchPositions();
     }, []); // Empty dependency array means this effect runs once when the component mounts
 
     const handleInputChange = (e) => {

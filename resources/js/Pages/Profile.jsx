@@ -476,7 +476,12 @@ export default function Profile() {
                     title="Edit Banner Photo" 
                     onClose={() => setIsPopupOpen(false)} 
                     onSave={handleSaveBio}
-                    onSelectFile={handleSelectFile}
+                    profileData={profileData}
+                    id={id}
+                    formData={formData}
+                    csrfToken={csrfToken}
+                    authToken={authToken}
+                    setPhoto={setPhoto}
                 />
             )}
         </Example>

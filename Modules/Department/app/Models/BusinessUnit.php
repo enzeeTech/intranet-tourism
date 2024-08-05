@@ -23,6 +23,7 @@ class BusinessUnit extends Model implements AuditableContract
 
     protected $fillable = [
         'name',
+        'department_id',
     ];
 
     public static function rules($scenario = 'create')
@@ -31,12 +32,14 @@ class BusinessUnit extends Model implements AuditableContract
             'create' => [
                 [
                     'name' => ['string'],
+                    'department_id' => ['string'],
                 ],
                 // [],
             ],
             'update' => [
                 [
                     'name' => ['string'],
+                    'department_id' => ['string'],
                 ],
                 // [],
             ],
