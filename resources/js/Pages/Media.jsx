@@ -10,8 +10,6 @@ import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css'
 
 
-
-
 const Media = () => {
     // const [selectedMedia, setSelectedMedia] = useState('All');
     const [posts, setPosts] = useState([]);
@@ -21,7 +19,7 @@ const Media = () => {
 
     useEffect(() => {
       const fetchData = async () => {
-        const url = '/api/posts/posts';
+        const url = '/api/posts/posts?with[]=attachments';
         const options = {
           method: 'GET',
           headers: { Accept: 'application/json' }
@@ -41,6 +39,9 @@ const Media = () => {
       fetchData();
     }, []);
 
+    console.log("DATA", posts);
+    
+
     useEffect(() => {
       if (selectedTag === '') {
         setFilteredPosts(posts);
@@ -55,19 +56,20 @@ const Media = () => {
 
     const renderImages = () => {
       return filteredPosts.map(post => (
-        post.attachments.filter(attachment => attachment.mime_type.startsWith('image/')).map(imageAttachment => (
+        post.attachments?.filter(attachment => attachment.mime_type.startsWith('image/')).map(imageAttachment => (
           <img key={imageAttachment.id} src={`/storage/${imageAttachment.path}`} alt="Image Attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full object-cover"/>
         ))
       ));
     };
-
+    
     const renderVideos = () => {
       return filteredPosts.map(post => (
-        post.attachments.filter(attachment => attachment.mime_type.startsWith('video/')).map(videoAttachment => (
+        post.attachments?.filter(attachment => attachment.mime_type.startsWith('video/')).map(videoAttachment => (
           <video key={videoAttachment.id} controls src={`/storage/${videoAttachment.path}`} className="grow shrink-0 max-w-full aspect-[1.19] w-full"/>
         ))
       ));
     };
+    
 
     // const menuItems = [
     //     'All',

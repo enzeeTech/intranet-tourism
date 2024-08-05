@@ -8,6 +8,8 @@ import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard'
 import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
+import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
+
 
 const StaffDirectory = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -106,6 +108,8 @@ const StaffDirectory = () => {
         <div>
           <FeaturedEvents />
           <WhosOnline />
+<Birthdaypopup />
+
         </div>
       </aside>
       {isCreateCommunityOpen && (
