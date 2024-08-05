@@ -60,7 +60,7 @@ const StaffDirectory = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+      const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
         method: "GET",
         headers: { Accept: 'application/json' }
       });

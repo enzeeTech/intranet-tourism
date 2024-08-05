@@ -173,7 +173,7 @@ function DpMembers() {
   useEffect(() => {
     const fetchData = async () => {
       const departmentId = getDepartmentIdFromQuery();
-      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+      const url = `/api/department/employment_posts?department_id=${departmentId}`;
 
       try {
         const response = await fetch(url, {
