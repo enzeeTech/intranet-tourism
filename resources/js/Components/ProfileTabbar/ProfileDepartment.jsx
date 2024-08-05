@@ -25,6 +25,9 @@ function ProfileDepartment({
 
     const csrfToken = ''; // Add your CSRF token here if needed
 
+    console.log("GGGG", originalFormData);
+    
+
     useEffect(() => {
         const formData = {
             department,
@@ -69,7 +72,28 @@ function ProfileDepartment({
 
         // Fetch data for departments and units separately
         fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
-        fetchData('/api/department/business_units', setUnitOptions, 'Units');
+
+        const fetchBusinessUnits = async () => {
+            try {
+                const response = await fetch('/api/department/business_units', {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for Positions');
+                }
+                const data = await response.json();
+                console.log('Received data for Units:', data);
+
+                const units = data.data;
+                console.log("UNITSSSS", units);
+                
+                setUnitOptions(units);
+            } catch (error) {
+                console.error('Error fetching Units:', error);
+            }
+        };
+        
 
         // Fetch for job titles, grades, locations, and phones
         const fetchEmploymentPosts = async () => {
@@ -90,6 +114,9 @@ function ProfileDepartment({
                     const grades = employmentPosts.filter(post => post.category === 'grade');
                     const locations = employmentPosts.filter(post => post.category === 'location');
                     const phones = employmentPosts.filter(post => post.category === 'phone');
+
+                    console.log("POSTTTT", data.data.data);
+                    
 
                     setJobTitleOptions(jobTitles);
                     setGradeOptions(grades);
@@ -123,6 +150,7 @@ function ProfileDepartment({
             }
         };
 
+        fetchBusinessUnits();
         fetchEmploymentPosts();
         fetchPositions();
     }, []); // Empty dependency array means this effect runs once when the component mounts
@@ -156,6 +184,8 @@ function ProfileDepartment({
     const handleUnitChange = (e) => {
         const selectedUnitId = e.target.value;
         const selectedUnit = unitOptions.find(unit => unit.id === parseInt(selectedUnitId));
+        console.log("unitID", selectedUnit);
+        
 
         setLocalFormData((prevData) => ({
             ...prevData,
@@ -291,9 +321,9 @@ function ProfileDepartment({
                         <tbody>
                             {renderField('Department', 'department', originalFormData.department, departmentOptions, true, handleDepartmentChange)}
                             {renderField('Unit', 'unit', originalFormData.unit, unitOptions, true, handleUnitChange)}
-                            {renderField('Job Title', 'jobtitle', originalFormData.jobtitle, jobTitleOptions, true, handleJobTitleChange)}
+                            {renderField('Job Title', 'jobtitle', originalFormData.title, jobTitleOptions, true, handleJobTitleChange)}
                             {renderField('Position', 'position', originalFormData.position, positionOptions, true, handlePositionChange)}
-                            {renderField('Grade', 'grade', originalFormData.grade, gradeOptions, true, handleGradeChange)}
+                            {renderField('Grade', 'grade', originalFormData.fullGrade, gradeOptions, true, handleGradeChange)}
                             {renderField('Location', 'location', originalFormData.location, locationOptions, true, handleLocationChange)}
                             {renderField('Office Number', 'phone', originalFormData.phone, phoneOptions, true, handlePhoneChange)}
                         </tbody>
