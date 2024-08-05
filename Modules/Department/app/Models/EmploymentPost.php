@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Modules\User\Models\User;;
+
 use Database\Factories\EmploymentPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
@@ -24,10 +25,13 @@ class EmploymentPost extends Model implements AuditableContract
 
     protected $fillable = [
         'department_id',
+        'business_unit_id',
         'business_post_id',
         'business_grade_id',
         'business_scheme_id',
         'user_id',
+        'location',
+        'order',
     ];
 
     protected $appends = [
@@ -40,20 +44,26 @@ class EmploymentPost extends Model implements AuditableContract
             'create' => [
                 [
                     'department_id' => ['string', 'required'],
+                    'business_unit_id' => ['string', 'required'],
                     'business_post_id' => ['string', 'required'],
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
-                    'user_id' => ['string'],
+                    'user_id' => ['numeric'],
+                    'location' => ['string'],
+                    'order' => ['numeric'],
                 ],
                 // [],
             ],
             'update' => [
                 [
                     'department_id' => ['string', 'required'],
-                    'business_post_id' => ['string', 'required'],
-                    'business_grade_id' => ['string', 'required'],
-                    'business_scheme_id' => ['string', 'required'],
-                    'user_id' => ['string'],
+                    'business_unit_id' => ['string',],
+                    'business_post_id' => ['string',],
+                    'business_grade_id' => ['string',],
+                    'business_scheme_id' => ['string',],
+                    'user_id' => ['numeric'],
+                    'location' => ['string'],
+                    'order' => ['numeric'],
                 ],
                 // [],
             ],
@@ -62,8 +72,17 @@ class EmploymentPost extends Model implements AuditableContract
         return $rules[$scenario];
     }
 
-    public function getFullGradeAttribute() {
-        return "{$this->businessScheme->code}{$this->businessGrade->code}";
+    public function getFullGradeAttribute()
+    {
+        $businessSchemeCode = $this->businessScheme ? $this->businessScheme->code : '';
+        $businessGradeCode = $this->businessGrade ? $this->businessGrade->code : '';
+
+        return "{$businessSchemeCode}{$businessGradeCode}";
+    }
+
+    public function businessUnit()
+    {
+        return $this->belongsTo(BusinessUnit::class);
     }
 
     public function businessGrade()
@@ -95,6 +114,4 @@ class EmploymentPost extends Model implements AuditableContract
     {
         return $this->hasMany(Supervisor::class);
     }
-
-
 }

@@ -71,8 +71,8 @@ const StaffDirectory = () => {
 
       const members = data.members.map(member => ({
         id: member.user_id,
-        name: member.name,
-        role: member.title,
+        name: member.name,  
+        role: member.business_post_title,
         status: 'Online',
         imageUrl: member.image,
         workNo: member.work_phone,

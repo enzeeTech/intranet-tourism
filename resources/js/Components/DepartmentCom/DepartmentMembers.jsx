@@ -185,6 +185,8 @@ function DpMembers() {
         const data = await response.json();
         
         const fetchedMembers = data.members || [];
+
+        fetchedMembers.sort((a, b) => a.order - b.order);
         
         setMembers(fetchedMembers);
       } catch (error) {
