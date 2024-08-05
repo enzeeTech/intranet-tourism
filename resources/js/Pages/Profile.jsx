@@ -56,7 +56,9 @@ export default function Profile() {
         grade2: "",
         location2: "",
         phone2: "",
+        employmentPosts: [] // Initialize with an empty array
     });
+    
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
@@ -73,63 +75,117 @@ export default function Profile() {
     });
     const [userData, setUserData] = useState({});
 
+    // useEffect(() => {
+    //     console.log("Fetching user data...");
+    //     fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
+    //         method: "GET",
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error("Network response was not ok");
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(({ data }) => {
+    //             console.log('hello', data);
+    //             setProfileData(pv => ({
+    //                 ...pv, ...data,
+    //                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
+    //                 profileImage: data.profile && data.profile.image,
+    //                 username: "@" + data.username,
+    //             }));
+
+    //             setFormData((pv) => ({
+    //                 ...pv,
+    //                 name: data.name,
+    //                 username: data.username || "N/A",
+    //                 email: data.email,
+    //                 department: data.employment_post?.department?.name || "N/A",
+    //                 unit: data.employment_post?.business_unit?.name || "N/A",
+    //                 position: data.employment_post?.title || "N/A",
+    //                 jobtitle: data.employment_post?.business_post?.title || "N/A",
+    //                 grade: data.employment_post?.business_grade.code || "N/A",
+    //                 location: data.employment_post?.location || "N/A",
+    //                 dateofbirth: data.profile?.dob || "N/A",
+    //                 phone: data.profile?.work_phone || "N/A",
+    //                 whatsapp: data.profile?.phone_no || "N/A",
+    //             }));
+
+    //             setOriginalFormData((pv) => ({
+    //                 ...pv,
+    //                 name: data.name,
+    //                 username: data.username || "N/A",
+    //                 email: data.email,
+    //                 department: data.employment_post?.department?.name || "N/A",
+    //                 unit: data.employment_post?.business_unit?.name || "N/A",
+    //                 position: data.employment_post?.title || "N/A",
+    //                 jobtitle: data.employment_post?.business_post?.title || "N/A",
+    //                 grade: data.employment_post?.business_grade.code || "N/A",
+    //                 location: data.employment_post?.location || "N/A",
+    //                 dateofbirth: data.profile?.dob || "N/A",
+    //                 phone: data.profile?.work_phone || "N/A",
+    //                 whatsapp: data.profile?.phone_no || "N/A",
+    //             }));
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching user data:", error);
+    //         });
+    // }, [id]);
+
+
     useEffect(() => {
-        console.log("Fetching user data...");
-        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
+        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(({ data }) => {
-                console.log('hello', data);
-                setProfileData(pv => ({
-                    ...pv, ...data,
-                    backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                    profileImage: data.profile && data.profile.image,
-                    username: "@" + data.username,
-                }));
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(({ data }) => {
+            console.log('hello', data);
+            setProfileData(pv => ({
+                ...pv, ...data,
+                backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
+                profileImage: data.profile && data.profile.image,
+                username: "@" + data.username,
+            }));
+    
+            setFormData((pv) => ({
+                ...pv,
+                name: data.name,
+                username: data.username || "N/A",
+                email: data.email,
+                dateofbirth: data.profile?.dob || "N/A",
+                phone: data.profile?.work_phone || "N/A",
+                whatsapp: data.profile?.phone_no || "N/A",
+                employmentPosts: data.employment_posts || [] // Store employment posts in formData
+            }));
+    
+            setOriginalFormData((pv) => ({
+                ...pv,
+                name: data.name,
+                username: data.username || "N/A",
+                email: data.email,
+                department: data.employment_post?.department?.name || "N/A",
+                unit: data.employment_post?.business_unit?.name || "N/A",
+                position: data.employment_post?.title || "N/A",
+                jobtitle: data.employment_post?.business_post?.title || "N/A",
+                grade: data.employment_post?.business_grade.code || "N/A",
+                location: data.employment_post?.location || "N/A",
+                dateofbirth: data.profile?.dob || "N/A",
+                phone: data.profile?.work_phone || "N/A",
+                whatsapp: data.profile?.phone_no || "N/A",
+                employmentPosts: data.employment_posts || [] // Store employment posts in formData
 
-                setFormData((pv) => ({
-                    ...pv,
-                    name: data.name,
-                    username: data.username || "N/A",
-                    email: data.email,
-                    department: data.employment_post?.department?.name || "N/A",
-                    unit: data.employment_post?.business_unit?.name || "N/A",
-                    jobtitle: data.employment_post?.title || "N/A",
-                    position: data.employment_post?.business_post?.title || "N/A",
-                    grade: data.employment_post?.schema_grade || "N/A",
-                    location: data.employment_post?.location || "N/A",
-                    dateofbirth: data.profile?.dob || "N/A",
-                    phone: data.profile?.work_phone || "N/A",
-                    whatsapp: data.profile?.phone_no || "N/A",
-                }));
-
-                setOriginalFormData((pv) => ({
-                    ...pv,
-                    name: data.name,
-                    username: data.username || "N/A",
-                    email: data.email,
-                    department: data.employment_post?.department?.name || "N/A",
-                    unit: data.employment_post?.business_unit?.name || "N/A",
-                    jobtitle: data.employment_post?.title || "N/A",
-                    position: data.employment_post?.business_post?.title || "N/A",
-                    grade: data.employment_post?.schema_grade || "N/A",
-                    location: data.employment_post?.location || "N/A",
-                    dateofbirth: data.profile?.dob || "N/A",
-                    phone: data.profile?.work_phone || "N/A",
-                    whatsapp: data.profile?.phone_no || "N/A",
-                }));
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error);
-            });
+            }));
+        })
+        .catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
     }, [id]);
-
+    
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
     };
@@ -209,12 +265,43 @@ export default function Profile() {
         window.location.reload();
     };
 
-    const handleSaveDepartment1 = () => {
-        setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        setIsEditingDepartment1(false);
-        openSaveNotification();
-        setTimeout(closeSaveNotification, 1200);
+    const handleSaveDepartment1 = async () => {
+        try {
+            const FfData = new FormData();
+            FfData.append('_method', 'PUT'); // Add _method to the form data
+            FfData.append('department', formData.department);
+            FfData.append('unit', formData.unit);
+            FfData.append('jobtitle', formData.jobtitle);
+            FfData.append('position', formData.position);
+            FfData.append('grade', formData.grade);
+            FfData.append('location', formData.location);
+            FfData.append('phone', formData.phone);
+            FfData.append('user_id', id); // Add user_id to the form data
+
+            const response = await fetch(`/api/department/employment_posts/${id}`, {
+                method: 'POST',
+                body: FfData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setOriginalFormData(formData);
+            setOriginalPhoto(photo);
+            setIsEditingDepartment1(false);
+            openSaveNotification();
+            setTimeout(closeSaveNotification, 1200);
+            console.log('Department 1 Information updated successfully:', data);
+        } catch (error) {
+            console.error('Error updating Department 1 Information:', error);
+        }
     };
 
     const handleSaveDepartment2 = () => {
@@ -300,6 +387,10 @@ export default function Profile() {
     const handleCreatePoll = (poll) => {
       setPolls((prevPolls) => [...prevPolls, poll]);
     };
+    
+
+    console.log("FK THIS", formData);
+    
 
     return (
         <Example>
@@ -329,104 +420,75 @@ export default function Profile() {
                             )}
                             {activeTab === "bio" && (
                                 <>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            icon2={profileData.icon2}
-                                            onEdit={handleEditBio}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                        <ProfileBio
-                                            photo={photo}
-                                            username={formData.username}
-                                            email={formData.email}
-                                            dateofbirth={formData.dateofbirth}
-                                            whatsapp={formData.whatsapp}
-                                            isEditing={isEditingBio}
-                                            onFormDataChange={setFormData}
-                                            onPhotoChange={handlePhotoChange}
-                                            originalFormData={originalFormData}
-                                            onEditBio={handleEditBio}
-                                            onCancelBio={handleCancelBio}
-                                            onSaveBio={handleSaveBio}
-                                            userId={id} // Pass userId as a prop
-                                        />
-                                        </div>
-                                    </div>
-                                </section>
-                                <div className="separator"></div>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 1 Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            onEdit={handleEditDepartment1}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileDepartment
-                                                department={formData.department}
-                                                unit={formData.unit}
-                                                jobtitle={formData.jobtitle}
-                                                position={formData.position}
-                                                grade={formData.grade}
-                                                location={formData.location}
-                                                phone={formData.phone}
-                                                isEditing={isEditingDepartment1}
-                                                onFormDataChange={handleFormDataChange}
-                                                originalFormData={originalFormData}
+                                    <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                        <div className="flex items-center justify-between">
+                                            <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
+                                            <ProfileIcons
+                                                icon1={profileData.icon1}
+                                                icon2={profileData.icon2}
+                                                onEdit={handleEditBio}
+                                                isFirstIcon
                                             />
                                         </div>
-                                        {isEditingDepartment1 && (
-                                            <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancelDepartment1} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSaveDepartment1} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                        <div className="flex-auto my-auto max-md:max-w-full">
+                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                <ProfileBio
+                                                    photo={photo}
+                                                    username={formData.username}
+                                                    email={formData.email}
+                                                    dateofbirth={formData.dateofbirth}
+                                                    whatsapp={formData.whatsapp}
+                                                    isEditing={isEditingBio}
+                                                    onFormDataChange={setFormData}
+                                                    onPhotoChange={handlePhotoChange}
+                                                    originalFormData={originalFormData}
+                                                    onEditBio={handleEditBio}
+                                                    onCancelBio={handleCancelBio}
+                                                    onSaveBio={handleSaveBio}
+                                                    userId={id} // Pass userId as a prop
+                                                />
                                             </div>
-                                        )}
-                                    </div>
-                                </section>
-                                <div className="separator"></div>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 2 Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            onEdit={handleEditDepartment2}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileDepartment
-                                                department={formData.department2}
-                                                unit={formData.unit2}
-                                                jobtitle={formData.jobtitle2}
-                                                position={formData.position2}
-                                                grade={formData.grade2}
-                                                location={formData.location2}
-                                                phone={formData.phone2}
-                                                isEditing={isEditingDepartment2}
-                                                onFormDataChange={handleFormDataChange}
-                                                originalFormData={originalFormData}
-                                            />
                                         </div>
-                                        {isEditingDepartment2 && (
-                                            <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSaveDepartment2} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                    </section>
+                                    <div className="separator"></div>
+                                    
+                                    {formData.employmentPosts && formData.employmentPosts.length > 0 && formData.employmentPosts.map((employmentPost, index) => (
+                                        <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                            <div className="flex items-center justify-between">
+                                                <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
+                                                <ProfileIcons
+                                                    icon1={profileData.icon1}
+                                                    onEdit={index === 0 ? handleEditDepartment1 : handleEditDepartment2}
+                                                    isFirstIcon
+                                                />
                                             </div>
-                                        )}
-                                    </div>
-                                </section>
+                                            <div className="flex-auto my-auto max-md:max-w-full">
+                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                    <ProfileDepartment
+                                                        department={employmentPost.department?.name || ''}
+                                                        unit={employmentPost.business_unit?.name || ''}
+                                                        jobtitle={employmentPost.business_post?.title || ''}
+                                                        position={employmentPost.title || ''}
+                                                        grade={employmentPost.business_grade?.code || ''}
+                                                        location={employmentPost.location || ''}
+                                                        phone={profileData.profile?.work_phone || ''}
+                                                        isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
+                                                        onFormDataChange={handleFormDataChange}
+                                                        originalFormData={originalFormData}
+                                                    />
+                                                </div>
+                                                {(index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2) ? (
+                                                    <div className="flex justify-end mt-4 pb-3">
+                                                        <button onClick={index === 0 ? handleCancelDepartment1 : handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                        <button onClick={index === 0 ? handleSaveDepartment1 : handleSaveDepartment2} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                        </section>
+                                    ))}
                                 </>
                             )}
+
                             {activeTab === "gallery" && (
                                 <section>
                                     <ImageProfile selectedItem="All" userId={id} />

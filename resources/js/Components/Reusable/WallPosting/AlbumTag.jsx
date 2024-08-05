@@ -28,13 +28,14 @@ const TagInput = ({ tags, setTags, onClose }) => {
     tag.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="flex flex-col font-semibold rounded-none max-w-[442px]">
         <section className="flex flex-col pt-1.5 w-full bg-white rounded-xl shadow-[2px_2px_8px_rgba(0,0,0,0.15)]">
           <header className="flex gap-5 justify-between self-end max-w-full text-2xl font-bold leading-tight text-center text-neutral-950 w-[265px]">
             <h1>Tag Album</h1>
-            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d7986dce07599ceb2e5628dea9fdbbf7b0d6801dfeb283d90ffedce0217a1cf?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="object-contain shrink-0 my-auto w-5 aspect-square" alt="" />
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d7986dce07599ceb2e5628dea9fdbbf7b0d6801dfeb283d90ffedce0217a1cf?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="object-contain shrink-0 my-auto w-5 aspect-square" alt="Close AlbumTag Popup" onClick={onClose} />
           </header>
           <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb95fa8e5f21e40306c92e50625664e1476952960dbc6acadb3e12bbdec9547f?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="object-contain mt-1.5 w-full aspect-[500]" alt="Album cover" />
           <div className="flex flex-col px-5 mt-4 w-full">

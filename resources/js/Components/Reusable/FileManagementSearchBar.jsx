@@ -56,14 +56,14 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
         />
         <button
           onClick={handleSearchChange}
-          className="visit-department-btn text-md font-bold rounded-full px-4 py-3 mx-4 bg-blue-500 text-white hover:bg-blue-700">
+          className="visit-department-btn text-md font-bold rounded-full px-4 py-3 mx-3 bg-blue-500 text-white hover:bg-blue-700">
           Search
         </button>
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
           <div
-            className="flex items-center shrink-0 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
-            <img src="/assets/addFile.svg" alt="add new file" className="w-10 h-8" />
+            className="flex items-center bg-blue-500 hover:bg-blue-700 px-4 py-2 max-md:px-3 h-full rounded-full">
+            <img src="/assets/plus.svg" alt="add new file" className="w-7 h-7" />
           </div>
         </label>
         {/* <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>

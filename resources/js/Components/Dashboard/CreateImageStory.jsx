@@ -80,7 +80,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
                 {/* <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} /> */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <img src="/assets/AaIcon.svg" alt="Add text" className='w-10 mb-3' />
-                  <label htmlFor="text" className="label" style={{ marginLeft: '8px' }}>Add text</label>
+                  <label htmlFor="text" className="label" style={{ marginLeft: '8px' }}>Add caption</label>
                 </div>
               </div>
                 {/* <hr className="half-width-line" style={{ marginLeft: '-30px', borderColor: '#E5E5E5', borderWidth: '1px' }} /> */}
@@ -93,8 +93,8 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
               />
             </div>
             <div className="buttons">
-              <button type="submit" className="post-button font-bold shadow-custom bg-blue-500 hover:bg-blue-700 text-white mb-2">Post</button>
-              <button type="button" className="back-button font-bold shadow-custom border-2 border-gray-400 hover:bg-gray-400 hover:text-white" onClick={onGoBack}>Cancel</button>
+              <button type="submit" className="post-button py-2 font-bold bg-blue-500 hover:bg-blue-700 text-white mb-2">Post</button>
+              <button type="button" className="back-button py-2 font-bold border-2 text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white" onClick={onGoBack}>Cancel</button>
             </div>
           </form>
         </div>

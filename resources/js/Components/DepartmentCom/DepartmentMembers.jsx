@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Invite from '../DepartmentCom/invPopup'; 
+import AddMemberPopup from '../Reusable/AddMemberPopup'; 
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 
@@ -52,7 +52,7 @@ function UserCard({ src, alt, name, role, status }) {
 //   </div>
 // );
 
-const PopupMenu = ({ onRemove, onAssign }) => {
+const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleRemoveClick = () => {
@@ -66,6 +66,7 @@ const PopupMenu = ({ onRemove, onAssign }) => {
   const handleConfirmRemove = () => {
     onRemove();
     setShowPopup(false);
+    closePopup();
   };
 
   return (
@@ -172,7 +173,7 @@ function DpMembers() {
   useEffect(() => {
     const fetchData = async () => {
       const departmentId = getDepartmentIdFromQuery();
-      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+      const url = `/api/department/employment_posts?department_id=${departmentId}`;
 
       try {
         const response = await fetch(url, {
@@ -255,21 +256,24 @@ function DpMembers() {
   };
 
   const handleNewMemberAdded = (newMember) => {
-    setMembers((prevMembers) => [...prevMembers, newMember]);
+    const newMembers = [...members, newMember];
+    newMembers.sort((a, b) => a.order - b.order);
+    setMembers(newMembers);
   };
 
   const handleAddMember = (newMemberData) => {
     const newMember = {
-      user_id: newMemberData.user_id,
-      employment_post_id: newMemberData.employment_post_id,
-      image: newMemberData.profile?.image || '/assets/dummyStaffPlaceHolder.jpg',
-      name: newMemberData.profile?.bio || '',
-      title: newMemberData.employment_post?.title || '',
-      is_active: newMemberData.user?.is_active || false,
+      user_id: newMemberData.id,
+      image: newMemberData.imageUrl || '/assets/dummyStaffPlaceHolder.jpg',
+      name: newMemberData.name || '',
+      business_post_title: newMemberData.role || '',
+      is_active: newMemberData.isDeactivated || false,
     };
   
     handleNewMemberAdded(newMember);
   };
+
+  // console.log(members);
 
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
@@ -321,7 +325,7 @@ function DpMembers() {
               employment_post_id={member.employment_post_id}
               imageUrl={member.image}
               name={member.name}
-              title={member.title}
+              title={member.business_post_title}
               isActive={member.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
@@ -333,7 +337,7 @@ function DpMembers() {
         </section>
       </div>
       {showInvite && 
-        <Invite 
+        <AddMemberPopup
           isAddMemberPopupOpen={showInvite}
           setIsAddMemberPopupOpen={setShowInvite}
           departmentId={getDepartmentIdFromQuery()}
