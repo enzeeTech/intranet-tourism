@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
+import deleteIcon from '../../../../../public/assets/deleteIcon.png'
 
-const DepartmentsCard = ({ name, imageUrl, onDeactivateClick, departmentID }) => {
+const DepartmentsCard = ({ name, imageUrl, onDeactivateClick, onDeleteClick, departmentID, isNotDeleted }) => {
+  const threeDotButtonRef = useRef(null);
+  
   return (
     <div className="staff-member-card">
       <div className="card-header">
         <img src={imageUrl || defaultImage} alt={name} className="staff-member-image" />
+        <button
+          className="status-button"
+          onClick={() => {
+            if (isNotDeleted) {
+              onDeleteClick();
+            } 
+          }}
+          ref={threeDotButtonRef}
+        >
+          <img style={{ width: '40px' }} src={deleteIcon} alt="Indicator Button" />
+        </button>
       </div>
       <div className="card-body">
         <h3 className="staff-member-name">{name}</h3>
