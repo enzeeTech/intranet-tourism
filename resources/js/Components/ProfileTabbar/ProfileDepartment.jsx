@@ -1,4 +1,3 @@
-import Login from '@/Pages/Auth/Login';
 import React, { useState, useEffect, useRef } from 'react';
 
 function ProfileDepartment({
@@ -39,43 +38,60 @@ function ProfileDepartment({
         setLocalFormData(formData);
     }, [department, unit, jobtitle, position, grade, location, phone]);
 
-    useEffect(() => {
-        const fetchData = async (API_URL, setOptions, label) => {
-            let allItems = [];
-            let currentPage = 1;
-            let lastPage = 1;
+    const fetchData = async (API_URL, setOptions, label) => {
+        let allItems = [];
+        let currentPage = 1;
+        let lastPage = 1;
 
-            try {
-                while (currentPage <= lastPage) {
-                    const response = await fetch(`${API_URL}?page=${currentPage}`, {
-                        method: "GET",
-                        headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
-                    });
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok for ${label}`);
-                    }
-                    const data = await response.json();
-                    allItems = allItems.concat(data.data.data);
-                    lastPage = data.data.last_page;
-                    currentPage++;
+        try {
+            while (currentPage <= lastPage) {
+                const response = await fetch(`${API_URL}?page=${currentPage}`, {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok for ${label}`);
                 }
-                setOptions(allItems);
-            } catch (error) {
-                console.error(`Error fetching data for ${label}:`, error);
+                const data = await response.json();
+                allItems = allItems.concat(data.data.data);
+                lastPage = data.data.last_page;
+                currentPage++;
             }
-        };
+            setOptions(allItems);
+        } catch (error) {
+            console.error(`Error fetching data for ${label}:`, error);
+        }
+    };
 
+    const fetchBusinessUnits = async () => {
+        let allUnits = [];
+        let currentPage = 1;
+        let lastPage = 1;
+
+        try {
+            while (currentPage <= lastPage) {
+                const response = await fetch(`/api/department/business_units?page=${currentPage}`, {
+                    method: "GET",
+                    headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok for Units');
+                }
+                const data = await response.json();
+                allUnits = allUnits.concat(data.data);
+                lastPage = data.last_page;
+                currentPage++;
+            }
+            setUnitOptions(allUnits);
+        } catch (error) {
+            console.error('Error fetching data for Units:', error);
+        }
+    };
+
+    useEffect(() => {
         fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
-        fetchData('/api/department/business_units', setUnitOptions, 'Units');
-        fetchData('/api/department/business_posts', setPositionOptions, 'Positions');
-        fetchData('/api/department/employment_posts', (data) => {
-            const jobTitles = data.filter(post => post.category === 'job_title');
-            const locations = data.filter(post => post.category === 'location');
-            const phones = data.filter(post => post.category === 'phone');
-            setJobTitleOptions(jobTitles);
-            setLocationOptions(locations);
-            setPhoneOptions(phones);
-        }, 'Employment Posts');
+        fetchBusinessUnits();
+        fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
     }, []);
 
@@ -118,7 +134,6 @@ function ProfileDepartment({
     );
 
     console.log("LOCALDATA", localFormData);
-    
 
     return (
         <div className="flex-auto my-auto p-4">
