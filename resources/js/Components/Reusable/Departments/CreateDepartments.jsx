@@ -1,5 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
+
+// Function to get current user info (replace with your actual method)
+const getCurrentUser = async () => {
+  // Replace this with actual logic to fetch user info
+  return {
+    name: "Current User Name",
+    role: "Admin",
+    src: "path/to/current/user/avatar.jpg"
+  };
+};
 
 function Header({ title }) {
   return (
@@ -44,12 +54,14 @@ function UserInfo({ name, role, src }) {
 
 function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate }) {
   const [departmentName, setDepartmentName] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [imageSrc, setImageSrc] = useState(imgSrc);
   const [selectedType, setSelectedType] = useState('');
   const [departmentDescription, setDepartmentDescription] = useState('');
   const csrfToken = useCsrf();
 
   const handleImageChange = (file) => {
+    setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
@@ -58,23 +70,21 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   };
 
   const handleSubmit = async () => {
-    const data = {
-      name: departmentName,
-      banner: imageSrc,
-      description: departmentDescription,
-      type: selectedType,
-      created_by: user.name,
-      updated_by: user.name,
-    };
+    const formData = new FormData();
+    formData.append('name', departmentName);
+    formData.append('banner', imageFile);
+    formData.append('description', departmentDescription);
+    formData.append('type', selectedType);
+    formData.append('created_by', user.name);
+    formData.append('updated_by', user.name);
 
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
         "X-CSRF-Token": csrfToken 
       },
-      body: JSON.stringify(data)
+      body: formData
     };
 
     try {
@@ -128,11 +138,19 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
 }
 
 export default function CreateDepartments({ onCancel, onCreate }) {
-  const user = {
-    name: "Aisyah binte Musa",
-    role: "Admin",
-    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
-  };
+  const [user, setUser] = useState({
+    name: '',
+    role: '',
+    src: ''
+  });
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userInfo = await getCurrentUser();
+      setUser(userInfo);
+    }
+    fetchUser();
+  }, []);
 
   return (
     <Card

@@ -1,3 +1,4 @@
+// DepartmentsCard.jsx
 import React, { useRef } from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
