@@ -18,14 +18,15 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
     if (!workNo || isDeactivated) return;
   
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const fullNumber = `+6038891${workNo}`;
+    // const fullNumber = `+6038891${workNo}`;
+    const fullNumber = workNo;
   
     if (isMobile) {
       window.location.href = `tel:${fullNumber}`;
     } else {
       setIsCallPopupOpen(true);
     }
-  };
+};      
 
   const handleWhatsApp = () => {
     if (!phoneNo || isDeactivated) return;
@@ -105,7 +106,8 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
             <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
               <br />
-              Office No: +603-8891 {workNo}
+              {/* Office No: +603-8891 {workNo} */}
+              Office No: {workNo}
             </p>
           </div>
         </div>

@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png'; 
 import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
 import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
-import SearchPopup from './AddMemberPopup';
+import AddMemberPopup from './AddMemberPopup';
 import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, onNewMemberAdded }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
@@ -117,11 +117,11 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         )}
       </div>
       {isAddMemberPopupOpen && (
-        <SearchPopup
+        <AddMemberPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}
           setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
           departmentId={selectedDepartment.id}
-          people={people}
+          onNewMemberAdded={onNewMemberAdded}
         />
       )}
     </div>

@@ -3,7 +3,7 @@ import './AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import { useCsrf } from "@/composables";
 
-const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId }) => {
+const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, onNewMemberAdded }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
@@ -16,7 +16,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [unitId, setUnitId] = useState('');
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(''); // New state for success message
+    const [success, setSuccess] = useState('');
     const csrfToken = useCsrf();
 
     useEffect(() => {
@@ -179,7 +179,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         const businessPostId = titleId;
         const businessUnitId = unitId;
         const locationValue = location;
-        const order = '1';        
+        const order = '0';        
 
         const body = JSON.stringify({
             department_id: String(departmentId),
@@ -192,8 +192,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             order: order,
         });
         
-        console.log('Body:', body);
-
         try {
             const response = await fetch(url, { ...options, body });
             const responseText = await response.text();
@@ -205,6 +203,23 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
             const data = responseText ? JSON.parse(responseText) : {};
             console.log('Successfully added member:', data);
+
+            console.log('selectedPerson from popup:', selectedPerson);
+
+            const newMember = {
+                id: userId,
+                name: selectedPerson.name,  
+                role: title,
+                status: 'Online',
+                imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
+                workNo: selectedPerson.profile.work_phone,
+                phoneNo: selectedPerson.profile.phone_no,
+                isDeactivated: selectedPerson.is_active,
+                order: order,
+            };  
+
+            onNewMemberAdded(newMember);
+
             setSuccess('Member successfully added!'); // Set success message
         } catch (error) {
             console.error('Error adding member to department:', error);
@@ -215,8 +230,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             handleClose();
         }, 1000); // Delay closing to show success message
     };
-
-    console.log('allMembers:', searchResults);
 
     return (
         <div>
@@ -249,9 +262,9 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="my-2 mx-2">
+                            <div className="mx-2 my-2">
                                 <div className="mb-2">
-                                    <label className="block text-gray-700 font-bold">Title</label>
+                                    <label className="block font-bold text-gray-700">Title</label>
                                     <select
                                         value={title.title}
                                         onChange={(e) => {
@@ -267,7 +280,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     </select>
                                 </div>
                                 <div className="mb-2">
-                                    <label className="block text-gray-700 font-bold">Unit</label>
+                                    <label className="block font-bold text-gray-700">Unit</label>
                                     <select
                                         value={unit.name}
                                         onChange={(e) => {
@@ -283,7 +296,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                     </select>
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 font-bold">Location</label>
+                                    <label className="block font-bold text-gray-700">Location</label>
                                     <input
                                         type="text"
                                         value={location}

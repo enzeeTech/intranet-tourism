@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Invite from '../DepartmentCom/invPopup'; 
+import AddMemberPopup from '../Reusable/AddMemberPopup'; 
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 
@@ -173,7 +173,7 @@ function DpMembers() {
   useEffect(() => {
     const fetchData = async () => {
       const departmentId = getDepartmentIdFromQuery();
-      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+      const url = `/api/department/employment_posts?department_id=${departmentId}`;
 
       try {
         const response = await fetch(url, {
@@ -256,7 +256,6 @@ function DpMembers() {
   };
 
   const handleNewMemberAdded = (newMember) => {
-    // add new meber to the list of members sorted by order
     const newMembers = [...members, newMember];
     newMembers.sort((a, b) => a.order - b.order);
     setMembers(newMembers);
@@ -264,11 +263,11 @@ function DpMembers() {
 
   const handleAddMember = (newMemberData) => {
     const newMember = {
-      user_id: newMemberData.user_id,
-      image: newMemberData.image || '/assets/dummyStaffPlaceHolder.jpg',
+      user_id: newMemberData.id,
+      image: newMemberData.imageUrl || '/assets/dummyStaffPlaceHolder.jpg',
       name: newMemberData.name || '',
-      title: newMemberData.title || '',
-      is_active: newMemberData.is_active || false,
+      business_post_title: newMemberData.role || '',
+      is_active: newMemberData.isDeactivated || false,
     };
   
     handleNewMemberAdded(newMember);
@@ -338,7 +337,7 @@ function DpMembers() {
         </section>
       </div>
       {showInvite && 
-        <Invite 
+        <AddMemberPopup
           isAddMemberPopupOpen={showInvite}
           setIsAddMemberPopupOpen={setShowInvite}
           departmentId={getDepartmentIdFromQuery()}
