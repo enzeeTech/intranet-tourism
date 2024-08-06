@@ -93,13 +93,13 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           ))}
         </ul>
       )}
-      <div className="relative flex items-center justify-start space-x-0">
+      <div className="relative flex items-center justify-start space-x-0 max-md:ml-20">
         {selectedDepartment.id && (
           <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
             <button className="visit-department-btn text-sm font-bold rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
               Visit Department
             </button>
-          </a>      
+          </a>
         )}
         {selectedDepartment.id && (
         <button 

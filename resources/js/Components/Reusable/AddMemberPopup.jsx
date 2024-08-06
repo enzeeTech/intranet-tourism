@@ -230,7 +230,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={!!selectedPerson}
-                            className="w-[95%] p-2 mb-4 ml-[2.5%] border border-gray-300 rounded-full"
+                            className="w-[95%] py-2 px-4 mb-4 ml-[2.5%] border font-bold bg-gray-100 border-gray-100 rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
                             {!selectedPerson && searchResults.map((person, index) => (
