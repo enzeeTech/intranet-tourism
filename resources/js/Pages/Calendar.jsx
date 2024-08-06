@@ -380,14 +380,14 @@ function Calendar() {
 
     return (
         <Example>
-            <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
+            <div className="container mx-auto mt-4 " style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
-                <div className="flex flex-col items-center mt-3 mb-8 w-full">
-                    <div className="flex w-full items-center justify-between">
+                <div className="flex flex-col items-center w-full mt-3 mb-8">
+                    <div className="flex items-center justify-between w-full">
                         <input
                             type="search"
-                            className="flex-grow mt-2 px-6 py-3 rounded-full border-gray-100 bg-gray-100 input-no-outline font-bold"
+                            className="flex-grow px-6 py-3 mt-2 font-bold bg-gray-100 border-gray-100 rounded-full input-no-outline"
                             placeholder="Search for events"
                             aria-label="Search"
                             value={searchTerm}
@@ -395,7 +395,7 @@ function Calendar() {
                         />
                         <button
                             onClick={handlePrint}
-                            className="flex items-center justify-center bg-red-500 hover:bg-red-700 mt-2 px-4 py-3 rounded-full mx-3">
+                            className="flex items-center justify-center px-4 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
                             <img src={printIcon} alt="Print" className="w-6 h-6" />
                         </button>
                         <button
@@ -556,7 +556,7 @@ function Calendar() {
                                     <img
                                         src={pencilIcon}
                                         alt="Edit"
-                                        className="w-4 h-4 ml-2 cursor-pointer inline-block"
+                                        className="inline-block w-4 h-4 ml-2 cursor-pointer"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             e.preventDefault();
@@ -574,7 +574,7 @@ function Calendar() {
                 {isModalOpen && (
                     <div className="modal-container">
                         <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
-                        <button onClick={closeModal} className="modal-close-button mt-2 mr-2">
+                        <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
                             <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleSubmit}>
@@ -596,7 +596,7 @@ function Calendar() {
                                 placeholder="Venue"
                                 required
                             />
-                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date</div>
+                            <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
                             <input
                                 type="date"
                                 name="startDate"
@@ -648,7 +648,7 @@ function Calendar() {
                                 {includeUrl && (
                                 <input
                                     type="url"
-                                    className="form-control mt-2"
+                                    className="mt-2 form-control"
                                     name="url"
                                     value={eventData.url}
                                     onChange={handleChange}
@@ -681,7 +681,7 @@ function Calendar() {
 
                 {isEditModalOpen && (
                     <div className="modal-container">
-                        <button onClick={closeEditModal} className="modal-close-button mt-2 mr-2">
+                        <button onClick={closeEditModal} className="mt-2 mr-2 modal-close-button">
                             <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleEditSubmit}>
@@ -759,7 +759,7 @@ function Calendar() {
                                 {includeUrl && (
                                     <input
                                         type="url"
-                                        className="form-control mt-2"
+                                        className="mt-2 form-control"
                                         name="url"
                                         value={eventData.url}
                                         onChange={handleChange}
@@ -796,12 +796,12 @@ function Calendar() {
                 )}
 
                 {isPrintModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
-                            <h2 className="text-xl font-bold mb-4">Select Date Range for Printing</h2>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                            <h2 className="mb-4 text-xl font-bold">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
                                 <div className="mb-2">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="startDate">Start Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="startDate">Start Date</label>
                                     <input
                                         type="date"
                                         name="startDate"
@@ -813,7 +813,7 @@ function Calendar() {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="endDate">End Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="endDate">End Date</label>
                                     <input
                                         type="date"
                                         name="endDate"
@@ -828,13 +828,13 @@ function Calendar() {
                                     <button
                                         type="button"
                                         onClick={closePrintModal}
-                                        className="mr-2 px-4 py-2 border-2 border-gray-400 text-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
+                                        className="px-4 py-2 mr-2 text-gray-400 border-2 border-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700"
+                                        className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
                                     >
                                         Print
                                     </button>
