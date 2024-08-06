@@ -214,11 +214,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                 role: title,
                 status: 'Online',
                 imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
-                workNo: selectedPerson.profile.work_phone,
+                workNo: selectedPerson.employment_post.work_phone,
                 phoneNo: selectedPerson.profile.phone_no,
                 isDeactivated: selectedPerson.is_active,
                 order: order,
             };  
+
+            console.log('newMember:', newMember);
 
             onNewMemberAdded(newMember);
 

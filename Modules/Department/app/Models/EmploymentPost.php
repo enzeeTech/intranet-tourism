@@ -32,6 +32,7 @@ class EmploymentPost extends Model implements AuditableContract
         'user_id',
         'location',
         'order',
+        'work_phone',
     ];
 
     protected $appends = [
@@ -51,6 +52,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'user_id' => ['numeric'],
                     'location' => ['string'],
                     'order' => ['numeric'],
+                    'work_phone' => ['string'],
                 ],
                 // [],
             ],
@@ -64,6 +66,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'user_id' => ['numeric'],
                     'location' => ['string'],
                     'order' => ['numeric'],
+                    'work_phone' => ['string'],
                 ],
                 // [],
             ],
