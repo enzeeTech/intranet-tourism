@@ -49,16 +49,9 @@ export default function Profile() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
-        department2: "",
-        unit2: "",
-        jobtitle2: "",
-        position2: "",
-        grade2: "",
-        location2: "",
-        phone2: "",
         employmentPosts: [] // Initialize with an empty array
     });
-    
+
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
@@ -93,7 +86,10 @@ export default function Profile() {
                 profileImage: data.profile && data.profile.image,
                 username: "@" + data.username,
             }));
-    
+
+            // Sort employmentPosts by id in ascending order (oldest first)
+            const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
+
             setFormData((pv) => ({
                 ...pv,
                 name: data.name,
@@ -102,32 +98,22 @@ export default function Profile() {
                 dateofbirth: data.profile?.dob || "N/A",
                 phone: data.profile?.work_phone || "N/A",
                 whatsapp: data.profile?.phone_no || "N/A",
-                employmentPosts: data.employment_posts || [] // Store employment posts in formData
+                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in formData
             }));
-    
+
             setOriginalFormData((pv) => ({
                 ...pv,
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
-                department: data.employment_post?.department?.name || "N/A",
-                unit: data.employment_post?.business_unit?.name || "N/A",
-                position: data.employment_post?.title || "N/A",
-                jobtitle: data.employment_post?.business_post?.title || "N/A",
-                grade: data.employment_post?.business_grade.code || "N/A",
-                location: data.employment_post?.location || "N/A",
-                dateofbirth: data.profile?.dob || "N/A",
-                phone: data.profile?.work_phone || "N/A",
-                whatsapp: data.profile?.phone_no || "N/A",
-                employmentPosts: data.employment_posts || [] // Store employment posts in formData
-
+                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in originalFormData
             }));
         })
         .catch((error) => {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
-    
+
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
     };
@@ -143,30 +129,17 @@ export default function Profile() {
 
     const handleFormDataChange = (newData, index) => {
         // Clone the current form data
-        let updatedEmploymentPosts = [...formData.employmentPosts];
-    
+        const updatedEmploymentPosts = [...formData.employmentPosts];
+
         // Update the specific employment post by index
         updatedEmploymentPosts[index] = { ...updatedEmploymentPosts[index], ...newData };
-    
-        // Sort the updatedEmploymentPosts array by employmentPost.number.id
-        updatedEmploymentPosts.sort((a, b) => {
-            if (a.number && b.number) {
-                return a.number.id - b.number.id; // Assuming `number.id` is a numeric value
-            }
-            return 0; // Fallback if number.id is missing
-        });
-    
-        // Update the form data state with the sorted employment posts array
+
+        // Update the form data state with the modified employment posts array
         setFormData((prevFormData) => ({
             ...prevFormData,
             employmentPosts: updatedEmploymentPosts,
         }));
     };
-    
-    
-    
-    
-    
 
     const handlePhotoChange = (newPhoto) => {
         setPhoto(newPhoto);
@@ -230,7 +203,6 @@ export default function Profile() {
         window.location.reload();
     };
 
-    
     const handleSaveDepartment = async (index) => {
         try {
             // Get the employment post for the specified index
@@ -263,21 +235,7 @@ export default function Profile() {
             }
         
             const data = await response.json();
-    
-            // Sort the employmentPosts array by employmentPost.number.id
-            const sortedEmploymentPosts = formData.employmentPosts.sort((a, b) => {
-                if (a.number && b.number) {
-                    return a.number.id - b.number.id; // Assuming `number.id` is a numeric value
-                }
-                return 0; // Fallback if number.id is missing
-            });
-    
-            // Update the state with the sorted data
-            setOriginalFormData((prevFormData) => ({
-                ...prevFormData,
-                employmentPosts: sortedEmploymentPosts,
-            }));
-    
+            setOriginalFormData(formData);
             setOriginalPhoto(photo);
             if (index === 0) {
                 setIsEditingDepartment1(false);
@@ -291,9 +249,6 @@ export default function Profile() {
             console.error(`Error updating Department ${index + 1} Information:`, error);
         }
     };
-    
-     
-    
 
     const handleCancelBio = () => {
         setFormData(originalFormData); // Revert to original form data
@@ -301,36 +256,32 @@ export default function Profile() {
         setIsEditingBio(false);
     };
 
-    const handleEditDepartment1 = () => {
-        setIsEditingDepartment1(true);
-    };
-    
-    const handleEditDepartment2 = () => {
-        setIsEditingDepartment2(true);
-    };
-    
     const handleCancelDepartment1 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment1(false);
     };
-    
+
     const handleCancelDepartment2 = () => {
-        setFormData(originalFormData);
-        setPhoto(originalPhoto);
+        setFormData(originalFormData); // Revert to original form data
+        setPhoto(originalPhoto);       // Revert to original photo
         setIsEditingDepartment2(false);
     };
-    
-    
-    const handleCreatePoll = (poll) => {
-        setPolls((prevPolls) => [...prevPolls, poll]);
-    };
-    
+
     const handleEditBio = () => {
         setIsEditingBio(true);
     };
 
-    console.log("FK THIS", formData);
+    const handleEditDepartment1 = () => {
+        setIsEditingDepartment1(true);
+    };
+
+    const handleEditDepartment2 = () => {
+        setIsEditingDepartment2(true);
+    };
+
+    // Sort employmentPosts by id in ascending order (oldest id first)
+    const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.id - b.id);
 
     return (
         <Example>
@@ -392,7 +343,7 @@ export default function Profile() {
                                     </section>
                                     <div className="separator"></div>
                                     
-                                    {formData.employmentPosts && formData.employmentPosts.length > 0 && formData.employmentPosts.map((employmentPost, index) => (
+                                    {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                             <div className="flex items-center justify-between">
                                                 <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
@@ -426,7 +377,6 @@ export default function Profile() {
                                             </div>
                                         </section>
                                     ))}
-
                                 </>
                             )}
 
