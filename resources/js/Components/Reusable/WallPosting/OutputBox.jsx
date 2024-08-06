@@ -330,7 +330,7 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                     <img 
                       loading="lazy" 
                       src={
-                        post.userProfile?.profile.image 
+                        post.userProfile.profile?.image 
                           ? `/storage/${post.userProfile.profile.image}` 
                           : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                       } 

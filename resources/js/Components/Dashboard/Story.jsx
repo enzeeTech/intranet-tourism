@@ -49,7 +49,7 @@ const StoryNew = ({ userId }) => {
         .then(({ data }) => {
             setUserData({
                 ...data,
-                profileImage: data.profile.image
+                profileImage: data.profile?.image
             });
         })
         .catch((error) => {
