@@ -229,14 +229,14 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
                     <div className="bg-white rounded-3xl pt-7 px-4 w-[400px]">
-                        <h1 className="mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
+                        <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
                         <input
                             type="text"
                             placeholder="Search people"
                             value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={!!selectedPerson}
-                            className="w-[95%] p-2 mb-4 ml-[2.5%] border border-gray-300 rounded-full"
+                            className="w-[95%] py-2 px-4 mb-4 ml-[2.5%] bg-gray-100 border-gray-100 font-bold rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
                             {!selectedPerson && searchResults.map((person, index) => (
@@ -255,9 +255,9 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="mt-4">
+                            <div className="my-2 mx-2">
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Title</label>
+                                    <label className="block text-gray-700 font-bold">Title</label>
                                     <select
                                         value={title.title}
                                         onChange={(e) => {
@@ -273,7 +273,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                                     </select>
                                 </div>
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Unit</label>
+                                    <label className="block text-gray-700 font-bold">Unit</label>
                                     <select
                                         value={unit.name}
                                         onChange={(e) => {
@@ -289,7 +289,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                                     </select>
                                 </div>
                                 <div className="mb-2">
-                                    <label className="block text-gray-700">Location</label>
+                                    <label className="block text-gray-700 font-bold">Location</label>
                                     <input
                                         type="text"
                                         value={location}
