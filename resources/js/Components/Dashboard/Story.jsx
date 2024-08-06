@@ -130,9 +130,10 @@ const StoryNew = ({ userId }) => {
             
 
             const userAvatars = users.map(user => ({
-                src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
+                src: user.data.profile && user.data.profile.image ? `/storage/${user.data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
                 alt: `Avatar of ${user.data.name}`,
                 name: user.data.username,
+                fullName: user.data.name,
                 stories: userStories.filter(story => story.userId === user.data.id)
             }));
 
@@ -265,6 +266,9 @@ const StoryNew = ({ userId }) => {
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
 
+    // console.log("FF", sortedAvatars);
+
+
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left', marginBottom: '30px', marginLeft: '-20px', width: '610px', }}>
@@ -350,7 +354,19 @@ const StoryNew = ({ userId }) => {
                         <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
                             {avatar.stories.length} {avatar.stories.length === 1 ? 'story' : 'stories'}
                         </div>
-                        <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.name}</div>
+                        {/* <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.fullName}</div> */}
+                        <div
+                            style={{
+                                textAlign: 'center',
+                                marginTop: '-5px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '85px' // Adjust the width as needed
+                            }}
+                            >
+                            {avatar.fullName}
+                        </div>
                 </div>
                 ))}
             </div>

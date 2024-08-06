@@ -78,51 +78,65 @@ function Calendar() {
         try {
             let allProfiles = [];
             let currentPage = 1;
-            let totalPages = 1; // Initialize totalPages to ensure at least one request
-        
+            let totalPages = 1;
+    
             while (currentPage <= totalPages) {
                 const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
                 const data = await response.json();
     
-                console.log("RESPONSE", data);
-    
                 if (data && data.data && Array.isArray(data.data.data)) {
-                    // Accumulate profiles
                     allProfiles = [...allProfiles, ...data.data.data];
-        
-                    // Update totalPages based on the response
+    
                     totalPages = data.data.last_page;
                     currentPage++;
                 } else {
                     console.error('Error: Expected an array, but got:', data);
-                    break; // Exit loop if the expected structure is not found
+                    break;
                 }
             }
-        
-            // Now that we have all profiles, map them to birthday events
-            const birthdayEvents = allProfiles.map(profile => {
+    
+            // Map profiles to birthday events
+            const birthdayEvents = allProfiles.reduce((acc, profile) => {
                 const dob = new Date(profile.dob);
                 const currentYear = new Date().getFullYear();
-                dob.setFullYear(currentYear); // Adjust the DOB to the current year
-        
-                return {
-                    title: `Birthday: ${profile.bio}`,
-                    start: dob.toISOString().split('T')[0], // Only date, no time
-                    allDay: true,
-                    backgroundColor: 'transparent',
-                    borderColor: 'blue',
-                    textColor: 'blue',
-                    isBirthday: true, // Custom property to identify birthday events
-                };
-            });
-        
-            // Set the events state with all the accumulated birthday events
+                dob.setFullYear(currentYear);
+    
+                const dateStr = dob.toISOString().split('T')[0];
+                let existingEvent = acc.find(event => event.start === dateStr);
+    
+                if (existingEvent) {
+                    // Ensure names property exists and push the new name
+                    if (!existingEvent.extendedProps.names) {
+                        existingEvent.extendedProps.names = [];
+                    }
+                    existingEvent.extendedProps.names.push(profile.bio);
+                } else {
+                    // Create a new birthday event with names initialized
+                    acc.push({
+                        title: `Birthday: ${profile.bio}`,
+                        start: dateStr,
+                        allDay: true,
+                        backgroundColor: 'transparent',
+                        // borderColor: 'blue',
+                        textColor: 'blue',
+                        isBirthday: true,
+                        extendedProps: {
+                            names: [profile.bio] // Initialize names array
+                        }
+                    });
+                }
+                return acc;
+            }, []);
+    
             setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
             setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
         } catch (error) {
             console.error('Error fetching birthdays: ', error);
         }
     };
+    
+    
+    
     
     const filterEvents = () => {
         if (searchTerm.trim() === '') {
@@ -366,14 +380,14 @@ function Calendar() {
 
     return (
         <Example>
-            <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
+            <div className="container mx-auto mt-4 " style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
-                <div className="flex flex-col items-center mt-3 mb-8 w-full">
-                    <div className="flex w-full items-center justify-between">
+                <div className="flex flex-col items-center w-full mt-3 mb-8">
+                    <div className="flex items-center justify-between w-full">
                         <input
                             type="search"
-                            className="flex-grow mt-2 px-6 py-3 rounded-full border-gray-100 bg-gray-100 input-no-outline font-bold"
+                            className="flex-grow px-6 py-3 mt-2 font-bold bg-gray-100 border-gray-100 rounded-full input-no-outline"
                             placeholder="Search for events"
                             aria-label="Search"
                             value={searchTerm}
@@ -381,7 +395,7 @@ function Calendar() {
                         />
                         <button
                             onClick={handlePrint}
-                            className="flex items-center justify-center bg-red-500 hover:bg-red-700 mt-2 px-4 py-3 rounded-full mx-3">
+                            className="flex items-center justify-center px-4 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
                             <img src={printIcon} alt="Print" className="w-6 h-6" />
                         </button>
                         <button
@@ -409,87 +423,150 @@ function Calendar() {
                     }}
                     events={filteredEvents}
                     eventDidMount={(info) => {
+                        console.log("eventDidMount called for event:", info.event);
+                    
                         if (info.event.extendedProps.isBirthday) {
+                            console.log("Birthday event detected:", info.event.extendedProps.names);
+                    
+                            // Clear any default styles
                             info.el.style.backgroundColor = 'transparent';
-                            info.el.style.borderColor = 'blue';
-                            info.el.style.color = 'blue';
+                            info.el.style.border = 'none';
+                            info.el.style.color = 'black';
+
+                            const namesArray = info.event.extendedProps.names;
+                            let namesList;
+
+                            if (namesArray.length > 1) {
+                                // Use numbering if more than one person
+                                namesList = namesArray.map((name, index) => `<li>${index + 1}. ${name}</li>`).join('');
+                            } else {
+                                // Display without numbering if only one person
+                                namesList = `<li>${namesArray[0]}</li>`;
+                            }
+
+                            const popoverContent = `
+                                <div>
+                                    <p class="event-title"><strong>Birthdays:</strong></p>
+                                    <ul>${namesList}</ul>
+                                </div>
+                            `;
+                    
+                            new bootstrap.Popover(info.el, {
+                                placement: "bottom", // Position popover below the cake icon
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                                offset: '0,10' // Adjust the offset if necessary (e.g., 0 pixels horizontally, 10 pixels vertically)
+                            });
+                        } else {
+                            console.log("Non-birthday event detected:", info.event);
+                            const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            });
+                            const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
+                                ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                                : '';
+                            
+                            const popoverContent = `
+                                <div>
+                                    <p class="event-title"><strong>${info.event.title}</strong></p>
+                                    <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
+                                    <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                                    ${urlContent}
+                                    <hr style="border: 10px solid #000;" />
+                                </div>`;
+                            
+                            new bootstrap.Popover(info.el, {
+                                placement: "auto",
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                            });
                         }
-                    
-                        const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true
-                        });
-                        const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
-                            ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
-                            : '';
-                    
-                        const isBirthday = info.event.extendedProps.isBirthday;
-                    
-                        const popoverContent = `
-                            <div>
-                                <p class="event-title"><strong>${info.event.title}</strong></p>
-                                ${!isBirthday ? `<p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>` : ''}
-                                ${!isBirthday ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>` : ''}
-                                ${urlContent} <!-- Only include if URL is valid -->
-                                <hr style="border: 10px solid #000;" />
-                            </div>`;
-                    
-                        return new bootstrap.Popover(info.el, {
-                            placement: "auto",
-                            trigger: "hover",
-                            container: 'body',
-                            customClass: "custom-popover",
-                            content: popoverContent,
-                            html: true,
-                        });
                     }}
                     
                     eventContent={(eventInfo) => {
+                        console.log("eventContent called for event:", eventInfo.event);
+                    
                         const isBirthday = eventInfo.event.extendedProps.isBirthday;
-                        const borderColor = isBirthday ? 'blue' : eventInfo.backgroundColor;
-                        return (
-                            <div
-                                style={{
-                                    backgroundColor: eventInfo.backgroundColor,
-                                    padding: '0 15px',
-                                    borderRadius: '2px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                    width: '100%',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    border: isBirthday ? `2px solid ${borderColor}` : '', // Set border color for birthday
-                                }}
-                                className="fc-event-title"
-                            >
+                        if (isBirthday) {
+                            const names = eventInfo.event.extendedProps.names || [];
+                            console.log("Rendering birthday icon for:", names);
+                    
+                            return (
                                 <div
                                     style={{
-                                        borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                        position: 'relative',
                                         height: '100%',
-                                        opacity: '50%',
+                                        width: '100%',
                                     }}
-                                />
-                                <span className="event-title" style={{ color: isBirthday ? borderColor : 'white', flexGrow: 1 }}>
-                                    {eventInfo.event.title}
-                                </span>
-                                {!isBirthday && (
+                                >
+                                    <span
+                                        role="img"
+                                        aria-label="cake"
+                                        style={{
+                                            position: 'absolute',
+                                            top: '-30px', // Adjust to position as needed
+                                            left: '5px', // Adjust to position as needed
+                                            fontSize: '1.8em',
+                                            cursor: 'pointer',
+                                            zIndex: 1, // Ensure it appears above other content
+                                        }}
+                                        title={names.join(', ')} // Show names on hover
+                                    >
+                                        🎂
+                                    </span>
+                                </div>
+                            );
+                        } else {
+                            const borderColor = eventInfo.event.backgroundColor || 'gray';
+                            return (
+                                <div
+                                    style={{
+                                        backgroundColor: eventInfo.backgroundColor,
+                                        padding: '0 15px',
+                                        borderRadius: '2px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        height: '100%',
+                                        width: '100%',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        border: `2px solid ${borderColor}`,
+                                    }}
+                                    className="fc-event-title"
+                                >
+                                    <div
+                                        style={{
+                                            borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                            height: '100%',
+                                            opacity: '50%',
+                                        }}
+                                    />
+                                    <span className="event-title" style={{ color: 'white', flexGrow: 1 }}>
+                                        {eventInfo.event.title}
+                                    </span>
                                     <img
                                         src={pencilIcon}
                                         alt="Edit"
-                                        className="w-4 h-4 ml-2 cursor-pointer inline-block"
+                                        className="inline-block w-4 h-4 ml-2 cursor-pointer"
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent triggering other event handlers
-                                            e.preventDefault(); // Prevent default behavior
+                                            e.stopPropagation();
+                                            e.preventDefault();
                                             handleEditClick(eventInfo.event);
                                         }}
                                     />
-                                )}
-                            </div>
-                        );
-                    }}
+                                </div>
+                            );
+                        }
+                    }}  
                 />
 
                 <div className='pb-10'></div>
@@ -497,7 +574,7 @@ function Calendar() {
                 {isModalOpen && (
                     <div className="modal-container">
                         <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
-                        <button onClick={closeModal} className="modal-close-button mt-2 mr-2">
+                        <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
                             <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleSubmit}>
@@ -519,7 +596,7 @@ function Calendar() {
                                 placeholder="Venue"
                                 required
                             />
-                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date</div>
+                            <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
                             <input
                                 type="date"
                                 name="startDate"
@@ -529,7 +606,7 @@ function Calendar() {
                                 placeholder="Start Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -537,7 +614,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            /> */}
+                            />
                             <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
                             <input
                                 type="date"
@@ -548,7 +625,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -556,7 +633,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            /> */}
+                            />
                             <div className="form-group">
                                 <label>
                                 <input
@@ -571,7 +648,7 @@ function Calendar() {
                                 {includeUrl && (
                                 <input
                                     type="url"
-                                    className="form-control mt-2"
+                                    className="mt-2 form-control"
                                     name="url"
                                     value={eventData.url}
                                     onChange={handleChange}
@@ -604,7 +681,7 @@ function Calendar() {
 
                 {isEditModalOpen && (
                     <div className="modal-container">
-                        <button onClick={closeEditModal} className="modal-close-button mt-2 mr-2">
+                        <button onClick={closeEditModal} className="mt-2 mr-2 modal-close-button">
                             <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                         <form onSubmit={handleEditSubmit}>
@@ -644,7 +721,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -652,8 +729,8 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            /> */}
-                            {/* <input
+                            />
+                            <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -661,7 +738,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            /> */}
+                            />
                             <div className="form-group">
                                 <label>
                                     <input
@@ -682,7 +759,7 @@ function Calendar() {
                                 {includeUrl && (
                                     <input
                                         type="url"
-                                        className="form-control mt-2"
+                                        className="mt-2 form-control"
                                         name="url"
                                         value={eventData.url}
                                         onChange={handleChange}
@@ -719,12 +796,12 @@ function Calendar() {
                 )}
 
                 {isPrintModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
-                            <h2 className="text-xl font-bold mb-4">Select Date Range for Printing</h2>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                            <h2 className="mb-4 text-xl font-bold">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
                                 <div className="mb-2">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="startDate">Start Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="startDate">Start Date</label>
                                     <input
                                         type="date"
                                         name="startDate"
@@ -736,7 +813,7 @@ function Calendar() {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="endDate">End Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="endDate">End Date</label>
                                     <input
                                         type="date"
                                         name="endDate"
@@ -751,13 +828,13 @@ function Calendar() {
                                     <button
                                         type="button"
                                         onClick={closePrintModal}
-                                        className="mr-2 px-4 py-2 border-2 border-gray-400 text-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
+                                        className="px-4 py-2 mr-2 text-gray-400 border-2 border-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700"
+                                        className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
                                     >
                                         Print
                                     </button>
