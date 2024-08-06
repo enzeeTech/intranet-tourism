@@ -93,6 +93,8 @@ function ProfileDepartment({
         fetchBusinessUnits();
         fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
+        fetchData('/api/department/employment_posts', setPhoneOptions, 'Location');
+        fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
     }, []);
 
     const handleInputChange = (e) => {
@@ -118,8 +120,13 @@ function ProfileDepartment({
             } else if (name === 'jobtitle') {
                 updatedData.business_post_id = value;
             } else if (name === 'grade') {
-                updatedData.business_grade_id = value;
+                updatedData.business_post_id = value;
+            } else if (name === 'location') {
+                updatedData.location = value;
+            } else if (name === 'phone') {
+                updatedData.work_phone = value;
             }
+            
     
             onFormDataChange(updatedData);
         }
