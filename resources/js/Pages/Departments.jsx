@@ -16,6 +16,9 @@ const StaffDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentDepartmentId, setCurrentDepartmentId] = useState(null);
+  const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
+  
+  const toggleCreateCommunity = () => setIsCreateDepartmentOpen(!isCreateDepartmentOpen);
 
   const fetchDepartments = async (url) => {
     try {
@@ -53,7 +56,6 @@ const StaffDirectory = () => {
 
   const handleDelete = async () => {
     try {
-      // Make an API call to delete the department
       await fetch(`/api/crud/departments/${currentDepartmentId}`, {
         method: 'DELETE',
         headers: {
@@ -88,6 +90,7 @@ const StaffDirectory = () => {
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar
             onSearch={(value) => setSearchTerm(value)}
+            toggleCreateCommunity={toggleCreateCommunity}
           />
           <DepartmentDropdown
             departments={filteredDepartments}
@@ -144,6 +147,19 @@ const StaffDirectory = () => {
                 No
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {isCreateDepartmentOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
+          <div className="bg-white p-4 rounded-lg shadow-lg relative">
+            <button
+              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+              onClick={toggleCreateCommunity}
+            >
+              &times;
+            </button>
+            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
           </div>
         </div>
       )}
