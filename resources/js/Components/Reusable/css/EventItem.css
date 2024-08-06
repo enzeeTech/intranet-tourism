@@ -3,6 +3,8 @@
     align-items: center;
     background-color: #fff; 
     overflow: hidden; 
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   /* .event-date-box {

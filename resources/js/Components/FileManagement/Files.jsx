@@ -284,7 +284,7 @@ const FileTable = ({ searchTerm }) => {
 
       const filesData = responseData.data.data.map(file => ({
         ...file,
-        uploader: file.uploader, // Assuming the API provides an 'uploader' field with the uploader's name
+        uploader: file.user, // Assuming the API provides an 'uploader' field with the uploader's name
         metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
       }));
 
@@ -401,6 +401,7 @@ const FileTable = ({ searchTerm }) => {
       if (response.ok) {
         const updatedFiles = files.filter((_, i) => i !== index);
         setFiles(updatedFiles);
+        // window.location.reload(); // Reload the page
       } else {
         console.error('Failed to delete file:', data);
       }

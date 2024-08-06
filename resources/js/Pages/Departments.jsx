@@ -1,3 +1,4 @@
+// StaffDirectory.jsx
 import React, { useState, useEffect } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -17,7 +18,7 @@ const StaffDirectory = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentDepartmentId, setCurrentDepartmentId] = useState(null);
   const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
-  
+
   const toggleCreateCommunity = () => setIsCreateDepartmentOpen(!isCreateDepartmentOpen);
 
   const fetchDepartments = async (url) => {
@@ -33,6 +34,7 @@ const StaffDirectory = () => {
       const departmentData = data.data.data.map((department) => ({
         id: department.id,
         name: department.name,
+        imageUrl: department.banner ? `api/crud/departments/${department.banner}` : 'assets/departmentsDefault.jpg', // Assuming the API returns an image URL here
       }));
 
       setDepartmentsList((prevDepartments) => {
@@ -107,7 +109,7 @@ const StaffDirectory = () => {
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={'assets/departmentsDefault.jpg'}
+                  imageUrl={department.imageUrl|| 'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
                   onDeleteClick={handleDeleteClick}
                 />

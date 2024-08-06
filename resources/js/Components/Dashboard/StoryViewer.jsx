@@ -5,7 +5,7 @@ import { useCsrf } from "@/composables";
 
 const StoryViewer = ({ stories, onClose, user, onViewed }) => {
 
-    // console.log("USER", user);
+    console.log("USER", user);
 
     const csrfToken = useCsrf();
 
@@ -70,7 +70,6 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
         setShowDeletePopup(false);
     };
 
-
     
     return (
         <div style={{
@@ -132,7 +131,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
-                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>Your Story</div>
+                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.fullName ? user.fullName : "Your Story"}</div>
                         </div>
                         <button
                             type="button"

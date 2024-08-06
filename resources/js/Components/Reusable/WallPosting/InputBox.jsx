@@ -24,21 +24,40 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
 
     const handleClickSend = () => {
         const formData = new FormData();
-        formData.append("user_id", userId); // Use the userId prop here
-        // formData.append('type', 'post');
-        formData.append("type", "post");
-        formData.append("visibility", "public");
-        formData.append("content", inputValue);
-        formData.append("tag", JSON.stringify(tags));
 
-        attachments.forEach((file, index) => {
-            formData.append(`attachments[${index}]`, file);
-        });
+        if (!inputValue) {
+            formData.append("user_id", userId); // Use the userId prop here
+            // formData.append('type', 'post');
+            formData.append("type", "post");
+            formData.append("visibility", "public");
+            formData.append("tag", JSON.stringify(tags));
+            attachments.forEach((file, index) => {
+                formData.append(`attachments[${index}]`, file);
+            });
 
-        if (includeAccessibilities) {
-            formData.append("accessibilities[0][accessable_type]", filterType);
-            formData.append("accessibilities[0][accessable_id]", filterId);
+            if (includeAccessibilities) {
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+            }
         }
+        else {
+            formData.append("user_id", userId); // Use the userId prop here
+            // formData.append('type', 'post');
+            formData.append("type", "post");
+            formData.append("visibility", "public");
+            formData.append("content", inputValue);
+            formData.append("tag", JSON.stringify(tags));
+
+            attachments.forEach((file, index) => {
+                formData.append(`attachments[${index}]`, file);
+            });
+
+            if (includeAccessibilities) {
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+            }
+        }
+        
 
         fetch("/api/posts/posts", {
             method: "POST",

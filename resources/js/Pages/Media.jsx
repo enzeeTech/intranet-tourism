@@ -84,13 +84,13 @@ const Media = () => {
 
   return (
     <Example>
-    <main className="xl:pl-96">
+    <main className="min-h-screen bg-gray-100 xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
-            <div className="flex flex-col justify-center text-sm max-w-full text-neutral-800 relative">
+            <div className="relative flex flex-col justify-center max-w-full text-sm text-neutral-800">
       <div
         style={{ width: '180px' }}
-        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg cursor-pointer"
+        className="flex justify-between gap-5 px-4 py-3 bg-white shadow-lg cursor-pointer rounded-2xl"
       >
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
@@ -103,14 +103,14 @@ const Media = () => {
                 <div>
                     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
                         <header>
-                            <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+                            <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
                             Images
                             </h1>
                             <hr className="underline" />
                         </header>
                         <section className="mt-8 max-md:max-w-full">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                                    {/* <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">Images</h1> */}
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                                    {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderImages()}
                             </div>
                         </section>
@@ -119,14 +119,14 @@ const Media = () => {
                 <div>
                     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
                         <header>
-                            <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+                            <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
                             Videos
                             </h1>
                             <hr className="underline" />
                         </header>
                         <section className="mt-8 max-md:max-w-full">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                                    {/* <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">Images</h1> */}
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                                    {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderVideos()}
                             </div>
                         </section>
@@ -135,7 +135,7 @@ const Media = () => {
             </div>
         </div>
     </main>
-    <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+    <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
         <style>
             {`
             aside::-webkit-scrollbar {
