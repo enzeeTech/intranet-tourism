@@ -490,7 +490,7 @@ function Calendar() {
                                 placeholder="Venue"
                                 required
                             />
-                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date and Time</div>
+                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date</div>
                             <input
                                 type="date"
                                 name="startDate"
@@ -500,7 +500,7 @@ function Calendar() {
                                 placeholder="Start Date"
                                 required
                             />
-                            <input
+                            {/* <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -508,8 +508,8 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            />
-                            <div className="flex items-start text-md font-semibold text-neutral-800">End Date and Time</div>
+                            /> */}
+                            <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
                             <input
                                 type="date"
                                 name="endDate"
@@ -519,7 +519,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            <input
+                            {/* <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -527,7 +527,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            />
+                            /> */}
                             <div className="form-group">
                                 <label>
                                 <input
@@ -615,7 +615,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            <input
+                            {/* <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -623,8 +623,8 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            />
-                            <input
+                            /> */}
+                            {/* <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -632,7 +632,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            />
+                            /> */}
                             <div className="form-group">
                                 <label>
                                     <input
