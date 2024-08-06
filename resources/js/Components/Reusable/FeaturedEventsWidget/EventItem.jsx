@@ -30,8 +30,8 @@ const EventItem = ({ date, title }) => {
       </div>
       <div className="event-details">
         <div className="event-title">{title}</div>
-        <div className="event-full-date">{`${month} ${day}, ${year}, ${time}`}</div>
-        <a href="#" className="more-link">More</a>
+        <div className="event-full-date">{`${month} ${day}, ${year}`}</div>
+        {/* <a href="#" className="more-link">More</a> */}
       </div>
     </li>
   );

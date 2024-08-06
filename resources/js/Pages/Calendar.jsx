@@ -78,51 +78,65 @@ function Calendar() {
         try {
             let allProfiles = [];
             let currentPage = 1;
-            let totalPages = 1; // Initialize totalPages to ensure at least one request
-        
+            let totalPages = 1;
+    
             while (currentPage <= totalPages) {
                 const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
                 const data = await response.json();
     
-                console.log("RESPONSE", data);
-    
                 if (data && data.data && Array.isArray(data.data.data)) {
-                    // Accumulate profiles
                     allProfiles = [...allProfiles, ...data.data.data];
-        
-                    // Update totalPages based on the response
+    
                     totalPages = data.data.last_page;
                     currentPage++;
                 } else {
                     console.error('Error: Expected an array, but got:', data);
-                    break; // Exit loop if the expected structure is not found
+                    break;
                 }
             }
-        
-            // Now that we have all profiles, map them to birthday events
-            const birthdayEvents = allProfiles.map(profile => {
+    
+            // Map profiles to birthday events
+            const birthdayEvents = allProfiles.reduce((acc, profile) => {
                 const dob = new Date(profile.dob);
                 const currentYear = new Date().getFullYear();
-                dob.setFullYear(currentYear); // Adjust the DOB to the current year
-        
-                return {
-                    title: `Birthday: ${profile.bio}`,
-                    start: dob.toISOString().split('T')[0], // Only date, no time
-                    allDay: true,
-                    backgroundColor: 'transparent',
-                    borderColor: 'blue',
-                    textColor: 'blue',
-                    isBirthday: true, // Custom property to identify birthday events
-                };
-            });
-        
-            // Set the events state with all the accumulated birthday events
+                dob.setFullYear(currentYear);
+    
+                const dateStr = dob.toISOString().split('T')[0];
+                let existingEvent = acc.find(event => event.start === dateStr);
+    
+                if (existingEvent) {
+                    // Ensure names property exists and push the new name
+                    if (!existingEvent.extendedProps.names) {
+                        existingEvent.extendedProps.names = [];
+                    }
+                    existingEvent.extendedProps.names.push(profile.bio);
+                } else {
+                    // Create a new birthday event with names initialized
+                    acc.push({
+                        title: `Birthday: ${profile.bio}`,
+                        start: dateStr,
+                        allDay: true,
+                        backgroundColor: 'transparent',
+                        // borderColor: 'blue',
+                        textColor: 'blue',
+                        isBirthday: true,
+                        extendedProps: {
+                            names: [profile.bio] // Initialize names array
+                        }
+                    });
+                }
+                return acc;
+            }, []);
+    
             setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
             setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
         } catch (error) {
             console.error('Error fetching birthdays: ', error);
         }
     };
+    
+    
+    
     
     const filterEvents = () => {
         if (searchTerm.trim() === '') {
@@ -409,87 +423,150 @@ function Calendar() {
                     }}
                     events={filteredEvents}
                     eventDidMount={(info) => {
+                        console.log("eventDidMount called for event:", info.event);
+                    
                         if (info.event.extendedProps.isBirthday) {
+                            console.log("Birthday event detected:", info.event.extendedProps.names);
+                    
+                            // Clear any default styles
                             info.el.style.backgroundColor = 'transparent';
-                            info.el.style.borderColor = 'blue';
-                            info.el.style.color = 'blue';
+                            info.el.style.border = 'none';
+                            info.el.style.color = 'black';
+
+                            const namesArray = info.event.extendedProps.names;
+                            let namesList;
+
+                            if (namesArray.length > 1) {
+                                // Use numbering if more than one person
+                                namesList = namesArray.map((name, index) => `<li>${index + 1}. ${name}</li>`).join('');
+                            } else {
+                                // Display without numbering if only one person
+                                namesList = `<li>${namesArray[0]}</li>`;
+                            }
+
+                            const popoverContent = `
+                                <div>
+                                    <p class="event-title"><strong>Birthdays:</strong></p>
+                                    <ul>${namesList}</ul>
+                                </div>
+                            `;
+                    
+                            new bootstrap.Popover(info.el, {
+                                placement: "bottom", // Position popover below the cake icon
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                                offset: '0,10' // Adjust the offset if necessary (e.g., 0 pixels horizontally, 10 pixels vertically)
+                            });
+                        } else {
+                            console.log("Non-birthday event detected:", info.event);
+                            const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            });
+                            const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
+                                ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                                : '';
+                            
+                            const popoverContent = `
+                                <div>
+                                    <p class="event-title"><strong>${info.event.title}</strong></p>
+                                    <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
+                                    <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                                    ${urlContent}
+                                    <hr style="border: 10px solid #000;" />
+                                </div>`;
+                            
+                            new bootstrap.Popover(info.el, {
+                                placement: "auto",
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                            });
                         }
-                    
-                        const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true
-                        });
-                        const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
-                            ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
-                            : '';
-                    
-                        const isBirthday = info.event.extendedProps.isBirthday;
-                    
-                        const popoverContent = `
-                            <div>
-                                <p class="event-title"><strong>${info.event.title}</strong></p>
-                                ${!isBirthday ? `<p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>` : ''}
-                                ${!isBirthday ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>` : ''}
-                                ${urlContent} <!-- Only include if URL is valid -->
-                                <hr style="border: 10px solid #000;" />
-                            </div>`;
-                    
-                        return new bootstrap.Popover(info.el, {
-                            placement: "auto",
-                            trigger: "hover",
-                            container: 'body',
-                            customClass: "custom-popover",
-                            content: popoverContent,
-                            html: true,
-                        });
                     }}
                     
                     eventContent={(eventInfo) => {
+                        console.log("eventContent called for event:", eventInfo.event);
+                    
                         const isBirthday = eventInfo.event.extendedProps.isBirthday;
-                        const borderColor = isBirthday ? 'blue' : eventInfo.backgroundColor;
-                        return (
-                            <div
-                                style={{
-                                    backgroundColor: eventInfo.backgroundColor,
-                                    padding: '0 15px',
-                                    borderRadius: '2px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                    width: '100%',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    border: isBirthday ? `2px solid ${borderColor}` : '', // Set border color for birthday
-                                }}
-                                className="fc-event-title"
-                            >
+                        if (isBirthday) {
+                            const names = eventInfo.event.extendedProps.names || [];
+                            console.log("Rendering birthday icon for:", names);
+                    
+                            return (
                                 <div
                                     style={{
-                                        borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                        position: 'relative',
                                         height: '100%',
-                                        opacity: '50%',
+                                        width: '100%',
                                     }}
-                                />
-                                <span className="event-title" style={{ color: isBirthday ? borderColor : 'white', flexGrow: 1 }}>
-                                    {eventInfo.event.title}
-                                </span>
-                                {!isBirthday && (
+                                >
+                                    <span
+                                        role="img"
+                                        aria-label="cake"
+                                        style={{
+                                            position: 'absolute',
+                                            top: '-30px', // Adjust to position as needed
+                                            left: '5px', // Adjust to position as needed
+                                            fontSize: '1.8em',
+                                            cursor: 'pointer',
+                                            zIndex: 1, // Ensure it appears above other content
+                                        }}
+                                        title={names.join(', ')} // Show names on hover
+                                    >
+                                        🎂
+                                    </span>
+                                </div>
+                            );
+                        } else {
+                            const borderColor = eventInfo.event.backgroundColor || 'gray';
+                            return (
+                                <div
+                                    style={{
+                                        backgroundColor: eventInfo.backgroundColor,
+                                        padding: '0 15px',
+                                        borderRadius: '2px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        height: '100%',
+                                        width: '100%',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        border: `2px solid ${borderColor}`,
+                                    }}
+                                    className="fc-event-title"
+                                >
+                                    <div
+                                        style={{
+                                            borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                            height: '100%',
+                                            opacity: '50%',
+                                        }}
+                                    />
+                                    <span className="event-title" style={{ color: 'white', flexGrow: 1 }}>
+                                        {eventInfo.event.title}
+                                    </span>
                                     <img
                                         src={pencilIcon}
                                         alt="Edit"
                                         className="w-4 h-4 ml-2 cursor-pointer inline-block"
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevent triggering other event handlers
-                                            e.preventDefault(); // Prevent default behavior
+                                            e.stopPropagation();
+                                            e.preventDefault();
                                             handleEditClick(eventInfo.event);
                                         }}
                                     />
-                                )}
-                            </div>
-                        );
-                    }}
+                                </div>
+                            );
+                        }
+                    }}  
                 />
 
                 <div className='pb-10'></div>
@@ -529,7 +606,7 @@ function Calendar() {
                                 placeholder="Start Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -537,7 +614,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            /> */}
+                            />
                             <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
                             <input
                                 type="date"
@@ -548,7 +625,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -556,7 +633,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            /> */}
+                            />
                             <div className="form-group">
                                 <label>
                                 <input
@@ -644,7 +721,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            {/* <input
+                            <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -652,8 +729,8 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="Start Time"
                                 required
-                            /> */}
-                            {/* <input
+                            />
+                            <input
                                 type="time"
                                 name="endTime"
                                 value={eventData.endTime}
@@ -661,7 +738,7 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
-                            /> */}
+                            />
                             <div className="form-group">
                                 <label>
                                     <input

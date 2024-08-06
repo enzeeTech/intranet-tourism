@@ -61,13 +61,13 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       }
       
       const fileUrl = `/storage/${fileObject.path}`;    // Extract the file path
-      console.log("FILE_PATH", fileUrl);
+      console.log("FILE_PATH", fileObject);
       
       console.log("File path:", fileUrl);    // Log the file path to verify
   
       const link = document.createElement('a');
       link.href = fileUrl;                   // Ensure this URL is correct
-      link.download = fileObject.name || 'download'; // Use a default name if fileObject.name is not available
+      link.download = fileObject.metadata.original_name; // Use a default name if fileObject.name is not available
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
