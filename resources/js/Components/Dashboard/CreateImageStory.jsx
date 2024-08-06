@@ -260,5 +260,5 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
 //   );
 // };
 
-// export default CreateImageStory;
+export default CreateImageStory;
 
