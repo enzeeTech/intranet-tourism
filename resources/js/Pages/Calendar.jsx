@@ -6,13 +6,13 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import searchIcon from '../../../public/assets/search.png';
 import printIcon from '../../../public/assets/PrintPDF.svg';
-import pencilIcon from '../../../public/assets/EditIcon.svg'
+import pencilIcon from '../../../public/assets/EditIcon.svg';
 import * as bootstrap from "bootstrap";
 import "./Calendar/index.css";
 import Example from '@/Layouts/DashboardLayoutNew';
-import './Calendar/index.css'
 import PrintCalendar from './Calendar/PrintCalendar';
 import { useCsrf } from "@/composables";
+// import { CakeIcon } from '@heroicons/react/20/solid';
 
 function Calendar() {
     const [events, setEvents] = useState([]);
@@ -41,6 +41,7 @@ function Calendar() {
 
     useEffect(() => {
         fetchEvents();
+        fetchBirthdayEvents(); // Fetch and add birthday events
     }, []);
 
     useEffect(() => {
@@ -62,8 +63,8 @@ function Calendar() {
                     userName: event.author.name,
                     url: event.url,
                 }));
-                setEvents(formattedEvents);
-                setFilteredEvents(formattedEvents);
+                setEvents(prevEvents => [...prevEvents, ...formattedEvents]);
+                setFilteredEvents(prevEvents => [...prevEvents, ...formattedEvents]);
                 if (calendarRef.current) {
                     calendarRef.current.getApi().gotoDate(new Date());
                 }
@@ -73,6 +74,56 @@ function Calendar() {
             });
     };
 
+    const fetchBirthdayEvents = async () => {
+        try {
+            let allProfiles = [];
+            let currentPage = 1;
+            let totalPages = 1; // Initialize totalPages to ensure at least one request
+        
+            while (currentPage <= totalPages) {
+                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const data = await response.json();
+    
+                console.log("RESPONSE", data);
+    
+                if (data && data.data && Array.isArray(data.data.data)) {
+                    // Accumulate profiles
+                    allProfiles = [...allProfiles, ...data.data.data];
+        
+                    // Update totalPages based on the response
+                    totalPages = data.data.last_page;
+                    currentPage++;
+                } else {
+                    console.error('Error: Expected an array, but got:', data);
+                    break; // Exit loop if the expected structure is not found
+                }
+            }
+        
+            // Now that we have all profiles, map them to birthday events
+            const birthdayEvents = allProfiles.map(profile => {
+                const dob = new Date(profile.dob);
+                const currentYear = new Date().getFullYear();
+                dob.setFullYear(currentYear); // Adjust the DOB to the current year
+        
+                return {
+                    title: `Birthday: ${profile.bio}`,
+                    start: dob.toISOString().split('T')[0], // Only date, no time
+                    allDay: true,
+                    backgroundColor: 'transparent',
+                    borderColor: 'blue',
+                    textColor: 'blue',
+                    isBirthday: true, // Custom property to identify birthday events
+                };
+            });
+        
+            // Set the events state with all the accumulated birthday events
+            setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+            setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+        } catch (error) {
+            console.error('Error fetching birthdays: ', error);
+        }
+    };
+    
     const filterEvents = () => {
         if (searchTerm.trim() === '') {
             setFilteredEvents(events);
@@ -188,7 +239,7 @@ function Calendar() {
                 closeModal();
             })
             .catch(error => {
-                console.error('Error creatinssg event: ', error);
+                console.error('Error creating event: ', error);
                 setIsModalOpen(false);
                 fetchEvents()
             });
@@ -235,9 +286,6 @@ function Calendar() {
     
         const url = event.url !== 'null' ? event.url : ''; // Handle 'null' or undefined
     
-        console.log('Event URL:', url); // Debugging line
-        console.log('Include URL:', url !== ''); // Debugging line
-    
         setEventId(event.id); // Set the event ID
         setEventData({
             title: event.title,
@@ -253,7 +301,6 @@ function Calendar() {
         setIncludeUrl(url !== ''); // Only set to true if URL is not an empty string
         setIsEditModalOpen(true);
     };
-    
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
@@ -286,7 +333,7 @@ function Calendar() {
                 fetchEvents()
             } else {
                 const errorData = await response.json();
-                console.error('Error updating esssvent:', errorData);
+                console.error('Error updating event:', errorData);
             }
         } catch (error) {
             console.error('Error updating event:', error);
@@ -316,7 +363,6 @@ function Calendar() {
             console.error('Error deleting event:', error);
         }
     };
-    
 
     return (
         <Example>
@@ -346,15 +392,6 @@ function Calendar() {
                     </div>
                 </div>
 
-                {/* <div className='flex justify-end mb-4' >
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full font-bold">
-                        <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
-                        Add Event
-                    </button>
-                </div> */}
-
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
                     initialView="dayGridMonth"
@@ -363,78 +400,68 @@ function Calendar() {
                     ref={calendarRef}
                     select={handleDateSelect}
                     eventClick={handleEventClick}
-                    // headerToolbar={{
-                    //     start: 'prev,next today title',
-                    //     center: '',
-                    //     end: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    // }}
                     height={650}
                     buttonText={{
-
                         today: 'Today',
                         year: 'Year',
                         month: 'Month',
                         day: 'Day',
-
                     }}
                     events={filteredEvents}
                     eventDidMount={(info) => {
+                        if (info.event.extendedProps.isBirthday) {
+                            info.el.style.backgroundColor = 'transparent';
+                            info.el.style.borderColor = 'blue';
+                            info.el.style.color = 'blue';
+                        }
+                    
                         const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
                             hour: 'numeric',
                             minute: 'numeric',
                             hour12: true
-                        });                    
+                        });
                         const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
                             ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
                             : '';
+                    
+                        const isBirthday = info.event.extendedProps.isBirthday;
+                    
+                        const popoverContent = `
+                            <div>
+                                <p class="event-title"><strong>${info.event.title}</strong></p>
+                                ${!isBirthday ? `<p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>` : ''}
+                                ${!isBirthday ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>` : ''}
+                                ${urlContent} <!-- Only include if URL is valid -->
+                                <hr style="border: 10px solid #000;" />
+                            </div>`;
                     
                         return new bootstrap.Popover(info.el, {
                             placement: "auto",
                             trigger: "hover",
                             container: 'body',
                             customClass: "custom-popover",
-                            content: `<div>
-                                        <p class="event-title"><strong>${info.event.title}</strong></p>
-                                        <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
-                                        <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
-                                        ${urlContent} <!-- Only include if URL is valid -->
-                                        <hr style="border: 10px solid #000;" />
-                                    </div>`,
+                            content: popoverContent,
                             html: true,
                         });
-                        
-                        // return new bootstrap.Popover(info.el, {
-                        //     placement: "auto",
-                        //     trigger: "hover",
-                        //     container: 'body',
-                        //     customClass: "custom-popover",
-                        //     content: `<div>
-                        //                 <p class="event-title"><strong>${info.event.title}</strong></p>
-                        //                 // <p><strong>Start Time:</strong> ${formattedStartTime}</p>
-                        //                 <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
-                        //                 <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
-                        //                 ${urlContent} <!-- Only include if URL is valid -->
-                        //                 <hr style="border: 10px solid #000;" />
-                        //                 <p><strong>Invited People: </strong></p>
-                        //             </div>`,
-                        //     html: true,
-                        // });
-                    }}                    
+                    }}
+                    
                     eventContent={(eventInfo) => {
+                        const isBirthday = eventInfo.event.extendedProps.isBirthday;
+                        const borderColor = isBirthday ? 'blue' : eventInfo.backgroundColor;
                         return (
                             <div
                                 style={{
-                                    backgroundColor: white,
-                                    border: gray,
+                                    backgroundColor: eventInfo.backgroundColor,
                                     padding: '0 15px',
                                     borderRadius: '2px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     height: '100%',
                                     width: '100%',
-                                    whiteSpace: 'nowrap', // Ensure the title doesn't wrap
-                                    overflow: 'hidden', // Hide overflow text
-                                    textOverflow: 'ellipsis', // Add ellipsis for overflow text
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    border: isBirthday ? `2px solid ${borderColor}` : '', // Set border color for birthday
                                 }}
                                 className="fc-event-title"
                             >
@@ -445,19 +472,21 @@ function Calendar() {
                                         opacity: '50%',
                                     }}
                                 />
-                                <span className="event-title" style={{ color: 'white', flexGrow: 1 }}>
+                                <span className="event-title" style={{ color: isBirthday ? borderColor : 'white', flexGrow: 1 }}>
                                     {eventInfo.event.title}
                                 </span>
-                                <img
-                                    src={pencilIcon}
-                                    alt="Edit"
-                                    className="w-4 h-4 ml-2 cursor-pointer inline-block"
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // Prevent triggering other event handlers
-                                        e.preventDefault(); // Prevent default behavior
-                                        handleEditClick(eventInfo.event);
-                                    }}
-                                />
+                                {!isBirthday && (
+                                    <img
+                                        src={pencilIcon}
+                                        alt="Edit"
+                                        className="w-4 h-4 ml-2 cursor-pointer inline-block"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent triggering other event handlers
+                                            e.preventDefault(); // Prevent default behavior
+                                            handleEditClick(eventInfo.event);
+                                        }}
+                                    />
+                                )}
                             </div>
                         );
                     }}
