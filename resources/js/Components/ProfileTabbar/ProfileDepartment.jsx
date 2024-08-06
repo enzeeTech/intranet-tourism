@@ -97,14 +97,35 @@ function ProfileDepartment({
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+    
+        // Update the local form data
         setLocalFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
+    
+        // Call the parent handler to update the main form data with the specific ID fields
         if (onFormDataChange) {
-            onFormDataChange({ ...localFormData, [name]: value });
+            const updatedData = {
+                [name]: value,
+            };
+    
+            // Append the IDs to the updated data
+            if (name === 'department') {
+                updatedData.department_id = value;
+            } else if (name === 'unit') {
+                updatedData.business_unit_id = value;
+            } else if (name === 'jobtitle') {
+                updatedData.business_post_id = value;
+            } else if (name === 'grade') {
+                updatedData.business_grade_id = value;
+            }
+    
+            onFormDataChange(updatedData);
         }
     };
+    
+    
 
     const renderField = (label, name, value, options, editable = true, onChangeHandler = handleInputChange) => (
         <tr key={name}>

@@ -75,64 +75,6 @@ export default function Profile() {
     });
     const [userData, setUserData] = useState({});
 
-    // useEffect(() => {
-    //     console.log("Fetching user data...");
-    //     fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
-    //         method: "GET",
-    //     })
-    //         .then((response) => {
-    //             if (!response.ok) {
-    //                 throw new Error("Network response was not ok");
-    //             }
-    //             return response.json();
-    //         })
-    //         .then(({ data }) => {
-    //             console.log('hello', data);
-    //             setProfileData(pv => ({
-    //                 ...pv, ...data,
-    //                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-    //                 profileImage: data.profile && data.profile.image,
-    //                 username: "@" + data.username,
-    //             }));
-
-    //             setFormData((pv) => ({
-    //                 ...pv,
-    //                 name: data.name,
-    //                 username: data.username || "N/A",
-    //                 email: data.email,
-    //                 department: data.employment_post?.department?.name || "N/A",
-    //                 unit: data.employment_post?.business_unit?.name || "N/A",
-    //                 position: data.employment_post?.title || "N/A",
-    //                 jobtitle: data.employment_post?.business_post?.title || "N/A",
-    //                 grade: data.employment_post?.business_grade.code || "N/A",
-    //                 location: data.employment_post?.location || "N/A",
-    //                 dateofbirth: data.profile?.dob || "N/A",
-    //                 phone: data.profile?.work_phone || "N/A",
-    //                 whatsapp: data.profile?.phone_no || "N/A",
-    //             }));
-
-    //             setOriginalFormData((pv) => ({
-    //                 ...pv,
-    //                 name: data.name,
-    //                 username: data.username || "N/A",
-    //                 email: data.email,
-    //                 department: data.employment_post?.department?.name || "N/A",
-    //                 unit: data.employment_post?.business_unit?.name || "N/A",
-    //                 position: data.employment_post?.title || "N/A",
-    //                 jobtitle: data.employment_post?.business_post?.title || "N/A",
-    //                 grade: data.employment_post?.business_grade.code || "N/A",
-    //                 location: data.employment_post?.location || "N/A",
-    //                 dateofbirth: data.profile?.dob || "N/A",
-    //                 phone: data.profile?.work_phone || "N/A",
-    //                 whatsapp: data.profile?.phone_no || "N/A",
-    //             }));
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching user data:", error);
-    //         });
-    // }, [id]);
-
-
     useEffect(() => {
         fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
@@ -199,9 +141,32 @@ export default function Profile() {
         closeSaveNotification();
     };
 
-    const handleFormDataChange = (newData) => {
-        setFormData(newData);
+    const handleFormDataChange = (newData, index) => {
+        // Clone the current form data
+        let updatedEmploymentPosts = [...formData.employmentPosts];
+    
+        // Update the specific employment post by index
+        updatedEmploymentPosts[index] = { ...updatedEmploymentPosts[index], ...newData };
+    
+        // Sort the updatedEmploymentPosts array by employmentPost.number.id
+        updatedEmploymentPosts.sort((a, b) => {
+            if (a.number && b.number) {
+                return a.number.id - b.number.id; // Assuming `number.id` is a numeric value
+            }
+            return 0; // Fallback if number.id is missing
+        });
+    
+        // Update the form data state with the sorted employment posts array
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            employmentPosts: updatedEmploymentPosts,
+        }));
     };
+    
+    
+    
+    
+    
 
     const handlePhotoChange = (newPhoto) => {
         setPhoto(newPhoto);
@@ -265,20 +230,25 @@ export default function Profile() {
         window.location.reload();
     };
 
-    const handleSaveDepartment1 = async () => {
+    
+    const handleSaveDepartment = async (index) => {
         try {
+            // Get the employment post for the specified index
+            const employmentPost = formData.employmentPosts[index]; // Get the employment_post object by index
+        
+            if (!employmentPost || !employmentPost.id) {
+                throw new Error(`Employment post ID is not available for department ${index + 1}`);
+            }
+        
             const FfData = new FormData();
             FfData.append('_method', 'PUT'); // Add _method to the form data
-            FfData.append('department', formData.department);
-            FfData.append('unit', formData.unit);
-            FfData.append('jobtitle', formData.jobtitle);
-            FfData.append('position', formData.position);
-            FfData.append('grade', formData.grade);
-            FfData.append('location', formData.location);
-            FfData.append('phone', formData.phone);
+            FfData.append('department_id', employmentPost.department_id);
+            FfData.append('business_unit_id', employmentPost.business_unit_id);
+            FfData.append('business_post_id', employmentPost.business_post_id);
+            FfData.append('business_grade_id', employmentPost.business_grade_id);
             FfData.append('user_id', id); // Add user_id to the form data
-
-            const response = await fetch(`/api/department/employment_posts/${id}`, {
+        
+            const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
                 method: 'POST',
                 body: FfData,
                 headers: {
@@ -287,30 +257,43 @@ export default function Profile() {
                     'Authorization': `Bearer ${authToken}`,
                 },
             });
-
+        
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+        
             const data = await response.json();
-            setOriginalFormData(formData);
+    
+            // Sort the employmentPosts array by employmentPost.number.id
+            const sortedEmploymentPosts = formData.employmentPosts.sort((a, b) => {
+                if (a.number && b.number) {
+                    return a.number.id - b.number.id; // Assuming `number.id` is a numeric value
+                }
+                return 0; // Fallback if number.id is missing
+            });
+    
+            // Update the state with the sorted data
+            setOriginalFormData((prevFormData) => ({
+                ...prevFormData,
+                employmentPosts: sortedEmploymentPosts,
+            }));
+    
             setOriginalPhoto(photo);
-            setIsEditingDepartment1(false);
+            if (index === 0) {
+                setIsEditingDepartment1(false);
+            } else if (index === 1) {
+                setIsEditingDepartment2(false);
+            }
             openSaveNotification();
             setTimeout(closeSaveNotification, 1200);
-            console.log('Department 1 Information updated successfully:', data);
+            console.log(`Department ${index + 1} Information updated successfully:`, data);
         } catch (error) {
-            console.error('Error updating Department 1 Information:', error);
+            console.error(`Error updating Department ${index + 1} Information:`, error);
         }
     };
-
-    const handleSaveDepartment2 = () => {
-        setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        setIsEditingDepartment2(false);
-        openSaveNotification();
-        setTimeout(closeSaveNotification, 1200);
-    };
+    
+     
+    
 
     const handleCancelBio = () => {
         setFormData(originalFormData); // Revert to original form data
@@ -318,79 +301,36 @@ export default function Profile() {
         setIsEditingBio(false);
     };
 
+    const handleEditDepartment1 = () => {
+        setIsEditingDepartment1(true);
+    };
+    
+    const handleEditDepartment2 = () => {
+        setIsEditingDepartment2(true);
+    };
+    
     const handleCancelDepartment1 = () => {
-        setFormData(originalFormData); // Revert to original form data
-        setPhoto(originalPhoto);       // Revert to original photo
+        setFormData(originalFormData);
+        setPhoto(originalPhoto);
         setIsEditingDepartment1(false);
     };
-
+    
     const handleCancelDepartment2 = () => {
-        setFormData(originalFormData); // Revert to original form data
-        setPhoto(originalPhoto);       // Revert to original photo
+        setFormData(originalFormData);
+        setPhoto(originalPhoto);
         setIsEditingDepartment2(false);
     };
-
+    
+    
+    const handleCreatePoll = (poll) => {
+        setPolls((prevPolls) => [...prevPolls, poll]);
+    };
+    
     const handleEditBio = () => {
         setIsEditingBio(true);
     };
 
-    const handleEditDepartment1 = () => {
-        setIsEditingDepartment1(true);
-    };
-
-    const handleEditDepartment2 = () => {
-        setIsEditingDepartment2(true);
-    };
-
-    const handleSelectFile = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const FfData = new FormData();
-            FfData.append('cover_photo', file);
-            FfData.append('user_id', id); // Add user_id to the form data
-            FfData.append('_method', 'PUT'); // Add _method to the form data
-            FfData.append('name', formData.name); // Add name to the form data
-    
-            const url = `/api/profile/profiles/${profileData.profile?.id}?with[]=user`;
-    
-            fetch(url, {
-                method: 'POST',
-                body: FfData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
-                    'Authorization': `Bearer ${authToken}`,
-                },
-            })
-            .then(async response => {
-                if (!response.ok) {
-                    const error = await response.json();
-                    return await Promise.reject(error);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    setPhoto(URL.createObjectURL(file));
-                    setIsPopupOpen(false);
-                    console.log('File uploaded successfully:', data);
-                } else {
-                    console.error('Error uploading file:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading file:', error);
-            });
-        }
-    };
-
-    const handleCreatePoll = (poll) => {
-      setPolls((prevPolls) => [...prevPolls, poll]);
-    };
-    
-
     console.log("FK THIS", formData);
-    
 
     return (
         <Example>
@@ -458,7 +398,7 @@ export default function Profile() {
                                                 <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
                                                 <ProfileIcons
                                                     icon1={profileData.icon1}
-                                                    onEdit={index === 0 ? handleEditDepartment1 : handleEditDepartment2}
+                                                    onEdit={() => index === 0 ? handleEditDepartment1() : handleEditDepartment2()}
                                                     isFirstIcon
                                                 />
                                             </div>
@@ -473,19 +413,20 @@ export default function Profile() {
                                                         location={employmentPost.location || ''}
                                                         phone={profileData.profile?.work_phone || ''}
                                                         isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
-                                                        onFormDataChange={handleFormDataChange}
+                                                        onFormDataChange={(newData) => handleFormDataChange(newData, index)}
                                                         originalFormData={originalFormData}
                                                     />
                                                 </div>
-                                                {(index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2) ? (
+                                                {((index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2)) && (
                                                     <div className="flex justify-end mt-4 pb-3">
-                                                        <button onClick={index === 0 ? handleCancelDepartment1 : handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                        <button onClick={index === 0 ? handleSaveDepartment1 : handleSaveDepartment2} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                        <button onClick={() => index === 0 ? handleCancelDepartment1() : handleCancelDepartment2()} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                        <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                                                     </div>
-                                                ) : null}
+                                                )}
                                             </div>
                                         </section>
                                     ))}
+
                                 </>
                             )}
 
