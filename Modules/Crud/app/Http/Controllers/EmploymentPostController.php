@@ -26,7 +26,7 @@ class EmploymentPostController extends Controller
                     'users.is_active',
                     'profiles.bio as name',
                     'profiles.image',
-                    'profiles.work_phone',
+                    'employment_posts.work_phone',
                     'profiles.phone_no',
                 )
                 ->get()
