@@ -32,7 +32,7 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
 
   const CancelButton = ({ onClick }) => (
     <button
-      className="self-end px-4 py-3 text-base font-bold whitespace-nowrap rounded-2xl border border-solid border-stone-300 text-neutral-400"
+      className="self-end px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400"
       onClick={onClick}
     >
       Cancel
@@ -76,19 +76,25 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
       </div>
       {showPopup && (
         <div className="file-popup">
-          <div className="file-popup-content">
+          <div className="file-popup-content rounded-3xl w-[400px]">
             <div className="popup-header">
-              <h3>Upload File</h3>
-              <button onClick={handleFileDelete} className="close-popup-btn">
-                &times;
-              </button>
+            <h2 className="mb-4 text-3xl font-bold">Upload file</h2>
             </div>
             <div className="popup-body">
-              <p>Selected file: {file ? file.name : 'No file selected'}</p>
-              <button onClick={handleFileUpload} className="upload-btn">
-                Upload
-              </button>
-              <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+              <div className="flex justify-start">
+                <p className="font-bold mb-2 items-start">Selected file:</p>
+              </div>
+              <div className="flex justify-start w-full px-4 py-2 border-2 border-gray-400 rounded-md overflow-hidden">
+                <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                  {file ? file.name : 'No file selected'}
+                </p>
+              </div>
+              <div className="flex flex-row justify-end mt-4 space-x-2">
+                <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+                <button onClick={handleFileUpload} className="upload-btn bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
+                  Upload
+                </button>
+              </div>
             </div>
           </div>
         </div>

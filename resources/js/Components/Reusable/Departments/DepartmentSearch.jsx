@@ -64,7 +64,7 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
           onChange={handleSearch}
         />
         <button
-          className="flex items-center text-sm font-bold px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700 md:justify-start"
+          className="flex items-center text-sm font-bold px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700"
           onClick={toggleCreateCommunity}>
           Create Department
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 ml-2" />
