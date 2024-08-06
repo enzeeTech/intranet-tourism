@@ -1,3 +1,5 @@
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React, { useState, useEffect } from 'react';
 import './AddMemberPopup.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
@@ -265,35 +267,49 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             <div className="mx-2 my-2">
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Title</label>
-                                    <select
-                                        value={title.title}
-                                        onChange={(e) => {
-                                            setTitle(e.target.options[e.target.selectedIndex].text);
-                                            setTitleId(e.target.value);
-                                        }}
-                                        className="w-full p-2 border border-gray-300 rounded-full"
-                                    >
-                                        <option value="">Select Title</option>
-                                        {titles.map((title) => (
-                                            <option key={title.id} value={title.id}>{title.title}</option>
-                                        ))}
-                                    </select>
+                                    <Menu as="div" className="relative inline-block w-full text-left">
+                                        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border border-gray-300 px-3 py-2 text-gray-700  hover:bg-gray-50">
+                                            {title || "Select Title"}
+                                            <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
+                                        </MenuButton>
+                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            {titles.map((title) => (
+                                                <MenuItem key={title.id} onClick={() => { setTitle(title.title); setTitleId(title.id); }}>
+                                                    {({ active }) => (
+                                                        <a
+                                                            href="#"
+                                                            className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                                        >
+                                                            {title.title}
+                                                        </a>
+                                                    )}
+                                                </MenuItem>
+                                            ))}
+                                        </MenuItems>
+                                    </Menu>
                                 </div>
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Unit</label>
-                                    <select
-                                        value={unit.name}
-                                        onChange={(e) => {
-                                            setUnit(e.target.options[e.target.selectedIndex].text);
-                                            setUnitId(e.target.value);
-                                        }}
-                                        className="w-full p-2 border border-gray-300 rounded-full"
-                                    >
-                                        <option value="">Select Unit</option>
-                                        {units.map((unit) => (
-                                            <option key={unit.id} value={unit.id}>{unit.name}</option>
-                                        ))}
-                                    </select>
+                                    <Menu as="div" className="relative inline-block w-full text-left">
+                                        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-50">
+                                            {unit || "Select Unit"}
+                                            <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
+                                        </MenuButton>
+                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            {units.map((unit) => (
+                                                <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); }}>
+                                                    {({ active }) => (
+                                                        <a
+                                                            href="#"
+                                                            className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                                        >
+                                                            {unit.name}
+                                                        </a>
+                                                    )}
+                                                </MenuItem>
+                                            ))}
+                                        </MenuItems>
+                                    </Menu>
                                 </div>
                                 <div className="mb-4">
                                     <label className="block font-bold text-gray-700">Location</label>
