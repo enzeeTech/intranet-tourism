@@ -58,7 +58,7 @@ export default function Header({ setSidebarOpen }) {
 
     useEffect(() => {
         console.log("Fetching user data...");
-        fetch(`/api/crud/users/${id}?with[]=profile`, {
+        fetch(`/api/users/users/${id}?with[]=profile`, {
             method: "GET",
         })
             .then((response) => {
