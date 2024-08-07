@@ -120,7 +120,7 @@ function ProfileDepartment({
             } else if (name === 'jobtitle') {
                 updatedData.business_post_id = value;
             } else if (name === 'grade') {
-                updatedData.business_post_id = value;
+                updatedData.business_grade_id = value;
             } else if (name === 'location') {
                 updatedData.location = value;
             } else if (name === 'phone') {

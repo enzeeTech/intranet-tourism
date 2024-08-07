@@ -110,12 +110,8 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, onNewMemberAdded 
           Member
         </button>
         )}
-        {selectedDepartment.id && (
-          <div className='relative'>
-            <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
-          </div>
-        )}
       </div>
+      <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
       {isAddMemberPopupOpen && (
         <AddMemberPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}

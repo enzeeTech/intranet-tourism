@@ -125,13 +125,21 @@
   height: auto;
 }
 
-.three-dot-btn {
+/* .three-dot-btn {
   cursor: pointer;
   position: absolute;
   right: 20px;
   align-items: center;
   height: auto;
   margin-top: 5px;
+  width: 50px;
+} */
+
+.three-dot-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: 10px; 
   width: 50px;
 }
 

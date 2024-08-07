@@ -74,6 +74,68 @@ function Calendar() {
             });
     };
 
+    // const fetchBirthdayEvents = async () => {
+    //     try {
+    //         let allProfiles = [];
+    //         let currentPage = 1;
+    //         let totalPages = 1;
+    
+    //         while (currentPage <= totalPages) {
+    //             const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+    //             const data = await response.json();
+    
+    //             if (data && data.data && Array.isArray(data.data.data)) {
+    //                 allProfiles = [...allProfiles, ...data.data.data];
+    
+    //                 totalPages = data.data.last_page;
+    //                 currentPage++;
+    //             } else {
+    //                 console.error('Error: Expected an array, but got:', data);
+    //                 break;
+    //             }
+    //         }
+    
+    //         // Map profiles to birthday events
+    //         const birthdayEvents = allProfiles.reduce((acc, profile) => {
+    //             const dob = new Date(profile.dob);
+    //             const currentYear = new Date().getFullYear();
+    //             dob.setFullYear(currentYear);
+    
+    //             const dateStr = dob.toISOString().split('T')[0];
+    //             let existingEvent = acc.find(event => event.start === dateStr);
+    
+    //             if (existingEvent) {
+    //                 // Ensure names property exists and push the new name
+    //                 if (!existingEvent.extendedProps.names) {
+    //                     existingEvent.extendedProps.names = [];
+    //                 }
+    //                 existingEvent.extendedProps.names.push(profile.bio);
+    //             } else {
+    //                 // Create a new birthday event with names initialized
+    //                 acc.push({
+    //                     title: `Birthday: ${profile.bio}`,
+    //                     start: dateStr,
+    //                     allDay: true,
+    //                     backgroundColor: 'transparent',
+    //                     // borderColor: 'blue',
+    //                     textColor: 'blue',
+    //                     isBirthday: true,
+    //                     extendedProps: {
+    //                         names: [profile.bio] // Initialize names array
+    //                     }
+    //                 });
+    //             }
+    //             return acc;
+    //         }, []);
+    
+    //         setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+    //         setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+    //     } catch (error) {
+    //         console.error('Error fetching birthdays: ', error);
+    //     }
+    // };
+
+    
     const fetchBirthdayEvents = async () => {
         try {
             let allProfiles = [];
@@ -97,7 +159,11 @@ function Calendar() {
     
             // Map profiles to birthday events
             const birthdayEvents = allProfiles.reduce((acc, profile) => {
+                if (!profile.dob) return acc; // Skip profiles with no dob
+    
                 const dob = new Date(profile.dob);
+                if (isNaN(dob.getTime())) return acc; // Skip invalid dob
+    
                 const currentYear = new Date().getFullYear();
                 dob.setFullYear(currentYear);
     
@@ -117,7 +183,6 @@ function Calendar() {
                         start: dateStr,
                         allDay: true,
                         backgroundColor: 'transparent',
-                        // borderColor: 'blue',
                         textColor: 'blue',
                         isBirthday: true,
                         extendedProps: {
@@ -134,7 +199,6 @@ function Calendar() {
             console.error('Error fetching birthdays: ', error);
         }
     };
-    
     
     
     

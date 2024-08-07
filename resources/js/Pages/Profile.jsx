@@ -363,7 +363,7 @@ export default function Profile() {
                                                         jobtitle={employmentPost.business_post?.title || ''}
                                                         position={employmentPost.title || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
-                                                        location={employmentPost.location || ''}
+                                                        location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}
                                                         isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
                                                         onFormDataChange={(newData) => handleFormDataChange(newData, index)}
