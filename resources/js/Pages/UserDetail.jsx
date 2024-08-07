@@ -262,6 +262,10 @@ export default function UserDetail() {
         });
     }, [selectedUserId]);
 
+    console.log("PDATA", profileData);
+    
+      
+
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
     };
@@ -311,6 +315,7 @@ export default function UserDetail() {
     };
 
     const handleSaveBio = async (newFormData) => {
+        
         try {
             const formData = new FormData();
             formData.append('_method', 'PUT');
@@ -318,10 +323,10 @@ export default function UserDetail() {
             formData.append('dob', newFormData.dateofbirth);
             formData.append('phone_no', newFormData.whatsapp);
             formData.append('user_id', user.id);
-            formData.append('name', newFormData.name);
+            formData.append('name', user.name);
 
             const [profileResponse, userResponse] = await Promise.all([
-                fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
+                fetch(`/api/profile/profiles/${profileData.profile.id}`, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -333,185 +338,264 @@ export default function UserDetail() {
                 updateUsername(newFormData)
             ]);
 
+            const profileResponseData = await profileResponse.json();
+            const userResponseData = await userResponse.json();
+
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
                 setIsEditingBio(false);
-                setIsSaveNotificationOpen(true);
-                setTimeout(handleSaveNotification, 1200);
+                openSaveNotification();
+                setTimeout(closeSaveNotification, 1200);
+                console.log('Data updated successfully:', profileResponseData, userResponseData);
             } else {
                 console.error('Error updating data:', profileResponseData, userResponseData);
             }
         } catch (error) {
             console.error('Error updating data:', error);
         }
+        window.location.reload();
     };
-//---------
-    const handleSaveDepartment = async (index) => {
-        try {
-            const employmentPost = formData.employmentPosts[index];
-            const formData = new FormData();
-            formData.append('_method', 'PUT');
-            formData.append('department_id', employmentPost.department_id);
-            formData.append('business_unit_id', employmentPost.business_unit_id);
-            formData.append('business_post_id', employmentPost.business_post_id);
-            formData.append('business_grade_id', employmentPost.business_grade_id);
-            formData.append('location', employmentPost.location);
-            formData.append('work_phone', employmentPost.work_phone);
-            formData.append('user_id', selectedUserId);
 
-            const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '',
-                    'Authorization': `Bearer ${authToken}`,
-                },
-            });
-
-            if (response.ok) {
-                setOriginalFormData(formData);
-                setIsSaveNotificationOpen(true);
-                setTimeout(handleSaveNotification, 1200);
-            } else {
-                throw new Error('Error saving department information');
-            }
-        } catch (error) {
-            console.error(`Error updating department information:`, error);
+const handleSaveDepartment = async (index) => {
+    try {
+        // Get the employment post for the specified index
+        const employmentPost = formData.employmentPosts[index]; // Get the employment_post object by index
+    
+        if (!employmentPost || !employmentPost.id) {
+            throw new Error(`Employment post ID is not available for department ${index + 1}`);
         }
-    };
+    
+        const FfData = new FormData();
+        FfData.append('_method', 'PUT'); // Add _method to the form data
+        FfData.append('department_id', employmentPost.department_id);
+        FfData.append('business_unit_id', employmentPost.business_unit_id);
+        FfData.append('business_post_id', employmentPost.business_post_id);
+        FfData.append('business_grade_id', employmentPost.business_grade_id);
+        FfData.append('location', employmentPost.location);
+        FfData.append('work_phone', employmentPost.work_phone);
+        FfData.append('user_id', user.id); // Add user_id to the form data
+    
+        const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
+            method: 'POST',
+            body: FfData,
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                'Authorization': `Bearer ${authToken}`,
+            },
+        });
+    
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        setOriginalFormData(formData);
+        setOriginalPhoto(photo);
+        if (index === 0) {
+            setIsEditingDepartment1(false);
+        } else if (index === 1) {
+            setIsEditingDepartment2(false);
+        }
+        openSaveNotification();
+        setTimeout(closeSaveNotification, 1200);
+        console.log(`Department ${index + 1} Information updated successfully:`, data);
+    } catch (error) {
+        console.error(`Error updating Department ${index + 1} Information:`, error);
+    }
+};
 
-    const handleEditBio = () => setIsEditingBio(true);
-    const handleEditDepartment1 = () => setIsEditingDepartment1(true);
-    const handleEditDepartment2 = () => setIsEditingDepartment2(true);
-    const handleCancelBio = () => setIsEditingBio(false);
-    const handleCancelDepartment1 = () => setIsEditingDepartment1(false);
-    const handleCancelDepartment2 = () => setIsEditingDepartment2(false);
+const handleCancelBio = () => {
+    setFormData(originalFormData); // Revert to original form data
+    setPhoto(originalPhoto);       // Revert to original photo
+    setIsEditingBio(false);
+};
 
-    return (
-        <Example>
-            <main className="xl:pl-96 w-full">
-                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                    <div>
-                        <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
-                            <ProfileHeader
-                                backgroundImage={profileData.profile?.cover_photo || ''}
-                                profileImage={photo}
-                                name={profileData.name}
-                                username={profileData.username}
-                                status={profileData.status}
-                                onEditBanner={() => setIsPopupOpen(true)}
-                                rounded={true}
-                                userId={selectedUserId}
-                                profileId={profileData.profile?.id}
-                            />
-                            <ProfileNav activeTab="bio" setActiveTab={() => {}} />
-                            <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                <div className="flex items-center justify-between">
-                                    <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
-                                    <ProfileIcons
-                                        icon1={profileData.icon1}
-                                        icon2={profileData.icon2}
-                                        onEdit={handleEditBio}
-                                        isFirstIcon
-                                    />
-                                </div>
-                                <div className="flex-auto my-auto max-md:max-w-full">
-                                    <ProfileBio
-                                        photo={photo}
-                                        username={formData.username}
-                                        email={formData.email}
-                                        dateofbirth={formData.dateofbirth}
-                                        whatsapp={formData.whatsapp}
-                                        isEditing={isEditingBio}
-                                        onFormDataChange={setFormData}
-                                        onPhotoChange={setPhoto}
-                                        originalFormData={originalFormData}
-                                        onEditBio={handleEditBio}
-                                        onCancelBio={handleCancelBio}
-                                        onSaveBio={handleSaveBio}
-                                        userId={selectedUserId}
-                                    />
-                                </div>
-                            </section>
-                            <div className="separator"></div>
-                            {formData.employmentPosts.map((employmentPost, index) => (
-                                <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+const handleCancelDepartment1 = () => {
+    setFormData(originalFormData); // Revert to original form data
+    setPhoto(originalPhoto);       // Revert to original photo
+    setIsEditingDepartment1(false);
+};
+
+const handleCancelDepartment2 = () => {
+    setFormData(originalFormData); // Revert to original form data
+    setPhoto(originalPhoto);       // Revert to original photo
+    setIsEditingDepartment2(false);
+};
+
+const handleEditBio = () => {
+    setIsEditingBio(true);
+};
+
+const handleEditDepartment1 = () => {
+    setIsEditingDepartment1(true);
+};
+
+const handleEditDepartment2 = () => {
+    setIsEditingDepartment2(true);
+};
+
+// Sort employmentPosts by id in ascending order (oldest id first)
+const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.id - b.id);
+
+// Attribute to tag guest profile
+const tag="guest";
+
+return (
+    <Example>
+        <main className="xl:pl-96 w-full">
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+                <div>
+                    <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
+                        <ProfileHeader
+                            backgroundImage={profileData.backgroundImage}
+                            profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                            name={profileData.name}
+                            username={profileData.username}
+                            status={profileData.status}
+                            onEditBanner={() => setIsPopupOpen(true)}
+                            rounded={true}
+                            userId={user.id}
+                            profileId={profileData.profile?.id}
+                            tag={tag}
+                        />
+                        <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                        {activeTab === "activities" && (
+                            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
+                                <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} />
+                                <Filter className="mr-10" />
+                                <div className="mb-20"></div>
+                                <OutputData polls={polls} showUserPosts={true} userId={user.id} />
+                            </div>
+                        )}
+                        {activeTab === "bio" && (
+                            <>
+                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                     <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
+                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
                                         <ProfileIcons
                                             icon1={profileData.icon1}
-                                            onEdit={index === 0 ? handleEditDepartment1 : handleEditDepartment2}
+                                            icon2={profileData.icon2}
+                                            onEdit={handleEditBio}
                                             isFirstIcon
                                         />
                                     </div>
-                                    <ProfileDepartment
-                                        department={employmentPost.department?.name || ''}
-                                        unit={employmentPost.business_unit?.name || ''}
-                                        jobtitle={employmentPost.business_post?.title || ''}
-                                        position={employmentPost.title || ''}
-                                        grade={employmentPost.business_grade?.code || ''}
-                                        location={employmentPost.location || ''}
-                                        phone={employmentPost.work_phone || ''}
-                                        isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
-                                        onFormDataChange={(newData) => setFormData((prev) => ({
-                                            ...prev,
-                                            employmentPosts: prev.employmentPosts.map((post, i) =>
-                                                i === index ? { ...post, ...newData } : post
-                                            ),
-                                        }))}
-                                        originalFormData={originalFormData}
-                                    />
-                                    {(index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2) ? (
-                                        <div className="flex justify-end mt-4 pb-3">
-                                            <button onClick={index === 0 ? handleCancelDepartment1 : handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                            <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                    <div className="flex-auto my-auto max-md:max-w-full">
+                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                            <ProfileBio
+                                                photo={photo}
+                                                username={formData.username}
+                                                email={formData.email}
+                                                dateofbirth={formData.dateofbirth}
+                                                whatsapp={formData.whatsapp}
+                                                isEditing={isEditingBio}
+                                                onFormDataChange={setFormData}
+                                                onPhotoChange={handlePhotoChange}
+                                                originalFormData={originalFormData}
+                                                onEditBio={handleEditBio}
+                                                onCancelBio={handleCancelBio}
+                                                onSaveBio={handleSaveBio}
+                                                userId={user.id} // Pass userId as a prop
+                                            />
                                         </div>
-                                    ) : null}
+                                    </div>
                                 </section>
-                            ))}
-                        </div>
+                                <div className="separator"></div>
+                                
+                                {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
+                                    <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                        <div className="flex items-center justify-between">
+                                            <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
+                                            <ProfileIcons
+                                                icon1={profileData.icon1}
+                                                onEdit={() => index === 0 ? handleEditDepartment1() : handleEditDepartment2()}
+                                                isFirstIcon
+                                            />
+                                        </div>
+                                        <div className="flex-auto my-auto max-md:max-w-full">
+                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                <ProfileDepartment
+                                                    department={employmentPost.department?.name || ''}
+                                                    unit={employmentPost.business_unit?.name || ''}
+                                                    jobtitle={employmentPost.business_post?.title || ''}
+                                                    position={employmentPost.title || ''}
+                                                    grade={employmentPost.business_grade?.code || ''}
+                                                    location={employmentPost.location || 'N/A'}
+                                                    phone={employmentPost.work_phone || 'N/A'}
+                                                    isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
+                                                    onFormDataChange={(newData) => handleFormDataChange(newData, index)}
+                                                    originalFormData={originalFormData}
+                                                />
+                                            </div>
+                                            {((index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2)) && (
+                                                <div className="flex justify-end mt-4 pb-3">
+                                                    <button onClick={() => index === 0 ? handleCancelDepartment1() : handleCancelDepartment2()} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                    <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </section>
+                                ))}
+                            </>
+                        )}
+
+                        {activeTab === "gallery" && (
+                            <section>
+                                <ImageProfile selectedItem="All" userId={user.id} />
+                                <VideoProfile selectedItem="All" userId={user.id} />
+                            </section>
+                        )}
+                        {activeTab === "files" && (
+                            <div>
+                                <div className="flex gap-4 whitespace-nowrap">
+                                    <SearchInput />
+                                    <SearchButton />
+                                </div>
+                                <Table userId={user.id} />
+                            </div>
+                        )}
                     </div>
                 </div>
-            </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 xl:block">
-                <style>
-                {`
-                    aside::-webkit-scrollbar {
-                        width: 0px !important;
-                        background: transparent !important;
-                    }
-                    aside {
-                        scrollbar-width: none !important; /* For Firefox */
-                        -ms-overflow-style: none;  /* IE and Edge */
-                    }
-                `}
-                </style>
-                <div className="file-directory-header">
-                    <PageTitle title="My Profile" />
-                </div>
-                <hr className="file-directory-underline" />
-                <div>
-                    <FeaturedEvents />
-                    <WhosOnline />
-                </div>
-            </aside>
-            {isSaveNotificationOpen && (
-                <SaveNotification title="Changes saved successfully" onClose={handleSaveNotification} />
-            )}
-            {isPopupOpen && (
-                <Popup 
-                    title="Edit Banner Photo" 
-                    onClose={() => setIsPopupOpen(false)} 
-                    onSave={handleSaveBio}
-                    profileData={profileData}
-                    id={selectedUserId}
-                    formData={formData}
-                    csrfToken={csrfToken}
-                    authToken={authToken}
-                    setPhoto={setPhoto}
-                />
-            )}
-        </Example>
-    );
+            </div>
+        </main>
+        <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 xl:block">
+            <style>
+            {`
+                aside::-webkit-scrollbar {
+                    width: 0px !important;
+                    background: transparent !important;
+                }
+                aside {
+                    scrollbar-width: none !important; /* For Firefox */
+                    -ms-overflow-style: none;  /* IE and Edge */
+                }
+            `}
+            </style>
+            <div className="file-directory-header">
+                <PageTitle title="My Profile" />
+            </div>
+            <hr className="file-directory-underline" />
+            <div>
+                <FeaturedEvents />
+                <WhosOnline />
+            </div>
+        </aside>
+        {isSaveNotificationOpen && (
+            <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
+        )}
+        {isPopupOpen && (
+            <Popup 
+                title="Edit Banner Photo" 
+                onClose={() => setIsPopupOpen(false)} 
+                onSave={handleSaveBio}
+                profileData={profileData}
+                id={user.id}
+                formData={formData}
+                csrfToken={csrfToken}
+                authToken={authToken}
+                setPhoto={setPhoto}
+            />
+        )}
+    </Example>
+);
 }
