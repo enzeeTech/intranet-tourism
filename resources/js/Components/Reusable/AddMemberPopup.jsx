@@ -42,6 +42,14 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         fetchUnits(`/api/department/business_units?department_id=${departmentId}&page=1`);
     }, [departmentId]);
 
+    useEffect(() => {
+        if (isAddMemberPopupOpen) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+    }, [isAddMemberPopupOpen]);
+
     const fetchCurrentMembers = async () => {
         try {
             const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`);
@@ -266,7 +274,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="mx-2 my-2">
+                            <div className="mx-0 my-2">
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Title</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
@@ -274,7 +282,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             {title || "Select Title"}
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
-                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none custom-scrollbar">
                                             {titles.map((title) => (
                                                 <MenuItem key={title.id} onClick={() => { setTitle(title.title); setTitleId(title.id); }}>
                                                     {({ active }) => (
@@ -297,7 +305,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             {unit || "Select Unit"}
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
-                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none custom-scrollbar">
                                             {units.map((unit) => (
                                                 <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); }}>
                                                     {({ active }) => (
