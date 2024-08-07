@@ -62,33 +62,30 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const csrfToken = useCsrf();
 
   const fetchUser = async () => {
-    
-  }
+    try {
+      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setUserData((pv) => ({
+        ...pv,
+        ...data,
+        name: data.name,
+        profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`/api/users/users/${id}?with[]=profile`, {
-      method: "GET",
-  })
-      .then((response) => {
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          return response.json();
-      })
-      //-----------------------------//
-      .then(({ data }) => {
-          // const firstName = data.name.split(' ')[0];
-          setUserData(pv => ({
-              ...pv, ...data,
-              name: data.name,
-              profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-          }));
-      })
-      .catch((error) => {
-          console.error("Error fetching user data:", error);
-      });
+    fetchUser();
   }, [id]);
-
 
   const handleImageChange = (file) => {
     setImageFile(file);
@@ -102,7 +99,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('name', departmentName);
-    if (imageFile){
+    if (imageFile) {
       formData.append('banner', imageFile);
     }
     formData.append('description', departmentDescription);
@@ -114,7 +111,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        "X-CSRF-Token": csrfToken 
+        "X-CSRF-Token": csrfToken
       },
       body: formData
     };
@@ -128,9 +125,10 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         throw new Error('Failed to create department');
       }
 
-      // const responseData = text ? JSON.parse(text) : {};
-      // console.log('Department created:', responseData.data);
-      // onCreate(responseData.data);
+      const responseData = text ? JSON.parse(text) : {};
+      console.log('Department created:', responseData.data);
+      onCreate(responseData.data);
+      window.location.reload(); // Refresh the page after creating the department
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
@@ -170,8 +168,6 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
 }
 
 export default function CreateDepartments({ onCancel, onCreate, userID }) {
-
-  // console.log("askdjalsdkaslkasjd:", id);
   const [user, setUser] = useState({
     name: '',
     role: '',
