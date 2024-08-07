@@ -17,8 +17,10 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [titleId, setTitleId] = useState('');
     const [unitId, setUnitId] = useState('');
     const [location, setLocation] = useState('');
+    const [workPhoneNumber, setWorkPhoneNumber] = useState(''); 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [titleError, setTitleError] = useState(false); 
     const csrfToken = useCsrf();
 
     useEffect(() => {
@@ -174,11 +176,19 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         setTitle('');
         setUnit('');
         setLocation('');
+        setWorkPhoneNumber('');
         setError('');
-        setSuccess(''); // Clear success message on close
+        setSuccess(''); 
+        setTitleError(false); 
     };
 
     const handleAdd = async () => {
+        if (!title) {
+            setTitleError(true);
+            return;
+        }
+        setTitleError(false);
+
         const url = '/api/department/employment_posts';
         const options = {
             method: 'POST',
@@ -187,23 +197,31 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         const userId = selectedPerson.id;
         const businessPostId = titleId;
-        const businessUnitId = unitId;
-        const locationValue = location;
         const order = '0';        
 
-        const body = JSON.stringify({
+        // Create the base body object with required fields
+        const body = {
             department_id: String(departmentId),
             business_post_id: String(businessPostId),
-            business_unit_id: String(businessUnitId),
             business_grade_id: String(selectedPerson.employment_post.business_grade_id),
             business_scheme_id: "1",
             user_id: String(userId),
-            location: locationValue,
             order: order,
-        });
-        
+        };
+
+        // Conditionally add optional fields
+        if (unitId !== '') {
+            body.business_unit_id = String(unitId);
+        }
+        if (location !== '') {
+            body.location = location;
+        }
+        if (workPhoneNumber !== '') {
+            body.work_phone = workPhoneNumber;
+        }
+
         try {
-            const response = await fetch(url, { ...options, body });
+            const response = await fetch(url, { ...options, body: JSON.stringify(body) });
             const responseText = await response.text();
             if (!response.ok) {
                 console.error('Error adding member to department:', responseText);
@@ -214,21 +232,17 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             const data = responseText ? JSON.parse(responseText) : {};
             console.log('Successfully added member:', data);
 
-            console.log('selectedPerson from popup:', selectedPerson);
-
             const newMember = {
                 id: userId,
                 name: selectedPerson.name,  
                 role: title,
                 status: 'Online',
                 imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
-                workNo: selectedPerson.employment_post.work_phone,
+                workNo: workPhoneNumber || '',
                 phoneNo: selectedPerson.profile.phone_no,
                 isDeactivated: selectedPerson.is_active,
                 order: order,
             };  
-
-            console.log('newMember:', newMember);
 
             onNewMemberAdded(newMember);
 
@@ -278,13 +292,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Title</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
-                                        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border border-gray-300 px-3 py-2 text-gray-700  hover:bg-gray-50">
+                                        <MenuButton className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border px-3 py-2 ${titleError ? 'border-red-500' : 'border-gray-300'} text-gray-700 hover:bg-gray-50`}>
                                             {title || "Select Title"}
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
                                         <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none custom-scrollbar">
                                             {titles.map((title) => (
-                                                <MenuItem key={title.id} onClick={() => { setTitle(title.title); setTitleId(title.id); }}>
+                                                <MenuItem key={title.id} onClick={() => { setTitle(title.title); setTitleId(title.id); setTitleError(false); }}>
                                                     {({ active }) => (
                                                         <a
                                                             href="#"
@@ -297,6 +311,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             ))}
                                         </MenuItems>
                                     </Menu>
+                                    {titleError && <div className="mt-2 text-red-500">You must select a title</div>}
                                 </div>
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Unit</label>
@@ -306,6 +321,16 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
                                         <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none custom-scrollbar">
+                                            <MenuItem key="no-unit" onClick={() => { setUnit("No Unit"); setUnitId(''); }}>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                                    >
+                                                        No Unit
+                                                    </a>
+                                                )}
+                                            </MenuItem>
                                             {units.map((unit) => (
                                                 <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); }}>
                                                     {({ active }) => (
@@ -321,12 +346,21 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         </MenuItems>
                                     </Menu>
                                 </div>
-                                <div className="mb-4">
+                                <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Location</label>
                                     <input
                                         type="text"
                                         value={location}
                                         onChange={(e) => setLocation(e.target.value)}
+                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                    />
+                                </div>
+                                <div className="mb-4"> {/* New input field for work phone number */}
+                                    <label className="block font-bold text-gray-700">Work Phone Number</label>
+                                    <input
+                                        type="text"
+                                        value={workPhoneNumber}
+                                        onChange={(e) => setWorkPhoneNumber(e.target.value)}
                                         className="w-full p-2 border border-gray-300 rounded-full"
                                     />
                                 </div>
@@ -343,7 +377,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             <button
                                 className="w-[100px] px-4 mb-4 mr-4 font-bold text-white bg-red-500 hover:bg-red-700 rounded-full"
                                 onClick={handleAdd}
-                                disabled={!selectedPerson || !title || !unit || !location}
+                                disabled={!selectedPerson}
                             >
                                 Add
                             </button>

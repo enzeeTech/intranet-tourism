@@ -45,7 +45,7 @@ class EmploymentPost extends Model implements AuditableContract
             'create' => [
                 [
                     'department_id' => ['string', 'required'],
-                    'business_unit_id' => ['string', 'required'],
+                    'business_unit_id' => ['string'],
                     'business_post_id' => ['string', 'required'],
                     'business_grade_id' => ['string', 'required'],
                     'business_scheme_id' => ['string', 'required'],
