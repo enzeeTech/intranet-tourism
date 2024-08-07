@@ -257,16 +257,28 @@ const StoryNew = ({ userId }) => {
     };
 
     // console.log("USERDATA", userData);
-
+    
+    const source = () => {
+        if (!userData.profileImage) {
+            return `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`;
+        }
+    
+        return userData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+            ? userData.profileImage
+            : userData.profileImage.startsWith('avatar/')
+            ? `/storage/${userData.profileImage}`
+            : `/avatar/${userData.profileImage}`;
+    };
+    
     const loggedInUserAvatar = {
-        // src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
-        src: userData.profileImage ? `/storage/${userData.profileImage}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
+        src: source(),
         alt: "Avatar of logged in user",
         name: userData.username,
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
-
-    // console.log("FF", sortedAvatars);
+    
+    console.log("FF", source());
+    
 
 
 
