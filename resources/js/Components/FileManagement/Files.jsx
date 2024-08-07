@@ -270,12 +270,13 @@ const FileTable = ({ searchTerm }) => {
 
   const fetchFiles = async () => {
     try {
-      const response = await fetch('/api/resources/resources');
+      const response = await fetch('/api/resources/resources?with[]=author');
       if (!response.ok) {
         throw new Error('Failed to fetch files');
       }
       const responseData = await response.json();
-
+      console.log("RESPONSEDATA", responseData);
+      
       if (!Array.isArray(responseData.data?.data)) {
         console.error('Expected an array of files, but received:', responseData.data?.data);
         setLoading(false);
@@ -284,7 +285,7 @@ const FileTable = ({ searchTerm }) => {
 
       const filesData = responseData.data.data.map(file => ({
         ...file,
-        uploader: file.user, // Assuming the API provides an 'uploader' field with the uploader's name
+        uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
         metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
       }));
 
