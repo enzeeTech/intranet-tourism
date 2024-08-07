@@ -33,8 +33,13 @@ function MyComponent() {
         category: community.public ? 'Public' : 'Private',
         imgSrc: 'assets/departmentsDefault.jpg',
         altText: `${community.name} community image`,
+        createdAt: new Date(community.created_at),
       }));
-      setCommunities(communityData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6));
+      setCommunities(
+        communityData
+          .sort((a, b) => b.createdAt - a.createdAt)
+          .slice(0, 6)
+      );
     } catch (error) {
       console.error('Error fetching communities:', error);
     }
@@ -46,7 +51,7 @@ function MyComponent() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20 ">
+    <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20">
       <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
         <h1 className="ml-4 text-2xl font-bold">Communities</h1>
         {isLoading ? (
