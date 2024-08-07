@@ -48,7 +48,10 @@ const FeaturedEvents = () => {
       try {
         const response = await fetch('/api/events/events');
         const data = await response.json();
-        const sortedEvents = data.data.data.sort((a, b) => new Date(a.start_at) - new Date(b.start_at));
+        const currentDate = new Date();
+        const sortedEvents = data.data.data
+          .filter(event => new Date(event.start_at) >= currentDate) // Filter events starting from today
+          .sort((a, b) => new Date(a.start_at) - new Date(b.start_at)); // Sort events by start date
         const upcomingEvents = sortedEvents.slice(0, 3);
         setFeaturedEvents(upcomingEvents);
       } catch (error) {
