@@ -43,42 +43,42 @@ function Card({
   onCancel, 
   onSave
 }) {
-  const [departmentName, setDepartmentName] = useState(department.name || '');
-  const [imageSrc, setImageSrc] = useState(department.banner || imgSrc); 
-  const [selectedType, setSelectedType] = useState(department.type || '');
-  const [departmentDescription, setDepartmentDescription] = useState(department.description || '');
+  const [departmentName, setDepartmentName] = useState(department?.name || '');
+  const [imageSrc, setImageSrc] = useState(department?.banner || imgSrc); 
+  const [selectedType, setSelectedType] = useState(department?.type || '');
+  const [departmentDescription, setDepartmentDescription] = useState(department?.description || '');
   const [error, setError] = useState('');
   const csrfToken = useCsrf();
   const { props } = usePage();
   const { id, authToken } = props;
 
   useEffect(() => {
-    setDepartmentName(department.name || '');
-    setImageSrc(department.banner || imgSrc);
-    setSelectedType(department.type || '');
-    setDepartmentDescription(department.description || '');
+    setDepartmentName(department?.name || '');
+    setImageSrc(department?.banner || imgSrc);
+    setSelectedType(department?.type || '');
+    setDepartmentDescription(department?.description || '');
   }, [department, imgSrc]);
 
   const handleImageChange = (file) => {
-    if (!file) return; // Exit if no file is selected
+    if (!file) return;
 
     const formData = new FormData();
     formData.append('banner', file);
-    formData.append('user_id', id); // Add user_id to the form data
-    formData.append('_method', 'PUT'); // Add _method to the form data
+    formData.append('user_id', id);
+    formData.append('_method', 'PUT');
   
-    fetch('/api/department/upload-banner', { // Adjust the endpoint as needed
+    fetch(`/api/department/departments/${department?.id}`, {
       method: 'POST',
       body: formData,
       headers: {
         'Accept': 'application/json',
-        'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+        'X-CSRF-TOKEN': csrfToken || '',
         'Authorization': `Bearer ${authToken}`,
       },
     })
     .then(response => response.json())
     .then(data => {
-      setImageSrc(data.filePath); // Update the image source to the file path returned by the server
+      setImageSrc(data.filePath);
     })
     .catch(error => {
       console.error('Error uploading image:', error);
@@ -98,9 +98,9 @@ function Card({
       name: departmentName,
       description: departmentDescription,
       type: selectedType,
-      created_by: user.name,
-      updated_by: user.name,
-      banner: imageSrc, // Include the image source in the update data
+      created_by: user?.name || 'Unknown User', // Fallback in case user is undefined
+      updated_by: user?.name || 'Unknown User', // Fallback in case user is undefined
+      banner: imageSrc,
     };
 
     const options = {
@@ -113,7 +113,7 @@ function Card({
       body: JSON.stringify(data)
     };
 
-    const url = `/api/department/departments/${department.id}`;
+    const url = `/api/department/departments/${department?.id}`;
 
     try {
       const response = await fetch(url, options);
@@ -127,7 +127,7 @@ function Card({
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department saved:', responseData.data);
       onSave(responseData.data);
-      window.location.reload(); // Reload the page on successful save
+      window.location.reload(); 
     } catch (error) {
       console.error('Error saving department:', error.message);
       setError('An error occurred while saving the department.');
@@ -152,13 +152,19 @@ function Card({
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justify-center items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
+          className="self-stretch border border-solid rounded-md mt-3 text-neutral-800 border-neutral-300"
         />
-        <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
-          <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
+        <div className="flex mt-4 space-x-4">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100"
+          >
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-full" onClick={handleSubmit}>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+          >
             {saveText}
           </button>
         </div>
@@ -167,45 +173,17 @@ function Card({
   );
 }
 
-export default function EditDepartments({ department, onCancel, onSave }) {
-  const [departmentData, setDepartmentData] = useState(null); // Added state to store fetched department data
+const EditDepartments = ({ department = {}, onCancel, onSave }) => (
+  <Card
+    title="Edit Department"
+    imgSrc="https://via.placeholder.com/150"
+    imgAlt="Department Image"
+    department={department}
+    cancelText="Cancel"
+    saveText="Save"
+    onCancel={onCancel}
+    onSave={onSave}
+  />
+);
 
-  const user = {
-    name: "Aisyah binte Musa",
-    role: "Admin",
-    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
-  };
-
-  useEffect(() => { // Added useEffect to fetch department data when component mounts
-    const fetchDepartmentData = async () => {
-      try {
-        const response = await fetch(`/api/department/departments/${department.id}`); // Fetch department data from API
-        const data = await response.json(); // Parse response JSON
-        setDepartmentData(data); // Store fetched data in state
-      } catch (error) {
-        console.error('Error fetching department data:', error); // Log error
-      }
-    };
-
-    fetchDepartmentData(); // Call the function to fetch data
-  }, [department.id]); // Dependency array to re-fetch if department.id changes
-
-  if (!departmentData) { // Render loading message while data is being fetched
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <Card
-      title="Edit Department"
-      imgSrc={department.banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"}
-      imgAlt="Departments Logo"
-      user={user}
-      department={department}
-      description="Description"
-      cancelText="Cancel"
-      saveText="Save"
-      onCancel={onCancel}
-      onSave={onSave}
-    />
-  );
-}
+export default EditDepartments;
