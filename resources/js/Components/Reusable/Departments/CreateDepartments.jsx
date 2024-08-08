@@ -135,7 +135,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   };
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center w-full px-6 mt-3">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
@@ -152,7 +152,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
+          className="justifycenter items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
         <div className="flex self-end justify-between gap-5 mt-12 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>

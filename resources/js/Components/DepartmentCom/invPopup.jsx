@@ -227,7 +227,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
     return (
         <div>
             {isAddMemberPopupOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-3xl pt-7 px-4 w-[400px]">
                         <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
                         <input

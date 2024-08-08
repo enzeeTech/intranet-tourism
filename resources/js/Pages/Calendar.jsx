@@ -636,110 +636,112 @@ function Calendar() {
                 <div className='pb-10'></div>
                 
                 {isModalOpen && (
-                    <div className="modal-container">
-                        <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
-                        <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
-                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-                        </button>
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                name="title"
-                                value={eventData.title}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Event Title"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="venue"
-                                value={eventData.venue}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Venue"
-                                required
-                            />
-                            <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
-                            <input
-                                type="date"
-                                name="startDate"
-                                value={eventData.startDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Date"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="startTime"
-                                value={eventData.startTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Time"
-                                required
-                            />
-                            <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={eventData.endDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="endTime"
-                                value={eventData.endTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Time"
-                                required
-                            />
-                            <div className="form-group">
-                                <label>
-                                <input
-                                    type="checkbox"
-                                    className='mr-2'
-                                    name="includeUrl"
-                                    checked={includeUrl}
-                                    onChange={(e) => setIncludeUrl(e.target.checked)}
-                                />
-                                Include URL
-                                </label>
-                                {includeUrl && (
-                                <input
-                                    type="url"
-                                    className="mt-2 form-control"
-                                    name="url"
-                                    value={eventData.url}
-                                    onChange={handleChange}
-                                    placeholder="Enter event URL"
-                                />
-                                )}
-                            </div>
-                            <select
-                                name="color"
-                                value={eventData.color}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="red">Red</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="orange">Orange</option>
-                                <option value="purple">Purple</option>
-                                <option value="DeepPink">Pink</option>
-                                <option value="black">Black</option>
-                                <option value="gray">Gray</option>
-                            </select>
-                            <button type="submit" className="modal-submit-button">
-                                Confirm
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal-container">
+                            <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
+                            <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
+                                <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                             </button>
-                        </form>
+                            <form onSubmit={handleSubmit}>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={eventData.title}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Event Title"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="venue"
+                                    value={eventData.venue}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Venue"
+                                    required
+                                />
+                                <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    value={eventData.startDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="startTime"
+                                    value={eventData.startTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Time"
+                                    required
+                                /> */}
+                                <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    value={eventData.endDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="endTime"
+                                    value={eventData.endTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Time"
+                                    required
+                                /> */}
+                                <div className="form-group">
+                                    <label>
+                                    <input
+                                        type="checkbox"
+                                        className='mr-2'
+                                        name="includeUrl"
+                                        checked={includeUrl}
+                                        onChange={(e) => setIncludeUrl(e.target.checked)}
+                                    />
+                                    Include URL
+                                    </label>
+                                    {includeUrl && (
+                                    <input
+                                        type="url"
+                                        className="mt-2 form-control"
+                                        name="url"
+                                        value={eventData.url}
+                                        onChange={handleChange}
+                                        placeholder="Enter event URL"
+                                    />
+                                    )}
+                                </div>
+                                <select
+                                    name="color"
+                                    value={eventData.color}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    required
+                                >
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="green">Green</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="DeepPink">Pink</option>
+                                    <option value="black">Black</option>
+                                    <option value="gray">Gray</option>
+                                </select>
+                                <button type="submit" className="modal-submit-button">
+                                    Confirm
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 )}
 
@@ -861,7 +863,7 @@ function Calendar() {
 
                 {isPrintModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="w-full max-w-md p-6 mx-auto bg-white rounded-lg shadow-lg">
+                        <div className="w-full max-w-md max-md:w-[340px] p-6 mx-auto bg-white rounded-3xl shadow-lg">
                             <h2 className="mb-4 text-xl font-bold">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
                                 <div className="mb-2">

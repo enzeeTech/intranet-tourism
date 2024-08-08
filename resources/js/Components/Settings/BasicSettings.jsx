@@ -76,7 +76,7 @@ function LogoUploader() {
   return (
     <article className="flex flex-col px-5 py-4 bg-white rounded-xl shadow-custom max-w-[296px]">
       <header>
-        <h1 className="text-2xl font-bold text-neutral-800">Company Logo</h1>
+        <h1 className="text-2xl font-bold text-neutral-800">Jomla! Intranet Logo</h1>
       </header>
       <FileInputSection onFileSelect={handleFileSelect} />
       <ImageSection imageSrc={imageSrc} onDelete={handleDelete} />

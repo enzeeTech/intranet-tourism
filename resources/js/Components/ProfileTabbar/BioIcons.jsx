@@ -71,7 +71,7 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
                 />
             )}
             {isPopupOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50" onClick={closePopup}>
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
                     <div className="bg-white p-2 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
                         <img
                             src="assets/qrAcap.jpg"

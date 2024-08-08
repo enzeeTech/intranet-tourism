@@ -64,7 +64,7 @@ const CommunitySearchBar = ({ onSearch, toggleCreateCommunity }) => {
           onChange={handleSearch}
         />
         <button
-          className="flex items-center text-sm px-4 py-4 bg-red-500 text-white rounded-full font-bold hover:bg-red-700 md:justify-start"
+          className="flex items-center text-sm px-4 py-3 bg-red-500 text-white rounded-full font-bold hover:bg-red-700 md:justify-start"
           onClick={toggleCreateCommunity}>
           Create Community
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 ml-2" />
