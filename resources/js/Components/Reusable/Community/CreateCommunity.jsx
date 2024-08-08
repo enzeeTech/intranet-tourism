@@ -124,11 +124,11 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="public">Public</option>
           <option value="all">All</option>
         </select>
-        <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>

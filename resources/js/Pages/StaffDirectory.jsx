@@ -300,7 +300,7 @@ const StaffDirectory = () => {
     </div>
   </div>
   {isDeactivateModalOpen && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
         <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
         <div className="flex justify-center space-x-4">
@@ -315,15 +315,15 @@ const StaffDirectory = () => {
     </div>
   )}
   {isActivateModalOpen && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-        <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
-          <h2 className="mb-4 font-bold text-center text-l">Activate?</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
+          <h2 className="mb-4 font-bold text-center text-xl">Activate?</h2>
           <div className="flex justify-center space-x-4">
-            <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={handleActivate}>
-              Yes
-            </button>
-            <button className="px-8 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsActivateModalOpen(false)}>
+            <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={() => setIsActivateModalOpen(false)}>
               No
+            </button>
+            <button className="px-8 py-1 text-white font-bold bg-blue-500 hover:bg-blue-700 rounded-full" onClick={handleActivate}>
+              Yes
             </button>
           </div>
         </div>

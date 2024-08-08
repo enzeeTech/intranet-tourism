@@ -73,7 +73,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   );
 
   return (
-    <div className="department-dropdown-container" ref={dropdownRef}>
+    <div className="department-dropdown-container flex" ref={dropdownRef}>
       <div className={`dropdown-header ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
         <input
           type="text"
