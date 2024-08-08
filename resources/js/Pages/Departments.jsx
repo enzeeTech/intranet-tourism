@@ -140,9 +140,9 @@ const Departments = () => {
         </div>
       </aside>
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
-            <h2 className="mb-4 text-xl font-bold text-center">Delete?</h2>
+            <h2 className="mb-4 text-xl font-bold text-center">Delete Department?</h2>
             <div className="flex justify-center space-x-4">
               <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleDelete}>
                 Yes
@@ -156,13 +156,20 @@ const Departments = () => {
       )}
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative p-4 bg-white rounded-lg shadow-lg">
-            <button
+          <div className="relative p-4 bg-white rounded-3xl shadow-lg">
+            {/* <button
               className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
               onClick={toggleCreateCommunity}
             >
               &times;
-            </button>
+            </button> */}
+            <div className="relative">
+              <div className="flex justify-end">
+                <button onClick={toggleCreateCommunity} className="mt-2 mr-2 absolute top-0 right-0">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
             <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
           </div>
         </div>

@@ -76,10 +76,10 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
         </label> */}
       </div>
       {showPopup && (
-        <div className="file-popup">
+        <div className="file-popup px-4">
           <div className="file-popup-content rounded-3xl w-[400px]">
             <div className="popup-header">
-            <h2 className="mb-4 text-3xl font-bold">Upload file</h2>
+            <h2 className="mb-4 text-2xl font-bold flex justify-start">Upload file</h2>
             </div>
             <div className="popup-body">
               <div className="flex justify-start">

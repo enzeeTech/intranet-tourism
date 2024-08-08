@@ -308,7 +308,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-red-500 hover:bg-red-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson || !title || !unit || !location}
                             >

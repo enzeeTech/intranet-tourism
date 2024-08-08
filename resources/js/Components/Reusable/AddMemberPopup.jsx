@@ -288,7 +288,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
-                            <div className="mx-0 my-2">
+                            <div className="mx-2 my-2">
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Title</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
@@ -375,7 +375,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 font-bold text-white bg-red-500 hover:bg-red-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson}
                             >

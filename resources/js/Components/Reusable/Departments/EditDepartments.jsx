@@ -1,163 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { useCsrf } from "@/composables";
-
-// function Header({ title }) {
-//   return (
-//     <header className="flex gap-5 items-start self-center px-5 w-full text-2xl font-bold text-center max-w-[358px] text-neutral-800">
-//       <h1 className="flex-auto mt-3">{title}</h1>
-//     </header>
-//   );
-// }
-
-// function Avatar({ src, alt, onImageChange }) {
-//   const handleClick = () => {
-//     document.getElementById('avatarInput').click();
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center">
-//       <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl cursor-pointer" onClick={handleClick}>
-//         <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
-//       </div>
-//       <input
-//         type="file"
-//         accept="image/*"
-//         id="avatarInput"
-//         onChange={(e) => onImageChange(e.target.files[0])}
-//         className="hidden"
-//       />
-//     </div>
-//   );
-// }
-
-// function Card({ 
-//   title, 
-//   imgSrc, 
-//   imgAlt, 
-//   user, 
-//   department, 
-//   description, 
-//   cancelText, 
-//   saveText, 
-//   onCancel, 
-//   onSave 
-// }) {
-//   const [departmentName, setDepartmentName] = useState(department.name || '');
-//   const [imageSrc, setImageSrc] = useState(department.banner || imgSrc);
-//   const [selectedType, setSelectedType] = useState(department.type || '');
-//   const [departmentDescription, setDepartmentDescription] = useState(department.description || '');
-//   const [error, setError] = useState('');
-//   const csrfToken = useCsrf();
-
-//   const handleImageChange = (file) => {
-//     const reader = new FileReader();
-//     reader.onload = () => {
-//       setImageSrc(reader.result);
-//     };
-//     reader.readAsDataURL(file);
-//   };
-
-//   const handleSubmit = async () => {
-//     if (!departmentName.trim()) {
-//         setError('Department Name is required.');
-//         return;
-//       }
-
-//     setError('');
-
-//     const data = {
-//       name: departmentName,
-//       banner: imageSrc,
-//       description: departmentDescription,
-//       type: selectedType,
-//       created_by: user.name,
-//       updated_by: user.name,
-//     };
-
-//     const options = {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Accept': 'application/json',
-//         "X-CSRF-Token": csrfToken 
-//       },
-//       body: JSON.stringify(data)
-//     };
-
-//     const url = `/api/department/departments/${department.id}`;
-
-//     try {
-//       const response = await fetch(url, options);
-//       const text = await response.text();
-
-//       if (!response.ok) {
-//         console.error('Server response not OK:', text);
-//         throw new Error('Failed to save department');
-//       }
-
-//       const responseData = text ? JSON.parse(text) : {};
-//       console.log('Department saved:', responseData.data);
-//       onSave(responseData.data);
-//     } catch (error) {
-//       console.error('Error saving department:', error.message);
-//     }
-//   };
-
-//   return (
-//     <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
-//       <Header title={title} />
-//       <div className="flex flex-col items-center px-6 mt-3 w-full">
-//         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
-//         <input
-//           type="text"
-//           placeholder="Department name"
-//           value={departmentName}
-//           onChange={(e) => setDepartmentName(e.target.value)}
-//           className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
-//         />
-//         <input
-//           type="text"
-//           placeholder={description}
-//           value={departmentDescription}
-//           onChange={(e) => setDepartmentDescription(e.target.value)}
-//           className="justify-center items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
-//         />
-//         <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
-//           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
-//             {cancelText}
-//           </button>
-//           <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
-//             {saveText}
-//           </button>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-// export default function EditDepartments({ department, onCancel, onSave }) {
-//   const user = {
-//     name: "Aisyah binte Musa",
-//     role: "Admin",
-//     src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
-//   };
-
-//   return (
-//     <Card
-//       title="Edit Department"
-//       imgSrc={department.banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"}
-//       imgAlt="Departments Logo"
-//       user={user}
-//       department={department}
-//       description="Description"
-//       cancelText="Cancel"
-//       saveText="Save"
-//       onCancel={onCancel}
-//       onSave={onSave}
-//     />
-//   );
-// }
-
 import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
 import { usePage } from '@inertiajs/react';
@@ -227,14 +67,14 @@ function Card({
     formData.append('user_id', id); // Add user_id to the form data
     formData.append('_method', 'PUT'); // Add _method to the form data
   
-    fetch('', {
+    fetch('/api/department/upload-banner', { // Adjust the endpoint as needed
       method: 'POST',
       body: formData,
       headers: {
         'Accept': 'application/json',
         'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
         'Authorization': `Bearer ${authToken}`,
-    },
+      },
     })
     .then(response => response.json())
     .then(data => {
@@ -260,11 +100,8 @@ function Card({
       type: selectedType,
       created_by: user.name,
       updated_by: user.name,
+      banner: imageSrc, // Include the image source in the update data
     };
-
-    if (imageSrc && imageSrc !== department.banner) {
-      data.banner = imageSrc;
-    }
 
     const options = {
       method: 'PUT',
@@ -290,6 +127,7 @@ function Card({
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department saved:', responseData.data);
       onSave(responseData.data);
+      window.location.reload(); // Reload the page on successful save
     } catch (error) {
       console.error('Error saving department:', error.message);
       setError('An error occurred while saving the department.');
@@ -371,4 +209,3 @@ export default function EditDepartments({ department, onCancel, onSave }) {
     />
   );
 }
-
