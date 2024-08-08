@@ -111,7 +111,9 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
         </button>
         )}
       </div>
-      <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+      {selectedDepartment.id && (
+        <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+      )}
       {isAddMemberPopupOpen && (
         <SearchPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}
