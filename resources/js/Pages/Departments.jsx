@@ -11,7 +11,7 @@ import CreateDepartments from '../Components/Reusable/Departments/CreateDepartme
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
 import { usePage } from '@inertiajs/react';
 
-const StaffDirectory = () => {
+const Departments = () => {
   const { props } = usePage();
   const { id } = props; 
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -171,4 +171,4 @@ const StaffDirectory = () => {
   );
 };
 
-export default StaffDirectory;
+export default Departments;
