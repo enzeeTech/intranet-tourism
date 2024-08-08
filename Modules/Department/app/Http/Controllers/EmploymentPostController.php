@@ -26,7 +26,7 @@ class EmploymentPostController extends Controller
                     'business_grades.code as business_grade',
                     'users.is_active',
                     'profiles.bio as name',
-                    'profiles.image',
+                    'profiles.staff_image',
                     'employment_posts.work_phone',
                     'profiles.phone_no',
                 )
