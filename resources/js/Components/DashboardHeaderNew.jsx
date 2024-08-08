@@ -69,17 +69,31 @@ export default function Header({ setSidebarOpen }) {
             })
             //-----------------------------//
             .then(({ data }) => {
+                console.log("DATA", data);
+                
                 // const firstName = data.name.split(' ')[0];
                 setUserData(pv => ({
                     ...pv, ...data,
                     name: data.name,
-                    profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+                    profileImage: data.profile?.image
                 }));
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
             });
     }, [id]);
+
+    const source = () => {
+        if (!userData.profileImage) {
+            return `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`;
+        }
+    
+        return userData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+            ? userData.profileImage
+            : userData.profileImage.startsWith('avatar/')
+            ? `/storage/${userData.profileImage}`
+            : `/avatar/${userData.profileImage}`;
+    };
 
     const handleLogout = (event) => {
         event.preventDefault();
@@ -168,7 +182,7 @@ export default function Header({ setSidebarOpen }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                                 className="w-8 h-8 rounded-full bg-gray-50"
-                                src={userData.profileImage}
+                                src={source()}
                                 alt=""
                             />
                             <span className="hidden lg:flex lg:items-center">
