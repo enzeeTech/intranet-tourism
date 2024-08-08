@@ -67,7 +67,7 @@ function Card({
     formData.append('user_id', id);
     formData.append('_method', 'PUT');
   
-    fetch('/api/department/upload-banner', {
+    fetch(`/api/department/departments/${department?.id}`, {
       method: 'POST',
       body: formData,
       headers: {
