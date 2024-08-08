@@ -12,7 +12,16 @@ function ProfileDepartment({
     onFormDataChange,
     originalFormData
 }) {
-    const [localFormData, setLocalFormData] = useState({});
+    const [localFormData, setLocalFormData] = useState({
+        department,
+        unit,
+        jobtitle,
+        position,
+        grade,
+        location,
+        phone,
+    });
+
     const [departmentOptions, setDepartmentOptions] = useState([]);
     const [unitOptions, setUnitOptions] = useState([]);
     const [jobTitleOptions, setJobTitleOptions] = useState([]);
@@ -26,17 +35,13 @@ function ProfileDepartment({
     const csrfToken = ''; // Add your CSRF token here if needed
 
     useEffect(() => {
-        const formData = {
-            department,
-            unit,
-            jobtitle,
-            position,
-            grade,
-            location,
-            phone
-        };
-        setLocalFormData(formData);
-    }, [department, unit, jobtitle, position, grade, location, phone]);
+        fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
+        fetchBusinessUnits();
+        fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
+        fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
+        fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
+        fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
+    }, []);
 
     const fetchData = async (API_URL, setOptions, label) => {
         let allItems = [];
@@ -88,40 +93,18 @@ function ProfileDepartment({
         }
     };
 
-    useEffect(() => {
-        fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
-        fetchBusinessUnits();
-        fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
-        fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
-        fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
-        fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
-    }, []);
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
-        // Find the selected option to get the display value
-        const selectedOption = departmentOptions.find(option => option.id === parseInt(value)) ||
-                               unitOptions.find(option => option.id === parseInt(value)) ||
-                               jobTitleOptions.find(option => option.id === parseInt(value)) ||
-                               gradeOptions.find(option => option.id === parseInt(value));
-
-        const displayValue = selectedOption?.title || selectedOption?.name || selectedOption?.code || '';
-
-        // Update the local form data with the ID
         setLocalFormData((prevData) => ({
             ...prevData,
-            [name]: value, // Store the ID in the form data
-            [`${name}_display`]: displayValue // Store the display value for rendering
+            [name]: value, // Update the specific field only
         }));
 
-        // Call the parent handler to update the main form data with the specific ID fields
         if (onFormDataChange) {
-            const updatedData = {
-                [name]: value, // Send the ID to the parent
-            };
+            const updatedData = { [name]: value };
 
-            // Append the IDs to the updated data
+            // Handle ID associations
             if (name === 'department') {
                 updatedData.department_id = value;
             } else if (name === 'unit') {
@@ -147,13 +130,13 @@ function ProfileDepartment({
                 {isEditing && editable ? (
                     <select
                         name={name}
-                        value={localFormData[name] || ''} // Ensure value is defined
+                        value={localFormData[name] || ''} // Use the current state value
                         onChange={onChangeHandler}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-y-auto"
                         ref={inputRef}
                         style={{ maxHeight: '150px' }} // Set max height for scrollable options
                     >
-                        <option value="">{localFormData[`${name}_display`] || value}</option> {/* Display the current value as an option */}
+                        <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
                             <option key={index} value={option?.id || ''}>
                                 {option?.title || option?.name || option?.code || ''}
@@ -170,7 +153,6 @@ function ProfileDepartment({
     );
 
     const handleSubmit = () => {
-        // Prepare the data for submission, using the IDs from localFormData
         const submissionData = {
             department_id: localFormData.department,
             business_unit_id: localFormData.unit,
@@ -180,7 +162,6 @@ function ProfileDepartment({
             work_phone: localFormData.phone,
         };
 
-        // Call your API to submit the data
         fetch('/your-api-endpoint', {
             method: 'POST',
             headers: {
@@ -191,7 +172,6 @@ function ProfileDepartment({
         })
         .then(response => response.json())
         .then(data => {
-            // Handle the response from the API
             console.log("Submission successful:", data);
         })
         .catch(error => {
@@ -248,6 +228,14 @@ function ProfileDepartment({
                             </tr>
                         </tbody>
                     </table>
+                    {isEditing && (
+                        <button
+                            onClick={handleSubmit}
+                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full"
+                        >
+                            Save
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
