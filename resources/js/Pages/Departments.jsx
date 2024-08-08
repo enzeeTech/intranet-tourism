@@ -1,4 +1,3 @@
-// StaffDirectory.jsx
 import React, { useState, useEffect } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -10,8 +9,11 @@ import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
+import { usePage } from '@inertiajs/react';
 
 const StaffDirectory = () => {
+  const { props } = usePage();
+  const { id } = props; 
   const [departmentsList, setDepartmentsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,7 +36,7 @@ const StaffDirectory = () => {
       const departmentData = data.data.data.map((department) => ({
         id: department.id,
         name: department.name,
-        imageUrl: department.banner ? `api/crud/departments/${department.banner}` : 'assets/departmentsDefault.jpg', // Assuming the API returns an image URL here
+        imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',// Assuming the API returns an image URL here
       }));
 
       setDepartmentsList((prevDepartments) => {
@@ -88,7 +90,7 @@ const StaffDirectory = () => {
 
   return (
     <Example>
-      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen">
+      <main className="w-full min-h-screen bg-gray-100 xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar
             onSearch={(value) => setSearchTerm(value)}
@@ -109,7 +111,7 @@ const StaffDirectory = () => {
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={department.imageUrl|| 'assets/departmentsDefault.jpg'}
+                  imageUrl={department.imageUrl || 'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
                   onDeleteClick={handleDeleteClick}
                 />
@@ -153,15 +155,15 @@ const StaffDirectory = () => {
         </div>
       )}
       {isCreateDepartmentOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
-          <div className="bg-white p-4 rounded-lg shadow-lg relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-4 bg-white rounded-lg shadow-lg">
             <button
-              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+              className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
               onClick={toggleCreateCommunity}
             >
               &times;
             </button>
-            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
+            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
           </div>
         </div>
       )}

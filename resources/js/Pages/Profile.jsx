@@ -68,6 +68,10 @@ export default function Profile() {
     });
     const [userData, setUserData] = useState({});
 
+    const handleCreatePoll = (poll) => {
+      setPolls((prevPolls) => [...prevPolls, poll]);
+    };
+
     useEffect(() => {
         fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
