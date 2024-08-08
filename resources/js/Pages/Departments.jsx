@@ -1,4 +1,3 @@
-// StaffDirectory.jsx
 import React, { useState, useEffect } from 'react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -37,7 +36,7 @@ const StaffDirectory = () => {
       const departmentData = data.data.data.map((department) => ({
         id: department.id,
         name: department.name,
-        imageUrl: department.banner ? `api/crud/departments/${department.banner}` : 'assets/departmentsDefault.jpg', // Assuming the API returns an image URL here
+        imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',// Assuming the API returns an image URL here
       }));
 
       setDepartmentsList((prevDepartments) => {
@@ -112,7 +111,7 @@ const StaffDirectory = () => {
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={department.imageUrl|| 'assets/departmentsDefault.jpg'}
+                  imageUrl={department.imageUrl || 'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
                   onDeleteClick={handleDeleteClick}
                 />
@@ -156,7 +155,7 @@ const StaffDirectory = () => {
         </div>
       )}
       {isCreateDepartmentOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-4 bg-white rounded-lg shadow-lg">
             <button
               className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"

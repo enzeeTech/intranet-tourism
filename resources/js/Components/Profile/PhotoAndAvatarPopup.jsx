@@ -1,10 +1,29 @@
 import * as React from "react";
 
-function Avatar({ src, alt, isSelected, onClick }) {
+function Avatar({ src, alt, isSelected, onClick, tag }) {
+
+  let source=null
+
+  console.log('tag', tag);
+    
+    if (tag){
+      source = `/assets/${src}`
+      console.log('in if statement');
+    } else {
+      console.log('in else statement');
+      console.log('src in else statement:', src)
+      source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+      ? src 
+      : src.startsWith('assets/') 
+      ?  `/${src}`
+      : src;
+    }
+    console.log("SOURCE", source);
+
   return (
     <img
       loading="lazy"
-      src={src}
+      src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
       alt={alt}
       className={`shrink-0 aspect-square w-[94px] cursor-pointer hover:scale-125 transition-transform duration-300 ${isSelected ? 'border-4 border-blue-500' : ''}`}
       onClick={onClick}
