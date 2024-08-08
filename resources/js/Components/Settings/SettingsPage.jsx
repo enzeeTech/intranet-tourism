@@ -267,7 +267,7 @@ import Departments from "./Departments";
 import Requests from "./Requests";
 import { AuditSearch, AuditCalendar, AuditTrailTable } from "./AuditTrail";
 import Feedback from "./Feedback";
-import Pautan from "./Pautan";
+import Roles from "./Roles";
 
 
 
@@ -300,9 +300,9 @@ const SettingsPage = ({ currentPage }) => {
         </>}
       {currentPage === 'Feedback' && <Feedback/>}
       {currentPage === 'Birthday Template' && <div></div>}
-      {currentPage === 'Pautan' && <Pautan/>}
+      {currentPage === 'Roles' && <Roles/>}
     </div>
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Pautan };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Roles };
