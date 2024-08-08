@@ -19,7 +19,7 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
       <div className="flex flex-col items-center space-y-4 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3">
         <input
           type="text"
-          className="search-input-staff-search-bar rounded-full flex-grow w-full font-bold py-3 px-6 bg-gray-100 border-gray-100 text-neutral-800 sm:w-auto"
+          className="rounded-full flex-grow w-full font-bold py-3 px-6 bg-gray-100 border-gray-100 text-neutral-800 sm:w-auto"
           placeholder="Search Department Name"
           value={searchTerm}
           onChange={handleSearch}

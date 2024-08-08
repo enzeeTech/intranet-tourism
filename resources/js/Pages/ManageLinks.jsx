@@ -309,7 +309,7 @@ const Pautan = () => {
         </section>
 
         {isAddModalVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
               <h2 className="mb-4 text-xl font-bold">Add New App</h2>
               <input
@@ -340,7 +340,7 @@ const Pautan = () => {
         )}
 
         {isEditModalVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
               <h2 className="mb-4 text-xl font-bold">Edit App</h2>
               <input
@@ -371,7 +371,7 @@ const Pautan = () => {
         )}
 
         {isDeleteModalVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
               <h2 className="mb-4 text-xl font-bold text-center">Delete this link?</h2>
               <div className="flex justify-center space-x-4">

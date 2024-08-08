@@ -135,7 +135,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   };
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center w-full px-6 mt-3">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
@@ -152,13 +152,13 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
+          className="justifycenter items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <div className="flex self-end justify-between gap-5 mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -184,7 +184,7 @@ export default function CreateDepartments({ onCancel, onCreate, userID }) {
 
   return (
     <Card
-      title="Create Department"
+      title="Create New Department"
       imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
       imgAlt="Departments Logo"
       user={user}

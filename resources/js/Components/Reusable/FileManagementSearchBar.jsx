@@ -40,15 +40,16 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   );
 
   return (
-    <div className="file-search-bar-container shadow-custom">
-      <div className="file-search-bar-title">
+    <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 sm:left">
+      <div className="file-search-bar-title -mt-1">
         <h2>Search Files</h2>
       </div>
       <div className="file-search-bar">
         <input
           type="text"
-          className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
-          placeholder="Search Name"
+          // className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
+          className="rounded-full flex-grow w-full font-bold py-3 px-6 bg-gray-100 border-gray-100 text-neutral-800 sm:w-auto"
+          placeholder="Search File Name"
           value={searchTerm}
           onChange={handleSearchChange} 
           style={{ paddingLeft: '1.5rem' }}
@@ -75,10 +76,10 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
         </label> */}
       </div>
       {showPopup && (
-        <div className="file-popup">
+        <div className="file-popup px-4">
           <div className="file-popup-content rounded-3xl w-[400px]">
             <div className="popup-header">
-            <h2 className="mb-4 text-3xl font-bold">Upload file</h2>
+            <h2 className="mb-4 text-2xl font-bold flex justify-start">Upload file</h2>
             </div>
             <div className="popup-body">
               <div className="flex justify-start">

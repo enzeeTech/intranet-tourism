@@ -100,7 +100,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
         </button>
       </div>
       {isCallPopupOpen && (
-        <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeCallPopup}>
           <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
             <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
             <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
@@ -113,7 +113,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
         </div>
       )}
       {isWhatsAppPopupOpen && (
-        <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeWhatsAppPopup}>
           <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
             {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
             <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>
