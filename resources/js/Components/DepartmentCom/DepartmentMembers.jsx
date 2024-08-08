@@ -83,7 +83,7 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
       </div>
 
       {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
             <h2 className="mb-4 text-xl font-bold text-center">Delete member?</h2>
             <div className="flex justify-center space-x-4">
@@ -140,7 +140,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
-          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-13" />
+          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-9" />
         </button>
         {activePopupId === id && (
           <div ref={popupRef}>
@@ -278,7 +278,7 @@ function DpMembers() {
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    <section className="flex flex-col h-auto max-w-full p-6 shadow-sm rounded-3xl max-md:px-5">
+    <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">
       <div className="flex items-center gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
@@ -295,9 +295,10 @@ function DpMembers() {
         </button>
         <button
           onClick={handleInviteClick}
-          className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
+          className="flex items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
-          Add Member
+          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
+          Member
         </button>
       </div>
 

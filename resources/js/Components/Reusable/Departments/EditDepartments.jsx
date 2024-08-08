@@ -100,17 +100,24 @@ function Card({
       type: selectedType,
       created_by: user?.name || 'Unknown User', // Fallback in case user is undefined
       updated_by: user?.name || 'Unknown User', // Fallback in case user is undefined
-      banner: imageSrc,
+      banner: department.banner,
     };
 
+    const formData = new FormData();
+      formData.append('_method', 'PUT');
+      formData.append("name", departmentName);
+      formData.append("description", departmentDescription);
+      formData.append("type", selectedType);
+      formData.append('banner', file);
+
     const options = {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         "X-CSRF-Token": csrfToken 
       },
-      body: JSON.stringify(data)
+      body: formData
     };
 
     const url = `/api/department/departments/${department?.id}`;
@@ -127,7 +134,7 @@ function Card({
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department saved:', responseData.data);
       onSave(responseData.data);
-      window.location.reload(); 
+      // window.location.reload(); 
     } catch (error) {
       console.error('Error saving department:', error.message);
       setError('An error occurred while saving the department.');
@@ -173,7 +180,7 @@ function Card({
   );
 }
 
-const EditDepartments = ({ department = {}, onCancel, onSave }) => (
+const EditDepartments = ({ department, onCancel, onSave }) => (
   <Card
     title="Edit Department"
     imgSrc="https://via.placeholder.com/150"

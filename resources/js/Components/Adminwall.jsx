@@ -173,7 +173,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
   const handleSave = (updatedDepartment) => {
     setDepartmentData(updatedDepartment);
     setIsEditPopupOpen(false);
-    window.location.reload(true);
+    // window.location.reload(true);
   };
 
   const handleCancel = () => {

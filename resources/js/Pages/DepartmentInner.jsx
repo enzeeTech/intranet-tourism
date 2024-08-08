@@ -54,6 +54,9 @@ const DepartmentInner = () => {
     return <div>Loading...</div>;
   }
 
+
+  console.log("DEPARTMENT", departmentData);
+  
   return (
     <Example>
       <main className="xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 w-full ml-4 mr-4 lg:ml-10 lg:mr-24 relative bottom-10">
