@@ -406,20 +406,60 @@ const handleSaveDepartment = async (index) => {
 };
 
 const handleCancelBio = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        name: originalFormData.name || "N/A",
+        username: originalFormData.username || "N/A",
+        email: originalFormData.email || "N/A",
+        dateofbirth: originalFormData.dateofbirth || "N/A",
+        phone: originalFormData.phone || "N/A",
+        whatsapp: originalFormData.whatsapp || "N/A",
+    }));
+    setPhoto(originalPhoto);       
     setIsEditingBio(false);
 };
 
 const handleCancelDepartment1 = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
+            index === 0 
+                ? {
+                    ...post,
+                    department: originalFormData.employmentPosts[0].department || "N/A",
+                    unit: originalFormData.employmentPosts[0].unit || "N/A",
+                    jobtitle: originalFormData.employmentPosts[0].jobtitle || "N/A",
+                    position: originalFormData.employmentPosts[0].position || "N/A",
+                    grade: originalFormData.employmentPosts[0].grade || "N/A",
+                    location: originalFormData.employmentPosts[0].location || "N/A",
+                    phone: originalFormData.employmentPosts[0].phone || "N/A",
+                }
+                : post
+        ),
+    }));
+    setPhoto(originalPhoto);
     setIsEditingDepartment1(false);
 };
 
 const handleCancelDepartment2 = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
+            index === 1 
+                ? {
+                    ...post,
+                    department: originalFormData.employmentPosts[1].department || "N/A",
+                    unit: originalFormData.employmentPosts[1].unit || "N/A",
+                    jobtitle: originalFormData.employmentPosts[1].jobtitle || "N/A",
+                    position: originalFormData.employmentPosts[1].position || "N/A",
+                    grade: originalFormData.employmentPosts[1].grade || "N/A",
+                    location: originalFormData.employmentPosts[1].location || "N/A",
+                    phone: originalFormData.employmentPosts[1].phone || "N/A",
+                }
+                : post
+        ),
+    }));
+    setPhoto(originalPhoto);
     setIsEditingDepartment2(false);
 };
 
