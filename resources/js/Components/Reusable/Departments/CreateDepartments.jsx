@@ -26,7 +26,7 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl cursor-pointer" onClick={handleClick}>
+      <div className="flex items-center justify-center px-16 py-12 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
         <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
       </div>
       <input
@@ -42,23 +42,50 @@ function Avatar({ src, alt, onImageChange }) {
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex gap-4 self-stretch mt-5 text-neutral-800">
+    <div className="flex self-stretch gap-4 mt-5 text-neutral-800">
       <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
-        <p className="-mt-1 text-sm">{role}</p>
+        {/* <p className="-mt-1 text-sm">{role}</p> */}
       </div>
     </div>
   );
 }
 
-function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate }) {
+function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate, id }) {
   const [departmentName, setDepartmentName] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imageSrc, setImageSrc] = useState(imgSrc);
   const [selectedType, setSelectedType] = useState('');
   const [departmentDescription, setDepartmentDescription] = useState('');
+  const [userData, setUserData] = useState({});
   const csrfToken = useCsrf();
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setUserData((pv) => ({
+        ...pv,
+        ...data,
+        name: data.name,
+        profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [id]);
 
   const handleImageChange = (file) => {
     setImageFile(file);
@@ -72,17 +99,19 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('name', departmentName);
-    formData.append('banner', imageFile);
+    if (imageFile) {
+      formData.append('banner', imageFile);
+    }
     formData.append('description', departmentDescription);
     formData.append('type', selectedType);
-    formData.append('created_by', user.name);
-    formData.append('updated_by', user.name);
+    // formData.append('created_by', user.name);
+    // formData.append('updated_by', user.name);
 
     const options = {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        "X-CSRF-Token": csrfToken 
+        "X-CSRF-Token": csrfToken
       },
       body: formData
     };
@@ -99,6 +128,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department created:', responseData.data);
       onCreate(responseData.data);
+      window.location.reload(); // Refresh the page after creating the department
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
@@ -107,16 +137,16 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
       <Header title={title} />
-      <div className="flex flex-col items-center px-6 mt-3 w-full">
+      <div className="flex flex-col items-center w-full px-6 mt-3">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
         <input
           type="text"
           placeholder="Department name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
-          className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
+          className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-7 text-neutral-800 border-neutral-300"
         />
-        <UserInfo name={user.name} role={user.role} src={user.src} />
+        <UserInfo name={userData.name} role={user.role} src={userData.profileImage} />
         <input
           type="text"
           placeholder={description}
@@ -124,7 +154,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           onChange={(e) => setDepartmentDescription(e.target.value)}
           className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex self-end justify-between gap-5 mt-12 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
@@ -137,7 +167,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   );
 }
 
-export default function CreateDepartments({ onCancel, onCreate }) {
+export default function CreateDepartments({ onCancel, onCreate, userID }) {
   const [user, setUser] = useState({
     name: '',
     role: '',
@@ -164,6 +194,7 @@ export default function CreateDepartments({ onCancel, onCreate }) {
       createText="Create"
       onCancel={onCancel}
       onCreate={onCreate}
+      id={userID}
     />
   );
 }
