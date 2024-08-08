@@ -157,14 +157,13 @@ function Navigation({ userId, departmentID, departmentName }) {
   );
 }
 
-
 function Adminsection({ departmentID, departmentHeader, departmentDescription, userId, departmentBanner }) {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [departmentData, setDepartmentData] = useState({
     id: departmentID,
     name: departmentHeader,
     description: departmentDescription,
-    banner: departmentBanner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg', // Initialize with the banner image URL
+    banner: departmentBanner ? `/storage/${departmentBanner}` : 'assets/departmentsDefault.jpg', // Initialize with the banner image URL
   });
 
   const handleEditClick = (isOpen) => {
@@ -210,12 +209,12 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
 
 export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
-    <div className="flex flex-wrap justify-left py-10 w-[875px] max-md:flex-col max-md:px-0 sm:w-sm">
+    <div className="flex flex-wrap justify-left mx-auto my-20 text-black max-w-7xl gap-y-10">
       <Adminsection
         departmentID={departmentID}
         departmentHeader={departmentHeader}
-        departmentBanner={departmentBanner}
         departmentDescription={departmentDescription}
+        departmentBanner={departmentBanner}
         userId={userId}
       />
     </div>
