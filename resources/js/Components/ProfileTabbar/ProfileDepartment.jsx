@@ -93,25 +93,34 @@ function ProfileDepartment({
         fetchBusinessUnits();
         fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
-        fetchData('/api/department/employment_posts', setPhoneOptions, 'Location');
+        fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
         fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
     }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-    
-        // Update the local form data
+
+        // Find the selected option to get the display value
+        const selectedOption = departmentOptions.find(option => option.id === parseInt(value)) ||
+                               unitOptions.find(option => option.id === parseInt(value)) ||
+                               jobTitleOptions.find(option => option.id === parseInt(value)) ||
+                               gradeOptions.find(option => option.id === parseInt(value));
+
+        const displayValue = selectedOption?.title || selectedOption?.name || selectedOption?.code || '';
+
+        // Update the local form data with the ID
         setLocalFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: value, // Store the ID in the form data
+            [`${name}_display`]: displayValue // Store the display value for rendering
         }));
-    
+
         // Call the parent handler to update the main form data with the specific ID fields
         if (onFormDataChange) {
             const updatedData = {
-                [name]: value,
+                [name]: value, // Send the ID to the parent
             };
-    
+
             // Append the IDs to the updated data
             if (name === 'department') {
                 updatedData.department_id = value;
@@ -126,13 +135,10 @@ function ProfileDepartment({
             } else if (name === 'phone') {
                 updatedData.work_phone = value;
             }
-            
-    
+
             onFormDataChange(updatedData);
         }
     };
-    
-    
 
     const renderField = (label, name, value, options, editable = true, onChangeHandler = handleInputChange) => (
         <tr key={name}>
@@ -147,21 +153,51 @@ function ProfileDepartment({
                         ref={inputRef}
                         style={{ maxHeight: '150px' }} // Set max height for scrollable options
                     >
-                        <option value={value}>{value}</option> {/* Display the current value as an option */}
+                        <option value="">{localFormData[`${name}_display`] || value}</option> {/* Display the current value as an option */}
                         {options && options.map((option, index) => (
-                            <option key={index} value={option?.id || ''}>{option?.title || option?.name || '' || option?.code || ''}</option>
+                            <option key={index} value={option?.id || ''}>
+                                {option?.title || option?.name || option?.code || ''}
+                            </option>
                         ))}
                     </select>
                 ) : (
                     <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
-                        {value}
+                        {localFormData[`${name}_display`] || value}
                     </div>
                 )}
             </td>
         </tr>
     );
 
-    console.log("LOCALDATA", localFormData);
+    const handleSubmit = () => {
+        // Prepare the data for submission, using the IDs from localFormData
+        const submissionData = {
+            department_id: localFormData.department,
+            business_unit_id: localFormData.unit,
+            business_post_id: localFormData.jobtitle,
+            business_grade_id: localFormData.grade,
+            location: localFormData.location,
+            work_phone: localFormData.phone,
+        };
+
+        // Call your API to submit the data
+        fetch('/your-api-endpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+            },
+            body: JSON.stringify(submissionData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the API
+            console.log("Submission successful:", data);
+        })
+        .catch(error => {
+            console.error('Error submitting the form:', error);
+        });
+    };
 
     return (
         <div className="flex-auto my-auto p-4">
