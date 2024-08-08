@@ -2,42 +2,28 @@ import * as React from "react";
 
 function Avatar({ src, alt, isSelected, onClick, tag }) {
 
-  // let source=null
+    let source=null
 
-  // console.log('tag', tag);
+  console.log('tag', tag);
     
-  //   if (tag){
-  //     source = `/assets/${src}`
-  //     console.log('in if statement');
-  //   } else {
-  //     console.log('in else statement');
-  //     console.log('src in else statement:', src)
-  //     source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-  //     ? src 
-  //     : src.startsWith('assets/') 
-  //     ?  `/${src}`
-  //     : src;
-  //   }
-  //   console.log("SOURCE", source);
-
-  let source = null;
-
-  if (src.startsWith('assets/')) {
-    // If src already starts with 'assets/', map it to '/avatar/{src}'
-    source = `/avatar/${src}`;
-  } else {
-    // If src doesn't start with 'assets/', check if it's a placeholder or not
-    source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+    if (tag){
+      source = `/avatar/${src}`
+      console.log('in if statement');
+    } else {
+      console.log('in else statement');
+      console.log('src in else statement:', src)
+      source = src === '/assets/dummyStaffPlaceHolder.jpg' 
       ? src 
-      : `/assets/${src}`;
-  }
-  
-  console.log("SOURCE", source);
-  
+      : src.startsWith('avatar/') 
+      ?  `/storage/${src}`
+      : src;
+    }
+    console.log("SOURCE", source);
+
   return (
     <img
       loading="lazy"
-      src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
+      src={src}
       alt={alt}
       className={`shrink-0 aspect-square w-[94px] cursor-pointer hover:scale-125 transition-transform duration-300 ${isSelected ? 'border-4 border-blue-500' : ''}`}
       onClick={onClick}
@@ -49,21 +35,21 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
   const [selectedAvatar, setSelectedAvatar] = React.useState(null);
 
   const avatars = [
-    { src: "Avatar 1.png", alt: "Avatar 1" },
-    { src: "Avatar 2.png", alt: "Avatar 2" },
-    { src: "Avatar 3.png", alt: "Avatar 3" },
-    { src: "Avatar 4.png", alt: "Avatar 4" },
-    { src: "Avatar 5.png", alt: "Avatar 5" },
-    { src: "Avatar 6.png", alt: "Avatar 6" },
-    { src: "Avatar 7.png", alt: "Avatar 7" },
-    { src: "Avatar 8.png", alt: "Avatar 8" },
-    { src: "Avatar 9.png", alt: "Avatar 9" },
-    { src: "Avatar 10.png", alt: "Avatar 10" },
-    { src: "Avatar 11.png", alt: "Avatar 11" },
-    { src: "Avatar 12.png", alt: "Avatar 12" },
-    { src: "Avatar 13.png", alt: "Avatar 13" },
-    { src: "Avatar 14.png", alt: "Avatar 14" },
-    { src: "Avatar 15.png", alt: "Avatar 15" },
+    { src: "assets/Avatar 1.png", alt: "Avatar 1" },
+    { src: "assets/Avatar 2.png", alt: "Avatar 2" },
+    { src: "assets/Avatar 3.png", alt: "Avatar 3" },
+    { src: "assets/Avatar 4.png", alt: "Avatar 4" },
+    { src: "assets/Avatar 5.png", alt: "Avatar 5" },
+    { src: "assets/Avatar 6.png", alt: "Avatar 6" },
+    { src: "assets/Avatar 7.png", alt: "Avatar 7" },
+    { src: "assets/Avatar 8.png", alt: "Avatar 8" },
+    { src: "assets/Avatar 9.png", alt: "Avatar 9" },
+    { src: "assets/Avatar 10.png", alt: "Avatar 10" },
+    { src: "assets/Avatar 11.png", alt: "Avatar 11" },
+    { src: "assets/Avatar 12.png", alt: "Avatar 12" },
+    { src: "assets/Avatar 13.png", alt: "Avatar 13" },
+    { src: "assets/Avatar 14.png", alt: "Avatar 14" },
+    { src: "assets/Avatar 15.png", alt: "Avatar 15" },
   ];
 
   const handleAvatarClick = (avatar) => {
@@ -113,7 +99,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
       onClose(); // Close the popup
     } catch (error) {
       console.error('Error updating avatar:', error);
-      // window.location.reload();
+      window.location.reload();
     }
   };
 
