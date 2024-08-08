@@ -140,7 +140,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
-          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-13" />
+          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-[35px]" />
         </button>
         {activePopupId === id && (
           <div ref={popupRef}>

@@ -20,7 +20,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [workPhoneNumber, setWorkPhoneNumber] = useState(''); 
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [titleError, setTitleError] = useState(false); 
+    const [titleError, setTitleError] = useState(false);
+    const [gradeError, setGradeError] = useState(false);
+    const [grades, setGrades] = useState([]);
+    const [selectedGrade, setSelectedGrade] = useState('');
+    const [selectedGradeId, setSelectedGradeId] = useState('');
     const csrfToken = useCsrf();
 
     useEffect(() => {
@@ -42,6 +46,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     useEffect(() => {
         fetchTitles('/api/department/business_posts?page=1');
         fetchUnits(`/api/department/business_units?department_id=${departmentId}&page=1`);
+        fetchGrades('/api/department/business_grades?page=1');
     }, [departmentId]);
 
     useEffect(() => {
@@ -159,6 +164,36 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
     };
 
+    const fetchGrades = async (url) => {
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: { Accept: 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            const gradeData = data.data.data.map((item) => ({
+                id: item.id,
+                grade: item.code,
+            }));
+
+            console.log('gradeData:', gradeData);
+
+            setGrades((prevGrades) => {
+                const allGrades = [...prevGrades, ...gradeData];
+                return allGrades.sort((a, b) => a.grade.localeCompare(b.grade));
+            });
+
+            if (data.data.next_page_url) {
+                fetchGrades(data.data.next_page_url);
+            }
+        } catch (error) {
+            console.error("Error fetching grades:", error);
+        }
+    };
+
     const handleSelectPerson = (person) => {
         if (currentMembers.includes(person.id)) {
             setError('This user is already in the department.');
@@ -179,15 +214,32 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         setWorkPhoneNumber('');
         setError('');
         setSuccess(''); 
-        setTitleError(false); 
+        setTitleError(false);
+        setGradeError(false);
+        setSelectedGrade('');
+        setSelectedGradeId(''); 
     };
 
     const handleAdd = async () => {
+        
+        if (!title && !selectedPerson.employment_post && !selectedGrade) {
+            setGradeError(true);
+            setTitleError(true);
+            return;
+        }
+
         if (!title) {
             setTitleError(true);
             return;
         }
         setTitleError(false);
+
+        if (!selectedPerson.employment_post && !selectedGrade) {
+            setGradeError(true);
+            return;
+        }
+        setGradeError(false);
+
 
         const url = '/api/department/employment_posts';
         const options = {
@@ -203,11 +255,13 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         const body = {
             department_id: String(departmentId),
             business_post_id: String(businessPostId),
-            business_grade_id: String(selectedPerson.employment_post.business_grade_id),
+            business_grade_id: selectedPerson.employment_post ? String(selectedPerson.employment_post.business_grade_id) : String(selectedGradeId),
             business_scheme_id: "1",
             user_id: String(userId),
             order: order,
         };
+
+        console.log('selected Person', selectedPerson.employment_post);
 
         // Conditionally add optional fields
         if (unitId !== '') {
@@ -346,6 +400,32 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         </MenuItems>
                                     </Menu>
                                 </div>
+                                {!selectedPerson.employment_post && (
+                                    <div className="mb-4">
+                                        <label className="block font-bold text-gray-700">Grade</label>
+                                        <Menu as="div" className="relative inline-block w-full text-left">
+                                            <MenuButton className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border px-3 py-2 ${gradeError ? 'border-red-500' : 'border-gray-300'} text-gray-700 hover:bg-gray-50`}>
+                                                {selectedGrade || "Select Grade"}
+                                                <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
+                                            </MenuButton>
+                                            <MenuItems className="absolute z-10 w-full mt-2 overflow-y-auto origin-top-right bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none custom-scrollbar">
+                                                {grades.map((grade) => (
+                                                    <MenuItem key={grade.id} onClick={() => { setSelectedGrade(grade.grade); setSelectedGradeId(grade.id); setGradeError(false); }}>
+                                                        {({ active }) => (
+                                                            <a
+                                                                href="#"
+                                                                className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}
+                                                            >
+                                                                {grade.grade}
+                                                            </a>
+                                                        )}
+                                                    </MenuItem>
+                                                ))}
+                                            </MenuItems>
+                                        </Menu>
+                                        {gradeError && <div className="mt-2 text-red-500">You must select a grade</div>}
+                                    </div>
+                                )}
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Location</label>
                                     <input
@@ -355,7 +435,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         className="w-full p-2 border border-gray-300 rounded-full"
                                     />
                                 </div>
-                                <div className="mb-4"> {/* New input field for work phone number */}
+                                <div className="mb-4">
                                     <label className="block font-bold text-gray-700">Work Phone Number</label>
                                     <input
                                         type="text"

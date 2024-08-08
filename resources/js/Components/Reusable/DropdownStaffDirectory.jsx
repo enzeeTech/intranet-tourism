@@ -6,7 +6,7 @@ import SearchPopup from './AddMemberPopup';
 import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
@@ -120,6 +120,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
           departmentId={selectedDepartment.id}
           people={people}
+          onNewMemberAdded={onNewMemberAdded}
         />
       )}
     </div>
