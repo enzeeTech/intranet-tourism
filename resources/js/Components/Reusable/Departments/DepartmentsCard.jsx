@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
-import deleteIcon from '../../../../../public/assets/deleteIcon.png';
+import deleteIcon from '../../../../../public/assets/deleteicon.svg';
 
 const DepartmentsCard = ({ name, imageUrl, onDeleteClick, departmentID }) => {
   const threeDotButtonRef = useRef(null);

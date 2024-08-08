@@ -95,7 +95,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   };
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center px-6 mt-3 w-full">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
