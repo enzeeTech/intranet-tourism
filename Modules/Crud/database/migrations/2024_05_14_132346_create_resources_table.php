@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resources', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignId('user_id')->constrained();
-            $table->uuidMorphs('attachable');
-            $table->string('for')->nullable()->default('attachment');
-            $table->string('path');
-            $table->string('extension');
-            $table->string('mime_type');
-            $table->string('filesize');
-            $table->string('duration')->nullable();
-            $table->json('metadata');
-            $table->auditable();
-        });
+        // Schema::create('resources', function (Blueprint $table) {
+        //     $table->uuid('id')->primary();
+        //     $table->foreignId('user_id')->constrained();
+        //     $table->uuidMorphs('attachable');
+        //     $table->string('for')->nullable()->default('attachment');
+        //     $table->string('path');
+        //     $table->string('extension');
+        //     $table->string('mime_type');
+        //     $table->string('filesize');
+        //     $table->string('duration')->nullable();
+        //     $table->json('metadata');
+        //     $table->auditable();
+        // });
 
         Schema::create('resource_access', function (Blueprint $table) {
             $table->uuid('id')->primary();

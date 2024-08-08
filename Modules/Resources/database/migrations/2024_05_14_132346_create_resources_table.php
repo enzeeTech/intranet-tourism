@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->uuidMorphs('attachable');
             $table->string('for')->nullable()->default('attachment');
-            $table->string('path');
-            $table->string('extension');
-            $table->string('mime_type');
-            $table->string('filesize');
+            $table->string('path')->nullable();
+            $table->string('extension')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->string('filesize')->nullable();
             $table->string('duration')->nullable();
-            $table->json('metadata');
+            $table->json('metadata')->nullable();
             $table->auditable();
         });
 
