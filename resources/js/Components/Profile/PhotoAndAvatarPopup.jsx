@@ -1,29 +1,15 @@
 import * as React from "react";
 
-function Avatar({ src, alt, isSelected, onClick, tag }) {
+function Avatar({ src, alt, isSelected, onClick }) {
+  // Ensure the path always starts with 'assets/'
+  let source = `/assets/${src.replace(/^user\//, '').replace(/^assets\//, '')}`;
 
-  let source=null
-
-  console.log('tag', tag);
-    
-    if (tag){
-      source = `/assets/${src}`
-      console.log('in if statement');
-    } else {
-      console.log('in else statement');
-      console.log('src in else statement:', src)
-      source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-      ? src 
-      : src.startsWith('assets/') 
-      ?  `/${src}`
-      : src;
-    }
-    console.log("SOURCE", source);
+  console.log("SOURCE", source); // This will output: /assets/Avatar%204.png
 
   return (
     <img
       loading="lazy"
-      src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
+      src={source ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
       alt={alt}
       className={`shrink-0 aspect-square w-[94px] cursor-pointer hover:scale-125 transition-transform duration-300 ${isSelected ? 'border-4 border-blue-500' : ''}`}
       onClick={onClick}
@@ -35,25 +21,27 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
   const [selectedAvatar, setSelectedAvatar] = React.useState(null);
 
   const avatars = [
-    { src: "assets/Avatar 1.png", alt: "Avatar 1" },
-    { src: "assets/Avatar 2.png", alt: "Avatar 2" },
-    { src: "assets/Avatar 3.png", alt: "Avatar 3" },
-    { src: "assets/Avatar 4.png", alt: "Avatar 4" },
-    { src: "assets/Avatar 5.png", alt: "Avatar 5" },
-    { src: "assets/Avatar 6.png", alt: "Avatar 6" },
-    { src: "assets/Avatar 7.png", alt: "Avatar 7" },
-    { src: "assets/Avatar 8.png", alt: "Avatar 8" },
-    { src: "assets/Avatar 9.png", alt: "Avatar 9" },
-    { src: "assets/Avatar 10.png", alt: "Avatar 10" },
-    { src: "assets/Avatar 11.png", alt: "Avatar 11" },
-    { src: "assets/Avatar 12.png", alt: "Avatar 12" },
-    { src: "assets/Avatar 13.png", alt: "Avatar 13" },
-    { src: "assets/Avatar 14.png", alt: "Avatar 14" },
-    { src: "assets/Avatar 15.png", alt: "Avatar 15" },
+    { src: "Avatar 1.png", alt: "Avatar 1" },
+    { src: "Avatar 2.png", alt: "Avatar 2" },
+    { src: "Avatar 3.png", alt: "Avatar 3" },
+    { src: "Avatar 4.png", alt: "Avatar 4" },
+    { src: "Avatar 5.png", alt: "Avatar 5" },
+    { src: "Avatar 6.png", alt: "Avatar 6" },
+    { src: "Avatar 7.png", alt: "Avatar 7" },
+    { src: "Avatar 8.png", alt: "Avatar 8" },
+    { src: "Avatar 9.png", alt: "Avatar 9" },
+    { src: "Avatar 10.png", alt: "Avatar 10" },
+    { src: "Avatar 11.png", alt: "Avatar 11" },
+    { src: "Avatar 12.png", alt: "Avatar 12" },
+    { src: "Avatar 13.png", alt: "Avatar 13" },
+    { src: "Avatar 14.png", alt: "Avatar 14" },
+    { src: "Avatar 15.png", alt: "Avatar 15" },
   ];
 
   const handleAvatarClick = (avatar) => {
-    setSelectedAvatar(avatar.src);
+    // Ensure the selected avatar is always correctly prefixed
+    const cleanedSrc = `/assets/${avatar.src.replace(/^user\//, '').replace(/^assets\//, '')}`;
+    setSelectedAvatar(cleanedSrc);
   };
 
   const handleSaveClick = async () => {
@@ -117,7 +105,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
                   <Avatar
                     src={avatar.src}
                     alt={avatar.alt}
-                    isSelected={selectedAvatar === avatar.src}
+                    isSelected={selectedAvatar === `/assets/${avatar.src.replace(/^user\//, '').replace(/^assets\//, '')}`}
                     onClick={() => handleAvatarClick(avatar)}
                   />
                 </div>

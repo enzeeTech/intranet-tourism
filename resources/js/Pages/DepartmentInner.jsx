@@ -4,7 +4,7 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import Adminwall from '../Components/Adminwall';
-import EditDepartments from '../Components/Reusable/Departments/EditDepartments'; // Import EditDepartments component
+import EditDepartments from '../Components/Reusable/Departments/EditDepartments';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
@@ -15,7 +15,7 @@ const DepartmentInner = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
 
   const getDepartmentIdFromQuery = () => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(window.location.search);
     return params.get('departmentId');
   };
 
@@ -24,7 +24,6 @@ const DepartmentInner = () => {
       const response = await fetch(`/api/department/departments/${departmentId}`);
       const result = await response.json();
       if (result.data) {
-        console.log("DATA", result.data);
         setDepartmentData(result.data);
       }
     } catch (error) {
@@ -51,17 +50,19 @@ const DepartmentInner = () => {
     }
   }, []);
 
-  console.log("UPDATED_DATA", departmentData);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Example>
-      <main className="xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 w-full ml-4 mr-4 lg:ml-10 lg:mr-24 relative bottom-10"> 
+      <main className="xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 w-full ml-4 mr-4 lg:ml-10 lg:mr-24 relative bottom-10">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
           <Adminwall
             departmentID={getDepartmentIdFromQuery()}
             departmentHeader={departmentData?.name}
             departmentDescription={departmentData?.description}
-            departmentBanner={departmentData?.banner}
+            departmentBanner={departmentData?.banner} // Pass banner data to Adminwall
             userId={id}
             onEditClick={handleEditClick} // Add edit button click handler
           />
@@ -81,7 +82,6 @@ const DepartmentInner = () => {
           <PageTitle title="Department" />
         </div>
         <hr className="file-directory-underline" />
-
         <div>
           <FeaturedEvents />
           <WhosOnline />

@@ -226,6 +226,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 width: '80px',
                                 padding: '10px 20px',
                                 cursor: 'pointer',
+                                marginRight: '16px',
                             }}
                         >
                             Yes

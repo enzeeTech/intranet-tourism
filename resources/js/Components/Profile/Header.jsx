@@ -9,27 +9,25 @@ import getCroppedImg from './cropImage';
 function ProfileImage({ name, src, alt, className, rounded, tag }) {
   // console.log("SRC", src);
 
-  let source=null
+  let source = null;
 
-  console.log('tag', tag);
-    
-    if (tag){
-      source = `/avatar/${src}`
-      console.log('in if statement');
-    } else {
-      console.log('in else statement');
-      console.log('src in else statement:', src)
-      source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+  if (src.startsWith('avatar/')) {
+    // If src already starts with 'avatar/', map it directly
+    source = `/storage/${src}`;
+  } else {
+    // If src doesn't start with 'avatar/', check if it's a placeholder or not
+    source = src === '/assets/dummyStaffPlaceHolder.jpg' 
       ? src 
-      : src.startsWith('avatar/') 
-      ?  `/storage/${src}`
-      :  `/avatar/${src}`;
-    }
-    console.log("SOURCE", source);
+      : `/avatar/${src}`;
+  }
+  
+  console.log("SOURCE", source);
+  
     
   return (
     <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-24 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className} max-md:w-32 max-md:mt-10`}>
       <img
+        // src={`/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`}
         src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
         alt={alt}
         className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-32 max-md:h-32 max-md:bottom-0`}
