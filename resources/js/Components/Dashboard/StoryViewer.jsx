@@ -144,7 +144,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 style={{ width: '30px', height: '30px', marginTop: '-10px' }}
                             />
                         </button>
-                        <button
+                        {/* <button
                             style={{
                                 border: 'none',
                                 background: 'none',
@@ -157,6 +157,9 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 alt="Close icon"
                                 style={{ width: '28px', height: '28px', marginTop: '-10px', marginLeft: '10px' }}
                             />
+                        </button> */}
+                        <button onClick={onClose} className="modal-close-button pt-3 px-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
                     </div>
                     <Stories
@@ -223,6 +226,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 width: '80px',
                                 padding: '10px 20px',
                                 cursor: 'pointer',
+                                marginRight: '16px',
                             }}
                         >
                             Yes
