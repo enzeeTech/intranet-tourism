@@ -225,15 +225,9 @@ const Popup = ({ isOpen, onClose, children }) => {
                 backgroundColor: 'rgba(0, 0, 0, 0.75)',
             },
         }}>
-            <button onClick={onClose} style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                background: 'none',
-                border: 'none',
-                fontSize: '16px',
-                cursor: 'pointer',
-            }}>X</button>
+            <button onClick={onClose} className="modal-close-button mt-2 mr-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                        </button>
             {children}
         </Modal>
     );

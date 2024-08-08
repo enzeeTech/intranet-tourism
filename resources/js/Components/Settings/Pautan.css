@@ -4,7 +4,7 @@ table {
 }
 
 .label-column {
-  width: 40%; /* Adjust this value to make the label column wider */
+  width: 30%; /* Adjust this value to make the label column wider */
 }
 
 .url-column {
@@ -16,7 +16,7 @@ table {
 }
 
 .edit-column, .delete-column {
-  width: 10%; /* Adjust this value to make the order column narrower */
+  width: 15%; /* Adjust this value to make the order column narrower */
   text-align: center; /* Center align the content */
 }
 

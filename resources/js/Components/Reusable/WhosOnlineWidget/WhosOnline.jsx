@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UserAvatar from './UserAvatar';
 import '../css/WhosOnline.css';
-import dummyProfilePic from '../../../../../public/assets/dummyProfilePic.png';
+import dummyProfilePic from '../../../../../public/assets/dummyProfilePic.png'
 import arrowRight from '../../../../../public/assets/viewAllArrow.png';
 import "@fontsource/nunito-sans"; // Defaults to weight 400
 import "@fontsource/nunito-sans/400.css"; // Specify weight

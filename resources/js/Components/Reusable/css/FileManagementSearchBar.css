@@ -3,7 +3,7 @@
     flex-direction: column;
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); */
     padding: 16px;
     margin-bottom: 20px;
   }
@@ -16,7 +16,7 @@
   
   .file-search-bar {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     margin-bottom: 5px;
   }
   

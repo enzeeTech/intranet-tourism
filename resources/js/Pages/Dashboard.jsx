@@ -28,7 +28,7 @@ const Dashboard = () => {
               <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
               <Filter className="mr-10" />
               <div className="mb-20"></div>
-              <OutputData polls={polls} filterType={null} />
+              <OutputData loggedInUserId={id} polls={polls} filterType={null} />
             </div>
           </main>
 

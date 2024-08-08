@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePage } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
+import EditPost from './EditPost';
 import './index.css'
 
 function Avatar({ src, alt }) {
@@ -71,10 +72,14 @@ function FeedbackForm() {
   );
 }
 
-function OutputData({ polls, filterType, filterId, userId }) {
+function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState({});
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentEditPost, setCurrentEditPost] = useState(null);
+  
+
   
   useEffect(() => {
     async function fetchData() {
@@ -142,12 +147,19 @@ function OutputData({ polls, filterType, filterId, userId }) {
       return false;
     });
   }
+
+  console.log("USER_ID", userId);
+
   
   const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
+
 
   // Reverse the order of posts to display latest first
   const reversedUserPosts = userId ? [...userPosts].reverse() : [];
   const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...filteredPostData].reverse();
+
+  console.log("userPosts", reversedUserPosts);
+
 
   const togglePopup = (index) => {
     setIsPopupOpen((prevState) => ({
@@ -163,6 +175,15 @@ function OutputData({ polls, filterType, filterId, userId }) {
   if (loading) {
     return <div>Loading...</div>;
   }
+
+
+  const handleEdit = (post) => {
+    console.log("EDITTING...");
+    setCurrentEditPost(post);
+    setIsEditModalOpen(true);
+  };
+
+
 
 
 
@@ -199,7 +220,18 @@ function OutputData({ polls, filterType, filterId, userId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" />
+                    {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
+                    <img 
+  loading="lazy" 
+  src={
+    post.userProfile?.profile.image 
+      ? `/storage/${post.userProfile.profile.image}` 
+      : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+  } 
+  alt={post.user.name} 
+  className="shrink-0 aspect-square w-[53px] rounded-image" 
+/>
+
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
@@ -268,7 +300,18 @@ function OutputData({ polls, filterType, filterId, userId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" />
+                    {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
+                    <img 
+  loading="lazy" 
+  src={
+    post.userProfile?.profile.image 
+      ? `/storage/${post.userProfile.profile.image}` 
+      : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+  } 
+  alt={post.user.name} 
+  className="shrink-0 aspect-square w-[53px] rounded-image" 
+/>
+
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                       <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
@@ -289,7 +332,7 @@ function OutputData({ polls, filterType, filterId, userId }) {
               </div>
               {isPopupOpen[index] && (
                 <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10 ">
-                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
+                  <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(post)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
                   <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
                   <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
                   <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
@@ -329,6 +372,14 @@ function OutputData({ polls, filterType, filterId, userId }) {
           </article>
         </div>
       ))}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50" onClick={() => setIsEditModalOpen(false)}></div>
+          <div className="relative bg-white p-6 rounded-lg shadow-lg w-96">
+            <EditPost post={currentEditPost} loggedInUserId={loggedInUserId} onClose={() => setIsEditModalOpen(false)} />
+          </div>
+        </div>
+      )}
     </>
   );
 }

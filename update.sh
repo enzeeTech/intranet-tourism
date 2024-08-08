@@ -1,7 +1,8 @@
 #!/bin/bash
 
-php artisan optimize &&
-    composer install &&
+php artisan optimize:clear &&
+    php artisan config:cache &&
+    composer install --no-dev --prefer-dist &&
     php artisan storage:link &&
     npm install &&
     npm run build &&
