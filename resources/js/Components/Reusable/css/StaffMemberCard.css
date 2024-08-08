@@ -47,7 +47,7 @@
 }
 
 .staff-member-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   font-family: 'Nunito Sans';
   white-space: nowrap;
@@ -58,12 +58,12 @@
 
 .staff-member-role {
   color: #202224;
-  font-size: 10px;
+  font-size: 12px;
   font-family: 'Nunito Sans';
 }
 
 .staff-member-status {
-  font-size: 8px;
+  font-size: 10px;
   font-family: 'Nunito Sans';
 }
 

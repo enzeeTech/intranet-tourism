@@ -9,26 +9,26 @@ const ConfirmationPopup = ({ selectedPerson, onConfirm, onCancel }) => {
     const departmentTitle = selectedPerson.employment_post?.department?.name || 'unknown department';
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-3xl pt-7 px-6 w-[500px] shadow-lg">
-                <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Confirm Action</h1>
-                <p>This user currently exists in <b>"{departmentTitle}"</b>.</p>
-                <p>Do you want to remove this user from <b>"{departmentTitle}"</b>?</p>
+                <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Confirm Action</h1>
+                <p>This user currently exists in <b>{departmentTitle}</b>.</p>
+                <p>Do you want to remove this user from <b>{departmentTitle}</b>?</p>
                 <div className="flex flex-col mt-4">
                     <button
-                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
+                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
                         onClick={() => onConfirm('remove')}
                     >
                         Yes, Remove
                     </button>
                     <button
-                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700"
+                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
                         onClick={() => onConfirm('keep')}
                     >
                         No, Keep & Add
                     </button>
                     <button
-                        className="w-full px-4 py-2 mb-4 font-bold text-white bg-gray-500 rounded-full hover:bg-gray-700"
+                        className="w-full px-4 py-2 mb-4 font-bold text-gray-400 border-2 border-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
                         onClick={onCancel}
                     >
                         Cancel
