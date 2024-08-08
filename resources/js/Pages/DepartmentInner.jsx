@@ -9,7 +9,7 @@ import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
 
 const DepartmentInner = () => {
-  const { id } = usePage().props; // Retrieve the user_id from the Inertia view
+  const { id } = usePage().props;
   const [departmentData, setDepartmentData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -62,9 +62,9 @@ const DepartmentInner = () => {
             departmentID={getDepartmentIdFromQuery()}
             departmentHeader={departmentData?.name}
             departmentDescription={departmentData?.description}
-            departmentBanner={departmentData?.banner} // Pass banner data to Adminwall
+            departmentBanner={departmentData?.banner}
             userId={id}
-            onEditClick={handleEditClick} // Add edit button click handler
+            onEditClick={handleEditClick}
           />
         </div>
       </main>
