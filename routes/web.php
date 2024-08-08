@@ -4,6 +4,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\communityPost;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentOrdering;
 use App\Http\Controllers\departments;
 use App\Http\Controllers\fileManagement;
 use App\Http\Controllers\NotificationController;
@@ -51,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/{id}', [ProfileController::class, 'show'])->name('UserDetail');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/ordering', [OrderingController::class, 'index'])->name('ordering');
+    Route::get('/orderingDepartments', [DepartmentOrdering::class, 'index'])->name('orderingDepartments');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
