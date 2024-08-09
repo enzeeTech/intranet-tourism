@@ -1,5 +1,7 @@
 import React from 'react';
 import './Roles.css';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const people = [
   {
@@ -114,7 +116,54 @@ export default function Roles() {
                         Active
                       </span>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">{person.role}</td>
+                    <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                      <Menu as="div" className="relative inline-block text-left">
+                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                          {person.role}
+                          <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-gray-400" />
+                        </MenuButton>
+                        <MenuItems
+                          className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
+                          <MenuItem>
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={`${
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                                } block px-4 py-2 text-sm`}
+                              >
+                                Super Admin
+                              </a>
+                            )}
+                          </MenuItem>
+                          <MenuItem>
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={`${
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                                } block px-4 py-2 text-sm`}
+                              >
+                                Admin
+                              </a>
+                            )}
+                          </MenuItem>
+                          <MenuItem>
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={`${
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                                } block px-4 py-2 text-sm`}
+                              >
+                                User
+                              </a>
+                            )}
+                          </MenuItem>
+                        </MenuItems>
+                      </Menu>
+                    </td>
                     <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <a href="#" className="text-indigo-600 hover:text-indigo-900">
                         Edit<span className="sr-only">, {person.name}</span>
