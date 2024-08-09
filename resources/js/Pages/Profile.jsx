@@ -408,7 +408,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost.title || ''}
+                                                        position={employmentPost.position || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}

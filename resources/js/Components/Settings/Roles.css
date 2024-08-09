@@ -1,0 +1,6 @@
+.box-container {
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding inside the box */
+  background-color: white; /* Light background color */
+}

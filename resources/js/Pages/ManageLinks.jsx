@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid';
-import '../Components/Settings/Pautan.css';
+import '../Components/Settings/ManageLinks.css';
 import { useCsrf } from "@/composables";
 import Example from '@/Layouts/DashboardLayoutNew'; // Assuming Example is a layout component
 
