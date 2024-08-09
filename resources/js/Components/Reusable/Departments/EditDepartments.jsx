@@ -15,10 +15,18 @@ function Avatar({ src, alt, onImageChange }) {
     document.getElementById('avatarInput').click();
   };
 
+  let banner = null;
+
+  if (src.startsWith('banner/')) {
+    banner = `/storage/${src}`;
+  } else {
+    banner = src;
+  }
+
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-16 py-12 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[200px]" />
       </div>
       <input
         type="file"
@@ -43,6 +51,8 @@ function Card({
   onCancel, 
   onSave
 }) {
+
+  console.log('Department banner in edit departments:', department.banner);
   const [departmentName, setDepartmentName] = useState(department?.name || '');
   const [imageSrc, setImageSrc] = useState(department?.banner || imgSrc); 
   const [selectedType, setSelectedType] = useState(department?.type || '');
@@ -153,13 +163,13 @@ function Card({
           onChange={(e) => setDepartmentName(e.target.value)}
           className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-7 text-neutral-800 border-neutral-300"
         />
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
         <input
           type="text"
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="self-stretch border border-solid rounded-md mt-3 text-neutral-800 border-neutral-300"
+          className="self-stretch mt-3 border border-solid rounded-md text-neutral-800 border-neutral-300"
         />
         <div className="flex mt-4 space-x-4">
           <button
