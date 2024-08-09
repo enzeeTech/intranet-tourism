@@ -127,7 +127,16 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         <div style={{ display: 'flex', flex: '1', marginBottom: '5px' }}>
                             <img
                                 // src={`/storage/${user.src}`}
-                                src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.name}`}
+                                // src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.fullName}`}
+                                src={
+                                    !user.src // check if src variable is empty
+                                      ? `https://ui-users.com/api/?background=0D8ABC&color=fff&name=${user.fullName}&rounded=true` // if src is empty = src equals to this path
+                                      : user.src === '/assets/dummyStaffPlaceHolder.jpg' //if user.src is not empty, check id user.src is equal to this path
+                                      ? user.src // if it is equal to the path, then src = user.src
+                                      : user.src.startsWith('user/') // if not equal, then check if user.src starts with user/
+                                      ? `/storage/${user.src}` // if yes, then src = storage/{user.src}
+                                      : `/storage/avatar/${user.src}`// If no then then src = 
+                                  }
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
@@ -144,7 +153,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 style={{ width: '30px', height: '30px', marginTop: '-10px' }}
                             />
                         </button>
-                        {/* <button
+                        <button
                             style={{
                                 border: 'none',
                                 background: 'none',
@@ -157,10 +166,10 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 alt="Close icon"
                                 style={{ width: '28px', height: '28px', marginTop: '-10px', marginLeft: '10px' }}
                             />
-                        </button> */}
-                        <button onClick={onClose} className="modal-close-button pt-3 px-2">
-                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                         </button>
+                        {/* <button onClick={onClose} className="modal-close-button pt-3 px-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                        </button> */}
                     </div>
                     <Stories
                         stories={stories.map(story => ({
