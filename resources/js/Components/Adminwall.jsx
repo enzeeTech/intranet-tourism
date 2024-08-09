@@ -45,11 +45,22 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
     }
   };
 
+  console.log(departmentBanner);
+
+  let banner = null;
+
+ if (departmentBanner.startsWith('banner/')) {
+    banner = `/storage/${departmentBanner}`;
+  } else {
+    banner = departmentBanner;
+  }
+
+
   return (
     <header className="flex overflow-hidden relative flex-col px-11 py-9 w-full w-[875px] text-white max-md:px-5 max-md:max-w-full rounded-t-xl">
       <img
         loading="lazy"
-        src={departmentBanner || "https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"}
+        src={banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"}
         className="absolute inset-0 object-cover size-full"
         alt=""
       />
@@ -159,13 +170,31 @@ function Navigation({ userId, departmentID, departmentName }) {
 
 function Adminsection({ departmentID, departmentHeader, departmentDescription, userId, departmentBanner }) {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-  const [departmentData, setDepartmentData] = useState({
-    id: departmentID,
-    name: departmentHeader,
-    description: departmentDescription,
-    banner: departmentBanner ? `/storage/${departmentBanner}` : 'assets/departmentsDefault.jpg', // Initialize with the banner image URL
-  });
+  const [departmentData, setDepartmentData] = useState(null);
 
+  useEffect(() => {
+    // Fetch the department data here
+    const fetchDepartmentData = async () => {
+      try {
+        const response = await fetch(`/api/department/departments/${departmentID}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch department data');
+        }
+
+        const department = await response.json();
+        setDepartmentData(department.data);
+      } catch (error) {
+        console.error('Error fetching department data:', error);
+      }
+    };
+
+    fetchDepartmentData();
+  }
+  , [departmentID]);
+
+  console.log("DEPARTMENT BANNER", departmentBanner);
+  
   const handleEditClick = (isOpen) => {
     setIsEditPopupOpen(isOpen);
   };
@@ -189,7 +218,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
       <HeaderSection
         departmentID={departmentID}
         departmentHeader={departmentHeader}
-        departmentBanner={departmentData.banner} // Use departmentData.banner here
+        departmentBanner={departmentBanner} // Use departmentData.banner here
         departmentDescription={departmentDescription}
         onEditClick={handleEditClick}
       />
@@ -209,7 +238,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
 
 export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
-    <div className="flex flex-wrap justify-left mx-auto my-20 text-black max-w-7xl gap-y-10">
+    <div className="flex flex-wrap mx-auto my-20 text-black justify-left max-w-7xl gap-y-10">
       <Adminsection
         departmentID={departmentID}
         departmentHeader={departmentHeader}

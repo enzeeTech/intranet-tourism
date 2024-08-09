@@ -324,7 +324,7 @@ function DpMembers() {
               key={index}
               id={member.user_id}
               employment_post_id={member.employment_post_id}
-              imageUrl={member.image}
+              imageUrl={member.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
               name={member.name}
               title={member.business_post_title}
               isActive={member.is_active}
