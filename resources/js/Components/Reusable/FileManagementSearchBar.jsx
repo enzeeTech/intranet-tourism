@@ -3,10 +3,13 @@ import searchIcon from '../../../../public/assets/searchStaffButton.png';
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
-const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
+const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [file, setFile] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+
+  console.log("userId", userId);
+  
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -22,7 +25,46 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   };
 
   const handleFileUpload = async () => {
-    // Handle file upload logic here...
+    if (!file) return;
+    const attachableType = 'exampleType'; // Replace with actual attachable type
+    const attachableId = 123; // Replace with actual attachable ID
+    const fileFor = 'exampleFor'; // Replace with actual "for" field value
+    const path = '/uploads'; // Replace with actual path
+    const extension = file.name.split('.').pop();
+    const mimeType = file.type;
+    const filesize = file.size;
+    const metadata = {}; // Replace with actual metadata if any
+
+    const formData = new FormData();
+    // formData.append('file', file);
+    formData.append('user_id', userId);
+    formData.append('attachable_type', "file");
+    formData.append('attachable_id', attachableId);
+    formData.append('for', fileFor);
+    formData.append('path', path);
+    formData.append('extension', extension);
+    formData.append('mime_type', mimeType);
+    formData.append('filesize', filesize);
+    formData.append('metadata', JSON.stringify(metadata));
+
+    try {
+      const response = await fetch('/api/resources/resources', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Upload failed:', errorData);
+      } else {
+        const responseData = await response.json();
+        console.log('File uploaded successfully:', responseData);
+        onFileUploaded(responseData); // Call the parent's onFileUploaded function
+        handleFileDelete(); // Clear the file input and close the popup
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+    }
   };
 
   const handleFileDelete = () => {
