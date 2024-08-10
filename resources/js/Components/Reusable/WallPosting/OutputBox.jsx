@@ -5,20 +5,6 @@ import EditPost from './EditPost';
 import './index.css'
 import { useCsrf } from "@/composables";
 
-
-function Avatar({ src, alt }) {
-  return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
-}
-
-function UserInfo({ name, timestamp }) {
-  return (
-    <div className="flex flex-col my-auto">
-      <div className="text-base font-bold text-neutral-800">{name}</div>
-      <div className="mt-3 text-xs text-neutral-800 text-opacity-50">{timestamp}</div>
-    </div>
-  );
-}
-
 function FeedbackOption({ optionText }) {
   return (
     <div className="flex gap-2.5 px-3.5 py-2.5 mt-4 text-sm leading-5 bg-gray-100 rounded-3xl text-neutral-800 max-md:flex-wrap">
@@ -73,6 +59,130 @@ function FeedbackForm() {
     </form>
   );
 }
+
+// const PostAttachments = ({ attachments }) => {
+//   const [sortedAttachments, setSortedAttachments] = useState([]);
+
+//   useEffect(() => {
+//     const loadImageDimensions = async () => {
+//       const attachmentsWithDimensions = await Promise.all(
+//         attachments.map((attachment) => 
+//           new Promise((resolve) => {
+//             const img = new Image();
+//             img.src = `/storage/${attachment.path}`;
+//             img.onload = () => {
+//               resolve({
+//                 ...attachment,
+//                 width: img.width,
+//                 height: img.height,
+//                 aspectRatio: img.width / img.height,
+//               });
+//             };
+//           })
+//         )
+//       );
+
+//       // Sort by height descending, so the tallest image comes first
+//       const sorted = attachmentsWithDimensions.sort((a, b) => b.height - a.height);
+//       setSortedAttachments(sorted);
+//     };
+
+//     loadImageDimensions();
+//   }, [attachments]);
+
+//   const attachmentCount = sortedAttachments.length;
+//   let gridClass = 'attachment-grid';
+
+//   if (attachmentCount === 1) gridClass += ' one';
+//   else if (attachmentCount === 2) gridClass += ' two';
+//   else if (attachmentCount === 3) gridClass += ' three';
+//   else if (attachmentCount === 4) gridClass += ' four';
+//   else if (attachmentCount > 4) gridClass += ' more-than-four';
+
+//   return (
+//     <div className={gridClass}>
+//       {sortedAttachments.map((attachment, index) => (
+//         <div key={index} className={`attachment ${attachment.aspectRatio > 1 ? 'wide' : 'tall'}`}>
+//           {attachment.mime_type.startsWith("image/") ? (
+//             <img src={`/storage/${attachment.path}`} alt="attachment" className="attachment-image" />
+//           ) : attachment.mime_type.startsWith("video/") ? (
+//             <video controls className="attachment-video">
+//               <source src={`/storage/${attachment.path}`} />
+//               Your browser does not support the video tag.
+//             </video>
+//           ) : (
+//             <a href={`/storage/${attachment.path}`} download>
+//               Download {attachment.file_name}
+//             </a>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+
+const PostAttachments = ({ attachments }) => {
+  const [sortedAttachments, setSortedAttachments] = useState([]);
+
+  useEffect(() => {
+    const loadImageDimensions = async () => {
+      const attachmentsWithDimensions = await Promise.all(
+        attachments.map((attachment) => 
+          new Promise((resolve) => {
+            const img = new Image();
+            img.src = `/storage/${attachment.path}`;
+            img.onload = () => {
+              resolve({
+                ...attachment,
+                width: img.width,
+                height: img.height,
+                aspectRatio: img.width / img.height,
+              });
+            };
+          })
+        )
+      );
+
+      // Sort by height descending, so the tallest image comes first
+      const sorted = attachmentsWithDimensions.sort((a, b) => b.height - a.height);
+      setSortedAttachments(sorted);
+    };
+
+    loadImageDimensions();
+  }, [attachments]);
+
+  const attachmentCount = sortedAttachments.length;
+  let gridClass = 'attachment-grid';
+
+  if (attachmentCount === 1) gridClass += ' one';
+  else if (attachmentCount === 2) gridClass += ' two';
+  else if (attachmentCount === 3) gridClass += ' three';
+  else if (attachmentCount === 4) gridClass += ' four';
+  else if (attachmentCount > 4) gridClass += ' more-than-four';
+
+  return (
+    <div className={gridClass}>
+      {sortedAttachments.map((attachment, index) => (
+        <div key={index} className={`attachment ${attachment.aspectRatio > 1 ? 'wide' : 'tall'}`}>
+          {attachment.mime_type.startsWith("image/") ? (
+            <img src={`/storage/${attachment.path}`} alt="attachment" className="attachment-image" />
+          ) : attachment.mime_type.startsWith("video/") ? (
+            <video controls className="attachment-video">
+              <source src={`/storage/${attachment.path}`} />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <a href={`/storage/${attachment.path}`} download>
+              Download {attachment.file_name}
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [postData, setPostData] = useState([]);
@@ -137,6 +247,9 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
 
     fetchData();
   }, []);
+
+
+
 
   // Filter posts based on accessable_type and accessable_id
   let filteredPostData = postData.filter(post => post.type !== 'story');
@@ -247,14 +360,8 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
                     <img 
                       loading="lazy" 
-                      // src={
-                      //   post.userProfile?.profile.image 
-                      //     ? `/storage/${post.userProfile.profile.image}` 
-                      //     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-                      // } 
                       src={
                         post.userProfile.profile?.image 
                             ? (
@@ -337,14 +444,8 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
               <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                 <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1.5 -mt-1">
-                    {/* <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt={post.user.name} className="shrink-0 aspect-square w-[53px] rounded-image" /> */}
                     <img 
                       loading="lazy" 
-                      // src={
-                      //   post.userProfile.profile?.image 
-                      //     ? `/storage/${post.userProfile.profile.image}` 
-                      //     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-                      // }
                       src={
                         post.userProfile.profile?.image 
                             ? (
@@ -394,24 +495,11 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
             <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
               {post.tag}
             </p>
-            <div className="grid grid-cols-3 gap-2 mt-2">
-              {post.attachments.map((attachment, index) => (
-                <div key={index} className="attachment">
-                  {attachment.mime_type.startsWith("image/") ? (
-                    <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
-                  ) : attachment.mime_type.startsWith("video/") ? (
-                    <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
-                      <source src={`/storage/${attachment.path}`} alt="attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full" />
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
-                      Download {attachment.file_name}
-                    </a>
-                  )}
+            {post.attachments.length > 0 && (
+                <div className="mt-4">
+                  <PostAttachments attachments={post.attachments} />
                 </div>
-              ))}
-            </div>
+              )}
             <div className="flex justify-start gap-2 w-5 h-5 mt-2">
               <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
               <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
@@ -488,3 +576,23 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
 }
 
 export default OutputData;
+
+
+
+
+{/* {post.attachments.map((attachment, index) => (
+                <div key={index} className="attachment">
+                  {attachment.mime_type.startsWith("image/") ? (
+                    <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
+                  ) : attachment.mime_type.startsWith("video/") ? (
+                    <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
+                      <source src={`/storage/${attachment.path}`} alt="attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full" />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
+                      Download {attachment.file_name}
+                    </a>
+                  )}
+                </div>
+              ))} */}

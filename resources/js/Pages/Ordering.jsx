@@ -35,7 +35,7 @@ const Ordering = () => {
                 name: member.name,
                 role: member.business_post_title,
                 status: 'Online',
-                imageUrl: member.image,
+                imageUrl: member.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
                 isDeactivated: member.is_active,
                 order: member.order,
             }));

@@ -11,25 +11,51 @@ function Header({ title }) {
 }
 
 function Avatar({ src, alt, onImageChange }) {
+  const [previewSrc, setPreviewSrc] = useState(src);
+
   const handleClick = () => {
     document.getElementById('avatarInput').click();
   };
 
+  const handleImageChange = (file) => {
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewSrc(objectUrl);
+      onImageChange(file);
+    }
+  };
+
+  let banner = '';
+
+  if (previewSrc && typeof previewSrc === 'string') {
+    if (previewSrc.startsWith('banner/')) {
+      banner = `/storage/${previewSrc}`;
+    } else {
+      banner = previewSrc;
+    }
+  }
+
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-16 py-12 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        {banner ? (
+          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px]" />
+        ) : (
+          <p>No image available</p>
+        )}
       </div>
       <input
         type="file"
         accept="image/*"
         id="avatarInput"
-        onChange={(e) => onImageChange(e.target.files[0])}
+        onChange={(e) => handleImageChange(e.target.files[0])}
         className="hidden"
       />
     </div>
   );
 }
+
+
 
 function Card({ 
   title, 
@@ -43,10 +69,20 @@ function Card({
   onCancel, 
   onSave
 }) {
+
   const [departmentName, setDepartmentName] = useState(department?.name || '');
-  const [imageSrc, setImageSrc] = useState(department?.banner || imgSrc); 
+  const [initialDepartmentName, setInitialDepartmentName] = useState(department?.name || '');
+
+  const [imageSrc, setImageSrc] = useState(department?.banner || imgSrc);
+  const [initialImageSrc, setInitialImageSrc] = useState(department?.banner || imgSrc);
+  const [imageFile, setImageFile] = useState(null); // New state to hold the file object
+
   const [selectedType, setSelectedType] = useState(department?.type || '');
+  const [initialSelectedType, setInitialSelectedType] = useState(department?.type || '');
+
   const [departmentDescription, setDepartmentDescription] = useState(department?.description || '');
+  const [initialDepartmentDescription, setInitialDepartmentDescription] = useState(department?.description || '');
+
   const [error, setError] = useState('');
   const csrfToken = useCsrf();
   const { props } = usePage();
@@ -54,68 +90,60 @@ function Card({
 
   useEffect(() => {
     setDepartmentName(department?.name || '');
+    setInitialDepartmentName(department?.name || '');
+    
     setImageSrc(department?.banner || imgSrc);
+    setInitialImageSrc(department?.banner || imgSrc);
+    
     setSelectedType(department?.type || '');
+    setInitialSelectedType(department?.type || '');
+
     setDepartmentDescription(department?.description || '');
+    setInitialDepartmentDescription(department?.description || '');
   }, [department, imgSrc]);
 
   const handleImageChange = (file) => {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('banner', file);
-    formData.append('user_id', id);
-    formData.append('_method', 'PUT');
-  
-    fetch(`/api/department/departments/${department?.id}`, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': csrfToken || '',
-        'Authorization': `Bearer ${authToken}`,
-      },
-    })
-    .then(response => response.json())
-    .then(data => {
-      setImageSrc(data.filePath);
-    })
-    .catch(error => {
-      console.error('Error uploading image:', error);
-      setError('An error occurred while uploading the image.');
-    });
+    const objectUrl = URL.createObjectURL(file);
+    setImageSrc(objectUrl);
+    setImageFile(file); 
   };
-  
+
   const handleSubmit = async () => {
     if (!departmentName.trim()) {
       setError('Department Name is required.');
       return;
     }
 
+    if (
+      departmentName === initialDepartmentName &&
+      imageSrc === initialImageSrc &&
+      selectedType === initialSelectedType &&
+      departmentDescription === initialDepartmentDescription
+    ) {
+      setError('No changes detected.');
+      return;
+    }
+
     setError('');
 
-    const data = {
-      name: departmentName,
-      description: departmentDescription,
-      type: selectedType,
-      created_by: user?.name || 'Unknown User', // Fallback in case user is undefined
-      updated_by: user?.name || 'Unknown User', // Fallback in case user is undefined
-      banner: department.banner,
-    };
-
     const formData = new FormData();
-      formData.append('_method', 'PUT');
-      formData.append("name", departmentName);
-      formData.append("description", departmentDescription);
-      formData.append("type", selectedType);
-      formData.append('banner', file);
+    formData.append('_method', 'PUT');
+    formData.append("name", departmentName);
+    formData.append("description", departmentDescription);
+    formData.append("type", selectedType);
+
+    if (imageFile) {
+      formData.append('banner', imageFile);
+    }
 
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "X-CSRF-Token": csrfToken 
+        "X-CSRF-Token": csrfToken,
+        'Authorization': `Bearer ${authToken}`,
       },
       body: formData
     };
@@ -134,7 +162,7 @@ function Card({
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department saved:', responseData.data);
       onSave(responseData.data);
-      // window.location.reload(); 
+      window.location.reload();
     } catch (error) {
       console.error('Error saving department:', error.message);
       setError('An error occurred while saving the department.');
@@ -153,15 +181,15 @@ function Card({
           onChange={(e) => setDepartmentName(e.target.value)}
           className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-7 text-neutral-800 border-neutral-300"
         />
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         <input
           type="text"
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="self-stretch border border-solid rounded-md mt-3 text-neutral-800 border-neutral-300"
+          className="self-stretch mt-3 border border-solid rounded-md text-neutral-800 border-neutral-300"
         />
-        <div className="flex mt-4 space-x-2 justify-end w-full">
+        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+        <div className="flex mt-4 space-x-4">
           <button
             onClick={onCancel}
             className="px-4 py-2 text-black font-bold"

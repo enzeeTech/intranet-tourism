@@ -50,29 +50,28 @@ const DepartmentInner = () => {
     }
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
+  console.log('DEPARTMENT DATA', departmentData);
 
-  console.log("DEPARTMENT", departmentData);
-  
   return (
     <Example>
-      <main className="xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 w-full ml-4 mr-4 lg:ml-10 lg:mr-24 relative bottom-10">
+      <main className="relative w-full ml-4 mr-4 xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 lg:ml-10 lg:mr-24 bottom-10">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
           <Adminwall
             departmentID={getDepartmentIdFromQuery()}
             departmentHeader={departmentData?.name}
             departmentDescription={departmentData?.description}
-            departmentBanner={departmentData?.banner}
+            departmentBanner={departmentData?.banner ? departmentData.banner : 'assets/departmentsDefault.jpg'}
             userId={id}
             onEditClick={handleEditClick}
           />
         </div>
       </main>
 
-      <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-0 lg:left-20 top-16 w-full lg:w-96 sm:px-6 lg:px-8 xl:block">
+      <aside className="fixed bottom-0 left-0 hidden w-full px-4 py-6 overflow-y-auto border-r border-gray-200 lg:left-20 top-16 lg:w-96 sm:px-6 lg:px-8 xl:block">
         <style>
           {`
           aside::-webkit-scrollbar {
@@ -92,7 +91,7 @@ const DepartmentInner = () => {
       </aside>
 
       {isEditPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <EditDepartments
             department={departmentData}
             onCancel={() => setIsEditPopupOpen(false)}

@@ -5,3 +5,57 @@
     object-fit: cover; /* Ensures the image covers the container without stretching */
   }
   
+  .attachment-grid {
+    display: grid;
+    gap: 4px;
+  }
+  
+  .attachment-grid.one {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .attachment-grid.two {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .attachment-grid.three {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+  }
+  
+  .attachment-grid.three .attachment:first-child {
+    grid-row: span 2; /* Ensure the first (tallest) image spans two rows */
+  }
+  
+  .attachment-grid.four {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .attachment-grid.more-than-four {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .attachment {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .attachment img,
+  .attachment video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the images fill the grid area without gaps */
+  }
+  
+  /* Add styles for tall images */
+  .attachment.tall {
+    grid-column: span 1; /* Adjust the width of tall images */
+    grid-row: span 2; /* You can adjust the row span if necessary */
+  }
+  
+  /* Example adjustment for the grid */
+  .attachment-grid.three .attachment.tall:first-child {
+    grid-column: span 1; /* Example: tall images in the first position span only one column */
+    grid-row: span 2; /* Example: span two rows if needed */
+  }
+  

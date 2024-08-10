@@ -268,7 +268,8 @@ import Requests from "./Requests";
 import { AuditSearch, AuditCalendar, AuditTrailTable } from "./AuditTrail";
 import Feedback from "./Feedback";
 import Roles from "./Roles";
-
+import Permissions from "./Permissions";
+import AddTitles from "./AddTitles";
 
 
 const SettingsPage = ({ currentPage }) => {
@@ -300,9 +301,11 @@ const SettingsPage = ({ currentPage }) => {
         </>}
       {currentPage === 'Feedback' && <Feedback/>}
       {currentPage === 'Birthday Template' && <div></div>}
+      {currentPage === 'Business Titles' && <AddTitles/>}
       {currentPage === 'Roles' && <Roles/>}
+      {currentPage === 'Permissions' && <Permissions/>}
     </div>
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Roles };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Roles, Permissions };

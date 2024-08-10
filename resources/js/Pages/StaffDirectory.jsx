@@ -74,7 +74,7 @@ const StaffDirectory = () => {
         name: member.name,  
         role: member.business_post_title,
         status: 'Online',
-        imageUrl: member.image,
+        imageUrl: member.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
         workNo: member.work_phone,
         phoneNo: member.phone_no,
         isDeactivated: member.is_active,
@@ -316,13 +316,13 @@ const StaffDirectory = () => {
   )}
   {isActivateModalOpen && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
-          <h2 className="mb-4 font-bold text-center text-xl">Activate?</h2>
+        <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
+          <h2 className="mb-4 text-xl font-bold text-center">Activate?</h2>
           <div className="flex justify-center space-x-4">
             <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={() => setIsActivateModalOpen(false)}>
               No
             </button>
-            <button className="px-8 py-1 text-white font-bold bg-blue-500 hover:bg-blue-700 rounded-full" onClick={handleActivate}>
+            <button className="px-8 py-1 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleActivate}>
               Yes
             </button>
           </div>
