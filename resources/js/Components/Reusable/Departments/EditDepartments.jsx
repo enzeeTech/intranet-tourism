@@ -161,16 +161,16 @@ function Card({
           onChange={(e) => setDepartmentDescription(e.target.value)}
           className="self-stretch border border-solid rounded-md mt-3 text-neutral-800 border-neutral-300"
         />
-        <div className="flex mt-4 space-x-4">
+        <div className="flex mt-4 space-x-2 justify-end w-full">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100"
+            className="px-4 py-2 text-black font-bold"
           >
             {cancelText}
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
           >
             {saveText}
           </button>

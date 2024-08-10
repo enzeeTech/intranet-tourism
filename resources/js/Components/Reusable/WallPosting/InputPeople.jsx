@@ -57,10 +57,10 @@ export function People({ onClose }) {
           {recommendedPeople.map((person) => (
             <RecommendedPerson key={person.name} imageSrc={person.imageSrc} name={person.name} department={person.department} />
           ))}
-          <div className="flex gap-5 justify-between self-end text-sm text-center whitespace-nowrap">
-            <div className="my-auto font-semibold text-neutral-800" onClick={onClose}>Cancel</div>
+          <div className="flex gap-5 justify-between self-end text-sm mb-4 text-center whitespace-nowrap">
+            <div className="my-auto font-semibold text-md text-neutral-800" onClick={onClose}>Cancel</div>
             <div className="flex flex-col justify-center font-bold text-white">
-              <button className="justify-center px-8 py-4 bg-red-500 rounded-3xl">Save</button>
+              <button className="justify-center text-md px-4 py-2 bg-red-500 hover:bg-red-700 rounded-3xl">Save</button>
             </div>
           </div>
         </div>
