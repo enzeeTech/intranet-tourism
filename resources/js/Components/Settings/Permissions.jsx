@@ -83,6 +83,25 @@ const Permissions = () => {
   const [postTypeUser, setPostTypeUser] = useState(false);
   const [postTypeAdmin, setPostTypeAdmin] = useState(false);
 
+  const [editPostUser, setEditPostUser] = useState(false);
+  const [editPostAdmin, setEditPostAdmin] = useState(false);
+
+  const [filterPostUser, setFilterPostUser] = useState(false);
+  const [filterPostAdmin, setFilterPostAdmin] = useState(false);
+
+  const [postAnnoucementUser, setPostAnnoucementUser] = useState(false);
+  const [postAnnoucementAdmin, setPostAnnoucementAdmin] = useState(false);
+
+  const [anotherPostAnnoucementUser, setAnotherPostAnnoucementUser] = useState(false);
+  const [anotherPostAnnoucementAdmin, setAnotherPostAnnoucementAdmin] = useState(false);
+
+  const [deleteOwnPostUser, setDeleteOwnPostUser] = useState(false);
+  const [deleteOwnPostAdmin, setDeleteOwnPostAdmin] = useState(false);
+
+  const [deleteAnotherPostUser, setDeleteAnotherPostUser] = useState(false);
+  const [deleteAnotherPostAdmin, setDeleteAnotherPostAdmin] = useState(false);
+
+
   // List of permissions
   const permissions = [
     {
@@ -112,6 +131,104 @@ const Permissions = () => {
       setUserState: setPostTypeUser,
       adminState: postTypeAdmin,
       setAdminState: setPostTypeAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Filter post',
+      userState: filterPostUser,
+      setUserState: setFilterPostUser,
+      adminState: filterPostAdmin,
+      setAdminState: setFilterPostAdmin,
+    },
+    {
+      label: 'Set/unset a post as an announcement',
+      userState: postAnnoucementUser,
+      setUserState: setPostAnnoucementUser,
+      adminState: postAnnoucementAdmin,
+      setAdminState: setPostAnnoucementAdmin,
+    },
+    {
+      label: "Set/unset another user's post as an announcement",
+      userState: anotherPostAnnoucementUser,
+      setUserState: setAnotherPostAnnoucementUser,
+      adminState: anotherPostAnnoucementAdmin,
+      setAdminState: setAnotherPostAnnoucementAdmin,
+    },
+    {
+      label: 'Delete own post',
+      userState: deleteOwnPostUser,
+      setUserState: setDeleteOwnPostUser,
+      adminState: deleteOwnPostAdmin,
+      setAdminState: setDeleteOwnPostAdmin,
+    },
+    {
+      label: "Delete another user's post",
+      userState: deleteAnotherPostUser,
+      setUserState: setDeleteAnotherPostUser,
+      adminState: deleteAnotherPostAdmin,
+      setAdminState: deleteAnotherPostAdmin,
+    },
+    {
+      label: 'Like a post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
+    },
+    {
+      label: 'Edit post',
+      userState: editPostUser,
+      setUserState: setEditPostUser,
+      adminState: editPostAdmin,
+      setAdminState: setEditPostAdmin,
     },
   ];
 
