@@ -21,12 +21,22 @@ class BusinessPostController extends Controller
         ]);
     }
 
+    // public function store()
+    // {
+    //     $validated = request()->validate(...BusinessPost::rules());
+    //     BusinessPost::create($validated);
+
+    //     return response()->noContent();
+    // }
+
     public function store()
     {
         $validated = request()->validate(...BusinessPost::rules());
-        BusinessPost::create($validated);
+        $businessPost = BusinessPost::create($validated);
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $businessPost,
+        ], 201);
     }
 
     public function update(BusinessPost $business_post)
