@@ -11,13 +11,14 @@ const navigation = [
     { name: 'Audit Trail', href: '#', inactive: "assets/Inactive Audit Trail.svg", active: "assets/Active Audit Trail.svg" },
     { name: 'Feedback', href: '#', inactive: "assets/Inactive Feedback.svg", active: "assets/Active Feedback.svg" },
     { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
+    { name: 'Business Titles', href: '#', inactive: "assets/Inactive Advanced Settings.svg", active: "assets/Active Advanced Settings.svg" },
     { name: 'Roles', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
     { name: 'Permissions', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
 ];
 
 const SettingNavigation = ({ current, setCurrent }) => {
     return (
-        <nav className="flex flex-1 flex-col" aria-label="Sidebar">
+        <nav className="flex flex-col flex-1" aria-label="Sidebar">
             <ul role="list" className="-mx-2 space-y-1">
                 {navigation.map((item) => (
                     <li key={item.name}>
@@ -35,7 +36,7 @@ const SettingNavigation = ({ current, setCurrent }) => {
                             <img
                                 src={item.name === current ? item.active : item.inactive}
                                 alt={`${item.name} icon`}
-                                className="h-6 w-6 shrink-0"
+                                className="w-6 h-6 shrink-0"
                                 aria-hidden="true"
                             />
                             {item.name}
