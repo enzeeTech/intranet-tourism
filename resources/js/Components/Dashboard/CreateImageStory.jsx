@@ -121,8 +121,8 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
               />
             </div>
             <div className="flex justify-end gap-2 my-4">
-              <button type="button" className="w-full md:w-auto py-2 max-md:py-0 px-4 font-bold border-2 text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white rounded-full" onClick={onGoBack}>Cancel</button>
-              <button type="submit" className="w-full md:w-auto py-2 max-md:py-2 px-4 font-bold bg-blue-500 hover:bg-blue-700 text-white rounded-full mb-2 md:mb-0">Post</button>
+              <button type="button" className="w-full py-2 max-md:py-0 max-md:mb-2 px-4 font-bold border-2 text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white rounded-full" onClick={onGoBack}>Cancel</button>
+              <button type="submit" className="w-full py-2 max-md:py-2 px-4 font-bold bg-blue-500 hover:bg-blue-700 text-white rounded-full mb-2 md:mb-0">Post</button>
             </div>
           </form>
         </div>

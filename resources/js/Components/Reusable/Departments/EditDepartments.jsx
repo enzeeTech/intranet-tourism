@@ -192,13 +192,13 @@ function Card({
         <div className="flex mt-4 space-x-4">
           <button
             onClick={onCancel}
-            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100"
+            className="px-4 py-2 text-black font-bold"
           >
             {cancelText}
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
           >
             {saveText}
           </button>
