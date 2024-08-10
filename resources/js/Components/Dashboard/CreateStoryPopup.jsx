@@ -215,10 +215,10 @@ const Popup = ({ isOpen, onClose, children }) => {
                 marginRight: '-50%',
                 transform: 'translate(-50%, -50%)',
                 width: '80%',
-                maxWidth: '800px',
+                maxWidth: '665px',
                 padding: '0',
                 background: '#fff',
-                borderRadius: '20px',
+                borderRadius: '30px',
                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
             },
             overlay: {

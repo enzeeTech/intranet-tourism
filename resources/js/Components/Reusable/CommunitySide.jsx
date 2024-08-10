@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
+// const CommunityItem = ({ name, category, imgSrc, altText }) => (
+//   <article className="flex items-start w-full gap-3 px-4 py-1 mt-0">
+//     <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase ">
+//       <img src={imgSrc} alt={altText} className="aspect-square w-[75px] rounded-md " />
+//     </div>
+//     <div className="flex flex-col mt-1.5 text-md font-bold">
+//       <h2>{name}</h2>
+//       <p className="text-xs font-semibold text-neutral-600">{category}</p>
+//     </div>
+//   </article>
+// );
+
 const CommunityItem = ({ name, category, imgSrc, altText }) => (
-  <article className="flex items-start w-full gap-2 px-4 py-1 mt-2">
-    <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase ">
-      <img src={imgSrc} alt={altText} className="aspect-square w-[53px] rounded-full " />
+  <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
+    <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase">
+      <img
+        src={imgSrc}
+        alt={altText}
+        className="w-[140px] rounded-md object-cover"
+      />
     </div>
-    <div className="flex flex-col mt-1.5 text-sm font-bold">
-      <h2>{name}</h2>
-      <p className="text-xs font-semibold">{category}</p>
+    <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">
+      <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
+      <p className="text-xs font-semibold text-neutral-600">{category}</p>
     </div>
   </article>
 );
+
 
 function MyComponent() {
   const [communities, setCommunities] = useState([]);
@@ -53,9 +70,9 @@ function MyComponent() {
   return (
     <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20">
       <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
-        <h1 className="ml-4 text-2xl font-bold">Communities</h1>
+        <h1 className="ml-4 mt-2 text-2xl font-bold">Communities</h1>
         {isLoading ? (
-          <div className="mt-20 ml-32 loading-spinner"></div>
+          <div className="mt-20 ml-20 loading-spinner"></div>
         ) : (
           communities.map((community, index) => (
             <CommunityItem
@@ -68,7 +85,7 @@ function MyComponent() {
           ))
         )}
         <div className="w-full h-8 hover:bg-slate-200">
-          <a href="/community" className="flex self-stretch mt-1.5 ml-4 font-bold items-center">
+          <a href="/community" className="flex self-stretch mt-2 mb-2 ml-4 font-bold items-center">
             VIEW ALL
           </a>
         </div>

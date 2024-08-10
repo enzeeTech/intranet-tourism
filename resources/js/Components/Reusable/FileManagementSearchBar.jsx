@@ -106,7 +106,7 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
           <div
             className="flex items-center bg-blue-500 hover:bg-blue-700 px-4 py-2 max-md:px-3 h-full rounded-full ml-4 mr-2">
-            <img src="/assets/plus.svg" alt="add new file" className="w-7 h-7" />
+            <img src="/assets/plus.svg" alt="add new file" className="w-5 h-5" />
           </div>
         </label>
         {/* <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
@@ -118,10 +118,10 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
         </label> */}
       </div>
       {showPopup && (
-        <div className="file-popup">
+        <div className="file-popup px-4">
           <div className="file-popup-content rounded-3xl w-[400px]">
             <div className="popup-header">
-            <h2 className="mb-4 text-3xl font-bold">Upload file</h2>
+            <h2 className="mb-4 text-2xl font-bold flex justify-start">Upload file</h2>
             </div>
             <div className="popup-body">
               <div className="flex justify-start">

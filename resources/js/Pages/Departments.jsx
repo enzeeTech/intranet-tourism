@@ -10,8 +10,9 @@ import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
 import { usePage } from '@inertiajs/react';
+import { useCsrf } from '@/composables';
 
-const StaffDirectory = () => {
+const Departments = () => {
   const { props } = usePage();
   const { id } = props; 
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -20,6 +21,7 @@ const StaffDirectory = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentDepartmentId, setCurrentDepartmentId] = useState(null);
   const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
+  const csrfToken = useCsrf();
 
   const toggleCreateCommunity = () => setIsCreateDepartmentOpen(!isCreateDepartmentOpen);
 
@@ -60,10 +62,12 @@ const StaffDirectory = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`/api/crud/departments/${currentDepartmentId}`, {
+      await fetch(`/api/department/departments/${currentDepartmentId}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-Token": csrfToken,
         },
       });
       setDepartmentsList((prevList) =>
@@ -140,9 +144,9 @@ const StaffDirectory = () => {
         </div>
       </aside>
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
-            <h2 className="mb-4 text-xl font-bold text-center">Delete?</h2>
+            <h2 className="mb-4 text-xl font-bold text-center">Delete Department?</h2>
             <div className="flex justify-center space-x-4">
               <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleDelete}>
                 Yes
@@ -156,13 +160,20 @@ const StaffDirectory = () => {
       )}
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative p-4 bg-white rounded-lg shadow-lg">
-            <button
+          <div className="relative p-4 bg-white shadow-lg rounded-3xl">
+            {/* <button
               className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
               onClick={toggleCreateCommunity}
             >
               &times;
-            </button>
+            </button> */}
+            <div className="relative">
+              <div className="flex justify-end">
+                <button onClick={toggleCreateCommunity} className="absolute top-0 right-0 mt-2 mr-2">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
             <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
           </div>
         </div>
@@ -171,4 +182,4 @@ const StaffDirectory = () => {
   );
 };
 
-export default StaffDirectory;
+export default Departments;

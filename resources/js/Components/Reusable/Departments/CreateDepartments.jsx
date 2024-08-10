@@ -26,8 +26,8 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-16 py-12 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[200px]" />
       </div>
       <input
         type="file"
@@ -154,11 +154,11 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           onChange={(e) => setDepartmentDescription(e.target.value)}
           className="justifycenter items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <div className="flex self-end justify-between gap-5 mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -184,7 +184,7 @@ export default function CreateDepartments({ onCancel, onCreate, userID }) {
 
   return (
     <Card
-      title="Create Department"
+      title="Create New Department"
       imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
       imgAlt="Departments Logo"
       user={user}

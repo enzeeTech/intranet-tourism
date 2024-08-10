@@ -6,7 +6,7 @@ import SearchPopup from './AddMemberPopup';
 import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
@@ -73,7 +73,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   );
 
   return (
-    <div className="department-dropdown-container" ref={dropdownRef}>
+    <div className="department-dropdown-container flex" ref={dropdownRef}>
       <div className={`dropdown-header ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
         <input
           type="text"
@@ -93,7 +93,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           ))}
         </ul>
       )}
-      <div className="relative flex items-center justify-start max-md:ml-24">
+      <div className="relative flex items-center justify-start max-md:ml-8">
         {selectedDepartment.id && (
           <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
             <button className="visit-department-btn text-sm font-bold rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
@@ -120,6 +120,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
           setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
           departmentId={selectedDepartment.id}
           people={people}
+          onNewMemberAdded={onNewMemberAdded}
         />
       )}
     </div>
