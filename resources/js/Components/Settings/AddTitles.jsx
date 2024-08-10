@@ -86,7 +86,7 @@ const AddTitles = () => {
 
   const saveTitle = () => {
     if (editingTitleName.trim() === "") return;
-
+  
     fetch(`/api/department/business_posts/${editingTitleId}`, {
       method: "PATCH",
       headers: {
@@ -96,7 +96,13 @@ const AddTitles = () => {
       },
       body: JSON.stringify({ title: editingTitleName }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 204) {
+          // No content, so don't attempt to parse JSON
+          return null;
+        }
+        return response.json();
+      })
       .then(() => {
         setTitles((prevTitles) =>
           prevTitles.map((title) =>
@@ -110,9 +116,10 @@ const AddTitles = () => {
         showMessage("success", "Title edited successfully.");
       })
       .catch((error) => {
-        showMessage("error", "Failed to edit title.");
+        showMessage("error", `Failed to edit title. ${error.message}`);
       });
   };
+  
 
   return (
     <div className="container p-8 mx-auto">
@@ -146,13 +153,13 @@ const AddTitles = () => {
         <table className="min-w-full leading-normal">
           <thead>
             <tr>
-              <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-gray-100">
+              <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-white">
                 ID
               </th>
-              <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-gray-100">
+              <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-white">
                 Name
               </th>
-              <th className="px-5 py-3 bg-gray-100"></th>
+              <th className="px-5 py-3 bg-white"></th>
             </tr>
           </thead>
           <tbody>
