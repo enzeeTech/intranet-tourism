@@ -17,41 +17,49 @@ const OrderingDepartments = () => {
 
     const fetchDepartments = async () => {
         setIsLoading(true);
+        let allDepartments = [];
+        let currentPage = 1;
+        let totalPages = 1;
     
         try {
-            const response = await fetch('/api/crud/departments', {
-                method: 'GET',
-                headers: { Accept: 'application/json' }
-            });
+            while (currentPage <= totalPages) {
+                const response = await fetch(`/api/crud/departments?page=${currentPage}`, {
+                    method: 'GET',
+                    headers: { Accept: 'application/json' }
+                });
     
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const data = await response.json();
+    
+                // Log the data to see its structure
+                console.log('Fetched data:', data);
+    
+                const departmentsArray = data.data?.data || []; // Use `data.data.data` if that is the correct path
+                totalPages = data.data?.last_page || 1; // Adjust according to the API response structure
+    
+                if (Array.isArray(departmentsArray)) {
+                    allDepartments = allDepartments.concat(departmentsArray.map(department => ({
+                        id: department.id,
+                        name: department.name,
+                        order: department.order,
+                        imageUrl: department.image || '/assets/default-department.png',
+                    })));
+                } else {
+                    throw new Error('Expected an array but received: ' + typeof departmentsArray);
+                }
+    
+                currentPage++;
             }
     
-            const result = await response.json();
-            console.log('Fetched result:', result); // Log the entire result to debug
+            // Sort departments by id in ascending order
+            allDepartments.sort((a, b) => a.id - b.id);
+            setDepartments(allDepartments);
     
-            // Check if 'data' key exists and is an array
-            if (result && result.data && Array.isArray(result.data)) {
-                const departmentsArray = result.data;
-    
-                // Map and process departments data
-                const departmentsData = departmentsArray.map(department => ({
-                    id: department.id,
-                    name: department.name,
-                    order: department.order,
-                    imageUrl: department.banner || '/assets/default-department.png', // Use 'banner' field for image URL
-                }));
-    
-                // Sort departments by 'order'
-                departmentsData.sort((a, b) => a.order - b.order);
-                setDepartments(departmentsData);
-            } else {
-                console.error('Error: Expected an array but received:', result.data);
-                throw new Error('Expected an array but received: ' + typeof result.data);
-            }
         } catch (error) {
-            console.error('Error fetching departments:', error);
+            console.error('Error:', error);
         }
     
         setIsLoading(false);
@@ -76,7 +84,9 @@ const OrderingDepartments = () => {
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
 
-        setDepartments(updateOrderAttributes(reorderedData));
+        // Update department order attributes
+        const updatedDepartments = updateOrderAttributes(reorderedData);
+        setDepartments(updatedDepartments);
     };
 
     const handleMoveUp = (index) => {
@@ -94,57 +104,69 @@ const OrderingDepartments = () => {
     };
 
     const updateOrderInDatabase = async (department) => {
+        const url = `/api/crud/departments/${department.id}`;
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken, // Ensure the CSRF token is provided if required
+            },
+            body: JSON.stringify({ 
+                id: department.id,
+                order: department.order }), // Send the order in the body
+        };
+    
         try {
-            const response = await fetch(`/api/crud/departments/${department.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '',
-                },
-                body: JSON.stringify({
-                    order: department.order,
-                }),
-            });
-
+            const response = await fetch(url, options);
+    
             if (!response.ok) {
-                throw new Error(`Failed to update order for department with ID ${department.id}`);
+                const errorText = await response.text();
+                console.error(`Error response from server for department ID ${department.id}: ${errorText}`);
+                return null;
             }
-
-            return await response.json();
+    
+            const data = await response.json();
+    
+            if (data && data.success) {
+                console.log(`Success: Updated department ID ${department.id} with new order`, data);
+                return data;
+            } else {
+                console.error(`Empty or invalid response for department ID ${department.id}`);
+                return null;
+            }
         } catch (error) {
-            console.error('Error updating order:', error);
+            console.error(`Error updating department ID ${department.id}:`, error);
             return null;
         }
     };
-
+    
     const handleSave = async () => {
-        setIsNotificationVisible(true);
-        setNotificationMessage('Saving changes...');
-
-        const updatePromises = departments.map(department => updateOrderInDatabase(department));
-        const results = await Promise.all(updatePromises);
-
-        const success = results.every(result => result !== null);
-        if (success) {
-            setNotificationMessage('Changes saved successfully!');
-        } else {
-            setNotificationMessage('Failed to save some changes.');
+        try {
+            const updatePromises = departments.map(department => updateOrderInDatabase(department));
+            const results = await Promise.all(updatePromises);
+    
+            // Filter out null results before checking for success
+            const successfulUpdates = results.filter(result => result && result.success);
+    
+            if (successfulUpdates.length === departments.length) {
+                console.log('All departments updated successfully');
+            } else {
+                console.log('Some departments failed to update');
+            }
+        } catch (error) {
+            console.error('Error saving order:', error);
         }
-
-        setTimeout(() => {
-            setIsNotificationVisible(false);
-            window.location.href = '/staffDirectory';
-        }, 1500);
     };
-
+    
+    
     const handleBack = () => {
-        window.location.href = '/staffDirectory';
+        window.location.href = '/orderingDepartments';
     };
 
     return (
         <Example>
-            <div className="flex-row ">
+            <div className="flex-row">
                 <div className="flex">
                     <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
@@ -180,10 +202,10 @@ const OrderingDepartments = () => {
                                                                     <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
                                                                     {item.name}
                                                                 </td>
-                                                                <td className="px-6 py-4 text-base font-bold text-black whitespace-nowrap">
-                                                                    <div className="flex">
+                                                                <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                    <div className="flex items-center">
                                                                         <button
-                                                                            type="button"
+                                                                            className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
                                                                                 handleMoveUp(index);
@@ -194,7 +216,7 @@ const OrderingDepartments = () => {
                                                                             <img src="assets/orderingup.svg" alt="Up" />
                                                                         </button>
                                                                         <button
-                                                                            type="button"
+                                                                            className="px-2"
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
                                                                                 handleMoveDown(index);
@@ -218,8 +240,33 @@ const OrderingDepartments = () => {
                             </DragDropContext>
                         </div>
                     </main>
+                    <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
+                        <style>
+                            {`
+                            aside::-webkit-scrollbar {
+                                width: 0px;
+                                background: transparent;
+                            }
+                            `}
+                        </style>
+                        <div className="file-directory-header">
+                            <PageTitle title="Staff Directory" />
+                        </div>
+                        <hr className="file-directory-underline" />
+                        <div>
+                            <FeaturedEvents />
+                            <WhosOnline />
+                        </div>
+                    </aside>
                 </div>
             </div>
+            {isNotificationVisible && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                    <div className="p-4 bg-white rounded-lg shadow-lg">
+                        <p className="text-lg font-semibold">{notificationMessage}</p>
+                    </div>
+                </div>
+            )}
         </Example>
     );
 };
