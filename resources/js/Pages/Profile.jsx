@@ -35,7 +35,7 @@ export default function Profile() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
+
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -49,11 +49,11 @@ export default function Profile() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
+        photo: "https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&",
         employmentPosts: [] // Initialize with an empty array
     });
 
     const [originalFormData, setOriginalFormData] = useState(formData);
-    const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
     const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
@@ -79,40 +79,25 @@ export default function Profile() {
             return response.json();
         })
         .then(({ data }) => {
-            console.log('hello', data);
-            setProfileData(pv => ({
-                ...pv, ...data,
-                backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                profileImage: data.profile && data.profile.image,
-                username: "@" + data.username,
-            }));
-
-            // Sort employmentPosts by id in ascending order (oldest first)
-            const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
-
-            setFormData((pv) => ({
-                ...pv,
+            const initialFormData = {
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
                 dateofbirth: data.profile?.dob || "N/A",
                 phone: data.profile?.work_phone || "N/A",
                 whatsapp: data.profile?.phone_no || "N/A",
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in formData
-            }));
-
-            setOriginalFormData((pv) => ({
-                ...pv,
-                name: data.name,
-                username: data.username || "N/A",
-                email: data.email,
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in originalFormData
-            }));
+                photo: data.profile?.image || "https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&",
+                employmentPosts: data.employment_posts.slice().sort((a, b) => a.id - b.id) // Store sorted employment posts
+            };
+    
+            setFormData(initialFormData);
+            setOriginalFormData(initialFormData);
         })
         .catch((error) => {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
+    
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -142,7 +127,10 @@ export default function Profile() {
     };
 
     const handlePhotoChange = (newPhoto) => {
-        setPhoto(newPhoto);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: newPhoto,
+        }));
     };
 
     const updateUsername = async (newFormData) => {
@@ -171,6 +159,7 @@ export default function Profile() {
             FfData.append('phone_no', newFormData.whatsapp);
             FfData.append('user_id', id); // Add user_id to the form data
             FfData.append('name', formData.name); // Add name to the form data
+            FfData.append('photo', formData.photo); // Add photo to the form data
 
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
@@ -238,7 +227,6 @@ export default function Profile() {
         
             const data = await response.json();
             setOriginalFormData(formData);
-            setOriginalPhoto(photo);
             if (index === 0) {
                 setIsEditingDepartment1(false);
             } else if (index === 1) {
@@ -254,16 +242,7 @@ export default function Profile() {
     };
 
     const handleCancelBio = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            name: originalFormData.name || "N/A",
-            username: originalFormData.username || "N/A",
-            email: originalFormData.email || "N/A",
-            dateofbirth: originalFormData.dateofbirth || "N/A",
-            phone: originalFormData.phone || "N/A",
-            whatsapp: originalFormData.whatsapp || "N/A",
-        }));
-        setPhoto(originalPhoto);       
+        setFormData(originalFormData); // Revert to the original data directly
         setIsEditingBio(false);
     }; 
 
@@ -285,7 +264,6 @@ export default function Profile() {
                     : post
             ),
         }));
-        setPhoto(originalPhoto);
         setIsEditingDepartment1(false);
     };   
     
@@ -307,7 +285,6 @@ export default function Profile() {
                     : post
             ),
         }));
-        setPhoto(originalPhoto);
         setIsEditingDepartment2(false);
     };   
 
@@ -374,11 +351,7 @@ export default function Profile() {
                                         <div className="flex-auto my-auto max-md:max-w-full">
                                             <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                                 <ProfileBio
-                                                    photo={photo}
-                                                    username={formData.username}
-                                                    email={formData.email}
-                                                    dateofbirth={formData.dateofbirth}
-                                                    whatsapp={formData.whatsapp}
+                                                    formData={formData}
                                                     isEditing={isEditingBio}
                                                     onFormDataChange={setFormData}
                                                     onPhotoChange={handlePhotoChange}
@@ -484,7 +457,7 @@ export default function Profile() {
                     formData={formData}
                     csrfToken={csrfToken}
                     authToken={authToken}
-                    setPhoto={setPhoto}
+                    setFormData={setFormData}
                 />
             )}
         </Example>
