@@ -37,7 +37,7 @@ const OrderingDepartments = () => {
 
             setDepartments((prevDepartments) => {
                 const allDepartments = [...prevDepartments, ...departmentsArray];
-                return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+                return allDepartments.sort((a, b) => a.order - b.order); // Sort by order in ascending order
             });
 
             if (data.data.next_page_url) {
@@ -61,7 +61,7 @@ const OrderingDepartments = () => {
     const updateOrderAttributes = (departments) => {
         return departments.map((department, index) => ({
             ...department,
-            order: index,
+            order: index + 1, // Ensure order starts from 1
         }));
     };
 
@@ -72,23 +72,8 @@ const OrderingDepartments = () => {
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
 
-        // Update department order attributes
         const updatedDepartments = updateOrderAttributes(reorderedData);
         setDepartments(updatedDepartments);
-    };
-
-    const handleMoveUp = (index) => {
-        if (index === 0) return;
-        const newData = [...departments];
-        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
-        setDepartments(updateOrderAttributes(newData));
-    };
-
-    const handleMoveDown = (index) => {
-        if (index === departments.length - 1) return;
-        const newData = [...departments];
-        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
-        setDepartments(updateOrderAttributes(newData));
     };
 
     const updateOrderInDatabase = async (department) => {
@@ -98,29 +83,32 @@ const OrderingDepartments = () => {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken, // Ensure the CSRF token is provided if required
+                'X-CSRF-TOKEN': csrfToken,
             },
             body: JSON.stringify({ 
-                id: department.id,
-                order: department.order }), // Send the order in the body
+                order: department.order
+            }),
         };
-    
+
         try {
             const response = await fetch(url, options);
-    
+            if (response.status === 204) {
+                console.log(`Success: Updated department ID ${department.id} with new order`);
+                return { success: true };
+            }
+
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error(`Error response from server for department ID ${department.id}: ${errorText}`);
                 return null;
             }
-    
+
             const data = await response.json();
-    
             if (data && data.success) {
                 console.log(`Success: Updated department ID ${department.id} with new order`, data);
                 return data;
             } else {
-                console.error(`Empty or invalid response for department ID ${department.id}`);
+                console.error(`Unexpected response for department ID ${department.id}`);
                 return null;
             }
         } catch (error) {
@@ -128,29 +116,31 @@ const OrderingDepartments = () => {
             return null;
         }
     };
-    
+
     const handleSave = async () => {
         try {
             const updatePromises = departments.map(department => updateOrderInDatabase(department));
             const results = await Promise.all(updatePromises);
-    
-            // Filter out null results before checking for success
+
             const successfulUpdates = results.filter(result => result && result.success);
-    
+
             if (successfulUpdates.length === departments.length) {
                 console.log('All departments updated successfully');
                 setNotificationMessage("All departments updated successfully");
                 setIsNotificationVisible(true);
                 setTimeout(() => {
                     setIsNotificationVisible(false);
-                }, 3000); // Hide the notification after 3 seconds
+                }, 3000); 
+
+                // Refetch departments to ensure the order is correct and trigger a UI update
+                fetchDepartments('/api/crud/departments');
             } else {
                 console.log('Some departments failed to update');
                 setNotificationMessage("Some departments failed to update");
                 setIsNotificationVisible(true);
                 setTimeout(() => {
                     setIsNotificationVisible(false);
-                }, 3000); // Hide the notification after 3 seconds
+                }, 3000);
             }
         } catch (error) {
             console.error('Error saving order:', error);
@@ -158,10 +148,10 @@ const OrderingDepartments = () => {
             setIsNotificationVisible(true);
             setTimeout(() => {
                 setIsNotificationVisible(false);
-            }, 3000); // Hide the notification after 3 seconds
+            }, 3000);
         }
     };
-    
+
     const handleBack = () => {
         window.location.href = '/orderingDepartments';
     };
@@ -173,7 +163,7 @@ const OrderingDepartments = () => {
                     <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                             <div className="flex items-center justify-between">
-                                <h1 className="text-3xl font-bold text-gray-900">Manage Department Ordering</h1>
+                                <h1 className="text-3xl font-bold text-gray-900">Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
                                     <button type="button" className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
@@ -215,7 +205,6 @@ const OrderingDepartments = () => {
                                                                                 className="px-2"
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
-                                                                                    handleMoveUp(index);
                                                                                 }}
                                                                                 disabled={index === 0}
                                                                                 style={{ opacity: index === 0 ? 0.6 : 1 }}
@@ -226,7 +215,6 @@ const OrderingDepartments = () => {
                                                                                 className="px-2"
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
-                                                                                    handleMoveDown(index);
                                                                                 }}
                                                                                 disabled={index === departments.length - 1}
                                                                                 style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
