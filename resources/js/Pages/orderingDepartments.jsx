@@ -15,59 +15,47 @@ const OrderingDepartments = () => {
     const [isLoading, setIsLoading] = useState(false);
     const csrfToken = useCsrf();
 
-    const fetchDepartments = async () => {
-        setIsLoading(true);
-        let allDepartments = [];
-        let currentPage = 1;
-        let totalPages = 1;
-    
+    const fetchDepartments = async (url) => {
         try {
-            while (currentPage <= totalPages) {
-                const response = await fetch(`/api/crud/departments?page=${currentPage}`, {
-                    method: 'GET',
-                    headers: { Accept: 'application/json' }
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-    
-                const data = await response.json();
-    
-                // Log the data to see its structure
-                console.log('Fetched data:', data);
-    
-                const departmentsArray = data.data?.data || []; // Use `data.data.data` if that is the correct path
-                totalPages = data.data?.last_page || 1; // Adjust according to the API response structure
-    
-                if (Array.isArray(departmentsArray)) {
-                    allDepartments = allDepartments.concat(departmentsArray.map(department => ({
-                        id: department.id,
-                        name: department.name,
-                        order: department.order,
-                        imageUrl: department.image || '/assets/default-department.png',
-                    })));
-                } else {
-                    throw new Error('Expected an array but received: ' + typeof departmentsArray);
-                }
-    
-                currentPage++;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: { Accept: 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-    
-            // Sort departments by id in ascending order
-            allDepartments.sort((a, b) => a.id - b.id);
-            setDepartments(allDepartments);
-    
+
+            const data = await response.json();
+
+            const departmentsArray = data.data.data.map((department) => ({
+                id: department.id,
+                name: department.name,
+                order: department.order,
+                imageUrl: department.banner ? `/storage/${department.banner}` : '/assets/default-department.png',
+            }));
+
+            setDepartments((prevDepartments) => {
+                const allDepartments = [...prevDepartments, ...departmentsArray];
+                return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+            });
+
+            if (data.data.next_page_url) {
+                fetchDepartments(data.data.next_page_url);
+            } else {
+                setIsLoading(false);
+            }
+
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching departments:', error);
+            setIsLoading(false);
         }
-    
-        setIsLoading(false);
     };
-    
 
     useEffect(() => {
-        fetchDepartments();
+        setIsLoading(true);
+        setDepartments([]); // Clear the departments before fetching
+        fetchDepartments('/api/crud/departments');
     }, []);
 
     const updateOrderAttributes = (departments) => {
@@ -151,14 +139,28 @@ const OrderingDepartments = () => {
     
             if (successfulUpdates.length === departments.length) {
                 console.log('All departments updated successfully');
+                setNotificationMessage("All departments updated successfully");
+                setIsNotificationVisible(true);
+                setTimeout(() => {
+                    setIsNotificationVisible(false);
+                }, 3000); // Hide the notification after 3 seconds
             } else {
                 console.log('Some departments failed to update');
+                setNotificationMessage("Some departments failed to update");
+                setIsNotificationVisible(true);
+                setTimeout(() => {
+                    setIsNotificationVisible(false);
+                }, 3000); // Hide the notification after 3 seconds
             }
         } catch (error) {
             console.error('Error saving order:', error);
+            setNotificationMessage("Error saving order");
+            setIsNotificationVisible(true);
+            setTimeout(() => {
+                setIsNotificationVisible(false);
+            }, 3000); // Hide the notification after 3 seconds
         }
     };
-    
     
     const handleBack = () => {
         window.location.href = '/orderingDepartments';
@@ -179,65 +181,71 @@ const OrderingDepartments = () => {
                             </div>
                         </div>
                         <div className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8">
-                            <DragDropContext onDragEnd={handleDragEnd}>
-                                <Droppable droppableId="departments">
-                                    {(provided) => (
-                                        <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
-                                            <thead>
-                                                <tr>
-                                                    <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
-                                                    <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {departments.map((item, index) => (
-                                                    <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                                                        {(provided) => (
-                                                            <tr
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                className="bg-white border-t border-gray-200"
-                                                            >
-                                                                <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
-                                                                    {item.name}
-                                                                </td>
-                                                                <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
-                                                                    <div className="flex items-center">
-                                                                        <button
-                                                                            className="px-2"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveUp(index);
-                                                                            }}
-                                                                            disabled={index === 0}
-                                                                            style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingup.svg" alt="Up" />
-                                                                        </button>
-                                                                        <button
-                                                                            className="px-2"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveDown(index);
-                                                                            }}
-                                                                            disabled={index === departments.length - 1}
-                                                                            style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingdown.svg" alt="Down" />
-                                                                        </button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </tbody>
-                                        </table>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+                            {isLoading ? (
+                                <div className="flex items-center justify-center h-64">
+                                    <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                                </div>
+                            ) : (
+                                <DragDropContext onDragEnd={handleDragEnd}>
+                                    <Droppable droppableId="departments">
+                                        {(provided) => (
+                                            <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                                <thead>
+                                                    <tr>
+                                                        <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
+                                                        <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {departments.map((item, index) => (
+                                                        <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                                            {(provided) => (
+                                                                <tr
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    className="bg-white border-t border-gray-200"
+                                                                >
+                                                                    <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                        <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
+                                                                        {item.name}
+                                                                    </td>
+                                                                    <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                        <div className="flex items-center">
+                                                                            <button
+                                                                                className="px-2"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    handleMoveUp(index);
+                                                                                }}
+                                                                                disabled={index === 0}
+                                                                                style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                            >
+                                                                                <img src="/assets/orderingup.svg" alt="Up" />
+                                                                            </button>
+                                                                            <button
+                                                                                className="px-2"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    handleMoveDown(index);
+                                                                                }}
+                                                                                disabled={index === departments.length - 1}
+                                                                                style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
+                                                                            >
+                                                                                <img src="/assets/orderingdown.svg" alt="Down" />
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                            )}
                         </div>
                     </main>
                     <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
