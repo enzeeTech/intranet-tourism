@@ -227,7 +227,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
     return (
         <div>
             {isAddMemberPopupOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-3xl pt-7 px-4 w-[400px]">
                         <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Invite People</h1>
                         <input
@@ -308,7 +308,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-red-500 hover:bg-red-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson || !title || !unit || !location}
                             >

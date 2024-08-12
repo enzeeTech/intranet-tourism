@@ -403,23 +403,64 @@ const handleSaveDepartment = async (index) => {
     } catch (error) {
         console.error(`Error updating Department ${index + 1} Information:`, error);
     }
+    window.location.reload();
 };
 
 const handleCancelBio = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        name: originalFormData.name || "N/A",
+        username: originalFormData.username || "N/A",
+        email: originalFormData.email || "N/A",
+        dateofbirth: originalFormData.dateofbirth || "N/A",
+        phone: originalFormData.phone || "N/A",
+        whatsapp: originalFormData.whatsapp || "N/A",
+    }));
+    setPhoto(originalPhoto);       
     setIsEditingBio(false);
 };
 
 const handleCancelDepartment1 = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
+            index === 0 
+                ? {
+                    ...post,
+                    department: originalFormData.employmentPosts[0].department || "N/A",
+                    unit: originalFormData.employmentPosts[0].unit || "N/A",
+                    jobtitle: originalFormData.employmentPosts[0].jobtitle || "N/A",
+                    position: originalFormData.employmentPosts[0].position || "N/A",
+                    grade: originalFormData.employmentPosts[0].grade || "N/A",
+                    location: originalFormData.employmentPosts[0].location || "N/A",
+                    phone: originalFormData.employmentPosts[0].phone || "N/A",
+                }
+                : post
+        ),
+    }));
+    setPhoto(originalPhoto);
     setIsEditingDepartment1(false);
 };
 
 const handleCancelDepartment2 = () => {
-    setFormData(originalFormData); // Revert to original form data
-    setPhoto(originalPhoto);       // Revert to original photo
+    setFormData((prevFormData) => ({
+        ...prevFormData,
+        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
+            index === 1 
+                ? {
+                    ...post,
+                    department: originalFormData.employmentPosts[1].department || "N/A",
+                    unit: originalFormData.employmentPosts[1].unit || "N/A",
+                    jobtitle: originalFormData.employmentPosts[1].jobtitle || "N/A",
+                    position: originalFormData.employmentPosts[1].position || "N/A",
+                    grade: originalFormData.employmentPosts[1].grade || "N/A",
+                    location: originalFormData.employmentPosts[1].location || "N/A",
+                    phone: originalFormData.employmentPosts[1].phone || "N/A",
+                }
+                : post
+        ),
+    }));
+    setPhoto(originalPhoto);
     setIsEditingDepartment2(false);
 };
 
@@ -433,6 +474,12 @@ const handleEditDepartment1 = () => {
 
 const handleEditDepartment2 = () => {
     setIsEditingDepartment2(true);
+};
+
+const handleCreatePoll = (pollData) => {
+    // Implement the logic to handle poll creation here.
+    console.log('Poll data:', pollData);
+    // You can use an API call to save the poll data, update the state, etc.
 };
 
 // Sort employmentPosts by id in ascending order (oldest id first)
@@ -449,7 +496,7 @@ return (
                     <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
-                            profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                            profileImage={profileData.profileImage}
                             name={profileData.name}
                             username={profileData.username}
                             status={profileData.status}
@@ -462,7 +509,7 @@ return (
                         <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         {activeTab === "activities" && (
                             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} />
+                                {/* <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} /> */}
                                 <Filter className="mr-10" />
                                 <div className="mb-20"></div>
                                 <OutputData polls={polls} showUserPosts={true} userId={user.id} />

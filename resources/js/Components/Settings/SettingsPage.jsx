@@ -267,8 +267,9 @@ import Departments from "./Departments";
 import Requests from "./Requests";
 import { AuditSearch, AuditCalendar, AuditTrailTable } from "./AuditTrail";
 import Feedback from "./Feedback";
-import Pautan from "./Pautan";
-
+import Roles from "./Roles";
+import Permissions from "./Permissions";
+import AddTitles from "./AddTitles";
 
 
 const SettingsPage = ({ currentPage }) => {
@@ -290,8 +291,8 @@ const SettingsPage = ({ currentPage }) => {
           <MailSettings onSave={handleSave} />
         </>
       )}
-      {currentPage === 'Departments' && <Departments onSave={handleSave} />}
-      {currentPage === 'Media' && <div></div>}
+      {/* {currentPage === 'Departments' && <Departments onSave={handleSave} />}
+      {currentPage === 'Media' && <div></div>} */}
       {currentPage === 'Requests' && <Requests/>}
       {currentPage === 'Audit Trail' &&
         <>
@@ -300,9 +301,11 @@ const SettingsPage = ({ currentPage }) => {
         </>}
       {currentPage === 'Feedback' && <Feedback/>}
       {currentPage === 'Birthday Template' && <div></div>}
-      {currentPage === 'Pautan' && <Pautan/>}
+      {currentPage === 'Business Titles' && <AddTitles/>}
+      {currentPage === 'Roles' && <Roles/>}
+      {currentPage === 'Permissions' && <Permissions/>}
     </div>
   );
 };
 
-export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Pautan };
+export { SettingsPage, LogoUploader, ThemeComponent, CoreFeatures, SizeLimit, Media, CoverPhotos, MailSettings, Departments, Requests, AuditSearch, AuditCalendar, AuditTrailTable, Roles, Permissions };

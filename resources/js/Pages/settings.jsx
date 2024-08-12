@@ -58,13 +58,14 @@ const navigation = [
     { name: "Basic Settings", href: '#', inactive: "assets/Inactive Basic Settings.svg", active: "assets/Active Basic Settings.svg" },
     { name: 'Themes', href: '#', inactive: "assets/Inactive Theme.svg", active: "assets/Active Theme.svg" },
     { name: 'Advance Settings', href: '#', inactive: "assets/Inactive Advanced Settings.svg", active: "assets/Active Advanced Settings.svg" },
-    { name: 'Departments', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
-    { name: 'Media', href: '#', inactive: "assets/Inactive Media.svg", active: "assets/Active Media.svg" },
+    // { name: 'Departments', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
+    // { name: 'Media', href: '#', inactive: "assets/Inactive Media.svg", active: "assets/Active Media.svg" },
     { name: 'Requests', href: '#', inactive: "assets/Inactive Requests.svg", active: "assets/Active Requests.svg" },
     { name: 'Audit Trail', href: '#', inactive: "assets/Inactive Audit Trail.svg", active: "assets/Active Audit Trail.svg" },
     { name: 'Feedback', href: '#', inactive: "assets/Inactive Feedback.svg", active: "assets/Active Feedback.svg" },
     { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
-    // { name: 'Pautan', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Roles', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Permissions', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
 ];
 
 const Settings = () => {

@@ -12,6 +12,8 @@ function classNames(...classes) {
 }
 
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
+  console.log("FILE", file);
+  
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
     return null; // or return some placeholder content
@@ -78,10 +80,20 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   
   
 
+  // const handleViewClick = (e) => {
+  //   e.stopPropagation();
+  //   onFileSelect(file); // Select this file for admin management
+  // };
+
+
   const handleViewClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    onFileSelect(file); // Select this file for admin management
-  };
+
+    const fileUrl = `/storage/${file.metadata.path}`; // Construct the file URL
+    window.open(fileUrl, '_blank'); // Open the file in a new tab
+};
+
 
   return (
     <Menu as="div" className="relative inline-block text-left">

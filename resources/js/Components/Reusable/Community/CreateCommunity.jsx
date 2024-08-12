@@ -66,7 +66,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       created_by: user.name,
       updated_by: user.name,
     };
-
+  
     const options = {
       method: 'POST',
       headers: {
@@ -76,26 +76,27 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       },
       body: JSON.stringify(data)
     };
-
+  
     try {
       const response = await fetch('/api/communities/communities', options);
       const text = await response.text();
-
+  
       if (!response.ok) {
         console.error('Server response not OK:', text);
         throw new Error('Failed to create department');
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department created:', responseData.data);
       onCreate(responseData.data);
+      window.location.reload(); // Reload the page after successful creation
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
-  };
+  }; 
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center px-6 mt-3 w-full">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
@@ -124,11 +125,11 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="public">Public</option>
           <option value="all">All</option>
         </select>
-        <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>

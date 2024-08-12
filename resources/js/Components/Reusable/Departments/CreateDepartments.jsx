@@ -26,8 +26,8 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-16 py-12 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[200px]" />
       </div>
       <input
         type="file"
@@ -62,33 +62,30 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const csrfToken = useCsrf();
 
   const fetchUser = async () => {
-    
-  }
+    try {
+      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setUserData((pv) => ({
+        ...pv,
+        ...data,
+        name: data.name,
+        profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`/api/users/users/${id}?with[]=profile`, {
-      method: "GET",
-  })
-      .then((response) => {
-          if (!response.ok) {
-              throw new Error("Network response was not ok");
-          }
-          return response.json();
-      })
-      //-----------------------------//
-      .then(({ data }) => {
-          // const firstName = data.name.split(' ')[0];
-          setUserData(pv => ({
-              ...pv, ...data,
-              name: data.name,
-              profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
-          }));
-      })
-      .catch((error) => {
-          console.error("Error fetching user data:", error);
-      });
+    fetchUser();
   }, [id]);
-
 
   const handleImageChange = (file) => {
     setImageFile(file);
@@ -102,7 +99,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('name', departmentName);
-    if (imageFile){
+    if (imageFile) {
       formData.append('banner', imageFile);
     }
     formData.append('description', departmentDescription);
@@ -114,7 +111,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        "X-CSRF-Token": csrfToken 
+        "X-CSRF-Token": csrfToken
       },
       body: formData
     };
@@ -128,16 +125,17 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         throw new Error('Failed to create department');
       }
 
-      // const responseData = text ? JSON.parse(text) : {};
-      // console.log('Department created:', responseData.data);
-      // onCreate(responseData.data);
+      const responseData = text ? JSON.parse(text) : {};
+      console.log('Department created:', responseData.data);
+      onCreate(responseData.data);
+      window.location.reload(); // Refresh the page after creating the department
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
   };
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center w-full px-6 mt-3">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
@@ -154,13 +152,13 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
+          className="justifycenter items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
-        <div className="flex self-end justify-between gap-5 mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -170,8 +168,6 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
 }
 
 export default function CreateDepartments({ onCancel, onCreate, userID }) {
-
-  // console.log("askdjalsdkaslkasjd:", id);
   const [user, setUser] = useState({
     name: '',
     role: '',
@@ -188,7 +184,7 @@ export default function CreateDepartments({ onCancel, onCreate, userID }) {
 
   return (
     <Card
-      title="Create Department"
+      title="Create New Department"
       imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
       imgAlt="Departments Logo"
       user={user}

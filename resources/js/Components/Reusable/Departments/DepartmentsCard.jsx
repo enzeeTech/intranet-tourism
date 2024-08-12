@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
-import deleteIcon from '../../../../../public/assets/deleteIcon.png';
+import deleteIcon from '../../../../../public/assets/deleteicon.svg';
 
 const DepartmentsCard = ({ name, imageUrl, onDeleteClick, departmentID }) => {
   const threeDotButtonRef = useRef(null);
@@ -10,7 +10,7 @@ const DepartmentsCard = ({ name, imageUrl, onDeleteClick, departmentID }) => {
   return (
     <div className="staff-member-card">
       <div className="card-header">
-        <img src={imageUrl || defaultImage} alt={name} className="staff-member-image" />
+        <img src={imageUrl || defaultImage} alt={`${name} Banner`} className="staff-member-image" />
         <button
           className="status-button"
           onClick={() => onDeleteClick(departmentID)}

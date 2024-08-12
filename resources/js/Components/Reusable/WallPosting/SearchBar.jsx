@@ -7,7 +7,7 @@ const SearchBar = ({ value, onChange, placeholder }) => {
       <input
         type="text"
         id="albumSearch"
-        className="px-6 py-3.5 text-lg leading-none rounded-[30px] text-neutral-950 w-full"
+        className="px-6 py-4 text-md leading-none rounded-full bg-gray-100 border-gray-100 w-full"
         placeholder={placeholder}
         value={value}
         onChange={onChange}

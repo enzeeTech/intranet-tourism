@@ -268,6 +268,39 @@ const FileTable = ({ searchTerm }) => {
   const csrfToken = useCsrf();
   const inputRef = useRef(null);
 
+  // const fetchFiles = async () => {
+  //   try {
+  //     const response = await fetch('/api/resources/resources?with[]=author');
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch files');
+  //     }
+  //     const responseData = await response.json();
+  //     console.log("RESPONSEDATA", responseData);
+      
+  //     if (!Array.isArray(responseData.data?.data)) {
+  //       console.error('Expected an array of files, but received:', responseData.data?.data);
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     const filesData = responseData.data.data.map(file => ({
+  //       ...file,
+  //       uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
+  //       metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
+  //     }));
+
+  //     setFiles(filesData);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching files:', error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchFiles();
+  // }, []);
+
   const fetchFiles = async () => {
     try {
       const response = await fetch('/api/resources/resources?with[]=author');
@@ -282,13 +315,16 @@ const FileTable = ({ searchTerm }) => {
         setLoading(false);
         return;
       }
-
+  
       const filesData = responseData.data.data.map(file => ({
         ...file,
         uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
         metadata: typeof file.metadata === 'string' ? JSON.parse(file.metadata) : file.metadata
       }));
-
+  
+      // Sort files by the `created_at` date in descending order (newest first)
+      filesData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  
       setFiles(filesData);
       setLoading(false);
     } catch (error) {
@@ -296,10 +332,11 @@ const FileTable = ({ searchTerm }) => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchFiles();
   }, []);
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {

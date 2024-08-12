@@ -84,8 +84,9 @@ const Community = () => {
                   name={department.name}
                   imageUrl={'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
+                  type={department.type} // Pass the type (public/private)
                 />
-              ))
+              )) 
             )}
           </div>
         </div>
@@ -110,13 +111,20 @@ const Community = () => {
       </aside>
       {isCreateCommunityOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
-          <div className="bg-white p-4 rounded-lg shadow-lg relative">
-            <button
+          <div className="bg-white p-4 rounded-3xl shadow-lg relative">
+            {/* <button
               className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
               onClick={toggleCreateCommunity}
             >
               &times;
-            </button>
+            </button> */}
+            <div className="relative">
+              <div className="flex justify-end">
+                <button onClick={toggleCreateCommunity} className="mt-2 mr-2 absolute top-0 right-0">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
             <CreateCommunity onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
           </div>
         </div>

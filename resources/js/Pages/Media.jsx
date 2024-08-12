@@ -88,10 +88,10 @@ const Media = () => {
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
             <div className="relative flex flex-col justify-center max-w-full text-sm text-neutral-800">
-      <div
-        style={{ width: '180px' }}
-        className="flex justify-between gap-5 px-4 py-3 bg-white shadow-lg cursor-pointer rounded-2xl"
-      >
+        <div
+          style={{ width: '180px' }}
+          className="flex justify-between gap-5 px-4 py-1 bg-white shadow-lg cursor-pointer rounded-2xl"
+        >
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
                     {tagOptions.map((tag, index) => (

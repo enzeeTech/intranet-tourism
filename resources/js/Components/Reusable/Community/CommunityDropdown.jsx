@@ -7,6 +7,7 @@ import CreateDepartments from './CreateCommunity';
 const CommunityDropdown = ({ departments, onSelectDepartment, onCreateDepartment }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [filter, setFilter] = useState('All');
   const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
   const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
 
@@ -16,16 +17,34 @@ const CommunityDropdown = ({ departments, onSelectDepartment, onCreateDepartment
     setIsOpen(false);
   };
 
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setIsOpen(false);
+  };
+
+  const filteredDepartments = departments.filter((dept) => {
+    if (filter === 'All') return true;
+    return dept.type === filter.toLowerCase(); // Assuming dept.type is either 'public' or 'private'
+  });
+
   const toggleReportingPopup = () => setIsReportingPopupOpen(!isReportingPopupOpen);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
   return (
     <div className="department-dropdown-container">
-      {/* <button className="flex items-center px-4 py-2 text-sm text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={toggleCreateCommunity}>
-        <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
-        Department
-      </button> */}
+      <div className="dropdown">
+        <button onClick={toggleDropdown} className="dropdown-button">
+          {selectedDepartment || 'Select Community'}
+        </button>
+        {isOpen && (
+          <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
+            <li onClick={() => handleFilterChange('All')}>All</li>
+            <li onClick={() => handleFilterChange('Public')}>Public</li>
+            <li onClick={() => handleFilterChange('Private')}>Private</li>
+          </ul>
+        )}
+      </div>
       {isReportingPopupOpen && (
         <button
           onClick={toggleReportingPopup}
@@ -37,15 +56,6 @@ const CommunityDropdown = ({ departments, onSelectDepartment, onCreateDepartment
         >
           Reporting Structure
         </button>
-      )}
-      {isOpen && (
-        <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
-          {departments.map((dept, index) => (
-            <li key={index} onClick={() => handleSelect(dept)}>
-              {dept}
-            </li>
-          ))}
-        </ul>
       )}
       {isCreateCommunityOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

@@ -35,7 +35,7 @@ const Ordering = () => {
                 name: member.name,
                 role: member.business_post_title,
                 status: 'Online',
-                imageUrl: member.image,
+                imageUrl: member.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
                 isDeactivated: member.is_active,
                 order: member.order,
             }));
@@ -242,7 +242,7 @@ const Ordering = () => {
                 </div>
             </div>
             {isNotificationVisible && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="p-4 bg-white rounded-lg shadow-lg">
                         <p className="text-lg font-semibold">{notificationMessage}</p>
                     </div>
