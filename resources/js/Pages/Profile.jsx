@@ -250,6 +250,7 @@ export default function Profile() {
         } catch (error) {
             console.error(`Error updating Department ${index + 1} Information:`, error);
         }
+        window.location.reload();
     };
 
     const handleCancelBio = () => {

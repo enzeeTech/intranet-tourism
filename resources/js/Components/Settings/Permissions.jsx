@@ -101,6 +101,9 @@ const Permissions = () => {
   const [deleteAnotherPostUser, setDeleteAnotherPostUser] = useState(false);
   const [deleteAnotherPostAdmin, setDeleteAnotherPostAdmin] = useState(false);
 
+  const [likeAPostUser, setLikeAPostUser] = useState(false);
+  const [likeAPostAdmin, setLikeAPostAdmin] = useState(false);
+
 
   // List of permissions
   const permissions = [
@@ -176,59 +179,10 @@ const Permissions = () => {
     },
     {
       label: 'Like a post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
-    },
-    {
-      label: 'Edit post',
-      userState: editPostUser,
-      setUserState: setEditPostUser,
-      adminState: editPostAdmin,
-      setAdminState: setEditPostAdmin,
+      userState: likeAPostUser,
+      setUserState: setLikeAPostUser,
+      adminState: likeAPostAdmin,
+      setAdminState: setLikeAPostAdmin,
     },
   ];
 

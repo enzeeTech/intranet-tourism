@@ -15,57 +15,53 @@ const OrderingDepartments = () => {
     const [isLoading, setIsLoading] = useState(false);
     const csrfToken = useCsrf();
 
-    const fetchDepartments = async () => {
-        setIsLoading(true);
-    
+    const fetchDepartments = async (url) => {
         try {
-            const response = await fetch('/api/crud/departments', {
+            const response = await fetch(url, {
                 method: 'GET',
                 headers: { Accept: 'application/json' }
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
-            const result = await response.json();
-            console.log('Fetched result:', result); // Log the entire result to debug
-    
-            // Check if 'data' key exists and is an array
-            if (result && result.data && Array.isArray(result.data)) {
-                const departmentsArray = result.data;
-    
-                // Map and process departments data
-                const departmentsData = departmentsArray.map(department => ({
-                    id: department.id,
-                    name: department.name,
-                    order: department.order,
-                    imageUrl: department.banner || '/assets/default-department.png', // Use 'banner' field for image URL
-                }));
-    
-                // Sort departments by 'order'
-                departmentsData.sort((a, b) => a.order - b.order);
-                setDepartments(departmentsData);
+
+            const data = await response.json();
+
+            const departmentsArray = data.data.data.map((department) => ({
+                id: department.id,
+                name: department.name,
+                order: department.order,
+                imageUrl: department.banner ? `/storage/${department.banner}` : '/assets/default-department.png',
+            }));
+
+            setDepartments((prevDepartments) => {
+                const allDepartments = [...prevDepartments, ...departmentsArray];
+                return allDepartments.sort((a, b) => a.order - b.order); // Sort by order in ascending order
+            });
+
+            if (data.data.next_page_url) {
+                fetchDepartments(data.data.next_page_url);
             } else {
-                console.error('Error: Expected an array but received:', result.data);
-                throw new Error('Expected an array but received: ' + typeof result.data);
+                setIsLoading(false);
             }
+
         } catch (error) {
             console.error('Error fetching departments:', error);
+            setIsLoading(false);
         }
-    
-        setIsLoading(false);
     };
-    
 
     useEffect(() => {
-        fetchDepartments();
+        setIsLoading(true);
+        setDepartments([]); // Clear the departments before fetching
+        fetchDepartments('/api/crud/departments');
     }, []);
 
     const updateOrderAttributes = (departments) => {
         return departments.map((department, index) => ({
             ...department,
-            order: index,
+            order: index + 1, // Ensure order starts from 1
         }));
     };
 
@@ -76,80 +72,98 @@ const OrderingDepartments = () => {
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
 
-        setDepartments(updateOrderAttributes(reorderedData));
-    };
-
-    const handleMoveUp = (index) => {
-        if (index === 0) return;
-        const newData = [...departments];
-        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
-        setDepartments(updateOrderAttributes(newData));
-    };
-
-    const handleMoveDown = (index) => {
-        if (index === departments.length - 1) return;
-        const newData = [...departments];
-        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
-        setDepartments(updateOrderAttributes(newData));
+        const updatedDepartments = updateOrderAttributes(reorderedData);
+        setDepartments(updatedDepartments);
     };
 
     const updateOrderInDatabase = async (department) => {
-        try {
-            const response = await fetch(`/api/crud/departments/${department.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '',
-                },
-                body: JSON.stringify({
-                    order: department.order,
-                }),
-            });
+        const url = `/api/crud/departments/${department.id}`;
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify({ 
+                order: department.order
+            }),
+        };
 
-            if (!response.ok) {
-                throw new Error(`Failed to update order for department with ID ${department.id}`);
+        try {
+            const response = await fetch(url, options);
+            if (response.status === 204) {
+                console.log(`Success: Updated department ID ${department.id} with new order`);
+                return { success: true };
             }
 
-            return await response.json();
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Error response from server for department ID ${department.id}: ${errorText}`);
+                return null;
+            }
+
+            const data = await response.json();
+            if (data && data.success) {
+                console.log(`Success: Updated department ID ${department.id} with new order`, data);
+                return data;
+            } else {
+                console.error(`Unexpected response for department ID ${department.id}`);
+                return null;
+            }
         } catch (error) {
-            console.error('Error updating order:', error);
+            console.error(`Error updating department ID ${department.id}:`, error);
             return null;
         }
     };
 
     const handleSave = async () => {
-        setIsNotificationVisible(true);
-        setNotificationMessage('Saving changes...');
+        try {
+            const updatePromises = departments.map(department => updateOrderInDatabase(department));
+            const results = await Promise.all(updatePromises);
 
-        const updatePromises = departments.map(department => updateOrderInDatabase(department));
-        const results = await Promise.all(updatePromises);
+            const successfulUpdates = results.filter(result => result && result.success);
 
-        const success = results.every(result => result !== null);
-        if (success) {
-            setNotificationMessage('Changes saved successfully!');
-        } else {
-            setNotificationMessage('Failed to save some changes.');
+            if (successfulUpdates.length === departments.length) {
+                console.log('All departments updated successfully');
+                setNotificationMessage("All departments updated successfully");
+                setIsNotificationVisible(true);
+                setTimeout(() => {
+                    setIsNotificationVisible(false);
+                }, 3000); 
+
+                // Refetch departments to ensure the order is correct and trigger a UI update
+                fetchDepartments('/api/crud/departments');
+            } else {
+                console.log('Some departments failed to update');
+                setNotificationMessage("Some departments failed to update");
+                setIsNotificationVisible(true);
+                setTimeout(() => {
+                    setIsNotificationVisible(false);
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('Error saving order:', error);
+            setNotificationMessage("Error saving order");
+            setIsNotificationVisible(true);
+            setTimeout(() => {
+                setIsNotificationVisible(false);
+            }, 3000);
         }
-
-        setTimeout(() => {
-            setIsNotificationVisible(false);
-            window.location.href = '/staffDirectory';
-        }, 1500);
     };
 
     const handleBack = () => {
-        window.location.href = '/staffDirectory';
+        window.location.href = '/orderingDepartments';
     };
 
     return (
         <Example>
-            <div className="flex-row ">
+            <div className="flex-row">
                 <div className="flex">
                     <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                             <div className="flex items-center justify-between">
-                                <h1 className="text-3xl font-bold text-gray-900">Manage Department Ordering</h1>
+                                <h1 className="text-3xl font-bold text-gray-900">Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
                                     <button type="button" className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
@@ -157,69 +171,98 @@ const OrderingDepartments = () => {
                             </div>
                         </div>
                         <div className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8">
-                            <DragDropContext onDragEnd={handleDragEnd}>
-                                <Droppable droppableId="departments">
-                                    {(provided) => (
-                                        <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
-                                            <thead>
-                                                <tr>
-                                                    <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
-                                                    <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {departments.map((item, index) => (
-                                                    <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                                                        {(provided) => (
-                                                            <tr
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                className="bg-white border-t border-gray-200"
-                                                            >
-                                                                <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
-                                                                    {item.name}
-                                                                </td>
-                                                                <td className="px-6 py-4 text-base font-bold text-black whitespace-nowrap">
-                                                                    <div className="flex">
-                                                                        <button
-                                                                            type="button"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveUp(index);
-                                                                            }}
-                                                                            disabled={index === 0}
-                                                                            style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingup.svg" alt="Up" />
-                                                                        </button>
-                                                                        <button
-                                                                            type="button"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveDown(index);
-                                                                            }}
-                                                                            disabled={index === departments.length - 1}
-                                                                            style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingdown.svg" alt="Down" />
-                                                                        </button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </tbody>
-                                        </table>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
+                            {isLoading ? (
+                                <div className="flex items-center justify-center h-64">
+                                    <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                                </div>
+                            ) : (
+                                <DragDropContext onDragEnd={handleDragEnd}>
+                                    <Droppable droppableId="departments">
+                                        {(provided) => (
+                                            <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                                <thead>
+                                                    <tr>
+                                                        <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
+                                                        <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {departments.map((item, index) => (
+                                                        <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                                            {(provided) => (
+                                                                <tr
+                                                                    ref={provided.innerRef}
+                                                                    {...provided.draggableProps}
+                                                                    className="bg-white border-t border-gray-200"
+                                                                >
+                                                                    <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                        <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
+                                                                        {item.name}
+                                                                    </td>
+                                                                    <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                        <div className="flex items-center">
+                                                                            <button
+                                                                                className="px-2"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                }}
+                                                                                disabled={index === 0}
+                                                                                style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                            >
+                                                                                <img src="/assets/orderingup.svg" alt="Up" />
+                                                                            </button>
+                                                                            <button
+                                                                                className="px-2"
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                }}
+                                                                                disabled={index === departments.length - 1}
+                                                                                style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
+                                                                            >
+                                                                                <img src="/assets/orderingdown.svg" alt="Down" />
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                            )}
                         </div>
                     </main>
+                    <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
+                        <style>
+                            {`
+                            aside::-webkit-scrollbar {
+                                width: 0px;
+                                background: transparent;
+                            }
+                            `}
+                        </style>
+                        <div className="file-directory-header">
+                            <PageTitle title="Staff Directory" />
+                        </div>
+                        <hr className="file-directory-underline" />
+                        <div>
+                            <FeaturedEvents />
+                            <WhosOnline />
+                        </div>
+                    </aside>
                 </div>
             </div>
+            {isNotificationVisible && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                    <div className="p-4 bg-white rounded-lg shadow-lg">
+                        <p className="text-lg font-semibold">{notificationMessage}</p>
+                    </div>
+                </div>
+            )}
         </Example>
     );
 };

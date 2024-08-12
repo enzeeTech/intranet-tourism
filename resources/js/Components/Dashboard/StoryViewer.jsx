@@ -162,7 +162,8 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                             onClick={onClose}
                         >
                             <img
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
+                                src="/assets/cancel.svg"
+                                className="w-6 h-6"
                                 alt="Close icon"
                                 style={{ width: '28px', height: '28px', marginTop: '-10px', marginLeft: '10px' }}
                             />
