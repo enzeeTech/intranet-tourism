@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Roles.css';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
-const people = [
+const initialPeople = [
   {
     name: 'Lindsay Walton',
     title: 'Front-end Developer',
     department: 'Optimization',
     email: 'lindsay.walton@example.com',
-    role: 'Member',
+    role: '',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   },
@@ -18,7 +18,7 @@ const people = [
     title: 'Designer',
     department: 'Intranet',
     email: 'courtney.henry@example.com',
-    role: 'Admin',
+    role: '',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   },
@@ -27,7 +27,7 @@ const people = [
     title: 'Director of Product',
     department: 'Directives',
     email: 'tom.cook@example.com',
-    role: 'Member',
+    role: '',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   },
@@ -36,7 +36,7 @@ const people = [
     title: 'Copywriter',
     department: 'Program',
     email: 'whitney.francis@example.com',
-    role: 'Admin',
+    role: '',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   },
@@ -45,28 +45,38 @@ const people = [
     title: 'Senior Designer',
     department: 'Mobility',
     email: 'leonard.krasner@example.com',
-    role: 'Owner',
+    role: '',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
   },
 ];
 
 export default function Roles() {
+  const [people, setPeople] = useState(initialPeople);
+
+  const handleRoleChange = (email, newRole) => {
+    setPeople((prevPeople) =>
+      prevPeople.map((person) =>
+        person.email === email ? { ...person, role: newRole } : person
+      )
+    );
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-bold leading-6 text-gray-900">Users</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          {/* <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1> */}
+          {/* <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title, email, and role.
-          </p>
+          </p> */}
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Add user
+            Assign as Admin
           </button>
         </div>
       </div>
@@ -85,12 +95,16 @@ export default function Roles() {
                   <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     Status
                   </th>
-                  <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    style={{ width: '12rem' }}
+                  >
                     Role
                   </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                  {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
@@ -127,48 +141,36 @@ export default function Roles() {
                         >
                           <MenuItem>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <button
+                                onClick={() => handleRoleChange(person.email, 'Super Admin')}
                                 className={`${
                                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                } block px-4 py-2 text-sm`}
+                                } block w-full text-left px-4 py-2 text-sm`}
                               >
                                 Super Admin
-                              </a>
+                              </button>
                             )}
                           </MenuItem>
                           <MenuItem>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <button
+                                onClick={() => handleRoleChange(person.email, 'Admin')}
                                 className={`${
                                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                } block px-4 py-2 text-sm`}
+                                } block w-full text-left px-4 py-2 text-sm`}
                               >
                                 Admin
-                              </a>
-                            )}
-                          </MenuItem>
-                          <MenuItem>
-                            {({ active }) => (
-                              <a
-                                href="#"
-                                className={`${
-                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                } block px-4 py-2 text-sm`}
-                              >
-                                User
-                              </a>
+                              </button>
                             )}
                           </MenuItem>
                         </MenuItems>
                       </Menu>
                     </td>
-                    <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    {/* <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <a href="#" className="text-indigo-600 hover:text-indigo-900">
                         Edit<span className="sr-only">, {person.name}</span>
                       </a>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
