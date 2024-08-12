@@ -35,7 +35,6 @@ export default function Profile() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -77,7 +76,7 @@ export default function Profile() {
             setProfileData(pv => ({
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                profileImage: data.profile && data.profile.image,
+                profileImage: data.profile?.image || '',
                 username: "@" + data.username,
             }));
     
@@ -90,7 +89,7 @@ export default function Profile() {
                 dateofbirth: data.profile?.dob || "", // Use empty string if no value
                 phone: data.profile?.work_phone || "", // Use empty string if no value
                 whatsapp: data.profile?.phone_no || "", // Use empty string if no value
-                photo: data.profile?.staff_image || data.profile?.image || "",
+                photo: data.profile?.staff_image,
                 employmentPosts: sortedEmploymentPosts
             });
     
@@ -101,7 +100,7 @@ export default function Profile() {
                 dateofbirth: data.profile?.dob || "", // Ensure originalFormData is correctly set
                 phone: data.profile?.work_phone || "", // Ensure originalFormData is correctly set
                 whatsapp: data.profile?.phone_no || "", // Ensure originalFormData is correctly set
-                photo: data.profile?.staff_image || data.profile?.image || "",
+                photo: data.profile?.staff_image,
                 employmentPosts: sortedEmploymentPosts
             });
         })
