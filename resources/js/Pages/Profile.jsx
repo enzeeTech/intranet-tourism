@@ -339,7 +339,7 @@ export default function Profile() {
                         <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                                profileImage={profileData.profileImage}
                                 name={profileData.name}
                                 username={profileData.username}
                                 status={profileData.status}
@@ -386,7 +386,6 @@ export default function Profile() {
                                         </div>
                                     </section>
                                     <div className="separator"></div>
-                                    
                                     {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                             <div className="flex items-center justify-between">
@@ -403,7 +402,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost.position || ''}
+                                                        position={employmentPost.title || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}
@@ -426,7 +425,7 @@ export default function Profile() {
 
                             {activeTab === "gallery" && (
                                 <section>
-                                    <ImageProfile selectedItem="All" userId={id} />
+                                    <ImageProfile selectedItem="All" userId={id} filterBy="user" />
                                     <VideoProfile selectedItem="All" userId={id} />
                                 </section>
                             )}
