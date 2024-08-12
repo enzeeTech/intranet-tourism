@@ -8,16 +8,18 @@ table {
 }
 
 .url-column {
-  width: 25%; /* Adjust this value to make the URL column wider */
-}
-
-.order-column {
-  width: 15%; /* Adjust this value to make the order column narrower */
+  width: 45%; /* Adjust this value to make the URL column wider */
 }
 
 .edit-column, .delete-column {
-  width: 15%; /* Adjust this value to make the order column narrower */
+  width: 10%; /* Default width for larger screens */
   text-align: center; /* Center align the content */
+}
+
+@media (max-width: 768px) { /* Adjust this breakpoint as needed */
+  .edit-column, .delete-column {
+    width: 15%; /* Width for smaller screens */
+  }
 }
 
 .fixed-size-row {

@@ -218,7 +218,7 @@ const Popup = ({ isOpen, onClose, children }) => {
                 maxWidth: '665px',
                 padding: '0',
                 background: '#fff',
-                borderRadius: '30px',
+                borderRadius: '16px',
                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
             },
             overlay: {

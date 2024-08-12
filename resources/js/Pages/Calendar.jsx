@@ -509,7 +509,7 @@ function Calendar() {
                             }
 
                             const popoverContent = `
-                                <div>
+                                <div className="">
                                     <p class="event-title"><strong>Birthdays:</strong></p>
                                     <ul>${namesList}</ul>
                                 </div>
@@ -594,7 +594,7 @@ function Calendar() {
                                 <div
                                     style={{
                                         backgroundColor: eventInfo.backgroundColor,
-                                        padding: '0 15px',
+                                        padding: '15px 15px',
                                         borderRadius: '2px',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -863,7 +863,7 @@ function Calendar() {
 
                 {isPrintModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="w-full max-w-md max-md:w-[340px] p-6 mx-auto bg-white rounded-3xl shadow-lg">
+                        <div className="w-full max-w-md max-md:w-[340px] p-6 mx-auto bg-white rounded-2xl shadow-lg">
                             <h2 className="mb-4 text-xl font-bold">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
                                 <div className="mb-2">

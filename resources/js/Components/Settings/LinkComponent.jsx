@@ -165,7 +165,7 @@ export default function Pautan() {
                   className="h-6 w-6 flex-none"
                 />
                 <div className="min-w-0 flex-auto self-center pl-2">
-                  <p className="text-xl font-semibold leading-5 text-gray-900">
+                  <p className="text-md font-semibold leading-5 text-gray-900">
                     {refer.label}
                   </p>
                 </div>
