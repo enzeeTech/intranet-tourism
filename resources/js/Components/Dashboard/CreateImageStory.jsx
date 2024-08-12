@@ -79,7 +79,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
   };
 
   return (
-    <div className="create-story-modal px-4 py-6">
+    <div className="create-story-modal px-4 py-6 rounded-2xl">
       <h2 className="mt-0 mb-4 max-md:mb-0 font-bold text-lg md:text-2xl">Create a story</h2>
       <hr className="border-t border-gray-200 mb-4 " />
 

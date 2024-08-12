@@ -88,7 +88,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
           {filteredDepartments.map((dept) => (
             <li key={dept.id} onClick={() => handleSelect(dept)}>
-              {dept.name}
+              {dept.name} 
             </li>
           ))}
         </ul>

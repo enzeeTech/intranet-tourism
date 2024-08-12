@@ -9,20 +9,24 @@ function ProfileBio({
     onEditBio,
     onCancelBio,
     onSaveBio,
-    userId // Add userId as a prop
+    userId
 }) {
-    const [localFormData, setLocalFormData] = useState({});
+    const [bioFormData, setBioFormData] = useState(formData || {});
+    console.log("JJ", formData);
+    // Initialize with an empty object if formData is undefined
     const formRef = useRef(null);
 
     useEffect(() => {
-        setLocalFormData({
-            username: formData.username,
-            email: formData.email,
-            dateofbirth: formData.dateofbirth,
-            whatsapp: formData.whatsapp,
-            photo: formData.photo,
-        });
-    }, [formData]);
+        if (!isEditing) {
+            setBioFormData(formData || {}); // Ensure bioFormData is always an object
+        }
+    }, [formData, isEditing]);
+
+    const handleClickOutside = (event) => {
+        if (formRef.current && !formRef.current.contains(event.target)) {
+            onCancelBio();
+        }
+    };
 
     useEffect(() => {
         if (isEditing) {
@@ -35,26 +39,23 @@ function ProfileBio({
         };
     }, [isEditing]);
 
-    const handleClickOutside = (event) => {
-        if (formRef.current && !formRef.current.contains(event.target)) {
-            onCancelBio();
-        }
-    };
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setLocalFormData((prevData) => ({
+        setBioFormData((prevData) => ({
             ...prevData,
-            [name]: value || "", // Ensure the value is never undefined or null
+            [name]: value, // Directly update the bioFormData
         }));
     };
 
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
-        console.log("Uploaded file:", file); // Log the file information
         const reader = new FileReader();
         reader.onloadend = () => {
-            onPhotoChange(reader.result);
+            setBioFormData((prevData) => ({
+                ...prevData,
+                photo: reader.result, // Update only the photo in bioFormData
+            }));
+            onPhotoChange(reader.result); // Pass the updated photo back to the parent component
         };
         if (file) {
             reader.readAsDataURL(file);
@@ -69,19 +70,33 @@ function ProfileBio({
                     <input
                         type={type}
                         name={name}
-                        value={value !== undefined && value !== null ? value : ""} // Ensure value is not undefined or null
+                        value={value !== undefined && value !== null ? value : ""}
                         onChange={handleInputChange}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
                         placeholder={label}
                     />
                 ) : (
                     <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
-                        {value !== undefined && value !== null && value !== "" ? value : "N/A"} {/* Ensure display of "N/A" when empty */}
+                        {value !== undefined && value !== null && value !== "" ? value : ""}
                     </div>
                 )}
             </td>
         </tr>
     );
+
+    let source = null;
+
+    if (bioFormData.photo.startsWith('staff_image/')) {
+      // If bioFormData.photo already starts with 'avatar/', map it directly
+      source = `/storage/${bioFormData.photo}`;
+    } else {
+      // If bioFormData.photo doesn't start with 'avatar/', check if it's a placeholder or not
+      source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg'
+        ? bioFormData.photo
+        : `/avatar/${bioFormData.photo}`;
+    }
+
+    console.log("SOURCE", source);
 
     return (
         <div ref={formRef} className="flex-auto my-auto p-4">
@@ -89,7 +104,7 @@ function ProfileBio({
                 <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                     <table className="table-auto w-full text-left border-collapse">
                         <tbody>
-                            {localFormData.photo && (
+                            {bioFormData.photo && (
                                 <tr>
                                     <td className="py-2 align-center w-1/3">
                                         <div className="text-base text-neutral-800 font-semibold">
@@ -108,7 +123,7 @@ function ProfileBio({
                                         <div className="flex items-center gap-4">
                                             <img
                                                 loading="lazy"
-                                                src={localFormData.photo}
+                                                src={source}
                                                 className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
                                                 alt="Staff's photo"
                                             />
@@ -124,18 +139,21 @@ function ProfileBio({
                                     </td>
                                 </tr>
                             )}
-                            {renderField('Username', 'username', localFormData.username, 'text')}
-                            {renderField('E-mail', 'email', localFormData.email, 'email')}
-                            {renderField('Date of Birth', 'dateofbirth', localFormData.dateofbirth, 'date')}
-                            {renderField('Whatsapp Number', 'whatsapp', localFormData.whatsapp, 'text')}
+                            {renderField('Username', 'username', bioFormData.username, 'text')}
+                            {renderField('E-mail', 'email', bioFormData.email, 'email')}
+                            {renderField('Date of Birth', 'dateofbirth', bioFormData.dateofbirth, 'date')}
+                            {renderField('Whatsapp Number', 'whatsapp', bioFormData.whatsapp, 'text')}
                         </tbody>
                     </table>
                 </div>
             </div>
             {isEditing && (
                 <div className="flex justify-end mt-4 pb-3">
-                    <button onClick={onCancelBio} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                    <button onClick={() => onSaveBio({ ...localFormData, user_id: userId })} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                    <button onClick={() => {
+                        setBioFormData(originalFormData); // Reset bioFormData to originalFormData
+                        onCancelBio();
+                    }} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                    <button onClick={() => onSaveBio({ ...bioFormData, user_id: userId })} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
                 </div>
             )}
         </div>

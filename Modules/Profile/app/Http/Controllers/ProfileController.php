@@ -95,9 +95,15 @@ class ProfileController extends Controller
                 $coverPhotoPath = uploadFile(request()->file('cover_photo'), null, 'cover_photo')['path'];
             }
 
+            $staffImagePath = $profile->staff_image;
+            if (request()->hasFile('staff_image')) {
+                $staffImagePath = uploadFile(request()->file('staff_image'), null, 'staff_image')['path'];
+            }
+
             $profile->update(array_merge($validated, [
                 'image' => $imagePath,
                 'cover_photo' => $coverPhotoPath,
+                'staff_image' => $staffImagePath,
             ]));
 
             $profile->user()->update($validatedUser);
