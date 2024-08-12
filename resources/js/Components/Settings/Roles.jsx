@@ -56,7 +56,7 @@ export default function Roles() {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1>
+          <h1 className="text-base font-bold leading-6 text-gray-900">Users</h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the users in your account including their name, title, email, and role.
           </p>
@@ -64,7 +64,7 @@ export default function Roles() {
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             type="button"
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Add user
           </button>
@@ -102,23 +102,23 @@ export default function Roles() {
                           <img alt="" src={person.image} className="h-11 w-11 rounded-full" />
                         </div>
                         <div className="ml-4">
-                          <div className="font-medium text-gray-900">{person.name}</div>
+                          <div className="font-bold text-gray-900">{person.name}</div>
                           <div className="mt-1 text-gray-500">{person.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      <div className="text-gray-900">{person.title}</div>
+                      <div className="text-gray-900 font-bold">{person.title}</div>
                       <div className="mt-1 text-gray-500">{person.department}</div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                      <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                      <span className="inline-flex items-center rounded-md bg-green-50 px-4 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                         Active
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
                       <Menu as="div" className="relative inline-block text-left">
-                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                           {person.role}
                           <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-gray-400" />
                         </MenuButton>

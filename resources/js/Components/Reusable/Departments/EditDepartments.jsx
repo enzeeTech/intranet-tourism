@@ -37,9 +37,9 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
         {banner ? (
-          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px]" />
+          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px] h-[200px] shrink-0 rounded-xl border-4 border-gray-200" />
         ) : (
           <p>No image available</p>
         )}
@@ -172,6 +172,9 @@ function Card({
   return (
     <section className="flex flex-col py-6 bg-white rounded-3xl shadow-sm max-w-[442px]">
       <Header title={title} />
+      <div className="flex flex-col items-start font-bold text-lg w-full px-6 mb-1">
+        Department banner image:
+      </div>
       <div className="flex flex-col items-center w-full px-6">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
         <input
@@ -179,17 +182,17 @@ function Card({
           placeholder="Department name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
-          className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-7 text-neutral-800 border-neutral-300"
+          className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-6 text-neutral-800 border-neutral-300"
         />
         <input
           type="text"
-          placeholder={description}
+          placeholder="Department description"
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="self-stretch mt-3 border border-solid rounded-md text-neutral-800 border-neutral-300"
+          className="self-stretch mt-3 border border-solid rounded-md text-neutral-800 border-neutral-300 font-bold"
         />
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-        <div className="flex mt-4 space-x-4">
+        <div className="flex justify-end w-full mt-4 space-x-2">
           <button
             onClick={onCancel}
             className="px-4 py-2 text-black font-bold"
