@@ -21,35 +21,36 @@ const Pautan = () => {
   const [urlError, setUrlError] = useState('');
   const csrfToken = useCsrf();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let allApps = [];
-      let currentPage = 1;
-      let lastPage = 1;
-
-      try {
-        while (currentPage <= lastPage) {
-          const response = await fetch(`${API_URL}?page=${currentPage}`, {
-            method: "GET",
-            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
-          });
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          allApps = allApps.concat(data.data.data);
-          lastPage = data.data.last_page;
-          currentPage++;
+  
+  const fetchData = async () => {
+    let allApps = [];
+    let currentPage = 1;
+    let lastPage = 1;
+    
+    try {
+      while (currentPage <= lastPage) {
+        const response = await fetch(`${API_URL}?page=${currentPage}`, {
+          method: "GET",
+          headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-        const sortedAppsData = allApps
-          .sort((a, b) => a.order - b.order)
-          .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-        setApps(sortedAppsData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+        const data = await response.json();
+        allApps = allApps.concat(data.data.data);
+        lastPage = data.data.last_page;
+        currentPage++;
       }
-    };
-
+      const sortedAppsData = allApps
+      .sort((a, b) => a.order - b.order)
+      .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+      setApps(sortedAppsData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
+  useEffect(() => {
     fetchData();
   }, [csrfToken]);
 
@@ -163,39 +164,78 @@ const Pautan = () => {
     setIsEditModalVisible(true);
   };
 
+  // const PautanHandleUpdateApp = () => {
+  //   if (!isValidUrl(newAppUrl)) {
+  //     setUrlError('URL must start with http:// or https://');
+  //     return;
+  //   } else {
+  //     setUrlError('');
+  //   }
+
+  //   const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
+  //   if (isNameDuplicate) {
+  //     alert('App name already exists.');
+  //     return;
+  //   } else if (isUrlDuplicate) {
+  //     alert('App URL already exists.');
+  //     return;
+  //   }
+
+  //   const updatedApp = { label: newAppName, url: newAppUrl };
+  //   const updateUrl = urlTemplate.replace('{id}', currentApp.id);
+
+  //   fetch(updateUrl, {
+  //     method: 'PUT',
+  //     headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+  //     body: JSON.stringify(updatedApp)
+  //   })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
+  //       setIsEditModalVisible(false);
+  //       resetForm();
+  //     })
+  //     .catch(error => console.error('Error updating app:', error));
+  // };
+
   const PautanHandleUpdateApp = () => {
-    if (!isValidUrl(newAppUrl)) {
+    if (newAppUrl && !isValidUrl(newAppUrl)) {
       setUrlError('URL must start with http:// or https://');
       return;
     } else {
       setUrlError('');
     }
-
-    const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
-    if (isNameDuplicate) {
-      alert('App name already exists.');
-      return;
-    } else if (isUrlDuplicate) {
-      alert('App URL already exists.');
-      return;
-    }
-
-    const updatedApp = { label: newAppName, url: newAppUrl };
+  
+    // const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
+    // if (newAppName && isNameDuplicate) {
+    //   alert('App name already exists.');
+    //   return;
+    // } else if (newAppUrl && isUrlDuplicate) {
+    //   alert('App URL already exists.');
+    //   return;
+    // }
+  
+    const updatedApp = {};
+    if (newAppName) updatedApp.label = newAppName;
+    if (newAppUrl) updatedApp.url = newAppUrl;
+  
     const updateUrl = urlTemplate.replace('{id}', currentApp.id);
-
+  
     fetch(updateUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(updatedApp)
     })
-      .then(response => response.json())
+      // .then(response => response.json())
       .then(data => {
         setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
-        setIsEditModalVisible(false);
         resetForm();
+        setIsEditModalVisible(false);
+        fetchData();
       })
       .catch(error => console.error('Error updating app:', error));
   };
+
 
   const PautanHandleDeleteApp = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);

@@ -31,6 +31,7 @@ class Profile extends Model implements AuditableContract
         'cover_photo',
         'phone_no',
         'dob',
+        'staff_image',
     ];
 
     public static function rules($scenario = 'create')
@@ -44,6 +45,7 @@ class Profile extends Model implements AuditableContract
                     'cover_photo' => ['file'],
                     'phone_no' => ['string'],
                     'dob' => ['string'],
+                    'staff_image' => ['file'],
                 ],
                 // [],
             ],
@@ -55,6 +57,7 @@ class Profile extends Model implements AuditableContract
                     'cover_photo' => ['file'],
                     'phone_no' => ['string'],
                     'dob' => ['string'],
+                    'staff_image' => ['file'],
                 ],
                 // [],
             ],

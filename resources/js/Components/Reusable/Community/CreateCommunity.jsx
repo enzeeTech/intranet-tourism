@@ -66,7 +66,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       created_by: user.name,
       updated_by: user.name,
     };
-
+  
     const options = {
       method: 'POST',
       headers: {
@@ -76,23 +76,24 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       },
       body: JSON.stringify(data)
     };
-
+  
     try {
       const response = await fetch('/api/communities/communities', options);
       const text = await response.text();
-
+  
       if (!response.ok) {
         console.error('Server response not OK:', text);
         throw new Error('Failed to create department');
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department created:', responseData.data);
       onCreate(responseData.data);
+      window.location.reload(); // Reload the page after successful creation
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
-  };
+  }; 
 
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">

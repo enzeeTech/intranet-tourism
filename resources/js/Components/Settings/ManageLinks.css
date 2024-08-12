@@ -4,15 +4,19 @@ table {
 }
 
 .label-column {
-  width: 30%; /* Adjust this value to make the label column wider */
+  width: 35%; /* Adjust this value to make the label column wider */
 }
 
 .url-column {
   width: 45%; /* Adjust this value to make the URL column wider */
 }
+  width: 30%; /* Adjust this value to make the URL column wider */
+}
+
+
 
 .edit-column, .delete-column {
-  width: 10%; /* Default width for larger screens */
+  width: 15%; /* Adjust this value to make the order column narrower */
   text-align: center; /* Center align the content */
 }
 

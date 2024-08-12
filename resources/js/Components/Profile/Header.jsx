@@ -11,7 +11,20 @@ function ProfileImage({ name, src, alt, className, rounded, tag }) {
 
   let source = null;
 
-  if (src.startsWith('avatar/')) {
+  // if (src.startsWith('avatar/')) {
+  //   // If src already starts with 'avatar/', map it directly
+  //   source = `/storage/${src}`;
+  // } else {
+  //   // If src doesn't start with 'avatar/', check if it's a placeholder or not
+  //   source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+  //     ? src 
+  //     : `/avatar/${src}`;
+  // }
+
+  if (!src || src.trim() === '') {
+    // If src is empty or only contains whitespace, use the UI Avatars URL
+    source = src;
+  } else if (src.startsWith('avatar/')) {
     // If src already starts with 'avatar/', map it directly
     source = `/storage/${src}`;
   } else {
@@ -20,6 +33,7 @@ function ProfileImage({ name, src, alt, className, rounded, tag }) {
       ? src 
       : `/avatar/${src}`;
   }
+  
   
   console.log("SOURCE", source);
   

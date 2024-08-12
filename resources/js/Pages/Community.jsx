@@ -84,8 +84,9 @@ const Community = () => {
                   name={department.name}
                   imageUrl={'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
+                  type={department.type} // Pass the type (public/private)
                 />
-              ))
+              )) 
             )}
           </div>
         </div>
