@@ -459,12 +459,12 @@ function Calendar() {
                         />
                         <button
                             onClick={handlePrint}
-                            className="flex items-center justify-center px-4 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
+                            className="flex items-center justify-center px-3 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
                             <img src={printIcon} alt="Print" className="w-6 h-6" />
                         </button>
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex items-center text-white bg-blue-500 hover:bg-blue-700 mt-2 px-4 py-3.5 rounded-full">
+                            className="flex items-center text-white bg-blue-500 hover:bg-blue-700 mt-2 px-3.5 py-3.5 rounded-full">
                             <img src="/assets/plus.svg" alt="Plus icon" className="w-5 h-5" />
                         </button>
                     </div>
