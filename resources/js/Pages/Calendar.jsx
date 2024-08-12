@@ -26,6 +26,7 @@ function Calendar() {
         endDate: '', 
         startTime: '', 
         endTime: '', 
+        description: '',
         color: 'purple', 
         url: '' 
     });
@@ -73,68 +74,6 @@ function Calendar() {
                 console.error('Error fetching events: ', error);
             });
     };
-
-    // const fetchBirthdayEvents = async () => {
-    //     try {
-    //         let allProfiles = [];
-    //         let currentPage = 1;
-    //         let totalPages = 1;
-    
-    //         while (currentPage <= totalPages) {
-    //             const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
-    //             const data = await response.json();
-    
-    //             if (data && data.data && Array.isArray(data.data.data)) {
-    //                 allProfiles = [...allProfiles, ...data.data.data];
-    
-    //                 totalPages = data.data.last_page;
-    //                 currentPage++;
-    //             } else {
-    //                 console.error('Error: Expected an array, but got:', data);
-    //                 break;
-    //             }
-    //         }
-    
-    //         // Map profiles to birthday events
-    //         const birthdayEvents = allProfiles.reduce((acc, profile) => {
-    //             const dob = new Date(profile.dob);
-    //             const currentYear = new Date().getFullYear();
-    //             dob.setFullYear(currentYear);
-    
-    //             const dateStr = dob.toISOString().split('T')[0];
-    //             let existingEvent = acc.find(event => event.start === dateStr);
-    
-    //             if (existingEvent) {
-    //                 // Ensure names property exists and push the new name
-    //                 if (!existingEvent.extendedProps.names) {
-    //                     existingEvent.extendedProps.names = [];
-    //                 }
-    //                 existingEvent.extendedProps.names.push(profile.bio);
-    //             } else {
-    //                 // Create a new birthday event with names initialized
-    //                 acc.push({
-    //                     title: `Birthday: ${profile.bio}`,
-    //                     start: dateStr,
-    //                     allDay: true,
-    //                     backgroundColor: 'transparent',
-    //                     // borderColor: 'blue',
-    //                     textColor: 'blue',
-    //                     isBirthday: true,
-    //                     extendedProps: {
-    //                         names: [profile.bio] // Initialize names array
-    //                     }
-    //                 });
-    //             }
-    //             return acc;
-    //         }, []);
-    
-    //         setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
-    //         setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
-    //     } catch (error) {
-    //         console.error('Error fetching birthdays: ', error);
-    //     }
-    // };
-
     
     const fetchBirthdayEvents = async () => {
         try {
@@ -285,15 +224,23 @@ function Calendar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         const formatDateTime = (date, time) => `${date}T${time}`;
+    
+        // Hardcoded start and end times
+        const defaultStartTime = "09:00";
+        const defaultEndTime = "17:00";  
+    
         const eventPayload = {
             title: eventData.title,
             venue: eventData.venue,
-            start_at: formatDateTime(eventData.startDate, eventData.startTime),
-            end_at: formatDateTime(eventData.endDate, eventData.endTime),
+            start_at: formatDateTime(eventData.startDate, defaultStartTime),
+            end_at: formatDateTime(eventData.endDate, defaultEndTime),
+            description: eventData.description,
             color: eventData.color,
             url: includeUrl ? eventData.url : null,
         };
+    
         fetch('/api/events/events', {
             method: 'POST',
             headers: {
@@ -319,9 +266,10 @@ function Calendar() {
             .catch(error => {
                 console.error('Error creating event: ', error);
                 setIsModalOpen(false);
-                fetchEvents()
+                fetchEvents();
             });
     };
+    
 
     const handlePrint = () => {
         setIsPrintModalOpen(true);
@@ -372,6 +320,7 @@ function Calendar() {
             endDate: event.end ? event.end.toISOString().split('T')[0] : '',
             startTime: formatTime(event.start),
             endTime: event.end ? formatTime(event.end) : '',
+            description: event.extendedProps.description,
             color: event.backgroundColor,
             url: url
         });
@@ -390,6 +339,7 @@ function Calendar() {
             FfData.append('venue', eventData.venue);
             FfData.append('start_at', `${eventData.startDate}T${eventData.startTime}`);
             FfData.append('end_at', `${eventData.endDate}T${eventData.endTime}`);
+            FfData.append('description', eventData.description);
             FfData.append('color', eventData.color);
             FfData.append('url', eventData.url || '');
     
@@ -531,8 +481,13 @@ function Calendar() {
                                 minute: 'numeric',
                                 hour12: true
                             });
+
                             const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
                                 ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                                : '';
+
+                            const descContent = (info.event.extendedProps.description && info.event.extendedProps.description.trim() && info.event.extendedProps.description !== 'null') 
+                                ? `<p><strong>Description:</strong> ${info.event.extendedProps.description}</p>` 
                                 : '';
                             
                             const popoverContent = `
@@ -540,6 +495,7 @@ function Calendar() {
                                     <p class="event-title"><strong>${info.event.title}</strong></p>
                                     <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
                                     <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                                    ${descContent}
                                     ${urlContent}
                                     <hr style="border: 10px solid #000;" />
                                 </div>`;
@@ -556,12 +512,12 @@ function Calendar() {
                     }}
                     
                     eventContent={(eventInfo) => {
-                        console.log("eventContent called for event:", eventInfo.event);
+                        // console.log("eventContent called for event:", eventInfo.event);
                     
                         const isBirthday = eventInfo.event.extendedProps.isBirthday;
                         if (isBirthday) {
                             const names = eventInfo.event.extendedProps.names || [];
-                            console.log("Rendering birthday icon for:", names);
+                            // console.log("Rendering birthday icon for:", names);
                     
                             return (
                                 <div
@@ -699,6 +655,15 @@ function Calendar() {
                                     placeholder="End Time"
                                     required
                                 /> */}
+                                <input
+                                    type="text"
+                                    name="description"
+                                    value={eventData.description}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Description"
+                                    required
+                                />
                                 <div className="form-group">
                                     <label>
                                     <input
@@ -787,7 +752,7 @@ function Calendar() {
                                 placeholder="End Date"
                                 required
                             />
-                            <input
+                            {/* <input
                                 type="time"
                                 name="startTime"
                                 value={eventData.startTime}
@@ -804,6 +769,15 @@ function Calendar() {
                                 className="form-control"
                                 placeholder="End Time"
                                 required
+                            /> */}
+                            <input
+                                    type="text"
+                                    name="description"
+                                    value={eventData.description}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Description"
+                                    required
                             />
                             <div className="form-group">
                                 <label>

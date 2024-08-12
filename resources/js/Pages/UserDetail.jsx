@@ -496,7 +496,7 @@ return (
                     <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
-                            profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                            profileImage={profileData.profileImage}
                             name={profileData.name}
                             username={profileData.username}
                             status={profileData.status}
@@ -509,7 +509,7 @@ return (
                         <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         {activeTab === "activities" && (
                             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} />
+                                {/* <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} /> */}
                                 <Filter className="mr-10" />
                                 <div className="mb-20"></div>
                                 <OutputData polls={polls} showUserPosts={true} userId={user.id} />
