@@ -16,7 +16,7 @@ const CommunityCard = ({ name, imageUrl, onDeactivateClick, departmentID, type }
           {name} {isPrivate && <FaLock style={{ color: 'black' }} />} {/* Lock icon in black */}
         </h3>
       </div>
-      <div className="card-footer items-center">
+      <div className="card-footer items-center justify-center">
         <a href={`/departmentInner?departmentId=${departmentID}`}>
           <button
             className="justify-center text-blue-500 font-semibold px-5 rounded-3xl border border-blue-500 bg-transparent hover:bg-blue-700 hover:text-white"

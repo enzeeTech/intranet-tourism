@@ -270,7 +270,7 @@ import Feedback from "./Feedback";
 import Roles from "./Roles";
 import Permissions from "./Permissions";
 import AddTitles from "./AddTitles";
-
+import AddUnits from "./AddUnits";
 
 const SettingsPage = ({ currentPage }) => {
   const handleSave = (selectedImage) => {
@@ -302,6 +302,7 @@ const SettingsPage = ({ currentPage }) => {
       {currentPage === 'Feedback' && <Feedback/>}
       {currentPage === 'Birthday Template' && <div></div>}
       {currentPage === 'Business Titles' && <AddTitles/>}
+      {currentPage === 'Business Units' && <AddUnits/>}
       {currentPage === 'Roles' && <Roles/>}
       {currentPage === 'Permissions' && <Permissions/>}
     </div>
