@@ -462,7 +462,8 @@ const FileTable = ({ searchTerm }) => {
                               className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80"
                               onDoubleClick={() => startEditing(indexOfFirstItem + index, metadata.original_name)}
                             >
-                              {metadata.original_name || 'Unknown'}
+                              {/* if current name too long, ellipses and also add file type in name */}
+                              {metadata.current_name || metadata.original_name || 'Unknown'} 
                             </div>
                           )}
                         </td>
