@@ -8,14 +8,20 @@ table {
 }
 
 .url-column {
-  width: 30%; /* Adjust this value to make the URL column wider */
+  width: 45%; /* Adjust this value to make the URL column wider */
 }
 
 
 
 .edit-column, .delete-column {
-  width: 30%; /* Adjust this value to make the order column narrower */
+  width: 15%; /* Adjust this value to make the order column narrower */
   text-align: center; /* Center align the content */
+}
+
+@media (max-width: 768px) { /* Adjust this breakpoint as needed */
+  .edit-column, .delete-column {
+    width: 15%; /* Width for smaller screens */
+  }
 }
 
 .fixed-size-row {

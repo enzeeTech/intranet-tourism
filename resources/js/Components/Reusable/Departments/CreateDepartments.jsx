@@ -26,8 +26,9 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center px-5 py-5 bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[200px]" />
+      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        {/* <img loading="lazy" src="/assets/uploadAnImage.svg" alt={alt} className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center" /> */}
+        <img loading="lazy" src={src} alt={alt} className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center" />
       </div>
       <input
         type="file"
@@ -185,7 +186,7 @@ export default function CreateDepartments({ onCancel, onCreate, userID }) {
   return (
     <Card
       title="Create New Department"
-      imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
+      imgSrc="/assets/uploadAnImage.svg"
       imgAlt="Departments Logo"
       user={user}
       type="Type"

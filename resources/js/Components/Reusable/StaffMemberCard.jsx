@@ -110,13 +110,13 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
       </div>
       {isCallPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeCallPopup}>
-          <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
-            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
+          <div className="popup w-[475px] rounded-none" onClick={(e) => e.stopPropagation()}>
+            <img src="assets/cancel.svg" className="close-button" onClick={closeCallPopup} alt="Close" />
             <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
-              <br />
-              {/* Office No: +603-8891 {workNo} */}
-              Office No: {workNo}
+              <br></br>
+              Office Number: 
+              <span className="text-blue-500 ml-2">{workNo}</span>
             </p>
           </div>
         </div>
