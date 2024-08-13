@@ -37,7 +37,7 @@ const PrintCalendar = ({ events }) => {
                         <th>EVENT NAME</th>
                         <th>VENUE</th>
                         <th>CREATED BY</th>
-                        <th>URL</th>
+                        <th>DESCRIPTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,13 +46,13 @@ const PrintCalendar = ({ events }) => {
                             <td className='w-56'>
                                 {/* {new Date(event.start).toLocaleDateString()} - {new Date(event.end).toLocaleDateString()}<br />
                                 {new Date(event.start).toLocaleTimeString()} - {new Date(event.end).toLocaleTimeString()} */}
-                                {formatDate(event.start)} - {formatDate(event.end)}<br />
-                                {formatTime(event.start)} - {formatTime(event.end)}
+                                {formatDate(event.start)} - {formatDate(event.end)}
+                                {/* {formatTime(event.start)} - {formatTime(event.end)} */}
                             </td>
                             <td>{event.title}</td>
                             <td>{event.venue}</td>
                             <td>{event.userName}</td>
-                            <td>{event.url ? <a href={event.url}>{event.url}</a> : "N/A"}</td>
+                            <td>{event.description ? event.description : "N/A"}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -59,8 +59,8 @@ class RoleHasPermissionController extends Controller
         $role_id = $validated['role_id'];
         $permission_ids = $validated['permission_id'];
 
-        $role = Role::findOrFail($role_id);
-
+        $role = Role::findOrFail($id);
+        
         $role->permissions()->detach();
 
         foreach ($permission_ids as $permission_id) {
@@ -85,6 +85,4 @@ class RoleHasPermissionController extends Controller
 
         return response()->noContent();
     }
-
-
 }
