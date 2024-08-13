@@ -35,7 +35,6 @@ export default function Profile() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -49,11 +48,11 @@ export default function Profile() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
+        photo: "",
         employmentPosts: [] // Initialize with an empty array
     });
 
     const [originalFormData, setOriginalFormData] = useState(formData);
-    const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
     const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
@@ -72,47 +71,45 @@ export default function Profile() {
         fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
+        .then((response) => response.json())
         .then(({ data }) => {
-            console.log('hello', data);
             setProfileData(pv => ({
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                profileImage: data.profile && data.profile.image,
+                profileImage: data.profile?.image || '',
                 username: "@" + data.username,
             }));
 
-            // Sort employmentPosts by id in ascending order (oldest first)
             const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
 
-            setFormData((pv) => ({
-                ...pv,
+            setFormData({
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
-                dateofbirth: data.profile?.dob || "N/A",
-                phone: data.profile?.work_phone || "N/A",
-                whatsapp: data.profile?.phone_no || "N/A",
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in formData
-            }));
+                dateofbirth: data.profile?.dob || "", // Use empty string if no value
+                phone: data.profile?.work_phone || "", // Use empty string if no value
+                whatsapp: data.profile?.phone_no || "", // Use empty string if no value
+                photo: data.profile?.staff_image,
+                employmentPosts: sortedEmploymentPosts
+            });
 
-            setOriginalFormData((pv) => ({
-                ...pv,
+            setOriginalFormData({
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in originalFormData
-            }));
+                dateofbirth: data.profile?.dob || "", // Ensure originalFormData is correctly set
+                phone: data.profile?.work_phone || "", // Ensure originalFormData is correctly set
+                whatsapp: data.profile?.phone_no || "", // Ensure originalFormData is correctly set
+                photo: data.profile?.staff_image,
+                employmentPosts: sortedEmploymentPosts
+            });
         })
         .catch((error) => {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
+
+
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -142,7 +139,10 @@ export default function Profile() {
     };
 
     const handlePhotoChange = (newPhoto) => {
-        setPhoto(newPhoto);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: newPhoto,
+        }));
     };
 
     const updateUsername = async (newFormData) => {
@@ -172,13 +172,22 @@ export default function Profile() {
             FfData.append('user_id', id); // Add user_id to the form data
             FfData.append('name', formData.name); // Add name to the form data
 
+            // Check if photo is a file or a URL
+            if (newFormData.photo instanceof File) {
+                FfData.append('photo', newFormData.photo);
+            } else if (newFormData.photo.startsWith('data:image')) {
+                // Convert base64 to file and append it to FormData
+                const blob = await (await fetch(newFormData.photo)).blob();
+                FfData.append('staff_image', blob, 'profile_image.png');
+            }
+
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
                     body: FfData,
                     headers: {
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                        'X-CSRF-TOKEN': csrfToken || '',
                         'Authorization': `Bearer ${authToken}`,
                     },
                 }),
@@ -203,15 +212,16 @@ export default function Profile() {
         window.location.reload();
     };
 
+
     const handleSaveDepartment = async (index) => {
         try {
             // Get the employment post for the specified index
             const employmentPost = formData.employmentPosts[index]; // Get the employment_post object by index
-        
+
             if (!employmentPost || !employmentPost.id) {
                 throw new Error(`Employment post ID is not available for department ${index + 1}`);
             }
-        
+
             const FfData = new FormData();
             FfData.append('_method', 'PUT'); // Add _method to the form data
             FfData.append('department_id', employmentPost.department_id);
@@ -221,7 +231,7 @@ export default function Profile() {
             FfData.append('location', employmentPost.location);
             FfData.append('work_phone', employmentPost.work_phone);
             FfData.append('user_id', id); // Add user_id to the form data
-        
+
             const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
                 method: 'POST',
                 body: FfData,
@@ -231,14 +241,13 @@ export default function Profile() {
                     'Authorization': `Bearer ${authToken}`,
                 },
             });
-        
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-        
+
             const data = await response.json();
             setOriginalFormData(formData);
-            setOriginalPhoto(photo);
             if (index === 0) {
                 setIsEditingDepartment1(false);
             } else if (index === 1) {
@@ -254,24 +263,15 @@ export default function Profile() {
     };
 
     const handleCancelBio = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            name: originalFormData.name || "N/A",
-            username: originalFormData.username || "N/A",
-            email: originalFormData.email || "N/A",
-            dateofbirth: originalFormData.dateofbirth || "N/A",
-            phone: originalFormData.phone || "N/A",
-            whatsapp: originalFormData.whatsapp || "N/A",
-        }));
-        setPhoto(originalPhoto);       
+        setFormData(originalFormData);
         setIsEditingBio(false);
-    }; 
+    };
 
     const handleCancelDepartment1 = () => {
         setFormData((prevFormData) => ({
             ...prevFormData,
-            employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-                index === 0 
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 0
                     ? {
                         ...post,
                         department: originalFormData.employmentPosts[0].department || "N/A",
@@ -285,15 +285,14 @@ export default function Profile() {
                     : post
             ),
         }));
-        setPhoto(originalPhoto);
         setIsEditingDepartment1(false);
-    };   
-    
+    };
+
     const handleCancelDepartment2 = () => {
         setFormData((prevFormData) => ({
             ...prevFormData,
-            employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-                index === 1 
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 1
                     ? {
                         ...post,
                         department: originalFormData.employmentPosts[1].department || "N/A",
@@ -307,9 +306,8 @@ export default function Profile() {
                     : post
             ),
         }));
-        setPhoto(originalPhoto);
         setIsEditingDepartment2(false);
-    };   
+    };
 
     const handleEditBio = () => {
         setIsEditingBio(true);
@@ -328,7 +326,7 @@ export default function Profile() {
         console.log('Poll data:', pollData);
         // You can use an API call to save the poll data, update the state, etc.
     };
-    
+
 
     // Sort employmentPosts by id in ascending order (oldest id first)
     const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.id - b.id);
@@ -341,7 +339,7 @@ export default function Profile() {
                         <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                                profileImage={profileData.profileImage}
                                 name={profileData.name}
                                 username={profileData.username}
                                 status={profileData.status}
@@ -374,11 +372,7 @@ export default function Profile() {
                                         <div className="flex-auto my-auto max-md:max-w-full">
                                             <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                                 <ProfileBio
-                                                    photo={photo}
-                                                    username={formData.username}
-                                                    email={formData.email}
-                                                    dateofbirth={formData.dateofbirth}
-                                                    whatsapp={formData.whatsapp}
+                                                    formData={formData}
                                                     isEditing={isEditingBio}
                                                     onFormDataChange={setFormData}
                                                     onPhotoChange={handlePhotoChange}
@@ -392,7 +386,6 @@ export default function Profile() {
                                         </div>
                                     </section>
                                     <div className="separator"></div>
-                                    
                                     {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                             <div className="flex items-center justify-between">
@@ -409,7 +402,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost.position || ''}
+                                                        position={employmentPost.title || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}
@@ -432,7 +425,7 @@ export default function Profile() {
 
                             {activeTab === "gallery" && (
                                 <section>
-                                    <ImageProfile selectedItem="All" userId={id} />
+                                    <ImageProfile selectedItem="All" userId={id} filterBy="user" />
                                     <VideoProfile selectedItem="All" userId={id} />
                                 </section>
                             )}
@@ -475,16 +468,16 @@ export default function Profile() {
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
             )}
             {isPopupOpen && (
-                <Popup 
-                    title="Edit Banner Photo" 
-                    onClose={() => setIsPopupOpen(false)} 
+                <Popup
+                    title="Edit Banner Photo"
+                    onClose={() => setIsPopupOpen(false)}
                     onSave={handleSaveBio}
                     profileData={profileData}
                     id={id}
                     formData={formData}
                     csrfToken={csrfToken}
                     authToken={authToken}
-                    setPhoto={setPhoto}
+                    setFormData={setFormData}
                 />
             )}
         </Example>

@@ -35,8 +35,8 @@ class ExternalLink extends Model implements AuditableContract
             ],
             'update' => [
                 [
-                    'label' => ['string', 'required'],
-                    'url' => ['string', 'required'],
+                    'label' => ['string'],
+                    'url' => ['string'],
                     'order' => ['integer'],
                 ],
                 // [],

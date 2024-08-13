@@ -5,7 +5,7 @@ import { usePage } from '@inertiajs/react';
 function Header({ title }) {
   return (
     <header className="flex gap-5 items-start self-center px-5 w-full text-2xl font-bold text-center max-w-[358px] text-neutral-800">
-      <h1 className="flex-auto mt-3">{title}</h1>
+      <h1 className="flex-auto mt-0">{title}</h1>
     </header>
   );
 }
@@ -39,7 +39,7 @@ function Avatar({ src, alt, onImageChange }) {
     <div className="flex flex-col items-center">
       <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
         {banner ? (
-          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px] h-[200px] shrink-0 rounded-xl border-4 border-gray-200" />
+          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px] h-[200px] shrink-0 rounded-xl border-4 border-gray-200 object-cover object-center" />
         ) : (
           <p>No image available</p>
         )}
@@ -170,11 +170,8 @@ function Card({
   };
 
   return (
-    <section className="flex flex-col py-6 bg-white rounded-3xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px]">
       <Header title={title} />
-      <div className="flex flex-col items-start font-bold text-lg w-full px-6 mb-1">
-        Department banner image:
-      </div>
       <div className="flex flex-col items-center w-full px-6">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
         <input
@@ -214,7 +211,7 @@ function Card({
 const EditDepartments = ({ department, onCancel, onSave }) => (
   <Card
     title="Edit Department"
-    imgSrc="https://via.placeholder.com/150"
+    imgSrc="/assets/uploadAnImage.svg"
     imgAlt="Department Image"
     department={department}
     cancelText="Cancel"

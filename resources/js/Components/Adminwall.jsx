@@ -149,8 +149,8 @@ function Navigation({ userId, departmentID, departmentName }) {
 
         {activeTab === "Gallery" && (
           <section>
-            <ImageProfile selectedItem="All" />
-            <VideoProfile selectedItem="All" />
+            <ImageProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
+            <VideoProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
           </section>
         )}
 

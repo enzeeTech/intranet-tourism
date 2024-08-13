@@ -153,8 +153,8 @@ const Ordering = () => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
-                                    <button type="button" className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
+                                    <button onClick={handleBack} className="text-md font-bold text-black">Back</button>
+                                    <button type="button" className="px-4 py-2 text-md font-bold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -165,8 +165,8 @@ const Ordering = () => {
                                         <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
-                                                    <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
+                                                    <th className="px-6 py-3 text-md font-bold text-left text-gray-500">Name</th>
+                                                    <th className="px-4 py-3 text-md font-bold text-left text-gray-500">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

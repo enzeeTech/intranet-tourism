@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import searchIcon from '../../../../public/assets/searchStaffButton.png';
+// import searchIcon from '../../../../public/assets/searchStaffButton.png';
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
@@ -90,8 +90,8 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
         <input
           type="text"
           // className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
-          className="rounded-full flex-grow w-full font-bold py-3 px-6 bg-gray-100 border-gray-100 text-neutral-800 sm:w-auto"
-          placeholder="Search File Name"
+          className="text-md px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 search-input-staff-search-bar sm:w-auto"
+          placeholder="Search file name"
           value={searchTerm}
           onChange={handleSearchChange} 
           style={{ paddingLeft: '1.5rem' }}
