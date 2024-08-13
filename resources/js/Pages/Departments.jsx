@@ -38,13 +38,17 @@ const Departments = () => {
       const departmentData = data.data.data.map((department) => ({
         id: department.id,
         name: department.name,
+        order: department.order,
         imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',// Assuming the API returns an image URL here
       }));
 
+      console.log('Department data:', departmentData);  
+
       setDepartmentsList((prevDepartments) => {
         const allDepartments = [...prevDepartments, ...departmentData];
-        return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+        return allDepartments.sort((a, b) => a.order - b.order);
       });
+      
 
       if (data.data.next_page_url) {
         fetchDepartments(data.data.next_page_url);
