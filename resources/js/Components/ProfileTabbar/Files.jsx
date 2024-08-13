@@ -373,7 +373,7 @@ const Table = ({ userId, departmentID }) => {
                   return (
                     <tr key={index}>
                       <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 overflow-hidden text-ellipsis">
-                        {metadata.name}
+                        {metadata.original_name || 'Unknown'}
                       </td>
                       <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 overflow-hidden text-ellipsis">
                         {(item.filesize / 1024 / 1024).toFixed(2)} MB

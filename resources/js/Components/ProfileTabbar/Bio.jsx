@@ -11,12 +11,14 @@ function ProfileBio({
     onSaveBio,
     userId
 }) {
-    const [bioFormData, setBioFormData] = useState(formData);
+    const [bioFormData, setBioFormData] = useState(formData || {});
+    console.log("JJ", formData);
+    // Initialize with an empty object if formData is undefined
     const formRef = useRef(null);
 
     useEffect(() => {
         if (!isEditing) {
-            setBioFormData(formData); // Only update bioFormData if not editing
+            setBioFormData(formData || {}); // Ensure bioFormData is always an object
         }
     }, [formData, isEditing]);
 
@@ -82,6 +84,20 @@ function ProfileBio({
         </tr>
     );
 
+    let source = null;
+
+    if (bioFormData.photo.startsWith('staff_image/')) {
+      // If bioFormData.photo already starts with 'avatar/', map it directly
+      source = `/storage/${bioFormData.photo}`;
+    } else {
+      // If bioFormData.photo doesn't start with 'avatar/', check if it's a placeholder or not
+      source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg'
+        ? bioFormData.photo
+        : `/avatar/${bioFormData.photo}`;
+    }
+
+    console.log("SOURCE", source);
+
     return (
         <div ref={formRef} className="flex-auto my-auto p-4">
             <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6">
@@ -107,7 +123,7 @@ function ProfileBio({
                                         <div className="flex items-center gap-4">
                                             <img
                                                 loading="lazy"
-                                                src={bioFormData.photo.startsWith('data:image') ? bioFormData.photo : `/storage/${bioFormData.photo}`}
+                                                src={source}
                                                 className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
                                                 alt="Staff's photo"
                                             />

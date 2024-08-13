@@ -67,7 +67,7 @@ export default function Login({ status, canResetPassword }) {
                         name="email"
                         placeholder="Email"
                         value={data.email}
-                        className="mt-1 block w-full px-3.5 py-2 whitespace-nowrap rounded-lg border-2 border-solid border-neutral-200 shadow-none focus:outline-none focus:border-2 focus:border-blue-500"
+                        className="text-md mt-1 block w-full px-3.5 py-2 whitespace-nowrap rounded-lg border-2 border-solid border-neutral-200 shadow-none focus:outline-none focus:border-2 focus:border-blue-500"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}

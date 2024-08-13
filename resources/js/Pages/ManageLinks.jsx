@@ -4,6 +4,7 @@ import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid
 import '../Components/Settings/ManageLinks.css';
 import { useCsrf } from "@/composables";
 import Example from '@/Layouts/DashboardLayoutNew'; // Assuming Example is a layout component
+import 'tailwindcss/tailwind.css';
 
 
 const API_URL = "/api/settings/external_links";
@@ -264,10 +265,10 @@ const Pautan = () => {
       <>
         <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1500px] mx-8 my-10">
           <div className="flex items-start justify-between mb-2 border-b border-gray-200">
-            <h2 className="mb-3 text-3xl font-bold text-blue-500">Manage links</h2>
-            <div className="flex space-x-2">
+            <h2 className="mb-3 text-3xl font-bold text-gray-900">Manage Links</h2>
+            <div className="flex space-x-4">
               <button
-                className="px-4 py-2 font-bold text-white bg-gray-500 hover:bg-gray-700 rounded-full"
+                className="text-gray-900 font-bold"
                 onClick={handleBackNavigation}
               >
                 Back
@@ -278,6 +279,11 @@ const Pautan = () => {
               >
                 + Add
               </button>
+              <button
+                class="btn"
+                onClick={PautanHandleAddApp}>
+                Default Button
+              </button>
             </div>
           </div>
           <DragDropContext onDragEnd={PautanHandleDragEnd}>
@@ -286,10 +292,10 @@ const Pautan = () => {
                 <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 text-base text-center text-gray-900 label-column">App name</th>
-                      <th className="px-6 py-3 text-base text-center text-gray-900 url-column">URL</th>
-                      <th className="px-6 py-3 text-base text-center text-gray-900 edit-column">Edit</th>
-                      <th className="px-6 py-3 text-base text-center text-gray-900 delete-column">Delete</th>
+                      <th className="px-6 py-3 font-bold text-md text-start text-gray-500 label-column">App name</th>
+                      <th className="px-6 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
+                      <th className="px-6 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
+                      <th className="px-6 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -350,8 +356,8 @@ const Pautan = () => {
 
         {isAddModalVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
-              <h2 className="mb-4 text-xl font-bold">Add New App</h2>
+            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
+              <h2 className="mb-4 text-xl font-bold">Add New Link</h2>
               <input
                 type="text"
                 placeholder="Example.com"
@@ -381,8 +387,8 @@ const Pautan = () => {
 
         {isEditModalVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
-              <h2 className="mb-4 text-xl font-bold">Edit App</h2>
+            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
+              <h2 className="mb-4 text-xl font-bold">Edit Link</h2>
               <input
                 type="text"
                 placeholder="Example.com"
@@ -398,7 +404,7 @@ const Pautan = () => {
                 className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
               />
               {urlError && <p className="text-red-500 -mt-4 mb-5">{urlError}</p>}
-              <div className="flex justify-end space-x-3">
+              <div className="flex justify-end space-x-3 mt-3">
                 <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsEditModalVisible(false)}>
                   Cancel
                 </button>
@@ -412,7 +418,7 @@ const Pautan = () => {
 
         {isDeleteModalVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative p-8 bg-white rounded-3xl shadow-lg w-96">
+            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
               <h2 className="mb-4 text-xl font-bold text-center">Delete this link?</h2>
               <div className="flex justify-center space-x-4">
                 <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsDeleteModalVisible(false)}>
