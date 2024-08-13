@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\Commmmunity;
+use App\Http\Controllers\Community;
 use App\Http\Controllers\communityPost;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentOrdering;
@@ -56,11 +56,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
-    Route::get('/community', [Commmmunity::class, 'index'])->name('Community');
+    Route::get('/community', [Community::class, 'index'])->name('Community');
 
     Route::get('/departments', [departments::class, 'index'])->name('Departments');
     Route::get('/departmentInner', [departments::class, 'renderinner'])->name('DepartmentInner');
-
+    Route::get('/communityInner', [Community::class, 'renderinner'])->name('CommunityInner');
     Route::get('/communityPost', [communityPost::class, 'index'])->name('communityPosts');
     Route::get('/fileManagement', [fileManagement::class, 'index'])->name('fileManagement');
     Route::get('/onlinelist', [DashboardController::class, 'onlinelist'])->name('onlinelist');

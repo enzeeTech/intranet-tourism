@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-// const CommunityItem = ({ name, category, imgSrc, altText }) => (
-//   <article className="flex items-start w-full gap-3 px-4 py-1 mt-0">
-//     <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase ">
-//       <img src={imgSrc} alt={altText} className="aspect-square w-[75px] rounded-md " />
-//     </div>
-//     <div className="flex flex-col mt-1.5 text-md font-bold">
-//       <h2>{name}</h2>
-//       <p className="text-xs font-semibold text-neutral-600">{category}</p>
-//     </div>
-//   </article>
-// );
+import arrowRight from '../../../../public/assets/viewAllArrow.png';
 
 const CommunityItem = ({ name, category, imgSrc, altText }) => (
   <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
@@ -85,9 +74,12 @@ function MyComponent() {
           ))
         )}
         <div className="w-full h-8 hover:bg-slate-200">
-          <a href="/community" className="flex self-stretch mt-2 mb-2 ml-4 font-bold items-center">
-            VIEW ALL
-          </a>
+        <a href="../Community">
+                <button style={{ fontFamily: "Nunito Sans" }} className="view-all-btn">
+                    VIEW ALL
+                    <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
+                </button>
+            </a>
         </div>
       </section>
     </div>
