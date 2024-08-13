@@ -108,7 +108,7 @@ const Media = () => {
                             </h1>
                             <hr className="underline" />
                         </header>
-                        <section className="mt-8 max-md:max-w-full">
+                        <section className="mt-4 max-md:max-w-full">
                             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                     {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderImages()}
@@ -124,7 +124,7 @@ const Media = () => {
                             </h1>
                             <hr className="underline" />
                         </header>
-                        <section className="mt-8 max-md:max-w-full">
+                        <section className="mt-4 max-md:max-w-full">
                             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                                     {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderVideos()}
