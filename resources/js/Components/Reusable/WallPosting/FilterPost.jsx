@@ -41,6 +41,8 @@ function Filter() {
     setIsOpen(!isOpen);
   };
 
+  
+
   return (
     <div className="flex flex-col absolute  justify-center text-sm max-w-[132px] text-neutral-800 relative mr-96  -mb-10">
       <div
@@ -50,7 +52,7 @@ function Filter() {
         <div>All posts</div>
         <img
           loading="lazy"
-          src="assets/Dropdownarrow.svg"
+          src="/assets/Dropdownarrow.svg"
           alt="Decorative icon"
           className={`shrink-0 my-auto aspect-[1.89] stroke-[2px] w-[15px] ${
             isOpen ? "transform rotate-180" : ""
