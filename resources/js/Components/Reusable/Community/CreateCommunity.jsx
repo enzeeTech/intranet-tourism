@@ -123,7 +123,6 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="">Select Type</option>
           <option value="private">Private</option>
           <option value="public">Public</option>
-          <option value="all">All</option>
         </select>
         <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
