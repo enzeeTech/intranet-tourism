@@ -13,8 +13,6 @@ import { usePage } from '@inertiajs/react';
 
 const FileManage = ({requiredData, onFileUploaded}) => {
     const { id } = usePage().props; // Retrieve the user_id from the Inertia view
-
-
     const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (term) => {

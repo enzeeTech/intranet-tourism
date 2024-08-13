@@ -401,7 +401,7 @@ function Calendar() {
                     <div className="flex items-center justify-between w-full">
                         <input
                             type="search"
-                            className="flex-grow px-6 py-3 mt-2 font-bold bg-gray-100 border-gray-100 rounded-full input-no-outline"
+                            className="flex-grow px-6 py-3 mt-2 bg-gray-100 border-gray-100 rounded-full input-no-outline"
                             placeholder="Search for events"
                             aria-label="Search"
                             value={searchTerm}
@@ -497,7 +497,6 @@ function Calendar() {
                                     <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
                                     ${descContent}
                                     ${urlContent}
-                                    <hr style="border: 10px solid #000;" />
                                 </div>`;
                             
                             new bootstrap.Popover(info.el, {
@@ -550,7 +549,7 @@ function Calendar() {
                                 <div
                                     style={{
                                         backgroundColor: eventInfo.backgroundColor,
-                                        padding: '15px 15px',
+                                        padding: '10px 15px',
                                         borderRadius: '2px',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -563,7 +562,7 @@ function Calendar() {
                                     }}
                                     className="fc-event-title"
                                 >
-                                    <div
+                                    <div 
                                         style={{
                                             borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
                                             height: '100%',
@@ -711,127 +710,130 @@ function Calendar() {
                 )}
 
                 {isEditModalOpen && (
-                    <div className="modal-container">
-                        <button onClick={closeEditModal} className="mt-2 mr-2 modal-close-button">
-                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-                        </button>
-                        <form onSubmit={handleEditSubmit}>
-                            <input
-                                type="text"
-                                name="title"
-                                value={eventData.title}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Event Title"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="venue"
-                                value={eventData.venue}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Venue"
-                                required
-                            />
-                            <input
-                                type="date"
-                                name="startDate"
-                                value={eventData.startDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Date"
-                                required
-                            />
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={eventData.endDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date"
-                                required
-                            />
-                            {/* <input
-                                type="time"
-                                name="startTime"
-                                value={eventData.startTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Time"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="endTime"
-                                value={eventData.endTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Time"
-                                required
-                            /> */}
-                            <input
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal-container">
+                            <h1 className="flex items-center justify-center mx-4 mb-4 text-2xl font-bold text-neutral-800">Edit Event</h1>
+                                <button onClick={closeEditModal} className="mt-2 mr-2 modal-close-button">
+                                    <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                                </button>
+                            <form onSubmit={handleEditSubmit}>
+                                <input
                                     type="text"
-                                    name="description"
-                                    value={eventData.description}
+                                    name="title"
+                                    value={eventData.title}
                                     onChange={handleChange}
                                     className="form-control"
-                                    placeholder="Description"
+                                    placeholder="Event Title"
                                     required
-                            />
-                            <div className="form-group">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        className='mr-2'
-                                        name="includeUrl"
-                                        checked={includeUrl}
-                                        onChange={(e) => {
-                                            const isChecked = e.target.checked;
-                                            setIncludeUrl(isChecked);
-                                            if (!isChecked) {
-                                                setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
-                                            }
-                                        }}
-                                    />
-                                    Include URL
-                                </label>
-                                {includeUrl && (
-                                    <input
-                                        type="url"
-                                        className="mt-2 form-control"
-                                        name="url"
-                                        value={eventData.url}
+                                />
+                                <input
+                                    type="text"
+                                    name="venue"
+                                    value={eventData.venue}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Venue"
+                                    required
+                                />
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    value={eventData.startDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    required
+                                />
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    value={eventData.endDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="startTime"
+                                    value={eventData.startTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Time"
+                                    required
+                                />
+                                <input
+                                    type="time"
+                                    name="endTime"
+                                    value={eventData.endTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Time"
+                                    required
+                                /> */}
+                                <input
+                                        type="text"
+                                        name="description"
+                                        value={eventData.description}
                                         onChange={handleChange}
-                                        placeholder="Enter event URL"
-                                    />
-                                )}
-                            </div>
-                            <select
-                                name="color"
-                                value={eventData.color}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="red">Red</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="orange">Orange</option>
-                                <option value="purple">Purple</option>
-                                <option value="DeepPink">Pink</option>
-                                <option value="black">Black</option>
-                                <option value="gray">Gray</option>
-                            </select>
-                            <div className="button-container">
-                                <button type="submit" className="modal-save-button">
-                                    Save
-                                </button>
-                                <button type="button" className="modal-delete-button" onClick={handleDelete}>
-                                    Delete
-                                </button>
-                            </div>
-                        </form>
+                                        className="form-control"
+                                        placeholder="Description"
+                                        required
+                                />
+                                <div className="form-group">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            className='mr-2'
+                                            name="includeUrl"
+                                            checked={includeUrl}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                setIncludeUrl(isChecked);
+                                                if (!isChecked) {
+                                                    setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
+                                                }
+                                            }}
+                                        />
+                                        Include URL
+                                    </label>
+                                    {includeUrl && (
+                                        <input
+                                            type="url"
+                                            className="mt-2 form-control"
+                                            name="url"
+                                            value={eventData.url}
+                                            onChange={handleChange}
+                                            placeholder="Enter event URL"
+                                        />
+                                    )}
+                                </div>
+                                <select
+                                    name="color"
+                                    value={eventData.color}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    required
+                                >
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="green">Green</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="DeepPink">Pink</option>
+                                    <option value="black">Black</option>
+                                    <option value="gray">Gray</option>
+                                </select>
+                                <div className="button-container">
+                                    <button type="button" className="modal-delete-button font-bold" onClick={handleDelete}>
+                                        Delete
+                                    </button>
+                                    <button type="submit" className="modal-save-button font-bold">
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>  
                     </div>
                 )}
 
