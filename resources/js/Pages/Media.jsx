@@ -27,7 +27,10 @@ const Media = () => {
         try {
           const response = await fetch(url, options);
           const data = await response.json();
-          setPosts(data.data.data);
+          // Filter out posts with type 'story'
+          const filteredData = data.data.data.filter(post => post.type !== 'story');
+
+          setPosts(filteredData);
           // Extract unique tag values
           const uniqueTags = [...new Set(data.data.data.flatMap(post => post.tag || []))];
           setTagOptions(uniqueTags);
@@ -70,17 +73,6 @@ const Media = () => {
       ));
     };
     
-
-    // const menuItems = [
-    //     'All',
-    //     'TM Networking Day',
-    //     'Peraduan Jomla!',
-    // ];
-
-    // const handleSelectMedia = (menuItem) => {
-    //     setSelectedMedia(menuItem);
-    //   };
-
 
   return (
     <Example>
