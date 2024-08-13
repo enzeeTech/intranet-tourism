@@ -136,7 +136,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                       : user.src.startsWith('user/') // if not equal, then check if user.src starts with user/
                                       ? `/storage/${user.src}` // if yes, then src = storage/{user.src}
                                       : `/storage/avatar/${user.src}`// If no then then src = 
-                                  }
+                                }
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
@@ -185,6 +185,9 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         currentIndex={currentStoryIndex}
                         onAllStoriesEnd={handleAllStoriesEnd}
                         isPaused={isPaused}
+                        storyStyles={{
+                            width: '360px',
+                          }}
                     />
                     {stories[currentStoryIndex]?.text && (
                         <div style={{
