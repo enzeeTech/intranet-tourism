@@ -1057,8 +1057,8 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
                         minWidth: '400px',
                     }}
                 >
-                    <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger' }}>
-                        <h2>Delete the Story?</h2>
+                    <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
+                        <h2>Delete Post?</h2>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                         <button

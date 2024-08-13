@@ -70,7 +70,7 @@ return (
       <section className="flex flex-col pt-1.5 w-full bg-white rounded-3xl shadow-custom">
         <header className="flex gap-5 mt-4 justify-between self-end max-w-full text-2xl font-bold leading-tight text-center text-neutral-950 w-[265px]">
           <h1>Tag Album</h1>
-          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/0d7986dce07599ceb2e5628dea9fdbbf7b0d6801dfeb283d90ffedce0217a1cf?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="w-6 h-6 mr-4" alt="Close AlbumTag Popup" onClick={onClose} />
+          <img loading="lazy" src="/assets/cancel.svg" className="w-6 h-6 mr-4" alt="Close AlbumTag Popup" onClick={onClose} />
         </header>
         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb95fa8e5f21e40306c92e50625664e1476952960dbc6acadb3e12bbdec9547f?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="object-contain mt-1.5 w-full aspect-[500]" alt="Album cover" />
         <div className="flex flex-col px-5 mt-2 mb-4 w-full">

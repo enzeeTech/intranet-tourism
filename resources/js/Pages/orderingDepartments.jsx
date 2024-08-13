@@ -32,7 +32,7 @@ const OrderingDepartments = () => {
                 id: department.id,
                 name: department.name,
                 order: department.order,
-                imageUrl: department.banner ? `/storage/${department.banner}` : '/assets/default-department.png',
+                imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',
             }));
 
             setDepartments((prevDepartments) => {
@@ -55,7 +55,7 @@ const OrderingDepartments = () => {
     useEffect(() => {
         setIsLoading(true);
         setDepartments([]); // Clear the departments before fetching
-        fetchDepartments('/api/crud/departments');
+        fetchDepartments('/api/department/departments');
     }, []);
 
     const updateOrderAttributes = (departments) => {
@@ -77,7 +77,7 @@ const OrderingDepartments = () => {
     };
 
     const updateOrderInDatabase = async (department) => {
-        const url = `/api/crud/departments/${department.id}`;
+        const url = `/api/department/departments/${department.id}`;
         const options = {
             method: 'PUT',
             headers: {
@@ -133,7 +133,7 @@ const OrderingDepartments = () => {
                 }, 3000); 
 
                 // Refetch departments to ensure the order is correct and trigger a UI update
-                fetchDepartments('/api/crud/departments');
+                fetchDepartments('/api/department/departments');
             } else {
                 console.log('Some departments failed to update');
                 setNotificationMessage("Some departments failed to update");
@@ -165,8 +165,8 @@ const OrderingDepartments = () => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <button onClick={handleBack} className="text-md font-bold text-black">Back</button>
-                                    <button type="button" className="px-4 py-2 text-md font-bold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
+                                    <button onClick={handleBack} className="font-bold text-black text-md">Back</button>
+                                    <button type="button" className="px-4 py-2 font-bold text-white bg-red-500 rounded-full text-md hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -182,8 +182,8 @@ const OrderingDepartments = () => {
                                             <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                                 <thead>
                                                     <tr>
-                                                        <th className="px-6 py-3 text-md font-bold text-left text-gray-500">Name</th>
-                                                        <th className="px-4 py-3 text-md font-bold text-left text-gray-500">Ordering</th>
+                                                        <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
+                                                        <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

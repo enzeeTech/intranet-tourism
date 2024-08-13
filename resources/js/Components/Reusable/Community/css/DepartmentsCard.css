@@ -1,13 +1,32 @@
 .staff-member-card {
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 189px;
-    width: 178px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 189px;
+  width: 100%;
+  max-width: 222px;
+}
+
+@media (min-width: 640px) {
+  .staff-member-card {
+      width: 100%;
   }
+}
+
+@media (min-width: 1024px) {
+  .staff-member-card {
+      width: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .staff-member-card {
+      width:100%;
+  }
+}
   
   .card-header {
     position: relative;
@@ -75,7 +94,7 @@
     display: flex;
     justify-content: space-around;
     height: 20px;
-    width: 178px;
+    width: 100%;
   }
   
   .call-button {

@@ -49,7 +49,9 @@ export function People({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="w-full max-w-screen-md bg-white p-2 rounded-xl shadow-lg" onClick={(e) => e.stopPropagation()}>
-        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="Close icon" className="self-end w-6 aspect-square" onClick={onClose} />
+        <div className="w-full flex justify-end">
+          <img loading="lazy" src="/assets/cancel.svg" alt="Close icon" className="self-end w-6 aspect-square" onClick={onClose} />
+        </div>
         <div className="flex flex-col px-5 mt-1.5">
           <SearchPeopleInput />
           <ChosenPerson />

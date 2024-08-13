@@ -57,7 +57,7 @@ const Departments = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchDepartments('/api/crud/departments');
+    fetchDepartments('/api/department/departments');
   }, []);
 
   const handleDelete = async () => {
