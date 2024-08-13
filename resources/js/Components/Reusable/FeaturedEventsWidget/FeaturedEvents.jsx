@@ -66,7 +66,7 @@ const FeaturedEvents = () => {
     <div className="featured-events-container border-2 shadow-custom">
       <h2 style={{fontWeight: 'bold', fontSize: '24px', marginBottom: '4px'}}>Upcoming Events</h2>
       <hr className="underline" />
-      <ul className="featured-events-list">
+      <ul className="featured-events-list text-ellipsis overflow-hidden whitespace-nowrap">
         {featuredEvents.map((event) => (
           <React.Fragment key={event.id}>
             <EventItem

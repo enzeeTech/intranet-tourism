@@ -744,7 +744,9 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   }, []);
 
   // Filter posts based on accessable_type and accessable_id
-  let filteredPostData = postData.filter(post => post.type !== 'story');
+  // let filteredPostData = postData.filter(post => post.type !== 'story');
+  let filteredPostData = postData.filter(post => post.type !== 'story' && post.type !== 'files');
+
 
   if (filterType !== null && filterId !== null) {
     filteredPostData = filteredPostData.filter((post) => {
@@ -760,7 +762,9 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   console.log("USER_ID", userId);
 
   
-  const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
+  // const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story') : [];
+  const userPosts = userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files') : [];
+
 
 
   // Reverse the order of posts to display latest first

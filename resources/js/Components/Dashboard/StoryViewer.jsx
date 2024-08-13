@@ -211,7 +211,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         backgroundColor: 'white',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                         padding: '20px',
                         boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
                         zIndex: 10000,

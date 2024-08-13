@@ -16,8 +16,8 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl cursor-pointer" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        <img loading="lazy" src={src} alt={alt} className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center" />
       </div>
       <input
         type="file"
@@ -32,7 +32,7 @@ function Avatar({ src, alt, onImageChange }) {
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex gap-4 self-stretch mt-5 text-neutral-800">
+    <div className="flex gap-4 self-stretch mt-2 text-neutral-800">
       <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
@@ -147,8 +147,8 @@ export default function CreateCommunity({ onCancel, onCreate }) {
 
   return (
     <Card
-      title="Create Community"
-      imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
+      title="Create New Community"
+      imgSrc="/assets/uploadAnImage.svg"
       imgAlt="Departments Logo"
       user={user}
       type="Type"

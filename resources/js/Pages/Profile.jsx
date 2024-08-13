@@ -35,7 +35,6 @@ export default function Profile() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -77,12 +76,12 @@ export default function Profile() {
             setProfileData(pv => ({
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                profileImage: data.profile && data.profile.image,
+                profileImage: data.profile?.image || '',
                 username: "@" + data.username,
             }));
-    
+
             const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
-    
+
             setFormData({
                 name: data.name,
                 username: data.username || "N/A",
@@ -90,10 +89,10 @@ export default function Profile() {
                 dateofbirth: data.profile?.dob || "", // Use empty string if no value
                 phone: data.profile?.work_phone || "", // Use empty string if no value
                 whatsapp: data.profile?.phone_no || "", // Use empty string if no value
-                photo: data.profile?.staff_image || data.profile?.image || "",
+                photo: data.profile?.staff_image,
                 employmentPosts: sortedEmploymentPosts
             });
-    
+
             setOriginalFormData({
                 name: data.name,
                 username: data.username || "N/A",
@@ -101,7 +100,7 @@ export default function Profile() {
                 dateofbirth: data.profile?.dob || "", // Ensure originalFormData is correctly set
                 phone: data.profile?.work_phone || "", // Ensure originalFormData is correctly set
                 whatsapp: data.profile?.phone_no || "", // Ensure originalFormData is correctly set
-                photo: data.profile?.staff_image || data.profile?.image || "",
+                photo: data.profile?.staff_image,
                 employmentPosts: sortedEmploymentPosts
             });
         })
@@ -109,8 +108,8 @@ export default function Profile() {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
-    
-    
+
+
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -172,7 +171,7 @@ export default function Profile() {
             FfData.append('phone_no', newFormData.whatsapp);
             FfData.append('user_id', id); // Add user_id to the form data
             FfData.append('name', formData.name); // Add name to the form data
-    
+
             // Check if photo is a file or a URL
             if (newFormData.photo instanceof File) {
                 FfData.append('photo', newFormData.photo);
@@ -181,7 +180,7 @@ export default function Profile() {
                 const blob = await (await fetch(newFormData.photo)).blob();
                 FfData.append('staff_image', blob, 'profile_image.png');
             }
-    
+
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
@@ -194,10 +193,10 @@ export default function Profile() {
                 }),
                 updateUsername(newFormData)
             ]);
-    
+
             const profileResponseData = await profileResponse.json();
             const userResponseData = await userResponse.json();
-    
+
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
                 setIsEditingBio(false);
@@ -212,17 +211,17 @@ export default function Profile() {
         }
         window.location.reload();
     };
-    
+
 
     const handleSaveDepartment = async (index) => {
         try {
             // Get the employment post for the specified index
             const employmentPost = formData.employmentPosts[index]; // Get the employment_post object by index
-        
+
             if (!employmentPost || !employmentPost.id) {
                 throw new Error(`Employment post ID is not available for department ${index + 1}`);
             }
-        
+
             const FfData = new FormData();
             FfData.append('_method', 'PUT'); // Add _method to the form data
             FfData.append('department_id', employmentPost.department_id);
@@ -231,8 +230,9 @@ export default function Profile() {
             FfData.append('business_grade_id', employmentPost.business_grade_id);
             FfData.append('location', employmentPost.location);
             FfData.append('work_phone', employmentPost.work_phone);
+            FfData.append('position', employmentPost.position);
             FfData.append('user_id', id); // Add user_id to the form data
-        
+
             const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
                 method: 'POST',
                 body: FfData,
@@ -242,11 +242,11 @@ export default function Profile() {
                     'Authorization': `Bearer ${authToken}`,
                 },
             });
-        
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-        
+
             const data = await response.json();
             setOriginalFormData(formData);
             if (index === 0) {
@@ -266,13 +266,13 @@ export default function Profile() {
     const handleCancelBio = () => {
         setFormData(originalFormData);
         setIsEditingBio(false);
-    }; 
+    };
 
     const handleCancelDepartment1 = () => {
         setFormData((prevFormData) => ({
             ...prevFormData,
-            employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-                index === 0 
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 0
                     ? {
                         ...post,
                         department: originalFormData.employmentPosts[0].department || "N/A",
@@ -287,13 +287,13 @@ export default function Profile() {
             ),
         }));
         setIsEditingDepartment1(false);
-    };   
-    
+    };
+
     const handleCancelDepartment2 = () => {
         setFormData((prevFormData) => ({
             ...prevFormData,
-            employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-                index === 1 
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 1
                     ? {
                         ...post,
                         department: originalFormData.employmentPosts[1].department || "N/A",
@@ -308,7 +308,7 @@ export default function Profile() {
             ),
         }));
         setIsEditingDepartment2(false);
-    };   
+    };
 
     const handleEditBio = () => {
         setIsEditingBio(true);
@@ -327,7 +327,7 @@ export default function Profile() {
         console.log('Poll data:', pollData);
         // You can use an API call to save the poll data, update the state, etc.
     };
-    
+
 
     // Sort employmentPosts by id in ascending order (oldest id first)
     const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.id - b.id);
@@ -403,7 +403,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost.title || ''}
+                                                        position={employmentPost?.position || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}
@@ -469,9 +469,9 @@ export default function Profile() {
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
             )}
             {isPopupOpen && (
-                <Popup 
-                    title="Edit Banner Photo" 
-                    onClose={() => setIsPopupOpen(false)} 
+                <Popup
+                    title="Edit Banner Photo"
+                    onClose={() => setIsPopupOpen(false)}
                     onSave={handleSaveBio}
                     profileData={profileData}
                     id={id}
