@@ -37,7 +37,7 @@ const OrderingDepartments = () => {
 
             setDepartments((prevDepartments) => {
                 const allDepartments = [...prevDepartments, ...departmentsArray];
-                return allDepartments.sort((a, b) => a.order - b.order); // Sort by order in ascending order
+                return allDepartments.sort((a, b) => a.order - b.order); 
             });
 
             if (data.data.next_page_url) {
@@ -54,38 +54,41 @@ const OrderingDepartments = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        setDepartments([]); // Clear the departments before fetching
+        setDepartments([]); 
         fetchDepartments('/api/department/departments');
     }, []);
 
     const updateOrderAttributes = (departments) => {
         return departments.map((department, index) => ({
             ...department,
-            order: index + 1, // Ensure order starts from 1
+            order: index + 1, 
         }));
     };
 
     const handleDragEnd = (result) => {
         if (!result.destination) return;
-
+    
         const reorderedData = Array.from(departments);
         const [reorderedItem] = reorderedData.splice(result.source.index, 1);
         reorderedData.splice(result.destination.index, 0, reorderedItem);
-
+    
         const updatedDepartments = updateOrderAttributes(reorderedData);
+    
         setDepartments(updatedDepartments);
     };
 
     const updateOrderInDatabase = async (department) => {
         const url = `/api/department/departments/${department.id}`;
         const options = {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
+                'X-CSRF-TOKEN': csrfToken || '',
             },
             body: JSON.stringify({ 
+                _method: 'PATCH',
+                name: department.name,
                 order: department.order
             }),
         };
@@ -93,7 +96,6 @@ const OrderingDepartments = () => {
         try {
             const response = await fetch(url, options);
             if (response.status === 204) {
-                console.log(`Success: Updated department ID ${department.id} with new order`);
                 return { success: true };
             }
 
@@ -105,7 +107,6 @@ const OrderingDepartments = () => {
 
             const data = await response.json();
             if (data && data.success) {
-                console.log(`Success: Updated department ID ${department.id} with new order`, data);
                 return data;
             } else {
                 console.error(`Unexpected response for department ID ${department.id}`);
@@ -118,42 +119,32 @@ const OrderingDepartments = () => {
     };
 
     const handleSave = async () => {
+        setNotificationMessage("Updating departments...");
+        setIsNotificationVisible(true);
+
         try {
             const updatePromises = departments.map(department => updateOrderInDatabase(department));
             const results = await Promise.all(updatePromises);
-
+    
             const successfulUpdates = results.filter(result => result && result.success);
-
+    
             if (successfulUpdates.length === departments.length) {
-                console.log('All departments updated successfully');
-                setNotificationMessage("All departments updated successfully");
-                setIsNotificationVisible(true);
-                setTimeout(() => {
-                    setIsNotificationVisible(false);
-                }, 3000); 
-
-                // Refetch departments to ensure the order is correct and trigger a UI update
-                fetchDepartments('/api/department/departments');
+                setNotificationMessage("Changes saved successfully");
             } else {
-                console.log('Some departments failed to update');
                 setNotificationMessage("Some departments failed to update");
-                setIsNotificationVisible(true);
-                setTimeout(() => {
-                    setIsNotificationVisible(false);
-                }, 3000);
             }
         } catch (error) {
-            console.error('Error saving order:', error);
             setNotificationMessage("Error saving order");
-            setIsNotificationVisible(true);
+        } finally {
             setTimeout(() => {
                 setIsNotificationVisible(false);
+                window.location.href = '/departments';
             }, 3000);
         }
     };
 
     const handleBack = () => {
-        window.location.href = '/orderingDepartments';
+        window.location.href = '/departments';
     };
 
     return (
