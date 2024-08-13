@@ -25,7 +25,7 @@ function ProfileDepartment({
     const [departmentOptions, setDepartmentOptions] = useState([]);
     const [unitOptions, setUnitOptions] = useState([]);
     const [jobTitleOptions, setJobTitleOptions] = useState([]);
-    const [positionOptions, setPositionOptions] = useState([]);
+    const [positionOptions, setPositionOptions] = useState(['Tetap', 'Kontrak', 'MySTEP']); // Hardcoded options
     const [gradeOptions, setGradeOptions] = useState([]);
     const [locationOptions, setLocationOptions] = useState([]);
     const [phoneOptions, setPhoneOptions] = useState([]);
@@ -41,7 +41,7 @@ function ProfileDepartment({
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
         fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
         fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
-        fetchData('/api/department/employment_posts', setPositionOptions, 'Position');
+        // No need to fetch position options as they are hardcoded
     }, []);
 
     const fetchData = async (API_URL, setOptions, label) => {
@@ -141,8 +141,8 @@ function ProfileDepartment({
                     >
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
-                            <option key={index} value={option?.id || ''}>
-                                {option?.title || option?.name || option?.code || option?.position || ''}
+                            <option key={index} value={option}>
+                                {option}
                             </option>
                         ))}
                     </select>
@@ -154,34 +154,6 @@ function ProfileDepartment({
             </td>
         </tr>
     );
-
-    const handleSubmit = () => {
-        const submissionData = {
-            department_id: localFormData.department,
-            business_unit_id: localFormData.unit,
-            business_post_id: localFormData.jobtitle,
-            business_grade_id: localFormData.grade,
-            location: localFormData.location,
-            work_phone: localFormData.phone,
-            position: localFormData.position,
-        };
-
-        fetch('/your-api-endpoint', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken,
-            },
-            body: JSON.stringify(submissionData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Submission successful:", data);
-        })
-        .catch(error => {
-            console.error('Error submitting the form:', error);
-        });
-    };
 
     return (
         <div className="flex-auto my-auto p-4">
@@ -232,14 +204,6 @@ function ProfileDepartment({
                             </tr>
                         </tbody>
                     </table>
-                    {/* {isEditing && (
-                        <button
-                            onClick={handleSubmit}
-                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full"
-                        >
-                            Save
-                        </button>
-                    )} */}
                 </div>
             </div>
         </div>
