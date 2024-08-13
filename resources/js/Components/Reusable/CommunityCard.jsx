@@ -59,7 +59,7 @@ const StaffMemberCard = ({ name, role, imageUrl, onDeactivateClick }) => {
             <div className="card-footer">
             <a href="/departmentInner">
                 <button
-                    className="justify-center px-5 bg-white rounded-3xl border border-solid border-neutral-400"
+                    className="justify-center px-5 bg-white ml-12 rounded-3xl border border-solid border-neutral-400"
                     aria-label="Visit"
                 >
                     Visit

@@ -22,7 +22,7 @@ const DepartmentsCard = ({ name, imageUrl, onDeleteClick, departmentID }) => {
       <div className="card-body">
         <h3 className="staff-member-name">{name}</h3>
       </div>
-      <div className="card-footer items-center">
+      <div className="card-footer items-center justify-center">
         <a href={`/departmentInner?departmentId=${departmentID}`}>
           <button
             className="justify-center text-blue-500 font-semibold px-5 rounded-3xl border border-blue-500 bg-transparent hover:bg-blue-700 hover:text-white"
