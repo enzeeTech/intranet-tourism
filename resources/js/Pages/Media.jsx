@@ -27,7 +27,10 @@ const Media = () => {
         try {
           const response = await fetch(url, options);
           const data = await response.json();
-          setPosts(data.data.data);
+          // Filter out posts with type 'story'
+          const filteredData = data.data.data.filter(post => post.type !== 'story');
+
+          setPosts(filteredData);
           // Extract unique tag values
           const uniqueTags = [...new Set(data.data.data.flatMap(post => post.tag || []))];
           setTagOptions(uniqueTags);
@@ -71,17 +74,6 @@ const Media = () => {
     };
     
 
-    // const menuItems = [
-    //     'All',
-    //     'TM Networking Day',
-    //     'Peraduan Jomla!',
-    // ];
-
-    // const handleSelectMedia = (menuItem) => {
-    //     setSelectedMedia(menuItem);
-    //   };
-
-
   return (
     <Example>
     <main className="min-h-screen bg-gray-100 xl:pl-96">
@@ -90,7 +82,7 @@ const Media = () => {
             <div className="relative flex flex-col justify-center max-w-full text-sm text-neutral-800">
         <div
           style={{ width: '180px' }}
-          className="flex justify-between gap-5 px-4 py-1 bg-white shadow-lg cursor-pointer rounded-2xl"
+          className="flex justify-between gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl"
         >
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
@@ -109,7 +101,7 @@ const Media = () => {
                             <hr className="underline" />
                         </header>
                         <section className="mt-4 max-md:max-w-full">
-                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
                                     {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderImages()}
                             </div>
@@ -125,7 +117,7 @@ const Media = () => {
                             <hr className="underline" />
                         </header>
                         <section className="mt-4 max-md:max-w-full">
-                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
                                     {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderVideos()}
                             </div>

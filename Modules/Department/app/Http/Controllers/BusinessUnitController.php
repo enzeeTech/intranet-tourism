@@ -27,12 +27,22 @@ class BusinessUnitController extends Controller
         ]);
     }
 
+    // public function store()
+    // {
+    //     $validated = request()->validate(...BusinessUnit::rules());
+    //     BusinessUnit::create($validated);
+
+    //     return response()->noContent();
+    // }
+
     public function store()
     {
         $validated = request()->validate(...BusinessUnit::rules());
-        BusinessUnit::create($validated);
+        $businessPost = BusinessUnit::create($validated);
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $businessPost,
+        ], 201);
     }
 
     public function update(BusinessUnit $business_unit)

@@ -260,7 +260,7 @@ export default function Profile() {
         } catch (error) {
             console.error(`Error updating Department ${index + 1} Information:`, error);
         }
-        window.location.reload();
+        // window.location.reload();
     };
 
     const handleCancelBio = () => {
@@ -403,7 +403,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost?.position || ''}
+                                                        position={employmentPost.position || 'N/A'}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}
