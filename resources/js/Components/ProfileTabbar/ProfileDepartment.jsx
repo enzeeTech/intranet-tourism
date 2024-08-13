@@ -141,8 +141,8 @@ function ProfileDepartment({
                     >
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
-                            <option key={index} value={option}>
-                                {option}
+                            <option key={index} value={option.id || option}>
+                                {typeof option === 'object' ? option.code || option.name || option.title : option}
                             </option>
                         ))}
                     </select>
@@ -154,6 +154,8 @@ function ProfileDepartment({
             </td>
         </tr>
     );
+        
+    
 
     return (
         <div className="flex-auto my-auto p-4">
