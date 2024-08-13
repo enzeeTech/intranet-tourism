@@ -71,6 +71,7 @@ function MyComponent() {
     <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20">
       <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
         <h1 className="ml-4 mt-2 text-2xl font-bold">Communities</h1>
+        <hr className="border border-gray-200 w-[235px] mx-4 -mt-4"></hr>
         {isLoading ? (
           <div className="mt-20 ml-20 loading-spinner"></div>
         ) : (
@@ -84,11 +85,13 @@ function MyComponent() {
             />
           ))
         )}
-        <div className="w-full h-8 hover:bg-slate-200">
-          <a href="/community" className="flex self-stretch mt-2 mb-2 ml-4 font-bold items-center">
+        <hr className="border border-gray-200 w-[235px] mx-4 mt-2"></hr>
+        <a href='../community'>
+          <button className="ml-4 my-2 font-bold text-sm flex items-center">
             VIEW ALL
-          </a>
-        </div>
+            <img src="assets/viewAllArrow.png" alt="Arrow right" className="ml-2 h-3 w-4" />
+          </button>
+        </a>
       </section>
     </div>
   );

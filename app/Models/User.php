@@ -9,13 +9,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Communities\Models\CommunityMember;
+use Modules\Department\Models\EmploymentPost;
+use Modules\Events\Models\EventAttendance;
+use Modules\Posts\Models\Post;
+use Modules\Profile\Models\Invitation;
+use Modules\Profile\Models\Profile;
+use Modules\Resources\Models\Resource;
+use Modules\Resources\Models\ResourceAccess;
+use Modules\Settings\Models\UserPreference;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Authorizable, HasFactory, QueryableApi;
-    use HasApiTokens, HasPermissions, HasRoles, Notifiable;
+    use Authorizable, HasFactory, QueryableApi , HasApiTokens, HasPermissions, HasRoles, Notifiable;
+
 
     protected $table = 'users';
 
@@ -87,51 +96,51 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function communityMembers()
     {
-        return $this->hasMany(\Modules\Crud\Models\CommunityMember::class);
+        return $this->hasMany(CommunityMember::class);
     }
 
     public function employmentPost()
     {
-        return $this->hasOne(\Modules\Crud\Models\EmploymentPost::class)->latestOfMany();
+        return $this->hasOne(EmploymentPost::class)->latestOfMany();
     }
 
     public function employmentPosts()
     {
-        return $this->hasMany(\Modules\Crud\Models\EmploymentPost::class);
+        return $this->hasMany(EmploymentPost::class);
     }
 
     public function eventAttendances()
     {
-        return $this->hasMany(\Modules\Crud\Models\EventAttendance::class);
+        return $this->hasMany(EventAttendance::class);
     }
 
     public function invitations()
     {
-        return $this->hasMany(\Modules\Crud\Models\Invitation::class);
+        return $this->hasMany(Invitation::class);
     }
 
     public function posts()
     {
-        return $this->hasMany(\Modules\Crud\Models\Post::class);
+        return $this->hasMany(Post::class);
     }
 
     public function profiles()
     {
-        return $this->hasMany(\Modules\Crud\Models\Profile::class);
+        return $this->hasMany(Profile::class);
     }
 
     public function resources()
     {
-        return $this->hasMany(\Modules\Crud\Models\Resource::class);
+        return $this->hasMany(Resource::class);
     }
 
     public function resourceAccesses()
     {
-        return $this->hasMany(\Modules\Crud\Models\ResourceAccess::class);
+        return $this->hasMany(ResourceAccess::class);
     }
 
     public function preferences()
     {
-        return $this->hasMany(\Modules\Crud\Models\UserPreference::class);
+        return $this->hasMany(UserPreference::class);
     }
 }

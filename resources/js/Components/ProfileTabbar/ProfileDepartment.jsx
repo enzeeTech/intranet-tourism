@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'; // Import the CSS for the phone input
 
 function ProfileDepartment({
     department,
@@ -20,6 +22,7 @@ function ProfileDepartment({
         grade,
         location,
         phone,
+        countryCode: "", // Add countryCode to the state
     });
 
     const [departmentOptions, setDepartmentOptions] = useState([]);
@@ -126,6 +129,23 @@ function ProfileDepartment({
         }
     };
 
+    const handlePhoneChange = (value) => {
+        setLocalFormData((prevData) => ({
+            ...prevData,
+            phone: value,
+        }));
+    
+        if (onFormDataChange) {
+            const updatedData = { phone: value };
+    
+            // Add the logic for work_phone
+            updatedData.work_phone = value;
+    
+            onFormDataChange(updatedData);
+        }
+    };
+    
+
     const renderField = (label, name, value, options, editable = true, onChangeHandler = handleInputChange) => (
         <tr key={name}>
             <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">{label}</td>
@@ -142,7 +162,7 @@ function ProfileDepartment({
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
                             <option key={index} value={option.id || option}>
-                                {typeof option === 'object' ? option.code || option.name || option.title : option}
+                                {typeof option === 'object' ? option.name || option.title || option.code : option}
                             </option>
                         ))}
                     </select>
@@ -154,8 +174,6 @@ function ProfileDepartment({
             </td>
         </tr>
     );
-        
-    
 
     return (
         <div className="flex-auto my-auto p-4">
@@ -190,12 +208,14 @@ function ProfileDepartment({
                                 <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">Office Number</td>
                                 <td className="py-2 align-center w-2/3">
                                     {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="phone"
-                                            value={localFormData.phone || ''}
-                                            onChange={handleInputChange}
-                                            className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                        <PhoneInput
+                                            country={'us'}
+                                            value={localFormData.phone}
+                                            onChange={handlePhoneChange}
+                                            inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                            containerClass="phone-input-container"
+                                            buttonClass="phone-input-button"
+                                            dropdownClass="phone-input-dropdown"
                                         />
                                     ) : (
                                         <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
