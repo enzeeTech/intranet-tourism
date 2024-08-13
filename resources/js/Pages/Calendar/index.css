@@ -8,7 +8,7 @@
     padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1050;
-    width: 300px; /* Adjust width as needed */
+    width: 400px; /* Adjust width as needed */
     border-radius: 8px; /* Rounded corners */
   }
   
@@ -99,6 +99,34 @@
 .modal-delete-button:hover {
     background-color: #d10000; /* Adjusted color for better contrast */
 }
+
+.color-picker {
+  display: flex;
+  gap: 10px;
+}
+
+.color-option {
+  display: flex;
+  align-items: center;
+}
+
+.color-display {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  display: inline-block;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + .color-display {
+  border: 2px solid #000; /* or any color to indicate selection */
+}
+
 
   
   /* Additional styles for the rest of the page */
