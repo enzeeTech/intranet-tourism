@@ -259,7 +259,7 @@ const excludedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 
 
 const FileTable = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -495,6 +495,7 @@ const FileTable = ({ searchTerm }) => {
     } catch (error) {
       console.error('Error deleting file:', error);
     }
+    window.location.reload(); // Reload the page
   };
 
   const startEditing = (index, currentName) => {
@@ -578,7 +579,8 @@ const FileTable = ({ searchTerm }) => {
             currentPage={currentPage}
             totalItems={filteredFiles.length}
             itemsPerPage={itemsPerPage}
-            onPageChange={setCurrentPage}
+            paginate={setCurrentPage}
+            // onPageChange={setCurrentPage}
           />
         </div>
       </div>
