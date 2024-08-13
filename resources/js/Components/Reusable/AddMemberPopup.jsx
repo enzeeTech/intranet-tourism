@@ -94,7 +94,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
     const fetchCurrentMembers = async () => {
         try {
-            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`);
+            const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.statusText}`);
             }

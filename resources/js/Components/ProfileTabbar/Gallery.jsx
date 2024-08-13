@@ -110,7 +110,8 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
     let apiUrl = '/api/resources/resources?';
 
     if (filterBy === 'user') {
-      apiUrl = apiUrl;
+      console.log("userrrr");
+      apiUrl += `with[]=attachable.accessibilities`;
     } else if (filterBy === 'department') {
       apiUrl += `scopes[0][accessfor]=posts&scopes[0][accessableBy][]=${accessableType}&scopes[0][accessableBy][]=${accessableId}&with[]=attachable.accessibilities`;
     }
@@ -122,12 +123,15 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
           .filter((item) => {
             const fileExtension = item.path.split('.').pop().toLowerCase();
 
-            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+            // console.log("ITEM", item);
+            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension) && item.attachable?.type !== 'story';
+            
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
             alt: `Description ${item.id}`,
-            category: item.attachable_type // Adjust as per your condition
+            category: item.attachable_type, // Adjust as per your condition
+            type: item.attachable?.type 
           }));
         setImages(imagePaths);
       })
@@ -135,6 +139,9 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
   }, [userId, accessableType, accessableId, filterBy]);
 
   const filteredImages = selectedItem === "All" ? images : images.filter((image) => image.category === selectedItem);
+
+  console.log("FI", filteredImages);
+  
 
   return (
     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-6">
