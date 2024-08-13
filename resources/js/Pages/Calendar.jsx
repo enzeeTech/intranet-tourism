@@ -6,13 +6,13 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import searchIcon from '../../../public/assets/search.png';
 import printIcon from '../../../public/assets/PrintPDF.svg';
-import pencilIcon from '../../../public/assets/EditIcon.svg'
+import pencilIcon from '../../../public/assets/EditIcon.svg';
 import * as bootstrap from "bootstrap";
 import "./Calendar/index.css";
 import Example from '@/Layouts/DashboardLayoutNew';
-import './Calendar/index.css'
 import PrintCalendar from './Calendar/PrintCalendar';
 import { useCsrf } from "@/composables";
+// import { CakeIcon } from '@heroicons/react/20/solid';
 
 function Calendar() {
     const [events, setEvents] = useState([]);
@@ -26,6 +26,7 @@ function Calendar() {
         endDate: '', 
         startTime: '', 
         endTime: '', 
+        description: '',
         color: 'purple', 
         url: '' 
     });
@@ -41,6 +42,7 @@ function Calendar() {
 
     useEffect(() => {
         fetchEvents();
+        fetchBirthdayEvents(); // Fetch and add birthday events
     }, []);
 
     useEffect(() => {
@@ -62,8 +64,8 @@ function Calendar() {
                     userName: event.author.name,
                     url: event.url,
                 }));
-                setEvents(formattedEvents);
-                setFilteredEvents(formattedEvents);
+                setEvents(prevEvents => [...prevEvents, ...formattedEvents]);
+                setFilteredEvents(prevEvents => [...prevEvents, ...formattedEvents]);
                 if (calendarRef.current) {
                     calendarRef.current.getApi().gotoDate(new Date());
                 }
@@ -72,7 +74,73 @@ function Calendar() {
                 console.error('Error fetching events: ', error);
             });
     };
-
+    
+    const fetchBirthdayEvents = async () => {
+        try {
+            let allProfiles = [];
+            let currentPage = 1;
+            let totalPages = 1;
+    
+            while (currentPage <= totalPages) {
+                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const data = await response.json();
+    
+                if (data && data.data && Array.isArray(data.data.data)) {
+                    allProfiles = [...allProfiles, ...data.data.data];
+    
+                    totalPages = data.data.last_page;
+                    currentPage++;
+                } else {
+                    console.error('Error: Expected an array, but got:', data);
+                    break;
+                }
+            }
+    
+            // Map profiles to birthday events
+            const birthdayEvents = allProfiles.reduce((acc, profile) => {
+                if (!profile.dob) return acc; // Skip profiles with no dob
+    
+                const dob = new Date(profile.dob);
+                if (isNaN(dob.getTime())) return acc; // Skip invalid dob
+    
+                const currentYear = new Date().getFullYear();
+                dob.setFullYear(currentYear);
+    
+                const dateStr = dob.toISOString().split('T')[0];
+                let existingEvent = acc.find(event => event.start === dateStr);
+    
+                if (existingEvent) {
+                    // Ensure names property exists and push the new name
+                    if (!existingEvent.extendedProps.names) {
+                        existingEvent.extendedProps.names = [];
+                    }
+                    existingEvent.extendedProps.names.push(profile.bio);
+                } else {
+                    // Create a new birthday event with names initialized
+                    acc.push({
+                        title: `Birthday: ${profile.bio}`,
+                        start: dateStr,
+                        allDay: true,
+                        backgroundColor: 'transparent',
+                        textColor: 'blue',
+                        isBirthday: true,
+                        extendedProps: {
+                            names: [profile.bio] // Initialize names array
+                        }
+                    });
+                }
+                return acc;
+            }, []);
+    
+            setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+            setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
+        } catch (error) {
+            console.error('Error fetching birthdays: ', error);
+        }
+    };
+    
+    
+    
     const filterEvents = () => {
         if (searchTerm.trim() === '') {
             setFilteredEvents(events);
@@ -156,15 +224,23 @@ function Calendar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         const formatDateTime = (date, time) => `${date}T${time}`;
+    
+        // Hardcoded start and end times
+        const defaultStartTime = "09:00";
+        const defaultEndTime = "17:00";  
+    
         const eventPayload = {
             title: eventData.title,
             venue: eventData.venue,
-            start_at: formatDateTime(eventData.startDate, eventData.startTime),
-            end_at: formatDateTime(eventData.endDate, eventData.endTime),
+            start_at: formatDateTime(eventData.startDate, defaultStartTime),
+            end_at: formatDateTime(eventData.endDate, defaultEndTime),
+            description: eventData.description,
             color: eventData.color,
             url: includeUrl ? eventData.url : null,
         };
+    
         fetch('/api/events/events', {
             method: 'POST',
             headers: {
@@ -188,11 +264,12 @@ function Calendar() {
                 closeModal();
             })
             .catch(error => {
-                console.error('Error creatinssg event: ', error);
+                console.error('Error creating event: ', error);
                 setIsModalOpen(false);
-                fetchEvents()
+                fetchEvents();
             });
     };
+    
 
     const handlePrint = () => {
         setIsPrintModalOpen(true);
@@ -235,9 +312,6 @@ function Calendar() {
     
         const url = event.url !== 'null' ? event.url : ''; // Handle 'null' or undefined
     
-        console.log('Event URL:', url); // Debugging line
-        console.log('Include URL:', url !== ''); // Debugging line
-    
         setEventId(event.id); // Set the event ID
         setEventData({
             title: event.title,
@@ -246,6 +320,7 @@ function Calendar() {
             endDate: event.end ? event.end.toISOString().split('T')[0] : '',
             startTime: formatTime(event.start),
             endTime: event.end ? formatTime(event.end) : '',
+            description: event.extendedProps.description,
             color: event.backgroundColor,
             url: url
         });
@@ -253,7 +328,6 @@ function Calendar() {
         setIncludeUrl(url !== ''); // Only set to true if URL is not an empty string
         setIsEditModalOpen(true);
     };
-    
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
@@ -265,6 +339,7 @@ function Calendar() {
             FfData.append('venue', eventData.venue);
             FfData.append('start_at', `${eventData.startDate}T${eventData.startTime}`);
             FfData.append('end_at', `${eventData.endDate}T${eventData.endTime}`);
+            FfData.append('description', eventData.description);
             FfData.append('color', eventData.color);
             FfData.append('url', eventData.url || '');
     
@@ -286,7 +361,7 @@ function Calendar() {
                 fetchEvents()
             } else {
                 const errorData = await response.json();
-                console.error('Error updating esssvent:', errorData);
+                console.error('Error updating event:', errorData);
             }
         } catch (error) {
             console.error('Error updating event:', error);
@@ -316,45 +391,33 @@ function Calendar() {
             console.error('Error deleting event:', error);
         }
     };
-    
 
     return (
         <Example>
-            <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
+            <div className="container mx-auto mt-4 " style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
-                <div className="flex justify-center mt-3 mb-4">
-
-                    <div className="flex justify-start rounded-full py-1 pl-6 my-2 " style={{ border: '2px solid #E4E4E4', width: '100%' }}>
-                        <div className="flex items-center justify-start">
-                            <span className="flex items-center justify-center bg-white rounded-l-full">
-                                <img src={searchIcon} alt="Search" className="w-6 h-6" />
-                            </span>
-                            <input
-                                type="search"
-                                className="flex-grow px-4 py-2 border-none input-no-outline"
-                                placeholder="Search for events"
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                // style={{ outline: 'none', marginRight: '850px' }}
-                            />
-                        </div>
+                <div className="flex flex-col items-center w-full mt-3 mb-8">
+                    <div className="flex items-center justify-between w-full">
+                        <input
+                            type="search"
+                            className="flex-grow px-6 py-3 mt-2 bg-gray-100 border-gray-100 rounded-full input-no-outline"
+                            placeholder="Search for events"
+                            aria-label="Search"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <button
+                            onClick={handlePrint}
+                            className="flex items-center justify-center px-3 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
+                            <img src={printIcon} alt="Print" className="w-6 h-6" />
+                        </button>
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="flex items-center text-white bg-blue-500 hover:bg-blue-700 mt-2 px-3.5 py-3.5 rounded-full">
+                            <img src="/assets/plus.svg" alt="Plus icon" className="w-5 h-5" />
+                        </button>
                     </div>
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 px-4 my-2 rounded-full ml-3">
-                        <img src={printIcon} alt="Print" className="w-5 h-6" />
-                    </button>
-                </div>
-
-                <div className='flex justify-end mb-4' >
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="flex items-center px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full">
-                        <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
-                        Add Event
-                    </button>
                 </div>
 
                 <FullCalendar
@@ -365,323 +428,422 @@ function Calendar() {
                     ref={calendarRef}
                     select={handleDateSelect}
                     eventClick={handleEventClick}
-                    headerToolbar={{
-                        start: 'prev,next today title',
-                        center: '',
-                        end: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    }}
                     height={650}
                     buttonText={{
-
                         today: 'Today',
                         year: 'Year',
                         month: 'Month',
                         day: 'Day',
-
                     }}
                     events={filteredEvents}
                     eventDidMount={(info) => {
-                        const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true
-                        });                    
-                        const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
-                            ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
-                            : '';
+                        console.log("eventDidMount called for event:", info.event);
                     
-                        return new bootstrap.Popover(info.el, {
-                            placement: "auto",
-                            trigger: "hover",
-                            container: 'body',
-                            customClass: "custom-popover",
-                            content: `<div>
-                                        <p class="event-title"><strong>${info.event.title}</strong></p>
-                                        <p><strong>Start Time:</strong> ${formattedStartTime}</p>
-                                        <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
-                                        <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
-                                        ${urlContent} <!-- Only include if URL is valid -->
-                                        <hr style="border: 10px solid #000;" />
-                                        <p><strong>Invited People: </strong></p>
-                                    </div>`,
-                            html: true,
-                        });
-                    }}                    
+                        if (info.event.extendedProps.isBirthday) {
+                            console.log("Birthday event detected:", info.event.extendedProps.names);
+                    
+                            // Clear any default styles
+                            info.el.style.backgroundColor = 'transparent';
+                            info.el.style.border = 'none';
+                            info.el.style.color = 'black';
+
+                            const namesArray = info.event.extendedProps.names;
+                            let namesList;
+
+                            if (namesArray.length > 1) {
+                                // Use numbering if more than one person
+                                namesList = namesArray.map((name, index) => `<li>${index + 1}. ${name}</li>`).join('');
+                            } else {
+                                // Display without numbering if only one person
+                                namesList = `<li>${namesArray[0]}</li>`;
+                            }
+
+                            const popoverContent = `
+                                <div className="">
+                                    <p class="event-title"><strong>Birthdays:</strong></p>
+                                    <ul>${namesList}</ul>
+                                </div>
+                            `;
+                    
+                            new bootstrap.Popover(info.el, {
+                                placement: "bottom", // Position popover below the cake icon
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                                offset: '0,10' // Adjust the offset if necessary (e.g., 0 pixels horizontally, 10 pixels vertically)
+                            });
+                        } else {
+                            console.log("Non-birthday event detected:", info.event);
+                            const formattedStartTime = new Date(info.event.start).toLocaleString('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            });
+
+                            const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
+                                ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                                : '';
+
+                            const descContent = (info.event.extendedProps.description && info.event.extendedProps.description.trim() && info.event.extendedProps.description !== 'null') 
+                                ? `<p><strong>Description:</strong> ${info.event.extendedProps.description}</p>` 
+                                : '';
+                            
+                            const popoverContent = `
+                                <div>
+                                    <p class="event-title"><strong>${info.event.title}</strong></p>
+                                    <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
+                                    <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                                    ${descContent}
+                                    ${urlContent}
+                                </div>`;
+                            
+                            new bootstrap.Popover(info.el, {
+                                placement: "auto",
+                                trigger: "hover",
+                                container: 'body',
+                                customClass: "custom-popover",
+                                content: popoverContent,
+                                html: true,
+                            });
+                        }
+                    }}
+                    
                     eventContent={(eventInfo) => {
-                        return (
-                            <div
-                                style={{
-                                    backgroundColor: eventInfo.event.backgroundColor,
-                                    padding: '0 5px',
-                                    borderRadius: '2px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    height: '100%',
-                                    width: '100%',
-                                    whiteSpace: 'nowrap', // Ensure the title doesn't wrap
-                                    overflow: 'hidden', // Hide overflow text
-                                    textOverflow: 'ellipsis', // Add ellipsis for overflow text
-                                }}
-                                className="fc-event-title"
-                            >
+                        // console.log("eventContent called for event:", eventInfo.event);
+                    
+                        const isBirthday = eventInfo.event.extendedProps.isBirthday;
+                        if (isBirthday) {
+                            const names = eventInfo.event.extendedProps.names || [];
+                            // console.log("Rendering birthday icon for:", names);
+                    
+                            return (
                                 <div
                                     style={{
-                                        borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                        position: 'relative',
                                         height: '100%',
-                                        opacity: '50%',
+                                        width: '100%',
                                     }}
-                                />
-                                <span className="event-title" style={{ color: 'white', flexGrow: 1 }}>
-                                    {eventInfo.event.title}
-                                </span>
-                                <img
-                                    src={pencilIcon}
-                                    alt="Edit"
-                                    className="w-4 h-4 ml-2 cursor-pointer inline-block"
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // Prevent triggering other event handlers
-                                        e.preventDefault(); // Prevent default behavior
-                                        handleEditClick(eventInfo.event);
+                                >
+                                    <span
+                                        role="img"
+                                        aria-label="cake"
+                                        style={{
+                                            position: 'absolute',
+                                            top: '-30px', // Adjust to position as needed
+                                            left: '5px', // Adjust to position as needed
+                                            fontSize: '1.8em',
+                                            cursor: 'pointer',
+                                            zIndex: 1, // Ensure it appears above other content
+                                        }}
+                                        title={names.join(', ')} // Show names on hover
+                                    >
+                                        🎂
+                                    </span>
+                                </div>
+                            );
+                        } else {
+                            const borderColor = eventInfo.event.backgroundColor || 'gray';
+                            return (
+                                <div
+                                    style={{
+                                        backgroundColor: eventInfo.backgroundColor,
+                                        padding: '10px 15px',
+                                        borderRadius: '2px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        height: '100%',
+                                        width: '100%',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        border: `2px solid ${borderColor}`,
                                     }}
-                                />
-                            </div>
-                        );
-                    }}
+                                    className="fc-event-title"
+                                >
+                                    <div 
+                                        style={{
+                                            borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
+                                            height: '100%',
+                                            opacity: '50%',
+                                        }}
+                                    />
+                                    <span className="event-title" style={{ color: 'white', flexGrow: 1 }}>
+                                        {eventInfo.event.title}
+                                    </span>
+                                    <img
+                                        src={pencilIcon}
+                                        alt="Edit"
+                                        className="inline-block w-4 h-4 ml-2 cursor-pointer"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                            handleEditClick(eventInfo.event);
+                                        }}
+                                    />
+                                </div>
+                            );
+                        }
+                    }}  
                 />
 
                 <div className='pb-10'></div>
                 
                 {isModalOpen && (
-                    <div className="modal-container">
-                        <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
-                        <button onClick={closeModal} className="modal-close-button mt-2 mr-2">
-                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-                        </button>
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                name="title"
-                                value={eventData.title}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Event Title"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="venue"
-                                value={eventData.venue}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Venue"
-                                required
-                            />
-                            <div className="flex items-start text-md font-bold text-neutral-800">Start Date and Time</div>
-                            <input
-                                type="date"
-                                name="startDate"
-                                value={eventData.startDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Date"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="startTime"
-                                value={eventData.startTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Time"
-                                required
-                            />
-                            <div className="flex items-start text-md font-semibold text-neutral-800">End Date and Time</div>
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={eventData.endDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="endTime"
-                                value={eventData.endTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Time"
-                                required
-                            />
-                            <div className="form-group">
-                                <label>
-                                <input
-                                    type="checkbox"
-                                    className='mr-2'
-                                    name="includeUrl"
-                                    checked={includeUrl}
-                                    onChange={(e) => setIncludeUrl(e.target.checked)}
-                                />
-                                Include URL
-                                </label>
-                                {includeUrl && (
-                                <input
-                                    type="url"
-                                    className="form-control mt-2"
-                                    name="url"
-                                    value={eventData.url}
-                                    onChange={handleChange}
-                                    placeholder="Enter event URL"
-                                />
-                                )}
-                            </div>
-                            <select
-                                name="color"
-                                value={eventData.color}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="red">Red</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="orange">Orange</option>
-                                <option value="purple">Purple</option>
-                                <option value="DeepPink">Pink</option>
-                                <option value="black">Black</option>
-                                <option value="gray">Gray</option>
-                            </select>
-                            <button type="submit" className="modal-submit-button">
-                                Confirm
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal-container">
+                            <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
+                            <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
+                                <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                             </button>
-                        </form>
-                    </div>
-                )}
-
-                {isEditModalOpen && (
-                    <div className="modal-container">
-                        <button onClick={closeEditModal} className="modal-close-button mt-2 mr-2">
-                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-                        </button>
-                        <form onSubmit={handleEditSubmit}>
-                            <input
-                                type="text"
-                                name="title"
-                                value={eventData.title}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Event Title"
-                                required
-                            />
-                            <input
-                                type="text"
-                                name="venue"
-                                value={eventData.venue}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Venue"
-                                required
-                            />
-                            <input
-                                type="date"
-                                name="startDate"
-                                value={eventData.startDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Date"
-                                required
-                            />
-                            <input
-                                type="date"
-                                name="endDate"
-                                value={eventData.endDate}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Date"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="startTime"
-                                value={eventData.startTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="Start Time"
-                                required
-                            />
-                            <input
-                                type="time"
-                                name="endTime"
-                                value={eventData.endTime}
-                                onChange={handleChange}
-                                className="form-control"
-                                placeholder="End Time"
-                                required
-                            />
-                            <div className="form-group">
-                                <label>
+                            <form onSubmit={handleSubmit}>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={eventData.title}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Event Title"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="venue"
+                                    value={eventData.venue}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Venue"
+                                    required
+                                />
+                                <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    value={eventData.startDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="startTime"
+                                    value={eventData.startTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Time"
+                                    required
+                                /> */}
+                                <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    value={eventData.endDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="endTime"
+                                    value={eventData.endTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Time"
+                                    required
+                                /> */}
+                                <input
+                                    type="text"
+                                    name="description"
+                                    value={eventData.description}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Description"
+                                    required
+                                />
+                                <div className="form-group">
+                                    <label>
                                     <input
                                         type="checkbox"
                                         className='mr-2'
                                         name="includeUrl"
                                         checked={includeUrl}
-                                        onChange={(e) => {
-                                            const isChecked = e.target.checked;
-                                            setIncludeUrl(isChecked);
-                                            if (!isChecked) {
-                                                setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
-                                            }
-                                        }}
+                                        onChange={(e) => setIncludeUrl(e.target.checked)}
                                     />
                                     Include URL
-                                </label>
-                                {includeUrl && (
+                                    </label>
+                                    {includeUrl && (
                                     <input
                                         type="url"
-                                        className="form-control mt-2"
+                                        className="mt-2 form-control"
                                         name="url"
                                         value={eventData.url}
                                         onChange={handleChange}
                                         placeholder="Enter event URL"
                                     />
-                                )}
-                            </div>
-                            <select
-                                name="color"
-                                value={eventData.color}
-                                onChange={handleChange}
-                                className="form-control"
-                                required
-                            >
-                                <option value="red">Red</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="orange">Orange</option>
-                                <option value="purple">Purple</option>
-                                <option value="DeepPink">Pink</option>
-                                <option value="black">Black</option>
-                                <option value="gray">Gray</option>
-                            </select>
-                            <div className="button-container">
-                                <button type="submit" className="modal-save-button">
-                                    Save
+                                    )}
+                                </div>
+                                <select
+                                    name="color"
+                                    value={eventData.color}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    required
+                                >
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="green">Green</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="DeepPink">Pink</option>
+                                    <option value="black">Black</option>
+                                    <option value="gray">Gray</option>
+                                </select>
+                                <button type="submit" className="modal-submit-button">
+                                    Confirm
                                 </button>
-                                <button type="button" className="modal-delete-button" onClick={handleDelete}>
-                                    Delete
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {isEditModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="modal-container">
+                            <h1 className="flex items-center justify-center mx-4 mb-4 text-2xl font-bold text-neutral-800">Edit Event</h1>
+                                <button onClick={closeEditModal} className="mt-2 mr-2 modal-close-button">
+                                    <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                                 </button>
-                            </div>
-                        </form>
+                            <form onSubmit={handleEditSubmit}>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={eventData.title}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Event Title"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="venue"
+                                    value={eventData.venue}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Venue"
+                                    required
+                                />
+                                <input
+                                    type="date"
+                                    name="startDate"
+                                    value={eventData.startDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Date"
+                                    required
+                                />
+                                <input
+                                    type="date"
+                                    name="endDate"
+                                    value={eventData.endDate}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Date"
+                                    required
+                                />
+                                {/* <input
+                                    type="time"
+                                    name="startTime"
+                                    value={eventData.startTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="Start Time"
+                                    required
+                                />
+                                <input
+                                    type="time"
+                                    name="endTime"
+                                    value={eventData.endTime}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    placeholder="End Time"
+                                    required
+                                /> */}
+                                <input
+                                        type="text"
+                                        name="description"
+                                        value={eventData.description}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        placeholder="Description"
+                                        required
+                                />
+                                <div className="form-group">
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            className='mr-2'
+                                            name="includeUrl"
+                                            checked={includeUrl}
+                                            onChange={(e) => {
+                                                const isChecked = e.target.checked;
+                                                setIncludeUrl(isChecked);
+                                                if (!isChecked) {
+                                                    setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
+                                                }
+                                            }}
+                                        />
+                                        Include URL
+                                    </label>
+                                    {includeUrl && (
+                                        <input
+                                            type="url"
+                                            className="mt-2 form-control"
+                                            name="url"
+                                            value={eventData.url}
+                                            onChange={handleChange}
+                                            placeholder="Enter event URL"
+                                        />
+                                    )}
+                                </div>
+                                <select
+                                    name="color"
+                                    value={eventData.color}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    required
+                                >
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="green">Green</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="DeepPink">Pink</option>
+                                    <option value="black">Black</option>
+                                    <option value="gray">Gray</option>
+                                </select>
+                                <div className="button-container">
+                                    <button type="button" className="modal-delete-button font-bold" onClick={handleDelete}>
+                                        Delete
+                                    </button>
+                                    <button type="submit" className="modal-save-button font-bold">
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>  
                     </div>
                 )}
 
                 {isPrintModalOpen && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
-                            <h2 className="text-xl font-bold mb-4">Select Date Range for Printing</h2>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="w-full max-w-md max-md:w-[340px] p-6 mx-auto bg-white rounded-2xl shadow-lg">
+                            <h2 className="mb-4 text-xl font-bold">Select Date Range for Printing</h2>
                             <form onSubmit={handlePrintSubmit}>
                                 <div className="mb-2">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="startDate">Start Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="startDate">Start Date</label>
                                     <input
                                         type="date"
                                         name="startDate"
@@ -693,7 +855,7 @@ function Calendar() {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-md text-gray-700 font-bold mb-2" htmlFor="endDate">End Date</label>
+                                    <label className="block mb-2 font-bold text-gray-700 text-md" htmlFor="endDate">End Date</label>
                                     <input
                                         type="date"
                                         name="endDate"
@@ -708,13 +870,13 @@ function Calendar() {
                                     <button
                                         type="button"
                                         onClick={closePrintModal}
-                                        className="mr-2 px-4 py-2 border-2 border-gray-400 text-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
+                                        className="px-4 py-2 mr-2 text-gray-400 border-2 border-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-700"
+                                        className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
                                     >
                                         Print
                                     </button>

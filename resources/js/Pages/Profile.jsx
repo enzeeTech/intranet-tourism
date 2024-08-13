@@ -15,7 +15,7 @@ import { ProfileDepartment } from '@/Components/ProfileTabbar';
 
 function SaveNotification({ title, content, onClose }) {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="p-2 rounded-3xl w-4xl">
                 <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
                     <div className="flex flex-col w-full">
@@ -35,7 +35,6 @@ export default function Profile() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -49,16 +48,11 @@ export default function Profile() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
-        department2: "",
-        unit2: "",
-        jobtitle2: "",
-        position2: "",
-        grade2: "",
-        location2: "",
-        phone2: "",
+        photo: "",
+        employmentPosts: [] // Initialize with an empty array
     });
+
     const [originalFormData, setOriginalFormData] = useState(formData);
-    const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
     const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
@@ -74,61 +68,48 @@ export default function Profile() {
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
-        console.log("Fetching user data...");
-        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`, {
+        fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(({ data }) => {
-                console.log('hello', data);
-                setProfileData(pv => ({
-                    ...pv, ...data,
-                    backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                    profileImage: data.profile && data.profile.image,
-                    username: "@" + data.username,
-                }));
+        .then((response) => response.json())
+        .then(({ data }) => {
+            setProfileData(pv => ({
+                ...pv, ...data,
+                backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
+                profileImage: data.profile?.image || '',
+                username: "@" + data.username,
+            }));
 
-                setFormData((pv) => ({
-                    ...pv,
-                    name: data.name,
-                    username: data.username || "N/A",
-                    email: data.email,
-                    department: data.employment_post?.department?.name || "N/A",
-                    unit: data.employment_post?.business_unit?.name || "N/A",
-                    jobtitle: data.employment_post?.title || "N/A",
-                    position: data.employment_post?.business_post?.title || "N/A",
-                    grade: data.employment_post?.schema_grade || "N/A",
-                    location: data.employment_post?.location || "N/A",
-                    dateofbirth: data.profile?.dob || "N/A",
-                    phone: data.profile?.work_phone || "N/A",
-                    whatsapp: data.profile?.phone_no || "N/A",
-                }));
+            const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
 
-                setOriginalFormData((pv) => ({
-                    ...pv,
-                    name: data.name,
-                    username: data.username || "N/A",
-                    email: data.email,
-                    department: data.employment_post?.department?.name || "N/A",
-                    unit: data.employment_post?.business_unit?.name || "N/A",
-                    jobtitle: data.employment_post?.title || "N/A",
-                    position: data.employment_post?.business_post?.title || "N/A",
-                    grade: data.employment_post?.schema_grade || "N/A",
-                    location: data.employment_post?.location || "N/A",
-                    dateofbirth: data.profile?.dob || "N/A",
-                    phone: data.profile?.work_phone || "N/A",
-                    whatsapp: data.profile?.phone_no || "N/A",
-                }));
-            })
-            .catch((error) => {
-                console.error("Error fetching user data:", error);
+            setFormData({
+                name: data.name,
+                username: data.username || "N/A",
+                email: data.email,
+                dateofbirth: data.profile?.dob || "", // Use empty string if no value
+                phone: data.profile?.work_phone || "", // Use empty string if no value
+                whatsapp: data.profile?.phone_no || "", // Use empty string if no value
+                photo: data.profile?.staff_image,
+                employmentPosts: sortedEmploymentPosts
             });
+
+            setOriginalFormData({
+                name: data.name,
+                username: data.username || "N/A",
+                email: data.email,
+                dateofbirth: data.profile?.dob || "", // Ensure originalFormData is correctly set
+                phone: data.profile?.work_phone || "", // Ensure originalFormData is correctly set
+                whatsapp: data.profile?.phone_no || "", // Ensure originalFormData is correctly set
+                photo: data.profile?.staff_image,
+                employmentPosts: sortedEmploymentPosts
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching user data:", error);
+        });
     }, [id]);
+
+
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -143,12 +124,25 @@ export default function Profile() {
         closeSaveNotification();
     };
 
-    const handleFormDataChange = (newData) => {
-        setFormData(newData);
+    const handleFormDataChange = (newData, index) => {
+        // Clone the current form data
+        const updatedEmploymentPosts = [...formData.employmentPosts];
+
+        // Update the specific employment post by index
+        updatedEmploymentPosts[index] = { ...updatedEmploymentPosts[index], ...newData };
+
+        // Update the form data state with the modified employment posts array
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            employmentPosts: updatedEmploymentPosts,
+        }));
     };
 
     const handlePhotoChange = (newPhoto) => {
-        setPhoto(newPhoto);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: newPhoto,
+        }));
     };
 
     const updateUsername = async (newFormData) => {
@@ -178,13 +172,22 @@ export default function Profile() {
             FfData.append('user_id', id); // Add user_id to the form data
             FfData.append('name', formData.name); // Add name to the form data
 
+            // Check if photo is a file or a URL
+            if (newFormData.photo instanceof File) {
+                FfData.append('photo', newFormData.photo);
+            } else if (newFormData.photo.startsWith('data:image')) {
+                // Convert base64 to file and append it to FormData
+                const blob = await (await fetch(newFormData.photo)).blob();
+                FfData.append('staff_image', blob, 'profile_image.png');
+            }
+
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
                     body: FfData,
                     headers: {
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                        'X-CSRF-TOKEN': csrfToken || '',
                         'Authorization': `Bearer ${authToken}`,
                     },
                 }),
@@ -209,37 +212,101 @@ export default function Profile() {
         window.location.reload();
     };
 
-    const handleSaveDepartment1 = () => {
-        setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        setIsEditingDepartment1(false);
-        openSaveNotification();
-        setTimeout(closeSaveNotification, 1200);
-    };
 
-    const handleSaveDepartment2 = () => {
-        setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        setIsEditingDepartment2(false);
-        openSaveNotification();
-        setTimeout(closeSaveNotification, 1200);
+    const handleSaveDepartment = async (index) => {
+        try {
+            // Get the employment post for the specified index
+            const employmentPost = formData.employmentPosts[index]; // Get the employment_post object by index
+
+            if (!employmentPost || !employmentPost.id) {
+                throw new Error(`Employment post ID is not available for department ${index + 1}`);
+            }
+
+            const FfData = new FormData();
+            FfData.append('_method', 'PUT'); // Add _method to the form data
+            FfData.append('department_id', employmentPost.department_id);
+            FfData.append('business_unit_id', employmentPost.business_unit_id);
+            FfData.append('business_post_id', employmentPost.business_post_id);
+            FfData.append('business_grade_id', employmentPost.business_grade_id);
+            FfData.append('location', employmentPost.location);
+            FfData.append('work_phone', employmentPost.work_phone);
+            FfData.append('position', employmentPost.position);
+            FfData.append('user_id', id); // Add user_id to the form data
+
+            const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
+                method: 'POST',
+                body: FfData,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setOriginalFormData(formData);
+            if (index === 0) {
+                setIsEditingDepartment1(false);
+            } else if (index === 1) {
+                setIsEditingDepartment2(false);
+            }
+            openSaveNotification();
+            setTimeout(closeSaveNotification, 1200);
+            console.log(`Department ${index + 1} Information updated successfully:`, data);
+        } catch (error) {
+            console.error(`Error updating Department ${index + 1} Information:`, error);
+        }
+        // window.location.reload();
     };
 
     const handleCancelBio = () => {
-        setFormData(originalFormData); // Revert to original form data
-        setPhoto(originalPhoto);       // Revert to original photo
+        setFormData(originalFormData);
         setIsEditingBio(false);
     };
 
     const handleCancelDepartment1 = () => {
-        setFormData(originalFormData); // Revert to original form data
-        setPhoto(originalPhoto);       // Revert to original photo
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 0
+                    ? {
+                        ...post,
+                        department: originalFormData.employmentPosts[0].department || "N/A",
+                        unit: originalFormData.employmentPosts[0].unit || "N/A",
+                        jobtitle: originalFormData.employmentPosts[0].jobtitle || "N/A",
+                        position: originalFormData.employmentPosts[0].position || "N/A",
+                        grade: originalFormData.employmentPosts[0].grade || "N/A",
+                        location: originalFormData.employmentPosts[0].location || "N/A",
+                        phone: originalFormData.employmentPosts[0].phone || "N/A",
+                    }
+                    : post
+            ),
+        }));
         setIsEditingDepartment1(false);
     };
 
     const handleCancelDepartment2 = () => {
-        setFormData(originalFormData); // Revert to original form data
-        setPhoto(originalPhoto);       // Revert to original photo
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            employmentPosts: prevFormData.employmentPosts.map((post, index) =>
+                index === 1
+                    ? {
+                        ...post,
+                        department: originalFormData.employmentPosts[1].department || "N/A",
+                        unit: originalFormData.employmentPosts[1].unit || "N/A",
+                        jobtitle: originalFormData.employmentPosts[1].jobtitle || "N/A",
+                        position: originalFormData.employmentPosts[1].position || "N/A",
+                        grade: originalFormData.employmentPosts[1].grade || "N/A",
+                        location: originalFormData.employmentPosts[1].location || "N/A",
+                        phone: originalFormData.employmentPosts[1].phone || "N/A",
+                    }
+                    : post
+            ),
+        }));
         setIsEditingDepartment2(false);
     };
 
@@ -255,51 +322,15 @@ export default function Profile() {
         setIsEditingDepartment2(true);
     };
 
-    const handleSelectFile = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const FfData = new FormData();
-            FfData.append('cover_photo', file);
-            FfData.append('user_id', id); // Add user_id to the form data
-            FfData.append('_method', 'PUT'); // Add _method to the form data
-            FfData.append('name', formData.name); // Add name to the form data
-    
-            const url = `/api/profile/profiles/${profileData.profile?.id}?with[]=user`;
-    
-            fetch(url, {
-                method: 'POST',
-                body: FfData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '', // Provide an empty string if csrfToken is null
-                    'Authorization': `Bearer ${authToken}`,
-                },
-            })
-            .then(async response => {
-                if (!response.ok) {
-                    const error = await response.json();
-                    return await Promise.reject(error);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    setPhoto(URL.createObjectURL(file));
-                    setIsPopupOpen(false);
-                    console.log('File uploaded successfully:', data);
-                } else {
-                    console.error('Error uploading file:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading file:', error);
-            });
-        }
+    const handleCreatePoll = (pollData) => {
+        // Implement the logic to handle poll creation here.
+        console.log('Poll data:', pollData);
+        // You can use an API call to save the poll data, update the state, etc.
     };
 
-    const handleCreatePoll = (poll) => {
-      setPolls((prevPolls) => [...prevPolls, poll]);
-    };
+
+    // Sort employmentPosts by id in ascending order (oldest id first)
+    const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.id - b.id);
 
     return (
         <Example>
@@ -309,7 +340,7 @@ export default function Profile() {
                         <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                                profileImage={profileData.profileImage}
                                 name={profileData.name}
                                 username={profileData.username}
                                 status={profileData.status}
@@ -329,107 +360,73 @@ export default function Profile() {
                             )}
                             {activeTab === "bio" && (
                                 <>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            icon2={profileData.icon2}
-                                            onEdit={handleEditBio}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                        <ProfileBio
-                                            photo={photo}
-                                            username={formData.username}
-                                            email={formData.email}
-                                            dateofbirth={formData.dateofbirth}
-                                            whatsapp={formData.whatsapp}
-                                            isEditing={isEditingBio}
-                                            onFormDataChange={setFormData}
-                                            onPhotoChange={handlePhotoChange}
-                                            originalFormData={originalFormData}
-                                            onEditBio={handleEditBio}
-                                            onCancelBio={handleCancelBio}
-                                            onSaveBio={handleSaveBio}
-                                            userId={id} // Pass userId as a prop
-                                        />
-                                        </div>
-                                    </div>
-                                </section>
-                                <div className="separator"></div>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 1 Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            onEdit={handleEditDepartment1}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileDepartment
-                                                department={formData.department}
-                                                unit={formData.unit}
-                                                jobtitle={formData.jobtitle}
-                                                position={formData.position}
-                                                grade={formData.grade}
-                                                location={formData.location}
-                                                phone={formData.phone}
-                                                isEditing={isEditingDepartment1}
-                                                onFormDataChange={handleFormDataChange}
-                                                originalFormData={originalFormData}
+                                    <section className="flex flex-col w-full gap-2 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                        <div className="flex items-center justify-between">
+                                            <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Bio Information</div>
+                                            <ProfileIcons
+                                                icon1={profileData.icon1}
+                                                icon2={profileData.icon2}
+                                                onEdit={handleEditBio}
+                                                isFirstIcon
                                             />
                                         </div>
-                                        {isEditingDepartment1 && (
-                                            <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancelDepartment1} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSaveDepartment1} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                        <div className="flex-auto my-auto max-md:max-w-full">
+                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                <ProfileBio
+                                                    formData={formData}
+                                                    isEditing={isEditingBio}
+                                                    onFormDataChange={setFormData}
+                                                    onPhotoChange={handlePhotoChange}
+                                                    originalFormData={originalFormData}
+                                                    onEditBio={handleEditBio}
+                                                    onCancelBio={handleCancelBio}
+                                                    onSaveBio={handleSaveBio}
+                                                    userId={id} // Pass userId as a prop
+                                                />
                                             </div>
-                                        )}
-                                    </div>
-                                </section>
-                                <div className="separator"></div>
-                                <section className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                    <div className="flex items-center justify-between">
-                                        <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">Department 2 Information</div>
-                                        <ProfileIcons
-                                            icon1={profileData.icon1}
-                                            onEdit={handleEditDepartment2}
-                                            isFirstIcon
-                                        />
-                                    </div>
-                                    <div className="flex-auto my-auto max-md:max-w-full">
-                                        <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileDepartment
-                                                department={formData.department2}
-                                                unit={formData.unit2}
-                                                jobtitle={formData.jobtitle2}
-                                                position={formData.position2}
-                                                grade={formData.grade2}
-                                                location={formData.location2}
-                                                phone={formData.phone2}
-                                                isEditing={isEditingDepartment2}
-                                                onFormDataChange={handleFormDataChange}
-                                                originalFormData={originalFormData}
-                                            />
                                         </div>
-                                        {isEditingDepartment2 && (
-                                            <div className="flex justify-end mt-4 pb-3">
-                                                <button onClick={handleCancelDepartment2} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                <button onClick={handleSaveDepartment2} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                    </section>
+                                    <div className="separator"></div>
+                                    {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
+                                        <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                            <div className="flex items-center justify-between">
+                                                <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
+                                                <ProfileIcons
+                                                    icon1={profileData.icon1}
+                                                    onEdit={() => index === 0 ? handleEditDepartment1() : handleEditDepartment2()}
+                                                    isFirstIcon
+                                                />
                                             </div>
-                                        )}
-                                    </div>
-                                </section>
+                                            <div className="flex-auto my-auto max-md:max-w-full">
+                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                    <ProfileDepartment
+                                                        department={employmentPost.department?.name || ''}
+                                                        unit={employmentPost.business_unit?.name || ''}
+                                                        jobtitle={employmentPost.business_post?.title || ''}
+                                                        position={employmentPost.position || 'N/A'}
+                                                        grade={employmentPost.business_grade?.code || ''}
+                                                        location={employmentPost.location || 'N/A'}
+                                                        phone={employmentPost.work_phone || 'N/A'}
+                                                        isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
+                                                        onFormDataChange={(newData) => handleFormDataChange(newData, index)}
+                                                        originalFormData={originalFormData}
+                                                    />
+                                                </div>
+                                                {((index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2)) && (
+                                                    <div className="flex justify-end mt-4 pb-3">
+                                                        <button onClick={() => index === 0 ? handleCancelDepartment1() : handleCancelDepartment2()} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                        <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </section>
+                                    ))}
                                 </>
                             )}
+
                             {activeTab === "gallery" && (
                                 <section>
-                                    <ImageProfile selectedItem="All" userId={id} />
+                                    <ImageProfile selectedItem="All" userId={id} filterBy="user" />
                                     <VideoProfile selectedItem="All" userId={id} />
                                 </section>
                             )}
@@ -472,11 +469,16 @@ export default function Profile() {
                 <SaveNotification title="Changes saved successfully" onClose={closeSaveNotification} />
             )}
             {isPopupOpen && (
-                <Popup 
-                    title="Edit Banner Photo" 
-                    onClose={() => setIsPopupOpen(false)} 
+                <Popup
+                    title="Edit Banner Photo"
+                    onClose={() => setIsPopupOpen(false)}
                     onSave={handleSaveBio}
-                    onSelectFile={handleSelectFile}
+                    profileData={profileData}
+                    id={id}
+                    formData={formData}
+                    csrfToken={csrfToken}
+                    authToken={authToken}
+                    setFormData={setFormData}
                 />
             )}
         </Example>

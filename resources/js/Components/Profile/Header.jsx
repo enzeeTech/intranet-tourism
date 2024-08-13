@@ -6,12 +6,43 @@ import { useCsrf } from '@/composables';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage';
 
-function ProfileImage({ name, src, alt, className, rounded }) {
+function ProfileImage({ name, src, alt, className, rounded, tag }) {
+  // console.log("SRC", src);
+
+  let source = null;
+
+  // if (src.startsWith('avatar/')) {
+  //   // If src already starts with 'avatar/', map it directly
+  //   source = `/storage/${src}`;
+  // } else {
+  //   // If src doesn't start with 'avatar/', check if it's a placeholder or not
+  //   source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+  //     ? src 
+  //     : `/avatar/${src}`;
+  // }
+
+  if (!src || src.trim() === '') {
+    // If src is empty or only contains whitespace, use the UI Avatars URL
+    source = src;
+  } else if (src.startsWith('avatar/')) {
+    // If src already starts with 'avatar/', map it directly
+    source = `/storage/${src}`;
+  } else {
+    // If src doesn't start with 'avatar/', check if it's a placeholder or not
+    source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+      ? src 
+      : `/avatar/${src}`;
+  }
+  
+  
+  console.log("SOURCE", source);
+  
+    
   return (
     <div className={`flex overflow-hidden relative z-10 flex-col items-end px-16 pt-20 pb-3.5 mt-24 mb-0 w-44 max-w-full aspect-square max-md:px-5 max-md:mt-10 max-md:mb-2.5 ${className} max-md:w-32 max-md:mt-10`}>
       <img
         // src={`/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`}
-        src={src ? `/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
+        src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
         alt={alt}
         className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-32 max-md:h-32 max-md:bottom-0`}
       />
@@ -22,8 +53,9 @@ function ProfileImage({ name, src, alt, className, rounded }) {
   );
 }
 
-function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId }) {
+function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId, tag }) {
   console.log("hhhhhhh", name);
+  console.log("PIMAGE", profileImage)
   
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
@@ -165,22 +197,23 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 max-md:h-3/5 rounded-lg shadow-custom" />
         <div onClick={handleIconClick}>
-          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} />
+          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} tag={tag} />
           {isPopupOpen && (
             <EditProfilePhoto
               onClose={handleCloseClick}
               onSelectFile={handleSelectFile}
               userId={userId}
               userName={name}
+              profileId={profileId}
             />
           )}
         </div>
         <div className="flex flex-col self-start px-5 -mt-16 -ml-10 max-md:-ml-5 max-md:mt-5">
           <div className="flex items-center ml-48 max-md:ml-0">
-            <h1 className="text-3xl font-extrabold text-neutral-800 relative mt-6 max-md:text-2xl">{name}</h1>
+            <h1 className="text-3xl font-extrabold text-neutral-800 relative mt-6 max-md:text-2xl max-md:mx-2">{name}</h1>
             <div className="text-lg ml-4 font-semibold text-neutral-800 text-opacity-50 mt-3 max-md:text-md max-md:mt-1">{username}</div>
           </div>
-          <div className="mt-0 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-0 max-md:-mt-4">{status}</div>
+          <div className="mt-0 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-2 max-md:-mt-4 ">{status}</div>
         </div>
       </header>
       {selectedFile && !croppedImage && (

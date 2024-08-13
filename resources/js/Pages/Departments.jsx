@@ -8,14 +8,22 @@ import DepartmentsCard from '../Components/Reusable/Departments/DepartmentsCard'
 import Example from '@/Layouts/DashboardLayoutNew';
 import './css/StaffDirectory.css';
 import CreateDepartments from '../Components/Reusable/Departments/CreateDepartments';
+import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
+import { usePage } from '@inertiajs/react';
+import { useCsrf } from '@/composables';
 
-const StaffDirectory = () => {
+const Departments = () => {
+  const { props } = usePage();
+  const { id } = props; 
   const [departmentsList, setDepartmentsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [currentDepartmentId, setCurrentDepartmentId] = useState(null);
+  const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
+  const csrfToken = useCsrf();
 
-  const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
+  const toggleCreateCommunity = () => setIsCreateDepartmentOpen(!isCreateDepartmentOpen);
 
   const fetchDepartments = async (url) => {
     try {
@@ -30,12 +38,17 @@ const StaffDirectory = () => {
       const departmentData = data.data.data.map((department) => ({
         id: department.id,
         name: department.name,
+        order: department.order,
+        imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',// Assuming the API returns an image URL here
       }));
+
+      console.log('Department data:', departmentData);  
 
       setDepartmentsList((prevDepartments) => {
         const allDepartments = [...prevDepartments, ...departmentData];
-        return allDepartments.sort((a, b) => a.name.localeCompare(b.name));
+        return allDepartments.sort((a, b) => a.order - b.order);
       });
+      
 
       if (data.data.next_page_url) {
         fetchDepartments(data.data.next_page_url);
@@ -48,8 +61,32 @@ const StaffDirectory = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchDepartments('/api/crud/departments');
+    fetchDepartments('/api/department/departments');
   }, []);
+
+  const handleDelete = async () => {
+    try {
+      await fetch(`/api/department/departments/${currentDepartmentId}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+      });
+      setDepartmentsList((prevList) =>
+        prevList.filter((department) => department.id !== currentDepartmentId)
+      );
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting department:', error);
+    }
+  };
+
+  const handleDeleteClick = (id) => {
+    setCurrentDepartmentId(id);
+    setIsDeleteModalOpen(true);
+  };
 
   const handleNewDepartment = (newDepartment) => {
     setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
@@ -61,7 +98,7 @@ const StaffDirectory = () => {
 
   return (
     <Example>
-      <main className="w-full xl:pl-96 bg-gray-100 min-h-screen">
+      <main className="w-full min-h-screen bg-gray-100 xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
           <DepartmentSearchBar
             onSearch={(value) => setSearchTerm(value)}
@@ -82,8 +119,9 @@ const StaffDirectory = () => {
                 <DepartmentsCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={'assets/departmentsDefault.jpg'}
+                  imageUrl={department.imageUrl || 'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
+                  onDeleteClick={handleDeleteClick}
                 />
               ))
             )}
@@ -106,18 +144,41 @@ const StaffDirectory = () => {
         <div>
           <FeaturedEvents />
           <WhosOnline />
+          <Birthdaypopup />
         </div>
       </aside>
-      {isCreateCommunityOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
-          <div className="bg-white p-4 rounded-lg shadow-lg relative">
-            <button
-              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
+            <h2 className="mb-4 text-xl font-bold text-center">Delete Department?</h2>
+            <div className="flex justify-center space-x-4">
+              <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleDelete}>
+                Yes
+              </button>
+              <button className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700" onClick={() => setIsDeleteModalOpen(false)}>
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isCreateDepartmentOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-4 bg-white shadow-lg rounded-2xl">
+            {/* <button
+              className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
               onClick={toggleCreateCommunity}
             >
               &times;
-            </button>
-            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} />
+            </button> */}
+            <div className="relative">
+              <div className="flex justify-end">
+                <button onClick={toggleCreateCommunity} className="absolute top-0 right-0 mt-2 mr-2">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
           </div>
         </div>
       )}
@@ -125,4 +186,4 @@ const StaffDirectory = () => {
   );
 };
 
-export default StaffDirectory;
+export default Departments;

@@ -4,14 +4,20 @@ namespace Modules\Department\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Department\Models\BusinessUnit;
+use Illuminate\Http\Request;
 
 class BusinessUnitController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            'data' => BusinessUnit::queryable()->paginate(),
-        ]);
+        $query = BusinessUnit::query();
+
+        if ($request->has('department_id')) {
+            $departmentId = $request->query('department_id');
+            $query->where('department_id', $departmentId);
+        }
+
+        return response()->json($query->paginate());
     }
 
     public function show($id)
@@ -21,12 +27,22 @@ class BusinessUnitController extends Controller
         ]);
     }
 
+    // public function store()
+    // {
+    //     $validated = request()->validate(...BusinessUnit::rules());
+    //     BusinessUnit::create($validated);
+
+    //     return response()->noContent();
+    // }
+
     public function store()
     {
         $validated = request()->validate(...BusinessUnit::rules());
-        BusinessUnit::create($validated);
+        $businessPost = BusinessUnit::create($validated);
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $businessPost,
+        ], 201);
     }
 
     public function update(BusinessUnit $business_unit)

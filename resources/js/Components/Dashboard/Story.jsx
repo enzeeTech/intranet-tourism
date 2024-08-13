@@ -49,7 +49,7 @@ const StoryNew = ({ userId }) => {
         .then(({ data }) => {
             setUserData({
                 ...data,
-                profileImage: data.profile.image
+                profileImage: data.profile?.image
             });
         })
         .catch((error) => {
@@ -130,9 +130,11 @@ const StoryNew = ({ userId }) => {
             
 
             const userAvatars = users.map(user => ({
-                src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
+                // src: user.data.profile && user.data.profile.image ? user.data.profile.image : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.data.name}&rounded=true`,
+                src: user.data.profile?.image,
                 alt: `Avatar of ${user.data.name}`,
                 name: user.data.username,
+                fullName: user.data.name,
                 stories: userStories.filter(story => story.userId === user.data.id)
             }));
 
@@ -255,13 +257,30 @@ const StoryNew = ({ userId }) => {
         });
     };
 
+    // console.log("USERDATA", userData);
+    
+    const source = () => {
+        if (!userData.profileImage) {
+            return `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`;
+        }
+    
+        return userData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+            ? userData.profileImage
+            : userData.profileImage.startsWith('avatar/')
+            ? `/storage/${userData.profileImage}`
+            : `/avatar/${userData.profileImage}`;
+    };
+    
     const loggedInUserAvatar = {
-        // src: userData.profileImage || `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
-        src: userData.profileImage ? `/storage/${userData.profileImage}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`,
+        src: source(),
         alt: "Avatar of logged in user",
-        name: "Your Story",
+        name: userData.username,
         stories: avatars[0].stories.filter(story => story.userId === id)
     };
+    
+    console.log("FF", sortedAvatars.src);
+    
+
 
 
     return (
@@ -279,8 +298,6 @@ const StoryNew = ({ userId }) => {
                         padding: '2px'
                     }}>
                         <img
-                            // src={loggedInUserAvatar.src}
-                            // src={`/storage/${loggedInUserAvatar.src}`}
                             src={loggedInUserAvatar.src}
                             alt={loggedInUserAvatar.alt}
                             style={{
@@ -323,6 +340,7 @@ const StoryNew = ({ userId }) => {
             </div>
             <div ref={containerRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
                 {sortedAvatars.map((avatar, index) => (
+                    console.log("AVATAR", avatar),
                 <div key={index} style={{ display: 'inline-block', margin: '10px', position: 'relative', marginRight: '10px' }}>
                         <button style={{ border: 'none', background: 'none', padding: '0', position: 'relative' }}>
                             <div style={{
@@ -334,7 +352,16 @@ const StoryNew = ({ userId }) => {
                                 <img
                                     // src={avatar.src}
                                     // src={`/storage/${avatar.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${userData.name}&rounded=true`}
-                                    src={avatar.src}
+                                    // src={avatar.src}
+                                    src={
+                                        !avatar.src // check if src variable is empty
+                                          ? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${avatar.fullName}&rounded=true` // if src is empty = src equals to this path
+                                          : avatar.src === '/assets/dummyStaffPlaceHolder.jpg' //if avatar.src is not empty, check id avatar.src is equal to this path
+                                          ? avatar.src // if it is equal to the path, then src = avatar.src
+                                          : avatar.src.startsWith('avatar/') // if not equal, then check if avatar.src starts with avatar/
+                                          ? `/storage/${avatar.src}` // if yes, then src = storage/{avatar.src}
+                                          : `/storage/avatar/${avatar.src}`// If no then then src = 
+                                      }
                                     alt={avatar.alt}
                                     style={{
                                         borderRadius: '50%',
@@ -350,7 +377,19 @@ const StoryNew = ({ userId }) => {
                         <div style={{ textAlign: 'center', marginTop: '-5px', fontSize: '12px', color: '#888' }}>
                             {avatar.stories.length} {avatar.stories.length === 1 ? 'story' : 'stories'}
                         </div>
-                        <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.name}</div>
+                        {/* <div style={{ textAlign: 'center', marginTop: '-5px' }}>{avatar.fullName}</div> */}
+                        <div
+                            style={{
+                                textAlign: 'center',
+                                marginTop: '-5px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '85px' // Adjust the width as needed
+                            }}
+                            >
+                            {avatar.fullName}
+                        </div>
                 </div>
                 ))}
             </div>

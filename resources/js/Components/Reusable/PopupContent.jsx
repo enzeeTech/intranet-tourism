@@ -4,7 +4,7 @@ import threeDotsIcon from '../../../../public/assets/threedots.svg';
 import deleteIcon from '../../../../public/assets/deleteicon.svg';
 import downloadIcon from '../../../../public/assets/downloadicon.svg';
 import renameIcon from '../../../../public/assets/renameicon.svg';
-import adminIcon from '../../../../public/assets/adminicon.svg';
+import ViewIcon from '../../../../public/assets/ViewIcon.svg';
 import ViewAdminPopup from '../Reusable/ViewAdminPopup';
 
 function classNames(...classes) {
@@ -12,6 +12,8 @@ function classNames(...classes) {
 }
 
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
+  console.log("FILE", file);
+  
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
     return null; // or return some placeholder content
@@ -30,16 +32,68 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
     }
   };
 
-  const handleDownload = (e) => {
+  // const handleDownload = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch(`/api/resources/resources?id=${file.id}`);
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     const data = await response.json();
+  //     const fileUrl = data.path;
+  //     window.open(fileUrl, '_blank');
+  //   } catch (error) {
+  //     console.error("Failed to download the file:", error);
+  //   }
+  // };
+  const handleDownload = async (e) => {
     e.preventDefault();
-    const fileUrl = `/api/downloadFile/${file.id}`;
-    window.open(fileUrl, '_blank');
+    try {
+      const response = await fetch(`/api/resources/resources?id=${file.id}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log("API response:", data); // Log the entire API response to check its structure
+  
+      const fileObject = data.data.data.find(f => f.id === file.id); // Find the file object in the data array
+  
+      if (!fileObject) {
+        throw new Error("File not found in the API response");     
+      }
+      
+      const fileUrl = `/storage/${fileObject.path}`;    // Extract the file path
+      console.log("FILE_PATH", fileObject);
+      
+      console.log("File path:", fileUrl);    // Log the file path to verify
+  
+      const link = document.createElement('a');
+      link.href = fileUrl;                   // Ensure this URL is correct
+      link.download = fileObject.metadata.original_name; // Use a default name if fileObject.name is not available
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Failed to download the file:", error);
+    }
   };
+  
+  
 
-  const handleManageAdminClick = (e) => {
+  // const handleViewClick = (e) => {
+  //   e.stopPropagation();
+  //   onFileSelect(file); // Select this file for admin management
+  // };
+
+
+  const handleViewClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    onFileSelect(file); // Select this file for admin management
-  };
+
+    const fileUrl = `/storage/${file.metadata.path}`; // Construct the file URL
+    window.open(fileUrl, '_blank'); // Open the file in a new tab
+};
+
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -104,14 +158,14 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
             <MenuItem>
               {({ active }) => (
                 <button
-                  onClick={handleManageAdminClick}
+                  onClick={handleViewClick}
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
-                  <img src={adminIcon} alt="Manage Admin" className="mr-3 h-5 w-5" />
-                  Manage Admin
+                  <img src={ViewIcon} alt="View" className="mr-3 h-5 w-5" />
+                  View
                 </button>
               )}
             </MenuItem>

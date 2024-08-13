@@ -18,14 +18,15 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
     if (!workNo || isDeactivated) return;
   
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const fullNumber = `+6038891${workNo}`;
+    // const fullNumber = `+6038891${workNo}`;
+    const fullNumber = workNo;
   
     if (isMobile) {
       window.location.href = `tel:${fullNumber}`;
     } else {
       setIsCallPopupOpen(true);
     }
-  };
+};      
 
   const handleWhatsApp = () => {
     if (!phoneNo || isDeactivated) return;
@@ -55,11 +56,20 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
 
   const isPhoneNumberAvailable = () => phoneNo != null;
   const isWorkNumberAvailable = () => workNo != null;
-  const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
-    ? imageUrl 
-    : imageUrl.startsWith('avatar/') 
-      ?  `/storage/${imageUrl}`
-      : `/avatar/full/${imageUrl}`;
+
+  console.log('imageUrl', imageUrl);
+
+  // const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/${imageUrl}`;
+
+  let source = null;
+
+    if (imageUrl.startsWith('staff_image/')) {
+        source = `/storage/${imageUrl}`;
+    } else {
+        source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? imageUrl 
+            : `/avatar/${imageUrl}`;
+    }
 
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
@@ -99,19 +109,20 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
         </button>
       </div>
       {isCallPopupOpen && (
-        <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeCallPopup}>
-          <div className="popup w-[475px]" onClick={(e) => e.stopPropagation()}>
-            <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeCallPopup} alt="Close" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeCallPopup}>
+          <div className="popup w-[475px] rounded-none" onClick={(e) => e.stopPropagation()}>
+            <img src="assets/cancel.svg" className="close-button" onClick={closeCallPopup} alt="Close" />
             <p style={{ fontSize: '16px', marginTop: '15px', marginBottom: '5px' }}>
               Call is available only on mobile.
-              <br />
-              Office No: +603-8891 {workNo}
+              <br></br>
+              Office Number: 
+              <span className="text-blue-500 ml-2">{workNo}</span>
             </p>
           </div>
         </div>
       )}
       {isWhatsAppPopupOpen && (
-        <div className="bg-gray-800 bg-opacity-50 popup-backdrop" onClick={closeWhatsAppPopup}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeWhatsAppPopup}>
           <div className="popup w-[350px]" onClick={(e) => e.stopPropagation()}>
             {/* <img src="assets/deactivatePopupClose.png" className="close-button" onClick={closeWhatsAppPopup} alt="Close" /> */}
             <p className="text-xl mb-4 font-bold mt-1.5">Redirect to WhatsApp Web?</p>

@@ -75,7 +75,7 @@ return [
 
     'whitelist' => [
         'criteria' => [
-            'extension' => ["jpg", "jpeg", "webp", "png", "bmp", "pdf", "mp4"]
+            'extension' => ["jpg", "jpeg", "webp", "png", "bmp", "pdf", "mp4", "doc", "docx", "txt", "xlsx"]
         ]
     ]
 ];

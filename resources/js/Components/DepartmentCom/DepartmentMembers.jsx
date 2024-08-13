@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Invite from '../DepartmentCom/invPopup'; 
+import AddMemberPopup from '../Reusable/AddMemberPopup'; 
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 
@@ -52,7 +52,7 @@ function UserCard({ src, alt, name, role, status }) {
 //   </div>
 // );
 
-const PopupMenu = ({ onRemove, onAssign }) => {
+const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleRemoveClick = () => {
@@ -66,6 +66,7 @@ const PopupMenu = ({ onRemove, onAssign }) => {
   const handleConfirmRemove = () => {
     onRemove();
     setShowPopup(false);
+    closePopup();
   };
 
   return (
@@ -82,8 +83,8 @@ const PopupMenu = ({ onRemove, onAssign }) => {
       </div>
 
       {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-          <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
             <h2 className="mb-4 text-xl font-bold text-center">Delete member?</h2>
             <div className="flex justify-center space-x-4">
               <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleClosePopup}>
@@ -139,7 +140,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
-          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-13" />
+          <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-9" />
         </button>
         {activePopupId === id && (
           <div ref={popupRef}>
@@ -172,7 +173,7 @@ function DpMembers() {
   useEffect(() => {
     const fetchData = async () => {
       const departmentId = getDepartmentIdFromQuery();
-      const url = `/api/crud/employment_posts?department_id=${departmentId}`;
+      const url = `/api/department/employment_posts?department_id=${departmentId}`;
 
       try {
         const response = await fetch(url, {
@@ -185,6 +186,8 @@ function DpMembers() {
         const data = await response.json();
         
         const fetchedMembers = data.members || [];
+
+        fetchedMembers.sort((a, b) => a.order - b.order);
         
         setMembers(fetchedMembers);
       } catch (error) {
@@ -224,7 +227,7 @@ function DpMembers() {
   };
 
   const handleDelete = async (id) => {
-    const url = `/api/crud/employment_posts/${id}`;
+    const url = `/api/department/employment_posts/${id}`;
 
     try {
       const response = await fetch(url, {
@@ -253,26 +256,29 @@ function DpMembers() {
   };
 
   const handleNewMemberAdded = (newMember) => {
-    setMembers((prevMembers) => [...prevMembers, newMember]);
+    const newMembers = [...members, newMember];
+    newMembers.sort((a, b) => a.order - b.order);
+    setMembers(newMembers);
   };
 
   const handleAddMember = (newMemberData) => {
     const newMember = {
-      user_id: newMemberData.user_id,
-      employment_post_id: newMemberData.employment_post_id,
-      image: newMemberData.profile?.image || '/assets/dummyStaffPlaceHolder.jpg',
-      name: newMemberData.profile?.bio || '',
-      title: newMemberData.employment_post?.title || '',
-      is_active: newMemberData.user?.is_active || false,
+      user_id: newMemberData.id,
+      image: newMemberData.imageUrl || '/assets/dummyStaffPlaceHolder.jpg',
+      name: newMemberData.name || '',
+      business_post_title: newMemberData.role || '',
+      is_active: newMemberData.isDeactivated || false,
     };
   
     handleNewMemberAdded(newMember);
   };
 
+  // console.log(members);
+
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
   return (
-    <section className="flex flex-col h-auto max-w-full p-6 shadow-sm rounded-3xl max-md:px-5">
+    <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">
       <div className="flex items-center gap-3.5 text-base font-bold text-white max-md:flex-wrap max-md:max-w-full">
         <input
           type="text"
@@ -289,9 +295,10 @@ function DpMembers() {
         </button>
         <button
           onClick={handleInviteClick}
-          className="items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
+          className="flex items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
         >
-          Add Member
+          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
+          Member
         </button>
       </div>
 
@@ -317,9 +324,9 @@ function DpMembers() {
               key={index}
               id={member.user_id}
               employment_post_id={member.employment_post_id}
-              imageUrl={member.image}
+              imageUrl={member.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
               name={member.name}
-              title={member.title}
+              title={member.business_post_title}
               isActive={member.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
@@ -331,7 +338,7 @@ function DpMembers() {
         </section>
       </div>
       {showInvite && 
-        <Invite 
+        <AddMemberPopup
           isAddMemberPopupOpen={showInvite}
           setIsAddMemberPopupOpen={setShowInvite}
           departmentId={getDepartmentIdFromQuery()}

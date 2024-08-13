@@ -11,11 +11,16 @@
     border-bottom: 1px solid #E4E4E4;
   }
 
-  .featured-events-list{
-    list-style: none;
-    padding: 0;
-    /* width: 110%; */
-  }
+  .featured-events-list {
+  list-style: none;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  /* width: 110%; */
+}
+
 
   .view-all-btn {
     display: flex;

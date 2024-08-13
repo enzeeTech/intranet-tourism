@@ -37,7 +37,7 @@ class Post extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'type' => ['string', 'required'],
-                    'content' => ['string', 'required'],
+                    'content' => ['string'],
                     'title' => ['string'],
                     'tag' => ['string'],
                     'visibility' => ['string', 'required'],
@@ -52,7 +52,7 @@ class Post extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'type' => ['string', 'required'],
-                    'content' => ['string', 'required'],
+                    'content' => ['string'],
                     'title' => ['string'],
                     'tag' => ['string'],
                     'visibility' => ['string', 'required'],

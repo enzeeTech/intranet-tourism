@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import searchIcon from '../../../../public/assets/searchStaffButton.png';
+import { useCsrf } from "@/composables";
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
-const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
+const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
+
   const [searchTerm, setSearchTerm] = useState('');
   const [file, setFile] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [tags, setTags] = useState([]);
+  const csrfToken = useCsrf();
+
+
+  console.log("userId", userId);
+  
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -22,8 +29,45 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   };
 
   const handleFileUpload = async () => {
-    // Handle file upload logic here...
+    if (!file) return;
+
+  
+    const formData = new FormData();
+    formData.append("user_id", userId); // Assuming userId is accessible within this component
+    formData.append("type", "files");
+    formData.append("visibility", "public");
+    formData.append("tag", JSON.stringify(tags));
+    formData.append("attachments[0]", file);
+  
+    try {
+      const response = await fetch("/api/posts/posts", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+          "X-CSRF-Token": csrfToken, // Assuming csrfToken is available in your component
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      // Call onFileUploaded callback if provided to notify the parent component about the upload
+      if (onFileUploaded) {
+        onFileUploaded(file);
+      }
+  
+      // Clear file selection and close popup
+      setFile(null);
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+
+    }
+    window.location.reload(); // Reload the page
   };
+  
 
   const handleFileDelete = () => {
     setFile(null);
@@ -32,7 +76,7 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
 
   const CancelButton = ({ onClick }) => (
     <button
-      className="self-end px-4 py-3 text-base font-bold whitespace-nowrap rounded-2xl border border-solid border-stone-300 text-neutral-400"
+      className="self-end px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border-2 border-gray-400"
       onClick={onClick}
     >
       Cancel
@@ -40,30 +84,31 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   );
 
   return (
-    <div className="file-search-bar-container shadow-custom">
-      <div className="file-search-bar-title">
+    <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 sm:left">
+      <div className="file-search-bar-title -mt-1">
         <h2>Search Files</h2>
       </div>
       <div className="file-search-bar">
         <input
           type="text"
-          className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
-          placeholder="Search Name"
+          // className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
+          className="text-md px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 search-input-staff-search-bar sm:w-auto"
+          placeholder="Search file name"
           value={searchTerm}
           onChange={handleSearchChange} 
           style={{ paddingLeft: '1.5rem' }}
           // style={{ paddingLeft: '1.2rem' }}
         />
-        <button
+        {/* <button
           onClick={handleSearchChange}
-          className="visit-department-btn text-md font-bold rounded-full px-4 py-3 mx-4 bg-blue-500 text-white hover:bg-blue-700">
+          className="visit-department-btn text-md font-bold rounded-full px-4 py-3 mx-3 bg-blue-500 text-white hover:bg-blue-700">
           Search
-        </button>
+        </button> */}
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
           <div
-            className="flex items-center shrink-0 bg-blue-500 hover:bg-blue-700 px-4 py-1.5 rounded-full">
-            <img src="/assets/addFile.svg" alt="add new file" className="w-10 h-8" />
+            className="flex items-center bg-blue-500 hover:bg-blue-700 px-4 py-2 max-md:px-5 max-md:py-0 h-full rounded-full ml-3 mr-2">
+            <img src="/assets/plus.svg" alt="add new file" className="w-5 h-5 max-md:w-7 max-md:h-7" />
           </div>
         </label>
         {/* <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
@@ -75,20 +120,26 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
         </label> */}
       </div>
       {showPopup && (
-        <div className="file-popup">
-          <div className="file-popup-content">
+        <div className="file-popup px-4">
+          <div className="file-popup-content rounded-3xl w-[400px]">
             <div className="popup-header">
-              <h3>Upload File</h3>
-              <button onClick={handleFileDelete} className="close-popup-btn">
-                &times;
-              </button>
+            <h2 className="mb-4 text-2xl font-bold flex justify-start">Upload file</h2>
             </div>
             <div className="popup-body">
-              <p>Selected file: {file ? file.name : 'No file selected'}</p>
-              <button onClick={handleFileUpload} className="upload-btn">
-                Upload
-              </button>
-              <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+              <div className="flex justify-start">
+                <p className="font-bold mb-2 items-start">Selected file:</p>
+              </div>
+              <div className="flex justify-start w-full px-4 py-2 border-2 border-gray-400 rounded-md overflow-hidden">
+                <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                  {file ? file.name : 'No file selected'}
+                </p>
+              </div>
+              <div className="flex flex-row justify-end mt-4 space-x-0">
+                <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
+                <button onClick={handleFileUpload} className="upload-btn font-bold bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
+                  Upload
+                </button>
+              </div>
             </div>
           </div>
         </div>

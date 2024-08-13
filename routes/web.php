@@ -4,6 +4,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\Commmmunity;
 use App\Http\Controllers\communityPost;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentOrdering;
 use App\Http\Controllers\departments;
 use App\Http\Controllers\fileManagement;
 use App\Http\Controllers\NotificationController;
@@ -16,6 +17,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\OrderingController;
+use App\Http\Controllers\ManageLinksController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -50,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/{id}', [ProfileController::class, 'show'])->name('UserDetail');
     Route::get('/staffDirectory', [StaffDirectoryController::class, 'index'])->name('staffDirectory');
     Route::get('/ordering', [OrderingController::class, 'index'])->name('ordering');
+    Route::get('/orderingDepartments', [DepartmentOrdering::class, 'index'])->name('orderingDepartments');
     Route::get('/notification', [NotificationController::class, 'index'])->name('notification');
     Route::get('/notipopup', [NotificationController::class, 'testing'])->name('Noti-popup-test');
     Route::get('/notification-unread', [NotificationController::class, 'index_unread'])->name('notification-unread');
@@ -64,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/link', [LinkController::class, 'index'])->name('link');
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
+    Route::get('/manage-links', [ManageLinksController::class, 'index'])->name('manage-links');
 });
 
 require __DIR__ . '/auth.php';

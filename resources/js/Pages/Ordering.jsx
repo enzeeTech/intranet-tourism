@@ -18,29 +18,30 @@ const Ordering = () => {
 
     const fetchStaffMembers = async (departmentId) => {
         setIsLoading(true);
-
+    
         try {
-            const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
-            method: "GET",
-            headers: { Accept: 'application/json' }
+            const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
+                method: "GET",
+                headers: { Accept: 'application/json' }
             });
             if (!response.ok) {
-            throw new Error("Network response was not ok");
+                throw new Error("Network response was not ok");
             }
             const data = await response.json();
-
+    
             const members = data.members.map(member => ({
-            id: member.user_id,
-            name: member.name,
-            role: member.title,
-            status: 'Online',
-            imageUrl: member.image,
-            workNo: member.work_phone,
-            phoneNo: member.phone_no,
-            isDeactivated: member.is_active,
-            order: member.order,
+                id: member.user_id,
+                employment_id: member.employment_post_id,
+                name: member.name,
+                role: member.business_post_title,
+                status: 'Online',
+                imageUrl: member.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
+                isDeactivated: member.is_active,
+                order: member.order,
             }));
-
+    
+            members.sort((a, b) => a.order - b.order);
+    
             setStaffMembers(members);
         } catch (error) {
             console.error("Error:", error);
@@ -58,7 +59,7 @@ const Ordering = () => {
     const updateOrderAttributes = (members) => {
         return members.map((member, index) => ({
             ...member,
-            order: index.toString(),
+            order: index,
         }));
     };
 
@@ -86,19 +87,26 @@ const Ordering = () => {
         setStaffMembers(updateOrderAttributes(newData));
     };
 
-    const updateOrderInDatabase = async (id, order) => {
+    const updateOrderInDatabase = async (employmentPost, department_id) => {
         try {
-            const response = await fetch(`/api/crud/users/${id}`, {
-                method: 'PUT',
+            const response = await fetch(`/api/department/employment_posts/${employmentPost.employment_id}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
-                body: JSON.stringify({ order: order }),
+                body: JSON.stringify({
+                    _method: 'PATCH',
+                    department_id: department_id,
+                    user_id: employmentPost.id,
+                    order:  employmentPost.order,
+                }),
+                
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to update order for user with ID ${id}`);
+                throw new Error(`Failed to update order for employment post with ID ${employmentPost.employment_id}`);
             }
 
             const responseBody = await response.text();
@@ -113,7 +121,7 @@ const Ordering = () => {
         setIsNotificationVisible(true);
         setNotificationMessage("Saving changes...");
         
-        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member.id, member.order));
+        const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member, departmentId));
         
         const results = await Promise.all(updatePromises);
 
@@ -134,6 +142,8 @@ const Ordering = () => {
         window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
     };
 
+    console.log(staffMembers);
+
     return (
         <Example>
             <div className="flex-row ">
@@ -143,8 +153,8 @@ const Ordering = () => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <button onClick={handleBack} className="text-lg font-semibold text-black">Back</button>
-                                    <button className="px-4 py-2 text-lg font-semibold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
+                                    <button onClick={handleBack} className="text-md font-bold text-black">Back</button>
+                                    <button type="button" className="px-4 py-2 text-md font-bold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -155,8 +165,8 @@ const Ordering = () => {
                                         <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-lg font-bold text-left text-gray-900">Name</th>
-                                                    <th className="px-4 py-3 text-lg font-bold text-left text-gray-900">Ordering</th>
+                                                    <th className="px-6 py-3 text-md font-bold text-left text-gray-500">Name</th>
+                                                    <th className="px-4 py-3 text-md font-bold text-left text-gray-500">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -232,7 +242,7 @@ const Ordering = () => {
                 </div>
             </div>
             {isNotificationVisible && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="p-4 bg-white rounded-lg shadow-lg">
                         <p className="text-lg font-semibold">{notificationMessage}</p>
                     </div>

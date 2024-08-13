@@ -4,6 +4,9 @@ import DeleteIcon from '../../../../public/assets/DeleteRedButton.svg';
 import { useCsrf } from "@/composables";
 
 const StoryViewer = ({ stories, onClose, user, onViewed }) => {
+
+    console.log("USER", user);
+
     const csrfToken = useCsrf();
 
     const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
@@ -67,6 +70,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
         setShowDeletePopup(false);
     };
 
+    
     return (
         <div style={{
             position: 'fixed',
@@ -122,11 +126,21 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', flex: '1', marginBottom: '5px' }}>
                             <img
-                                src={`/storage/${user.src}`}
+                                // src={`/storage/${user.src}`}
+                                // src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.fullName}`}
+                                src={
+                                    !user.src // check if src variable is empty
+                                      ? `https://ui-users.com/api/?background=0D8ABC&color=fff&name=${user.fullName}&rounded=true` // if src is empty = src equals to this path
+                                      : user.src === '/assets/dummyStaffPlaceHolder.jpg' //if user.src is not empty, check id user.src is equal to this path
+                                      ? user.src // if it is equal to the path, then src = user.src
+                                      : user.src.startsWith('user/') // if not equal, then check if user.src starts with user/
+                                      ? `/storage/${user.src}` // if yes, then src = storage/{user.src}
+                                      : `/storage/avatar/${user.src}`// If no then then src = 
+                                }
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
-                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.name}</div>
+                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.fullName ? user.fullName : "Your Story"}</div>
                         </div>
                         <button
                             type="button"
@@ -148,11 +162,15 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                             onClick={onClose}
                         >
                             <img
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=285d536833cc4168a8fbec258311d77b&"
+                                src="/assets/cancel.svg"
+                                className="w-6 h-6"
                                 alt="Close icon"
                                 style={{ width: '28px', height: '28px', marginTop: '-10px', marginLeft: '10px' }}
                             />
                         </button>
+                        {/* <button onClick={onClose} className="modal-close-button pt-3 px-2">
+                            <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                        </button> */}
                     </div>
                     <Stories
                         stories={stories.map(story => ({
@@ -167,6 +185,9 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         currentIndex={currentStoryIndex}
                         onAllStoriesEnd={handleAllStoriesEnd}
                         isPaused={isPaused}
+                        storyStyles={{
+                            width: '360px',
+                          }}
                     />
                     {stories[currentStoryIndex]?.text && (
                         <div style={{
@@ -193,7 +214,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         backgroundColor: 'white',
-                        borderRadius: '8px',
+                        borderRadius: '16px',
                         padding: '20px',
                         boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
                         zIndex: 10000,
@@ -218,6 +239,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 width: '80px',
                                 padding: '10px 20px',
                                 cursor: 'pointer',
+                                marginRight: '16px',
                             }}
                         >
                             Yes

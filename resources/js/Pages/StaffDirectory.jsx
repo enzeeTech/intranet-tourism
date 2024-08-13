@@ -60,7 +60,7 @@ const StaffDirectory = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/crud/employment_posts?department_id=${departmentId}`, {
+      const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
         method: "GET",
         headers: { Accept: 'application/json' }
       });
@@ -71,10 +71,10 @@ const StaffDirectory = () => {
 
       const members = data.members.map(member => ({
         id: member.user_id,
-        name: member.name,
-        role: member.title,
+        name: member.name,  
+        role: member.business_post_title,
         status: 'Online',
-        imageUrl: member.image,
+        imageUrl: member.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
         workNo: member.work_phone,
         phoneNo: member.phone_no,
         isDeactivated: member.is_active,
@@ -201,11 +201,35 @@ const StaffDirectory = () => {
 
   console.log('staffMembers', staffMembers);
 
+  const handleNewMemberAdded = (newMember) => {
+    const newMembers = [...staffMembers, newMember];
+    newMembers.sort((a, b) => a.order - b.order);
+    setStaffMembers(newMembers);
+  };
+
+  const handleAddMember = (newMemberData) => {
+    const newMember = {
+      id: newMemberData.id,
+      name: newMemberData.name,  
+      role: newMemberData.role,
+      status: 'Online',
+      imageUrl: newMemberData.imageUrl || '/assets/dummyStaffPlaceHolder.jpg',
+      workNo: newMemberData.workNo,
+      phoneNo: newMemberData.phoneNo,
+      isDeactivated: newMemberData.isDeactivated,
+      order: newMemberData.order,
+    };
+
+    console.log('newMember passed from popup', newMember);
+  
+    handleNewMemberAdded(newMember);
+  };
+
   return (
     <Example>
       <div className="flex-row">
-        <div className="flex ">
-          <main className="w-full xl:pl-96">
+        <div className="flex">
+          <main className="w-full min-h-screen bg-gray-100 xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-[1200px]">
               <SearchMembers
                 {...{
@@ -219,7 +243,7 @@ const StaffDirectory = () => {
               <DepartmentDropdown
                 departments={departments}
                 onSelectDepartment={handleSelectDepartment}
-                staffMembers={staffMembers}
+                onNewMemberAdded={handleAddMember}
               />
               {isLoading ? (
                 <div className="staff-member-grid-container max-w-[1200px]">
@@ -276,9 +300,9 @@ const StaffDirectory = () => {
     </div>
   </div>
   {isDeactivateModalOpen && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-      <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
-        <h2 className="mb-4 text-xl font-bold text-center">Deactivate?</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
+        <h2 className="mb-4 text-xl font-bold text-center">Deactivate staff?</h2>
         <div className="flex justify-center space-x-4">
           <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleDeactivate}>
             Yes
@@ -291,15 +315,15 @@ const StaffDirectory = () => {
     </div>
   )}
   {isActivateModalOpen && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-        <div className="relative p-8 bg-white rounded-lg shadow-lg w-96">
-          <h2 className="mb-4 font-bold text-center text-l">Activate?</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="relative p-8 bg-white shadow-lg rounded-3xl w-96">
+          <h2 className="mb-4 text-xl font-bold text-center">Activate?</h2>
           <div className="flex justify-center space-x-4">
-            <button className="px-8 py-1 text-white font-bold bg-[#4880FF] rounded-full" onClick={handleActivate}>
-              Yes
-            </button>
-            <button className="px-8 py-1 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsActivateModalOpen(false)}>
+            <button className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={() => setIsActivateModalOpen(false)}>
               No
+            </button>
+            <button className="px-8 py-1 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleActivate}>
+              Yes
             </button>
           </div>
         </div>

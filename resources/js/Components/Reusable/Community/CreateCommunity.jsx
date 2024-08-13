@@ -16,8 +16,8 @@ function Avatar({ src, alt, onImageChange }) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex justify-center items-center px-16 py-12 bg-gray-200 rounded-xl cursor-pointer" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square w-[58px]" />
+      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
+        <img loading="lazy" src={src} alt={alt} className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center" />
       </div>
       <input
         type="file"
@@ -32,7 +32,7 @@ function Avatar({ src, alt, onImageChange }) {
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex gap-4 self-stretch mt-5 text-neutral-800">
+    <div className="flex gap-4 self-stretch mt-2 text-neutral-800">
       <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
@@ -66,7 +66,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       created_by: user.name,
       updated_by: user.name,
     };
-
+  
     const options = {
       method: 'POST',
       headers: {
@@ -76,26 +76,27 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       },
       body: JSON.stringify(data)
     };
-
+  
     try {
       const response = await fetch('/api/communities/communities', options);
       const text = await response.text();
-
+  
       if (!response.ok) {
         console.error('Server response not OK:', text);
         throw new Error('Failed to create department');
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department created:', responseData.data);
       onCreate(responseData.data);
+      window.location.reload(); // Reload the page after successful creation
     } catch (error) {
       console.error('Error creating department:', error.message);
     }
-  };
+  }; 
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center px-6 mt-3 w-full">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
@@ -124,11 +125,11 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="public">Public</option>
           <option value="all">All</option>
         </select>
-        <div className="flex gap-5 justify-between self-end mt-12 text-sm text-center whitespace-nowrap">
+        <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-red-500 hover:bg-red-700 rounded-3xl" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleSubmit}>
             {createText}
           </button>
         </div>
@@ -146,8 +147,8 @@ export default function CreateCommunity({ onCancel, onCreate }) {
 
   return (
     <Card
-      title="Create Community"
-      imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/6f8e3479de331781a2f10c0ab889344565741f0340528db3a07d68a166a8dee4?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
+      title="Create New Community"
+      imgSrc="/assets/uploadAnImage.svg"
       imgAlt="Departments Logo"
       user={user}
       type="Type"

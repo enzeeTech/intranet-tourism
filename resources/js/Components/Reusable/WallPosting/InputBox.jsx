@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
 import TagInput from "./AlbumTag";
+import MediaTag from '../../../../../public/assets/Media tag.svg'
 import "../css/InputBox.css";
 import "../../../Pages/Calendar/index.css";
 import { useCsrf } from "@/composables";
@@ -9,6 +10,7 @@ import { useCsrf } from "@/composables";
 function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
+    const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
     const [showPeoplePopup, setShowPeoplePopup] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
@@ -22,21 +24,40 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
 
     const handleClickSend = () => {
         const formData = new FormData();
-        formData.append("user_id", userId); // Use the userId prop here
-        // formData.append('type', 'post');
-        formData.append("type", "post");
-        formData.append("visibility", "public");
-        formData.append("content", inputValue);
-        formData.append("tag", JSON.stringify(tags));
 
-        attachments.forEach((file, index) => {
-            formData.append(`attachments[${index}]`, file);
-        });
+        if (!inputValue) {
+            formData.append("user_id", userId); // Use the userId prop here
+            // formData.append('type', 'post');
+            formData.append("type", "post");
+            formData.append("visibility", "public");
+            formData.append("tag", JSON.stringify(tags));
+            attachments.forEach((file, index) => {
+                formData.append(`attachments[${index}]`, file);
+            });
 
-        if (includeAccessibilities) {
-            formData.append("accessibilities[0][accessable_type]", filterType);
-            formData.append("accessibilities[0][accessable_id]", filterId);
+            if (includeAccessibilities) {
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+            }
         }
+        else {
+            formData.append("user_id", userId); // Use the userId prop here
+            // formData.append('type', 'post');
+            formData.append("type", "post");
+            formData.append("visibility", "public");
+            formData.append("content", inputValue);
+            formData.append("tag", JSON.stringify(tags));
+
+            attachments.forEach((file, index) => {
+                formData.append(`attachments[${index}]`, file);
+            });
+
+            if (includeAccessibilities) {
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+            }
+        }
+        
 
         fetch("/api/posts/posts", {
             method: "POST",
@@ -80,11 +101,15 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const handleClickImg = createFileInputHandler("image/*");
     const handleClickVid = createFileInputHandler("video/*");
     const handleClickDoc = createFileInputHandler(
-        "application/pdf, .doc, .docx, .txt"
+        "application/pdf, .doc, .docx, .txt, .xlsx"
     );
 
     const handleClickPoll = () => {
         setShowPollPopup(true);
+    };
+
+    const handleClickMediaTag = () => {
+        setShowMediaTagPopup(true);
     };
 
     const handleClickPeople = () => {
@@ -94,6 +119,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const closePopup = () => {
         setShowPollPopup(false);
         setShowPeoplePopup(false);
+        setShowMediaTagPopup(false);
     };
 
     return (
@@ -148,6 +174,15 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                             <button>
                                 <img
                                     loading="lazy"
+                                    src={MediaTag}
+                                    alt="Icon 4"
+                                    className="w-[19px] h-auto"
+                                    onClick={handleClickMediaTag}
+                                />
+                            </button>
+                            <button>
+                                <img
+                                    loading="lazy"
                                     src="assets/inputpeople.svg"
                                     alt="Icon 5"
                                     className="w-[10px] h-auto"
@@ -182,7 +217,9 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     </div>
                 </div>
             </div>
-            <TagInput tags={tags} setTags={setTags} />
+            {showMediaTagPopup && (
+            <TagInput tags={tags} setTags={setTags} onClose={closePopup} />
+            )}
             {showPollPopup && (
                 <Polls onClose={closePopup} onCreatePoll={onCreatePoll} />
             )}

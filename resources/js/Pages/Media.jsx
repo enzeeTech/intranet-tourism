@@ -10,8 +10,6 @@ import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css'
 
 
-
-
 const Media = () => {
     // const [selectedMedia, setSelectedMedia] = useState('All');
     const [posts, setPosts] = useState([]);
@@ -21,7 +19,7 @@ const Media = () => {
 
     useEffect(() => {
       const fetchData = async () => {
-        const url = '/api/posts/posts';
+        const url = '/api/posts/posts?with[]=attachments';
         const options = {
           method: 'GET',
           headers: { Accept: 'application/json' }
@@ -29,7 +27,10 @@ const Media = () => {
         try {
           const response = await fetch(url, options);
           const data = await response.json();
-          setPosts(data.data.data);
+          // Filter out posts with type 'story'
+          const filteredData = data.data.data.filter(post => post.type !== 'story');
+
+          setPosts(filteredData);
           // Extract unique tag values
           const uniqueTags = [...new Set(data.data.data.flatMap(post => post.tag || []))];
           setTagOptions(uniqueTags);
@@ -40,6 +41,9 @@ const Media = () => {
 
       fetchData();
     }, []);
+
+    console.log("DATA", posts);
+    
 
     useEffect(() => {
       if (selectedTag === '') {
@@ -55,41 +59,31 @@ const Media = () => {
 
     const renderImages = () => {
       return filteredPosts.map(post => (
-        post.attachments.filter(attachment => attachment.mime_type.startsWith('image/')).map(imageAttachment => (
+        post.attachments?.filter(attachment => attachment.mime_type.startsWith('image/')).map(imageAttachment => (
           <img key={imageAttachment.id} src={`/storage/${imageAttachment.path}`} alt="Image Attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full object-cover"/>
         ))
       ));
     };
-
+    
     const renderVideos = () => {
       return filteredPosts.map(post => (
-        post.attachments.filter(attachment => attachment.mime_type.startsWith('video/')).map(videoAttachment => (
+        post.attachments?.filter(attachment => attachment.mime_type.startsWith('video/')).map(videoAttachment => (
           <video key={videoAttachment.id} controls src={`/storage/${videoAttachment.path}`} className="grow shrink-0 max-w-full aspect-[1.19] w-full"/>
         ))
       ));
     };
-
-    // const menuItems = [
-    //     'All',
-    //     'TM Networking Day',
-    //     'Peraduan Jomla!',
-    // ];
-
-    // const handleSelectMedia = (menuItem) => {
-    //     setSelectedMedia(menuItem);
-    //   };
-
+    
 
   return (
     <Example>
-    <main className="xl:pl-96">
+    <main className="min-h-screen bg-gray-100 xl:pl-96">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div>
-            <div className="flex flex-col justify-center text-sm max-w-full text-neutral-800 relative">
-      <div
-        style={{ width: '180px' }}
-        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg cursor-pointer"
-      >
+            <div className="relative flex flex-col justify-center max-w-full text-sm text-neutral-800">
+        <div
+          style={{ width: '180px' }}
+          className="flex justify-between gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl"
+        >
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
                     {tagOptions.map((tag, index) => (
@@ -101,14 +95,14 @@ const Media = () => {
                 <div>
                     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
                         <header>
-                            <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+                            <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
                             Images
                             </h1>
                             <hr className="underline" />
                         </header>
-                        <section className="mt-8 max-md:max-w-full">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                                    {/* <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">Images</h1> */}
+                        <section className="mt-4 max-md:max-w-full">
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
+                                    {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderImages()}
                             </div>
                         </section>
@@ -117,14 +111,14 @@ const Media = () => {
                 <div>
                     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
                         <header>
-                            <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+                            <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
                             Videos
                             </h1>
                             <hr className="underline" />
                         </header>
-                        <section className="mt-8 max-md:max-w-full">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                                    {/* <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">Images</h1> */}
+                        <section className="mt-4 max-md:max-w-full">
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
+                                    {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
                                     {renderVideos()}
                             </div>
                         </section>
@@ -133,7 +127,7 @@ const Media = () => {
             </div>
         </div>
     </main>
-    <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+    <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
         <style>
             {`
             aside::-webkit-scrollbar {

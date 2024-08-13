@@ -29,7 +29,7 @@
 //                     </div>
 //                 </div>
 //             </main>
-//             <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:block xl:block">
+//             <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:block xl:block">
 //                 <div className="file-directory-header"></div>
 //                 <PageTitle title="Settings" />
 //                 <hr className="file-directory-underline" />
@@ -58,13 +58,14 @@ const navigation = [
     { name: "Basic Settings", href: '#', inactive: "assets/Inactive Basic Settings.svg", active: "assets/Active Basic Settings.svg" },
     { name: 'Themes', href: '#', inactive: "assets/Inactive Theme.svg", active: "assets/Active Theme.svg" },
     { name: 'Advance Settings', href: '#', inactive: "assets/Inactive Advanced Settings.svg", active: "assets/Active Advanced Settings.svg" },
-    { name: 'Departments', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
-    { name: 'Media', href: '#', inactive: "assets/Inactive Media.svg", active: "assets/Active Media.svg" },
+    // { name: 'Departments', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
+    // { name: 'Media', href: '#', inactive: "assets/Inactive Media.svg", active: "assets/Active Media.svg" },
     { name: 'Requests', href: '#', inactive: "assets/Inactive Requests.svg", active: "assets/Active Requests.svg" },
     { name: 'Audit Trail', href: '#', inactive: "assets/Inactive Audit Trail.svg", active: "assets/Active Audit Trail.svg" },
     { name: 'Feedback', href: '#', inactive: "assets/Inactive Feedback.svg", active: "assets/Active Feedback.svg" },
     { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
-    { name: 'Pautan', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Roles', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Permissions', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
 ];
 
 const Settings = () => {
@@ -105,14 +106,14 @@ const Settings = () => {
 
     return (
         <Example>
-            <main className="xl:pl-96 lg:pl-96">
+            <main className="min-h-screen bg-gray-100 xl:pl-96 lg:pl-96">
                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                     <div>
                         <SettingsPage currentPage={currentPage} />
                     </div>
                 </div>
             </main>
-            <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:block xl:block">
+            <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:block xl:block">
                 <div className="file-directory-header"></div>
                 <PageTitle title="Settings" />
                 <hr className="file-directory-underline" />
@@ -128,13 +129,13 @@ const Settings = () => {
                 </button>
 
                 {isOpen && (
-                    <div className="fixed left-4 bottom-12 bg-white shadow-lg rounded-md border border-gray-200 w-52 max-h-screen sm:max-h-64 overflow-y-auto">
+                    <div className="fixed max-h-screen overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg left-4 bottom-12 w-52 sm:max-h-64">
                         <ul className="divide-y divide-gray-200">
                             {navigation.map((item) => (
                                 <li key={item.name}>
                                     {/* { <a
                                     href={item.href}
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-36 border-gray shadow-sm"
+                                    className="block px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-100 w-36 border-gray"
                                 >
                                     {item.name}
                             </a> } */}
@@ -153,7 +154,7 @@ const Settings = () => {
                                         <img
                                             src={item.name === currentPage ? item.active : item.inactive}
                                             alt={`${item.name}`}
-                                            className="h-4 w-4 mt-2 shrink-0"
+                                            className="w-4 h-4 mt-2 shrink-0"
                                             aria-hidden="true"
                                         />
                                         {item.name}
