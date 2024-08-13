@@ -10,7 +10,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResources([
         'role-has-permissions' => RoleHasPermissionController::class,
         'roles' => RoleController::class,
-        'model_has_roles' => ModelHasRoleController::class,
+        'model-has-roles' => ModelHasRoleController::class,
 
     ]);
 
