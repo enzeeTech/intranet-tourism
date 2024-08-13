@@ -90,14 +90,20 @@ function ProfileBio({
 
     let source = null;
 
-    if (bioFormData.photo.startsWith('staff_image/')) {
-        source = `/storage/${bioFormData.photo}`;
+    if (bioFormData.photo) {
+        if (bioFormData.photo.startsWith('staff_image/')) {
+            source = `/storage/${bioFormData.photo}`;
+        } else {
+            source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
+                ? bioFormData.photo 
+                : bioFormData.photo.startsWith('data:image') 
+                ? bioFormData.photo 
+                : `/avatar/${bioFormData.photo}`;
+        }
     } else {
-        source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
-            ? bioFormData.photo 
-            : bioFormData.photo.startsWith('data:image') 
-            ? bioFormData.photo 
-            : `/avatar/${bioFormData.photo}`;
+        // If the photo is null, use the generated avatar from ui-avatars.com
+        const name = bioFormData.name || 'Staff'; // Use 'Staff' as a fallback if name is not available
+        source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(name)}`;
     }
 
     return (
@@ -106,41 +112,39 @@ function ProfileBio({
                 <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
                     <table className="table-auto w-full text-left border-collapse">
                         <tbody>
-                            {bioFormData.photo && (
-                                <tr>
-                                    <td className="py-2 align-center w-1/3">
-                                        <div className="text-base text-neutral-800 font-semibold">
-                                            Staff’s photo
-                                            <button
-                                                className="ml-2 inline-block justify-center items-center w-3.5 h-3.5 text-xs text-center text-white whitespace-nowrap rounded-full bg-zinc-300"
-                                                role="tooltip"
-                                                tabIndex="0"
-                                            >
-                                                ?
-                                            </button>
-                                        </div>
-                                        <div className="text-xs text-blue-500">Maximum size: 1MB</div>
-                                    </td>
-                                    <td className="py-2 align-start w-2/3">
-                                        <div className="flex items-center gap-4">
-                                            <img
-                                                loading="lazy"
-                                                src={source}
-                                                className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
-                                                alt="Staff's photo"
+                            <tr>
+                                <td className="py-2 align-center w-1/3">
+                                    <div className="text-base text-neutral-800 font-semibold">
+                                        Staff’s photo
+                                        <button
+                                            className="ml-2 inline-block justify-center items-center w-3.5 h-3.5 text-xs text-center text-white whitespace-nowrap rounded-full bg-zinc-300"
+                                            role="tooltip"
+                                            tabIndex="0"
+                                        >
+                                            ?
+                                        </button>
+                                    </div>
+                                    <div className="text-xs text-blue-500">Maximum size: 1MB</div>
+                                </td>
+                                <td className="py-2 align-start w-2/3">
+                                    <div className="flex items-center gap-4">
+                                        <img
+                                            loading="lazy"
+                                            src={source}
+                                            className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
+                                            alt="Staff's photo"
+                                        />
+                                        {isEditing && (
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handlePhotoChange}
+                                                className="text-xs"
                                             />
-                                            {isEditing && (
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={handlePhotoChange}
-                                                    className="text-xs"
-                                                />
-                                            )}
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
                             {renderField('Username', 'username', bioFormData.username, 'text')}
                             {renderField('E-mail', 'email', bioFormData.email, 'email')}
                             {renderField('Date of Birth', 'dateofbirth', bioFormData.dateofbirth, 'date')}

@@ -227,7 +227,7 @@ function DpMembers() {
   };
 
   const handleDelete = async (id) => {
-    const url = `/api/crud/employment_posts/${id}`;
+    const url = `/api/department/employment_posts/${id}`;
 
     try {
       const response = await fetch(url, {

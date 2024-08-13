@@ -65,6 +65,7 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
       console.error("Error uploading file:", error);
 
     }
+    window.location.reload(); // Reload the page
   };
   
 
