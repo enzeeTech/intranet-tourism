@@ -27,10 +27,9 @@ const Community = () => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      const departmentData = data.data.data.map((community) => ({
-        id: community.id,
-        name: community.name,
-        imageUrl: community.banner ? `/storage/${community.banner}` : 'assets/departmentsDefault.jpg', // Assuming the API returns an image URL here
+      const departmentData = data.data.data.map((department) => ({
+        id: department.id,
+        name: department.name,
       }));
 
       setDepartmentsList((prevDepartments) => {
@@ -56,8 +55,8 @@ const Community = () => {
     setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
-  const filteredDepartments = departmentsList.filter((community) =>
-    community.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDepartments = departmentsList.filter((department) =>
+    department.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -83,7 +82,7 @@ const Community = () => {
                 <CommunityCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={department.imageUrl}
+                  imageUrl={'assets/departmentsDefault.jpg'}
                   departmentID={department.id}
                   type={department.type} // Pass the type (public/private)
                 />
@@ -113,6 +112,12 @@ const Community = () => {
       {isCreateCommunityOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 ">
           <div className="bg-white p-4 rounded-2xl shadow-lg relative">
+            {/* <button
+              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
+              onClick={toggleCreateCommunity}
+            >
+              &times;
+            </button> */}
             <div className="relative">
               <div className="flex justify-end">
                 <button onClick={toggleCreateCommunity} className="mt-2 mr-2 absolute top-0 right-0">
