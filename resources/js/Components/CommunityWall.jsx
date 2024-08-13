@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import DpMembers from './DepartmentCom/DepartmentMembers';
+import DpMembers from '../Components/DepartmentCom/DepartmentMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
-import { SearchInput, SearchButton, Table } from "./ProfileTabbar";
-import { ImageProfile, VideoProfile } from "./ProfileTabbar/Gallery";
-import EditDepartments from './Reusable/Departments/EditDepartments'; // Import EditDepartments
+import { SearchInput, SearchButton, Table } from "../Components/ProfileTabbar";
+import { ImageProfile, VideoProfile } from "../Components/ProfileTabbar/Gallery";
+import EditDepartments from '../Components/Reusable/Departments/EditDepartments'; // Import EditDepartments
 
-function HeaderSection({ communityID, communityHeader, communityBanner, communityDescription, onEditClick }) {
+function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
   const [textContent, setTextContent] = useState('');
 
   useEffect(() => {
-    setTextContent(communityDescription);
-  }, [communityDescription]);
+    setTextContent(departmentDescription || ''); // Ensure textContent is always a string
+  }, [departmentDescription]);
 
   const handleEditClick = () => {
     onEditClick(true); // Notify parent to open the edit popup
   };
 
   const handleInputChange = (e) => {
-    const newDescription = e.target.value;
-    setTextContent(newDescription);
+    setTextContent(e.target.value);
   };
 
   const handleSaveClick = async () => {
@@ -45,28 +44,27 @@ function HeaderSection({ communityID, communityHeader, communityBanner, communit
     }
   };
 
-  console.log(communityBanner);
+  console.log(departmentBanner);
 
+  // Check if departmentBanner is defined and a string
   let banner = null;
-
- if (communityBanner.startsWith('banner/')) {
-    banner = `/storage/${communityBanner}`;
+  if (typeof departmentBanner === 'string' && departmentBanner.startsWith('banner/')) {
+    banner = `/storage/${departmentBanner}`;
   } else {
-    banner = communityBanner;
+    banner = departmentBanner || 'https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&';
   }
-
 
   return (
     <header className="flex overflow-hidden relative flex-col px-11 py-9 w-full w-[875px] text-white max-md:px-5 max-md:max-w-full rounded-t-xl">
       <img
         loading="lazy"
-        src={banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"}
+        src={banner}
         className="absolute inset-0 object-cover size-full"
         alt=""
       />
       <div className="relative flex justify-between w-full gap-5 max-md:flex-wrap max-md:max-w-full">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-extrabold">{communityHeader}</h1>
+          <h1 className="text-3xl font-extrabold">{departmentHeader}</h1>
         </div>
         <div className="flex content-center self-start justify-between gap-5 text-sm font-medium">
         </div>
@@ -107,7 +105,8 @@ function HeaderSection({ communityID, communityHeader, communityBanner, communit
   );
 }
 
-function Navigation({ userId, communityID, communityName }) {
+
+function Navigation({ userId, departmentID, departmentName }) {
   const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
   const [polls, setPolls] = useState([]);
 
@@ -143,14 +142,14 @@ function Navigation({ userId, communityID, communityName }) {
               <SearchInput />
               <SearchButton />
             </div>
-            <Table communityID={communityID} />
+            <Table departmentID={departmentID} />
           </div>
         )}
 
         {activeTab === "Gallery" && (
           <section>
-            <ImageProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
-            <VideoProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
+            <ImageProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
+            <VideoProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
           </section>
         )}
 
@@ -159,7 +158,7 @@ function Navigation({ userId, communityID, communityName }) {
             <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
               <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={departmentID} />
               <Filter /><br />
-              <OutputData polls={polls} filterType="Department" filterId={communityID} communityName={communityName} />
+              <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />
             </div>
           </div>
         )}
@@ -168,35 +167,32 @@ function Navigation({ userId, communityID, communityName }) {
   );
 }
 
-function Adminsection({ dcommunityID, communityHeader, communityDescription, userId, communityBanner }) {
+function Adminsection({ departmentID, departmentHeader, departmentDescription, userId, departmentBanner }) {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [departmentData, setDepartmentData] = useState(null);
 
   useEffect(() => {
-    console.log("Community ID:", communityID); // Add this line for debugging
+    // Fetch the department data here
     const fetchDepartmentData = async () => {
       try {
-        const response = await fetch(`/api/communities/communities/${communityID}`);
-  
+        const response = await fetch(`/api/communities/communities/${departmentID}`); // Use departmentID
+
         if (!response.ok) {
           throw new Error('Failed to fetch department data');
         }
-  
+
         const department = await response.json();
-        setDepartmentData(community.data);
+        setDepartmentData(department.data);
       } catch (error) {
         console.error('Error fetching department data:', error);
       }
     };
-  
-    if (communityID) { // Ensure communityID is defined before fetching
-      fetchDepartmentData();
-    }
-  }, [communityID]);
-  
 
-  console.log("DEPARTMENT BANNER", communityBanner);
-  
+    fetchDepartmentData();
+  }, [departmentID]);
+
+  console.log("DEPARTMENT BANNER", departmentBanner);
+
   const handleEditClick = (isOpen) => {
     setIsEditPopupOpen(isOpen);
   };
@@ -218,17 +214,17 @@ function Adminsection({ dcommunityID, communityHeader, communityDescription, use
   return (
     <div className='w-[875px]'>
       <HeaderSection
-        communityID={communityID}
-        communityHeader={communityHeader}
-        communityBanner={communityBanner} // Use departmentData.banner here
-        communityDescription={communityDescription}
+        departmentID={departmentID}
+        departmentHeader={departmentHeader}
+        departmentBanner={departmentBanner} // Use departmentData.banner here
+        departmentDescription={departmentDescription}
         onEditClick={handleEditClick}
       />
-      <Navigation dcommunityID={communityID} userId={userId} communityName={communityHeader} />
+      <Navigation departmentID={departmentID} userId={userId} departmentName={departmentHeader} />
       {isEditPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <EditDepartments
-            department={communityData}
+            department={departmentData}
             onSave={handleSave}
             onCancel={handleCancel}
           />
@@ -238,14 +234,15 @@ function Adminsection({ dcommunityID, communityHeader, communityDescription, use
   );
 }
 
-export default function Adminwall({ communityID, communityHeader, communityDescription, communityBanner, userId }) {
+
+export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
     <div className="flex flex-wrap mx-auto my-20 text-black justify-left max-w-7xl gap-y-10">
       <Adminsection
-        communityID={communityID}
-        communityHeader={dcommunityHeader}
-        communityDescription={communityDescription}
-        communityBanner={communityBanner}
+        departmentID={departmentID}
+        departmentHeader={departmentHeader}
+        departmentDescription={departmentDescription}
+        departmentBanner={departmentBanner}
         userId={userId}
       />
     </div>
