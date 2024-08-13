@@ -74,18 +74,18 @@ function ProfileIcons({ icon1, icon2, onEdit, onFormDataChange, onPhotoChange, o
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
                     <div className="bg-white p-2 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
                         <img
-                            src="assets/qrAcap.jpg"
+                            src="/assets/qrAcap.jpg"
                             alt="QR Code"
                             className="mx-auto mx-4"
                         />
                         <hr className="mb-4 w-full border-gray-300" />
                         <div className="flex justify-between -mt-1 mx-20 max-md:mx-12 relative">
                             <button onClick={handleDownload} className="text-white py-2">
-                                <img src="assets/DownloadIcon.png" alt="Download Icon" className="w-6 h-6 shrink-0" />
+                                <img src="/assets/DownloadIcon.png" alt="Download Icon" className="w-6 h-6 shrink-0" />
                             </button>
                             {/* <hr className="absolute top-0 right-52 h-full border-l border-red-300" /> */}
                             <button onClick={handleCopyLink} className="text-white py-2">
-                                <img src="assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
+                                <img src="/assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
                             </button>
                         </div>
                     </div>

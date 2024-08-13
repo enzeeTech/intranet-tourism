@@ -145,10 +145,10 @@ function ProfileBio({
                                     </div>
                                 </td>
                             </tr>
-                            {renderField('Username', 'username', bioFormData.username, 'text')}
+                            {renderField('Name', 'name', bioFormData.name, 'text')}
                             {renderField('E-mail', 'email', bioFormData.email, 'email')}
                             {renderField('Date of Birth', 'dateofbirth', bioFormData.dateofbirth, 'date')}
-                            {renderField('Whatsapp Number', 'whatsapp', bioFormData.whatsapp, 'text')}
+                            {renderField('WhatsApp Number', 'whatsapp', bioFormData.whatsapp, 'text')}
                         </tbody>
                     </table>
                 </div>

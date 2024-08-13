@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import CommunityWall from '../Components/Communitywall';
+import CommunityWall from '../Components/CommunityWall';
 import EditDepartments from '../Components/Reusable/Departments/EditDepartments';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
@@ -18,6 +18,7 @@ const CommunityInner = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get('communityId');
   };
+  
 
   const fetchDepartmentData = async (communityId) => {
     try {
@@ -32,6 +33,7 @@ const CommunityInner = () => {
       setIsLoading(false);
     }
   };
+  
 
   const handleEditClick = () => {
     setIsEditPopupOpen(true);
@@ -49,25 +51,26 @@ const CommunityInner = () => {
       fetchDepartmentData(communityId);
     }
   }, []);
+  
 
   // if (isLoading) {
   //   return <div>Loading...</div>;
   // }
 
-  console.log('DEPARTMENT DATA', communityData);
+  console.log('DEPARTMENT DATA', departmentData);
 
   return (
     <Example>
       <main className="relative w-full ml-4 mr-4 xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 lg:ml-10 lg:mr-24 bottom-10">
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
-          <CommunityWall
-            communityID={getDepartmentIdFromQuery()}
-            communityHeader={communityData?.name}
-            communityDescription={communityData?.description}
-            communityBanner={communityData?.banner ? communityData.banner : 'assets/departmentsDefault.jpg'}
-            userId={id}
-            onEditClick={handleEditClick}
-          />
+        <CommunityWall
+          communityID={getDepartmentIdFromQuery()}
+          communityHeader={departmentData?.name}
+          communityDescription={departmentData?.description}
+          communityBanner={departmentData?.banner ? departmentData.banner : 'assets/departmentsDefault.jpg'}
+          userId={id}
+          onEditClick={handleEditClick}
+/>
         </div>
       </main>
 
@@ -104,3 +107,4 @@ const CommunityInner = () => {
 };
 
 export default CommunityInner;
+

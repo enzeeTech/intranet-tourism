@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, authToken, setPhoto }) {
   const [fileNames, setFileNames] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleClickImg = () => {
@@ -14,24 +15,25 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
     if (file) {
       setSelectedFile(file);
       setFileNames([file.name]);
+      setPreviewUrl(URL.createObjectURL(file)); // Create a preview URL for the selected image
     }
   };
 
   const handleSave = () => {
     if (!selectedFile) {
-        console.error("No file selected");
-        return;
+      console.error("No file selected");
+      return;
     }
 
     // Add checks for formData and profileData
     if (!formData || !formData.name) {
-        console.error("formData is undefined or missing 'name' property");
-        return;
+      console.error("formData is undefined or missing 'name' property");
+      return;
     }
 
     if (!profileData || !profileData.profile || !profileData.profile.id) {
-        console.error("profileData is undefined or missing 'profile' or 'id' property");
-        return;
+      console.error("profileData is undefined or missing 'profile' or 'id' property");
+      return;
     }
 
     const FfData = new FormData();
@@ -43,37 +45,36 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
     const url = `/api/profile/profiles/${profileData.profile.id}?with[]=user`;
 
     fetch(url, {
-        method: "POST",
-        body: FfData,
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": csrfToken || "",
-            Authorization: `Bearer ${authToken}`,
-        },
+      method: "POST",
+      body: FfData,
+      headers: {
+        Accept: "application/json",
+        "X-CSRF-TOKEN": csrfToken || "",
+        Authorization: `Bearer ${authToken}`,
+      },
     })
-    .then(async (response) => {
+      .then(async (response) => {
         if (!response.ok) {
-            const error = await response.json();
-            return await Promise.reject(error);
+          const error = await response.json();
+          return await Promise.reject(error);
         }
         return response.json();
-    })
-    .then((data) => {
+      })
+      .then((data) => {
         if (data.success) {
-            setPhoto(URL.createObjectURL(selectedFile)); // Update the photo URL
-            onSave(); // Trigger the onSave callback
-            console.log("File uploaded successfully:", data);
-            window.location.reload();
+          setPhoto(URL.createObjectURL(selectedFile)); // Update the photo URL
+          onSave(); // Trigger the onSave callback
+          console.log("File uploaded successfully:", data);
+          window.location.reload();
         } else {
-            console.error("Error uploading file:", data);
+          console.error("Error uploading file:", data);
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error("Error uploading file:", error);
         window.location.reload();
-    });
-};
-
+      });
+  };
 
   return (
     <div
@@ -88,12 +89,21 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           <div className="flex flex-col grow shrink-0 mt-3.5 basis-0 w-fit">
             <div className="text-xl font-bold">{title}</div>
             <div className="flex gap-5 mt-4 text-base font-medium">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
-                className="shrink-0 aspect-square w-[27px] cursor-pointer"
-                onClick={handleClickImg}
-              />
+              {previewUrl ? (
+                <img
+                  loading="lazy"
+                  src={previewUrl}
+                  alt="Preview"
+                  className="shrink-0 aspect-square w-[100px] rounded-lg"
+                />
+              ) : (
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
+                  className="shrink-0 aspect-square w-[27px] cursor-pointer"
+                  onClick={handleClickImg}
+                />
+              )}
               <div
                 className="flex-auto my-auto cursor-pointer"
                 onClick={handleClickImg}

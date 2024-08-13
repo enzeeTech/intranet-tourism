@@ -76,7 +76,7 @@ export default function UserDetail() {
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
                 profileImage: data.profile?.image || '',
-                username: "@" + data.username,
+                // username: "@" + data.username,
             }));
     
             const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
@@ -146,7 +146,7 @@ export default function UserDetail() {
     const updateUsername = async (newFormData) => {
         const userFormData = new FormData();
         userFormData.append('_method', 'PUT');
-        userFormData.append('username', newFormData.username);
+        userFormData.append('name', newFormData.name);
         userFormData.append('user_id', user.id); // Add user_id to the form data
 
         return fetch(`/api/users/users/${user.id}`, {

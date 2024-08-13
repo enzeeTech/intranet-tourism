@@ -62,7 +62,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-  }
+}
+
+.staff-member-name svg {
+    margin-left: 0.5rem; /* Add space between the name and the icon */
+}
   
   .staff-member-role {
     color: #202224;
