@@ -291,8 +291,8 @@ const SettingsPage = ({ currentPage }) => {
           <MailSettings onSave={handleSave} />
         </>
       )}
-      {currentPage === 'Departments' && <Departments onSave={handleSave} />}
-      {currentPage === 'Media' && <div></div>}
+      {/* {currentPage === 'Departments' && <Departments onSave={handleSave} />}
+      {currentPage === 'Media' && <div></div>} */}
       {currentPage === 'Requests' && <Requests/>}
       {currentPage === 'Audit Trail' &&
         <>

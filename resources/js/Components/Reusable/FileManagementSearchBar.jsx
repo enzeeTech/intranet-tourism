@@ -74,7 +74,7 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
 
   const CancelButton = ({ onClick }) => (
     <button
-      className="self-end px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400"
+      className="self-end px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border-2 border-gray-400"
       onClick={onClick}
     >
       Cancel
@@ -90,8 +90,8 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
         <input
           type="text"
           // className="search-input font-bold py-4 px-4 bg-gray-100 border-gray-100"
-          className="rounded-full flex-grow w-full font-bold py-3 px-6 bg-gray-100 border-gray-100 text-neutral-800 sm:w-auto"
-          placeholder="Search File Name"
+          className="text-md px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 search-input-staff-search-bar sm:w-auto"
+          placeholder="Search file name"
           value={searchTerm}
           onChange={handleSearchChange} 
           style={{ paddingLeft: '1.5rem' }}
@@ -105,8 +105,8 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
         <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
           <input type="file" id="file-upload" style={{ display: 'none' }} onChange={handleFileChange} />
           <div
-            className="flex items-center bg-blue-500 hover:bg-blue-700 px-4 py-2 max-md:px-3 h-full rounded-full ml-4 mr-2">
-            <img src="/assets/plus.svg" alt="add new file" className="w-5 h-5" />
+            className="flex items-center bg-blue-500 hover:bg-blue-700 px-4 py-2 max-md:px-5 max-md:py-0 h-full rounded-full ml-3 mr-2">
+            <img src="/assets/plus.svg" alt="add new file" className="w-5 h-5 max-md:w-7 max-md:h-7" />
           </div>
         </label>
         {/* <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
@@ -132,9 +132,9 @@ const SearchFile = ({ userId, onSearch, requiredData, onFileUploaded }) => {
                   {file ? file.name : 'No file selected'}
                 </p>
               </div>
-              <div className="flex flex-row justify-end mt-4 space-x-2">
+              <div className="flex flex-row justify-end mt-4 space-x-0">
                 <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
-                <button onClick={handleFileUpload} className="upload-btn bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
+                <button onClick={handleFileUpload} className="upload-btn font-bold bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
                   Upload
                 </button>
               </div>

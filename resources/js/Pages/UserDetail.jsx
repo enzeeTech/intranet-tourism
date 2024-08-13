@@ -1,152 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import Example from '@/Layouts/DashboardLayoutNew';
-// import PageTitle from '../Components/Reusable/PageTitle';
-// import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
-// import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-// import { ProfileHeader, ProfileNav } from "@/Components/Profile";
-// import { OutputData } from '@/Components/Reusable/WallPosting';
-// import { ProfileBio, ProfileIcons, SearchInput, SearchButton, Table } from "@/Components/ProfileTabbar";
-// import { ImageProfile, VideoProfile } from '@/Components/ProfileTabbar/Gallery';
-// import '../Components/Profile/profile.css';
-
-// function UserDetail({ user }) {
-//     console.log("hello", user);
-//     const [userData, setUserData] = useState({});
-//     const [activeTab, setActiveTab] = useState("bio");
-//     const [loading, setLoading] = useState(true);
-//     const [polls, setPolls] = useState([]);
-
-//     useEffect(() => {
-//         // Fetch user data using user ID (assuming user.id exists in props)
-//         fetch(`/api/users/users/${user.id}?with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`)
-//             .then(response => {
-//                 if (!response.ok) {
-//                     throw new Error("Network response was not ok");
-//                 }
-//                 return response.json();
-//             })
-//             .then(({ data }) => {
-//                 console.log('Fetched user data:', data);
-//                 setUserData(data); // Update state with fetched user data
-//             })
-//             .catch(error => {
-//                 console.error('Error fetching user data:', error);
-//             });
-
-//         setLoading(false); // Assuming user data loading is complete
-//     }, [user.id]);
-
-//     console.log("UD", userData);
-
-//     return (
-//         <Example>
-//             <main className="xl:pl-96 w-full">
-//                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-//                     <div>
-//                         <div className="w-full bg-white h-[485px] shadow-custom">
-//                             <ProfileHeader
-//                                 backgroundImage={userData.backgroundImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?'}
-//                                 // profileImage={userData.profile?.image ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
-//                                 name={userData.name}
-//                                 username={"@" + userData.username || "N/A"}
-//                                 status={userData.status ?? "Online"}
-//                                 rounded={true}
-//                             />
-//                             <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
-//                             {activeTab === "activities" && (
-//                                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-//                                 <OutputData polls={polls} userId={user.id} />
-//                                 </div>
-//                             )}
-//                             {activeTab === "bio" && (
-//                                 <>
-//                                     <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-//                                         <div className="flex-auto my-auto max-md:max-w-full">
-//                                             <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-//                                                 <ProfileBio
-//                                                     name={userData.name}
-//                                                     photo={userData.profilePictureUrl ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(userData.name)}`}
-//                                                     username={userData.username || "N/A"}
-//                                                     email={userData.email}
-//                                                     grade={userData.employment_post?.schema_grade || "N/A"}
-//                                                     dateofbirth={userData.profile?.dob || "N/A"}
-//                                                     whatsapp={userData.profile?.phone_no || "N/A"}
-//                                                 />
-//                                                 <ProfileIcons
-//                                                     icon1={userData.icon1}
-//                                                     icon2={userData.icon2}
-//                                                 />
-//                                             </div>
-//                                         </div>
-//                                     </section>
-//                                     <div className="separator"></div>
-//                                     <section className="flex flex-col w-full gap-5 px-8 py-4 mt-6 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-//                                         <div className="flex-auto my-auto max-md:max-w-full">
-//                                             <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-//                                                 <ProfileBio
-//                                                     department={userData.employment_post?.department?.name || "N/A"}
-//                                                     unit={userData.employment_post?.business_unit?.name || "N/A"}
-//                                                     jobtitle={userData.employment_post?.title || "N/A"}
-//                                                     position={userData.employment_post?.business_post?.title || "N/A"}
-//                                                     location={userData.employment_post?.location || "N/A"}
-//                                                     phone={`${userData.profile?.work_phone} ${userData.profile?.phone_no}` || "N/A"}
-//                                                 />
-//                                                 <ProfileIcons
-//                                                     icon1={userData.icon1}
-//                                                     icon2={userData.icon2}
-//                                                 />
-//                                             </div>
-//                                         </div>
-//                                     </section>
-//                                 </>
-//                             )}
-//                             {activeTab === "gallery" && (
-//                                 <section>
-//                                     <ImageProfile selectedItem="All" userId={user.id} />
-//                                     <VideoProfile selectedItem="All" userId={user.id} />
-//                                 </section>
-//                             )}
-//                             {activeTab === "files" && (
-//                                 <div>
-//                                     <div className="flex gap-4 whitespace-nowrap">
-//                                         <SearchInput />
-//                                         <SearchButton />
-//                                     </div>
-//                                     <Table userId={user.id} />
-//                                 </div>
-//                             )}
-//                         </div>
-//                     </div>
-//                 </div>
-//             </main>
-//             <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto  px-4 py-6 sm:px-6 lg:px-8 xl:block">
-//                 <style>
-//                 {`
-//                     aside::-webkit-scrollbar {
-//                         width: 0px !important;
-//                         background: transparent !important;
-//                     }
-//                     aside {
-//                         scrollbar-width: none !important; /* For Firefox */
-//                         -ms-overflow-style: none;
-//                     }
-//                 `}
-//                 </style>
-//                 <div className="file-directory-header">
-//                     <PageTitle title="User Profile" />
-//                 </div>
-//                 <hr className="file-directory-underline" />
-//                 <div>
-//                     <FeaturedEvents />
-//                     <WhosOnline />
-//                 </div>
-//             </aside>
-//         </Example>
-//     );
-// }
-
-// export default UserDetail;
-
 import React, { useState, useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
@@ -184,7 +35,6 @@ export default function UserDetail() {
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [photo, setPhoto] = useState("https://cdn.builder.io/api/v1/image/assets/TEMP/e2529a8d6493a4752f7510057ac1d7c1f0535b2b08af30702ea115fd3e80f513?apiKey=285d536833cc4168a8fbec258311d77b&");
     const [formData, setFormData] = useState({
         name: "",
         username: "",
@@ -198,17 +48,17 @@ export default function UserDetail() {
         phone: "",
         dateofbirth: "",
         whatsapp: "",
+        photo: "",
         employmentPosts: [] // Initialize with an empty array
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
-    const [originalPhoto, setOriginalPhoto] = useState(photo);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
     const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
     const [profileData, setProfileData] = useState({
         backgroundImage: "",
         profileImage: "",
-        name: "", // Initialize with empty string or placeholder
+        name: "", // Initialize with an empty string or placeholder
         username: "",
         status: "Online",
         icon1: "/assets/EditButton.svg",
@@ -220,42 +70,38 @@ export default function UserDetail() {
         fetch(`/api/users/users/${user.id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
+        .then((response) => response.json())
         .then(({ data }) => {
-            console.log('hello', data);
             setProfileData(pv => ({
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
-                profileImage: data.profile && data.profile.image,
+                profileImage: data.profile?.image || '',
                 username: "@" + data.username,
             }));
-
-            // Sort employmentPosts by id in ascending order (oldest first)
+    
             const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
-
-            setFormData((pv) => ({
-                ...pv,
+    
+            setFormData({
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
-                dateofbirth: data.profile?.dob || "N/A",
-                phone: data.profile?.work_phone || "N/A",
-                whatsapp: data.profile?.phone_no || "N/A",
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in formData
-            }));
-
-            setOriginalFormData((pv) => ({
-                ...pv,
+                dateofbirth: data.profile?.dob || "", // Use an empty string if no value
+                phone: data.profile?.work_phone || "", // Use an empty string if no value
+                whatsapp: data.profile?.phone_no || "", // Use an empty string if no value
+                photo: data.profile?.staff_image || data.profile?.image || "",
+                employmentPosts: sortedEmploymentPosts
+            });
+    
+            setOriginalFormData({
                 name: data.name,
                 username: data.username || "N/A",
                 email: data.email,
-                employmentPosts: sortedEmploymentPosts // Store sorted employment posts in originalFormData
-            }));
+                dateofbirth: data.profile?.dob || "", // Ensure originalFormData is correctly set
+                phone: data.profile?.work_phone || "", // Ensure originalFormData is correctly set
+                whatsapp: data.profile?.phone_no || "", // Ensure originalFormData is correctly set
+                photo: data.profile?.staff_image || data.profile?.image || "",
+                employmentPosts: sortedEmploymentPosts
+            });
         })
         .catch((error) => {
             console.error("Error fetching user data:", error);
@@ -264,8 +110,6 @@ export default function UserDetail() {
 
     console.log("PDATA", profileData);
     
-      
-
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
     };
@@ -292,9 +136,11 @@ export default function UserDetail() {
             employmentPosts: updatedEmploymentPosts,
         }));
     };
-
     const handlePhotoChange = (newPhoto) => {
-        setPhoto(newPhoto);
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            photo: newPhoto,
+        }));
     };
 
     const updateUsername = async (newFormData) => {
@@ -324,6 +170,15 @@ export default function UserDetail() {
             formData.append('phone_no', newFormData.whatsapp);
             formData.append('user_id', user.id);
             formData.append('name', user.name);
+
+            // Check if the photo is a file or a URL
+            if (newFormData.photo instanceof File) {
+                formData.append('photo', newFormData.photo);
+            } else if (newFormData.photo.startsWith('data:image')) {
+                // Convert base64 to file and append it to FormData
+                const blob = await (await fetch(newFormData.photo)).blob();
+                formData.append('staff_image', blob, 'profile_image.png');
+            }
 
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile.id}`, {
@@ -403,21 +258,13 @@ const handleSaveDepartment = async (index) => {
     } catch (error) {
         console.error(`Error updating Department ${index + 1} Information:`, error);
     }
+    window.location.reload();
 };
 
 const handleCancelBio = () => {
-    setFormData((prevFormData) => ({
-        ...prevFormData,
-        name: originalFormData.name || "N/A",
-        username: originalFormData.username || "N/A",
-        email: originalFormData.email || "N/A",
-        dateofbirth: originalFormData.dateofbirth || "N/A",
-        phone: originalFormData.phone || "N/A",
-        whatsapp: originalFormData.whatsapp || "N/A",
-    }));
-    setPhoto(originalPhoto);       
+    setFormData(originalFormData);
     setIsEditingBio(false);
-};
+}; 
 
 const handleCancelDepartment1 = () => {
     setFormData((prevFormData) => ({
@@ -437,9 +284,8 @@ const handleCancelDepartment1 = () => {
                 : post
         ),
     }));
-    setPhoto(originalPhoto);
     setIsEditingDepartment1(false);
-};
+};   
 
 const handleCancelDepartment2 = () => {
     setFormData((prevFormData) => ({
@@ -459,9 +305,8 @@ const handleCancelDepartment2 = () => {
                 : post
         ),
     }));
-    setPhoto(originalPhoto);
     setIsEditingDepartment2(false);
-};
+};   
 
 const handleEditBio = () => {
     setIsEditingBio(true);
@@ -495,7 +340,7 @@ return (
                     <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
-                            profileImage={profileData.profileImage ?? 'https://cdn.builder.io/api/v1/image/assets/TEMP/19dbe4d9d7098d561e725a31b63856fbbf81097ff193f1e5b04be40ccd3fe081?'}
+                            profileImage={profileData.profileImage}
                             name={profileData.name}
                             username={profileData.username}
                             status={profileData.status}
@@ -508,7 +353,7 @@ return (
                         <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
                         {activeTab === "activities" && (
                             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
-                                <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} />
+                                {/* <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} /> */}
                                 <Filter className="mr-10" />
                                 <div className="mb-20"></div>
                                 <OutputData polls={polls} showUserPosts={true} userId={user.id} />
@@ -528,21 +373,17 @@ return (
                                     </div>
                                     <div className="flex-auto my-auto max-md:max-w-full">
                                         <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                            <ProfileBio
-                                                photo={photo}
-                                                username={formData.username}
-                                                email={formData.email}
-                                                dateofbirth={formData.dateofbirth}
-                                                whatsapp={formData.whatsapp}
-                                                isEditing={isEditingBio}
-                                                onFormDataChange={setFormData}
-                                                onPhotoChange={handlePhotoChange}
-                                                originalFormData={originalFormData}
-                                                onEditBio={handleEditBio}
-                                                onCancelBio={handleCancelBio}
-                                                onSaveBio={handleSaveBio}
-                                                userId={user.id} // Pass userId as a prop
-                                            />
+                                        <ProfileBio
+                                                    formData={formData}
+                                                    isEditing={isEditingBio}
+                                                    onFormDataChange={setFormData}
+                                                    onPhotoChange={handlePhotoChange}
+                                                    originalFormData={originalFormData}
+                                                    onEditBio={handleEditBio}
+                                                    onCancelBio={handleCancelBio}
+                                                    onSaveBio={handleSaveBio}
+                                                    userId={user.id} // Pass userId as a prop
+                                                />
                                         </div>
                                     </div>
                                 </section>
@@ -564,7 +405,7 @@ return (
                                                     department={employmentPost.department?.name || ''}
                                                     unit={employmentPost.business_unit?.name || ''}
                                                     jobtitle={employmentPost.business_post?.title || ''}
-                                                    position={employmentPost.title || ''}
+                                                    position={employmentPost.position || ''}
                                                     grade={employmentPost.business_grade?.code || ''}
                                                     location={employmentPost.location || 'N/A'}
                                                     phone={employmentPost.work_phone || 'N/A'}
@@ -639,7 +480,7 @@ return (
                 formData={formData}
                 csrfToken={csrfToken}
                 authToken={authToken}
-                setPhoto={setPhoto}
+                setFormData={setFormData}
             />
         )}
     </Example>
