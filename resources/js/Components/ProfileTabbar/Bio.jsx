@@ -90,15 +90,21 @@ function ProfileBio({
 
     let source = null;
 
-    if (bioFormData.photo.startsWith('staff_image/')) {
-        source = `/storage/${bioFormData.photo}`;
+    if (bioFormData.photo) {
+        if (bioFormData.photo.startsWith('staff_image/')) {
+            source = `/storage/${bioFormData.photo}`;
+        } else {
+            source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
+                ? bioFormData.photo 
+                : bioFormData.photo.startsWith('data:image') 
+                ? bioFormData.photo 
+                : `/avatar/${bioFormData.photo}`;
+        }
     } else {
-        source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
-            ? bioFormData.photo 
-            : bioFormData.photo.startsWith('data:image') 
-            ? bioFormData.photo 
-            : `/avatar/${bioFormData.photo}`;
+        // Set a default image or handle the case when photo is not defined
+        source = '/assets/defaultPlaceholder.jpg'; // Assuming you have a default placeholder image
     }
+    
 
     return (
         <div ref={formRef} className="flex-auto my-auto p-4">

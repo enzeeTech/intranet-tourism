@@ -5,7 +5,9 @@ namespace Modules\Department\Models;
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
-use Modules\User\Models\User;;
+use Modules\User\Models\User;
+use Illuminate\Validation\Rule; // Add this import
+
 
 use Database\Factories\EmploymentPostFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,6 +35,7 @@ class EmploymentPost extends Model implements AuditableContract
         'location',
         'order',
         'work_phone',
+        'position',
     ];
 
     protected $appends = [
@@ -53,6 +56,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'location' => ['string'],
                     'order' => ['numeric'],
                     'work_phone' => ['string'],
+                    'position' => ['string'],
                 ],
                 // [],
             ],
@@ -67,6 +71,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'location' => ['string'],
                     'order' => ['numeric'],
                     'work_phone' => ['string'],
+                    'position' => ['string'],
                 ],
                 // [],
             ],
