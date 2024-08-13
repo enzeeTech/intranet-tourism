@@ -11,9 +11,8 @@ function ProfileBio({
     onSaveBio,
     userId
 }) {
-    const [bioFormData, setBioFormData] = useState(formData || {});
-    console.log("JJ", formData);
-    // Initialize with an empty object if formData is undefined
+    const [bioFormData, setBioFormData] = useState(formData || {}); 
+    const [isPhotoChangeNotificationOpen, setIsPhotoChangeNotificationOpen] = useState(false); // State for photo change notification popup
     const formRef = useRef(null);
 
     useEffect(() => {
@@ -53,13 +52,18 @@ function ProfileBio({
         reader.onloadend = () => {
             setBioFormData((prevData) => ({
                 ...prevData,
-                photo: reader.result, // Update only the photo in bioFormData
+                photo: reader.result, // Update the photo in bioFormData
             }));
             onPhotoChange(reader.result); // Pass the updated photo back to the parent component
+            setIsPhotoChangeNotificationOpen(true); // Show the photo change notification popup
         };
         if (file) {
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // Read the file and trigger the onloadend event
         }
+    };
+
+    const handleCloseNotification = () => {
+        setIsPhotoChangeNotificationOpen(false);
     };
 
     const renderField = (label, name, value, type) => (
@@ -87,16 +91,14 @@ function ProfileBio({
     let source = null;
 
     if (bioFormData.photo.startsWith('staff_image/')) {
-      // If bioFormData.photo already starts with 'avatar/', map it directly
-      source = `/storage/${bioFormData.photo}`;
+        source = `/storage/${bioFormData.photo}`;
     } else {
-      // If bioFormData.photo doesn't start with 'avatar/', check if it's a placeholder or not
-      source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg'
-        ? bioFormData.photo
-        : `/avatar/${bioFormData.photo}`;
+        source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? bioFormData.photo 
+            : bioFormData.photo.startsWith('data:image') 
+            ? bioFormData.photo 
+            : `/avatar/${bioFormData.photo}`;
     }
-
-    console.log("SOURCE", source);
 
     return (
         <div ref={formRef} className="flex-auto my-auto p-4">
@@ -154,6 +156,17 @@ function ProfileBio({
                         onCancelBio();
                     }} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
                     <button onClick={() => onSaveBio({ ...bioFormData, user_id: userId })} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                </div>
+            )}
+            {isPhotoChangeNotificationOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <h2 className="text-xl font-bold mb-2">Photo Change Request</h2>
+                        <p>The staff’s photo change request has been submitted for review.</p>
+                        <div className="flex justify-end mt-4">
+                            <button onClick={handleCloseNotification} className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">OK</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

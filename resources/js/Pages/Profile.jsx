@@ -230,6 +230,7 @@ export default function Profile() {
             FfData.append('business_grade_id', employmentPost.business_grade_id);
             FfData.append('location', employmentPost.location);
             FfData.append('work_phone', employmentPost.work_phone);
+            FfData.append('position', employmentPost.position);
             FfData.append('user_id', id); // Add user_id to the form data
 
             const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
@@ -402,7 +403,7 @@ export default function Profile() {
                                                         department={employmentPost.department?.name || ''}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
-                                                        position={employmentPost.title || ''}
+                                                        position={employmentPost?.position || ''}
                                                         grade={employmentPost.business_grade?.code || ''}
                                                         location={employmentPost.location || 'N/A'}
                                                         phone={employmentPost.work_phone || 'N/A'}

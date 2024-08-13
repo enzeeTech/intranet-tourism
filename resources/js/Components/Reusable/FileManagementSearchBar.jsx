@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import searchIcon from '../../../../public/assets/searchStaffButton.png';
+import { useCsrf } from "@/composables";
 import './css/FileManagementSearchBar.css';
 import './css/General.css';
 
-const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
+const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
+
   const [searchTerm, setSearchTerm] = useState('');
   const [file, setFile] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [tags, setTags] = useState([]);
+  const csrfToken = useCsrf();
+
+
+  console.log("userId", userId);
+  
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -22,8 +29,44 @@ const SearchFile = ({ onSearch, requiredData, onFileUploaded }) => {
   };
 
   const handleFileUpload = async () => {
-    // Handle file upload logic here...
+    if (!file) return;
+
+  
+    const formData = new FormData();
+    formData.append("user_id", userId); // Assuming userId is accessible within this component
+    formData.append("type", "files");
+    formData.append("visibility", "public");
+    formData.append("tag", JSON.stringify(tags));
+    formData.append("attachments[0]", file);
+  
+    try {
+      const response = await fetch("/api/posts/posts", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+          "X-CSRF-Token": csrfToken, // Assuming csrfToken is available in your component
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      // Call onFileUploaded callback if provided to notify the parent component about the upload
+      if (onFileUploaded) {
+        onFileUploaded(file);
+      }
+  
+      // Clear file selection and close popup
+      setFile(null);
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+
+    }
   };
+  
 
   const handleFileDelete = () => {
     setFile(null);

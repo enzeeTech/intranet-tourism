@@ -59,7 +59,17 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
 
   console.log('imageUrl', imageUrl);
 
-  const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/${imageUrl}`;
+  // const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/${imageUrl}`;
+
+  let source = null;
+
+    if (imageUrl.startsWith('staff_image/')) {
+        source = `/storage/${imageUrl}`;
+    } else {
+        source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? imageUrl 
+            : `/avatar/${imageUrl}`;
+    }
 
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>

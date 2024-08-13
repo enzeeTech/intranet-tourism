@@ -37,10 +37,11 @@ function ProfileDepartment({
     useEffect(() => {
         fetchData('/api/department/departments', setDepartmentOptions, 'Departments');
         fetchBusinessUnits();
-        fetchData('/api/department/business_posts', setJobTitleOptions, 'Positions');
+        fetchData('/api/department/business_posts', setJobTitleOptions, 'Job Title');
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
         fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
         fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
+        fetchData('/api/department/employment_posts', setPositionOptions, 'Position');
     }, []);
 
     const fetchData = async (API_URL, setOptions, label) => {
@@ -117,6 +118,8 @@ function ProfileDepartment({
                 updatedData.location = value;
             } else if (name === 'phone') {
                 updatedData.work_phone = value;
+            } else if (name === 'position') {
+                updatedData.position = value;
             }
 
             onFormDataChange(updatedData);
@@ -139,7 +142,7 @@ function ProfileDepartment({
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
                             <option key={index} value={option?.id || ''}>
-                                {option?.title || option?.name || option?.code || ''}
+                                {option?.title || option?.name || option?.code || option?.position || ''}
                             </option>
                         ))}
                     </select>
@@ -160,6 +163,7 @@ function ProfileDepartment({
             business_grade_id: localFormData.grade,
             location: localFormData.location,
             work_phone: localFormData.phone,
+            position: localFormData.position,
         };
 
         fetch('/your-api-endpoint', {
