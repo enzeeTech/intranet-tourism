@@ -11,8 +11,8 @@ const OrderingDepartments = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [departments, setDepartments] = useState([]);
     const [notificationMessage, setNotificationMessage] = useState("");
-    const { props } = usePage();
     const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0); 
     const csrfToken = useCsrf();
 
     const fetchDepartments = async (url) => {
@@ -121,9 +121,18 @@ const OrderingDepartments = () => {
     const handleSave = async () => {
         setNotificationMessage("Updating departments...");
         setIsNotificationVisible(true);
+        setProgress(0); 
 
         try {
-            const updatePromises = departments.map(department => updateOrderInDatabase(department));
+            const totalDepartments = departments.length;
+            const updatePromises = departments.map(async (department, index) => {
+                const result = await updateOrderInDatabase(department);
+                if (result && result.success) {
+                    setProgress(((index + 1) / totalDepartments) * 100); 
+                }
+                return result;
+            });
+
             const results = await Promise.all(updatePromises);
     
             const successfulUpdates = results.filter(result => result && result.success);
@@ -167,63 +176,65 @@ const OrderingDepartments = () => {
                                     <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
                                 </div>
                             ) : (
-                                <DragDropContext onDragEnd={handleDragEnd}>
-                                    <Droppable droppableId="departments">
-                                        {(provided) => (
-                                            <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
-                                                <thead>
-                                                    <tr>
-                                                        <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
-                                                        <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {departments.map((item, index) => (
-                                                        <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                                                            {(provided) => (
-                                                                <tr
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    className="bg-white border-t border-gray-200"
-                                                                >
-                                                                    <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                        <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
-                                                                        {item.name}
-                                                                    </td>
-                                                                    <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
-                                                                        <div className="flex items-center">
-                                                                            <button
-                                                                                className="px-2"
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                }}
-                                                                                disabled={index === 0}
-                                                                                style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                                            >
-                                                                                <img src="/assets/orderingup.svg" alt="Up" />
-                                                                            </button>
-                                                                            <button
-                                                                                className="px-2"
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                }}
-                                                                                disabled={index === departments.length - 1}
-                                                                                style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
-                                                                            >
-                                                                                <img src="/assets/orderingdown.svg" alt="Down" />
-                                                                            </button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            )}
-                                                        </Draggable>
-                                                    ))}
-                                                    {provided.placeholder}
-                                                </tbody>
-                                            </table>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
+                                <>
+                                    <DragDropContext onDragEnd={handleDragEnd}>
+                                        <Droppable droppableId="departments">
+                                            {(provided) => (
+                                                <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
+                                                            <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {departments.map((item, index) => (
+                                                            <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                                                {(provided) => (
+                                                                    <tr
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        className="bg-white border-t border-gray-200"
+                                                                    >
+                                                                        <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                            <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
+                                                                            {item.name}
+                                                                        </td>
+                                                                        <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                            <div className="flex items-center">
+                                                                                <button
+                                                                                    className="px-2"
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                    }}
+                                                                                    disabled={index === 0}
+                                                                                    style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                                >
+                                                                                    <img src="/assets/orderingup.svg" alt="Up" />
+                                                                                </button>
+                                                                                <button
+                                                                                    className="px-2"
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                    }}
+                                                                                    disabled={index === departments.length - 1}
+                                                                                    style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
+                                                                                >
+                                                                                    <img src="/assets/orderingdown.svg" alt="Down" />
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )}
+                                                            </Draggable>
+                                                        ))}
+                                                        {provided.placeholder}
+                                                    </tbody>
+                                                </table>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
+                                </>
                             )}
                         </div>
                     </main>
@@ -251,8 +262,16 @@ const OrderingDepartments = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
                     <div className="p-4 bg-white rounded-lg shadow-lg">
                         <p className="text-lg font-semibold">{notificationMessage}</p>
+                        <div className="mt-4">
+                            <div className="w-full bg-gray-200 rounded-full">
+                                <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: `${progress}%` }}>
+                                    {/* {progress.toFixed(0)}% */}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
             )}
         </Example>
     );
