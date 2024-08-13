@@ -85,7 +85,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
 
       <div className="flex flex-col md:flex-row md:space-x-10">
         
-      <div className="flex justify-center items-center mt-6 max-md:mt-2 max-md:mb-4 md:mt-0 md:w-1/2">
+        <div className="flex justify-center items-center mt-6 max-md:mt-2 max-md:mb-4 md:mt-0 md:w-1/2">
           {previewUrl && (
             <div className="image-preview relative">
               <Stories
@@ -94,8 +94,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
                 width={300}
                 height={460}
                 storyStyles={{
-                  borderRadius: '8px',
-                  objectFit: 'cover',
+                  width: '300px',
                 }}
                 style={{ borderRadius: '8px', objectFit: 'cover' }}
               />
