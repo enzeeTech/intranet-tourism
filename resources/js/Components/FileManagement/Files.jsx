@@ -255,7 +255,7 @@ import PopupContent from '../Reusable/PopupContent';
 import Pagination from '../Paginator';
 import { useCsrf } from "@/composables";
 
-const excludedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'];
+const excludedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'mp4'];
 
 const FileTable = ({ searchTerm }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -369,33 +369,81 @@ const FileTable = ({ searchTerm }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredFiles.slice(indexOfFirstItem, indexOfLastItem);
 
+  // const handleRename = async (index, newName) => {
+  //   const fileToRename = files[index];
+  //   if (!fileToRename || !fileToRename.id) {
+  //     console.error("File ID is missing.");
+  //     return;
+  //   }
+
+  //   console.log("FIEID", fileToRename);
+    
+
+  //   const updatedMetadata = {
+  //     ...fileToRename.metadata,
+  //     original_name: newName
+  //   };
+  //   const metadataString = JSON.stringify(updatedMetadata);
+
+  //   const payload = {
+  //     metadata: metadataString,
+  //   };
+
+  //   const url = `/api/crud/resources/${fileToRename.id}`;
+  //   const options = {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Accept: 'application/json',
+  //       'X-CSRF-Token': csrfToken,
+  //     },
+  //     body: JSON.stringify(payload),
+  //   };
+
+  //   try {
+  //     const response = await fetch(url, options);
+  //     if (!response.ok) {
+  //       const responseBody = await response.text();
+  //       console.error('Failed to rename file:', responseBody);
+  //       throw new Error(`Failed to rename file: ${response.statusText}`);
+  //     }
+
+  //     console.log('File renamed successfully.');
+  //     await fetchFiles();
+
+  //   } catch (error) {
+  //     console.error('Error renaming file:', error);
+  //   } finally {
+  //     setEditingIndex(null);
+  //   }
+  // };
+
+
   const handleRename = async (index, newName) => {
     const fileToRename = files[index];
     if (!fileToRename || !fileToRename.id) {
       console.error("File ID is missing.");
       return;
     }
-
-    const userId = String(fileToRename.user_id);
+  
+    console.log("FILE ID", fileToRename.id);
+  
+    // Create updated metadata object with the new name
     const updatedMetadata = {
       ...fileToRename.metadata,
-      original_name: newName
+      original_name: newName,
     };
+  
+    // Convert updatedMetadata to a JSON string
     const metadataString = JSON.stringify(updatedMetadata);
-
+  
+    // Create payload with the metadata as a JSON string
     const payload = {
-      user_id: userId,
-      attachable_id: fileToRename.attachable_id,
-      attachable_type: fileToRename.attachable_type,
-      extension: fileToRename.extension,
-      filesize: fileToRename.filesize,
-      for: fileToRename.for,
-      metadata: metadataString,
-      mime_type: fileToRename.mime_type,
-      path: fileToRename.path,
+      metadata: metadataString,  // Ensure this is a string
     };
-
-    const url = `/api/crud/resources/${fileToRename.id}`;
+  
+    // Prepare API request
+    const url = `/api/resources/resources/${fileToRename.id}`;
     const options = {
       method: 'PUT',
       headers: {
@@ -405,7 +453,7 @@ const FileTable = ({ searchTerm }) => {
       },
       body: JSON.stringify(payload),
     };
-
+  
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
@@ -413,16 +461,17 @@ const FileTable = ({ searchTerm }) => {
         console.error('Failed to rename file:', responseBody);
         throw new Error(`Failed to rename file: ${response.statusText}`);
       }
-
+  
       console.log('File renamed successfully.');
-      await fetchFiles();
-
+      await fetchFiles();  // Refresh file list after renaming
+  
     } catch (error) {
       console.error('Error renaming file:', error);
     } finally {
-      setEditingIndex(null);
+      setEditingIndex(null);  // Clear editing state
     }
   };
+  
 
   const handleDelete = async (fileId, index) => {
     const url = `/api/crud/resources/${fileId}`;
@@ -436,13 +485,13 @@ const FileTable = ({ searchTerm }) => {
       const data = await response.json();
       console.log('Delete response:', data);
 
-      if (response.ok) {
-        const updatedFiles = files.filter((_, i) => i !== index);
-        setFiles(updatedFiles);
-        // window.location.reload(); // Reload the page
-      } else {
-        console.error('Failed to delete file:', data);
-      }
+      // if (response.ok) {
+      //   const updatedFiles = files.filter((_, i) => i !== index);
+      //   setFiles(updatedFiles);
+      //   // window.location.reload(); // Reload the page
+      // } else {
+      //   console.error('Failed to delete file:', data);
+      // }
     } catch (error) {
       console.error('Error deleting file:', error);
     }

@@ -4,6 +4,7 @@ import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/Featured
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import SearchFile from '../Components/Reusable/FileManagementSearchBar';
 import { FileTable } from '@/Components/FileManagement';
+import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
 import Example from '@/Layouts/DashboardLayoutNew';
@@ -11,7 +12,7 @@ import Example from '@/Layouts/DashboardLayoutNew';
 
 
 const FileManage = ({requiredData, onFileUploaded}) => {
-
+    const { id } = usePage().props; // Retrieve the user_id from the Inertia view
     const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (term) => {
@@ -23,7 +24,7 @@ const FileManage = ({requiredData, onFileUploaded}) => {
         <main className="min-h-screen bg-gray-100 xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <div>
-                <SearchFile onSearch={setSearchTerm} requiredData={requiredData} onFileUploaded={onFileUploaded} />
+                <SearchFile onSearch={setSearchTerm} userId={id} requiredData={requiredData} onFileUploaded={onFileUploaded} />
                 <FileTable searchTerm={searchTerm} />
                 </div>
             </div>
