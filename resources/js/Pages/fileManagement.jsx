@@ -8,6 +8,7 @@ import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import '../Components/Reusable/css/FileManagementSearchBar.css';
 import Example from '@/Layouts/DashboardLayoutNew';
+import { usePage } from '@inertiajs/react';
 
 
 
@@ -24,7 +25,7 @@ const FileManage = ({requiredData, onFileUploaded}) => {
         <main className="min-h-screen bg-gray-100 xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <div>
-                <SearchFile onSearch={setSearchTerm} userId={id} requiredData={requiredData} onFileUploaded={onFileUploaded} />
+                <SearchFile userId={id} onSearch={setSearchTerm} requiredData={requiredData} onFileUploaded={onFileUploaded} />
                 <FileTable searchTerm={searchTerm} />
                 </div>
             </div>
