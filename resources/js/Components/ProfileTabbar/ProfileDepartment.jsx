@@ -162,7 +162,7 @@ function ProfileDepartment({
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
                             <option key={index} value={option.id || option}>
-                                {typeof option === 'object' ? option.code : option}
+                                {typeof option === 'object' ? option.name || option.title || option.code : option}
                             </option>
                         ))}
                     </select>
