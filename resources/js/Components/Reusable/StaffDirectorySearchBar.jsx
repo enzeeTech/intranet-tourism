@@ -60,6 +60,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
   };
 
   const getImageSource = (imageUrl) => {
+    console.log('imageURL', imageUrl);
     if (imageUrl.startsWith('staff_image/')) {
       return `/storage/${imageUrl}`;
     } else {
@@ -105,7 +106,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
               <a key={result.id} href={`/user/${result.id}`}>
                 <div className="flex items-center justify-between p-2 cursor-pointer search-result-item hover:bg-gray-100">
                   <div className="flex items-center cursor-pointer">
-                    <img src={getImageSource(result.profile?.staff_image || defaultImage)} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
+                    <img src={getImageSource(result.profile?.staff_image || '/assets/dummyStaffPlaceHolder.jpg')} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
                     <p className="font-semibold cursor-pointer">{result.name}</p>
                   </div>
                   <p className="text-gray-600">{result.employment_post?.business_post.title || 'No title available'}</p>
