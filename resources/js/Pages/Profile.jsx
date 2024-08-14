@@ -73,6 +73,8 @@ export default function Profile() {
         })
         .then((response) => response.json())
         .then(({ data }) => {
+            console.log("KL", data);
+            
             setProfileData(pv => ({
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
@@ -171,7 +173,7 @@ export default function Profile() {
             FfData.append('dob', newFormData.dateofbirth);
             FfData.append('phone_no', newFormData.whatsapp);
             FfData.append('user_id', id); // Add user_id to the form data
-            FfData.append('name', formData.name); // Add name to the form data
+            FfData.append('name', newFormData.name); // Add name to the form data
 
             // Check if photo is a file or a URL
             if (newFormData.photo instanceof File) {
