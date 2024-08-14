@@ -33,7 +33,7 @@ const Community = () => {
       }
 
       const data = await response.json();
-      const departmentData = data.data.map((community) => ({
+      const departmentData = data.data.data.map((community) => ({
         id: community.id,
         name: community.name,
         type: community.type,
