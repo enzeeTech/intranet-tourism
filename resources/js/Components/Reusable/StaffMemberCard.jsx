@@ -22,7 +22,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
     const fullNumber = workNo;
   
     if (isMobile) {
-      window.location.href = `tel:${fullNumber}`;
+      window.location.href = `tel:+${fullNumber}`;
     } else {
       setIsCallPopupOpen(true);
     }
@@ -116,7 +116,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
               Call is available only on mobile.
               <br></br>
               Office Number: 
-              <span className="text-blue-500 ml-2">{workNo}</span>
+              <span className="ml-2 text-blue-500">+{workNo}</span>
             </p>
           </div>
         </div>
