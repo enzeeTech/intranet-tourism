@@ -6,11 +6,14 @@ import CommunityDropdown from '../Components/Reusable/Community/CommunityDropdow
 import CommunitySearchBar from '../Components/Reusable/Community/CommunitySearch';
 import CommunityCard from '../Components/Reusable/Community/CommunityCard';
 import Example from '@/Layouts/DashboardLayoutNew';
+import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
 
-const Community = () => {
+const Community = ({  }) => {
   const [departmentsList, setDepartmentsList] = useState([]);
+  const { props } = usePage();
+  const { id } = props; 
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
@@ -134,7 +137,7 @@ const Community = () => {
                 </svg>
               </button>
             </div>
-            <CreateCommunity onCreate={handleNewDepartment} />
+            <CreateCommunity id={id} onCreate={handleNewDepartment} />
           </div>
         </div>
       )}
