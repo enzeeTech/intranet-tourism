@@ -93,8 +93,7 @@ const Ordering = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || '',
+                    'X-CSRF-TOKEN': csrfToken,
                 },
                 body: JSON.stringify({
                     _method: 'PATCH',
@@ -102,7 +101,6 @@ const Ordering = () => {
                     user_id: employmentPost.id,
                     order:  employmentPost.order,
                 }),
-                
             });
 
             if (!response.ok) {
@@ -144,6 +142,16 @@ const Ordering = () => {
 
     console.log(staffMembers);
 
+    const getImageSource = (imageUrl) => {
+        if (imageUrl.startsWith('staff_image/')) {
+            return `/storage/${imageUrl}`;
+        } else {
+            return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+                ? imageUrl 
+                : `/avatar/${imageUrl}`;
+        }
+    };
+
     return (
         <Example>
             <div className="flex-row ">
@@ -153,8 +161,8 @@ const Ordering = () => {
                             <div className="flex items-center justify-between">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
-                                    <button onClick={handleBack} className="text-md font-bold text-black">Back</button>
-                                    <button type="button" className="px-4 py-2 text-md font-bold text-white bg-red-500 rounded-full hover:bg-red-700" onClick={handleSave}>Save</button>
+                                    <button onClick={handleBack} className="font-bold text-black text-md">Back</button>
+                                    <button type="button" className="px-4 py-2 font-bold text-white bg-red-500 rounded-full text-md hover:bg-red-700" onClick={handleSave}>Save</button>
                                 </div>
                             </div>
                         </div>
@@ -165,8 +173,8 @@ const Ordering = () => {
                                         <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-6 py-3 text-md font-bold text-left text-gray-500">Name</th>
-                                                    <th className="px-4 py-3 text-md font-bold text-left text-gray-500">Ordering</th>
+                                                    <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
+                                                    <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -179,7 +187,7 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={item.imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? '/assets/dummyStaffPlaceHolder.jpg' : `/avatar/full/${item.imageUrl}`} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
+                                                                    <img src={getImageSource(item.imageUrl)} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
                                                                     {item.name}
                                                                     {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
                                                                 </td>

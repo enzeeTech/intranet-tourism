@@ -660,23 +660,22 @@ function Calendar() {
                                     onChange={handleChange}
                                     className="form-control h-44 overflow-y-auto"
                                     placeholder="Description"
-                                    required
                                 />
                                 <div className="color-picker">
-    {['red', 'blue', 'green', 'orange', 'purple', 'DeepPink', 'black', 'gray'].map((color) => (
-        <label key={color} className="color-option">
-            <input
-                type="radio"
-                name="color"
-                value={color}
-                checked={eventData.color === color}
-                onChange={handleChange}
-                required
-            />
-            <span className="color-display" style={{ backgroundColor: color }}></span>
-        </label>
-    ))}
-</div>
+                                    {['red', 'blue', 'green', 'orange', 'purple', 'DeepPink', 'black', 'gray'].map((color) => (
+                                        <label key={color} className="color-option">
+                                            <input
+                                                type="radio"
+                                                name="color"
+                                                value={color}
+                                                checked={eventData.color === color}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            <span className="color-display" style={{ backgroundColor: color }}></span>
+                                        </label>
+                                    ))}
+                                </div>
 
                                 <button type="submit" className="modal-submit-button">
                                     Confirm
@@ -755,9 +754,7 @@ function Calendar() {
                                         onChange={handleChange}
                                         className="form-control"
                                         placeholder="Description"
-                                        required
                                 />
-                                
                                 <select
                                     name="color"
                                     value={eventData.color}

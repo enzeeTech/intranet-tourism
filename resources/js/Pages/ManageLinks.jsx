@@ -279,11 +279,6 @@ const Pautan = () => {
               >
                 + Add
               </button>
-              <button
-                class="btn"
-                onClick={PautanHandleAddApp}>
-                Default Button
-              </button>
             </div>
           </div>
           <DragDropContext onDragEnd={PautanHandleDragEnd}>
