@@ -176,7 +176,7 @@ const AddUnits = () => {
         </div>
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+          className="px-4 py-2 text-white bg-blue-500 rounded-full font-bold hover:bg-blue-700"
           disabled={!selectedDepartmentId}
         >
           Add New Unit
@@ -205,25 +205,27 @@ const AddUnits = () => {
 
       {/* Message Display */}
       {message && (
-        <div
-          className={`fixed top-4 right-4 p-4 rounded shadow-lg z-50 ${
-            message.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-          }`}
-        >
-          {message.text}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div
+            className={`bg-green-100 rounded-lg flex items-center justify-start py-4 px-8 ${
+              message.type === "success" ? "font-bold text-lg bg-green-100 text-green-800  " : "font-bold text-lg bg-red-100 text-red-800"
+            }`}
+          >
+            {message.text}
+          </div>
         </div>
       )}
 
       {/* Units Table */}
       {selectedDepartmentId && (
         <div className="overflow-hidden bg-white rounded-lg shadow-md">
-          <table className="min-w-full leading-normal">
+          <table className="min-w-full leading-normal mt-2">
             <thead>
               <tr>
-                <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-white">
+                <th className="pl-8 py-3 text-sm font-semibold text-left text-gray-500 uppercase bg-white">
                   ID
                 </th>
-                <th className="px-5 py-3 text-sm font-semibold text-left text-gray-700 uppercase bg-white">
+                <th className="px-5 py-3 text-sm font-semibold text-left text-gray-500 uppercase bg-white">
                   Name
                 </th>
                 <th className="px-5 py-3 bg-white"></th>
@@ -232,7 +234,7 @@ const AddUnits = () => {
             <tbody>
               {units.map((unit) => (
                 <tr key={unit.id}>
-                  <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                  <td className="pl-8 py-5 text-sm bg-white border-b border-gray-200">
                     {unit.id}
                   </td>
                   <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
@@ -258,7 +260,7 @@ const AddUnits = () => {
                     ) : (
                       <button
                         onClick={() => editUnit(unit.id, unit.name)}
-                        className="text-blue-500 hover:text-blue-700"
+                        className="text-blue-500 hover:text-blue-700 mr-4"
                       >
                         Edit
                       </button>
@@ -273,16 +275,10 @@ const AddUnits = () => {
 
       {/* Popup for adding a new unit */}
       {isPopupOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold">Add New Unit</h2>
-              <button
-                onClick={() => setIsPopupOpen(false)}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                &times;
-              </button>
             </div>
             <input
               type="text"
@@ -294,13 +290,13 @@ const AddUnits = () => {
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setIsPopupOpen(false)}
-                className="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600"
+                className="px-4 py-2 text-gray-500 bg-white border-2 border-gray-500 rounded-full hover:bg-gray-500 hover:text-white"
               >
                 Cancel
               </button>
               <button
                 onClick={createUnit}
-                className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
                 disabled={!selectedDepartmentId}
               >
                 Add

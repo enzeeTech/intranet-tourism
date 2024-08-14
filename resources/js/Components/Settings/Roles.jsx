@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Roles.css";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useCsrf } from '@/composables';
 
 const initialPeople = [
     {
@@ -48,10 +49,40 @@ const initialPeople = [
 
 export default function Roles() {
     const [people, setPeople] = useState(initialPeople);
+    const [roles, setRoles] = useState([]);
+    const csrfToken = useCsrf();
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const response = await fetch('/api/permission/roles', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                    },
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const roles = data.data.data.map(role => ({
+                        id: role.id,
+                        name: role.name,
+                    }));
+                    setRoles(roles);
+                } else {
+                    console.error('Failed to fetch roles:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching roles:', error);
+            }
+        };
+
+        fetchRoles();
+    }, [csrfToken]);
 
     const handleRoleChange = (email, newRole) => {
-        setPeople((prevPeople) =>
-            prevPeople.map((person) =>
+        setPeople(prevPeople =>
+            prevPeople.map(person =>
                 person.email === email ? { ...person, role: newRole } : person
             )
         );
@@ -106,22 +137,15 @@ export default function Roles() {
                                     >
                                         Role
                                     </th>
-                                    {/* <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Edit</span>
-                  </th> */}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200 bg-white">
-                                {people.map((person) => (
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {people.map(person => (
                                     <tr key={person.email}>
-                                        <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                        <td className="py-5 pl-4 pr-3 text-sm whitespace-nowrap sm:pl-0">
                                             <div className="flex items-center">
-                                                <div className="h-11 w-11 flex-shrink-0">
-                                                    <img
-                                                        alt=""
-                                                        src={person.image}
-                                                        className="h-11 w-11 rounded-full"
-                                                    />
+                                                <div className="flex-shrink-0 h-11 w-11">
+                                                    <img alt="" src={person.image} className="rounded-full h-11 w-11" />
                                                 </div>
                                                 <div className="ml-4">
                                                     <div className="font-bold text-gray-900">
@@ -133,78 +157,34 @@ export default function Roles() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                            <div className="text-gray-900 font-bold">
+                                        <td className="px-3 py-5 text-sm text-gray-500 whitespace-nowrap">
+                                            <div className="font-bold text-gray-900">
                                                 {person.title}
                                             </div>
                                             <div className="mt-1 text-gray-500">
                                                 {person.department}
                                             </div>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                            <span className="inline-flex items-center rounded-md bg-green-50 px-4 py-2 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                        <td className="px-3 py-5 text-sm text-gray-500 whitespace-nowrap">
+                                            <span className="inline-flex items-center px-4 py-2 text-xs font-medium text-green-700 rounded-md bg-green-50 ring-1 ring-inset ring-green-600/20">
                                                 Active
                                             </span>
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                            <Menu
-                                                as="div"
-                                                className="relative inline-block text-left"
-                                            >
-                                                <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                                                    {person.role}
-                                                    <ChevronDownIcon
-                                                        aria-hidden="true"
-                                                        className="-mr-1 h-5 w-5 text-gray-400"
-                                                    />
+                                        <td className="px-3 py-5 text-sm text-gray-500 whitespace-nowrap">
+                                            <Menu as="div" className="relative inline-block text-left">
+                                                <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" style={{ width: "100%" }}>
+                                                    {person.role.name || 'Select Role'}
+                                                    <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                                 </MenuButton>
-                                                <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                    <MenuItem>
-                                                        {({ active }) => (
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleRoleChange(
-                                                                        person.email,
-                                                                        "Super Admin"
-                                                                    )
-                                                                }
-                                                                className={`${
-                                                                    active
-                                                                        ? "bg-gray-100 text-gray-900"
-                                                                        : "text-gray-700"
-                                                                } block w-full text-left px-4 py-2 text-sm`}
-                                                            >
-                                                                Super Admin
-                                                            </button>
-                                                        )}
-                                                    </MenuItem>
-                                                    <MenuItem>
-                                                        {({ active }) => (
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleRoleChange(
-                                                                        person.email,
-                                                                        "Admin"
-                                                                    )
-                                                                }
-                                                                className={`${
-                                                                    active
-                                                                        ? "bg-gray-100 text-gray-900"
-                                                                        : "text-gray-700"
-                                                                } block w-full text-left px-4 py-2 text-sm`}
-                                                            >
-                                                                Admin
-                                                            </button>
-                                                        )}
-                                                    </MenuItem>
+                                                <MenuItems className="absolute right-0 z-10 w-full mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    {roles.map(role => (
+                                                        <MenuItem key={role.id} as="button" onClick={() => handleRoleChange(person.email, role)} className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100">
+                                                            {role.name}
+                                                        </MenuItem>
+                                                    ))}
                                                 </MenuItems>
                                             </Menu>
                                         </td>
-                                        {/* <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                        Edit<span className="sr-only">, {person.name}</span>
-                      </a>
-                    </td> */}
                                     </tr>
                                 ))}
                             </tbody>

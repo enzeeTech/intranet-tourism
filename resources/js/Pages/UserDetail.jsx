@@ -161,29 +161,40 @@ export default function UserDetail() {
     };
 
     const handleSaveBio = async (newFormData) => {
-        
         try {
-            const formData = new FormData();
-            formData.append('_method', 'PUT');
-            formData.append('email', newFormData.email);
-            formData.append('dob', newFormData.dateofbirth);
-            formData.append('phone_no', newFormData.whatsapp);
-            formData.append('user_id', user.id);
-            formData.append('name', user.name);
-
-            // Check if the photo is a file or a URL
+            const FfData = new FormData();
+    
+            // Compulsory fields
+            FfData.append('user_id', user.id); // Add user_id to the form data
+            FfData.append('_method', 'PUT'); // Add _method to the form data
+    
+            // Conditional fields
+            if (newFormData.email) {
+                FfData.append('email', newFormData.email);
+            }
+            if (newFormData.dateofbirth) {
+                FfData.append('dob', newFormData.dateofbirth);
+            }
+            if (newFormData.whatsapp) {
+                FfData.append('phone_no', newFormData.whatsapp);
+            }
+            if (newFormData.name) {
+                FfData.append('name', user.name);
+            }
+    
+            // Check if photo is a file or a URL
             if (newFormData.photo instanceof File) {
-                formData.append('photo', newFormData.photo);
-            } else if (newFormData.photo.startsWith('data:image')) {
+                FfData.append('photo', newFormData.photo);
+            } else if (newFormData.photo && newFormData.photo.startsWith('data:image')) {
                 // Convert base64 to file and append it to FormData
                 const blob = await (await fetch(newFormData.photo)).blob();
-                formData.append('staff_image', blob, 'profile_image.png');
+                FfData.append('staff_image', blob, 'profile_image.png');
             }
-
+    
             const [profileResponse, userResponse] = await Promise.all([
-                fetch(`/api/profile/profiles/${profileData.profile.id}`, {
+                fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
-                    body: formData,
+                    body: FfData,
                     headers: {
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': csrfToken || '',
@@ -192,10 +203,10 @@ export default function UserDetail() {
                 }),
                 updateUsername(newFormData)
             ]);
-
+    
             const profileResponseData = await profileResponse.json();
             const userResponseData = await userResponse.json();
-
+    
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
                 setIsEditingBio(false);
@@ -228,6 +239,7 @@ const handleSaveDepartment = async (index) => {
         FfData.append('business_grade_id', employmentPost.business_grade_id);
         FfData.append('location', employmentPost.location);
         FfData.append('work_phone', employmentPost.work_phone);
+        FfData.append('position', employmentPost.position);
         FfData.append('user_id', user.id); // Add user_id to the form data
     
         const response = await fetch(`/api/department/employment_posts/${employmentPost.id}`, {
