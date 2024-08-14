@@ -54,7 +54,10 @@
   }
   
   .staff-member-name {
-    margin-top: 5%;
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    margin-top: 10%;
     font-size: 14px;
     font-weight: bold;
     font-family: 'Nunito Sans';
@@ -62,7 +65,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-  }
+}
+
+.staff-member-name svg {
+    margin-left: 0.5rem; /* Add space between the name and the icon */
+}
   
   .staff-member-role {
     color: #202224;
