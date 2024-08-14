@@ -534,18 +534,18 @@ const FileTable = ({ searchTerm }) => {
                             type="text"
                             value={editingName}
                             onChange={(e) => setEditingName(e.target.value)}
-                            className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                            className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-hidden text-ellipsis"
                           />
                           <button
                             onClick={() => saveEditing(indexOfFirstItem + index)}
-                            className="ml-2 text-sm text-blue-500"
+                            className="ml-2 text-sm text-blue-500 overflow-hidden text-ellipsis"
                           >
                             Save
                           </button>
                         </div>
                       ) : (
                         <div
-                          className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80"
+                          className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80 overflow-hidden text-ellipsis"
                           onDoubleClick={() => startEditing(indexOfFirstItem + index, metadata.original_name)}
                         >
                           {metadata.original_name || 'Unknown'}
