@@ -77,7 +77,7 @@ export default function Profile() {
                 ...pv, ...data,
                 backgroundImage: data.profile && data.profile.cover_photo ? `/storage/${data.profile.cover_photo}` : 'https://cdn.builder.io/api/v1/image/assets/TEMP/51aef219840e60eadf3805d1bd5616298ec00b2df42d036b6999b052ac398ab5?',
                 profileImage: data.profile?.image || '',
-                username: "@" + data.username,
+                // username: "@" + data.username,
             }));
 
             const sortedEmploymentPosts = data.employment_posts.slice().sort((a, b) => a.id - b.id);
@@ -135,6 +135,7 @@ export default function Profile() {
         setFormData((prevFormData) => ({
             ...prevFormData,
             employmentPosts: updatedEmploymentPosts,
+            phone: newData.phone || prevFormData.phone, // Ensure phone updates correctly
         }));
     };
 
@@ -148,7 +149,7 @@ export default function Profile() {
     const updateUsername = async (newFormData) => {
         const userFormData = new FormData();
         userFormData.append('_method', 'PUT');
-        userFormData.append('username', newFormData.username);
+        userFormData.append('name', newFormData.name);
         userFormData.append('user_id', id); // Add user_id to the form data
 
         return fetch(`/api/users/users/${id}`, {
@@ -260,7 +261,7 @@ export default function Profile() {
         } catch (error) {
             console.error(`Error updating Department ${index + 1} Information:`, error);
         }
-        // window.location.reload();
+        window.location.reload();
     };
 
     const handleCancelBio = () => {

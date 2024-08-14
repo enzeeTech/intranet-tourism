@@ -56,20 +56,9 @@ const Community = () => {
     setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
-  const handleFilterChange = (selectedFilter) => {
-    setFilter(selectedFilter);
-  };
-
-  const filteredDepartments = departmentsList
-    .filter((community) => {
-      if (filter === 'All') return true;
-      if (filter === 'Public') return community.type === 'public';
-      if (filter === 'Private') return community.type === 'private';
-      return false;
-    })
-    .filter((community) =>
-      community.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filteredDepartments = departmentsList.filter((department) =>
+    department.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <Example>
@@ -79,8 +68,12 @@ const Community = () => {
             onSearch={(value) => setSearchTerm(value)}
             toggleCreateCommunity={toggleCreateCommunity}
           />
-          <CommunityDropdown onSelectFilter={handleFilterChange} />
-          <div className="staff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 sm:p-4 md:p-6 lg:p-8">
+          <CommunityDropdown
+            departments={filteredDepartments}
+            onSelectDepartment={() => {}}
+            onCreateDepartment={handleNewDepartment}
+          />
+          <div className="taff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
             {isLoading ? (
               <div className="mt-20 ml-32 loading-spinner"></div>
             ) : filteredDepartments.length === 0 ? (

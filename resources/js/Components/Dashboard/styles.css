@@ -149,3 +149,33 @@
     scrollbar-width: none !important; /* For Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
   }
+
+  .phone-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.phone-input-button {
+    border-radius: 50%;
+    border: 2px solid red;
+}
+
+.phone-input-dropdown {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.phone-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.phone-input-button {
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.phone-input-dropdown {
+  max-height: 150px;
+  overflow-y: auto;
+}

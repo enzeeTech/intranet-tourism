@@ -1,0 +1,14 @@
+.phone-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.phone-input-button {
+    border-radius: 50%;
+    border: 2px solid #ccc;
+}
+
+.phone-input-dropdown {
+    max-height: 150px;
+    overflow-y: auto;
+}

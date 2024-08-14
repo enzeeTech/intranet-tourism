@@ -17,7 +17,7 @@ const CommunityCard = ({ name, imageUrl, onDeactivateClick, communityID, type })
         </h3>
       </div>
       <div className="card-footer items-center">
-      <a href={`/communityInner?communityId=${communityID}`}>
+        <a href={`/communityInner?communityId=${communityID}`}>
           <button
             className="justify-center text-blue-500 font-semibold px-5 rounded-3xl border border-blue-500 bg-transparent hover:bg-blue-700 hover:text-white"
             aria-label="Visit"

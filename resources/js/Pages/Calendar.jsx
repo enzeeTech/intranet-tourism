@@ -654,53 +654,30 @@ function Calendar() {
                                     placeholder="End Time"
                                     required
                                 /> */}
-                                <input
-                                    type="text"
+                                <textarea
                                     name="description"
                                     value={eventData.description}
                                     onChange={handleChange}
-                                    className="form-control"
+                                    className="form-control h-44 overflow-y-auto"
                                     placeholder="Description"
                                     required
                                 />
-                                <div className="form-group">
-                                    <label>
-                                    <input
-                                        type="checkbox"
-                                        className='mr-2'
-                                        name="includeUrl"
-                                        checked={includeUrl}
-                                        onChange={(e) => setIncludeUrl(e.target.checked)}
-                                    />
-                                    Include URL
-                                    </label>
-                                    {includeUrl && (
-                                    <input
-                                        type="url"
-                                        className="mt-2 form-control"
-                                        name="url"
-                                        value={eventData.url}
-                                        onChange={handleChange}
-                                        placeholder="Enter event URL"
-                                    />
-                                    )}
-                                </div>
-                                <select
-                                    name="color"
-                                    value={eventData.color}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    required
-                                >
-                                    <option value="red">Red</option>
-                                    <option value="blue">Blue</option>
-                                    <option value="green">Green</option>
-                                    <option value="orange">Orange</option>
-                                    <option value="purple">Purple</option>
-                                    <option value="DeepPink">Pink</option>
-                                    <option value="black">Black</option>
-                                    <option value="gray">Gray</option>
-                                </select>
+                                <div className="color-picker">
+    {['red', 'blue', 'green', 'orange', 'purple', 'DeepPink', 'black', 'gray'].map((color) => (
+        <label key={color} className="color-option">
+            <input
+                type="radio"
+                name="color"
+                value={color}
+                checked={eventData.color === color}
+                onChange={handleChange}
+                required
+            />
+            <span className="color-display" style={{ backgroundColor: color }}></span>
+        </label>
+    ))}
+</div>
+
                                 <button type="submit" className="modal-submit-button">
                                     Confirm
                                 </button>
@@ -780,34 +757,7 @@ function Calendar() {
                                         placeholder="Description"
                                         required
                                 />
-                                <div className="form-group">
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            className='mr-2'
-                                            name="includeUrl"
-                                            checked={includeUrl}
-                                            onChange={(e) => {
-                                                const isChecked = e.target.checked;
-                                                setIncludeUrl(isChecked);
-                                                if (!isChecked) {
-                                                    setEventData(prevState => ({ ...prevState, url: '' })); // Clear URL if unchecked
-                                                }
-                                            }}
-                                        />
-                                        Include URL
-                                    </label>
-                                    {includeUrl && (
-                                        <input
-                                            type="url"
-                                            className="mt-2 form-control"
-                                            name="url"
-                                            value={eventData.url}
-                                            onChange={handleChange}
-                                            placeholder="Enter event URL"
-                                        />
-                                    )}
-                                </div>
+                                
                                 <select
                                     name="color"
                                     value={eventData.color}
