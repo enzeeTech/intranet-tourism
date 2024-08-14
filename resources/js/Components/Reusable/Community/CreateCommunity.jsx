@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
 
 function Header({ title }) {
@@ -43,10 +43,10 @@ function UserInfo({ name, role, src }) {
 }
 
 function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate }) {
-  const [departmentName, setDepartmentName] = useState('');
+  const [communityName, setCommunityName] = useState('');
   const [imageSrc, setImageSrc] = useState(imgSrc);
   const [selectedType, setSelectedType] = useState('');
-  const [departmentDescription, setDepartmentDescription] = useState('');
+  const [communityDescription, setCommunityDescription] = useState('');
   const csrfToken = useCsrf();
 
   const handleImageChange = (file) => {
@@ -59,9 +59,9 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
 
   const handleSubmit = async () => {
     const data = {
-      name: departmentName,
+      name: communityName,
       banner: imageSrc,
-      description: departmentDescription,
+      description: communityDescription,
       type: selectedType,
       created_by: user.name,
       updated_by: user.name,
@@ -83,15 +83,15 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   
       if (!response.ok) {
         console.error('Server response not OK:', text);
-        throw new Error('Failed to create department');
+        throw new Error('Failed to create community');
       }
   
       const responseData = text ? JSON.parse(text) : {};
-      console.log('Department created:', responseData.data);
+      console.log('Community created:', responseData.data);
       onCreate(responseData.data);
       window.location.reload(); // Reload the page after successful creation
     } catch (error) {
-      console.error('Error creating department:', error.message);
+      console.error('Error creating community:', error.message);
     }
   }; 
 
@@ -103,16 +103,16 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         <input
           type="text"
           placeholder="Community name"
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
+          value={communityName}
+          onChange={(e) => setCommunityName(e.target.value)}
           className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
         />
-        <UserInfo name={user.name} role={user.role} src={user.src} />
+        <UserInfo name={user.name} role={user.role} src={user.profileImage} />
         <input
           type="text"
           placeholder={description}
-          value={departmentDescription}
-          onChange={(e) => setDepartmentDescription(e.target.value)}
+          value={communityDescription}
+          onChange={(e) => setCommunityDescription(e.target.value)}
           className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
         <select
@@ -123,7 +123,6 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="">Select Type</option>
           <option value="private">Private</option>
           <option value="public">Public</option>
-          <option value="all">All</option>
         </select>
         <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
@@ -138,18 +137,44 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   );
 }
 
-export default function CreateCommunity({ onCancel, onCreate }) {
-  const user = {
-    name: "Aisyah binte Musa",
-    role: "Admin",
-    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
+export default function CreateCommunity({ id, onCancel, onCreate }) {
+  const [user, setUserData] = useState({
+    name: '',
+    role: 'Admin',
+    profileImage: '',
+  });
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setUserData((pv) => ({
+        ...pv,
+        ...data,
+        name: data.name,
+        profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, [id]);
 
   return (
     <Card
       title="Create New Community"
       imgSrc="/assets/uploadAnImage.svg"
-      imgAlt="Departments Logo"
+      imgAlt="Community Logo"
       user={user}
       type="Type"
       description="Description"
