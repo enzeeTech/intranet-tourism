@@ -62,10 +62,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers }) =
   );
 
   return (
-    <div className="relative flex items-end justify-end w-[980px]">
-        <div className='relative'>
-          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
-        </div>
+    <div className="max-w-screen-lg">
+      <div className="relative flex items-end justify-end w-full">
+          <div className='relative'>
+            <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+          </div>
+      </div>
     </div>
   );
 };

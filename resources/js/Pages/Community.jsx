@@ -73,7 +73,7 @@ const Community = () => {
             onSelectDepartment={() => {}}
             onCreateDepartment={handleNewDepartment}
           />
-          <div className="taff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
+          <div className="dept-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
             {isLoading ? (
               <div className="mt-20 ml-32 loading-spinner"></div>
             ) : filteredDepartments.length === 0 ? (
