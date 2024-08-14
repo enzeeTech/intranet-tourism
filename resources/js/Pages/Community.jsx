@@ -33,11 +33,11 @@ const Community = () => {
       }
 
       const data = await response.json();
-      const departmentData = data.data.data.map((community) => ({
+      const departmentData = data.data.map((community) => ({
         id: community.id,
         name: community.name,
         type: community.type,
-        imageUrl: community.banner || 'assets/departmentsDefault.jpg', // Use banner if available
+        imageUrl: community.banner || '/assets/departmentsDefault.jpg', // Use banner if available
       }));
 
       setDepartmentsList(departmentData.sort((a, b) => a.name.localeCompare(b.name)));
@@ -56,9 +56,20 @@ const Community = () => {
     setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
-  const filteredDepartments = departmentsList.filter((department) =>
-    department.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleFilterChange = (selectedFilter) => {
+    setFilter(selectedFilter);
+  };
+
+  const filteredDepartments = departmentsList
+    .filter((community) => {
+      if (filter === 'All') return true;
+      if (filter === 'Public') return community.type === 'public';
+      if (filter === 'Private') return community.type === 'private';
+      return false;
+    })
+    .filter((community) =>
+      community.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
     <Example>
@@ -68,12 +79,8 @@ const Community = () => {
             onSearch={(value) => setSearchTerm(value)}
             toggleCreateCommunity={toggleCreateCommunity}
           />
-          <CommunityDropdown
-            departments={filteredDepartments}
-            onSelectDepartment={() => {}}
-            onCreateDepartment={handleNewDepartment}
-          />
-          <div className="taff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
+          <CommunityDropdown onSelectFilter={handleFilterChange} />
+          <div className="staff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 sm:p-4 md:p-6 lg:p-8">
             {isLoading ? (
               <div className="mt-20 ml-32 loading-spinner"></div>
             ) : filteredDepartments.length === 0 ? (
@@ -83,11 +90,9 @@ const Community = () => {
                 <CommunityCard
                   key={department.id}
                   name={department.name}
-                  imageUrl={'assets/departmentsDefault.jpg'}
-                  departmentID={department.id}
+                  imageUrl={department.imageUrl}
+                  communityID={department.id}
                   type={department.type}
-                  // Conditionally render the lock icon based on type
-                  lockIcon={department.type === 'private'}
                 />
               ))
             )}
@@ -115,12 +120,6 @@ const Community = () => {
       {isCreateCommunityOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-4 rounded-2xl shadow-lg relative">
-            {/* <button
-              className="absolute top-2 right-2 mr-4 text-gray-600 hover:text-gray-900 hover:bg-slate-100 text-2xl rounded-full w-10 h-10 flex justify-center items-center"
-              onClick={toggleCreateCommunity}
-            >
-              &times;
-            </button> */}
             <div className="relative">
               <button
                 onClick={toggleCreateCommunity}
