@@ -36,7 +36,7 @@ function UpdatePhotoButton({ onClose }) {
                className="self-end w-6 my-2 aspect-square cursor-pointer" 
                onClick={handleCloseClick} 
           /> */}
-          <div className="flex flex-col pr-2.5 pl-2 w-full ">
+          <div className="flex flex-col pr-2.5 pl-2 w-full rounded-2xl ">
             <h2 className="text-xl text-neutral-800 font-semibold mt-5">Update Photo to Staff Directory?</h2>
             <div className="flex justify-center space-x-4 text-sm my-4">
               <button className="px-4 py-2 bg-white border-2 border-grey-400 hover:bg-gray-400 text-gray-400 hover:text-white rounded-full" onClick={handleCloseClick}>No</button>

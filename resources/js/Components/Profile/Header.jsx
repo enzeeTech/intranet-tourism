@@ -218,7 +218,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       </header>
       {selectedFile && !croppedImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative bg-white p-6 rounded-lg w-full max-w-3xl">
+          <div className="relative bg-white p-6 rounded-2xl w-full max-w-3xl">
             <div className="cropper-wrapper">
               <Cropper
                 image={currentProfileImage}
@@ -231,7 +231,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
               />
             </div>
             <div className="flex justify-end mt-4">
-              <button onClick={handleCropImage} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button onClick={handleCropImage} className="bg-blue-500 text-white px-4 py-2 rounded-full">
                 Crop
               </button>
             </div>

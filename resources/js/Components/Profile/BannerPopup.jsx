@@ -145,7 +145,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           >
             {fileNames.map((name, index) => (
               <div
-                className="flex items-center px-2 py-1 bg-white rounded-lg shadow"
+                className="flex items-center px-2 py-1 bg-white rounded-2xl shadow"
                 key={index}
                 style={{
                   maxWidth: "150px",
