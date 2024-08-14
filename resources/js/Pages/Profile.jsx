@@ -168,22 +168,34 @@ export default function Profile() {
     const handleSaveBio = async (newFormData) => {
         try {
             const FfData = new FormData();
-            FfData.append('_method', 'PUT'); // Add _method to the form data
-            FfData.append('email', newFormData.email);
-            FfData.append('dob', newFormData.dateofbirth);
-            FfData.append('phone_no', newFormData.whatsapp);
+    
+            // Compulsory fields
             FfData.append('user_id', id); // Add user_id to the form data
-            FfData.append('name', newFormData.name); // Add name to the form data
-
+            FfData.append('_method', 'PUT'); // Add _method to the form data
+    
+            // Conditional fields
+            if (newFormData.email) {
+                FfData.append('email', newFormData.email);
+            }
+            if (newFormData.dateofbirth) {
+                FfData.append('dob', newFormData.dateofbirth);
+            }
+            if (newFormData.whatsapp) {
+                FfData.append('phone_no', newFormData.whatsapp);
+            }
+            if (newFormData.name) {
+                FfData.append('name', newFormData.name);
+            }
+    
             // Check if photo is a file or a URL
             if (newFormData.photo instanceof File) {
                 FfData.append('photo', newFormData.photo);
-            } else if (newFormData.photo.startsWith('data:image')) {
+            } else if (newFormData.photo && newFormData.photo.startsWith('data:image')) {
                 // Convert base64 to file and append it to FormData
                 const blob = await (await fetch(newFormData.photo)).blob();
                 FfData.append('staff_image', blob, 'profile_image.png');
             }
-
+    
             const [profileResponse, userResponse] = await Promise.all([
                 fetch(`/api/profile/profiles/${profileData.profile?.id}`, {
                     method: 'POST',
@@ -196,10 +208,10 @@ export default function Profile() {
                 }),
                 updateUsername(newFormData)
             ]);
-
+    
             const profileResponseData = await profileResponse.json();
             const userResponseData = await userResponse.json();
-
+    
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
                 setIsEditingBio(false);
@@ -214,6 +226,7 @@ export default function Profile() {
         }
         window.location.reload();
     };
+    
 
 
     const handleSaveDepartment = async (index) => {
