@@ -13,8 +13,8 @@ const navigation = [
     { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
     { name: 'Business Units', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
     { name: 'Business Titles', href: '#', inactive: "assets/Inactive Departments.svg", active: "assets/Active Departments.svg" },
-    { name: 'Roles', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
-    { name: 'Permissions', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Roles', href: '#', inactive: "assets/role-inactive.svg", active: "assets/role-active.svg" },
+    { name: 'Permissions', href: '#', inactive: "assets/permission-inactive.svg", active: "assets/permission-active.svg" },
 ];
 
 const SettingNavigation = ({ current, setCurrent }) => {
