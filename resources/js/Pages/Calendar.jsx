@@ -106,7 +106,16 @@ function Calendar() {
                 const currentYear = new Date().getFullYear();
                 dob.setFullYear(currentYear);
     
-                const dateStr = dob.toISOString().split('T')[0];
+                // const dateStr = dob.toISOString().split('T')[0];
+                const year = dob.getFullYear();
+const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+const day = String(dob.getDate()).padStart(2, '0');
+const dateStr = `${year}-${month}-${day}`;
+
+                // console.log("dateStr", dateStr);
+                // console.log("dob", dob);
+
+                
                 let existingEvent = acc.find(event => event.start === dateStr);
     
                 if (existingEvent) {
@@ -352,17 +361,18 @@ function Calendar() {
                 },
             });
     
-            if (response.ok) {
-                const updatedEvent = await response.json();
+            // if (response.ok) {
+            //     const updatedEvent = await response.json();
                 setEvents((prevEvents) =>
                     prevEvents.map((event) => (event.id === eventId ? updatedEvent : event))
                 );
                 setIsEditModalOpen(false);
                 fetchEvents()
-            } else {
-                const errorData = await response.json();
-                console.error('Error updating event:', errorData);
-            }
+                window.location.reload();
+            // } else {
+            //     const errorData = await response.json();
+            //     console.error('Error updating event:', errorData);
+            // }
         } catch (error) {
             console.error('Error updating event:', error);
             setIsEditModalOpen(false);
@@ -440,6 +450,8 @@ function Calendar() {
                         console.log("eventDidMount called for event:", info.event);
                     
                         if (info.event.extendedProps.isBirthday) {
+                            console.log("BD", );
+                            
                             console.log("Birthday event detected:", info.event.extendedProps.names);
                     
                             // Clear any default styles
@@ -832,7 +844,7 @@ function Calendar() {
                     </div>
                 )}
 
-                {showPrint && <PrintCalendar events={filteredEvents} />}
+                {showPrint && <PrintCalendar events={filteredEvents} refetchEvents={fetchEvents} />}
 
             </div>
         </Example>

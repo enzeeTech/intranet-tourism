@@ -46,6 +46,39 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   //     console.error("Failed to download the file:", error);
   //   }
   // };
+  // const handleDownload = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch(`/api/resources/resources?id=${file.id}`);
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     const data = await response.json();
+  //     console.log("API response:", data); // Log the entire API response to check its structure
+  
+  //     const fileObject = data.data.data.find(f => f.id === file.id); // Find the file object in the data array
+  
+  //     if (!fileObject) {
+  //       throw new Error("File not found in the API response");     
+  //     }
+      
+  //     const fileUrl = `/storage/${fileObject.path}`;    // Extract the file path
+  //     console.log("FILE_PATH", fileObject);
+      
+  //     console.log("File path:", fileUrl);    // Log the file path to verify
+  
+  //     const link = document.createElement('a');
+  //     link.href = fileUrl;                   // Ensure this URL is correct
+  //     link.download = fileObject.metadata.original_name; // Use a default name if fileObject.name is not available
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   } catch (error) {
+  //     console.error("Failed to download the file:", error);
+  //   }
+  // };
+
+
   const handleDownload = async (e) => {
     e.preventDefault();
     try {
@@ -62,14 +95,19 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
         throw new Error("File not found in the API response");     
       }
       
-      const fileUrl = `/storage/${fileObject.path}`;    // Extract the file path
-      console.log("FILE_PATH", fileObject);
-      
-      console.log("File path:", fileUrl);    // Log the file path to verify
+      // Parse the metadata field since it's a JSON string
+      const metadata = JSON.parse(fileObject.metadata);
+  
+      const fileUrl = `/storage/${metadata.path}`; // Use parsed metadata for the file path
+      console.log("File path:", fileUrl); // Log the file path to verify
+  
+      // Access the original_name from the parsed metadata object
+      const originalName = metadata.original_name || 'default_filename';
+      console.log("Original name:", originalName);
   
       const link = document.createElement('a');
-      link.href = fileUrl;                   // Ensure this URL is correct
-      link.download = fileObject.metadata.original_name; // Use a default name if fileObject.name is not available
+      link.href = fileUrl; // Ensure this URL is correct
+      link.download = originalName; // Use the correct name or a fallback
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -77,6 +115,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       console.error("Failed to download the file:", error);
     }
   };
+  
   
   
 
