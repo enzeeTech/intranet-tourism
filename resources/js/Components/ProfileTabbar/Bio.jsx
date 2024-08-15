@@ -21,23 +21,6 @@ function ProfileBio({
         }
     }, [formData, isEditing]);
 
-    const handleClickOutside = (event) => {
-        if (formRef.current && !formRef.current.contains(event.target)) {
-            onCancelBio();
-        }
-    };
-
-    useEffect(() => {
-        if (isEditing) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isEditing]);
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setBioFormData((prevData) => ({
