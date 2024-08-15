@@ -28,23 +28,18 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const handleCropImage = async () => {
-    try {
-      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
-      setCroppedImage(croppedImg); // Set the cropped image as the preview
-    } catch (e) {
-      console.error("Error cropping image:", e);
-    }
-  };
-
-  const handleSave = async () => {
-    if (!croppedImage) {
-      console.error("No cropped image to save");
+  const handleCropAndSave = async () => {
+    if (!croppedImage || !croppedAreaPixels) {
+      console.error("No image or cropped area to save");
       return;
     }
 
     try {
-      const response = await fetch(croppedImage);
+      // Crop the image
+      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
+
+      // Convert cropped image to a blob and create a file
+      const response = await fetch(croppedImg);
       const blob = await response.blob();
       const file = new File([blob], 'profile.jpg', { type: blob.type });
 
@@ -73,7 +68,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
 
       const data = await uploadResponse.json();
       if (data.success) {
-        setPhoto(croppedImage); // Update the photo URL with the cropped image
+        setPhoto(croppedImg); // Update the photo URL with the cropped image
         onSave(); // Trigger the onSave callback
         console.log("File uploaded successfully:", data);
         window.location.reload();
@@ -81,7 +76,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
         console.error("Error uploading file:", data);
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error cropping or uploading file:", error);
       window.location.reload();
     }
   };
@@ -99,12 +94,12 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           <div className="text-xl font-bold">{title}</div>
           <div className="flex gap-5 mt-4 text-base font-medium">
             {croppedImage ? (
-              <div className="relative w-[500px] h-[400px]"> {/* Larger cropper area */}
+              <div className="relative w-[500px] h-[300px]"> {/* Adjusted cropper area to match aspect ratio */}
                 <Cropper
                   image={croppedImage}
                   crop={crop}
                   zoom={zoom}
-                  aspect={1}
+                  aspect={3 / 1} // Set to a rectangular aspect ratio, e.g., 16:9
                   onCropChange={setCrop}
                   onCropComplete={handleCropComplete}
                   onZoomChange={setZoom}
@@ -166,15 +161,9 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-sm text-white px-4 py-2 rounded-full"
-            onClick={handleCropImage}
+            onClick={handleCropAndSave} // Combined Crop and Save function
           >
-            Crop
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-sm text-white px-4 py-2 rounded-full"
-            onClick={handleSave}
-          >
-            Save
+            Crop & Save
           </button>
         </div>
       </div>
