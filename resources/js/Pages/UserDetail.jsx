@@ -53,8 +53,7 @@ export default function UserDetail() {
     });
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [isEditingBio, setIsEditingBio] = useState(false);
-    const [isEditingDepartment1, setIsEditingDepartment1] = useState(false);
-    const [isEditingDepartment2, setIsEditingDepartment2] = useState(false);
+    const [isEditingDepartments, setIsEditingDepartments] = useState([false, false]);
     const [profileData, setProfileData] = useState({
         backgroundImage: "",
         profileImage: "",
@@ -278,59 +277,34 @@ const handleCancelBio = () => {
     setIsEditingBio(false);
 }; 
 
-const handleCancelDepartment1 = () => {
+const handleCancelDepartment = (index) => {
     setFormData((prevFormData) => ({
         ...prevFormData,
-        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-            index === 0 
+        employmentPosts: prevFormData.employmentPosts.map((post, i) =>
+            i === index
                 ? {
                     ...post,
-                    department: originalFormData.employmentPosts[0].department || "N/A",
-                    unit: originalFormData.employmentPosts[0].unit || "N/A",
-                    jobtitle: originalFormData.employmentPosts[0].jobtitle || "N/A",
-                    position: originalFormData.employmentPosts[0].position || "N/A",
-                    grade: originalFormData.employmentPosts[0].grade || "N/A",
-                    location: originalFormData.employmentPosts[0].location || "N/A",
-                    phone: originalFormData.employmentPosts[0].phone || "N/A",
+                    department: originalFormData.employmentPosts[index].department || "N/A",
+                    unit: originalFormData.employmentPosts[index].unit || "N/A",
+                    jobtitle: originalFormData.employmentPosts[index].jobtitle || "N/A",
+                    position: originalFormData.employmentPosts[index].position || "N/A",
+                    grade: originalFormData.employmentPosts[index].grade || "N/A",
+                    location: originalFormData.employmentPosts[index].location || "N/A",
+                    phone: originalFormData.employmentPosts[index].phone || "N/A",
                 }
                 : post
         ),
     }));
-    setIsEditingDepartment1(false);
-};   
-
-const handleCancelDepartment2 = () => {
-    setFormData((prevFormData) => ({
-        ...prevFormData,
-        employmentPosts: prevFormData.employmentPosts.map((post, index) => 
-            index === 1 
-                ? {
-                    ...post,
-                    department: originalFormData.employmentPosts[1].department || "N/A",
-                    unit: originalFormData.employmentPosts[1].unit || "N/A",
-                    jobtitle: originalFormData.employmentPosts[1].jobtitle || "N/A",
-                    position: originalFormData.employmentPosts[1].position || "N/A",
-                    grade: originalFormData.employmentPosts[1].grade || "N/A",
-                    location: originalFormData.employmentPosts[1].location || "N/A",
-                    phone: originalFormData.employmentPosts[1].phone || "N/A",
-                }
-                : post
-        ),
-    }));
-    setIsEditingDepartment2(false);
+    setIsEditingDepartments((prev) => prev.map((isEditing, i) => (i === index ? false : isEditing)));
 };   
 
 const handleEditBio = () => {
     setIsEditingBio(true);
 };
 
-const handleEditDepartment1 = () => {
-    setIsEditingDepartment1(true);
-};
-
-const handleEditDepartment2 = () => {
-    setIsEditingDepartment2(true);
-};
+const handleEditDepartment = (index) => {
+    setIsEditingDepartments((prev) => prev.map((isEditing, i) => (i === index ? true : isEditing)));
+}; 
 
 const handleCreatePoll = (pollData) => {
     // Implement the logic to handle poll creation here.
@@ -400,41 +374,40 @@ return (
                                     </div>
                                 </section>
                                 <div className="separator"></div>
-                                
                                 {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
-                                    <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
-                                        <div className="flex items-center justify-between">
-                                            <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
-                                            <ProfileIcons
-                                                icon1={profileData.icon1}
-                                                onEdit={() => index === 0 ? handleEditDepartment1() : handleEditDepartment2()}
-                                                isFirstIcon
-                                            />
-                                        </div>
-                                        <div className="flex-auto my-auto max-md:max-w-full">
-                                            <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
-                                                <ProfileDepartment
-                                                    department={employmentPost.department?.name || ''}
-                                                    unit={employmentPost.business_unit?.name || ''}
-                                                    jobtitle={employmentPost.business_post?.title || ''}
-                                                    position={employmentPost.position || ''}
-                                                    grade={employmentPost.business_grade?.code || ''}
-                                                    location={employmentPost.location || 'N/A'}
-                                                    phone={employmentPost.work_phone || 'N/A'}
-                                                    isEditing={index === 0 ? isEditingDepartment1 : isEditingDepartment2}
-                                                    onFormDataChange={(newData) => handleFormDataChange(newData, index)}
-                                                    originalFormData={originalFormData}
+                                        <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
+                                            <div className="flex items-center justify-between">
+                                                <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
+                                                <ProfileIcons
+                                                    icon1={profileData.icon1}
+                                                    onEdit={() => handleEditDepartment(index)}
+                                                    isFirstIcon
                                                 />
                                             </div>
-                                            {((index === 0 && isEditingDepartment1) || (index === 1 && isEditingDepartment2)) && (
-                                                <div className="flex justify-end mt-4 pb-3">
-                                                    <button onClick={() => index === 0 ? handleCancelDepartment1() : handleCancelDepartment2()} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                                                    <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                            <div className="flex-auto my-auto max-md:max-w-full">
+                                                <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
+                                                    <ProfileDepartment
+                                                        department={employmentPost.department?.name || ''}
+                                                        unit={employmentPost.business_unit?.name || ''}
+                                                        jobtitle={employmentPost.business_post?.title || ''}
+                                                        position={employmentPost.position || 'N/A'}
+                                                        grade={employmentPost.business_grade?.code || ''}
+                                                        location={employmentPost.location || 'N/A'}
+                                                        phone={employmentPost.work_phone || 'N/A'}
+                                                        isEditing={isEditingDepartments[index]}
+                                                        onFormDataChange={(newData) => handleFormDataChange(newData, index)}
+                                                        originalFormData={originalFormData}
+                                                    />
                                                 </div>
-                                            )}
-                                        </div>
-                                    </section>
-                                ))}
+                                                {isEditingDepartments[index] && (
+                                                    <div className="flex justify-end mt-4 pb-3">
+                                                        <button onClick={() => handleCancelDepartment(index)} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
+                                                        <button onClick={() => handleSaveDepartment(index)} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </section>
+                                    ))}
                             </>
                         )}
 
