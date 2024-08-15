@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './css/DepartmentsCard.css';
 import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
 import { FaLock } from 'react-icons/fa'; // Import the lock icon
+import PopupMenu from './CommunityPopUp'; 
 
 const CommunityCard = ({ name, imageUrl, onDeactivateClick, communityID, type }) => {
   const isPrivate = type === 'private'; // Add a fallback check
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const togglePopup = () => {
     setIsPopupOpen((prev) => !prev);
+  };
+
+  const handleAssign = () => {
+    console.log('Reporting Structure');
+    setIsPopupOpen(false);
   };
 
   return (
@@ -17,6 +24,9 @@ const CommunityCard = ({ name, imageUrl, onDeactivateClick, communityID, type })
         <button className="status-button" onClick={togglePopup} >
         <img src="/assets/threedots.svg" alt="Menu" className="h-5 w-[50px]" />
         </button> 
+        {isPopupOpen && (
+        <PopupMenu onAssign={handleAssign} onClose={() => setIsPopupOpen(false)} />
+      )}
       </div>
       <div className="card-body whitespace-nowrap overflow-hidden text-ellipsis">
         <h3 className="staff-member-name flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PopupMenu from './PopupMenu'; 
+import PopupMenu from './CommunityPopUp'; 
 
 const ThreeDotButton = ({ selectedDepartmentId }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
