@@ -45,11 +45,13 @@ function UserInfo({ name, role, src }) {
 function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate }) {
   const [communityName, setCommunityName] = useState('');
   const [imageSrc, setImageSrc] = useState(imgSrc);
+  const [imageFile, setImageFile] = useState(null);
   const [selectedType, setSelectedType] = useState('');
   const [communityDescription, setCommunityDescription] = useState('');
   const csrfToken = useCsrf();
 
   const handleImageChange = (file) => {
+    setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
@@ -57,16 +59,27 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = async () => {
-    const data = {
-      name: communityName,
-      banner: imageSrc,
-      description: communityDescription,
-      type: selectedType,
-      created_by: user.name,
-      updated_by: user.name,
-    };
+  // const handleSubmit = async () => {
+  //   const data = {
+  //     name: communityName,
+  //     banner: imageSrc,
+  //     description: communityDescription,
+  //     type: selectedType,
+  //     created_by: user.name,
+  //     updated_by: user.name,
+  //   };
   
+    const handleSubmit = async () => {
+      const formData = new FormData();
+      formData.append('name', communityName);
+      if (imageFile) {
+        formData.append('banner', imageFile);
+      }
+      formData.append('description', communityDescription);
+      formData.append('type', selectedType);
+      formData.append('created_by', user.name);
+      formData.append('updated_by', user.name);
+
     const options = {
       method: 'POST',
       headers: {
@@ -74,7 +87,8 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         'Accept': 'application/json',
         "X-CSRF-Token": csrfToken 
       },
-      body: JSON.stringify(data)
+      // body: JSON.stringify(data)
+      body: formData
     };
   
     try {

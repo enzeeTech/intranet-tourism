@@ -47,7 +47,7 @@ function MyComponent() {
       const communityData = data.data.data.map((community) => ({
         id: community.id,
         name: community.name,
-        category: community.public ? 'Public' : 'Private',
+        category: community.type,
         imgSrc: 'assets/departmentsDefault.jpg',
         altText: `${community.name} community image`,
         createdAt: new Date(community.created_at),
