@@ -97,17 +97,17 @@ export default function Roles() {
                             Roles
                         </h1>
                         <p className="text-gray-600">
-                            Manage the role here to Admin or Super Admin.
+                            Manage the role here for user.
                         </p>
                     </div>
                     <button
                         onClick={() => setIsPopupOpen(true)}
-                        className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 rounded-full"
+                        className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 font-bold rounded-full"
                     >
                         Assign As Admin
                     </button>
                 </div>
-                <div className="box-container -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-1">
+                <div className="box-container -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-0 shadow-custom">
                     <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table className="min-w-full divide-y divide-gray-300">
                             <thead>
