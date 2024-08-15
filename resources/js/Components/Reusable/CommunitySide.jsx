@@ -68,7 +68,7 @@ function MyComponent() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center max-w-[290px] text-neutral-800 mb-20">
+    <div className="flex flex-col justify-center max-w-[320px] text-neutral-800 mb-20">
       <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
         <h1 className="ml-4 mt-2 text-2xl font-bold">Communities</h1>
         <hr className="border border-gray-200 w-[235px] mx-4 -mt-4"></hr>

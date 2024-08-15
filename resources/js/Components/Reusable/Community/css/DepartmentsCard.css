@@ -60,10 +60,8 @@
   }
   
   .staff-member-name {
-    text-align: center;
     margin-top: 5%;
-    display: flex; /* Use flexbox for alignment */
-    justify-content: center; /* Center items horizontally */
+    justify-content: start; /* Center items horizontally */
     align-items: center; /* Center items vertically */
     font-size: 14px;
     font-weight: bold;

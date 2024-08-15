@@ -593,7 +593,7 @@ function Calendar() {
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="modal-container">
-                            <h1 className="flex items-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
+                            <h1 className="flex items-start justify-center mb-4 text-2xl font-bold text-neutral-800">Create New Event</h1>
                             <button onClick={closeModal} className="mt-2 mr-2 modal-close-button">
                                 <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                             </button>
@@ -658,12 +658,12 @@ function Calendar() {
                                     name="description"
                                     value={eventData.description}
                                     onChange={handleChange}
-                                    className="form-control h-44 overflow-y-auto"
+                                    className="form-control h-36 overflow-y-auto"
                                     placeholder="Description"
                                 />
-                                <div className="color-picker">
+                                <div className="color-picker justify-between">
                                     {['red', 'blue', 'green', 'orange', 'purple', 'DeepPink', 'black', 'gray'].map((color) => (
-                                        <label key={color} className="color-option">
+                                        <label key={color} className="color-option mb-4">
                                             <input
                                                 type="radio"
                                                 name="color"
@@ -677,7 +677,7 @@ function Calendar() {
                                     ))}
                                 </div>
 
-                                <button type="submit" className="modal-submit-button">
+                                <button type="submit" className="modal-submit-button font-bold">
                                     Confirm
                                 </button>
                             </form>
@@ -755,22 +755,21 @@ function Calendar() {
                                         className="form-control"
                                         placeholder="Description"
                                 />
-                                <select
-                                    name="color"
-                                    value={eventData.color}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    required
-                                >
-                                    <option value="red">Red</option>
-                                    <option value="blue">Blue</option>
-                                    <option value="green">Green</option>
-                                    <option value="orange">Orange</option>
-                                    <option value="purple">Purple</option>
-                                    <option value="DeepPink">Pink</option>
-                                    <option value="black">Black</option>
-                                    <option value="gray">Gray</option>
-                                </select>
+                                <div className="color-picker justify-between">
+                                    {['red', 'blue', 'green', 'orange', 'purple', 'DeepPink', 'black', 'gray'].map((color) => (
+                                        <label key={color} className="color-option mb-3">
+                                        <input
+                                            type="radio"
+                                            name="color"
+                                            value={color} 
+                                            onChange={handleChange}
+                                            required
+                                            checked={eventData.color === color}
+                                        />
+                                        <span className="color-display" style={{ backgroundColor: color }}></span>
+                                        </label>
+                                    ))}
+                                </div>
                                 <div className="button-container">
                                     <button type="button" className="modal-delete-button font-bold" onClick={handleDelete}>
                                         Delete

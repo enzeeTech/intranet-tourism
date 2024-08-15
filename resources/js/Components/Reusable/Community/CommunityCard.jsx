@@ -12,9 +12,12 @@ const CommunityCard = ({ name, imageUrl, onDeactivateClick, communityID, type })
         <img src={imageUrl || defaultImage} alt={name} className="staff-member-image" />
       </div>
       <div className="card-body whitespace-nowrap overflow-hidden text-ellipsis">
-        <h3 className="staff-member-name flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis">
-          {name} {isPrivate && <FaLock style={{ color: 'black', alignItems: 'center' }} />} {/* Lock icon in black */}
-        </h3>
+        <div className="flex items-center justify-center">
+          <h3 className="staff-member-name whitespace-nowrap overflow-hidden text-ellipsis">
+            {name}
+          </h3>
+          {isPrivate && <FaLock style={{ color: 'black'}} className="mt-2 ml-1.5" />} {/* Lock icon in black */}
+        </div>
       </div>
       <div className="card-footer items-center">
         <a href={`/communityInner?communityId=${communityID}`}>

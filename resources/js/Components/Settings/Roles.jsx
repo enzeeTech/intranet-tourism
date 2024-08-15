@@ -102,7 +102,7 @@ export default function Roles() {
                     </div>
                     <button
                         onClick={() => setIsPopupOpen(true)}
-                        className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700 rounded-full"
+                        className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                     >
                         Assign As Admin
                     </button>
