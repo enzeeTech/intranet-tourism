@@ -144,7 +144,7 @@ const Departments = () => {
         <div>
           <FeaturedEvents />
           <WhosOnline />
-          <Birthdaypopup />
+          {/* <Birthdaypopup /> */}
         </div>
       </aside>
       {isDeleteModalOpen && (
