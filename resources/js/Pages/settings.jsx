@@ -64,8 +64,8 @@ const navigation = [
     { name: 'Audit Trail', href: '#', inactive: "assets/Inactive Audit Trail.svg", active: "assets/Active Audit Trail.svg" },
     { name: 'Feedback', href: '#', inactive: "assets/Inactive Feedback.svg", active: "assets/Active Feedback.svg" },
     { name: 'Birthday Template', href: '#', inactive: "assets/Inactive Birthday Template.svg", active: "assets/Active Birthday Template.svg" },
-    { name: 'Roles', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
-    { name: 'Permissions', href: '#', inactive: "assets/Inactive Pautan.svg", active: "assets/Active Pautan.svg" },
+    { name: 'Roles', href: '#', inactive: "assets/role-inactive.svg", active: "assets/role-active.svg" },
+    { name: 'Permissions', href: '#', inactive: "assets/permission-active.svg", active: "assets/permission-active.svg" },
 ];
 
 const Settings = () => {
