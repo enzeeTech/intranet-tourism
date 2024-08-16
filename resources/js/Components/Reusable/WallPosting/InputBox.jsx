@@ -101,7 +101,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const handleClickImg = createFileInputHandler("image/*");
     const handleClickVid = createFileInputHandler("video/*");
     const handleClickDoc = createFileInputHandler(
-        "application/pdf, .doc, .docx, .txt, .xlsx"
+        "application/pdf, .doc, .docx, .txt, .xlsx, .ppt, .pptx"
     );
 
     const handleClickPoll = () => {

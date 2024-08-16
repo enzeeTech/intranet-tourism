@@ -14,7 +14,7 @@ if (!function_exists('uploadFile')) {
         $fileRef = [];
         $whitelistExtension = !empty(config('filesystems.whitelist'))
             ? config('filesystems.whitelist.criteria.extension')
-            : ["jpg", "jpeg", "png", "bmp", "pdf"];
+            : ["jpg", "jpeg", "png", "bmp", "pdf", "pptx", "ppt"];
             // echo phpinfo();
             // die();
             // dd(

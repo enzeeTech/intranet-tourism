@@ -92,16 +92,23 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       const fileObject = data.data.data.find(f => f.id === file.id); // Find the file object in the data array
   
       if (!fileObject) {
-        throw new Error("File not found in the API response");     
+        throw new Error("File not found in the API response");
       }
       
-      // Parse the metadata field since it's a JSON string
-      const metadata = JSON.parse(fileObject.metadata);
+      // Check if metadata is a string and parse it if necessary
+      const metadata = typeof fileObject.metadata === 'string' 
+        ? JSON.parse(fileObject.metadata) 
+        : fileObject.metadata;
   
-      const fileUrl = `/storage/${metadata.path}`; // Use parsed metadata for the file path
+      // If the path or original_name is undefined, log an error or handle it accordingly
+      if (!metadata.path || !metadata.original_name) {
+        throw new Error("Invalid metadata format: missing path or original_name");
+      }
+  
+      const fileUrl = `/storage/${metadata.path}`; // Use the metadata for the file path
       console.log("File path:", fileUrl); // Log the file path to verify
   
-      // Access the original_name from the parsed metadata object
+      // Access the original_name from the metadata object
       const originalName = metadata.original_name || 'default_filename';
       console.log("Original name:", originalName);
   
@@ -115,6 +122,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       console.error("Failed to download the file:", error);
     }
   };
+  
   
   
   
