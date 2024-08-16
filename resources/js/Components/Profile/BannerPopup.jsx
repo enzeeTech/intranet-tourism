@@ -83,15 +83,15 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={onClose}
     >
       <div
-        className="flex flex-col py-4 px-8 bg-white rounded-3xl shadow-custom max-w-[600px]" // Increased max width for larger crop area
+        className="flex flex-col py-6 px-8 bg-white rounded-2xl shadow-custom max-w-[600px]" // Increased max width for larger crop area
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center text-neutral-800">
-          <div className="text-xl font-bold">{title}</div>
+          <div className="flex justify-start w-full text-xl font-bold my-1">{title}</div>
           <div className="flex gap-5 mt-4 text-base font-medium">
             {croppedImage ? (
               <div className="relative w-[500px] h-[300px]"> {/* Adjusted cropper area to match aspect ratio */}
@@ -106,16 +106,16 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
                 />
               </div>
             ) : (
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
-                className="shrink-0 aspect-square w-[27px] cursor-pointer"
-                onClick={handleClickImg}
-              />
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
+                  className="shrink-0 aspect-square w-[270px] h-[90px] cursor-pointer bg-gray-100 rounded-lg"
+                  onClick={handleClickImg}
+                />
             )}
           </div>
           <div
-            className="flex-auto my-auto cursor-pointer mt-5" // Moved below and added margin-top for spacing
+            className="flex justify-start w-full cursor-pointer my-2" // Moved below and added margin-top for spacing
             onClick={handleClickImg}
           >
             Choose photo from the device
@@ -125,10 +125,11 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
             accept="image/*"
             ref={fileInputRef}
             style={{ display: "none" }}
+            className="w-full"
             onChange={handleFileChange}
           />
         </div>
-        <div className="flex gap-2 self-end mt-3.5 mb-4 font-bold text-center">
+        <div className="flex gap-2 self-end mt-3.5 mb-2 font-bold text-center">
           <div
             className="file-names-container flex flex-wrap gap-2"
             style={{

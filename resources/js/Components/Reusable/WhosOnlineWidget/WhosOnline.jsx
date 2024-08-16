@@ -29,12 +29,12 @@ const WhosOnline = () => {
     }, []);
 
     return (
-        <div className="whos-online-container border-2 shadow-2xl">
+        <div className="whos-online-container border-2 shadow-2xl flex-col justify-start">
             <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '4px', fontFamily: "Nunito Sans" }}>
                 Who's Online
             </h2>
-            <hr style={{ marginTop: '5px', marginBottom: '5px' }} className="underline" />
-            <div className="online-users">
+            <hr style={{ marginTop: '5px', marginBottom: '5px',}} className="underline" />
+            <div className="online-users text-left flex justify-start">
                 {onlineUsers.map((user, index) => (
                     <UserAvatar key={index} {...user} />
                 ))}
