@@ -23,7 +23,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
 
     try {
       while (hasMorePages) {
-        const response = await fetch(`/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+        const response = await fetch(`/api/users/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
         const data = await response.json();
         allResults = [...allResults, ...data.data.data];
         currentPage++;
@@ -59,10 +59,21 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
     fetchAllSearchResults(searchTerm);
   };
 
+  const getImageSource = (imageUrl) => {
+    console.log('imageURL', imageUrl);
+    if (imageUrl.startsWith('staff_image/')) {
+      return `/storage/${imageUrl}`;
+    } else {
+      return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+        ? imageUrl 
+        : `/avatar/${imageUrl}`;
+    }
+  };
+
   return (
     <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 sm:left">
       <div className="mb-1 staff-search-bar-title">
-        <h2 className="lg:text-xl font-semibold sm:text-sm md:text-md">Search Staff</h2>
+        <h2 className="font-semibold lg:text-xl sm:text-sm md:text-md">Search Staff</h2>
       </div>
       <div className={`flex flex-col items-center space-y-3 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3 ${searchResults.length > 0 ? 'open-dropdown' : ''}`}>
         <input
@@ -95,7 +106,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
               <a key={result.id} href={`/user/${result.id}`}>
                 <div className="flex items-center justify-between p-2 cursor-pointer search-result-item hover:bg-gray-100">
                   <div className="flex items-center cursor-pointer">
-                    <img src={result.profile?.image ? `/avatar/${result.profile.image}` : defaultImage} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
+                    <img src={getImageSource(result.profile?.staff_image || '/assets/dummyStaffPlaceHolder.jpg')} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
                     <p className="font-semibold cursor-pointer">{result.name}</p>
                   </div>
                   <p className="text-gray-600">{result.employment_post?.business_post.title || 'No title available'}</p>

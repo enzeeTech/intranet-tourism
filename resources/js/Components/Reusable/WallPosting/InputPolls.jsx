@@ -236,17 +236,30 @@ export function Polls({ onClose, onCreatePoll }) {
     setOptions(newOptions);
   };
 
+// const handlePostPoll = () => {
+//     const newPoll = {
+//       id: Date.now(),
+//       content: inputValue,
+//       options: options,
+//       allowMultipleAnswers: data.remember,
+//       timestamp: new Date().toISOString(),
+//     };
+//     onCreatePoll(newPoll);
+//     onClose();
+//   };
+
 const handlePostPoll = () => {
-    const newPoll = {
+  const newPoll = {
       id: Date.now(),
       content: inputValue,
       options: options,
       allowMultipleAnswers: data.remember,
       timestamp: new Date().toISOString(),
-    };
-    onCreatePoll(newPoll);
-    onClose();
   };
+  onCreatePoll(newPoll);  // Pass the new poll data to the parent component
+  onClose();
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">

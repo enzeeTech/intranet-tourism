@@ -21,11 +21,11 @@ const BirthdayCom = () => {
 
   return (
     <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl max-w-[px]">
-      <div className="flex flex-col  px-2 mt-3 w-full">
+      <div className="flex flex-col px-2 mt-3 w-full">
 
-        <div className="flex flex-col   gap-1 self-stretch text-xs font-semibold text-neutral-800">
+        <div className="flex flex-col gap-1 self-stretch text-xs font-semibold text-neutral-800">
 
-        <div className="flex col justify-center   ">
+        <div className="flex col justify-center">
 
         <p className=" text-xl">CREATE POST</p>
         </div>
@@ -38,7 +38,7 @@ const BirthdayCom = () => {
                Bahagian Pentadbiran</p></div>
                </div>
         
-        <div className="relative  rounded-xl overflow-hidden flex flex-col justify-center items-center self-stretch px-16 pt-20 pb-20 mt-1.5 text-3xl font-black text-center aspect-[1.87] text-white text-opacity-70" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="relative rounded-xl overflow-hidden flex flex-col justify-center items-center self-stretch px-16 pt-20 pb-20 mt-1.5 text-3xl font-black text-center aspect-[1.87] text-white text-opacity-70" style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
          
           <input
             type="text"

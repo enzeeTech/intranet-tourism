@@ -1,8 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "./cropImage"; // Assume you have this utility to crop the image
 
 function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, authToken, setPhoto }) {
   const [fileNames, setFileNames] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleClickImg = () => {
@@ -12,105 +18,118 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const fileUrl = URL.createObjectURL(file);
       setSelectedFile(file);
-      setFileNames([file.name]);
+      setCroppedImage(fileUrl); // Set the file URL as the initial cropped image
     }
   };
 
-  const handleSave = () => {
-    if (!selectedFile) {
-        console.error("No file selected");
-        return;
+  const handleCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCropAndSave = async () => {
+    if (!croppedImage || !croppedAreaPixels) {
+      console.error("No image or cropped area to save");
+      return;
     }
 
-    // Add checks for formData and profileData
-    if (!formData || !formData.name) {
-        console.error("formData is undefined or missing 'name' property");
-        return;
-    }
+    try {
+      // Crop the image
+      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
 
-    if (!profileData || !profileData.profile || !profileData.profile.id) {
-        console.error("profileData is undefined or missing 'profile' or 'id' property");
-        return;
-    }
+      // Convert cropped image to a blob and create a file
+      const response = await fetch(croppedImg);
+      const blob = await response.blob();
+      const file = new File([blob], 'profile.jpg', { type: blob.type });
 
-    const FfData = new FormData();
-    FfData.append("cover_photo", selectedFile);
-    FfData.append("user_id", id);
-    FfData.append("_method", "PUT");
-    FfData.append("name", formData.name);
+      const FfData = new FormData();
+      FfData.append("cover_photo", file);
+      FfData.append("user_id", id);
+      FfData.append("_method", "PUT");
+      FfData.append("name", formData.name);
 
-    const url = `/api/profile/profiles/${profileData.profile.id}?with[]=user`;
+      const url = `/api/profile/profiles/${profileData.profile.id}?with[]=user`;
 
-    fetch(url, {
+      const uploadResponse = await fetch(url, {
         method: "POST",
         body: FfData,
         headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": csrfToken || "",
-            Authorization: `Bearer ${authToken}`,
+          Accept: "application/json",
+          "X-CSRF-TOKEN": csrfToken || "",
+          Authorization: `Bearer ${authToken}`,
         },
-    })
-    .then(async (response) => {
-        if (!response.ok) {
-            const error = await response.json();
-            return await Promise.reject(error);
-        }
-        return response.json();
-    })
-    .then((data) => {
-        if (data.success) {
-            setPhoto(URL.createObjectURL(selectedFile)); // Update the photo URL
-            onSave(); // Trigger the onSave callback
-            console.log("File uploaded successfully:", data);
-            window.location.reload();
-        } else {
-            console.error("Error uploading file:", data);
-        }
-    })
-    .catch((error) => {
-        console.error("Error uploading file:", error);
-        window.location.reload();
-    });
-};
+      });
 
+      if (!uploadResponse.ok) {
+        const error = await uploadResponse.json();
+        throw new Error(error.message || "Error uploading file");
+      }
+
+      const data = await uploadResponse.json();
+      if (data.success) {
+        setPhoto(croppedImg); // Update the photo URL with the cropped image
+        onSave(); // Trigger the onSave callback
+        console.log("File uploaded successfully:", data);
+        window.location.reload();
+      } else {
+        console.error("Error uploading file:", data);
+      }
+    } catch (error) {
+      console.error("Error cropping or uploading file:", error);
+      window.location.reload();
+    }
+  };
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={onClose}
     >
       <div
-        className="flex flex-col py-4 px-8 bg-white rounded-3xl shadow-custom max-w-[350px]"
+        className="flex flex-col py-6 px-8 bg-white rounded-2xl shadow-custom max-w-[600px]" // Increased max width for larger crop area
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex gap-5 items-start text-neutral-800">
-          <div className="flex flex-col grow shrink-0 mt-3.5 basis-0 w-fit">
-            <div className="text-xl font-bold">{title}</div>
-            <div className="flex gap-5 mt-4 text-base font-medium">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
-                className="shrink-0 aspect-square w-[27px] cursor-pointer"
-                onClick={handleClickImg}
-              />
-              <div
-                className="flex-auto my-auto cursor-pointer"
-                onClick={handleClickImg}
-              >
-                Choose photo from the device
+        <div className="flex flex-col items-center text-neutral-800">
+          <div className="flex justify-start w-full text-xl font-bold my-1">{title}</div>
+          <div className="flex gap-5 mt-4 text-base font-medium">
+            {croppedImage ? (
+              <div className="relative w-[500px] h-[300px]"> {/* Adjusted cropper area to match aspect ratio */}
+                <Cropper
+                  image={croppedImage}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={3 / 1} // Set to a rectangular aspect ratio, e.g., 16:9
+                  onCropChange={setCrop}
+                  onCropComplete={handleCropComplete}
+                  onZoomChange={setZoom}
+                />
               </div>
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
+            ) : (
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
+                  className="shrink-0 aspect-square w-[270px] h-[90px] cursor-pointer bg-gray-100 rounded-lg"
+                  onClick={handleClickImg}
+                />
+            )}
           </div>
+          <div
+            className="flex justify-start w-full cursor-pointer my-2" // Moved below and added margin-top for spacing
+            onClick={handleClickImg}
+          >
+            Choose photo from the device
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            className="w-full"
+            onChange={handleFileChange}
+          />
         </div>
-        <div className="flex gap-2 self-end mt-3.5 mb-4 font-bold text-center">
+        <div className="flex gap-2 self-end mt-3.5 mb-2 font-bold text-center">
           <div
             className="file-names-container flex flex-wrap gap-2"
             style={{
@@ -122,7 +141,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           >
             {fileNames.map((name, index) => (
               <div
-                className="flex items-center px-2 py-1 bg-white rounded-lg shadow"
+                className="flex items-center px-2 py-1 bg-white rounded-2xl shadow"
                 key={index}
                 style={{
                   maxWidth: "150px",
@@ -143,9 +162,9 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-sm text-white px-4 py-2 rounded-full"
-            onClick={handleSave}
+            onClick={handleCropAndSave} // Combined Crop and Save function
           >
-            Save
+            Crop & Save
           </button>
         </div>
       </div>

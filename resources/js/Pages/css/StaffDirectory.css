@@ -79,9 +79,18 @@
 .staff-member-grid-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 30px;
+  grid-gap: 20px;
   padding: 16px;
   margin-left: -16px;
+  margin-top: 16px;
+  /* max-height: calc(100vh - 250px);  */
+}
+
+.department-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 30px;
+  padding: 16px;
   margin-top: 16px;
   /* max-height: calc(100vh - 250px);  */
 }
@@ -127,8 +136,63 @@
 }
 
  /* Responsive adjustments */
+ /* DEPT COMM Add responsive styles for smaller screens */
+ @media (max-width: 768px) {
+  .widgets-container {
+    flex-direction: column;
+  }
+}
 
- /* Add responsive styles for smaller screens */
+@media (max-width: 2000px) {
+.dept-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 1456px) {
+.dept-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 1419px) {
+  .dept-grid-container {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+@media (max-width: 1267px) {
+.dept-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 1265px) {
+.dept-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 940px) {
+.dept-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+}
+}
+
+@media (max-width: 767px) {
+  .dept-grid-container {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 632px) {
+  .dept-grid-container {
+      grid-template-columns: repeat(2, 1fr); /* 1 column for small screens */
+  }
+}
+
+ /* STFFDRTRY Add responsive styles for smaller screens */ 
 @media (max-width: 768px) {
     .widgets-container {
       flex-direction: column;
@@ -137,7 +201,7 @@
 
 @media (max-width: 2000px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
   }
 }
 
@@ -156,7 +220,7 @@
 
 @media (max-width: 1267px) {
   .staff-member-grid-container {
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
   }
 }
 

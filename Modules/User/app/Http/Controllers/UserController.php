@@ -4,19 +4,40 @@ namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\User\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $query = request()->query();
+    //     $modelBuilder = User::queryable();
+    //     if (array_key_exists('disabledPagination', $query)) {
+    //         $data = $modelBuilder->get();
+    //     } else {
+    //         $data = $modelBuilder->paginate();
+    //     }
+    //     return response()->json([ 'data' => $data ]);
+    // }
+    public function index(Request $request)
     {
-        $query = request()->query();
+        $query = $request->query();
         $modelBuilder = User::queryable();
+
+        // Handle search by name
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $modelBuilder->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
+        }
+
+        // Handle pagination
         if (array_key_exists('disabledPagination', $query)) {
             $data = $modelBuilder->get();
         } else {
             $data = $modelBuilder->paginate();
         }
-        return response()->json([ 'data' => $data ]);
+
+        return response()->json(['data' => $data]);
     }
 
     public function show($id)

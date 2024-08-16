@@ -1,80 +1,136 @@
 import React, { useState } from 'react';
-import './css/DepartmentsDropdown.css';
-import AddCommunity from '../../../../../public/assets/AddCommunity.png';
-import CreateDepartment from '../../../../../public/assets/CreateDepartment.png';
-import CreateDepartments from './CreateCommunity'; 
 
-const CommunityDropdown = ({ departments, onSelectDepartment, onCreateDepartment }) => {
+function MenuItem({ src, alt, text, isActive, onClick }) {
+  return (
+    <div
+      className={`flex items-center gap-3 p-2 m-0.5 rounded-md cursor-pointer ${
+        isActive ? 'bg-gray-100' : 'hover:bg-gray-100'
+      }`}
+      onClick={() => onClick(text, src)}
+    >
+      <img
+        loading="lazy"
+        src={src}
+        alt={alt}
+        className={`shrink-0 aspect-square w-[21px] ${
+          isActive ? 'opacity-100' : 'opacity-100'
+        }`} // Change opacity based on active/inactive state
+      />
+      <span
+        className={`my-auto ${
+          isActive ? 'text-neutral-800 font-bold' : 'text-neutral-800'
+        }`} // Change text color and style based on active/inactive state
+      >
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function IconMenu({ menuItems, onSelectFilter, closeDropdown }) {
+  return (
+    <aside className="absolute flex flex-col p-2 bg-white rounded-lg shadow-lg w-[160px] text-neutral-800 mt-[180px] z-10 ">
+      {menuItems.map((item, index) => (
+        <React.Fragment key={index}>
+          <MenuItem
+            src={item.src}
+            alt={item.alt}
+            text={item.text}
+            isActive={item.isActive} // Pass active state to MenuItem
+            onClick={(text, src) => {
+              onSelectFilter(text, src);
+              closeDropdown(); // Close the dropdown after selecting an option
+            }}
+          />
+        </React.Fragment>
+      ))}
+    </aside>
+  );
+}
+
+function Filter({ onSelectFilter }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState('');
-  const [filter, setFilter] = useState('All');
-  const [isReportingPopupOpen, setIsReportingPopupOpen] = useState(false);
-  const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
-
-  const handleSelect = (department) => {
-    setSelectedDepartment(department);
-    onSelectDepartment(department);
-    setIsOpen(false);
-  };
-
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter);
-    setIsOpen(false);
-  };
-
-  const filteredDepartments = departments.filter((dept) => {
-    if (filter === 'All') return true;
-    return dept.type === filter.toLowerCase(); // Assuming dept.type is either 'public' or 'private'
+  const [selectedFilter, setSelectedFilter] = useState({
+    text: 'All',
+    icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/206f67ee2b58618f2c710e12ff29852a94c07b8a9ab92c6681c10b5d14e697fc?apiKey=285d536833cc4168a8fbec258311d77b&', // Default icon
   });
+  const [menuItems, setMenuItems] = useState([
+    {
+      src: 'https://cdn.builder.io/api/v1/image/assets/TEMP/206f67ee2b58618f2c710e12ff29852a94c07b8a9ab92c6681c10b5d14e697fc?apiKey=285d536833cc4168a8fbec258311d77b&',
+      alt: 'All Posts Icon',
+      text: 'All',
+      isActive: true, // Default active state for 'All'
+    },
+    {
+      src: "/assets/public.svg",
+      alt: 'Public Icon',
+      text: 'Public',
+      isActive: false,
+    },
+    {
+      src: "/assets/lock.svg",
+      alt: 'Lock Icon',
+      text: 'Private',
+      isActive: false,
+    },
+  ]);
 
-  const toggleReportingPopup = () => setIsReportingPopupOpen(!isReportingPopupOpen);
-  const toggleDropdown = () => setIsOpen(!isOpen);
-  const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
+  const handleSelectFilter = (text, src) => {
+    setSelectedFilter({ text, icon: src }); // Update the filter text and icon
+    onSelectFilter(text); // Call the parent function
+
+    // Update active state for the icons
+    const updatedMenuItems = menuItems.map((item) =>
+      item.text === text
+        ? { ...item, isActive: true }
+        : { ...item, isActive: false }
+    );
+    setMenuItems(updatedMenuItems);
+
+    closeDropdown(); // Close the dropdown
+  };
 
   return (
-    <div className="department-dropdown-container">
-      <div className="dropdown">
-        <button onClick={toggleDropdown} className="dropdown-button">
-          {selectedDepartment || 'Select Community'}
-        </button>
-        {isOpen && (
-          <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
-            <li onClick={() => handleFilterChange('All')}>All</li>
-            <li onClick={() => handleFilterChange('Public')}>Public</li>
-            <li onClick={() => handleFilterChange('Private')}>Private</li>
-          </ul>
-        )}
-      </div>
-      {isReportingPopupOpen && (
-        <button
-          onClick={toggleReportingPopup}
-          className="staff-popup"
-          style={{
-            top: '25px',
-            right: '-200px',
-          }}
-        >
-          Reporting Structure
-        </button>
-      )}
-      {isCreateCommunityOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative p-4 bg-white rounded-lg shadow-lg">
-            <button
-              className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
-              onClick={toggleCreateCommunity}
-            >
-              &times;
-            </button>
-            <CreateDepartments
-              onCancel={toggleCreateCommunity}
-              onCreate={onCreateDepartment}
-            />
-          </div>
+    <div className="flex flex-col justify-center text-sm max-w-[132px] text-neutral-800 relative mr-96 -mb-2 -mt-6">
+      <div
+        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg mb-4 w-[160px] cursor-pointer"
+        onClick={toggleDropdown}
+      >
+        <div className="flex items-center gap-3">
+          <img
+            loading="lazy"
+            src={selectedFilter.icon}
+            alt="Selected Filter Icon"
+            className="shrink-0 aspect-square w-[21px]"
+          />
+          <span>{selectedFilter.text}</span>
         </div>
+        <img
+          loading="lazy"
+          src="assets/Dropdownarrow.svg"
+          alt="Decorative icon"
+          className={`shrink-0 my-auto aspect-[1.89] stroke-[2px] w-[15px] ${
+            isOpen ? 'transform rotate-180' : ''
+          }`}
+        />
+      </div>
+      {isOpen && (
+        <IconMenu
+          menuItems={menuItems} // Pass the menuItems with active states
+          onSelectFilter={handleSelectFilter}
+          closeDropdown={closeDropdown}
+        />
       )}
     </div>
   );
-};
+}
 
-export default CommunityDropdown;
+export default Filter;

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 function ProfileDepartment({
     department,
@@ -20,12 +22,13 @@ function ProfileDepartment({
         grade,
         location,
         phone,
+        countryCode: "",
     });
 
     const [departmentOptions, setDepartmentOptions] = useState([]);
     const [unitOptions, setUnitOptions] = useState([]);
     const [jobTitleOptions, setJobTitleOptions] = useState([]);
-    const [positionOptions, setPositionOptions] = useState(['Tetap', 'Kontrak', 'MySTEP']); // Hardcoded options
+    const [positionOptions, setPositionOptions] = useState(['Tetap', 'Kontrak', 'MySTEP']);
     const [gradeOptions, setGradeOptions] = useState([]);
     const [locationOptions, setLocationOptions] = useState([]);
     const [phoneOptions, setPhoneOptions] = useState([]);
@@ -41,7 +44,6 @@ function ProfileDepartment({
         fetchData('/api/department/business_grades', setGradeOptions, 'Grades');
         fetchData('/api/department/employment_posts', setLocationOptions, 'Location');
         fetchData('/api/department/employment_posts', setPhoneOptions, 'Phones');
-        // No need to fetch position options as they are hardcoded
     }, []);
 
     const fetchData = async (API_URL, setOptions, label) => {
@@ -99,13 +101,12 @@ function ProfileDepartment({
 
         setLocalFormData((prevData) => ({
             ...prevData,
-            [name]: value, // Update the specific field only
+            [name]: value,
         }));
 
         if (onFormDataChange) {
             const updatedData = { [name]: value };
 
-            // Handle ID associations
             if (name === 'department') {
                 updatedData.department_id = value;
             } else if (name === 'unit') {
@@ -126,6 +127,32 @@ function ProfileDepartment({
         }
     };
 
+    const formatPhoneNumber = (number) => {
+        // Remove non-digit characters
+        const cleaned = ('' + number).replace(/\D/g, '');
+        // Split the number into parts for formatting
+        const match = cleaned.match(/^(\d{1,3})(\d{3})(\d{4})$/);
+        if (match) {
+            return `(${match[1]}) ${match[2]}-${match[3]}`;
+        }
+        return number;
+    };
+
+    const handlePhoneChange = (value, country, e, formattedValue) => {
+        const formattedPhone = formatPhoneNumber(formattedValue);
+
+        setLocalFormData((prevData) => ({
+            ...prevData,
+            phone: formattedPhone,
+        }));
+
+        if (onFormDataChange) {
+            const updatedData = { phone: formattedPhone };
+            updatedData.work_phone = formattedPhone;
+            onFormDataChange(updatedData);
+        }
+    };
+
     const renderField = (label, name, value, options, editable = true, onChangeHandler = handleInputChange) => (
         <tr key={name}>
             <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">{label}</td>
@@ -133,16 +160,16 @@ function ProfileDepartment({
                 {isEditing && editable ? (
                     <select
                         name={name}
-                        value={localFormData[name] || ''} // Use the current state value
+                        value={localFormData[name] || ''}
                         onChange={onChangeHandler}
                         className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-y-auto"
                         ref={inputRef}
-                        style={{ maxHeight: '150px' }} // Set max height for scrollable options
+                        style={{ maxHeight: '150px' }}
                     >
                         <option value="">{localFormData[`${name}_display`] || value}</option>
                         {options && options.map((option, index) => (
                             <option key={index} value={option.id || option}>
-                                {typeof option === 'object' ? option.code || option.name || option.title : option}
+                                {typeof option === 'object' ? option.name || option.title || option.code : option}
                             </option>
                         ))}
                     </select>
@@ -154,8 +181,6 @@ function ProfileDepartment({
             </td>
         </tr>
     );
-        
-    
 
     return (
         <div className="flex-auto my-auto p-4">
@@ -190,12 +215,15 @@ function ProfileDepartment({
                                 <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">Office Number</td>
                                 <td className="py-2 align-center w-2/3">
                                     {isEditing ? (
-                                        <input
-                                            type="text"
-                                            name="phone"
-                                            value={localFormData.phone || ''}
-                                            onChange={handleInputChange}
-                                            className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                        <PhoneInput
+                                            country={'my'}  // Set to the default country you prefer
+                                            value={localFormData.phone}
+                                            onChange={handlePhoneChange}
+                                            inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                            containerClass="phone-input-container"
+                                            buttonClass="phone-input-button"
+                                            dropdownClass="phone-input-dropdown"
+                                            disableDropdown={false}
                                         />
                                     ) : (
                                         <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">

@@ -80,10 +80,12 @@ const FeaturedEvents = () => {
           </React.Fragment>
         ))}
       </ul>
-      <button className="view-all-btn">
-        VIEW ALL
-        <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
-      </button>
+      <a href='../calendar'>
+        <button className="view-all-btn">
+          VIEW ALL
+          <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
+        </button>
+      </a>
     </div>
   );
 };

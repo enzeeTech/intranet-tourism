@@ -129,6 +129,7 @@ const Pautan = () => {
       return;
     } else {
       setUrlError('');
+      window.location.reload();
     }
 
     const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
@@ -278,11 +279,6 @@ const Pautan = () => {
                 onClick={() => { resetForm(); setIsAddModalVisible(true); }}
               >
                 + Add
-              </button>
-              <button
-                class="btn"
-                onClick={PautanHandleAddApp}>
-                Default Button
               </button>
             </div>
           </div>

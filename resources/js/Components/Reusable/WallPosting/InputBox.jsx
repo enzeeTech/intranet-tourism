@@ -73,7 +73,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 setAttachments([]);
                 setFileNames([]);
                 setTags([]);
-                // window.location.reload();
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -101,7 +101,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const handleClickImg = createFileInputHandler("image/*");
     const handleClickVid = createFileInputHandler("video/*");
     const handleClickDoc = createFileInputHandler(
-        "application/pdf, .doc, .docx, .txt, .xlsx"
+        "application/pdf, .doc, .docx, .txt, .xlsx, .ppt, .pptx"
     );
 
     const handleClickPoll = () => {
