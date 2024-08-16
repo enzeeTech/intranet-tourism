@@ -51,7 +51,7 @@ function IconMenu({ menuItems, onSelectFilter, closeDropdown }) {
 function Filter({ onSelectFilter }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState({
-    text: 'All posts',
+    text: 'All',
     icon: 'https://cdn.builder.io/api/v1/image/assets/TEMP/206f67ee2b58618f2c710e12ff29852a94c07b8a9ab92c6681c10b5d14e697fc?apiKey=285d536833cc4168a8fbec258311d77b&', // Default icon
   });
   const [menuItems, setMenuItems] = useState([

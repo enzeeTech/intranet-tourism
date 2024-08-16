@@ -50,9 +50,9 @@ function Birthdaypopup() {
 
 
   return (
-    <main className="flex flex-col justify-center gap-14 max-w-[500px] w-[319px] text-neutral-800 shadow-lg rounded-2xl">
+    <main className="mb-10 flex flex-col justify-center gap-14 max-w-[290px] w-[319px] text-neutral-800 shadow-lg rounded-2xl">
       
-      <div onClick={handlePopupOpen} style={{ color: "rgba(128, 128, 128, 128)" }}>
+      <div onClick={handlePopupOpen} style={{ color: "" }}>
         <NotificationCard
           imgSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/80d03561f93a8c4f659ca6eb6958bfd4e2b46ee8c54d6d205eb675ead43272e1?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"
           altText="Musa's profile picture"

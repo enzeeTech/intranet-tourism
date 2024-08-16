@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useCsrf } from "@/composables";
 
-function EditPost({ post, onClose, loggedInUserId }) {
+function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) {
+
+  console.log("POST", post);
+  
+
   const [content, setContent] = useState(post.content || '');
   const [attachments, setAttachments] = useState(post.attachments || []);
   const [tags, setTags] = useState(post.tags || []);
@@ -25,46 +29,6 @@ function EditPost({ post, onClose, loggedInUserId }) {
   const handleDeleteAttachment = (index) => {
     setAttachments(prevAttachments => prevAttachments.filter((_, i) => i !== index));
   };
-
-  // const handleFormSubmit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('_method', 'PUT');
-  //     formData.append("user_id", loggedInUserId);
-  //     formData.append("type", "post");
-  //     formData.append("visibility", "public");
-  //     formData.append('content', content);
-  //     formData.append('tag', JSON.stringify(tags));
-
-  //     attachments.forEach((file, index) => {
-  //       if (file instanceof File) {
-  //         formData.append(`attachments[${index}]`, file);
-  //       } else {
-  //         formData.append(`attachments[${index}]`, file);
-  //       }
-  //     });
-
-  //     const response = await fetch(`/api/posts/posts/${post.id}`, {
-  //       method: 'POST',
-  //       body: formData,
-  //       headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log(responseData);
-
-  //     // Close the modal and refresh the page
-  //     onClose();
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error('Error updating post:', error);
-  //   }
-  // };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -95,17 +59,9 @@ function EditPost({ post, onClose, loggedInUserId }) {
         body: formData,
         headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
       });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const responseData = await response.json();
-      console.log(responseData);
-  
-      // Close the modal and refresh the page
       onClose();
-      window.location.reload();
+      onClosePopup();
+      refetchPost();
     } catch (error) {
       console.error('Error updating post:', error);
     }

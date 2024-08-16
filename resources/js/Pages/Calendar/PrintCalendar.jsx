@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./index.css";
 
 const formatDate = (dateString) => {
@@ -19,16 +19,31 @@ const formatTime = (dateString) => {
     });
 };
 
+const PrintCalendar = ({ events, refetchEvents }) => {
+    // Sort events by the start date (oldest first)
+    const sortedEvents = events.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-const PrintCalendar = ({ events }) => {
-    console.log("GG", events);
+    useEffect(() => {
+        // Run the refetchEvents function after the print dialog is closed
+        const handleAfterPrint = () => {
+            refetchEvents();
+        };
+
+        window.addEventListener('afterprint', handleAfterPrint);
+
+        // Clean up the event listener when the component is unmounted
+        return () => {
+            window.removeEventListener('afterprint', handleAfterPrint);
+        };
+    }, [refetchEvents]);
+
     return (
         <div className="print-container">
             <img
-                    className="h-8 w-[70px] hidden lg:block"
-                    src="/assets/Jomla logo red.svg"
-                    alt="Jomla Logo"
-                />
+                className="h-8 w-[70px] hidden lg:block"
+                src="/assets/Jomla logo red.svg"
+                alt="Jomla Logo"
+            />
             <h1>Jomla! Events</h1>
             <table className="events-table">
                 <thead>
@@ -41,13 +56,10 @@ const PrintCalendar = ({ events }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {events.map(event => (
+                    {sortedEvents.map(event => (
                         <tr key={event.id}>
                             <td className='w-56'>
-                                {/* {new Date(event.start).toLocaleDateString()} - {new Date(event.end).toLocaleDateString()}<br />
-                                {new Date(event.start).toLocaleTimeString()} - {new Date(event.end).toLocaleTimeString()} */}
                                 {formatDate(event.start)} - {formatDate(event.end)}
-                                {/* {formatTime(event.start)} - {formatTime(event.end)} */}
                             </td>
                             <td>{event.title}</td>
                             <td>{event.venue}</td>
