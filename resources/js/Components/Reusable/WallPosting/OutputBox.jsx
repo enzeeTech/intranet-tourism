@@ -7,6 +7,7 @@ import { useCsrf } from "@/composables";
 import Excel from '../../../../../public/assets/ExcellIcon.svg'
 import PDF from '../../../../../public/assets/PDFIcon.svg'
 import DOC from '../../../../../public/assets/Docs.svg'
+import PowerPoint from '../../../../../public/assets/PowerPointIcon.svg'
 import announce from '../../../../../public/assets/announcementIcon.svg'
 
 function Avatar({ src, alt }) {
@@ -33,7 +34,6 @@ function ProfileHeader({ name, timeAgo, profileImageSrc, profileImageAlt }) {
           <time className="mt-3 text-xs text-neutral-800 text-opacity-50">{timeAgo}</time>
         </div>
       </div>
-      {/* <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/e3c193bbbcd5eca7bf933dad4a6932d076b04eb038d7635c591737bbebdc61ef?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="shrink-0 self-start aspect-[3.85] w-[19px]" /> */}
     </header>
   );
 }
@@ -135,6 +135,7 @@ function PostAttachments({ attachments }) {
                 attachment.extension === 'pdf' ? PDF :
                 attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
                 attachment.extension === 'xlsx' ? Excel :
+                attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
                 'path/to/default-icon.png'
               }
               style={{ width: '48px', height: '48px', objectFit: 'contain' }}
@@ -247,16 +248,6 @@ function PostAttachments({ attachments }) {
 }
 
 
-// function FeedbackOption({ optionText }) {
-  
-//   return (
-//     <div className="flex gap-2.5 px-3.5 py-2.5 mt-4 text-sm leading-5 bg-gray-100 rounded-3xl text-neutral-800 max-md:flex-wrap">
-//       <div className="shrink-0 self-start w-3 bg-white rounded-full h-[11px]" />
-//       <div className="flex-auto max-md:max-w-full">{optionText}</div>
-//     </div>
-//   );
-// }
-
 function FeedbackOption({ optionText, onVote }) {
   return (
     <div
@@ -281,58 +272,6 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [postIdToDelete, setPostIdToDelete] = useState(null);
   const csrfToken = useCsrf();
 
-    // async function fetchData() {
-    //   try {
-    //     const postsResponse = await fetch("/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities", {
-    //       method: "GET",
-    //     });
-    //     if (!postsResponse.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
-    //     const postsData = await postsResponse.json();
-    //     // console.log("POSTDATA", postData);
-        
-
-    //     const posts = postsData.data.data.map((post) => {
-    //       post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
-    //       return post;
-    //     });
-
-    //     console.log("POSTDATA", posts);
-
-
-    //     const postsWithUserProfiles = await Promise.all(posts.map(async (post) => {
-    //       const userProfileResponse = await fetch(`/api/users/users/${post.user_id}?with[]=profile`, {
-    //         method: "GET",
-    //       });
-    //       const userProfileData = await userProfileResponse.json();
-    //       post.userProfile = userProfileData.data; // Attach user profile to the post
-
-    //       // Fetch department names if post has accessibilities
-    //       if (Array.isArray(post.accessibilities) && post.accessibilities.length > 0) {
-    //         const departmentNames = await Promise.all(post.accessibilities.map(async (accessibility) => {
-    //           if (accessibility.accessable_type === accessibility.accessable_type) {
-    //             const departmentResponse = await fetch(`/api/department/departments/${accessibility.accessable_id}`);
-    //             const departmentData = await departmentResponse.json();
-    //             return departmentData.data.name;
-    //           }
-    //           return null;
-    //         }));
-    //         post.departmentNames = departmentNames.filter(name => name !== null).join(', '); // Combine department names
-    //       } else {
-    //         post.departmentNames = null;
-    //       }
-          
-    //       return post;
-    //     }));
-
-    //     setPostData(postsWithUserProfiles);
-    //   } catch (error) {
-    //     console.error("Error fetching posts:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
 
     async function fetchData() {
   try {
@@ -379,7 +318,10 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
     const otherPosts = postsWithUserProfiles.filter(post => post.type !== 'announcement');
     
     // Sort announcements by created_at descending (latest first)
-    announcements.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    announcements.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+    otherPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
     
     // Merge announcements with other posts
     const sortedPosts = [...announcements, ...otherPosts];
@@ -414,27 +356,12 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
     });
   }
 
-  // const reversedFilteredPosts = filterType ? [...filteredPostData].reverse() : [...filteredPostData].reverse();
-  // const reversedFilteredPosts = filteredPostData;
-  // Separate announcements and non-announcements
-// const announcements = filteredPostData.filter(post => post.isAnnouncement);
-// const nonAnnouncements = filteredPostData.filter(post => !post.isAnnouncement);
-
-// // Reverse the non-announcement posts
-// const reversedNonAnnouncements = filterType ? [...nonAnnouncements].reverse() : [...nonAnnouncements].reverse();
-
-// console.log("REVERSEDNON", reversedNonAnnouncements);
-
-
-// // Combine announcements at the top with the reversed non-announcement posts
-// const finalPosts = [...announcements, ...reversedNonAnnouncements];
-
 // Separate announcements and non-announcements
 const announcements = filteredPostData.filter(post => post.type === 'announcement');
 const nonAnnouncements = filteredPostData.filter(post => post.type !== 'announcement');
 
 // Reverse the non-announcement posts
-const reversedNonAnnouncements = filterType ? [...nonAnnouncements].reverse() : [...nonAnnouncements].reverse();
+const reversedNonAnnouncements = filterType ? [...nonAnnouncements] : [...nonAnnouncements];
 
 console.log("REVERSEDNON", reversedNonAnnouncements);
 
@@ -545,40 +472,6 @@ console.log("FINAL", finalPosts);
   };
 
 
-  // const handleAnnouncement = async (index) => {
-  //   const postToEdit = postData[index];
-  //   console.log("EDITTTT", postToEdit);
-    
-  //   if (!postToEdit) return;
-  
-  //   const newType = postToEdit.type === 'announcement' ? 'post' : 'announcement';
-    
-  //   try {
-  //     const response = await fetch(`/api/posts/posts/${postToEdit.id}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Accept: "application/json",
-  //         "X-CSRF-Token": csrfToken,
-  //       },
-  //       body: JSON.stringify({ type: newType, user_id: String(postToEdit.user.id), visibility: "public" }),
-  //     });
-  
-  //     if (response.ok) {
-  //       // Update the post type in the state
-  //       setPostData(prevPostData =>
-  //         prevPostData.map((post, i) =>
-  //           i === index ? { ...post, type: newType } : post
-  //         )
-  //       );
-  //     } else {
-  //       console.error('Failed to update post type');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating post type:', error);
-  //   }
-  // };
-
   const handleAnnouncement = async (post) => {
     try {
       const newType = post.type === 'announcement' ? 'post' : 'announcement';
@@ -651,7 +544,7 @@ console.log("FINAL", finalPosts);
       {/* {polls.map((poll) => (
         <OutputPoll poll={poll} />
     ))} */}
-      {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').reverse().map((post, index) => (
+      {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => (
         <div key={post.id} className="">
           <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
             <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
@@ -724,10 +617,10 @@ console.log("FINAL", finalPosts);
           <div key={post.id}>
             {/* Conditional Rendering for Announcement */}
             {post.type === 'announcement' && (
-              <div className="mt-10 p-2 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
+              <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
                 <div className="mb-2 flex items-center gap-1">
                   <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
-                  <div className="text-center font-bold text-lg	ml-2">
+                  <div className="text-center font-bold text-xl	ml-2">
                     Announcement 🔊 🔊
                   </div>
                 </div>

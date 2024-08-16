@@ -44,10 +44,10 @@ function ProfileImage({ name, src, alt, className, rounded, tag }) {
         // src={`/storage/${src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}`}
         src={src ? source : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`}
         alt={alt}
-        className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-32 max-md:h-32 max-md:bottom-0`}
+        className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-24 max-md:h-24 max-md:bottom-0`}
       />
-      <div className="relative w-full h-0 flex justify-end mt-16 max-md:mt-10">
-        <div className="absolute w-5 h-5 bg-green-500 rounded-full border-2 border-white border-solid stroke-[2px] bottom-0.5 right-0 left-14 max-md:left-auto max-md:right-0 max-md:bottom-0" />
+      <div className="relative w-full h-0 flex justify-end mt-16 max-md:mt-2 max-md:mr-4">
+        <div className="absolute w-5 h-5 max-md:w-4 max-md:h-4 bg-green-500 rounded-full border-2 border-white border-solid stroke-[2px] bottom-0.5 right-0 left-14 max-md:left-auto max-md:right-0 max-md:bottom-0" />
       </div>
     </div>
   );
@@ -192,13 +192,13 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
   return (
     <>
       <header
-        className="flex overflow-hidden relative z-999 flex-col items-start px-7 pt-32 -mt-14 w-full min-h-[400px] max-md:px-5 max-md:max-w-full"
+        className="flex overflow-hidden relative z-999 flex-col items-start px-8 pt-32 max-md:pt-12 -mt-6 max-md:-mt-10 w-full min-h-[400px] max-md:h-[100px] max-md:px-5 max-md:max-w-full"
         onClick={handleEditBanner}
       >
-        <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-4/5 max-md:h-3/5 rounded-lg shadow-custom" />
+        <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-[290px] max-md:h-1/3" />
         <div onClick={handleIconClick}>
           <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} tag={tag} />
-          {isPopupOpen && (
+          {isPopupOpen && (~
             <EditProfilePhoto
               onClose={handleCloseClick}
               onSelectFile={handleSelectFile}
@@ -210,10 +210,10 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         </div>
         <div className="flex flex-col self-start px-5 -mt-16 -ml-10 max-md:-ml-5 max-md:mt-5">
           <div className="flex items-center ml-48 max-md:ml-0">
-            <h1 className="text-3xl font-extrabold text-neutral-800 relative mt-6 max-md:text-2xl max-md:mx-2">{name}</h1>
+            <h1 className="text-3xl font-extrabold text-neutral-800 relative -mt-4 max-md:-mt-4 max-md:text-2xl max-md:mx-2 text-start">{name}</h1>
             {/* <div className="text-lg ml-4 font-semibold text-neutral-800 text-opacity-50 mt-3 max-md:text-md max-md:mt-1">{username}</div> */}
           </div>
-          <div className="mt-0 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-2 max-md:-mt-4 ">{status}</div>
+          <div className="-mt-2 text-xs font-semibold text-neutral-800 text-opacity-50 ml-48 max-md:text-sm max-md:ml-2 max-md:-mt-4 ">{status}</div>
         </div>
       </header>
       {selectedFile && !croppedImage && (

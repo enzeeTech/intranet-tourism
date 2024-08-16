@@ -133,8 +133,10 @@ export default function UserDetail() {
         setFormData((prevFormData) => ({
             ...prevFormData,
             employmentPosts: updatedEmploymentPosts,
+            phone: newData.phone || prevFormData.phone,
         }));
     };
+
     const handlePhotoChange = (newPhoto) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -178,7 +180,7 @@ export default function UserDetail() {
                 FfData.append('phone_no', newFormData.whatsapp);
             }
             if (newFormData.name) {
-                FfData.append('name', user.name);
+                FfData.append('name', newFormData.name);
             }
     
             // Check if photo is a file or a URL
@@ -203,17 +205,12 @@ export default function UserDetail() {
                 updateUsername(newFormData)
             ]);
     
-            const profileResponseData = await profileResponse.json();
-            const userResponseData = await userResponse.json();
-    
             if (profileResponse.ok && userResponse.ok) {
                 setOriginalFormData(newFormData);
-                setIsEditingBio(false);
                 openSaveNotification();
                 setTimeout(closeSaveNotification, 1200);
-                console.log('Data updated successfully:', profileResponseData, userResponseData);
             } else {
-                console.error('Error updating data:', profileResponseData, userResponseData);
+                console.error('Error updating data:', await profileResponse.json(), await userResponse.json());
             }
         } catch (error) {
             console.error('Error updating data:', error);
@@ -254,18 +251,11 @@ const handleSaveDepartment = async (index) => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-    
-        const data = await response.json();
+
         setOriginalFormData(formData);
-        setOriginalPhoto(photo);
-        if (index === 0) {
-            setIsEditingDepartment1(false);
-        } else if (index === 1) {
-            setIsEditingDepartment2(false);
-        }
+        setIsEditingDepartments((prev) => prev.map((isEditing, i) => (i === index ? false : isEditing)));
         openSaveNotification();
         setTimeout(closeSaveNotification, 1200);
-        console.log(`Department ${index + 1} Information updated successfully:`, data);
     } catch (error) {
         console.error(`Error updating Department ${index + 1} Information:`, error);
     }
@@ -323,7 +313,7 @@ return (
         <main className="xl:pl-96 w-full">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <div>
-                    <div className="w-full bg-white h-[485px] shadow-custom rounded-lg">
+                    <div className="profile-header w-full bg-white h-[485px] max-md:h-[385px] shadow-custom rounded-lg ml-8">
                         <ProfileHeader
                             backgroundImage={profileData.backgroundImage}
                             profileImage={profileData.profileImage}
@@ -353,7 +343,7 @@ return (
                                         <ProfileIcons
                                             icon1={profileData.icon1}
                                             icon2={profileData.icon2}
-                                            onEdit={handleEditBio}
+                                            onEdit={() => handleEditBio()}
                                             isFirstIcon
                                         />
                                     </div>
@@ -374,7 +364,7 @@ return (
                                     </div>
                                 </section>
                                 <div className="separator"></div>
-                                {sortedEmploymentPosts && sortedEmploymentPosts.length > 0 && sortedEmploymentPosts.map((employmentPost, index) => (
+                                {formData.employmentPosts && formData.employmentPosts.length > 0 && formData.employmentPosts.map((employmentPost, index) => (
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                             <div className="flex items-center justify-between">
                                                 <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
