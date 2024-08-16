@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// const CommunityItem = ({ name, category, imgSrc, altText }) => (
-//   <article className="flex items-start w-full gap-3 px-4 py-1 mt-0">
-//     <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase ">
-//       <img src={imgSrc} alt={altText} className="aspect-square w-[75px] rounded-md " />
-//     </div>
-//     <div className="flex flex-col mt-1.5 text-md font-bold">
-//       <h2>{name}</h2>
-//       <p className="text-xs font-semibold text-neutral-600">{category}</p>
-//     </div>
-//   </article>
-// );
-
 const CommunityItem = ({ name, category, imgSrc, altText }) => (
   <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
     <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase">
@@ -27,7 +15,6 @@ const CommunityItem = ({ name, category, imgSrc, altText }) => (
     </div>
   </article>
 );
-
 
 function MyComponent() {
   const [communities, setCommunities] = useState([]);
@@ -55,7 +42,7 @@ function MyComponent() {
       setCommunities(
         communityData
           .sort((a, b) => b.createdAt - a.createdAt)
-          .slice(0, 6)
+          .slice(0, 5) // Limit to 5 latest communities
       );
     } catch (error) {
       console.error('Error fetching communities:', error);
