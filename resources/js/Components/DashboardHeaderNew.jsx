@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { usePage } from '@inertiajs/react';
 import NotificationPopup from '../Components/Noti-popup-test';
+import BirthdayNotificationPopup from '../Components/BirthdayNotificationPopup';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -15,32 +16,55 @@ export default function Header({ setSidebarOpen }) {
     const [userData, setUserData] = useState({
         name: "",
         profileImage: "",
+        birthday: "", // Assuming the user's birthday is provided by the API
     });
 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const [isActive, setIsActive] = useState(false);
+    const [isBirthdayPopupVisible, setIsBirthdayPopupVisible] = useState(false);
+    const [isBirthdayHovered, setIsBirthdayHovered] = useState(false);
+    const [isBellHovered, setIsBellHovered] = useState(false);
+    const [isBirthdayActive, setIsBirthdayActive] = useState(false);
+    const [isBellActive, setIsBellActive] = useState(false);
     const [csrfToken, setCsrfToken] = useState(null);
 
     const notificationRef = useRef();
+    const birthdayNotificationRef = useRef();
 
     const togglePopup = () => {
         setIsPopupVisible(!isPopupVisible);
-        setIsActive(!isActive);
+        setIsBellActive(!isBellActive);
     };
 
-    const handleMouseEnter = () => {
-        setIsHovered(true);
+    const toggleBirthdayPopup = () => {
+        setIsBirthdayPopupVisible(!isBirthdayPopupVisible);
+        setIsBirthdayActive(!isBirthdayActive);
     };
 
-    const handleMouseLeave = () => {
-        setIsHovered(false);
+    const handleBellMouseEnter = () => {
+        setIsBellHovered(true);
+    };
+
+    const handleBellMouseLeave = () => {
+        setIsBellHovered(false);
+    };
+
+    const handleBirthdayMouseEnter = () => {
+        setIsBirthdayHovered(true);
+    };
+
+    const handleBirthdayMouseLeave = () => {
+        setIsBirthdayHovered(false);
     };
 
     const handleClickOutside = (event) => {
         if (notificationRef.current && !notificationRef.current.contains(event.target)) {
             setIsPopupVisible(false);
-            setIsActive(false);
+            setIsBellActive(false);
+        }
+
+        if (birthdayNotificationRef.current && !birthdayNotificationRef.current.contains(event.target)) {
+            setIsBirthdayPopupVisible(false);
+            setIsBirthdayActive(false);
         }
     };
 
@@ -71,12 +95,14 @@ export default function Header({ setSidebarOpen }) {
             .then(({ data }) => {
                 console.log("DATA", data);
                 
-                // const firstName = data.name.split(' ')[0];
                 setUserData(pv => ({
                     ...pv, ...data,
                     name: data.name,
-                    profileImage: data.profile?.image
+                    profileImage: data.profile?.image,
+                    birthday: data.profile?.birthday, // Assuming the API provides birthday
                 }));
+
+                checkBirthday(data.profile?.birthday);
             })
             .catch((error) => {
                 console.error("Error fetching user data:", error);
@@ -95,8 +121,20 @@ export default function Header({ setSidebarOpen }) {
             : `/avatar/${userData.profileImage}`;
     };
 
+    const checkBirthday = (birthday) => {
+        if (!birthday) return;
+
+        const today = new Date();
+        const birthDate = new Date(birthday);
+
+        if (today.getMonth() === birthDate.getMonth() && today.getDate() === birthDate.getDate()) {
+            toggleBirthdayPopup();
+        }
+    };
+
     const handleLogout = (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent the default form submission behavior
+        
         fetch('/logout', {
             method: 'POST',
             headers: {
@@ -104,24 +142,39 @@ export default function Header({ setSidebarOpen }) {
                 'X-CSRF-Token': csrfToken,
             },
         })
-            .then(() => {
-                window.location.href = '/';
+            .then((response) => {
+                if (response.ok) {
+                    window.location.href = '/'; // Redirect after successful logout
+                } else {
+                    throw new Error('Failed to logout');
+                }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => console.error('Error logging out:', err));
     };
+    
 
     const userNavigation = [
         { name: 'Your profile', href: '../profile' },
         { name: 'Log out', href: '/logout', onClick: handleLogout },
     ];
 
-    const getIconSrc = () => {
-        if (isActive) {
+    const getBellIconSrc = () => {
+        if (isBellActive) {
             return "/assets/bell-active.svg";
-        } else if (isHovered) {
+        } else if (isBellHovered) {
             return "/assets/bell-hover.svg";
         } else {
             return "/assets/bell.svg";
+        }
+    };
+
+    const getBirthdayIconSrc = () => {
+        if (isBirthdayActive) {
+            return "/assets/Birthday Active.svg";
+        } else if (isBirthdayHovered) {
+            return "/assets/Birthday Hover.svg";
+        } else {
+            return "/assets/Birthday Inactive.svg";
         }
     };
 
@@ -158,15 +211,35 @@ export default function Header({ setSidebarOpen }) {
                     />
                 </form>
                 <div className="flex items-center gap-x-4 lg:gap-x-6">
+                    {/* Birthday Notification */}
+                    <div className="relative" ref={birthdayNotificationRef}>
+                        <button
+                            type="button"
+                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
+                            onClick={toggleBirthdayPopup}
+                            onMouseEnter={handleBirthdayMouseEnter}
+                            onMouseLeave={handleBirthdayMouseLeave}
+                        >
+                            <img src={getBirthdayIconSrc()} className="w-6 h-6" aria-hidden="true" />
+                        </button>
+                        {isBirthdayPopupVisible && (
+                            <BirthdayNotificationPopup 
+                                userData={userData} 
+                                onClose={() => setIsBirthdayPopupVisible(false)} 
+                            />
+                        )}
+                    </div>
+
+                    {/* Bell Notification */}
                     <div className="relative" ref={notificationRef}>
                         <button
                             type="button"
                             className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
                             onClick={togglePopup}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
+                            onMouseEnter={handleBellMouseEnter}
+                            onMouseLeave={handleBellMouseLeave}
                         >
-                            <img src={getIconSrc()} className="w-6 h-6" aria-hidden="true" />
+                            <img src={getBellIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
                         {isPopupVisible && (
                             <NotificationPopup />
@@ -176,7 +249,7 @@ export default function Header({ setSidebarOpen }) {
                     {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                    {/* Profile dropdown */} {/*//------------------------//*/}
+                    {/* Profile dropdown */}
                     <Menu as="div" className="relative">
                         <Menu.Button className="-m-1.5 flex items-center p-1.5">
                             <span className="sr-only">Open user menu</span>

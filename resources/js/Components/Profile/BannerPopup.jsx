@@ -28,23 +28,18 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const handleCropImage = async () => {
-    try {
-      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
-      setCroppedImage(croppedImg); // Set the cropped image as the preview
-    } catch (e) {
-      console.error("Error cropping image:", e);
-    }
-  };
-
-  const handleSave = async () => {
-    if (!croppedImage) {
-      console.error("No cropped image to save");
+  const handleCropAndSave = async () => {
+    if (!croppedImage || !croppedAreaPixels) {
+      console.error("No image or cropped area to save");
       return;
     }
 
     try {
-      const response = await fetch(croppedImage);
+      // Crop the image
+      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
+
+      // Convert cropped image to a blob and create a file
+      const response = await fetch(croppedImg);
       const blob = await response.blob();
       const file = new File([blob], 'profile.jpg', { type: blob.type });
 
@@ -73,7 +68,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
 
       const data = await uploadResponse.json();
       if (data.success) {
-        setPhoto(croppedImage); // Update the photo URL with the cropped image
+        setPhoto(croppedImg); // Update the photo URL with the cropped image
         onSave(); // Trigger the onSave callback
         console.log("File uploaded successfully:", data);
         window.location.reload();
@@ -81,46 +76,46 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
         console.error("Error uploading file:", data);
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error cropping or uploading file:", error);
       window.location.reload();
     }
   };
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={onClose}
     >
       <div
-        className="flex flex-col py-4 px-8 bg-white rounded-3xl shadow-custom max-w-[600px]" // Increased max width for larger crop area
+        className="flex flex-col py-6 px-8 bg-white rounded-2xl shadow-custom max-w-[600px]" // Increased max width for larger crop area
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center text-neutral-800">
-          <div className="text-xl font-bold">{title}</div>
+          <div className="flex justify-start w-full text-xl font-bold my-1">{title}</div>
           <div className="flex gap-5 mt-4 text-base font-medium">
             {croppedImage ? (
-              <div className="relative w-[500px] h-[400px]"> {/* Larger cropper area */}
+              <div className="relative w-[500px] h-[300px]"> {/* Adjusted cropper area to match aspect ratio */}
                 <Cropper
                   image={croppedImage}
                   crop={crop}
                   zoom={zoom}
-                  aspect={1}
+                  aspect={3 / 1} // Set to a rectangular aspect ratio, e.g., 16:9
                   onCropChange={setCrop}
                   onCropComplete={handleCropComplete}
                   onZoomChange={setZoom}
                 />
               </div>
             ) : (
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
-                className="shrink-0 aspect-square w-[27px] cursor-pointer"
-                onClick={handleClickImg}
-              />
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f866987dac766e7c7baf2f103208e42a078a207c09f4684986fefda5837d21a?"
+                  className="shrink-0 aspect-square w-[270px] h-[90px] cursor-pointer bg-gray-100 rounded-lg"
+                  onClick={handleClickImg}
+                />
             )}
           </div>
           <div
-            className="flex-auto my-auto cursor-pointer mt-5" // Moved below and added margin-top for spacing
+            className="flex justify-start w-full cursor-pointer my-2" // Moved below and added margin-top for spacing
             onClick={handleClickImg}
           >
             Choose photo from the device
@@ -130,10 +125,11 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
             accept="image/*"
             ref={fileInputRef}
             style={{ display: "none" }}
+            className="w-full"
             onChange={handleFileChange}
           />
         </div>
-        <div className="flex gap-2 self-end mt-3.5 mb-4 font-bold text-center">
+        <div className="flex gap-2 self-end mt-3.5 mb-2 font-bold text-center">
           <div
             className="file-names-container flex flex-wrap gap-2"
             style={{
@@ -145,7 +141,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           >
             {fileNames.map((name, index) => (
               <div
-                className="flex items-center px-2 py-1 bg-white rounded-lg shadow"
+                className="flex items-center px-2 py-1 bg-white rounded-2xl shadow"
                 key={index}
                 style={{
                   maxWidth: "150px",
@@ -166,15 +162,9 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-sm text-white px-4 py-2 rounded-full"
-            onClick={handleCropImage}
+            onClick={handleCropAndSave} // Combined Crop and Save function
           >
-            Crop
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-sm text-white px-4 py-2 rounded-full"
-            onClick={handleSave}
-          >
-            Save
+            Crop & Save
           </button>
         </div>
       </div>

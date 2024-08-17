@@ -30,7 +30,17 @@
       width:100%;
   }
 }
-  
+.status-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 25px;
+  width: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
   .card-header {
     position: relative;
   }
@@ -60,12 +70,9 @@
   }
   
   .staff-member-name {
-    text-align: center;
     margin-top: 5%;
-    display: flex; /* Use flexbox for alignment */
-    justify-content: center; /* Center items horizontally */
+    justify-content: start; /* Center items horizontally */
     align-items: center; /* Center items vertically */
-    margin-top: 10%;
     font-size: 14px;
     font-weight: bold;
     font-family: 'Nunito Sans';

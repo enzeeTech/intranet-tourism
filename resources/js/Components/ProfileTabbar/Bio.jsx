@@ -21,23 +21,6 @@ function ProfileBio({
         }
     }, [formData, isEditing]);
 
-    const handleClickOutside = (event) => {
-        if (formRef.current && !formRef.current.contains(event.target)) {
-            onCancelBio();
-        }
-    };
-
-    useEffect(() => {
-        if (isEditing) {
-            document.addEventListener('mousedown', handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [isEditing]);
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setBioFormData((prevData) => ({
@@ -164,7 +147,7 @@ function ProfileBio({
             )}
             {isPhotoChangeNotificationOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg">
                         <h2 className="text-xl font-bold mb-2">Photo Change Request</h2>
                         <p>The staff’s photo change request has been submitted for review.</p>
                         <div className="flex justify-end mt-4">
