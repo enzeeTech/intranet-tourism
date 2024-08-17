@@ -32,52 +32,6 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
     }
   };
 
-  // const handleDownload = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch(`/api/resources/resources?id=${file.id}`);
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const data = await response.json();
-  //     const fileUrl = data.path;
-  //     window.open(fileUrl, '_blank');
-  //   } catch (error) {
-  //     console.error("Failed to download the file:", error);
-  //   }
-  // };
-  // const handleDownload = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch(`/api/resources/resources?id=${file.id}`);
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const data = await response.json();
-  //     console.log("API response:", data); // Log the entire API response to check its structure
-  
-  //     const fileObject = data.data.data.find(f => f.id === file.id); // Find the file object in the data array
-  
-  //     if (!fileObject) {
-  //       throw new Error("File not found in the API response");     
-  //     }
-      
-  //     const fileUrl = `/storage/${fileObject.path}`;    // Extract the file path
-  //     console.log("FILE_PATH", fileObject);
-      
-  //     console.log("File path:", fileUrl);    // Log the file path to verify
-  
-  //     const link = document.createElement('a');
-  //     link.href = fileUrl;                   // Ensure this URL is correct
-  //     link.download = fileObject.metadata.original_name; // Use a default name if fileObject.name is not available
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   } catch (error) {
-  //     console.error("Failed to download the file:", error);
-  //   }
-  // };
-
 
   const handleDownload = async (e) => {
     e.preventDefault();
@@ -122,16 +76,6 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       console.error("Failed to download the file:", error);
     }
   };
-  
-  
-  
-  
-
-  // const handleViewClick = (e) => {
-  //   e.stopPropagation();
-  //   onFileSelect(file); // Select this file for admin management
-  // };
-
 
   const handleViewClick = (e) => {
     e.preventDefault();
