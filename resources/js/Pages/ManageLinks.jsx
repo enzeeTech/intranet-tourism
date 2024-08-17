@@ -129,6 +129,7 @@ const Pautan = () => {
       return;
     } else {
       setUrlError('');
+      window.location.reload();
     }
 
     const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);

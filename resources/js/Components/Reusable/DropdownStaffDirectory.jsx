@@ -82,7 +82,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
           placeholder="Select Department"
           className="font-bold dropdown-header-input"
         />
-        <img style={{ width: '15px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
+        <img style={{ width: '15px', marginRight: '10px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
       </div>
       {isOpen && (
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>

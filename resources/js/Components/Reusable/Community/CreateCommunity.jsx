@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
 
 function Header({ title }) {
@@ -11,13 +11,21 @@ function Header({ title }) {
 
 function Avatar({ src, alt, onImageChange }) {
   const handleClick = () => {
-    document.getElementById('avatarInput').click();
+    document.getElementById("avatarInput").click();
   };
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        <img loading="lazy" src={src} alt={alt} className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center" />
+      <div
+        className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl"
+        onClick={handleClick}
+      >
+        <img
+          loading="lazy"
+          src={src}
+          alt={alt}
+          className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center"
+        />
       </div>
       <input
         type="file"
@@ -33,7 +41,12 @@ function Avatar({ src, alt, onImageChange }) {
 function UserInfo({ name, role, src }) {
   return (
     <div className="flex gap-4 self-stretch mt-2 text-neutral-800">
-      <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px]" />
+      <img
+        loading="lazy"
+        src={src}
+        alt=""
+        className="shrink-0 aspect-square w-[42px]"
+      />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
         <p className="-mt-1 text-sm">{role}</p>
@@ -42,58 +55,70 @@ function UserInfo({ name, role, src }) {
   );
 }
 
-function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText, onCancel, onCreate }) {
-  const [departmentName, setDepartmentName] = useState('');
+function Card({
+  title,
+  imgSrc,
+  imgAlt,
+  user,
+  description,
+  cancelText,
+  createText,
+  onCancel,
+  onCreate,
+}) {
+  const [communityName, setCommunityName] = useState("");
   const [imageSrc, setImageSrc] = useState(imgSrc);
-  const [selectedType, setSelectedType] = useState('');
-  const [departmentDescription, setDepartmentDescription] = useState('');
+  const [imageBase64, setImageBase64] = useState(""); // Base64 image string
+  const [selectedType, setSelectedType] = useState("");
+  const [communityDescription, setCommunityDescription] = useState("");
   const csrfToken = useCsrf();
 
   const handleImageChange = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
+      setImageBase64(reader.result); // Set the base64 string
     };
     reader.readAsDataURL(file);
   };
 
   const handleSubmit = async () => {
     const data = {
-      name: departmentName,
-      banner: imageSrc,
-      description: departmentDescription,
+      name: communityName,
+      banner: imageBase64, // Send the base64 string
+      description: communityDescription,
       type: selectedType,
       created_by: user.name,
       updated_by: user.name,
     };
-  
+
     const options = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        "X-CSRF-Token": csrfToken 
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRF-Token": csrfToken,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     };
-  
+
     try {
-      const response = await fetch('/api/communities/communities', options);
+      const response = await fetch("/api/communities/communities", options);
       const text = await response.text();
-  
+
       if (!response.ok) {
-        console.error('Server response not OK:', text);
-        throw new Error('Failed to create department');
+        console.error("Server response not OK:", text);
+        throw new Error("Failed to create community");
       }
-  
+
       const responseData = text ? JSON.parse(text) : {};
-      console.log('Department created:', responseData.data);
+      console.log("Community created:", responseData.data);
       onCreate(responseData.data);
       window.location.reload(); // Reload the page after successful creation
     } catch (error) {
-      console.error('Error creating department:', error.message);
+      console.error("Error creating community:", error.message);
     }
-  }; 
+  };
 
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
@@ -103,16 +128,16 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         <input
           type="text"
           placeholder="Community name"
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
+          value={communityName}
+          onChange={(e) => setCommunityName(e.target.value)}
           className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
         />
-        <UserInfo name={user.name} role={user.role} src={user.src} />
+        <UserInfo name={user.name} role={user.role} src={user.profileImage} />
         <input
           type="text"
           placeholder={description}
-          value={departmentDescription}
-          onChange={(e) => setDepartmentDescription(e.target.value)}
+          value={communityDescription}
+          onChange={(e) => setCommunityDescription(e.target.value)}
           className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
         />
         <select
@@ -123,13 +148,18 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <option value="">Select Type</option>
           <option value="private">Private</option>
           <option value="public">Public</option>
-          <option value="all">All</option>
         </select>
         <div className="flex gap-5 justify-between self-end mt-6 text-sm text-center whitespace-nowrap">
-          <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
+          <button
+            className="my-auto font-semibold text-neutral-800"
+            onClick={onCancel}
+          >
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-3xl" onClick={handleSubmit}>
+          <button
+            className="justify-center px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-3xl"
+            onClick={handleSubmit}
+          >
             {createText}
           </button>
         </div>
@@ -138,18 +168,47 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   );
 }
 
-export default function CreateCommunity({ onCancel, onCreate }) {
-  const user = {
-    name: "Aisyah binte Musa",
+export default function CreateCommunity({ id, onCancel, onCreate }) {
+  const [user, setUserData] = useState({
+    name: "",
     role: "Admin",
-    src: "https://cdn.builder.io/api/v1/image/assets/TEMP/336116b2c015d4234b019c5e8ecf65be0d5d967c671f2fbd3512d78d09d2f956?apiKey=0fc34b149732461ab0a1b5ebd38a1a4f&"
+    profileImage: "",
+  });
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const { data } = await response.json();
+      setUserData((pv) => ({
+        ...pv,
+        ...data,
+        name: data.name,
+        profileImage:
+          data.profile && data.profile.image
+            ? `/storage/${data.profile.image}`
+            : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`,
+      }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, [id]);
 
   return (
     <Card
       title="Create New Community"
       imgSrc="/assets/uploadAnImage.svg"
-      imgAlt="Departments Logo"
+      imgAlt="Community Logo"
       user={user}
       type="Type"
       description="Description"

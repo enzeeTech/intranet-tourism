@@ -12,3 +12,14 @@
     max-height: 150px;
     overflow-y: auto;
 }
+
+.react-tel-input .flag-dropdown {
+    margin-right: 10px;
+}
+
+.react-tel-input .form-control {
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding-left: 8px;
+    font-size: 14px;
+}

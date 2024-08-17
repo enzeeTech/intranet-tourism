@@ -15,6 +15,11 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
     const [tags, setTags] = useState([]);
+    const [mediaTagCount, setMediaTagCount] = useState(0);
+    // const [peopleCount, setPeopleCount] = useState(0);
+    const [chosenPeople, setChosenPeople] = useState([]); // Added chosenPeople state
+
+
     const textAreaRef = useRef(null);
     const csrfToken = useCsrf();
 
@@ -24,63 +29,64 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
 
     const handleClickSend = () => {
         const formData = new FormData();
-
+    
+        // Append common fields
+        formData.append("user_id", userId);
+        formData.append("type", "post");
+        formData.append("visibility", "public");
+    
         if (!inputValue) {
-            formData.append("user_id", userId); // Use the userId prop here
-            // formData.append('type', 'post');
-            formData.append("type", "post");
-            formData.append("visibility", "public");
             formData.append("tag", JSON.stringify(tags));
             attachments.forEach((file, index) => {
                 formData.append(`attachments[${index}]`, file);
             });
-
-            if (includeAccessibilities) {
-                formData.append("accessibilities[0][accessable_type]", filterType);
-                formData.append("accessibilities[0][accessable_id]", filterId);
-            }
-        }
-        else {
-            formData.append("user_id", userId); // Use the userId prop here
-            // formData.append('type', 'post');
-            formData.append("type", "post");
-            formData.append("visibility", "public");
+        } else {
             formData.append("content", inputValue);
-            formData.append("tag", JSON.stringify(tags));
-
             attachments.forEach((file, index) => {
                 formData.append(`attachments[${index}]`, file);
             });
-
-            if (includeAccessibilities) {
-                formData.append("accessibilities[0][accessable_type]", filterType);
-                formData.append("accessibilities[0][accessable_id]", filterId);
-            }
         }
-        
-
+    
+        // Handle tags with spaces after commas
+        if (tags.length > 0) {
+            const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+            formData.append("tag", formattedTags);
+        }
+    
+        // Handle mentions with spaces after commas
+        if (chosenPeople.length > 0) {
+            const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+            const formattedMentions = `[${mentions}]`;
+            formData.append("mentions", formattedMentions);
+        }
+    
+        if (includeAccessibilities) {
+            formData.append("accessibilities[0][accessable_type]", filterType);
+            formData.append("accessibilities[0][accessable_id]", filterId);
+        }
+    
         fetch("/api/posts/posts", {
             method: "POST",
             body: formData,
             headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
         })
             .then((response) => {
-                if (!response.ok)
-                    throw new Error("Network response was not ok");
+                if (!response.ok) throw new Error("Network response was not ok");
             })
-            .then((data) => {
+            .then(() => {
+                // Reset state
                 setInputValue("");
                 setAttachments([]);
                 setFileNames([]);
                 setTags([]);
-                // window.location.reload();
+                setChosenPeople([]); // Clear chosen people after sending
+                window.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
-                // window.location.reload();
             });
     };
-
+    
     const handleFileUpload = (file) => {
         setAttachments((prevAttachments) => [...prevAttachments, file]);
         setFileNames((prevFileNames) => [...prevFileNames, file.name]);
@@ -101,7 +107,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const handleClickImg = createFileInputHandler("image/*");
     const handleClickVid = createFileInputHandler("video/*");
     const handleClickDoc = createFileInputHandler(
-        "application/pdf, .doc, .docx, .txt, .xlsx"
+        "application/pdf, .doc, .docx, .txt, .xlsx, .ppt, .pptx"
     );
 
     const handleClickPoll = () => {
@@ -122,6 +128,16 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         setShowMediaTagPopup(false);
     };
 
+    const handleSaveTags = () => {
+        setMediaTagCount(tags.length); // Update the count when saving tags
+        closePopup(); // Close the popup
+    };
+
+    const handleSavePeople = (selectedPeople) => {
+        setChosenPeople(selectedPeople); // Update chosenPeople state
+        closePopup(); // Close the popup
+    };
+
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800">
             <div className="input-box-container  flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full">
@@ -134,62 +150,70 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                         className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline "
                     />
                     <div className="flex mt-7 items-center  justify-between ">
-                        <div className="flex gap-3 ">
-                            <button>
+                        <div className="flex gap-4 items-center">
+                            <button onClick={handleClickPoll}>
                                 <img
                                     loading="lazy"
                                     src="assets/inputpolls.svg"
-                                    alt="Icon 1"
-                                    className="w-[15px] h-auto"
-                                    onClick={handleClickPoll}
+                                    alt="Poll Icon"
+                                    className="w-[14px] h-[14px]"
                                 />
                             </button>
-                            <button>
+                            <button onClick={handleClickImg}>
                                 <img
                                     loading="lazy"
                                     src="assets/inputimg.svg"
-                                    alt="Icon 2"
-                                    className="w-[15px] h-auto"
-                                    onClick={handleClickImg}
+                                    alt="Image Icon"
+                                    className="w-[14px] h-[14px]"
                                 />
                             </button>
-                            <button>
+                            <button onClick={handleClickVid}>
                                 <img
                                     loading="lazy"
                                     src="assets/inputvid.svg"
-                                    alt="Icon 3"
-                                    className="w-[15px] h-auto"
-                                    onClick={handleClickVid}
+                                    alt="Video Icon"
+                                    className="w-[18px] h-[18px]"
                                 />
                             </button>
-                            <button>
+                            <button onClick={handleClickDoc}>
                                 <img
                                     loading="lazy"
                                     src="assets/inputdoc.svg"
-                                    alt="Icon 4"
-                                    className="w-[15px] h-auto"
-                                    onClick={handleClickDoc}
+                                    alt="Document Icon"
+                                    className="w-[14px] h-[14px]"
                                 />
                             </button>
-                            <button>
-                                <img
-                                    loading="lazy"
-                                    src={MediaTag}
-                                    alt="Icon 4"
-                                    className="w-[19px] h-auto"
-                                    onClick={handleClickMediaTag}
-                                />
+                            <button
+                                type="button"
+                                onClick={handleClickMediaTag}
+                                className="relative text-md text-blue-500 hover:text-blue-700"
+                            >
+                                <img src={MediaTag} alt="Tag Media" className="w-[18px] h-[18px]" />
+                                {mediaTagCount > 0 && (
+                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                        {mediaTagCount}
+                                    </span>
+                                )}
                             </button>
-                            <button>
+                            <button
+                                type="button"
+                                onClick={handleClickPeople}
+                                className="relative text-md text-blue-500 hover:text-blue-700"
+                            >
                                 <img
                                     loading="lazy"
                                     src="assets/inputpeople.svg"
-                                    alt="Icon 5"
-                                    className="w-[10px] h-auto"
-                                    onClick={handleClickPeople}
+                                    alt="People Icon"
+                                    className="w-[16px] h-[16px]"
                                 />
+                                {chosenPeople.length > 0 && (
+                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                        {chosenPeople.length}
+                                    </span>
+                                )}
                             </button>
                         </div>
+
                         <div
                             className="file-names-container flex flex-wrap gap-2"
                             style={{ minWidth: `${fileNames.length * 80}px` }}
@@ -218,12 +242,23 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 </div>
             </div>
             {showMediaTagPopup && (
-            <TagInput tags={tags} setTags={setTags} onClose={closePopup} />
+                <TagInput
+                tags={tags}
+                setTags={setTags}
+                onClose={closePopup}
+                onSave={handleSaveTags}
+                />
             )}
             {showPollPopup && (
                 <Polls onClose={closePopup} onCreatePoll={onCreatePoll} />
             )}
-            {showPeoplePopup && <People onClose={closePopup} />}
+            {showPeoplePopup && (
+                <People
+                    onClose={closePopup}
+                    chosenPeople={chosenPeople} // Pass chosenPeople state
+                    onSavePeople={handleSavePeople}
+                />
+            )}
         </section>
     );
 }

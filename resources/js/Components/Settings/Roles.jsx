@@ -89,40 +89,52 @@ export default function Roles() {
     };
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8">
-            <div className="sm:flex sm:items-center">
-                <div className="mt-5 mr-2 file-search-bar-title">
-                    <h2 className="text-xl font-bold">Roles</h2>
-                    <p className="mt-1 text-sm text-gray-600">
-                        Manage and assign roles to team members
-                    </p>
-                </div>
-                <div className="sm:flex-auto"></div>
-                <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <div className="flow-root">
+            <div className="container p-8 mx-auto">
+                <div className="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            Roles
+                        </h1>
+                        <p className="text-gray-600">
+                            Manage the role here for user.
+                        </p>
+                    </div>
                     <button
-                        type="button"
-                        className="block px-3 py-2 text-sm font-bold text-center text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={() => setIsPopupOpen(true)}
+                        className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-full"
                     >
-                        Assign as Admin
+                        Assign As Admin
                     </button>
                 </div>
-            </div>
-            <div className="flow-root mt-8">
-                <div className="-mx-4 -my-2 overflow-x-auto box-container sm:-mx-6 lg:-mx-8">
+                <div className="box-container -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-0 shadow-custom">
                     <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                         <table className="min-w-full divide-y divide-gray-300">
                             <thead>
                                 <tr>
-                                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                                    <th
+                                        scope="col"
+                                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-500 sm:pl-0"
+                                    >
                                         Name
                                     </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-500"
+                                    >
                                         Title
                                     </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-500"
+                                    >
                                         Status
                                     </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900" style={{ width: "16rem" }}>
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-500"
+                                        style={{ width: "12rem" }}
+                                    >
                                         Role
                                     </th>
                                 </tr>

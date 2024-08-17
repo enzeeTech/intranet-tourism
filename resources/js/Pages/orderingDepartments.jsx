@@ -196,10 +196,10 @@ const OrderingDepartments = () => {
                                                                         {...provided.draggableProps}
                                                                         className="bg-white border-t border-gray-200"
                                                                     >
-                                                                        <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                            <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
+                                                                        <td className="flex items-center px-6 py-4 text-base font-bold text-black whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                            <img src={item.imageUrl} alt={item.name} className="w-[100px] rounded-md object-cover mr-4" />
                                                                             {item.name}
-                                                                        </td>
+                                                                    </td>
                                                                         <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
                                                                             <div className="flex items-center">
                                                                                 <button

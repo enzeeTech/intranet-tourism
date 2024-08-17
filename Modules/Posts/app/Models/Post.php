@@ -55,7 +55,7 @@ class Post extends Model implements AuditableContract
                     'content' => ['string'],
                     'title' => ['string'],
                     'tag' => ['string'],
-                    'visibility' => ['string', 'required'],
+                    'visibility' => ['string'],
                     'pool_posting' => ['string'],
                     'likes' => ['string'],
                     'mentions' => ['string'],

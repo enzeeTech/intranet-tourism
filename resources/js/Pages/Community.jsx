@@ -6,11 +6,14 @@ import CommunityDropdown from '../Components/Reusable/Community/CommunityDropdow
 import CommunitySearchBar from '../Components/Reusable/Community/CommunitySearch';
 import CommunityCard from '../Components/Reusable/Community/CommunityCard';
 import Example from '@/Layouts/DashboardLayoutNew';
+import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
 
-const Community = () => {
+const Community = ({  }) => {
   const [departmentsList, setDepartmentsList] = useState([]);
+  const { props } = usePage();
+  const { id } = props; 
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
@@ -79,8 +82,9 @@ const Community = () => {
             onSearch={(value) => setSearchTerm(value)}
             toggleCreateCommunity={toggleCreateCommunity}
           />
+          <div className="department-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8"> </div>
           <CommunityDropdown onSelectFilter={handleFilterChange} />
-          <div className="staff-member-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 sm:p-4 md:p-6 lg:p-8">
+          <div className="dept-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
             {isLoading ? (
               <div className="mt-20 ml-32 loading-spinner"></div>
             ) : filteredDepartments.length === 0 ? (
@@ -134,7 +138,7 @@ const Community = () => {
                 </svg>
               </button>
             </div>
-            <CreateCommunity onCreate={handleNewDepartment} />
+            <CreateCommunity id={id} onCreate={handleNewDepartment} />
           </div>
         </div>
       )}

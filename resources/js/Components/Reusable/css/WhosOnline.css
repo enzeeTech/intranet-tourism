@@ -10,7 +10,8 @@
 
   .online-users {
     display: flex;
-    align-items: center;
+    text-align: left;
+    align-items: start;
     justify-content: start;
     overflow-x: auto;
   }

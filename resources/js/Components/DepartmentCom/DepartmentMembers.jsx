@@ -105,6 +105,7 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
 
 
 const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
 
@@ -135,6 +136,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
   }, [popupRef, closePopup]);
 
   return (
+    <a href={`/user/${id}`}>
     <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={title} isActive={isActive} />
@@ -153,6 +155,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
         )}
       </div>
     </div>
+    </a>
   );
 };
 
@@ -273,9 +276,9 @@ function DpMembers() {
     handleNewMemberAdded(newMember);
   };
 
-  // console.log(members);
-
+  
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
+  console.log("asasasa", displayedMembers);
 
   return (
     <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">
