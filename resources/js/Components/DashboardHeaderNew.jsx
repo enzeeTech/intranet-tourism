@@ -133,7 +133,8 @@ export default function Header({ setSidebarOpen }) {
     };
 
     const handleLogout = (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent the default form submission behavior
+        
         fetch('/logout', {
             method: 'POST',
             headers: {
@@ -141,11 +142,16 @@ export default function Header({ setSidebarOpen }) {
                 'X-CSRF-Token': csrfToken,
             },
         })
-            .then(() => {
-                window.location.href = '/';
+            .then((response) => {
+                if (response.ok) {
+                    window.location.href = '/'; // Redirect after successful logout
+                } else {
+                    throw new Error('Failed to logout');
+                }
             })
-            .catch((err) => console.error(err));
+            .catch((err) => console.error('Error logging out:', err));
     };
+    
 
     const userNavigation = [
         { name: 'Your profile', href: '../profile' },
