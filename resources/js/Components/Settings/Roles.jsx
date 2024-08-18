@@ -102,7 +102,7 @@ export default function Roles() {
                     data.data.data
                         .filter(userRole => {
                             const roleIds = Array.isArray(userRole.role_id) ? userRole.role_id : [userRole.role_id];
-                            return roleIds.includes(1) || roleIds.includes(2);  /
+                            return roleIds.includes(1) || roleIds.includes(2);  
                         })
                         .map(async (userRole) => {
                             const userResponse = await fetch(`/api/users/users/${userRole.model_id}?with[]=profile&with[]=employmentPosts`, {
