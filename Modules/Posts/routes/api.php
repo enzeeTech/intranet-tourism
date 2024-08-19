@@ -22,10 +22,17 @@ use Modules\Posts\Http\Controllers\PostController;
 
 // require_once 'crud.php';
 Route::group(['middleware' => ['auth:api']], function () {
+
     Route::apiResources([
         'posts' => PostController::class,
         'post_accessibilities' => PostAccessibilityController::class,
         'post_comment' => PostCommentController::class,
     ]);
-});
 
+    Route::prefix('post')->group(function () {
+
+        Route::put('/like/{id}', [PostController::class, 'likePost'])->name('post.like');
+        Route::put('/unlike/{id}', [PostController::class, 'unlikePost'])->name('post.unlike');
+
+    });
+});

@@ -8,6 +8,7 @@ import Excel from '../../../../../public/assets/ExcellIcon.svg'
 import PDF from '../../../../../public/assets/PDFIcon.svg'
 import DOC from '../../../../../public/assets/Docs.svg'
 import PowerPoint from '../../../../../public/assets/PowerPointIcon.svg'
+import TXT from '../../../../../public/assets/TXTIcon.png'
 import announce from '../../../../../public/assets/announcementIcon.svg'
 
 function Avatar({ src, alt }) {
@@ -136,6 +137,7 @@ function PostAttachments({ attachments }) {
                 attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
                 attachment.extension === 'xlsx' ? Excel :
                 attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
+                attachment.extension === 'txt' ? TXT :
                 'path/to/default-icon.png'
               }
               style={{ width: '48px', height: '48px', objectFit: 'contain' }}
@@ -270,6 +272,7 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [currentEditPost, setCurrentEditPost] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [likedPosts, setLikedPosts] = useState({});
   const csrfToken = useCsrf();
 
 
@@ -502,6 +505,55 @@ console.log("FINAL", finalPosts);
       console.error('Error updating post type:', error);
     }
   };
+
+    // Function to handle liking a post
+    const handleLike = async (postId) => {
+      try {
+        const response = await fetch(`/api/posts/post/like/${postId}`, {
+          method: 'PUT',
+          headers: { 'X-CSRF-Token': csrfToken },
+        });
+  
+        if (response.ok) {
+          setLikedPosts((prevLikedPosts) => ({
+            ...prevLikedPosts,
+            [postId]: true,
+          }));
+          fetchData(); // Refetch the data to update the post likes count
+        } else {
+          console.error("Failed to like the post");
+        }
+      } catch (error) {
+        console.error("Error liking the post:", error);
+      }
+    };
+  
+    // Function to handle unliking a post
+    const handleUnlike = async (postId) => {
+      try {
+        const response = await fetch(`/api/posts/post/unlike/${postId}`, {
+          method: 'PUT',
+          headers: { 'X-CSRF-Token': csrfToken },
+        });
+  
+        if (response.ok) {
+          setLikedPosts((prevLikedPosts) => ({
+            ...prevLikedPosts,
+            [postId]: false,
+          }));
+          fetchData(); // Refetch the data to update the post likes count
+        } else {
+          console.error("Failed to unlike the post");
+        }
+      } catch (error) {
+        console.error("Error unliking the post:", error);
+      }
+    };
+  
+    // Example function to determine if the user liked a post (use your logic)
+    const isPostLikedByUser = (post) => {
+      return likedPosts[post.id] || false;
+    };
   
 
   return (
@@ -541,9 +593,6 @@ console.log("FINAL", finalPosts);
           </article>
         </div>
       ))}
-      {/* {polls.map((poll) => (
-        <OutputPoll poll={poll} />
-    ))} */}
       {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => (
         <div key={post.id} className="">
           <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
@@ -612,111 +661,141 @@ console.log("FINAL", finalPosts);
             </div>
           </article>
         </div>
-        // )) : reversedFilteredPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => (
-        )) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => (
-          <div key={post.id}>
-            {/* Conditional Rendering for Announcement */}
-            {post.type === 'announcement' && (
-              <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
-                <div className="mb-2 flex items-center gap-1">
-                  <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
-                  <div className="text-center font-bold text-xl	ml-2">
-                    Announcement 🔊 🔊
+        )) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => {
+          // Parse the likes string
+          let likesCount = 0;
+          try {
+            const likesObject = JSON.parse(post.likes);
+            likesCount = likesObject.likes || 0;
+          } catch (error) {
+            // console.error('Error parsing likes:', error);
+          }
+
+          return (
+            <div key={post.id}>
+              {/* Conditional Rendering for Announcement */}
+              {post.type === 'announcement' && (
+                <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
+                  <div className="mb-2 flex items-center gap-1">
+                    <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
+                    <div className="text-center font-bold text-xl	ml-2">
+                      Announcement 🔊 🔊
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Main Post Content */}
-            <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
-              <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
-                <div className="flex gap-1 mt-2"></div>
-                <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
-                  <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                    <div className="flex gap-1.5 -mt-1">
-                      <img 
-                        loading="lazy" 
-                        src={
-                          post.userProfile.profile?.image 
-                              ? (
-                                  post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
-                                      ? post.userProfile.profile.image
-                                      : post.userProfile.profile.image.startsWith('avatar/')
-                                          ? `/storage/${post.userProfile.profile.image}`
-                                          : `/avatar/${post.userProfile.profile.image}`
-                              )
-                              : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-                      } 
-                        alt={post.user.name} 
-                        className="shrink-0 aspect-square w-[53px] rounded-image" 
-                      />
-                      <div className="flex flex-col my-auto">
-                        <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
-                        <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
+              {/* Main Post Content */}
+              <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
+                <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
+                  <div className="flex gap-1 mt-2"></div>
+                  <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                    <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+                      <div className="flex gap-1.5 -mt-1">
+                        <img 
+                          loading="lazy" 
+                          src={
+                            post.userProfile.profile?.image 
+                                ? (
+                                    post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
+                                        ? post.userProfile.profile.image
+                                        : post.userProfile.profile.image.startsWith('avatar/')
+                                            ? `/storage/${post.userProfile.profile.image}`
+                                            : `/avatar/${post.userProfile.profile.image}`
+                                )
+                                : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                        } 
+                          alt={post.user.name} 
+                          className="shrink-0 aspect-square w-[53px] rounded-image" 
+                        />
+                        <div className="flex flex-col my-auto">
+                          <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
+                          <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                          {post.accessibilities?.map((accessibility, index) => (
+                            <span key={index}>
+                              {accessibility.accessable_type}{": "}
+                            </span>
+                          ))}
+                          {post.departmentNames ? post.departmentNames : post.type}
+                        </span>
+                        <img 
+                          loading="lazy" 
+                          src="/assets/wallpost-dotbutton.svg" 
+                          alt="Options" 
+                          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" 
+                          onClick={() => togglePopup(index)} 
+                        />
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
-                        {post.accessibilities?.map((accessibility, index) => (
-                          <span key={index}>
-                            {accessibility.accessable_type}{": "}
-                          </span>
-                        ))}
-                        {post.departmentNames ? post.departmentNames : post.type}
-                      </span>
-                      <img 
-                        loading="lazy" 
-                        src="/assets/wallpost-dotbutton.svg" 
-                        alt="Options" 
-                        className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" 
-                        onClick={() => togglePopup(index)} 
-                      />
+                  </div>
+                  {isPopupOpen[index] && (
+                    <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => handleEdit(post)}
+                      >
+                        <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
+                        Edit
+                      </p>
+                      <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => confirmDelete(post.id)}
+                      >
+                        <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
+                        Delete
+                      </p>
+                      <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => handleAnnouncement(post)}
+                      >
+                        <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                        Announcement
+                      </p>
                     </div>
-                  </div>
+                  )}
+                </header>
+                <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                  {post.content}
                 </div>
-                {isPopupOpen[index] && (
-                  <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => handleEdit(post)}
-                    >
-                      <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
-                      Edit
-                    </p>
-                    <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => confirmDelete(post.id)}
-                    >
-                      <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
-                      Delete
-                    </p>
-                    <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => handleAnnouncement(post)}
-                    >
-                      <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
-                      Announcement
-                    </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                  {/* {post.tag.replace(/[\[\]"]/, '')} */}
+                  {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                {post.mentions?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <PostAttachments attachments={post.attachments} />
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2">
+                    {isPostLikedByUser(post) ? (
+                      <img
+                        src="/assets/Like.svg"
+                        alt="Unlike"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleUnlike(post.id)}
+                      />
+                    ) : (
+                      <img
+                        src="/assets/likeforposting.svg"
+                        alt="Like"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleLike(post.id)}
+                      />
+                    )}
+                    {likesCount > 0 && <span className="text-sm font-medium">{likesCount}</span>}
                   </div>
-                )}
-              </header>
-              <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-                {post.content}
-              </div>
-              <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
-                {post.tag.replace(/[\[\]"]/g, '')}
-              </p>
-              <PostAttachments attachments={post.attachments} />
-              <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-                <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-                <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-                <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-              </div>
-            </article>
-          </div>
-        ))
+                  <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" />
+                </div>
+              </article>
+            </div>
+          )
+        })
       }
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

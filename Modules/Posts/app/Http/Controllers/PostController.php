@@ -114,4 +114,46 @@ class PostController extends Controller
 
         return response()->noContent();
     }
+
+    public function likePost($id)
+    {
+        $post = Post::findOrFail($id);
+
+        $likesData = $post->likes ? json_decode($post->likes, true) : [];
+
+
+        $likesData['likes'] = isset($likesData['likes']) ? $likesData['likes'] + 1 : 1;
+
+
+        $post->likes = json_encode($likesData);
+
+        $post->save();
+
+        return response()->json([
+            'data' => $post
+        ]);
+    }
+
+
+    public function unlikePost($id)
+    {
+        $post = Post::findOrFail($id);
+
+        $likesData = $post->likes ? json_decode($post->likes, true) : [];
+
+        if (isset($likesData['likes']) && $likesData['likes'] > 0) {
+            $likesData['likes'] -= 1;
+        } else {
+            $likesData['likes'] = 0;
+        }
+
+        $post->likes = json_encode($likesData);
+
+
+        $post->save();
+
+        return response()->json([
+            'data' => $post
+        ]);
+    }
 }

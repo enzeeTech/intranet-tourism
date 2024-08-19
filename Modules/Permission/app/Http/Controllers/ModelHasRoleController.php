@@ -11,21 +11,23 @@ class ModelHasRoleController extends Controller
 {
     public function index()
     {
+        // Add a filter to only retrieve records with role_id 1 (Super Admin) or 2 (Department Admin)
+        $roles = ModelHasRole::whereIn('role_id', [1, 2])->paginate();
+
         return response()->json([
-            'data' => ModelHasRole::queryable()->paginate(),
+            'data' => $roles,
         ]);
     }
 
     public function show($id)
     {
         return response()->json([
-            'data' => ModelHasRole::where('model_id', $id)->queryable()->firstOrFail(),
+            'data' => ModelHasRole::where('model_id', $id)->firstOrFail(),
         ]);
     }
 
     public function store()
     {
-
         $user = User::with('roles')->findOrFail(request('model_id'));
 
         $validated = request()->validate(...ModelHasRole::rules('create'));
@@ -34,7 +36,6 @@ class ModelHasRoleController extends Controller
         $user->syncRoles([]);
 
         foreach ($roleIds as $roleId) {
-
             $role = Role::findOrFail($roleId);
             $user->assignRole($role);
         }
@@ -45,7 +46,7 @@ class ModelHasRoleController extends Controller
                 'user' => $user,
                 'role' => $assignedRoles,
             ],
-            'message' => 'User has been assigned for the role.',
+            'message' => 'User has been assigned to the role.',
         ]);
     }
 
@@ -59,7 +60,6 @@ class ModelHasRoleController extends Controller
         $user->syncRoles([]);
 
         foreach ($roleIds as $roleId) {
-
             $role = Role::findOrFail($roleId);
             $user->assignRole($role);
         }
@@ -70,10 +70,9 @@ class ModelHasRoleController extends Controller
                 'user' => $user,
                 'role' => $assignedRoles,
             ],
-            'message' => 'User has been assigned for the role.',
+            'message' => 'User has been assigned to the role.',
         ]);
     }
-
 
     public function destroy(ModelHasRole $modelHasRole)
     {
