@@ -104,11 +104,13 @@
 
 .color-picker {
   display: flex;
+
 }
 
 .color-option {
   display: flex;
   align-items: center;
+  width:30px;
 }
 
 .color-display {
