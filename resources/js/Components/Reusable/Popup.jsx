@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import React from 'react';
 import './Popup.css'; // Make sure to create the relevant CSS for styling
 
 const Popup = ({ isOpen, onClose, children }) => {
