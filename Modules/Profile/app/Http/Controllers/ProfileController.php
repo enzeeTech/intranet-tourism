@@ -20,12 +20,36 @@ class ProfileController extends Controller
      */
 
 
-    public function index()
-    {
-        return response()->json([
-            'data' => $this->shouldPaginate(Profile::queryable()),
-        ]);
+    public function index(Request $request)
+{
+    $query = Profile::query();
+
+    if ($request->has('filter')) {
+        $filters = $request->get('filter');
+
+        // Ensure $filters is an array
+        if (is_string($filters)) {
+            $filters = [$filters];
+        }
+
+        foreach ($filters as $filter) {
+            if ($filter === 'dob') {
+                $query->whereNotNull('dob');
+            }
+        }
     }
+
+    $query->select('bio', 'dob');
+
+    $paginate = $request->has('paginate') ? (bool) $request->get('paginate') : true;
+
+    $data = $paginate ? $this->shouldPaginate($query) : $query->get();
+
+    return response()->json([
+        'data' => $data,
+    ]);
+}
+
 
     public function show($id)
     {
