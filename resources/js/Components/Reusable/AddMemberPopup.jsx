@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import { useCsrf } from "@/composables";
 import './AddMemberPopup.css';
@@ -334,7 +336,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                 name: selectedPerson.name,  
                 role: title,
                 status: 'Online',
-                imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
+                imageUrl: selectedPerson.profile.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
                 workNo: workPhoneNumber || '',
                 phoneNo: selectedPerson.profile.phone_no,
                 isDeactivated: selectedPerson.is_active,
@@ -509,11 +511,15 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 </div>
                                 <div className="mb-4">
                                     <label className="block font-bold text-gray-700">Work Phone Number</label>
-                                    <input
-                                        type="text"
+                                    <PhoneInput
+                                        country={'my'}  // Set to the default country you prefer
                                         value={workPhoneNumber}
-                                        onChange={(e) => setWorkPhoneNumber(e.target.value)}
-                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                        onChange={setWorkPhoneNumber}
+                                        inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                        containerClass="phone-input-container"
+                                        buttonClass="phone-input-button"
+                                        dropdownClass="phone-input-dropdown"
+                                        disableDropdown={false}
                                     />
                                 </div>
                             </div>
