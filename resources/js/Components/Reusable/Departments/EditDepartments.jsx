@@ -173,7 +173,7 @@ function Card({
     <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center w-full px-6">
-        <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
+        <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange}/>
         <input
           type="text"
           placeholder="Department name"
