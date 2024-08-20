@@ -122,12 +122,14 @@ function BirthdayNotificationPopup({ onClose, userData }) {
                 {birthdays.length === 0 && (
                     <p className="text-sm text-gray-600 mt-1">No birthday today.</p>
                 )}
-                <button
-                    onClick={onClose}
-                    className="mt-2 text-sm text-blue-600 hover:underline block"
-                >
-                    Close
-                </button>
+                <div className="w-full flex justify-end">
+                    <button
+                        onClick={onClose}
+                        className="mt-2 text-sm text-blue-600 hover:underline block"
+                    >
+                        Close
+                    </button>
+                </div>
             </div>
 
             {/* Independent BirthdayCom Popup */}
