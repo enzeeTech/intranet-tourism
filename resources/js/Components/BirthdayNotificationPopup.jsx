@@ -16,7 +16,9 @@ function BirthdayNotificationPopup({ onClose, userData }) {
             let totalPages = 1;
 
             while (currentPage <= totalPages) {
-                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                // const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const response = await fetch(`/api/profile/profiles?filter[]=dob&paginate=false`);
+
                 const data = await response.json();
 
                 if (data && data.data && Array.isArray(data.data.data)) {
@@ -56,6 +58,9 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
             // Sort the birthday events by name alphabetically
             birthdayEvents.sort((a, b) => a.name.localeCompare(b.name));
+
+            console.log('birthdayEvents', birthdayEvents);
+            
 
             setBirthdays(birthdayEvents);
         } catch (error) {

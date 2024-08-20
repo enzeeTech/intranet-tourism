@@ -39,7 +39,7 @@ class ProfileController extends Controller
         }
     }
 
-    $query->select('bio', 'dob');
+    $query->select('bio', 'dob', 'image');
 
     $paginate = $request->has('paginate') ? (bool) $request->get('paginate') : true;
 
