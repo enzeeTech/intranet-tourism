@@ -24,7 +24,7 @@ function Avatar({ src, alt, onImageChange }) {
           loading="lazy"
           src={src}
           alt={alt}
-          className="aspect-square h-[200px] w-[400px] rounded-xl border-4 border-gray-200 object-cover object-center"
+          className="aspect-square w-full h-w/3 rounded-xl border-4 border-gray-200 object-cover object-center"
         />
       </div>
       <input
@@ -138,7 +138,7 @@ function Card({
           placeholder={description}
           value={communityDescription}
           onChange={(e) => setCommunityDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-[383px] rounded-md border border-solid border-neutral-300"
+          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-full rounded-md border border-solid border-neutral-300"
         />
         <select
           value={selectedType}

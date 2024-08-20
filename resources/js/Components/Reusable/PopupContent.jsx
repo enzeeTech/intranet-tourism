@@ -89,7 +89,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex justify-center items-center w-full pl-5">
+        <MenuButton className="inline-flex justify-center items-center w-full pl-5 max-md:pl-1">
           <img src={threeDotsIcon} alt="Options" className="h-auto w-auto" />
         </MenuButton>
       </div>
@@ -102,7 +102,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <MenuItem>
               {({ active, close }) => (
