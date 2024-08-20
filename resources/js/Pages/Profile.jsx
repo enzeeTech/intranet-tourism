@@ -434,9 +434,18 @@ export default function Profile() {
     return (
         <Example>
             <main className="xl:pl-96 w-full">
-                <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                    <div>
-                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] shadow-custom rounded-lg">
+                <div className="px-4                /* Default padding-left and padding-right */
+    py-6                /* Default padding-top and padding-bottom */
+    sm:px-6             /* Padding-left and padding-right for small screens */
+    sm:py-8            
+    lg:px-8            
+    lg:py-10            
+    mr-10                
+    sm:mr-12             
+    lg:mr-14             
+">
+                    <div className="w-full  ">
+                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] shadow-custom rounded-lg ">
                             <ProfileHeader
                                 backgroundImage={profileData.backgroundImage}
                                 profileImage={profileData.profileImage}

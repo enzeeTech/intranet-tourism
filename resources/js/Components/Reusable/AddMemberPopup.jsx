@@ -66,16 +66,21 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         fetchCurrentMembers();
     }, [departmentId]);
 
+    let debounceTimeout;
+
     useEffect(() => {
-        const debounceTimeout = setTimeout(() => {
-            if (searchTerm) {
+        clearTimeout(debounceTimeout);
+
+        if (searchTerm.trim() !== '') {
+            debounceTimeout = setTimeout(() => {
                 fetchAllSearchResults(searchTerm);
-            } else {
-                setSearchResults([]);
-            }
-        }, 300);
+            }, 300); 
+        } else {
+            setSearchResults([]);  
+        }
 
         return () => clearTimeout(debounceTimeout);
+
     }, [searchTerm]);
 
     useEffect(() => {
