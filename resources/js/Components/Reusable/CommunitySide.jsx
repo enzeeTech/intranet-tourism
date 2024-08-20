@@ -7,7 +7,7 @@ const CommunityItem = ({ name, category, imgSrc, altText }) => (
       <img
         src={imgSrc}
         alt={altText}
-        className="w-[140px] rounded-md object-cover"
+        className="w-[120px] h-[40px] rounded-md object-cover object-center"
       />
     </div>
     <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">

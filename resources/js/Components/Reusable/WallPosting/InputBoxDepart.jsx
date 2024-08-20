@@ -206,7 +206,7 @@ function ShareYourThoughtsDepart() {
             ref={textAreaRef}
             value={inputValue}
             onChange={handleChange}
-            placeholder="Share Your Thoughts..."
+            placeholder="Share Your fsdf..."
             style={textAreaStyle}
           />
 
