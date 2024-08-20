@@ -50,11 +50,7 @@ const CommunityInner = () => {
     }
   }, []);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  console.log('DEPARTMENT DATA', communityData);
+  console.log('DEPARTMENT DATA', departmentData);
 
   return (
     <Example>
@@ -62,9 +58,9 @@ const CommunityInner = () => {
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
           <CommunityWall
             communityID={getDepartmentIdFromQuery()}
-            communityHeader={communityData?.name}
-            communityDescription={communityData?.description}
-            communityBanner={communityData?.banner ? communityData.banner : 'assets/departmentsDefault.jpg'}
+            communityHeader={departmentData?.name}
+            communityDescription={departmentData?.description}
+            communityBanner={departmentData?.banner ? departmentData.banner : 'assets/departmentsDefault.jpg'}
             userId={id}
             onEditClick={handleEditClick}
           />
