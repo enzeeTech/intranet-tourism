@@ -528,19 +528,19 @@ const FileTable = ({ searchTerm }) => {
     };
 
     return (
-        <div className="w-full px-4 overflow-visible sm:px-0 lg:px-0">
+        <div className="w-full overflow-visible">
             <div className="flow-root mt-8">
                 <div className="overflow-visible">
-                    <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl border-spacing-1">
+                    <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
                         <thead>
                             <tr>
-                                <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">
+                                <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
                                     File Name
                                 </th>
-                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">
+                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                                     Uploaded By
                                 </th>
-                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">
+                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                                     Date Created
                                 </th>
                                 <th className="w-1/12 relative py-3.5">
@@ -586,7 +586,7 @@ const FileTable = ({ searchTerm }) => {
                                                 </div>
                                             ) : (
                                                 <div
-                                                    className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80 overflow-hidden text-ellipsis"
+                                                    className="text-sm font-bold mt-1 block w-full rounded-md py-2 border-2 border-transparent text-neutral-800 text-opacity-80 overflow-hidden text-ellipsis"
                                                     onDoubleClick={() =>
                                                         startEditing(
                                                             indexOfFirstItem +

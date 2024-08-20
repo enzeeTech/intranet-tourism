@@ -118,7 +118,7 @@ function BirthdayNotificationPopup({ onClose }) {
                 </p>
                 {renderBirthdays()}
                 {birthdays.length === 0 && (
-                    <p className="text-sm text-gray-600 mt-1">No birthdays today.</p>
+                    <p className="text-sm text-gray-600 mt-1">No birthday today.</p>
                 )}
                 <button
                     onClick={onClose}
