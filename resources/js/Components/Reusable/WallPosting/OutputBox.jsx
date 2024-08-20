@@ -685,7 +685,79 @@ console.log("FINAL", finalPosts);
                 </div>
               )}
 
+              {/* //birthday */}
+              {post.type === 'birthday' && (
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
+                  <div className="flex gap-1.5 -mt-1">
+                      <img 
+                        loading="lazy" 
+                        src={
+                          post.userProfile.profile?.image 
+                              ? (
+                                  post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
+                                      ? post.userProfile.profile.image
+                                      : post.userProfile.profile.image.startsWith('avatar/')
+                                          ? `/storage/${post.userProfile.profile.image}`
+                                          : `/avatar/${post.userProfile.profile.image}`
+                              )
+                              : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                      } 
+                        alt={post.user.name} 
+                        className="shrink-0 aspect-square w-[53px] rounded-image" 
+                      />
+                      <div className="flex flex-col my-auto">
+                        <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
+                        <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
+                      </div>
+                      <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                        {post.accessibilities?.map((accessibility, index) => (
+                          <span key={index}>
+                            {accessibility.accessable_type}{": "}
+                          </span>
+                        ))}
+                        {post.departmentNames ? post.departmentNames : post.type}
+                      </span>
+                      <img 
+                        loading="lazy" 
+                        src="/assets/wallpost-dotbutton.svg" 
+                        alt="Options" 
+                        className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" 
+                        onClick={() => togglePopup(index)} 
+                      />
+                    </div>
+                    </div>
+                    <div className="flex flex-col gap-1 text-xs font-semibold text-neutral-800">
+                      <div className="w-full border-b-2 mb-2 mt-2"></div>
+                                          
+                      {/* Attachments with overlayed content */}
+                      <div className="relative flex flex-wrap gap-2 mt-4">
+                        {post.attachments.map((attachment, idx) => (
+                          <div key={idx} className="relative w-full">
+                            <img
+                              src={`/storage/${attachment.path}`}
+                              alt={`Attachment ${idx + 1}`}
+                              className="rounded-xl w-full h-auto object-cover"
+                              style={{ maxHeight: '300px' }}  // Allowing the image to take up more vertical space
+                            />
+                            {idx === Math.floor(post.attachments.length / 2) && (
+                              <div className="absolute inset-0 flex justify-center items-center">
+                                <span className="text-5xl font-black text-center text-white text-opacity-90 bg-black bg-opacity-50 p-4 rounded-lg" style={{ maxWidth: '90%' }}>
+                                  {post.content}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                </article>
+              )}
+
+
+
               {/* Main Post Content */}
+              {post.type !== 'birthday' && (
               <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1 mt-2"></div>
@@ -793,6 +865,7 @@ console.log("FINAL", finalPosts);
                   <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" />
                 </div>
               </article>
+              )}
             </div>
           )
         })
