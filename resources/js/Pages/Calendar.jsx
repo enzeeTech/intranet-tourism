@@ -565,7 +565,7 @@ const dateStr = `${year}-${month}-${day}`;
                                         borderRadius: '2px',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        height: '100%',
+                                        height: '30px',
                                         width: '100%',
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../../../css/style.css';
 import { useCsrf } from '@/composables';
+import '../Birthdayfunction/birthday.css'
 
 const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
@@ -26,6 +27,18 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     e.preventDefault();
     setText(inputText);
   };
+
+  let source = null;
+
+  if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
+    source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
+  } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
+    source = `/storage/${loggedInUser.profile?.image}`;
+  } else {
+    source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
+      ? loggedInUser.profile?.image 
+      : `/avatar/${loggedInUser.profile?.image}`;
+  }
 
   const handleClickSend = () => {
     const formData = new FormData();
@@ -115,11 +128,11 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
           <div className="flex flex-row mb-2">
             <img
               loading="lazy"
-              src={profileImage}
-              className="shrink-0 aspect-square w-[38px] rounded-full"
+              src={source}
+              className="w-8 h-8 rounded-full mr-2"
               alt="Profile"
             />
-            <p className="my-auto text-xl ml-2">{loggedInUser.name}</p>
+            <p className="my-auto text-base">{loggedInUser.name}</p>
           </div>
         </div>
 
@@ -131,13 +144,13 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
             backgroundPosition: 'center',
           }}
         >
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleChange}
-            className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white text-3xl font-black"
-            placeholder="Make a wish..."
-          />
+<input
+  type="text"
+  value={inputValue}
+  onChange={handleChange}
+  className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white text-3xl font-black custom-placeholder"
+  placeholder="Make a wish..."
+/>
         </div>
 
         <div className="relative mt-2 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-16 xl:grid-cols-20 h-24 w-full overflow-x-auto border-2 rounded-2xl px-2 py-2">
