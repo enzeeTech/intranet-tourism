@@ -219,7 +219,7 @@ function ProfileDepartment({
                                         country={'my'}
                                         value={localFormData.phone}
                                         onChange={handlePhoneChange}
-                                        containerClass="w-full sm:ml-[5px] md:ml-[4px] lg:ml-[1px]" // Tailwind classes for margin adjustments
+                                        containerClass="w-full sm:ml-[5px] md:ml-[4px] lg:ml-[1px] max-md:px-3" // Tailwind classes for margin adjustments
                                         inputStyle={{ width: '100%', marginLeft: '0px' }}                                      />
                                     ) : (
                                         <div>
