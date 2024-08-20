@@ -22,6 +22,7 @@ class AuthSeeder extends Seeder
     {
         $superAdminRole = Role::create(['name' => 'superadmin', 'description' => 'Pentadbir Sistem']);
         $adminRole = Role::create(['name' => 'admin_department', 'description' => 'Pentadbir Jabatan']);
+        $communityAdminRole = Role::create(['name' => 'admin_community', 'description' => 'Pentadbir Komuniti']);
         $userRole = Role::create(['name' => 'user', 'description' => 'Pengguna']);
         Role::create(['name' => 'new_user', 'description' => 'Pengguna Baru']);
 
@@ -35,6 +36,10 @@ class AuthSeeder extends Seeder
                 ['user:department' => 'Manage department users'],
                 ['profile:department' => 'Manage department profiles'],
             ],
+            $communityAdminRole->id => [
+                ['community:all' => 'Manage community members'],
+                ['profile:community' => 'Manage community profiles'],
+            ],
             $userRole->id => [
                 ['user:own' => 'Manage own user'],
                 ['profile:own' => 'Manage own profile'],
@@ -42,9 +47,9 @@ class AuthSeeder extends Seeder
         ];
 
         foreach ($permissions as $roleId => $permissionList) {
-            collect($permissionList)->each(fn ($item) => Permission::firstOrCreate(['name' => key($item), 'description' => current($item)]));
+            collect($permissionList)->each(fn($item) => Permission::firstOrCreate(['name' => key($item), 'description' => current($item)]));
             $role = Role::findById($roleId);
-            $role->givePermissionTo(collect($permissionList)->flatMap(fn ($item) => $item)->keys()->toArray());
+            $role->givePermissionTo(collect($permissionList)->flatMap(fn($item) => $item)->keys()->toArray());
         }
 
         $admin = User::factory()->create(['email' => 'admin@enzee.com']);
