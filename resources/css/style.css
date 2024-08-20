@@ -49,13 +49,31 @@
   display: flex;
   align-items: center;
 }
+.custom-phone-input {
+  width: 40%; /* or specify any width you need */
+}
+
 
 .phone-input-button {
   border-radius: 50%;
   border: 2px solid #ccc;
+  margin-left: 0%;
 }
 
 .phone-input-dropdown {
   max-height: 150px;
   overflow-y: auto;
+}
+
+::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* White color with some opacity */
+  opacity: 1; /* Override browser's default opacity for placeholders */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(255, 255, 255, 0.7);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: rgba(255, 255, 255, 0.7);
 }

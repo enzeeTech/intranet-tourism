@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import '../../../../css/style.css';
-import { useCsrf } from "@/composables";
+import { useCsrf } from '@/composables';
 
 const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
-  const csrfToken = useCsrf();
   const [text, setText] = useState('Make a wish...');
+  const csrfToken = useCsrf();
   const [inputText, setInputText] = useState(text);
   const [inputValue, setInputValue] = useState("");
   const [attachments, setAttachments] = useState([]);
@@ -27,18 +27,6 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     setText(inputText);
   };
 
-  let source = null;
-
-  if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
-    source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
-  } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
-    source = `/storage/${loggedInUser.profile?.image}`;
-  } else {
-    source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
-      ? loggedInUser.profile?.image 
-      : `/avatar/${loggedInUser.profile?.image}`;
-  }
-
   const handleClickSend = () => {
     const formData = new FormData();
 
@@ -48,13 +36,19 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     formData.append("visibility", "public");
     formData.append("content", inputValue);
 
-    // Append the selected background image as an attachment
+    // Append the selected background image as an attachment if it's a supported format
     fetch(backgroundImage)
       .then(res => res.blob())
       .then(blob => {
-        const file = new File([blob], `background.${blob.type.split('/')[1]}`, { type: blob.type });
-        formData.append("attachments[]", file);
-        
+        const allowedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp'];
+        if (allowedFormats.includes(blob.type)) {
+          const file = new File([blob], `background.${blob.type.split('/')[1]}`, { type: blob.type });
+          formData.append("attachments[]", file);
+        } else {
+          alert('Only JPG, JPEG, PNG, WEBP, and BMP formats are supported for background images.');
+          return;
+        }
+
         // Append any additional attachments
         attachments.forEach((file, index) => {
           formData.append(`attachments[${index}]`, file);
@@ -92,6 +86,13 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
       const file = e.target.files[0];
       if (!file) return;
 
+      // Check if the selected file format is supported
+      const allowedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp'];
+      if (!allowedFormats.includes(file.type)) {
+        alert('Only JPG, JPEG, PNG, WEBP, and BMP formats are supported for background images.');
+        return;
+      }
+
       const fileUrl = URL.createObjectURL(file);
       setBackgroundImage(fileUrl); // Update background image with the selected file
 
@@ -101,7 +102,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     fileInput.click();
   };
 
-  const handleClickImg = createFileInputHandler("image/*");
+  const handleClickImg = createFileInputHandler("image/jpeg, image/png, image/webp, image/bmp");
 
   return (
     <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl w-full max-w-xl mx-auto">
@@ -114,7 +115,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
           <div className="flex flex-row mb-2">
             <img
               loading="lazy"
-              src={source}
+              src={profileImage}
               className="shrink-0 aspect-square w-[38px] rounded-full"
               alt="Profile"
             />
@@ -140,96 +141,96 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
         </div>
 
         <div className="relative mt-2 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-16 xl:grid-cols-20 h-24 w-full overflow-x-auto border-2 rounded-2xl px-2 py-2">
-          <img
+        <img
             loading="lazy"
-            src="/assets/Birthday-Template-1.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-1.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 1"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-2.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-2.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 2"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-2.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-2.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-3.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-3.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 3"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-3.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-3.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-4.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-4.jpg"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 4"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-4.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-4.jpg')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-5.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-5.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 5"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-5.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-5.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-6.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-6.jpg"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 6"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-6.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-6.jpg')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-7.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-7.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 7"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-7.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-7.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-8.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-8.jpg"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 8"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-8.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-8.jpg')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-9.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-9.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 9"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-9.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-9.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-10.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-10.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 10"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-10.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-10.png')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-11.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-11.jpg"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 11"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-11.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-11.jpg')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-12.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-12.jpg"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 12"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-12.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-12.jpg')}
           />
             <img
             loading="lazy"
-            src="/assets/Birthday-Template-1.svg"
-            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            src="/assets/Birthday-Template-1.png"
+            className="w-12 h-9 cursor-pointer rounded-lg mb-1.5"
             alt="image 1"
-            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.svg')}
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.png')}
           />
           {/* Additional images */}
         </div>

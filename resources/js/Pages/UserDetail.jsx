@@ -311,7 +311,7 @@ const tag="guest";
 return (
     <Example>
         <main className="xl:pl-96 w-full">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div className="px-1 py-10 sm:px-1 lg:px-8 lg:py-6 sm:mr-0 md:mr-7 lg:mr-9 mr-9">
                 <div>
                     <div className="profile-header w-full bg-white h-[485px] max-md:h-[385px] shadow-custom rounded-lg ml-8">
                         <ProfileHeader

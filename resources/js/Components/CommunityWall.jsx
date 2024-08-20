@@ -235,7 +235,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
 }
 
 
-export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
+export default function CommunityWall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
     <div className="flex flex-wrap mx-auto my-20 text-black justify-left max-w-7xl gap-y-10">
       <Adminsection

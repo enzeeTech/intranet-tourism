@@ -147,6 +147,7 @@ input[type="radio"]:checked + .color-display {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
   }
   
   .event-title {
@@ -223,8 +224,16 @@ input[type="radio"]:checked + .color-display {
     background-color: #ffffff;
     color: #333;
     border: 1px solid #ddd;
-    padding: 10px 15px 10px 15px;
+    padding: 10px 15px;
     border-radius: 10px;
+    width: 500px;
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;  /* Ensures long words break to the next line */
+    word-break: break-word; /* Forces breaking of long words */
+    white-space: normal;    /* Allows the text to wrap */
+    margin-left: auto;
+    margin-right:auto;
   }
   
   .custom-popover .popover-arrow {
