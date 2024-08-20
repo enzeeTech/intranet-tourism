@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Popup from './Reusable/Popup';
 import BirthdayCom from './Reusable/Birthdayfunction/birthdaypopup';
 
-function BirthdayNotificationPopup({ onClose }) {
+function BirthdayNotificationPopup({ onClose, userData }) {
+    // console.log("GGG", userData);
+
     const [birthdays, setBirthdays] = useState([]);
     const [isBirthdayComOpen, setIsBirthdayComOpen] = useState(false);
     const [selectedBirthday, setSelectedBirthday] = useState(null);
@@ -131,7 +133,7 @@ function BirthdayNotificationPopup({ onClose }) {
             {/* Independent BirthdayCom Popup */}
             {selectedBirthday && (
                 <Popup isOpen={isBirthdayComOpen} onClose={closeBirthdayComPopup}>
-                    <BirthdayCom profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} />
+                    <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} />
                 </Popup>
             )}
         </>
