@@ -147,6 +147,7 @@ input[type="radio"]:checked + .color-display {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
   }
   
   .event-title {
@@ -223,9 +224,31 @@ input[type="radio"]:checked + .color-display {
     background-color: #ffffff;
     color: #333;
     border: 1px solid #ddd;
-    padding: 10px 15px 10px 15px;
+    padding: 10px 15px;
     border-radius: 10px;
-  }
+    width: 90%;  /* Set a default width relative to the screen size */
+    max-width: 500px;  /* Ensure it doesn't exceed a certain width */
+    height: auto;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Optional: Media queries for finer control */
+@media (min-width: 768px) {
+    .custom-popover .popover-body {
+        width: 80%;  /* Slightly wider on medium screens */
+    }
+}
+
+@media (min-width: 1024px) {
+    .custom-popover .popover-body {
+        width: 70%;  /* Wider on large screens */
+    }
+}
+
   
   .custom-popover .popover-arrow {
     display: none;
