@@ -1,40 +1,3 @@
-// import React from 'react';
-// import EventItem from './EventItem';
-// import '../css/FeaturedEvents.css';
-// import arrowRight from '../../../../../public/assets/viewAllArrow.png';
-
-// const featuredEvents = [
-//   // This array should be fetched from your backend or passed as props
-//   { id: 1, date: 'January 19,2024,12:30 PM', title: 'Conference' },
-//   { id: 2, date: 'January 21,2024,08:00 AM', title: 'Corporate event' },
-//   { id: 3, date: 'February 12,2024,07:00 PM', title: 'Exhibition' },
-// ];
-
-// const FeaturedEvents = () => {
-//   return (
-//     <div className="featured-events-container border-2 shadow-custom">
-//       <h2 style={{fontWeight: 'bold', fontSize: '24px', marginBottom: '4px'}}>Featured Events</h2>
-//       <hr className="underline" />
-//       <ul className="featured-events-list">
-//         {featuredEvents.map((event) => (
-//           <React.Fragment key={event.id}>
-//             <EventItem {...event} />
-//             <hr className="event-separator" />
-//           </React.Fragment>
-//         ))}
-//       </ul>
-//       <button className="view-all-btn">
-//         VIEW ALL
-//         <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default FeaturedEvents;
-
-
-
 import React, { useState, useEffect } from 'react';
 import EventItem from './EventItem';
 import '../css/FeaturedEvents.css';
@@ -48,6 +11,8 @@ const FeaturedEvents = () => {
       try {
         const response = await fetch('/api/events/events');
         const data = await response.json();
+        console.log("DATEE",data);
+        
         const currentDate = new Date();
         const sortedEvents = data.data.data
           .filter(event => new Date(event.start_at) >= currentDate) // Filter events starting from today
@@ -71,8 +36,11 @@ const FeaturedEvents = () => {
           <React.Fragment key={event.id}>
             <EventItem
               id={event.id}
-              date={new Date(event.start_at).toLocaleString('en-US', { 
+              start_date={new Date(event.start_at).toLocaleString('en-US', { 
                 month: 'long', day: 'numeric', year: 'numeric' 
+              })}
+              end_date={new Date(event.end_at).toLocaleString('en-US', { 
+                month: 'long', day: 'numeric', year: 'numeric'
               })}
               title={event.title}
             />

@@ -4,15 +4,39 @@ namespace Modules\Events\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Events\Models\Event;
+use Illuminate\Http\Request;
 use Modules\Events\Models\EventAttendance;
 
 class EventController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     return response()->json([
+    //         'data' => $this->shouldpaginate(Event::queryable()),
+    //     ]);
+    // }
+
+    public function index(Request $request)
     {
-        return response()->json([
-            'data' => $this->shouldpaginate(Event::queryable()),
-        ]);
+        $query = $request->query();
+        $modelBuilder = Event::queryable();
+        
+        // Handle search by title
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $modelBuilder->whereRaw('LOWER(title) LIKE ?', ['%' . strtolower($search) . '%']);
+            $modelBuilder->select('id', 'title');
+        }
+        
+
+        // Handle pagination
+        if (array_key_exists('disabledPagination', $query)) {
+            $data = $modelBuilder->get();
+        } else {
+            $data = $modelBuilder->paginate();
+        }
+
+        return response()->json(['data' => $data]);
     }
 
     public function show($id)

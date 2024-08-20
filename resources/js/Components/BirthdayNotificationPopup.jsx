@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import Popup from './Reusable/Popup';
+import BirthdayCom from './Reusable/Birthdayfunction/birthdaypopup';
 
-function BirthdayNotificationPopup({ onClose }) {
+function BirthdayNotificationPopup({ onClose, userData }) {
+    // console.log("GGG", userData);
+
     const [birthdays, setBirthdays] = useState([]);
-    const [showMore, setShowMore] = useState(false);
+    const [isBirthdayComOpen, setIsBirthdayComOpen] = useState(false);
+    const [selectedBirthday, setSelectedBirthday] = useState(null);
 
     const fetchBirthdayEvents = async () => {
         try {
@@ -11,10 +16,10 @@ function BirthdayNotificationPopup({ onClose }) {
             let totalPages = 1;
 
             while (currentPage <= totalPages) {
-                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
-                const data = await response.json();
+                // const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const response = await fetch(`/api/profile/profiles?filter[]=dob&paginate=false`);
 
-                console.log('Fetched data:', data); // Debug: Log the fetched data
+                const data = await response.json();
 
                 if (data && data.data && Array.isArray(data.data.data)) {
                     allProfiles = [...allProfiles, ...data.data.data];
@@ -26,49 +31,36 @@ function BirthdayNotificationPopup({ onClose }) {
                 }
             }
 
-            console.log('All profiles:', allProfiles); // Debug: Log all collected profiles
-
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set to midnight to compare only date part
+            const currentMonth = today.getMonth();
+            const currentDay = today.getDate();
 
-            // Map profiles to birthday events
-            const birthdayEvents = allProfiles.reduce((acc, profile) => {
-                if (!profile.dob) return acc; // Skip profiles with no dob
+            let birthdayEvents = allProfiles.reduce((acc, profile) => {
+                if (!profile.dob) return acc;
 
                 const dob = new Date(profile.dob);
-                if (isNaN(dob.getTime())) return acc; // Skip invalid dob
+                if (isNaN(dob.getTime())) return acc;
 
-                const currentYear = today.getFullYear();
-                dob.setFullYear(currentYear);
+                const dobMonth = dob.getMonth();
+                const dobDay = dob.getDate();
 
-                const day = String(dob.getDate()).padStart(2, '0');
-                const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-                const year = dob.getFullYear();
-                const dateStr = `${day}-${month}-${year}`;
-
-                // Only include upcoming birthdays
-                if (dob >= today) {
-                    console.log('Upcoming Birthday:', profile.bio, 'Date:', dateStr); // Debug: Log upcoming birthdays
-                    let existingEvent = acc.find(event => event.date === dateStr);
-
-                    if (existingEvent) {
-                        if (!existingEvent.names) {
-                            existingEvent.names = [];
-                        }
-                        existingEvent.names.push(profile.bio);
-                    } else {
-                        acc.push({
-                            name: profile.bio,
-                            date: dateStr,
-                            profileId: profile.id, // Store profile ID for click handling
-                        });
-                    }
+                // Only include birthdays that are today
+                if (dobMonth === currentMonth && dobDay === currentDay) {
+                    acc.push({
+                        name: profile.bio,
+                        profileId: profile.id,
+                        profileImage: getAvatarSource(profile.image, profile.bio),
+                    });
                 }
 
                 return acc;
             }, []);
 
-            console.log('Upcoming Birthday events:', birthdayEvents); // Debug: Log the resulting upcoming birthday events
+            // Sort the birthday events by name alphabetically
+            birthdayEvents.sort((a, b) => a.name.localeCompare(b.name));
+
+            console.log('birthdayEvents', birthdayEvents);
+            
 
             setBirthdays(birthdayEvents);
         } catch (error) {
@@ -76,48 +68,82 @@ function BirthdayNotificationPopup({ onClose }) {
         }
     };
 
+    const getAvatarSource = (src, name) => {
+        let source = null;
+
+        if (!src || src.trim() === '') {
+            // If src is empty or only contains whitespace, use the UI Avatars URL
+            source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`;
+        } else if (src.startsWith('avatar/')) {
+            // If src already starts with 'avatar/', map it directly
+            source = `/storage/${src}`;
+        } else {
+            // If src doesn't start with 'avatar/', check if it's a placeholder or not
+            source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+              ? src 
+              : `/avatar/${src}`;
+        }
+
+        return source;
+    };
+
     useEffect(() => {
         fetchBirthdayEvents();
     }, []);
 
-    const handleBirthdayClick = (profileId) => {
-        console.log(`Clicked on profile ID: ${profileId}`);
+    const handleBirthdayClick = (birthday) => {
+        setSelectedBirthday(birthday);
+        setIsBirthdayComOpen(true); // Open the BirthdayCom popup
+    };
+
+    const closeBirthdayComPopup = () => {
+        setIsBirthdayComOpen(false); // Close the BirthdayCom popup
     };
 
     const renderBirthdays = () => {
-        const displayBirthdays = showMore ? birthdays : birthdays.slice(0, 5);
-        return displayBirthdays.map((birthday, index) => (
+        return birthdays.map((birthday, index) => (
             <div
                 key={index}
-                className="cursor-pointer text-sm text-gray-600 mt-1 p-2 hover:bg-blue-100 rounded"
-                onClick={() => handleBirthdayClick(birthday.profileId)}
+                className="cursor-pointer text-sm text-gray-600 mt-1 p-2 hover:bg-blue-100 rounded flex items-center"
+                onClick={() => handleBirthdayClick(birthday)}
             >
-                {birthday.name} - {birthday.date}
+                <img
+                    src={birthday.profileImage}
+                    alt={`${birthday.name}'s avatar`}
+                    className="w-8 h-8 rounded-full mr-2"
+                />
+                <p className="font-semibold">{birthday.name}</p>
             </div>
         ));
     };
 
     return (
-        <div className="absolute right-0 z-10 mt-2.5 w-60 p-4 bg-white border border-gray-200 rounded-lg shadow-lg">
-            <p className="text-sm font-semibold text-gray-900">
-                Upcoming Birthdays
-            </p>
-            {renderBirthdays()}
-            {birthdays.length > 5 && !showMore && (
-                <button
-                    onClick={() => setShowMore(true)}
-                    className="mt-2 text-sm text-blue-600 hover:underline"
-                >
-                    See More
-                </button>
+        <>
+            <div className="absolute right-0 z-10 mt-2.5 w-60 p-4 bg-white border border-gray-200 rounded-lg shadow-lg">
+                <p className="text-sm font-semibold text-gray-900">
+                    Today's Birthdays
+                </p>
+                {renderBirthdays()}
+                {birthdays.length === 0 && (
+                    <p className="text-sm text-gray-600 mt-1">No birthday today.</p>
+                )}
+                <div className="w-full flex justify-end">
+                    <button
+                        onClick={onClose}
+                        className="mt-2 text-sm text-blue-600 hover:underline block"
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
+
+            {/* Independent BirthdayCom Popup */}
+            {selectedBirthday && (
+                <Popup isOpen={isBirthdayComOpen} onClose={closeBirthdayComPopup}>
+                    <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} />
+                </Popup>
             )}
-            <button
-                onClick={onClose}
-                className="mt-2 text-sm text-blue-600 hover:underline block"
-            >
-                Close
-            </button>
-        </div>
+        </>
     );
 }
 

@@ -10,6 +10,8 @@ const AddUnits = () => {
   const [editingUnitName, setEditingUnitName] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [message, setMessage] = useState(null);
+  const [isLoadingDepartments, setIsLoadingDepartments] = useState(true);
+  const [isLoadingUnits, setIsLoadingUnits] = useState(false);
   const csrfToken = useCsrf();
 
   const fetchDepartments = async (url) => {
@@ -34,15 +36,19 @@ const AddUnits = () => {
 
       if (data.data.next_page_url) {
         fetchDepartments(data.data.next_page_url);
+      } else {
+        setIsLoadingDepartments(false); 
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsLoadingDepartments(false); 
     }
   };
 
   const fetchUnits = async (url) => {
     let allUnits = [];
     let hasMorePages = true;
+    setIsLoadingUnits(true); 
 
     try {
       while (hasMorePages) {
@@ -72,8 +78,10 @@ const AddUnits = () => {
         }
       }
       setUnits(allUnits.sort((a, b) => a.name.localeCompare(b.name)));
+      setIsLoadingUnits(false);
     } catch (error) {
       console.error("Error fetching units:", error);
+      setIsLoadingUnits(false); 
     }
   };
 
@@ -125,7 +133,6 @@ const AddUnits = () => {
         showMessage("error", error.message);
       });
   };
-  
 
   const editUnit = (id, name) => {
     setEditingUnitId(id);
@@ -176,7 +183,7 @@ const AddUnits = () => {
         </div>
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 text-white bg-blue-500 rounded-full font-bold hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
           disabled={!selectedDepartmentId}
         >
           Add New Unit
@@ -188,19 +195,25 @@ const AddUnits = () => {
         <label htmlFor="department" className="block mb-2 text-sm font-medium text-gray-700">
           Select Department
         </label>
-        <select
-          id="department"
-          value={selectedDepartmentId}
-          onChange={(e) => setSelectedDepartmentId(e.target.value)}
-          className="w-full p-2 border rounded"
-        >
-          <option value="">-- Select a Department --</option>
-          {departments.map((department) => (
-            <option key={department.id} value={department.id}>
-              {department.name}
-            </option>
-          ))}
-        </select>
+        {isLoadingDepartments ? (
+          <div className="flex items-center justify-center h-64 max-w-[1050px]">
+            <div className="w-16 h-16 border-b-2 border-gray-900 max-w-[1050px] rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <select
+            id="department"
+            value={selectedDepartmentId}
+            onChange={(e) => setSelectedDepartmentId(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">-- Select a Department --</option>
+            {departments.map((department) => (
+              <option key={department.id} value={department.id}>
+                {department.name}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Message Display */}
@@ -218,59 +231,61 @@ const AddUnits = () => {
 
       {/* Units Table */}
       {selectedDepartmentId && (
-        <div className="overflow-hidden bg-white rounded-lg shadow-md">
-          <table className="min-w-full leading-normal mt-2">
-            <thead>
-              <tr>
-                <th className="pl-8 py-3 text-sm font-semibold text-left text-gray-500 uppercase bg-white">
-                  ID
-                </th>
-                <th className="px-5 py-3 text-sm font-semibold text-left text-gray-500 uppercase bg-white">
-                  Name
-                </th>
-                <th className="px-5 py-3 bg-white"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {units.map((unit) => (
-                <tr key={unit.id}>
-                  <td className="pl-8 py-5 text-sm bg-white border-b border-gray-200">
-                    {unit.id}
-                  </td>
-                  <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                    {editingUnitId === unit.id ? (
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded"
-                        value={editingUnitName}
-                        onChange={(e) => setEditingUnitName(e.target.value)}
-                      />
-                    ) : (
-                      <span>{unit.name}</span>
-                    )}
-                  </td>
-                  <td className="px-5 py-5 text-sm text-right bg-white border-b border-gray-200">
-                    {editingUnitId === unit.id ? (
-                      <button
-                        onClick={saveUnit}
-                        className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-                      >
-                        Save
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => editUnit(unit.id, unit.name)}
-                        className="text-blue-500 hover:text-blue-700 mr-4"
-                      >
-                        Edit
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          {isLoadingUnits ? (
+            <div className="flex items-center justify-center h-64 max-w-[1050px]">
+              <div className="w-16 h-16 border-b-2 border-gray-900 max-w-[1050px] rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <div className="overflow-hidden bg-white rounded-lg shadow-md">
+              <table className="min-w-full mt-2 leading-normal">
+                <thead>
+                  <tr>
+                    <th className="px-5 py-3 text-sm font-semibold text-left text-gray-500 uppercase bg-white">
+                      Name
+                    </th>
+                    <th className="px-5 py-3 bg-white"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {units.map((unit) => (
+                    <tr key={unit.id}>
+                      <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                        {editingUnitId === unit.id ? (
+                          <input
+                            type="text"
+                            className="w-full p-2 border rounded"
+                            value={editingUnitName}
+                            onChange={(e) => setEditingUnitName(e.target.value)}
+                          />
+                        ) : (
+                          <span>{unit.name}</span>
+                        )}
+                      </td>
+                      <td className="px-5 py-5 text-sm text-right bg-white border-b border-gray-200">
+                        {editingUnitId === unit.id ? (
+                          <button
+                            onClick={saveUnit}
+                            className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                          >
+                            Save
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => editUnit(unit.id, unit.name)}
+                            className="mr-4 text-blue-500 hover:text-blue-700"
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
       )}
 
       {/* Popup for adding a new unit */}

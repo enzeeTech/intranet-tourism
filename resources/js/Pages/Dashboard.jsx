@@ -58,7 +58,6 @@ const Dashboard = () => {
 
           <aside className="fixed bottom-0 right-0 hidden w-5/10 px-4 py-6 overflow-y-auto border-l border-gray-200 top-16 sm:px-6 lg:px-4 xl:block">
             <div>
-            <Birthdaypopup />
               <MyComponent />
             </div>
           </aside>

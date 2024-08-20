@@ -16,10 +16,10 @@ import { ProfileDepartment } from '@/Components/ProfileTabbar';
 function SaveNotification({ title, content, onClose }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="p-2 rounded-3xl w-4xl">
-                <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
+            <div className="rounded-2xl">
+                <section className="flex flex-col font-bold text-center bg-green-100 rounded-2xl shadow-custom py-4 px-8">
                     <div className="flex flex-col w-full">
-                        <h2 className="text-xl text-neutral-800">{title}</h2>
+                        <h2 className="text-xl text-green-800">{title}</h2>
                     </div>
                 </section>
             </div>
@@ -487,6 +487,8 @@ export default function Profile() {
                                     </section>
                                     <div className="separator"></div>
                                     {formData.employmentPosts && formData.employmentPosts.length > 0 && formData.employmentPosts.map((employmentPost, index) => (
+                                        // console.log("lllll", employmentPost),
+                                        
                                         <section key={index} className="flex flex-col w-full gap-2 px-8 py-4 mt-3 bg-white rounded-lg shadow-custom max-md:flex-wrap max-md:px-5 max-md:max-w-full">
                                             <div className="flex items-center justify-between">
                                                 <div className="separator text-xl font-semibold mt-2 pl-4 justify-center">{`Department ${index + 1} Information`}</div>
@@ -500,6 +502,7 @@ export default function Profile() {
                                                 <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                                     <ProfileDepartment
                                                         department={employmentPost.department?.name || ''}
+                                                        departmentId={employmentPost.department_id}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
                                                         position={employmentPost.position || 'N/A'}

@@ -39,7 +39,7 @@ const Departments = () => {
         id: department.id,
         name: department.name,
         order: department.order,
-        imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',// Assuming the API returns an image URL here
+        imageUrl: department.banner ? `/storage/${department.banner}` : 'assets/departmentsDefault.jpg',
       }));
 
       console.log('Department data:', departmentData);  
@@ -48,7 +48,6 @@ const Departments = () => {
         const allDepartments = [...prevDepartments, ...departmentData];
         return allDepartments.sort((a, b) => a.order - b.order);
       });
-      
 
       if (data.data.next_page_url) {
         fetchDepartments(data.data.next_page_url);
@@ -66,7 +65,8 @@ const Departments = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`/api/department/departments/${currentDepartmentId}`, {
+      // Delete all related employment posts first
+      const responseEmploymentPosts = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
         method: 'DELETE',
         headers: {
           "Content-Type": "application/json",
@@ -74,6 +74,26 @@ const Departments = () => {
           "X-CSRF-Token": csrfToken,
         },
       });
+  
+      if (!responseEmploymentPosts.ok) {
+        throw new Error('Error deleting related employment posts');
+      }
+  
+      // Then delete the department
+      const responseDepartment = await fetch(`/api/department/departments/${currentDepartmentId}`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+      });
+  
+      if (!responseDepartment.ok) {
+        throw new Error('Error deleting department');
+      }
+  
+      // Update the state after successful deletion
       setDepartmentsList((prevList) =>
         prevList.filter((department) => department.id !== currentDepartmentId)
       );
@@ -82,6 +102,7 @@ const Departments = () => {
       console.error('Error deleting department:', error);
     }
   };
+  
 
   const handleDeleteClick = (id) => {
     setCurrentDepartmentId(id);
@@ -144,7 +165,6 @@ const Departments = () => {
         <div>
           <FeaturedEvents />
           <WhosOnline />
-          {/* <Birthdaypopup /> */}
         </div>
       </aside>
       {isDeleteModalOpen && (
@@ -165,12 +185,6 @@ const Departments = () => {
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-4 bg-white shadow-lg rounded-2xl">
-            {/* <button
-              className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
-              onClick={toggleCreateCommunity}
-            >
-              &times;
-            </button> */}
             <div className="relative">
               <div className="flex justify-end">
                 <button onClick={toggleCreateCommunity} className="absolute top-0 right-0 mt-2 mr-2">

@@ -11,15 +11,28 @@ class ModelHasRoleController extends Controller
 {
     public function index()
     {
+        $filters = request()->query('filter');
+
+        $query = ModelHasRole::query();
+
+        // Apply filters if they exist
+        if ($filters) {
+            $roleIds = array_map('intval', explode(',', $filters[0]));
+
+            $query->whereIn('role_id', $roleIds);
+        }
+
+        $roles = $query->paginate();
+
         return response()->json([
-            'data' => ModelHasRole::queryable()->paginate(),
+            'data' => $roles,
         ]);
     }
 
     public function show($id)
     {
         return response()->json([
-            'data' => ModelHasRole::where('model_id', $id)->queryable()->firstOrFail(),
+            'data' => ModelHasRole::where('model_id', $id)->firstOrFail(),
         ]);
     }
 
@@ -27,25 +40,36 @@ class ModelHasRoleController extends Controller
     {
 
         $user = User::with('roles')->findOrFail(request('model_id'));
-
         $validated = request()->validate(...ModelHasRole::rules('create'));
 
         $roleIds = $validated['role_id'];
+        $departmentId = $validated['department_id'] ?? null;
+        $communityId = $validated['community_id'] ?? null;
+
+        // Remove all existing roles first
         $user->syncRoles([]);
 
         foreach ($roleIds as $roleId) {
-
             $role = Role::findOrFail($roleId);
             $user->assignRole($role);
+
+            // Attach department_id and community_id to the pivot table
+            $user->roles()->updateExistingPivot($roleId, [
+                'department_id' => $departmentId,
+                'community_id' => $communityId,
+            ]);
         }
 
         $assignedRoles = $user->roles()->get();
+
         return response()->json([
             'data' => [
                 'user' => $user,
-                'role' => $assignedRoles,
+                'roles' => $assignedRoles,
+                'department_id' => $departmentId,
+                'community_id' => $communityId,
             ],
-            'message' => 'User has been assigned for the role.',
+            'message' => 'User has been assigned to the role.',
         ]);
     }
 
@@ -56,24 +80,33 @@ class ModelHasRoleController extends Controller
         $validated = request()->validate(...ModelHasRole::rules('create'));
 
         $roleIds = $validated['role_id'];
+        $departmentId = $validated['department_id'] ?? null;
+        $communityId = $validated['community_id'] ?? null;
+
+        // Remove all existing roles first
         $user->syncRoles([]);
 
         foreach ($roleIds as $roleId) {
-
             $role = Role::findOrFail($roleId);
             $user->assignRole($role);
+
+            // Attach department_id and community_id to the pivot table
+            $user->roles()->updateExistingPivot($roleId, [
+                'department_id' => $departmentId,
+                'community_id' => $communityId,
+            ]);
         }
 
         $assignedRoles = $user->roles()->get();
+
         return response()->json([
             'data' => [
                 'user' => $user,
-                'role' => $assignedRoles,
+                'roles' => $assignedRoles,
             ],
-            'message' => 'User has been assigned for the role.',
+            'message' => 'User roles have been updated.',
         ]);
     }
-
 
     public function destroy(ModelHasRole $modelHasRole)
     {

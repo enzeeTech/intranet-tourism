@@ -82,6 +82,8 @@ function ChosenPerson({ chosenPeople, onRemovePerson }) {
 
 
 function RecommendedPerson({ person, onAddPerson }) {
+  console.log("PERSON", person);
+  
   return (
     <div
       className="flex gap-4 mt-2.5 font-bold text-neutral-800 cursor-pointer"
@@ -103,7 +105,7 @@ function RecommendedPerson({ person, onAddPerson }) {
           style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
       />
       <div className="flex-auto my-auto">
-        {person.name} ({person.department || "No Department"})
+        {person.name} ({person.employment_post?.department.name || "No Department"})
       </div>
     </div>
   );

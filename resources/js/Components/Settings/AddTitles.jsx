@@ -8,6 +8,7 @@ const AddTitles = () => {
   const [editingTitleName, setEditingTitleName] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [message, setMessage] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const csrfToken = useCsrf();
 
   const fetchTitles = async (url) => {
@@ -33,9 +34,12 @@ const AddTitles = () => {
 
       if (data.data.next_page_url) {
         fetchTitles(data.data.next_page_url);
+      } else {
+        setIsLoading(false); 
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsLoading(false); 
     }
   };
 
@@ -132,7 +136,7 @@ const AddTitles = () => {
         </div>
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 text-white bg-blue-500 rounded-full font-bold hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
         >
           Add New Title
         </button>
@@ -142,7 +146,7 @@ const AddTitles = () => {
       {message && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div
-            className={`bg-green-100 rounded-lg flex items-center justify-start py-4 px-8 ${
+            className={`bg-gray-100 rounded-lg flex items-center justify-start py-4 px-8 ${
               message.type === "success" ? "font-bold text-lg bg-green-100 text-green-800  " : "font-bold text-lg bg-red-100 text-red-800"
             }`}
           >
@@ -151,72 +155,67 @@ const AddTitles = () => {
         </div>
       )}
 
-      <div className="overflow-hidden bg-white rounded-lg shadow-md">
-        <table className="min-w-full leading-normal mt-2">
-          <thead>
-            <tr>
-              <th className="pl-8 py-3 text-sm font-bold text-left text-gray-500 uppercase bg-white">
-                ID
-              </th>
-              <th className="px-5 py-3 text-sm font-bold text-left text-gray-500 uppercase bg-white">
-                Name
-              </th>
-              <th className="px-5 py-3 bg-white"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {titles.map((title) => (
-              <tr key={title.id}>
-                <td className="pl-8 py-5 text-sm bg-white border-b border-gray-200">
-                  {title.id}
-                </td>
-                <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                  {editingTitleId === title.id ? (
-                    <input
-                      type="text"
-                      className="w-full p-2 border rounded"
-                      value={editingTitleName}
-                      onChange={(e) => setEditingTitleName(e.target.value)}
-                    />
-                  ) : (
-                    <span>{title.title}</span>
-                  )}
-                </td>
-                <td className="px-5 py-5 text-sm text-right bg-white border-b border-gray-200">
-                  {editingTitleId === title.id ? (
-                    <button
-                      onClick={saveTitle}
-                      className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-                    >
-                      Save
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => editTitle(title.id, title.title)}
-                      className="text-blue-500 hover:text-blue-700 mr-4"
-                    >
-                      Edit
-                    </button>
-                  )}
-                </td>
+      {/* Loading Spinner */}
+      {isLoading ? (
+        <div className="flex items-center justify-center h-64 max-w-[1050px]">
+          <div className="w-16 h-16 border-b-2 border-gray-900 max-w-[1050px] rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <div className="overflow-hidden bg-white rounded-lg shadow-md">
+          <table className="min-w-full mt-2 leading-normal">
+            <thead>
+              <tr>
+                <th className="px-5 py-3 text-sm font-bold text-left text-gray-500 uppercase bg-white">
+                  Name
+                </th>
+                <th className="px-5 py-3 bg-white"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {titles.map((title) => (
+                <tr key={title.id}>
+                  <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+                    {editingTitleId === title.id ? (
+                      <input
+                        type="text"
+                        className="w-full p-2 border rounded"
+                        value={editingTitleName}
+                        onChange={(e) => setEditingTitleName(e.target.value)}
+                      />
+                    ) : (
+                      <span>{title.title}</span>
+                    )}
+                  </td>
+                  <td className="px-5 py-5 text-sm text-right bg-white border-b border-gray-200">
+                    {editingTitleId === title.id ? (
+                      <button
+                        onClick={saveTitle}
+                        className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => editTitle(title.id, title.title)}
+                        className="mr-4 text-blue-500 hover:text-blue-700"
+                      >
+                        Edit
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Popup for adding a new title */}
       {isPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="w-full max-w-sm p-6 bg-white rounded-2xl shadow-lg">
+          <div className="w-full max-w-sm p-6 bg-white shadow-lg rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold ">Add New Title</h2>
-              {/* <button
-                onClick={() => setIsPopupOpen(false)}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                &times;
-              </button> */}
             </div>
             <input
               type="text"

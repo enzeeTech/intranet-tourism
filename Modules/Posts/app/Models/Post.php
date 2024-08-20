@@ -28,6 +28,7 @@ class Post extends Model implements AuditableContract
         'pool_posting',
         'likes',
         'mentions',
+        'event'
     ];
 
     public static function rules($scenario = 'create')
@@ -45,6 +46,7 @@ class Post extends Model implements AuditableContract
                     'likes' => ['string'],
                     'mentions' => ['string'],
                     'accessibilities' => ['array'],
+                    'event' => ['string'],
                 ],
                 // [],
             ],
@@ -59,6 +61,7 @@ class Post extends Model implements AuditableContract
                     'pool_posting' => ['string'],
                     'likes' => ['string'],
                     'mentions' => ['string'],
+                    'event' => ['string'],
                 ],
                 // [],
             ],

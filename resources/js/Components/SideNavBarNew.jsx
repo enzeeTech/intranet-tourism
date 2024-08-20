@@ -99,7 +99,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   return (
     <>
       <Transition show={sidebarOpen} as={Fragment}>
-        <Dialog className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+        <Dialog className="relative z-59 lg:hidden" onClose={setSidebarOpen}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"

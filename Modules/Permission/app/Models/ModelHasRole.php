@@ -19,6 +19,8 @@ class ModelHasRole extends Model implements AuditableContract
         'role_id',
         'model_type',
         'model_id',
+        'department_id',
+        'community_id',
     ];
 
     public static function rules($scenario = 'create')
@@ -26,17 +28,21 @@ class ModelHasRole extends Model implements AuditableContract
         $rules = [
             'create' => [
                 [
-                    'role_id' => [ 'required'],
+                    'role_id' => ['required'],
                     // 'model_type' => [ 'required'],
-                    'model_id' => [ 'required'],
+                    'model_id' => ['required'],
+                    'department_id' => ['nullable', 'integer'],
+                    'community_id' => ['nullable', 'integer'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'role_id' => [ 'required'],
+                    'role_id' => ['required'],
                     // 'model_type' => [ 'required'],
-                    'model_id' => [ 'required'],
+                    'model_id' => ['required'],
+                    'department_id' => ['nullable', 'integer'],
+                    'community_id' => ['nullable', 'integer'],
                 ],
                 // [],
             ],
