@@ -116,7 +116,7 @@ export default function Header({ setSidebarOpen }) {
 
     const getBirthdayIconSrc = () => {
         return isBirthdayPopupVisible ? "/assets/Birthday Active.svg" : "/assets/Birthday Inactive.svg";
-    };
+    };   
 
     return (
         <div className="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">

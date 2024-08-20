@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import '../../../../css/style.css';
 
-const BirthdayCom = ({ profileImage, name }) => {
+const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
+    console.log("GGG", loggedInUser);
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
   const [text, setText] = useState('Make a wish...');
   const [inputText, setInputText] = useState(text);
+
+  
 
   const handleBackgroundChange = (imageSrc) => {
     setBackgroundImage(imageSrc);
@@ -19,6 +22,22 @@ const BirthdayCom = ({ profileImage, name }) => {
     setText(inputText);
   };
 
+  let source = null;
+
+        if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
+            // If loggedInUser.profile?.image is empty or only contains whitespace, use the UI Avatars URL
+            source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
+        } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
+            // If loggedInUser.profile?.image already starts with 'avatar/', map it directly
+            source = `/storage/${loggedInUser.profile?.image}`;
+        } else {
+            // If loggedInUser.profile?.image doesn't start with 'avatar/', check if it's a placeholder or not
+            source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
+              ? loggedInUser.profile?.image 
+              : `/avatar/${loggedInUser.profile?.image}`;
+        }
+
+
   return (
     <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl w-full max-w-xl mx-auto">
       <div className="flex flex-col px-4 mt-3 w-full">
@@ -30,11 +49,11 @@ const BirthdayCom = ({ profileImage, name }) => {
           <div className="flex flex-row mb-2">
             <img
               loading="lazy"
-              src={profileImage}
+              src={source}
               className="shrink-0 aspect-square w-[38px] rounded-full"
               alt="Profile"
             />
-            <p className="my-auto text-xl ml-2">{name}</p>
+            <p className="my-auto text-xl ml-2">{loggedInUser.name}</p>
           </div>
         </div>
 
@@ -58,17 +77,94 @@ const BirthdayCom = ({ profileImage, name }) => {
         <div className="relative mt-2 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-16 xl:grid-cols-20 h-24 w-full overflow-x-auto border-2 rounded-2xl px-2 py-2">
           <img
             loading="lazy"
-            src="/assets/smile.jpg"
-            className=" w-[30px] cursor-pointer rounded-full mb-2 "
-            alt="Post image 1"
-            onClick={() => handleBackgroundChange('/assets/smile.jpg')}
+            src="/assets/Birthday-Template-1.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 1"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.svg')}
           />
           <img
             loading="lazy"
-            src="/assets/birthday-bg.svg"
-            className=" w-[30px] h-[30px] cursor-pointer rounded-full mb-2 "
-            alt="Post image 2"
-            onClick={() => handleBackgroundChange('/assets/birthday-bg.svg')}
+            src="/assets/Birthday-Template-2.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 2"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-2.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-3.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 3"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-3.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-4.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 4"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-4.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-5.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 5"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-5.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-6.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 6"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-6.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-7.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 7"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-7.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-8.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 8"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-8.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-9.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 9"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-9.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-10.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 10"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-10.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-11.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 11"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-11.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-12.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 12"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-12.svg')}
+          />
+          <img
+            loading="lazy"
+            src="/assets/Birthday-Template-1.svg"
+            className="w-12 cursor-pointer rounded-lg mb-1.5"
+            alt="image 1"
+            onClick={() => handleBackgroundChange('/assets/Birthday-Template-1.svg')}
           />
           {/* Additional images */}
         </div>
