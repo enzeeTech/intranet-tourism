@@ -9,22 +9,17 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
-// ----------------------------//
 export default function Header({ setSidebarOpen }) {
     const { props } = usePage();
-    const { id } = props; // Access the user ID from props
+    const { id } = props;
     const [userData, setUserData] = useState({
         name: "",
         profileImage: "",
-        birthday: "", // Assuming the user's birthday is provided by the API
+        birthday: "", 
     });
 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isBirthdayPopupVisible, setIsBirthdayPopupVisible] = useState(false);
-    const [isBirthdayHovered, setIsBirthdayHovered] = useState(false);
-    const [isBellHovered, setIsBellHovered] = useState(false);
-    const [isBirthdayActive, setIsBirthdayActive] = useState(false);
-    const [isBellActive, setIsBellActive] = useState(false);
     const [csrfToken, setCsrfToken] = useState(null);
 
     const notificationRef = useRef();
@@ -32,48 +27,11 @@ export default function Header({ setSidebarOpen }) {
 
     const togglePopup = () => {
         setIsPopupVisible(!isPopupVisible);
-        setIsBellActive(!isBellActive);
     };
 
     const toggleBirthdayPopup = () => {
         setIsBirthdayPopupVisible(!isBirthdayPopupVisible);
-        setIsBirthdayActive(!isBirthdayActive);
     };
-
-    const handleBellMouseEnter = () => {
-        setIsBellHovered(true);
-    };
-
-    const handleBellMouseLeave = () => {
-        setIsBellHovered(false);
-    };
-
-    const handleBirthdayMouseEnter = () => {
-        setIsBirthdayHovered(true);
-    };
-
-    const handleBirthdayMouseLeave = () => {
-        setIsBirthdayHovered(false);
-    };
-
-    const handleClickOutside = (event) => {
-        if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-            setIsPopupVisible(false);
-            setIsBellActive(false);
-        }
-
-        if (birthdayNotificationRef.current && !birthdayNotificationRef.current.contains(event.target)) {
-            setIsBirthdayPopupVisible(false);
-            setIsBirthdayActive(false);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     useEffect(() => {
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -81,7 +39,6 @@ export default function Header({ setSidebarOpen }) {
     }, []);
 
     useEffect(() => {
-        console.log("Fetching user data...");
         fetch(`/api/users/users/${id}?with[]=profile`, {
             method: "GET",
         })
@@ -91,17 +48,13 @@ export default function Header({ setSidebarOpen }) {
                 }
                 return response.json();
             })
-            //-----------------------------//
             .then(({ data }) => {
-                console.log("DATA", data);
-                
-                setUserData(pv => ({
-                    ...pv, ...data,
+                setUserData({
+                    ...data,
                     name: data.name,
                     profileImage: data.profile?.image,
-                    birthday: data.profile?.birthday, // Assuming the API provides birthday
-                }));
-
+                    birthday: data.profile?.birthday,
+                });
                 checkBirthday(data.profile?.birthday);
             })
             .catch((error) => {
@@ -133,8 +86,8 @@ export default function Header({ setSidebarOpen }) {
     };
 
     const handleLogout = (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior
-        
+        event.preventDefault();
+
         fetch('/logout', {
             method: 'POST',
             headers: {
@@ -144,14 +97,13 @@ export default function Header({ setSidebarOpen }) {
         })
             .then((response) => {
                 if (response.ok) {
-                    window.location.href = '/'; // Redirect after successful logout
+                    window.location.href = '/';
                 } else {
                     throw new Error('Failed to logout');
                 }
             })
             .catch((err) => console.error('Error logging out:', err));
     };
-    
 
     const userNavigation = [
         { name: 'Your profile', href: '../profile' },
@@ -159,23 +111,11 @@ export default function Header({ setSidebarOpen }) {
     ];
 
     const getBellIconSrc = () => {
-        if (isBellActive) {
-            return "/assets/bell-active.svg";
-        } else if (isBellHovered) {
-            return "/assets/bell-hover.svg";
-        } else {
-            return "/assets/bell.svg";
-        }
+        return isPopupVisible ? "/assets/bell-active.svg" : "/assets/bell.svg";
     };
 
     const getBirthdayIconSrc = () => {
-        if (isBirthdayActive) {
-            return "/assets/Birthday Active.svg";
-        } else if (isBirthdayHovered) {
-            return "/assets/Birthday Hover.svg";
-        } else {
-            return "/assets/Birthday Inactive.svg";
-        }
+        return isBirthdayPopupVisible ? "/assets/Birthday Active.svg" : "/assets/Birthday Inactive.svg";
     };
 
     return (
@@ -185,47 +125,29 @@ export default function Header({ setSidebarOpen }) {
                 <Bars3Icon className="w-6 h-6" aria-hidden="true" />
             </button>
 
-            {/* Separator */}
             <div className="w-px h-6 bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
             <div className="flex items-center self-stretch flex-1 gap-x-4 lg:gap-x-6">
-                <img
-                    className="h-8 w-[70px] hidden lg:block"
-                    src="/assets/Jomla logo red.svg"
-                    alt="Jomla Logo"
-                />
+                <img className="h-8 w-[70px] hidden lg:block" src="/assets/Jomla logo red.svg" alt="Jomla Logo" />
                 <form className="relative flex flex-1" action="#" method="GET">
-                    <label htmlFor="search-field" className="sr-only">
-                        Search
-                    </label>
-                    <MagnifyingGlassIcon
-                        className="absolute inset-y-0 left-0 w-5 h-full text-gray-400 pointer-events-none"
-                        aria-hidden="true"
-                    />
-                    <input
-                        id="search-field"
-                        className="block w-full h-full py-0 pl-8 pr-0 text-gray-900 border-0 outline-none placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                        placeholder="Search..."
-                        type="search"
-                        name="search"
-                    />
+                    <label htmlFor="search-field" className="sr-only">Search</label>
+                    <MagnifyingGlassIcon className="absolute inset-y-0 left-0 w-5 h-full text-gray-400 pointer-events-none" aria-hidden="true" />
+                    <input id="search-field" className="block w-full h-full py-0 pl-8 pr-0 text-gray-900 border-0 outline-none placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Search..." type="search" name="search" />
                 </form>
                 <div className="flex items-center gap-x-4 lg:gap-x-6">
                     {/* Birthday Notification */}
                     <div className="relative" ref={birthdayNotificationRef}>
                         <button
                             type="button"
-                            className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
+                            className="birthday-icon -m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
                             onClick={toggleBirthdayPopup}
-                            onMouseEnter={handleBirthdayMouseEnter}
-                            onMouseLeave={handleBirthdayMouseLeave}
                         >
                             <img src={getBirthdayIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
                         {isBirthdayPopupVisible && (
-                            <BirthdayNotificationPopup 
-                                userData={userData} 
-                                onClose={() => setIsBirthdayPopupVisible(false)} 
+                            <BirthdayNotificationPopup
+                                userData={userData}
+                                onClose={() => setIsBirthdayPopupVisible(false)}
                             />
                         )}
                     </div>
@@ -236,8 +158,6 @@ export default function Header({ setSidebarOpen }) {
                             type="button"
                             className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
                             onClick={togglePopup}
-                            onMouseEnter={handleBellMouseEnter}
-                            onMouseLeave={handleBellMouseLeave}
                         >
                             <img src={getBellIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
@@ -246,10 +166,8 @@ export default function Header({ setSidebarOpen }) {
                         )}
                     </div>
 
-                    {/* Separator */}
                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                    {/* Profile dropdown */}
                     <Menu as="div" className="relative">
                         <Menu.Button className="-m-1.5 flex items-center p-1.5">
                             <span className="sr-only">Open user menu</span>

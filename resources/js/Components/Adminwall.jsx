@@ -57,7 +57,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
 
 
   return (
-    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-[875px] h-[291.6666666666667px] text-white max-md:px-5 max-md:max-w-full rounded-t-xl">
+    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-[875px] h-[291.67px] text-white max-md:px-5 w-full rounded-t-xl">
       <img
         loading="lazy"
         src={banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"}
@@ -155,8 +155,8 @@ function Navigation({ userId, departmentID, departmentName }) {
         )}
 
         {activeTab === 'Post' && (
-          <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
+          <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
+            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
               <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={departmentID} />
               <Filter /><br />
               <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />

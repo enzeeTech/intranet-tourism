@@ -107,7 +107,7 @@ function ProfileBio({
                                             ?
                                         </button>
                                     </div>
-                                    <div className="text-xs text-blue-500">Maximum size: 1MB</div>
+                                    <div className="text-xs text-blue-500">Recommended Image Ratio 3 : 4</div>
                                 </td>
                                 <td className="py-2 align-start w-2/3">
                                     <div className="flex items-center gap-4">
