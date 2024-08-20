@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import '../../../../css/style.css';
 
 const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
-    console.log("GGG", loggedInUser);
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
   const [text, setText] = useState('Make a wish...');
   const [inputText, setInputText] = useState(text);
-
-  
 
   const handleBackgroundChange = (imageSrc) => {
     setBackgroundImage(imageSrc);
@@ -24,19 +21,15 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
 
   let source = null;
 
-        if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
-            // If loggedInUser.profile?.image is empty or only contains whitespace, use the UI Avatars URL
-            source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
-        } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
-            // If loggedInUser.profile?.image already starts with 'avatar/', map it directly
-            source = `/storage/${loggedInUser.profile?.image}`;
-        } else {
-            // If loggedInUser.profile?.image doesn't start with 'avatar/', check if it's a placeholder or not
-            source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
-              ? loggedInUser.profile?.image 
-              : `/avatar/${loggedInUser.profile?.image}`;
-        }
-
+  if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
+    source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
+  } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
+    source = `/storage/${loggedInUser.profile?.image}`;
+  } else {
+    source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
+      ? loggedInUser.profile?.image 
+      : `/avatar/${loggedInUser.profile?.image}`;
+  }
 
   return (
     <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl w-full max-w-xl mx-auto">
@@ -171,20 +164,12 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
 
         <form className="flex flex-col w-full mt-4" onSubmit={handleSubmit}>
           <div className="flex items-center">
-            <label htmlFor="tagInput" className="sr-only">Tag the person</label>
-            <div
-              className="flex items-center font-extrabold text-blue-500 rounded-full bg-slate-100 h-[21px] w-[21px] justify-center"
-              aria-hidden="true"
-            >
-              @
-            </div>
-            <input
-              id="tagInput"
-              className="flex-auto ml-2 text-neutral-400 rounded-2xl"
-              type="text"
-              placeholder="Tag the person"
-              aria-label="Tag the person"
+            <img
+              src={profileImage}
+              alt={`${name}'s avatar`}
+              className="w-8 h-8 rounded-full mr-2"
             />
+            <p className="my-auto font-semibold text-gray-800">{name}</p>
           </div>
           <button
             type="submit"
