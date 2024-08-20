@@ -93,20 +93,20 @@ const Media = () => {
                 </div>
                 </div>
                 <div>
-                    <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
-                        <header>
-                            <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
-                            Images
-                            </h1>
-                            <hr className="underline" />
-                        </header>
-                        <section className="mt-4 max-md:max-w-full">
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
-                                    {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
-                                    {renderImages()}
-                            </div>
-                        </section>
-                    </section>
+                  <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
+                      <header>
+                          <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">
+                          Images
+                          </h1>
+                          <hr className="underline" />
+                      </header>
+                      <section className="mt-4 max-md:max-w-full">
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-2">
+                                  {/* <h1 className="pb-2 text-2xl font-bold text-neutral-800 max-md:max-w-full">Images</h1> */}
+                                  {renderImages()}
+                          </div>
+                      </section>
+                  </section>
                 </div>
                 <div>
                     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">

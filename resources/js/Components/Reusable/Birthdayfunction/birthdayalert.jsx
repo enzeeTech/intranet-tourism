@@ -9,16 +9,16 @@ import Popup from "../Popup";
 
 function NotificationCard({ imgSrc, altText, name, message, btnImgSrc, btnAltText, btnText }) {
   return (
-    <article className="flex gap-6 py-5 pr-6 pl-2.5 mr-0 bg-white rounded-2xl shadow-sm border-2">
-      <img src={imgSrc} alt={altText} loading="lazy" className="shrink-0 aspect-square w-[100px] rounded-full border-2 border-white shadow-xl"/>
+    <article className="flex gap-4 py-5 pr-6 pl-4 mr-0 bg-white rounded-2xl border border-gray-200">
+      <img src={imgSrc} alt={altText} loading="lazy" className="shrink-0 aspect-square w-[80px] h-[80px] rounded-full border-2 border-white shadow-lg"/>
       <div className="flex flex-col mt-2.5 ">
         <p className="text-sm font-semibold mb-3">
           <span className="text-neutral-800">It’s </span>
           <span className="font-extrabold text-neutral-800">{name}</span> 
           <span className="text-neutral-800">{message}</span>
         </p>
-        <div className="flex gap-2 mt-2 text-xs">
-          <img src={btnImgSrc} alt={btnAltText} loading="lazy" className="shrink-0 aspect-square w-[22px]" />
+        <div className="flex gap-2 mt-0 text-xs">
+          <img src={btnImgSrc} alt={btnAltText} loading="lazy" className="shrink-0 aspect-square w-[20px]" />
 
           <button className="flex underline " aria-label={btnText}>{btnText}</button>
         </div>
@@ -50,7 +50,7 @@ function Birthdaypopup() {
 
 
   return (
-    <main className="mb-10 flex flex-col justify-center gap-14 max-w-[290px] w-[319px] text-neutral-800 shadow-lg rounded-2xl">
+    <main className="mb-6 flex flex-col justify-center gap-14 max-w-[320px] w-[320px] text-neutral-800 shadow-custom rounded-2xl mr-4">
       
       <div onClick={handlePopupOpen} style={{ color: "" }}>
         <NotificationCard

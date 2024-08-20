@@ -21,7 +21,7 @@ const FileManage = ({requiredData, onFileUploaded}) => {
 
   return (
     <Example>
-        <main className="min-h-screen bg-gray-100 xl:pl-96">
+        <main className="min-h-screen bg-gray-100 xl:pl-96 ">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                 <div>
                 <SearchFile userId={id} onSearch={setSearchTerm} requiredData={requiredData} onFileUploaded={onFileUploaded} />

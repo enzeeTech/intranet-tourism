@@ -164,7 +164,7 @@ const Departments = () => {
       )}
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="relative p-4 bg-white shadow-lg rounded-2xl">
+          <div className="relative p-4 bg-white shadow-lg max-md:w-5/6 rounded-2xl">
             {/* <button
               className="absolute flex items-center justify-center w-10 h-10 mr-4 text-2xl text-gray-600 rounded-full top-2 right-2 hover:text-gray-900 hover:bg-slate-100"
               onClick={toggleCreateCommunity}
