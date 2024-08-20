@@ -251,8 +251,8 @@ const Ordering = () => {
             </div>
             {isNotificationVisible && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="p-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">{notificationMessage}</p>
+                    <div className="p-4 bg-green-100 rounded-2xl shadow-lg">
+                        <p className="text-lg font-semibold text-green-800">{notificationMessage}</p>
                     </div>
                 </div>
             )}

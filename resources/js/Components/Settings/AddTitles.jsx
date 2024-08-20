@@ -146,7 +146,7 @@ const AddTitles = () => {
       {message && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div
-            className={`bg-green-100 rounded-lg flex items-center justify-start py-4 px-8 ${
+            className={`bg-gray-100 rounded-lg flex items-center justify-start py-4 px-8 ${
               message.type === "success" ? "font-bold text-lg bg-green-100 text-green-800  " : "font-bold text-lg bg-red-100 text-red-800"
             }`}
           >

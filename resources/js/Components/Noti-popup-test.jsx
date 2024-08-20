@@ -113,7 +113,7 @@ class NotificationPopup extends React.Component {
 
 
         return (
-            <div className="notification-box absolute right-0 mt-2 w-[360px] bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div className="notification-box absolute right-0 mt-2 w-[360px] bg-pink-300 border border-gray-200 rounded-lg shadow-lg z-50">
                 <style>{`
                     .notification-message {
                         display: -webkit-box;

@@ -54,8 +54,8 @@ const CommunityInner = () => {
 
   return (
     <Example>
-      <main className="relative w-full ml-4 mr-4 xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 lg:ml-10 lg:mr-24 bottom-10">
-        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto">
+      <main className="relative lg:w-full ml-4 mr-4 xl:pl-96 xl:pr-24 sm:pr-44 sm:right-8 2xl:pl-80 lg:ml-10 lg:mr-24 bottom-10">
+        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto ">
           <CommunityWall
             departmentID={getDepartmentIdFromQuery()}
             departmentHeader={departmentData?.name}

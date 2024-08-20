@@ -36,23 +36,28 @@ function Avatar({ src, alt, onImageChange }) {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl" onClick={handleClick}>
-        {banner ? (
-          <img loading="lazy" src={banner} alt={alt} className="aspect-square w-[400px] h-[200px] shrink-0 rounded-xl border-4 border-gray-200 object-cover object-center" />
-        ) : (
-          <p>No image available</p>
-        )}
-      </div>
+    <div className="flex flex-col items-center object-cover object-center">
+      {banner ? (
+        <img
+          loading="lazy"
+          src={banner}
+          alt={alt}
+          className="cursor-pointer w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
+          onClick={handleClick}
+        />
+      ) : (
+        <p>No image available</p>
+      )}
       <input
         type="file"
         accept="image/*"
         id="avatarInput"
         onChange={(e) => handleImageChange(e.target.files[0])}
-        className="hidden"
+        className="hidden w-[400px] h-[100px] rounded-xl border-4 border-gray-200 object-cover object-center"
       />
     </div>
   );
+  
 }
 
 
