@@ -136,23 +136,24 @@ function ProfileBio({
                                     </div>
                                 </td>
                                 <td className="py-2 align-start w-2/3">
-                                    <div className="flex items-center gap-4 ">
-                                        <img
-                                            loading="lazy"
-                                            src={source}
-                                            className="aspect-square rounded-md w-auto h-full sm:w-auto md:w-auto lg:w-[90px] sm:h-auto md:h-auto lg:h-[120px] ml-4 object-cover"
-                                            alt="Staff's photo"
-                                        />
-                                        {isEditing && (
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handlePhotoChange}
-                                                className="text-xs w-20"
-                                            />
-                                        )}
-                                    </div>
-                                </td>
+    <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 lg:gap-6 ">
+        <img
+            loading="lazy"
+            src={source}
+            className="aspect-square rounded-md w-20 h-full sm:w-auto md:w-auto lg:w-[90px] sm:h-auto md:h-auto lg:h-[120px] ml-4 object-cover"
+            alt="Staff's photo"
+        />
+        {isEditing && (
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="text-xs w-20 mt-2 sm:mt-0"
+            />
+        )}
+    </div>
+</td>
+
                             </tr>
                             {renderField(
                                 "Name",
