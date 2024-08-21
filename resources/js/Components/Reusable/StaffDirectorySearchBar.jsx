@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import searchIcon from '../../../../public/assets/searchStaffButton.png';
 import staffListIconActive from '../../../../public/assets/staffListButton.svg';
 import staffListIconInactive from '../../../../public/assets/staffListButtonInactive.svg';
@@ -14,46 +14,48 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchAllSearchResults = useCallback(async (query) => {
-    setLoading(true);
-    setError(null);
-    let allResults = [];
-    let currentPage = 1;
-    let hasMorePages = true;
+  const fetchAllSearchResults = async (query) => {
+      setError('');
+      let allResults = [];
 
-    try {
-      while (hasMorePages) {
-        const response = await fetch(`/api/users/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-        const data = await response.json();
-        allResults = [...allResults, ...data.data.data];
-        currentPage++;
-        hasMorePages = data.data.next_page_url !== null;
+      try {
+          const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+          
+          if (!response.ok) {
+              throw new Error(`Failed to fetch: ${response.statusText}`);
+          }
+
+          const responseText = await response.text();
+          const data = responseText ? JSON.parse(responseText) : {};
+
+          allResults = data.data;
+
+          setSearchResults(allResults);
+      } catch (error) {
+          console.error('Error fetching search results:', error);
+          setError('Failed to fetch search results. Please try again.');
+      } finally {
+          setLoading(false);
       }
-      setSearchResults(allResults);
-      if (allResults.length === 0) {
-        setError('No results found');
-      }
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-      setError('Error fetching search results');
-      setSearchResults([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  };
+
+  let debounceTimeout;
 
   useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      if (searchTerm) {
-        fetchAllSearchResults(searchTerm);
-      } else {
-        setSearchResults([]);
-        setError(null);
-      }
-    }, 300);
+      clearTimeout(debounceTimeout);
 
-    return () => clearTimeout(debounceTimeout);
-  }, [searchTerm, fetchAllSearchResults]);
+      if (searchTerm.trim() !== '') {
+          setLoading(true);
+          debounceTimeout = setTimeout(() => {
+              fetchAllSearchResults(searchTerm);
+          }, 1000); 
+      } else {
+          setSearchResults([]);  
+      }
+
+      return () => clearTimeout(debounceTimeout);
+
+  }, [searchTerm]);
 
   const handleSearch = () => {
     fetchAllSearchResults(searchTerm);
@@ -101,6 +103,8 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
             <p className="p-2">Loading...</p>
           ) : error ? (
             <p className="p-2">{error}</p>
+          ) : searchResults.length === 0 ? (
+            <p className="p-2">No members found.</p>  
           ) : (
             searchResults.map((result) => (
               <a key={result.id} href={`/user/${result.id}`}>

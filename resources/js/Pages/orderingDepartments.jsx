@@ -7,8 +7,6 @@ import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import { usePage } from '@inertiajs/react';
 import { useCsrf } from '@/composables';
 
-
-
 const OrderingDepartments = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [departments, setDepartments] = useState([]);
@@ -158,6 +156,20 @@ const OrderingDepartments = () => {
         window.location.href = '/departments';
     };
 
+    const handleMoveUp = (index) => {
+        if (index === 0) return;
+        const newData = [...departments];
+        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
+        setDepartments(updateOrderAttributes(newData));
+    };
+
+    const handleMoveDown = (index) => {
+        if (index === departments.length - 1) return;
+        const newData = [...departments];
+        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
+        setDepartments(updateOrderAttributes(newData));
+    };
+
     return (
         <Example>
     <div className="flex-row">
@@ -256,35 +268,18 @@ const OrderingDepartments = () => {
                     `}
                 </style>
                 <div className="file-directory-header">
-                    <PageTitle title="Departments" />
+                    <PageTitle title="Staff Directory" />
                 </div>
-                <hr className="file-directory-underline" />
-                <div>
-                    <FeaturedEvents />
-                    {/* <WhosOnline /> */}
-                </div>
-            </aside>
-        </div>
-    </div>
-    {isNotificationVisible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50">
-            <div className="p-4 bg-white rounded-lg shadow-lg">
-                <p className="text-lg font-semibold">{notificationMessage}</p>
-                <div className="mt-4">
-                    <div className="w-full bg-gray-200 rounded-full">
-                        <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: `${progress}%` }}>
-                            {/* {progress.toFixed(0)}% */}
-                        </div>
+                <aside className="flex-shrink-0 hidden w-96 xl:block">
+                    <div className="px-4 mt-10">
+                        <PageTitle title="Widgets" />
+                        <FeaturedEvents />
+                        {/* <WhosOnline /> */}
                     </div>
-                </div>
+                </aside>
             </div>
-        </div>
-    )}
-</Example>
-
+        </Example>
     );
-};
+}
 
 export default OrderingDepartments;
-
-

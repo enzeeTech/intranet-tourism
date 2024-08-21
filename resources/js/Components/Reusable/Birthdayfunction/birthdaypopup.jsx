@@ -144,13 +144,13 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
             backgroundPosition: 'center',
           }}
         >
-<input
-  type="text"
-  value={inputValue}
-  onChange={handleChange}
-  className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white text-3xl font-black custom-placeholder"
-  placeholder="Make a wish..."
-/>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white text-3xl font-black custom-placeholder"
+            placeholder="Make a wish..."
+          />
         </div>
 
         <div className="relative mt-2 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-16 xl:grid-cols-20 h-24 w-full overflow-x-auto border-2 rounded-2xl px-2 py-2">
