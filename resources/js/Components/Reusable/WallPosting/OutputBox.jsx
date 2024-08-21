@@ -379,6 +379,73 @@ console.log("FINAL", finalPosts);
       setIsCommentPopupOpen(true);
     };
   
+    // const renderContentWithTags = (content) => {
+    //   const tagRegex = /@\w+(\s\w+)*\b/g;
+    //   const parts = content.split(tagRegex);
+    //   const tags = content.match(tagRegex) || [];
+    
+    //   const result = [];
+    //   parts.forEach((part, index) => {
+    //     result.push(part);
+    //     if (tags[index]) {
+    //       result.push(<span className="tagged-text">{tags[index]}</span>);
+    //     }
+    //   });
+    
+    //   return result;
+    // };
+
+
+    // const renderContentWithTags = (content) => {
+    //   // Regex to match tags (e.g., @username or @FirstName LastName)
+    //   const tagRegex = /@\w+(?:\s\w+)*\b/g;
+    
+    //   // Replace matched tags with a span containing the className
+    //   const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
+    //     if (index === 0) return [part];
+    //     const match = content.match(tagRegex)[index - 1];
+    //     return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
+    //   }, []);
+    
+    //   return formattedContent;
+    // };
+
+    const renderContentWithTags = (content) => {
+      // Regex to match tags (e.g., @username or @FirstName LastName)
+      const tagRegex = /@\w+(?:\s\w+)*\b/g;
+  
+      // Replace matched tags with a span containing the className
+      const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
+          if (index === 0) return [part];
+          const match = content.match(tagRegex)[index - 1];
+          return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
+      }, []);
+  
+      return formattedContent;
+  };
+  
+
+
+    // const renderContentWithTags = (content) => {
+    //   // Regex to match the mention with at most two words (e.g., @FirstName LastName)
+    //   const tagRegex = /@(\w+\s\w+)/g;
+    
+    //   // Replace matched tags with a span containing the className
+    //   const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
+    //     if (index % 2 === 0) {
+    //       // Regular text part
+    //       return [...acc, part];
+    //     } else {
+    //       // Mention part (at most two words)
+    //       return [...acc, <span className="tagged-text" key={index}>@{part}</span>];
+    //     }
+    //   }, []);
+    
+    //   return formattedContent;
+    // };
+    
+    
+  
 
   return (
     <>
@@ -746,9 +813,13 @@ console.log("FINAL", finalPosts);
                     </div>
                   )}
                 </header>
-                <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
                   {post.content}
-                </div>
+                </div> */}
+                <article className="post-content">
+                    {renderContentWithTags(post.content)}
+                </article>
+
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                   {/* {post.tag.replace(/[\[\]"]/, '')} */}
                   {post.tag?.replace(/[\[\]"]/g, '') || ''}
