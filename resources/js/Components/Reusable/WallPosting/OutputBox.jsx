@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { usePage } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
 import EditPost from './EditPost';
+import Comment from './Comment';
 import './index.css'
 import { useCsrf } from "@/composables";
-import Excel from '../../../../../public/assets/ExcellIcon.svg'
-import PDF from '../../../../../public/assets/PDFIcon.svg'
-import DOC from '../../../../../public/assets/Docs.svg'
-import PowerPoint from '../../../../../public/assets/PowerPointIcon.svg'
+import PostAttachments from './PostAttachments'
 import announce from '../../../../../public/assets/announcementIcon.svg'
 
 function Avatar({ src, alt }) {
@@ -69,185 +66,6 @@ function FeedbackForm() {
   );
 }
 
-function PostAttachments({ attachments }) {
-  const [showPopup, setShowPopup] = useState(false);
-  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-  
-  const openPopup = (index) => {
-    setCurrentMediaIndex(index);
-    setShowPopup(true);
-  };
-  
-  const closePopup = () => {
-    setShowPopup(false);
-  };
-  
-  const imagesAndVideos = attachments.filter(
-    (att) => att.mime_type.startsWith("image/") || att.mime_type.startsWith("video/")
-  );
-  
-  const renderImageOrVideo = (attachment, index, isMore = false) => (
-    <div
-    key={attachment.path} // Use a unique key based on the attachment
-    className={`attachment ${attachment.height > attachment.width ? 'tall' : ''} ${isMore ? 'relative' : ''}`}
-    onClick={() => openPopup(index)}
-    >
-      {attachment.mime_type.startsWith("image/") ? (
-        <img
-        src={`/storage/${attachment.path}`}
-        alt="attachment"
-        className="w-full h-auto rounded-lg object-cover"
-        />
-      ) : (
-        <video controls className="w-full h-auto rounded-lg">
-          <source src={`/storage/${attachment.path}`} />
-          Your browser does not support the video tag.
-        </video>
-      )}
-      {isMore && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-semibold text-lg">
-          +{attachments.length - 4} more
-        </div>
-      )}
-    </div>
-  );
-  
-  const renderDocument = (attachment, index) => {
-    const handleDownload = () => {
-      const link = document.createElement('a');
-      link.href = `/storage/${attachment.path}`;
-      link.download = attachment.metadata.original_name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-    
-    return (
-      <article key={index} className="flex flex-col text-xs text-neutral-800 w-48">
-        <div className="p-1 bg-gray-200 rounded-xl">
-          <div
-            className="flex gap-3 items-start py-4 px-4 bg-white rounded-xl max-w-[600px]"
-            onClick={handleDownload}
-            style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
-            >
-            <img
-              src={
-                attachment.extension === 'pdf' ? PDF :
-                attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
-                attachment.extension === 'xlsx' ? Excel :
-                attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
-                'path/to/default-icon.png'
-              }
-              style={{ width: '48px', height: '48px', objectFit: 'contain' }}
-              />
-            <div className="flex flex-col items-start flex-grow">
-              <span className="whitespace-normal break-all blue border-2">Download File</span>
-            </div>
-          </div>
-        </div>
-      </article>
-    );
-  };
-  
-  const getGridClass = () => {
-    const count = imagesAndVideos.length;
-    if (count === 1) return 'one';
-    if (count === 2) return 'two';
-    if (count === 3) return 'three';
-    return 'four';
-  };
-  
-  if (imagesAndVideos.length === 3) {
-    let tallestImageIndex = 0;
-    let maxHeightRatio = 0;
-    
-    imagesAndVideos.forEach((attachment, index) => {
-      if (attachment.mime_type.startsWith("image/")) {
-        const heightRatio = attachment.height / attachment.width;
-        if (heightRatio > maxHeightRatio) {
-          maxHeightRatio = heightRatio;
-          tallestImageIndex = index;
-        }
-      }
-    });
-    
-    const [tallestImage] = imagesAndVideos.splice(tallestImageIndex, 1);
-    imagesAndVideos.unshift(tallestImage);
-  }
-  
-  const attachmentsToDisplay = imagesAndVideos.slice(0, 4);
-  
-  return (
-    <>
-      <div className={`attachment-grid ${getGridClass()}`}>
-        {attachmentsToDisplay.map((attachment, index) => {
-          if (index === 3 && imagesAndVideos.length > 4) {
-            return renderImageOrVideo(attachment, index, true);
-          }
-          return renderImageOrVideo(attachment, index);
-        })}
-        {attachments
-          .filter(att => !att.mime_type.startsWith("image/") && !att.mime_type.startsWith("video/"))
-          .map(renderDocument)}
-      </div>
-
-      {showPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-          <button
-            onClick={closePopup}
-            className="absolute top-4 right-4 text-white text-lg"
-            >
-            &times;
-          </button>
-          <div className="bg-white p-4 rounded-lg max-w-3xl w-full relative">
-            <div className="flex justify-center w-full">
-              {imagesAndVideos[currentMediaIndex].mime_type.startsWith("image/") ? (
-                <img
-                key={imagesAndVideos[currentMediaIndex].path} // Unique key for image
-                src={`/storage/${imagesAndVideos[currentMediaIndex].path}`}
-                alt="Current attachment"
-                className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                />
-              ) : (
-                <video
-                key={imagesAndVideos[currentMediaIndex].path} // Unique key for video
-                controls
-                className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                >
-                  <source src={`/storage/${imagesAndVideos[currentMediaIndex].path}`} />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
-            <div className="flex justify-center mt-4 overflow-x-auto w-full">
-              {imagesAndVideos.map((attachment, index) => (
-                <div
-                key={index}
-                className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => setCurrentMediaIndex(index)}
-                >
-                  {attachment.mime_type.startsWith("image/") ? (
-                    <img
-                    src={`/storage/${attachment.path}`}
-                    alt="Thumbnail"
-                    className="w-20 h-20 object-cover rounded-lg"
-                    />
-                  ) : (
-                    <video className="w-20 h-20 object-cover rounded-lg">
-                      <source src={`/storage/${attachment.path}`} />
-                    </video>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
-
 function FeedbackOption({ optionText, onVote }) {
   return (
     <div
@@ -270,6 +88,9 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [currentEditPost, setCurrentEditPost] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [likedPosts, setLikedPosts] = useState({});
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
   const csrfToken = useCsrf();
 
 
@@ -502,11 +323,66 @@ console.log("FINAL", finalPosts);
       console.error('Error updating post type:', error);
     }
   };
+
+    // Function to handle liking a post
+    const handleLike = async (postId) => {
+      try {
+        const response = await fetch(`/api/posts/post/like/${postId}`, {
+          method: 'PUT',
+          headers: { 'X-CSRF-Token': csrfToken },
+        });
+  
+        if (response.ok) {
+          setLikedPosts((prevLikedPosts) => ({
+            ...prevLikedPosts,
+            [postId]: true,
+          }));
+          fetchData(); // Refetch the data to update the post likes count
+        } else {
+          console.error("Failed to like the post");
+        }
+      } catch (error) {
+        console.error("Error liking the post:", error);
+      }
+    };
+  
+    // Function to handle unliking a post
+    const handleUnlike = async (postId) => {
+      try {
+        const response = await fetch(`/api/posts/post/unlike/${postId}`, {
+          method: 'PUT',
+          headers: { 'X-CSRF-Token': csrfToken },
+        });
+  
+        if (response.ok) {
+          setLikedPosts((prevLikedPosts) => ({
+            ...prevLikedPosts,
+            [postId]: false,
+          }));
+          fetchData(); // Refetch the data to update the post likes count
+        } else {
+          console.error("Failed to unlike the post");
+        }
+      } catch (error) {
+        console.error("Error unliking the post:", error);
+      }
+    };
+  
+    // Example function to determine if the user liked a post (use your logic)
+    const isPostLikedByUser = (post) => {
+      return likedPosts[post.id] || false;
+    };
+
+
+    const openCommentPopup = (post) => {
+      setSelectedPost(post);
+      setIsCommentPopupOpen(true);
+    };
   
 
   return (
     <>
-      {polls.map((poll) => (
+      {polls?.map((poll) => (
         console.log("POLL", poll),
         
         <div className="input-box-container" style={{ height: "auto", marginTop: "-10px" }} key={poll.id}>
@@ -541,10 +417,16 @@ console.log("FINAL", finalPosts);
           </article>
         </div>
       ))}
-      {/* {polls.map((poll) => (
-        <OutputPoll poll={poll} />
-    ))} */}
-      {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => (
+      {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => {
+        let likesCount = 0;
+        try {
+          const likesObject = JSON.parse(post.likes);
+          likesCount = likesObject.likes || 0;
+        } catch (error) {
+          // console.error('Error parsing likes:', error);
+        }
+        
+        return (
         <div key={post.id} className="">
           <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
             <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
@@ -599,41 +481,68 @@ console.log("FINAL", finalPosts);
               )}
             </header>
             <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-              {post.content}
+                  {post.content}
+                </div>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                  {/* {post.tag.replace(/[\[\]"]/, '')} */}
+                  {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                {post.mentions?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <PostAttachments attachments={post.attachments} />
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2">
+                    {isPostLikedByUser(post) ? (
+                      <img
+                        src="/assets/Like.svg"
+                        alt="Unlike"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleUnlike(post.id)}
+                      />
+                    ) : (
+                      <img
+                        src="/assets/likeforposting.svg"
+                        alt="Like"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleLike(post.id)}
+                      />
+                    )}
+                    {likesCount > 0 && <span className="text-sm font-medium">{likesCount}</span>}
+                  </div>
+                  <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                </div>
+              </article>
             </div>
-            <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
-              {post.tag.replace(/[\[\]"]/g, '')}
-            </p>
-            <PostAttachments attachments={post.attachments} />
-            <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-              <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-              <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-              <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-            </div>
-          </article>
-        </div>
-        // )) : reversedFilteredPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => (
-        )) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => (
-          <div key={post.id}>
-            {/* Conditional Rendering for Announcement */}
-            {post.type === 'announcement' && (
-              <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
-                <div className="mb-2 flex items-center gap-1">
-                  <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
-                  <div className="text-center font-bold text-xl	ml-2">
-                    Announcement 🔊 🔊
+        )
+        }) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => {
+          // Parse the likes string
+          let likesCount = 0;
+          try {
+            const likesObject = JSON.parse(post.likes);
+            likesCount = likesObject.likes || 0;
+          } catch (error) {
+            // console.error('Error parsing likes:', error);
+          }
+
+          return (
+            <div key={post.id}>
+              {/* Conditional Rendering for Announcement */}
+              {post.type === 'announcement' && (
+                <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
+                  <div className="mb-2 flex items-center gap-1">
+                    <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
+                    <div className="text-center font-bold text-xl	ml-2">
+                      Announcement 🔊 🔊
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Main Post Content */}
-            <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
-              <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
-                <div className="flex gap-1 mt-2"></div>
-                <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
-                  <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                    <div className="flex gap-1.5 -mt-1">
+              {/* //birthday */}
+              {post.type === 'birthday' && (
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
+                  <div className="flex gap-1.5 -mt-1">
                       <img 
                         loading="lazy" 
                         src={
@@ -654,8 +563,7 @@ console.log("FINAL", finalPosts);
                         <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                         <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                       <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
                         {post.accessibilities?.map((accessibility, index) => (
                           <span key={index}>
@@ -672,51 +580,152 @@ console.log("FINAL", finalPosts);
                         onClick={() => togglePopup(index)} 
                       />
                     </div>
+                    </div>
+                    <div className="flex flex-col gap-1 text-xs font-semibold text-neutral-800">
+                      <div className="w-full border-b-2 mb-2 mt-2"></div>
+                                          
+                      {/* Attachments with overlayed content */}
+                      <div className="relative flex flex-wrap gap-2 mt-4">
+                        {post.attachments.map((attachment, idx) => (
+                          <div key={idx} className="relative w-full">
+                            <img
+                              src={`/storage/${attachment.path}`}
+                              alt={`Attachment ${idx + 1}`}
+                              className="rounded-xl w-full h-auto object-cover"
+                              style={{ maxHeight: '300px' }}  // Allowing the image to take up more vertical space
+                            />
+                            {idx === Math.floor(post.attachments.length / 2) && (
+                              <div className="absolute inset-0 flex justify-center items-center">
+                                <span className="text-5xl font-black text-center text-white text-opacity-90 bg-black bg-opacity-50 p-4 rounded-lg" style={{ maxWidth: '90%' }}>
+                                  {post.content}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                </article>
+              )}
+
+
+
+              {/* Main Post Content */}
+              {post.type !== 'birthday' && (
+              <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
+                <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
+                  <div className="flex gap-1 mt-2"></div>
+                  <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                    <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+                      <div className="flex gap-1.5 -mt-1">
+                        <img 
+                          loading="lazy" 
+                          src={
+                            post.userProfile.profile?.image 
+                                ? (
+                                    post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
+                                        ? post.userProfile.profile.image
+                                        : post.userProfile.profile.image.startsWith('avatar/')
+                                            ? `/storage/${post.userProfile.profile.image}`
+                                            : `/avatar/${post.userProfile.profile.image}`
+                                )
+                                : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                          } 
+                          alt={post.user.name} 
+                          className="shrink-0 aspect-square w-[53px] rounded-image" 
+                        />
+                        <div className="flex flex-col my-auto">
+                          <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
+                          <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                          {post.accessibilities?.map((accessibility, index) => (
+                            <span key={index}>
+                              {accessibility.accessable_type}{": "}
+                            </span>
+                          ))}
+                          {post.departmentNames ? post.departmentNames : post.type}
+                        </span>
+                        <img 
+                          loading="lazy" 
+                          src="/assets/wallpost-dotbutton.svg" 
+                          alt="Options" 
+                          className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" 
+                          onClick={() => togglePopup(index)} 
+                        />
+                      </div>
+                    </div>
                   </div>
+                  {isPopupOpen[index] && (
+                    <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => handleEdit(post)}
+                      >
+                        <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
+                        Edit
+                      </p>
+                      <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => confirmDelete(post.id)}
+                      >
+                        <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
+                        Delete
+                      </p>
+                      <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
+                      <p 
+                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        onClick={() => handleAnnouncement(post)}
+                      >
+                        <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                        Announcement
+                      </p>
+                    </div>
+                  )}
+                </header>
+                <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                  {post.content}
                 </div>
-                {isPopupOpen[index] && (
-                  <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => handleEdit(post)}
-                    >
-                      <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
-                      Edit
-                    </p>
-                    <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => confirmDelete(post.id)}
-                    >
-                      <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
-                      Delete
-                    </p>
-                    <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
-                    <p 
-                      className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                      onClick={() => handleAnnouncement(post)}
-                    >
-                      <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
-                      Announcement
-                    </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                  {/* {post.tag.replace(/[\[\]"]/, '')} */}
+                  {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                {post.mentions?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                {post.event?.replace(/[\[\]"]/g, '') || ''}
+                </p>
+                <PostAttachments attachments={post.attachments} />
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2">
+                    {isPostLikedByUser(post) ? (
+                      <img
+                        src="/assets/Like.svg"
+                        alt="Unlike"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleUnlike(post.id)}
+                      />
+                    ) : (
+                      <img
+                        src="/assets/likeforposting.svg"
+                        alt="Like"
+                        className="w-5 h-5 cursor-pointer"
+                        onClick={() => handleLike(post.id)}
+                      />
+                    )}
+                    {likesCount > 0 && <span className="text-sm font-medium">{likesCount}</span>}
                   </div>
-                )}
-              </header>
-              <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-                {post.content}
-              </div>
-              <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 underline max-md:max-w-full">
-                {post.tag.replace(/[\[\]"]/g, '')}
-              </p>
-              <PostAttachments attachments={post.attachments} />
-              <div className="flex justify-start gap-2 w-5 h-5 mt-2">
-                <img src='/assets/likeforposting.svg' alt="Like" className="w-6 h-6 cursor-pointer" />
-                <img src='/assets/commentforposting.svg' alt="Comment" className="w-6 h-6 cursor-pointer" />
-                <img src='/assets/shareforposting.svg' alt="Share" className="w-6 h-6 cursor-pointer" />
-              </div>
-            </article>
-          </div>
-        ))
+                  <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                </div>
+              </article>
+              )}
+            </div>
+          )
+        })
       }
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -780,6 +789,10 @@ console.log("FINAL", finalPosts);
                 </button>
             </div>
         </div>
+      )}
+
+      {isCommentPopupOpen && selectedPost && (
+        <Comment post={selectedPost} onClose={() => setIsCommentPopupOpen(false)} />
       )}
     </>
   );

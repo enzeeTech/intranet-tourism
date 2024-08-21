@@ -51,25 +51,25 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
   if (typeof departmentBanner === 'string' && departmentBanner.startsWith('banner/')) {
     banner = `/storage/${departmentBanner}`;
   } else {
-    banner = departmentBanner || 'https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&';
+    banner = departmentBanner || '/assets/defaultCommunity.png';
   }
 
   return (
-    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-full w-[875px] text-white max-md:px-5 max-md:max-w-full rounded-t-xl">
+    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-[875px] h-[291.67px] text-white max-md:px-5 w-full rounded-t-xl max-md:-mt-12">
       <img
         loading="lazy"
         src={banner}
         className="absolute inset-0 object-cover size-full"
         alt=""
       />
-      <div className="relative flex justify-between w-full gap-5 max-md:flex-wrap max-md:max-w-full">
+      <div className="relative flex justify-between w-full gap-0 max-md:flex-wrap max-md:max-w-full py-2">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-extrabold">{departmentHeader}</h1>
+          <h1 className="text-3xl drop-shadow-lg text-start font-extrabold shadow-neutral-100">{departmentHeader}</h1>
         </div>
         <div className="flex content-center self-start justify-between gap-5 text-sm font-medium">
         </div>
       </div>
-      <div className="relative mt-5 text-base font-medium leading-5 max-md:max-w-full">
+      <div className="relative -mt-2 text-md font-medium max-md:max-w-full drop-shadow-lg">
         {isEditing ? (
           <textarea
             className="w-full h-32 p-2 text-white bg-inherit focus:outline-none focus:ring focus:ring-blue-500"
@@ -92,7 +92,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
             Save
           </button>
         ) : (
-          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 text-white bg-blue-500 rounded-full" onClick={handleEditClick}>
+          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 mb-4 text-white bg-blue-500 rounded-full" onClick={handleEditClick}>
             <img
               src="/assets/pencil.svg"
               alt="Edit Icon"
@@ -154,8 +154,8 @@ function Navigation({ userId, departmentID, departmentName }) {
         )}
 
         {activeTab === 'Post' && (
-          <div className="flex flex-col max-w-[900px] shadow-2xl pb-6 rounded-xl mt-6">
-            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
+          <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
+            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
               <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={departmentID} />
               <Filter /><br />
               <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />
@@ -235,7 +235,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
 }
 
 
-export default function Adminwall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
+export default function CommunityWall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
   return (
     <div className="flex flex-wrap mx-auto my-20 text-black justify-left max-w-7xl gap-y-10">
       <Adminsection

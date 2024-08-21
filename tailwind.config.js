@@ -62,6 +62,10 @@ export default {
         custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
       },
 
+      width: {
+        comment: "600px",
+      },
+
       gridTemplateColumns: {
         layout: '1fr 3fr 1fr', // Custom grid template for layout
       },

@@ -15,11 +15,11 @@ import { ProfileDepartment } from '@/Components/ProfileTabbar';
 
 function SaveNotification({ title, content, onClose }) {
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-            <div className="p-2 rounded-3xl w-4xl">
-                <section className="flex flex-col px-2.5 pt-16 font-bold text-center bg-white rounded-xl shadow-custom w-[380px] h-[165px]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="rounded-2xl">
+                <section className="flex flex-col font-bold text-center bg-green-100 rounded-2xl shadow-custom py-4 px-8">
                     <div className="flex flex-col w-full">
-                        <h2 className="text-xl text-neutral-800">{title}</h2>
+                        <h2 className="text-xl text-green-800">{title}</h2>
                     </div>
                 </section>
             </div>
@@ -311,7 +311,7 @@ const tag="guest";
 return (
     <Example>
         <main className="xl:pl-96 w-full">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div className="px-1 py-10 sm:px-1 lg:px-8 lg:py-6 sm:mr-0 md:mr-7 lg:mr-9 mr-9">
                 <div>
                     <div className="profile-header w-full bg-white h-[485px] max-md:h-[385px] shadow-custom rounded-lg ml-8">
                         <ProfileHeader

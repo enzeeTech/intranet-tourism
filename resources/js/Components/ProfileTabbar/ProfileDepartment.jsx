@@ -4,6 +4,7 @@ import 'react-phone-input-2/lib/style.css';
 
 function ProfileDepartment({
     department,
+    departmentId,
     unit,
     jobtitle,
     position,
@@ -71,6 +72,9 @@ function ProfileDepartment({
         }
     };
 
+    console.log("DDDD", department);
+    
+
     const fetchBusinessUnits = async () => {
         let allUnits = [];
         let currentPage = 1;
@@ -78,7 +82,8 @@ function ProfileDepartment({
 
         try {
             while (currentPage <= lastPage) {
-                const response = await fetch(`/api/department/business_units?page=${currentPage}`, {
+                // const response = await fetch(`/api/department/business_units?page=${currentPage}`, {
+                const response = await fetch(`/api/department/business_units?department_id=${departmentId}&page=${currentPage}`, {
                     method: "GET",
                     headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
                 });
@@ -155,14 +160,14 @@ function ProfileDepartment({
 
     const renderField = (label, name, value, options, editable = true, onChangeHandler = handleInputChange) => (
         <tr key={name}>
-            <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">{label}</td>
-            <td className="py-2 align-center w-2/3">
+            <td className="w-1/3 py-2 font-semibold capitalize align-center text-neutral-800 ">{label}</td>
+            <td className="w-2/3 py-2 align-center">
                 {isEditing && editable ? (
                     <select
                         name={name}
                         value={localFormData[name] || ''}
                         onChange={onChangeHandler}
-                        className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-y-auto"
+                        className="block w-full sm:w-full md:w-full lg:w-full p-2 mt-1 overflow-y-auto text-sm border-2 rounded-full text-neutral-800 text-opacity-80 border-stone-300 max-md:ml-4"
                         ref={inputRef}
                         style={{ maxHeight: '150px' }}
                     >
@@ -174,7 +179,7 @@ function ProfileDepartment({
                         ))}
                     </select>
                 ) : (
-                    <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
+                    <div className="block w-full p-2 mt-1 text-sm border-2 border-transparent rounded-md text-neutral-800 text-opacity-80">
                         {localFormData[`${name}_display`] || value}
                     </div>
                 )}
@@ -183,51 +188,47 @@ function ProfileDepartment({
     );
 
     return (
-        <div className="flex-auto my-auto p-4">
+        <div className="flex-auto p-4 my-auto">
             <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6">
-                <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
-                    <table className="table-auto w-full text-left border-collapse">
+                <div className="flex flex-col w-full md:ml-0 md:w-full">
+                    <table className="w-full text-left border-collapse table-auto">
                         <tbody>
-                            {renderField('Department', 'department', localFormData.department, departmentOptions, true, handleInputChange)}
+                            {renderField('Department', 'department', localFormData.department, departmentOptions, false, handleInputChange)}
                             {renderField('Unit', 'unit', localFormData.unit, unitOptions, true, handleInputChange)}
                             {renderField('Job Title', 'jobtitle', localFormData.jobtitle, jobTitleOptions, true, handleInputChange)}
                             {renderField('Position', 'position', localFormData.position, positionOptions, true, handleInputChange)}
                             {renderField('Grade', 'grade', localFormData.grade, gradeOptions, true, handleInputChange)}
                             <tr>
-                                <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">Location</td>
-                                <td className="py-2 align-center w-2/3">
+                                <td className="w-1/3  py-2 font-semibold capitalize align-center text-neutral-800">Location</td>
+                                <td className="w-2/3 py-2 align-center">
                                     {isEditing ? (
                                         <input
                                             type="text"
                                             name="location"
                                             value={localFormData.location || ''}
                                             onChange={handleInputChange}
-                                            className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                            className="block w-full sm:w-full md:w-full lg:w-full p-2 mt-1 text-sm border-2 rounded-full text-neutral-800 text-opacity-80 border-stone-300 max-md:ml-4"
                                         />
                                     ) : (
-                                        <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
+                                        <div className="block w-full p-2 mt-1 text-sm border-2 border-transparent rounded-md text-neutral-800 text-opacity-80">
                                             {localFormData.location}
                                         </div>
                                     )}
                                 </td>
                             </tr>
                             <tr>
-                                <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">Office Number</td>
-                                <td className="py-2 align-center w-2/3">
+                                <td className="w-1/3 py-2 font-semibold capitalize align-center text-neutral-800">Office Number</td>
+                                <td className="w-2/3 py-2 align-center ml-20">
                                     {isEditing ? (
                                         <PhoneInput
-                                            country={'my'}  // Set to the default country you prefer
-                                            value={localFormData.phone}
-                                            onChange={handlePhoneChange}
-                                            inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
-                                            containerClass="phone-input-container"
-                                            buttonClass="phone-input-button"
-                                            dropdownClass="phone-input-dropdown"
-                                            disableDropdown={false}
-                                        />
+                                        country={'my'}
+                                        value={localFormData.phone}
+                                        onChange={handlePhoneChange}
+                                        containerClass="w-full sm:ml-[5px] md:ml-[4px] lg:ml-[1px] max-md:px-3" // Tailwind classes for margin adjustments
+                                        inputStyle={{ width: '100%', marginLeft: '0px' }}                                      />
                                     ) : (
-                                        <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
-                                            {localFormData.phone}
+                                        <div>
+                                            +{localFormData.phone}
                                         </div>
                                     )}
                                 </td>

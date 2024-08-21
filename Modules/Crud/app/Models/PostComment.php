@@ -17,7 +17,7 @@ class PostComment extends Model implements AuditableContract
 
     protected $fillable = [
         'post_id',
-        'comment_id',
+        // 'comment_id',
     ];
 
     public static function rules($scenario = 'create')
@@ -26,14 +26,14 @@ class PostComment extends Model implements AuditableContract
             'create' => [
                 [
                     'post_id' => ['string', 'required'],
-                    'comment_id' => ['string', 'required'],
+                    // 'comment_id' => ['string', 'required'],
                 ],
                 // [],
             ],
             'update' => [
                 [
                     'post_id' => ['string', 'required'],
-                    'comment_id' => ['string', 'required'],
+                    // 'comment_id' => ['string', 'required'],
                 ],
                 // [],
             ],

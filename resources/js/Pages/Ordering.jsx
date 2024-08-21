@@ -158,7 +158,7 @@ const Ordering = () => {
                 <div className="flex">
                     <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
                         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between max-md:px-4">
                                 <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
                                 <div className="flex space-x-4">
                                     <button onClick={handleBack} className="font-bold text-black text-md">Back</button>
@@ -166,15 +166,15 @@ const Ordering = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8">
+                        <div className="flex flex-col px-10 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8 mr-8 sm:px-6 lg:px-8 lg:py-6">
                             <DragDropContext onDragEnd={handleDragEnd}>
                                 <Droppable droppableId="staff">
                                     {(provided) => (
-                                        <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                        <table className="w-full table-fixed bg-white divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
-                                                    <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
+                                                    <th className="px-0 py-3 font-bold text-left text-gray-700 text-md w-3/5">Name</th>
+                                                    <th className="px-14 max-md:px-0 py-3 font-bold text-right text-gray-700 text-md w-1/5">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -186,36 +186,49 @@ const Ordering = () => {
                                                                 {...provided.draggableProps}
                                                                 className="bg-white border-t border-gray-200"
                                                             >
-                                                                <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                    <img src={getImageSource(item.imageUrl)} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11 " />
-                                                                    {item.name}
-                                                                    {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
-                                                                </td>
-                                                                <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                <td
+                                                                    className="py-4 text-lg font-bold max-md:text-sm text-black pr-12 whitespace-nowrap bg-white"
+                                                                    {...provided.dragHandleProps}
+                                                                    >
                                                                     <div className="flex items-center">
-                                                                        <button
-                                                                            className="px-2"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveUp(index);
-                                                                            }}
-                                                                            disabled={index === 0}
-                                                                            style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingup.svg" alt="Up" />
-                                                                        </button>
-                                                                        <button
-                                                                            className="px-2"
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                handleMoveDown(index);
-                                                                            }}
-                                                                            disabled={index === staffMembers.length - 1}
-                                                                            style={{ opacity: index === staffMembers.length - 1 ? 0.6 : 1 }}
-                                                                        >
-                                                                            <img src="assets/orderingdown.svg" alt="Down" />
-                                                                        </button>
+                                                                        <img
+                                                                        src={getImageSource(item.imageUrl)}
+                                                                        alt={item.name}
+                                                                        className="inline-block object-cover w-12 h-16 mr-4 max-md:w-9 max-md:h-12 max-md:mr-2 max-md:rounded-md rounded-md"
+                                                                        />
+                                                                        <div className="flex flex-col">
+                                                                        <span className="whitespace-normal overflow-hidden text-ellipsis">
+                                                                            {item.name}
+                                                                        </span>
+                                                                        {item.isDeactivated && (
+                                                                            <span className="text-red-500 text-sm mt-0">(Deactivated)</span>
+                                                                        )}
+                                                                        </div>
                                                                     </div>
+                                                                </td>
+                                                                <td className="flex-col bg-white w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0">
+                                                                    <button
+                                                                        className="px-2"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleMoveUp(index);
+                                                                        }}
+                                                                        disabled={index === 0}
+                                                                        style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                    >
+                                                                        <img src="assets/orderingup.svg" alt="Up" />
+                                                                    </button>
+                                                                    <button
+                                                                        className="px-2"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleMoveDown(index);
+                                                                        }}
+                                                                        disabled={index === staffMembers.length - 1}
+                                                                        style={{ opacity: index === staffMembers.length - 1 ? 0.6 : 1 }}
+                                                                    >
+                                                                        <img src="assets/orderingdown.svg" alt="Down" />
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         )}
@@ -244,15 +257,15 @@ const Ordering = () => {
                         <hr className="file-directory-underline" />
                         <div>
                             <FeaturedEvents />
-                            <WhosOnline />
+                            {/* <WhosOnline /> */}
                         </div>
                     </aside>
                 </div>
             </div>
             {isNotificationVisible && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="p-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">{notificationMessage}</p>
+                    <div className="p-4 bg-green-100 rounded-2xl shadow-lg">
+                        <p className="text-lg font-semibold text-green-800">{notificationMessage}</p>
                     </div>
                 </div>
             )}

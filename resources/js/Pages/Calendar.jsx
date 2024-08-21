@@ -53,6 +53,8 @@ function Calendar() {
         fetch('/api/events/events?with[]=author')
             .then(response => response.json())
             .then(data => {
+                console.log("DATAAA", data);
+                
                 const formattedEvents = data.data.data.map(event => ({
                     id: event.id,
                     title: event.title,
@@ -82,8 +84,10 @@ function Calendar() {
             let totalPages = 1;
     
             while (currentPage <= totalPages) {
-                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                // const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const response = await fetch(`/api/profile/profiles?filter[]=dob&paginate=false`);
                 const data = await response.json();
+                
     
                 if (data && data.data && Array.isArray(data.data.data)) {
                     allProfiles = [...allProfiles, ...data.data.data];
@@ -95,6 +99,8 @@ function Calendar() {
                     break;
                 }
             }
+            console.log("DATAAAA", allProfiles);
+
     
             // Map profiles to birthday events
             const birthdayEvents = allProfiles.reduce((acc, profile) => {
@@ -108,9 +114,9 @@ function Calendar() {
     
                 // const dateStr = dob.toISOString().split('T')[0];
                 const year = dob.getFullYear();
-const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-const day = String(dob.getDate()).padStart(2, '0');
-const dateStr = `${year}-${month}-${day}`;
+                const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+                const day = String(dob.getDate()).padStart(2, '0');
+                const dateStr = `${year}-${month}-${day}`;
 
                 // console.log("dateStr", dateStr);
                 // console.log("dob", dob);
@@ -182,7 +188,7 @@ const dateStr = `${year}-${month}-${day}`;
             title: '',
             venue: '',
             startDate: formatDate(selectedDate),
-            endDate: '',
+            endDate: formatDate(selectedDate),
             startTime: '',
             endTime: '',
             color: 'purple',
@@ -239,15 +245,16 @@ const dateStr = `${year}-${month}-${day}`;
         // Hardcoded start and end times
         const defaultStartTime = "09:00";
         const defaultEndTime = "17:00";  
-    
+        
         const eventPayload = {
             title: eventData.title,
-            venue: eventData.venue,
             start_at: formatDateTime(eventData.startDate, defaultStartTime),
             end_at: formatDateTime(eventData.endDate, defaultEndTime),
             description: eventData.description,
             color: eventData.color,
-            url: includeUrl ? eventData.url : null,
+            // url: includeUrl ? eventData.url : null,
+            // Only include venue if it's provided
+            ...(eventData.venue ? { venue: eventData.venue } : {}),
         };
     
         fetch('/api/events/events', {
@@ -258,26 +265,22 @@ const dateStr = `${year}-${month}-${day}`;
             },
             body: JSON.stringify(eventPayload),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.errors) {
-                    console.error('Error creating event: ', data.errors);
-                    return;
-                }
-                setEvents([...events, data]);
-                closeModal();
-            })
-            .catch(error => {
-                console.error('Error creating event: ', error);
-                setIsModalOpen(false);
-                fetchEvents();
-            });
+        .then(response => response.json())
+        .then(data => {
+            if (data.errors) {
+                console.error('Error creating event: ', data.errors);
+                return;
+            }
+            setEvents([...events, data]);
+            closeModal();
+        })
+        .catch(error => {
+            console.error('Error creating event: ', error);
+            setIsModalOpen(false);
+            fetchEvents();
+        });
     };
+    
     
 
     const handlePrint = () => {
@@ -302,14 +305,10 @@ const dateStr = `${year}-${month}-${day}`;
         closePrintModal();
     };
 
-    const handleEventClick = (info) => {
-        info.jsEvent.preventDefault();
-        info.jsEvent.stopPropagation();
-        if (info.event.url && info.event.url.trim() && info.event.url !== 'null') {
-            window.open(info.event.url, '_blank');
-        } else {
-            alert('This event does not have a URL.');
-        }
+    const handleEventClick = (eventInfo) => {
+        eventInfo.jsEvent.preventDefault();
+        // Trigger handleEditClick with the event data
+        handleEditClick(eventInfo.event);
     };
     
     const handleEditClick = (event) => {
@@ -350,7 +349,7 @@ const dateStr = `${year}-${month}-${day}`;
             FfData.append('end_at', `${eventData.endDate}T${eventData.endTime}`);
             FfData.append('description', eventData.description);
             FfData.append('color', eventData.color);
-            FfData.append('url', eventData.url || '');
+            // FfData.append('url', eventData.url || '');
     
             const response = await fetch(`/api/events/events/${eventId}`, {
                 method: 'POST',
@@ -494,21 +493,24 @@ const dateStr = `${year}-${month}-${day}`;
                                 hour12: true
                             });
 
-                            const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
-                                ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
-                                : '';
+                            // const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
+                            //     ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                            //     : '';
 
                             const descContent = (info.event.extendedProps.description && info.event.extendedProps.description.trim() && info.event.extendedProps.description !== 'null') 
                                 ? `<p><strong>Description:</strong> ${info.event.extendedProps.description}</p>` 
+                                : '';
+
+                            const VenueContent = (info.event.extendedProps.venue && info.event.extendedProps.venue.trim() && info.event.extendedProps.venue !== 'null') 
+                                ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue}</p>` 
                                 : '';
                             
                             const popoverContent = `
                                 <div>
                                     <p class="event-title"><strong>${info.event.title}</strong></p>
                                     <p><strong>Created by:</strong> ${info.event.extendedProps.userName}</p>
-                                    <p><strong>Venue:</strong> ${info.event.extendedProps.venue || 'No venue'}</p>
+                                    ${VenueContent}
                                     ${descContent}
-                                    ${urlContent}
                                 </div>`;
                             
                             new bootstrap.Popover(info.el, {
@@ -565,7 +567,7 @@ const dateStr = `${year}-${month}-${day}`;
                                         borderRadius: '2px',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        height: '100%',
+                                        height: '30px',
                                         width: '100%',
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
@@ -626,7 +628,6 @@ const dateStr = `${year}-${month}-${day}`;
                                     onChange={handleChange}
                                     className="form-control"
                                     placeholder="Venue"
-                                    required
                                 />
                                 <div className="flex items-start font-bold text-md text-neutral-800">Start Date</div>
                                 <input
@@ -638,15 +639,6 @@ const dateStr = `${year}-${month}-${day}`;
                                     placeholder="Start Date"
                                     required
                                 />
-                                {/* <input
-                                    type="time"
-                                    name="startTime"
-                                    value={eventData.startTime}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="Start Time"
-                                    required
-                                /> */}
                                 <div className="flex items-start text-md font-semibold text-neutral-800">End Date</div>
                                 <input
                                     type="date"
@@ -657,15 +649,6 @@ const dateStr = `${year}-${month}-${day}`;
                                     placeholder="End Date"
                                     required
                                 />
-                                {/* <input
-                                    type="time"
-                                    name="endTime"
-                                    value={eventData.endTime}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="End Time"
-                                    required
-                                /> */}
                                 <textarea
                                     name="description"
                                     value={eventData.description}
@@ -721,7 +704,6 @@ const dateStr = `${year}-${month}-${day}`;
                                     onChange={handleChange}
                                     className="form-control"
                                     placeholder="Venue"
-                                    required
                                 />
                                 <input
                                     type="date"
@@ -741,24 +723,6 @@ const dateStr = `${year}-${month}-${day}`;
                                     placeholder="End Date"
                                     required
                                 />
-                                {/* <input
-                                    type="time"
-                                    name="startTime"
-                                    value={eventData.startTime}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="Start Time"
-                                    required
-                                />
-                                <input
-                                    type="time"
-                                    name="endTime"
-                                    value={eventData.endTime}
-                                    onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="End Time"
-                                    required
-                                /> */}
                                 <input
                                         type="text"
                                         name="description"

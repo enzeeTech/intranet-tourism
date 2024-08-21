@@ -40,7 +40,7 @@ const Community = ({  }) => {
         id: community.id,
         name: community.name,
         type: community.type,
-        imageUrl: community.banner || '/assets/departmentsDefault.jpg', // Use banner if available
+        imageUrl: community.banner || '/assets/defaultCommunity.png', // Use banner if available
       }));
 
       setDepartmentsList(departmentData.sort((a, b) => a.name.localeCompare(b.name)));
@@ -118,25 +118,18 @@ const Community = ({  }) => {
         <hr className="file-directory-underline" />
         <div>
           <FeaturedEvents />
-          <WhosOnline />
+          {/* <WhosOnline /> */}
         </div>
       </aside>
       {isCreateCommunityOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-2xl shadow-lg relative">
+          <div className="bg-white p-4 rounded-2xl shadow-lg max-md:w-5/6 relative">
             <div className="relative">
-              <button
-                onClick={toggleCreateCommunity}
-                className="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-900"
-              >
-                <svg
-                  className="h-6 w-6 fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 8.586L3.293 1.879a1 1 0 1 0-1.414 1.414L8.586 10l-6.707 6.707a1 1 0 0 0 1.414 1.414L10 11.414l6.707 6.707a1 1 0 0 0 1.414-1.414L11.414 10l6.707-6.707a1 1 0 0 0-1.414-1.414L10 8.586z" />
-                </svg>
-              </button>
+              <div className="flex justify-end">
+                <button onClick={toggleCreateCommunity} className="absolute top-0 right-0 mt-2 mr-2">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+                </button>
+              </div>
             </div>
             <CreateCommunity id={id} onCreate={handleNewDepartment} />
           </div>

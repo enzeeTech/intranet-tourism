@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import defaultImage from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import { useCsrf } from "@/composables";
 import './AddMemberPopup.css';
@@ -61,21 +63,29 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [selectedGradeId, setSelectedGradeId] = useState('');
     const csrfToken = useCsrf();
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchCurrentMembers();
     }, [departmentId]);
 
+    let debounceTimeout;
+
     useEffect(() => {
-        const debounceTimeout = setTimeout(() => {
-            if (searchTerm) {
+        clearTimeout(debounceTimeout);
+
+        if (searchTerm.trim() !== '') {
+            setLoading(true);
+            debounceTimeout = setTimeout(() => {
                 fetchAllSearchResults(searchTerm);
-            } else {
-                setSearchResults([]);
-            }
-        }, 300);
+            }, 1000); 
+        } else {
+            setSearchResults([]);  
+            setLoading(false); 
+        }
 
         return () => clearTimeout(debounceTimeout);
+
     }, [searchTerm]);
 
     useEffect(() => {
@@ -109,28 +119,25 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const fetchAllSearchResults = async (query) => {
         setError('');
         let allResults = [];
-        let currentPage = 1;
-        let hasMorePages = true;
-
+    
         try {
-            while (hasMorePages) {
-                const response = await fetch(`/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-                
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch: ${response.statusText}`);
-                }
-
-                const responseText = await response.text();
-                const data = responseText ? JSON.parse(responseText) : {};
-
-                allResults = [...allResults, ...data.data.data];
-                currentPage++;
-                hasMorePages = data.data.next_page_url !== null;
+            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+            
+            if (!response.ok) {
+                throw new Error(`Failed to fetch: ${response.statusText}`);
             }
+    
+            const responseText = await response.text();
+            const data = responseText ? JSON.parse(responseText) : {};
+    
+            allResults = data.data;
+    
             setSearchResults(allResults);
         } catch (error) {
             console.error('Error fetching search results:', error);
             setError('Failed to fetch search results. Please try again.');
+        } finally {
+            setLoading(false); 
         }
     };
 
@@ -233,6 +240,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             return;
         }
         setSelectedPerson(person);
+        setSearchTerm(person.name);
         setError('');  
     };
 
@@ -291,7 +299,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         const businessPostId = titleId;
         const order = '0';        
 
-        // Create the base body object with required fields
         const body = {
             department_id: String(departmentId),
             business_post_id: String(businessPostId),
@@ -301,7 +308,6 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             order: order,
         };
 
-        // Conditionally add optional fields
         if (unitId !== '') {
             body.business_unit_id = String(unitId);
         }
@@ -329,7 +335,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                 name: selectedPerson.name,  
                 role: title,
                 status: 'Online',
-                imageUrl: selectedPerson.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
+                imageUrl: selectedPerson.profile.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
                 workNo: workPhoneNumber || '',
                 phoneNo: selectedPerson.profile.phone_no,
                 isDeactivated: selectedPerson.is_active,
@@ -393,19 +399,25 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             className="w-[95%] py-2 px-4 mb-4 ml-[2.5%] border bg-gray-200 border-gray-200 rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
-                            {!selectedPerson && searchResults.map((person, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-center p-2 cursor-pointer"
-                                    onClick={() => handleSelectPerson(person)}
-                                >
-                                    <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
-                                    <div>
-                                        <div className="text-lg font-bold">{person.name}</div>
-                                        <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
-                                    </div>
+                            {loading ? (
+                                <div className="flex items-center justify-center h-64">
+                                    <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
                                 </div>
-                            ))}
+                            ) : (
+                                searchResults.map((person, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center p-2 cursor-pointer"
+                                        onClick={() => handleSelectPerson(person)}
+                                    >
+                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <div>
+                                            <div className="text-lg font-bold">{person.name}</div>
+                                            <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                             {error && <div className="mt-2 text-red-500">{error}</div>}
                         </div>
                         {selectedPerson && (
@@ -504,11 +516,15 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 </div>
                                 <div className="mb-4">
                                     <label className="block font-bold text-gray-700">Work Phone Number</label>
-                                    <input
-                                        type="text"
+                                    <PhoneInput
+                                        country={'my'}  
                                         value={workPhoneNumber}
-                                        onChange={(e) => setWorkPhoneNumber(e.target.value)}
-                                        className="w-full p-2 border border-gray-300 rounded-full"
+                                        onChange={setWorkPhoneNumber}
+                                        inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                                        containerClass="phone-input-container"
+                                        buttonClass="phone-input-button"
+                                        dropdownClass="phone-input-dropdown"
+                                        disableDropdown={false}
                                     />
                                 </div>
                             </div>

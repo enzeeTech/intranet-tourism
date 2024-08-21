@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaLock } from 'react-icons/fa'; // Import the lock icon
 
 const CommunityItem = ({ name, category, imgSrc, altText }) => (
   <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
@@ -6,11 +7,16 @@ const CommunityItem = ({ name, category, imgSrc, altText }) => (
       <img
         src={imgSrc}
         alt={altText}
-        className="w-[140px] rounded-md object-cover"
+        className="w-[120px] h-[40px] rounded-md object-cover object-center"
       />
     </div>
     <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">
-      <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
+      <div className="flex items-center">
+        <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
+        {category === 'private' && (
+          <FaLock className="ml-2 h-3 w-3 text-gray-600 fill-black" /> // Lock icon for private communities
+        )}
+      </div>
       <p className="text-xs font-semibold text-neutral-600">{category}</p>
     </div>
   </article>
@@ -35,7 +41,7 @@ function MyComponent() {
         id: community.id,
         name: community.name,
         category: community.type,
-        imgSrc: 'assets/departmentsDefault.jpg',
+        imgSrc: community.banner ? community.banner : 'assets/departmentsDefault.jpg',
         altText: `${community.name} community image`,
         createdAt: new Date(community.created_at),
       }));

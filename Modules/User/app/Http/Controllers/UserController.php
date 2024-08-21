@@ -22,19 +22,26 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = $request->query();
-        $modelBuilder = User::queryable();
+        $modelBuilder = User::query();
 
         // Handle search by name
         if ($request->has('search')) {
             $search = $request->input('search');
             $modelBuilder->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
-        }
 
-        // Handle pagination
-        if (array_key_exists('disabledPagination', $query)) {
-            $data = $modelBuilder->get();
+            // Skip pagination if search is present and disabledPagination is set
+            if (array_key_exists('disabledPagination', $query)) {
+                $data = $modelBuilder->get();
+            } else {
+                $data = $modelBuilder->paginate();
+            }
         } else {
-            $data = $modelBuilder->paginate();
+            // Handle pagination for general queries without search
+            if (array_key_exists('disabledPagination', $query)) {
+                $data = $modelBuilder->get();
+            } else {
+                $data = $modelBuilder->paginate();
+            }
         }
 
         return response()->json(['data' => $data]);

@@ -11,7 +11,7 @@
     background: #f0f0f0; /* Customize the scrollbar track color */
 }
 
-.modal-open {
-    overflow: hidden; /* Prevent the scrollbar from disappearing */
-}
+body {
+    overflow-x: hidden;
+  }
 

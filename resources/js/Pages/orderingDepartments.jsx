@@ -128,7 +128,7 @@ const OrderingDepartments = () => {
             const updatePromises = departments.map(async (department, index) => {
                 const result = await updateOrderInDatabase(department);
                 if (result && result.success) {
-                    setProgress(((index + 1) / totalDepartments) * 100); 
+                    setProgress(Math.round(((index + 1) / totalDepartments) * 100));  // Rounded to nearest whole number
                 }
                 return result;
             });
@@ -154,6 +154,20 @@ const OrderingDepartments = () => {
 
     const handleBack = () => {
         window.location.href = '/departments';
+    };
+
+    const handleMoveUp = (index) => {
+        if (index === 0) return;
+        const newData = [...departments];
+        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
+        setDepartments(updateOrderAttributes(newData));
+    };
+
+    const handleMoveDown = (index) => {
+        if (index === departments.length - 1) return;
+        const newData = [...departments];
+        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
+        setDepartments(updateOrderAttributes(newData));
     };
 
     return (
@@ -196,16 +210,17 @@ const OrderingDepartments = () => {
                                                                         {...provided.draggableProps}
                                                                         className="bg-white border-t border-gray-200"
                                                                     >
-                                                                        <td className="flex items-center px-6 py-4 text-base font-bold text-black whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                            <img src={item.imageUrl} alt={item.name} className="w-[100px] rounded-md object-cover mr-4" />
+                                                                        <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                            <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
                                                                             {item.name}
-                                                                    </td>
+                                                                        </td>
                                                                         <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
                                                                             <div className="flex items-center">
                                                                                 <button
                                                                                     className="px-2"
                                                                                     onClick={(e) => {
                                                                                         e.stopPropagation();
+                                                                                        handleMoveUp(index); // Move up
                                                                                     }}
                                                                                     disabled={index === 0}
                                                                                     style={{ opacity: index === 0 ? 0.6 : 1 }}
@@ -216,6 +231,7 @@ const OrderingDepartments = () => {
                                                                                     className="px-2"
                                                                                     onClick={(e) => {
                                                                                         e.stopPropagation();
+                                                                                        handleMoveDown(index); // Move down
                                                                                     }}
                                                                                     disabled={index === departments.length - 1}
                                                                                     style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
@@ -237,44 +253,28 @@ const OrderingDepartments = () => {
                                 </>
                             )}
                         </div>
-                    </main>
-                    <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
-                        <style>
-                            {`
-                            aside::-webkit-scrollbar {
-                                width: 0px;
-                                background: transparent;
-                            }
-                            `}
-                        </style>
-                        <div className="file-directory-header">
-                            <PageTitle title="Staff Directory" />
-                        </div>
-                        <hr className="file-directory-underline" />
-                        <div>
-                            <FeaturedEvents />
-                            <WhosOnline />
-                        </div>
-                    </aside>
-                </div>
-            </div>
-            {isNotificationVisible && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50 backdrop-blur-sm">
-                    <div className="p-4 bg-white rounded-lg shadow-lg">
-                        <p className="text-lg font-semibold">{notificationMessage}</p>
-                        <div className="mt-4">
-                            <div className="w-full bg-gray-200 rounded-full">
-                                <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: `${progress}%` }}>
-                                    {/* {progress.toFixed(0)}% */}
+                        {isNotificationVisible && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">  {/* Adjusted styling for full screen cover */}
+                                <div className="p-6 text-center bg-white rounded-lg shadow-lg">
+                                    <h2 className="mb-4 text-xl font-semibold">{notificationMessage}</h2>
+                                    <div className="w-full bg-gray-300">
+                                        <div className="py-1 text-xs leading-none text-center text-white bg-green-500" style={{ width: `${progress}%` }}>{`${progress}%`}</div> {/* Whole number percentage */}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        )}
+                    </main>
                 </div>
-                
-            )}
+                <aside className="flex-shrink-0 hidden w-96 xl:block">
+                    <div className="px-4 mt-10">
+                        <PageTitle title="Widgets" />
+                        <FeaturedEvents />
+                        <WhosOnline />
+                    </div>
+                </aside>
+            </div>
         </Example>
     );
-};
+}
 
 export default OrderingDepartments;

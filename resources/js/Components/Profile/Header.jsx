@@ -198,7 +198,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-[290px] max-md:h-1/3" />
         <div onClick={handleIconClick}>
           <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} tag={tag} />
-          {isPopupOpen && (~
+          {isPopupOpen && (
             <EditProfilePhoto
               onClose={handleCloseClick}
               onSelectFile={handleSelectFile}
@@ -250,9 +250,9 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           </div>
         </div>
       )}
-      {isUpdatePopupOpen && (
+      {/* {isUpdatePopupOpen && (
         <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={croppedImage} />
-      )}
+      )} */}
     </>
   );
 }

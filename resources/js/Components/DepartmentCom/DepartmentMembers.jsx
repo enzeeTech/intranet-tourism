@@ -4,10 +4,19 @@ import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 
 function Avatar({ src, alt, className, status }) {
-  const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
+  let source = null;
+
+    if (src.startsWith('staff_image/')) {
+        source = `/storage/${src}`;
+    } else {
+        source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? src 
+            : `/avatar/${src}`;
+    }
+  // const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
   return (
     <div className="relative items-center justify-end h-16">
-      <img loading="lazy" src={imageUrl} alt={alt} className={className} />
+      <img loading="lazy" src={source} alt={alt} className={className} />
       {status === 1 && (
         <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-1"></div>
       )}
@@ -105,16 +114,29 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
 
 
 const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const handleDotClick = () => {
+  // const handleDotClick = () => {
+  //   if (activePopupId === id) {
+  //     closePopup();
+  //   } else {
+  //     setActivePopupId(id);
+  //   }
+  // };
+
+  const handleDotClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (activePopupId === id) {
       closePopup();
     } else {
       setActivePopupId(id);
     }
   };
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -135,6 +157,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
   }, [popupRef, closePopup]);
 
   return (
+    <a href={`/user/${id}`}>
     <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={title} isActive={isActive} />
@@ -153,6 +176,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
         )}
       </div>
     </div>
+    </a>
   );
 };
 
@@ -273,9 +297,9 @@ function DpMembers() {
     handleNewMemberAdded(newMember);
   };
 
-  // console.log(members);
-
+  
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
+  console.log("asasasa", displayedMembers);
 
   return (
     <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">
