@@ -62,6 +62,10 @@ export default {
         custom: '0px 0px 20px -10px rgba(0, 0, 0, 0.3)',
       },
 
+      dropShadow:{
+        custom: '2px 2px 4px rgba(0, 0, 0, 0.5);',
+      },
+
       width: {
         comment: "600px",
       },
