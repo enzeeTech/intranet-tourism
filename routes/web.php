@@ -40,6 +40,7 @@ Route::post('/logout', function () {
 
     return redirect('/');  // Redirect to home or login page
 })->name('logout');
+Route::get('/user/{id}/profile-qr', [ProfileController::class, 'profileQr'])->name('profileQr');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

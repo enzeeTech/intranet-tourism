@@ -21,6 +21,21 @@ use Modules\Settings\Models\UserPreference;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
+
+use BaconQrCode\Renderer\Color\Rgb;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\Fill;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+use Astrotomic\Vcard\Properties\Email;
+use Astrotomic\Vcard\Properties\Gender;
+use Astrotomic\Vcard\Properties\Kind;
+use Astrotomic\Vcard\Properties\Tel;
+use Astrotomic\Vcard\Vcard;
+use Carbon\Carbon;
+
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Authorizable, HasFactory, QueryableApi , HasApiTokens, HasPermissions, HasRoles, Notifiable;
@@ -124,9 +139,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
-    public function profiles()
+    public function profile()
     {
-        return $this->hasMany(Profile::class);
+        return $this->hasOne(Profile::class);
     }
 
     public function resources()
@@ -142,5 +157,36 @@ class User extends Authenticatable implements MustVerifyEmail
     public function preferences()
     {
         return $this->hasMany(UserPreference::class);
+    }
+
+    public function getVcardAttribute($value) {
+
+        $vcard =  Vcard::make()
+        ->kind(Kind::INDIVIDUAL)
+        // ->gender(Gender::MALE)
+        ->fullName($this->name)
+        ->name($this->name)
+        ->email($this->email)
+        // ->email('john.smith@company.com', [Email::WORK, Email::INTERNET])
+        ->tel($this->profile->phone_no, [Tel::WORK, Tel::VOICE])
+        ->bday(Carbon::parse($this->profile->dob))
+        // ->adr('','','1600 Pennsylvania Ave NW', 'Washington', 'DC', '20500-0003', 'USA')
+        // ->photo('data:image/jpeg;base64,'.base64_encode(file_get_contents(__DIR__.'/stubs/photo.jpg')))
+        // ->title('V. P. Research and Development')
+        // ->role('Excecutive')
+        // ->org('Google', 'GMail Team', 'Spam Detection Squad')
+        // ->member('john.smith@company.com', '550e8400-e29b-11d4-a716-446655440000')
+        // ->note('Hello world')
+    ;
+        $svg = (new Writer(
+            new ImageRenderer(
+                new RendererStyle(192, 0, null, null, Fill::uniformColor(new Rgb(255, 255, 255), new Rgb(45, 55, 72))),
+                new SvgImageBackEnd
+            )
+        ))->writeString($vcard);
+
+        return trim(substr($svg, strpos($svg, "\n") + 1));
+
+
     }
 }
