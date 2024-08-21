@@ -7,8 +7,6 @@ import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import { usePage } from '@inertiajs/react';
 import { useCsrf } from '@/composables';
 
-
-
 const OrderingDepartments = () => {
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [departments, setDepartments] = useState([]);
@@ -158,133 +156,125 @@ const OrderingDepartments = () => {
         window.location.href = '/departments';
     };
 
+    const handleMoveUp = (index) => {
+        if (index === 0) return;
+        const newData = [...departments];
+        [newData[index - 1], newData[index]] = [newData[index], newData[index - 1]];
+        setDepartments(updateOrderAttributes(newData));
+    };
+
+    const handleMoveDown = (index) => {
+        if (index === departments.length - 1) return;
+        const newData = [...departments];
+        [newData[index + 1], newData[index]] = [newData[index], newData[index + 1]];
+        setDepartments(updateOrderAttributes(newData));
+    };
+
     return (
         <Example>
-    <div className="flex-row">
-        <div className="flex">
-            <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                <div className="flex items-center justify-between max-md:px-4">
-                    <h1 className="text-3xl font-bold text-gray-900 ">Manage Ordering</h1>
-                    <div className="flex space-x-4">
-                        <button onClick={handleBack} className="font-bold text-black text-md">Back</button>
-                        <button type="button" className="px-4 py-2 font-bold text-white bg-red-500 rounded-full text-md hover:bg-red-700" onClick={handleSave}>Save</button>
-                    </div>
-                </div>
-                </div>
-                <div className="flex flex-col px-10 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8 mr-8 sm:px-6 lg:px-8 lg:py-6">
-                    {isLoading ? (
-                        <div className="flex items-center justify-center h-64 max-w-[1050px]">
-                            <div className="w-16 h-16 border-b-2 border-gray-900 max-w-[1050px] rounded-full animate-spin"></div>
+            <div className="flex-row">
+                <div className="flex">
+                    <main className="w-full mt-5 xl:pl-96 max-w-[1400px]">
+                        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+                            <div className="flex items-center justify-between">
+                                <h1 className="text-3xl font-bold text-gray-900">Manage Ordering</h1>
+                                <div className="flex space-x-4">
+                                    <button onClick={handleBack} className="font-bold text-black text-md">Back</button>
+                                    <button type="button" className="px-4 py-2 font-bold text-white bg-red-500 rounded-full text-md hover:bg-red-700" onClick={handleSave}>Save</button>
+                                </div>
+                            </div>
                         </div>
-                    ) : (
-                        <>
-                            <DragDropContext onDragEnd={handleDragEnd}>
-                                <Droppable droppableId="departments">
-                                    {(provided) => (
-                                    <table className="w-full table-fixed bg-white divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
-                                        <thead>
-                                        <tr className="bg-white">
-                                            <th className="px-0 py-3 font-bold text-left text-gray-700 text-md w-3/5">Name</th>
-                                            <th className="px-14 max-md:px-0 py-3 font-bold text-right text-gray-700 text-md w-1/5">Ordering</th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody>
-                                        {departments.map((item, index) => (
-                                            <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                        <div className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8">
+                            {isLoading ? (
+                                <div className="flex items-center justify-center h-64">
+                                    <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+                                </div>
+                            ) : (
+                                <>
+                                    <DragDropContext onDragEnd={handleDragEnd}>
+                                        <Droppable droppableId="departments">
                                             {(provided) => (
-                                                <tr
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                className="w-full bg-white border-t border-gray-200"
-                                                >
-                                                <td
-                                                    className="bg-white flex items-center px-0 py-4 text-base font-bold text-black whitespace-normal overflow-hidden"
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <img
-                                                    src={item.imageUrl}
-                                                    alt={item.name}
-                                                    className="w-[80px] h-[40px] sm:w-[100px] sm:h-[50px] lg:w-[120px] lg:h-[60px] rounded-md object-cover mr-4"
-                                                    />
-                                                    <span className="whitespace-normal text-xs sm:text-sm md:text-base lg:text-lg">
-                                                    {item.name}
-                                                    </span>
-                                                </td>
-                                                <td className="flex-col w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0">
-                                                    <button
-                                                    className="px-2"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    disabled={index === 0}
-                                                    style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                    >
-                                                    <img src="/assets/orderingup.svg" alt="Move Up" />
-                                                    </button>
-                                                    <button
-                                                    className="px-2"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    disabled={index === departments.length - 1}
-                                                    style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
-                                                    >
-                                                    <img src="/assets/orderingdown.svg" alt="Move Down" />
-                                                    </button>
-                                                </td>
-                                                </tr>
+                                                <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="px-6 py-3 font-bold text-left text-gray-500 text-md">Name</th>
+                                                            <th className="px-4 py-3 font-bold text-left text-gray-500 text-md">Ordering</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {departments.map((item, index) => (
+                                                            <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                                                {(provided) => (
+                                                                    <tr
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        className="bg-white border-t border-gray-200"
+                                                                    >
+                                                                        <td className="px-6 py-4 text-base font-bold text-black pr-60 whitespace-nowrap" {...provided.dragHandleProps}>
+                                                                            <img src={item.imageUrl} alt={item.name} className="inline-block object-cover w-10 mr-6 rounded-full h-11" />
+                                                                            {item.name}
+                                                                        </td>
+                                                                        <td className="px-1 py-4 text-sm font-semibold text-black whitespace-nowrap">
+                                                                            <div className="flex items-center">
+                                                                                <button
+                                                                                    className="px-2"
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        handleMoveUp(index); // Move up
+                                                                                    }}
+                                                                                    disabled={index === 0}
+                                                                                    style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                                >
+                                                                                    <img src="/assets/orderingup.svg" alt="Up" />
+                                                                                </button>
+                                                                                <button
+                                                                                    className="px-2"
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        handleMoveDown(index); // Move down
+                                                                                    }}
+                                                                                    disabled={index === departments.length - 1}
+                                                                                    style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
+                                                                                >
+                                                                                    <img src="/assets/orderingdown.svg" alt="Down" />
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )}
+                                                            </Draggable>
+                                                        ))}
+                                                        {provided.placeholder}
+                                                    </tbody>
+                                                </table>
                                             )}
-                                            </Draggable>
-                                        ))}
-                                        {provided.placeholder}
-                                        </tbody>
-                                    </table>
-                                    )}
-                                </Droppable>
-                                </DragDropContext>
-
-
-                        </>
-                    )}
-                </div>
-            </main>
-            <aside className="fixed bottom-0 hidden px-4 py-6 overflow-y-auto border-r border-gray-200 left-20 top-16 w-96 sm:px-6 lg:px-8 xl:block">
-                <style>
-                    {`
-                    aside::-webkit-scrollbar {
-                        width: 0px;
-                        background: transparent;
-                    }
-                    `}
-                </style>
-                <div className="file-directory-header">
-                    <PageTitle title="Staff Directory" />
-                </div>
-                <hr className="file-directory-underline" />
-                <div>
-                    <FeaturedEvents />
-                    <WhosOnline />
-                </div>
-            </aside>
-        </div>
-    </div>
-    {isNotificationVisible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-50">
-            <div className="p-4 bg-white rounded-lg shadow-lg">
-                <p className="text-lg font-semibold">{notificationMessage}</p>
-                <div className="mt-4">
-                    <div className="w-full bg-gray-200 rounded-full">
-                        <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: `${progress}%` }}>
-                            {/* {progress.toFixed(0)}% */}
+                                        </Droppable>
+                                    </DragDropContext>
+                                </>
+                            )}
                         </div>
-                    </div>
+                        {isNotificationVisible && (
+                            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                                <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                                    <h2 className="text-xl font-semibold mb-4">{notificationMessage}</h2>
+                                    <div className="w-full bg-gray-300">
+                                        <div className="bg-green-500 text-xs leading-none py-1 text-center text-white" style={{ width: `${progress}%` }}>{progress}%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </main>
                 </div>
+                <aside className="flex-shrink-0 hidden w-96 xl:block">
+                    <div className="px-4 mt-10">
+                        <PageTitle title="Widgets" />
+                        <FeaturedEvents />
+                        <WhosOnline />
+                    </div>
+                </aside>
             </div>
-        </div>
-    )}
-</Example>
-
+        </Example>
     );
-};
+}
 
 export default OrderingDepartments;
-
-
