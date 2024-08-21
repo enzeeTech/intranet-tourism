@@ -240,6 +240,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             return;
         }
         setSelectedPerson(person);
+        setSearchTerm(person.name);
         setError('');  
     };
 
