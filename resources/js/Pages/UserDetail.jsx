@@ -378,6 +378,7 @@ return (
                                                 <div className="flex gap-5 flex-col md:flex-row max-md:gap-0">
                                                     <ProfileDepartment
                                                         department={employmentPost.department?.name || ''}
+                                                        departmentId={employmentPost.department_id}
                                                         unit={employmentPost.business_unit?.name || ''}
                                                         jobtitle={employmentPost.business_post?.title || ''}
                                                         position={employmentPost.position || 'N/A'}
