@@ -126,11 +126,9 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', flex: '1', marginBottom: '5px' }}>
                             <img
-                                // src={`/storage/${user.src}`}
-                                // src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.fullName}`}
                                 src={
                                     !user.src // check if src variable is empty
-                                      ? `https://ui-users.com/api/?background=0D8ABC&color=fff&name=${user.fullName}&rounded=true` // if src is empty = src equals to this path
+                                    ? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.fullName}` // if src is empty = src equals to this path
                                       : user.src === '/assets/dummyStaffPlaceHolder.jpg' //if user.src is not empty, check id user.src is equal to this path
                                       ? user.src // if it is equal to the path, then src = user.src
                                       : user.src.startsWith('avatar/') // if not equal, then check if user.src starts with user/

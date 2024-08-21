@@ -410,19 +410,46 @@ console.log("FINAL", finalPosts);
     //   return formattedContent;
     // };
 
-    const renderContentWithTags = (content) => {
-      // Regex to match tags (e.g., @username or @FirstName LastName)
-      const tagRegex = /@\w+(?:\s\w+)*\b/g;
+  //   const renderContentWithTags = (content) => {
+  //     // Regex to match tags (e.g., @username or @FirstName LastName)
+  //     const tagRegex = /@\w+(?:\s\w+)*\b/g;
   
-      // Replace matched tags with a span containing the className
-      const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
-          if (index === 0) return [part];
-          const match = content.match(tagRegex)[index - 1];
-          return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
-      }, []);
+  //     // Replace matched tags with a span containing the className
+  //     const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
+  //         if (index === 0) return [part];
+  //         const match = content.match(tagRegex)[index - 1];
+  //         return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
+  //     }, []);
   
-      return formattedContent;
-  };
+  //     return formattedContent;
+  // };
+
+  const renderContentWithTags = (content) => {
+    // Regex to match tags (e.g., @username or @FirstName LastName)
+    const tagRegex = /@\w+(?:\s\w+)*\b/g;
+    // Regex to match URLs starting with https
+    const urlRegex = /https:\/\/[^\s]+/g;
+
+    // Replace URLs with anchor tags
+    const replaceUrls = (text) => {
+        return text.split(urlRegex).reduce((acc, part, index) => {
+            if (index === 0) return [part];
+            const urlMatch = text.match(urlRegex)[index - 1];
+            return [...acc, <a href={urlMatch} key={index} target="_blank" rel="noopener noreferrer">{urlMatch}</a>, part];
+        }, []);
+    };
+
+    // Replace tags with span and URLs with anchor tags
+    const parts = content.split(tagRegex);
+    const formattedContent = parts.reduce((acc, part, index) => {
+        if (index === 0) return replaceUrls(part);
+        const tagMatch = content.match(tagRegex)[index - 1];
+        return [...acc, <span className="tagged-text" key={`tag-${index}`}>{tagMatch}</span>, ...replaceUrls(part)];
+    }, []);
+  
+    return formattedContent;
+};
+
   
 
 
@@ -682,9 +709,9 @@ console.log("FINAL", finalPosts);
                        </div>
                      )}
                    </header>
-                   <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                   {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
                      {post.content}
-                   </div>
+                   </div> */}
                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                      {post.tag?.replace(/[\[\]"]/g, '') || ''}
                    </p>
