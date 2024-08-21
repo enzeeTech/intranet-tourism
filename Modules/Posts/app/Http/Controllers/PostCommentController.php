@@ -3,6 +3,7 @@
 namespace Modules\Posts\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Modules\Posts\Models\Post;
 use Modules\Posts\Models\PostComment;
 
 class PostCommentController extends Controller
@@ -23,23 +24,49 @@ class PostCommentController extends Controller
 
     public function store()
     {
+        $user_id = auth()->user()->id;
+        $post_type = 'posting_comment';
+
+        $post = Post::create([
+            'content' => request()->content,
+            'user_id' => $user_id,
+            'type' => $post_type
+        ]);
+
+        request()->merge(['comment_id' => $post->id]);
+
         $validated = request()->validate(...PostComment::rules());
+
         PostComment::create($validated);
 
         return response()->noContent();
     }
 
-    public function update(PostComment $post_comment)
+    public function update(PostComment $postComment)
     {
+        $user_id = auth()->user()->id;
+
+
+        $post = $postComment->comment;
+        $post->update([
+            'content' => request()->content,
+            'user_id' => $user_id,
+        ]);
+        
+
+        request()->merge(['comment_id' => $post->id]);
+
         $validated = request()->validate(...PostComment::rules('update'));
-        $post_comment->update($validated);
+
+        $postComment->update($validated);
 
         return response()->noContent();
     }
 
-    public function destroy(PostComment $post_comment)
+
+    public function destroy(PostComment $postComment)
     {
-        $post_comment->delete();
+        $postComment->delete();
 
         return response()->noContent();
     }

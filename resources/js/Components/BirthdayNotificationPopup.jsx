@@ -139,6 +139,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
             {/* Independent BirthdayCom Popup */}
             {selectedBirthday && (
+                
                 <Popup isOpen={isBirthdayComOpen} onClose={closeBirthdayComPopup}>
                     <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} />
                 </Popup>
