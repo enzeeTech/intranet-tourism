@@ -4,10 +4,19 @@ import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 
 function Avatar({ src, alt, className, status }) {
-  const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
+  let source = null;
+
+    if (src.startsWith('staff_image/')) {
+        source = `/storage/${src}`;
+    } else {
+        source = src === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? src 
+            : `/avatar/${src}`;
+    }
+  // const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
   return (
     <div className="relative items-center justify-end h-16">
-      <img loading="lazy" src={imageUrl} alt={alt} className={className} />
+      <img loading="lazy" src={source} alt={alt} className={className} />
       {status === 1 && (
         <div className="absolute bottom-0 right-0 border-2 border-white bg-red-500 rounded-full w-[12px] h-[12px] mb-1"></div>
       )}
