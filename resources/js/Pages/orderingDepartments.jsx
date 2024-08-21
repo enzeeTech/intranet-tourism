@@ -128,7 +128,7 @@ const OrderingDepartments = () => {
             const updatePromises = departments.map(async (department, index) => {
                 const result = await updateOrderInDatabase(department);
                 if (result && result.success) {
-                    setProgress(((index + 1) / totalDepartments) * 100); 
+                    setProgress(Math.round(((index + 1) / totalDepartments) * 100));  // Rounded to nearest whole number
                 }
                 return result;
             });
@@ -254,11 +254,11 @@ const OrderingDepartments = () => {
                             )}
                         </div>
                         {isNotificationVisible && (
-                            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                                <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-                                    <h2 className="text-xl font-semibold mb-4">{notificationMessage}</h2>
+                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">  
+                                <div className="p-6 text-center bg-white rounded-lg shadow-lg">
+                                    <h2 className="mb-4 text-xl font-semibold">{notificationMessage}</h2>
                                     <div className="w-full bg-gray-300">
-                                        <div className="bg-green-500 text-xs leading-none py-1 text-center text-white" style={{ width: `${progress}%` }}>{progress}%</div>
+                                        <div className="py-1 text-xs leading-none text-center text-white bg-green-500" style={{ width: `${progress}%` }}>{`${progress}%`}</div>
                                     </div>
                                 </div>
                             </div>
