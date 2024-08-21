@@ -24,7 +24,7 @@ function Avatar({ src, alt, onImageChange }) {
           loading="lazy"
           src={src}
           alt={alt}
-          className="aspect-square w-full h-w/3 rounded-xl border-4 border-gray-200 object-cover object-center"
+          className="aspect-square w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
         />
       </div>
       <input
@@ -40,12 +40,12 @@ function Avatar({ src, alt, onImageChange }) {
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex gap-4 self-stretch mt-2 text-neutral-800">
+    <div className="flex gap-4 items-center mt-2 text-neutral-800">
       <img
         loading="lazy"
         src={src}
         alt=""
-        className="shrink-0 aspect-square w-[42px]"
+        className="shrink-0 aspect-square w-[42px] h-[42px] rounded-full object-cover object-center"
       />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>
@@ -132,14 +132,14 @@ function Card({
           onChange={(e) => setCommunityName(e.target.value)}
           className="self-stretch mt-7 text-2xl font-extrabold text-neutral-800 border border-solid border-neutral-300 rounded-md"
         />
-        <UserInfo name={user.name} role={user.role} src={user.profileImage} />
         <input
           type="text"
           placeholder={description}
           value={communityDescription}
           onChange={(e) => setCommunityDescription(e.target.value)}
-          className="justifycenter itemsstart px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-full rounded-md border border-solid border-neutral-300"
+          className="justify-center items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-800 w-full rounded-md border border-solid border-neutral-300"
         />
+        <UserInfo name={user.name} role={user.role} src={user.profileImage} />
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
@@ -208,7 +208,7 @@ export default function CreateCommunity({ id, onCancel, onCreate }) {
     <Card
       title="Create New Community"
       imgSrc="/assets/uploadAnImage.svg"
-      imgAlt="Community Logo"
+      imgAlt="Community Header Photo"
       user={user}
       type="Type"
       description="Description"
