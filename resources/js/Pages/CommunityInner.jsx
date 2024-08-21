@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
-import CommunityWall from '../Components/CommunityWall';
+import CommunityWall from '../Components/Reusable/Community/CommunityWall';
 import EditDepartments from '../Components/Reusable/Departments/EditDepartments';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';

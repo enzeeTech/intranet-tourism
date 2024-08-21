@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import DpMembers from '../Components/DepartmentCom/DepartmentMembers';
+import DpMembers from '../../DepartmentCom/DepartmentMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
-import { SearchInput, SearchButton, Table } from "../Components/ProfileTabbar";
-import { ImageProfile, VideoProfile } from "../Components/ProfileTabbar/Gallery";
-import EditDepartments from '../Components/Reusable/Departments/EditDepartments'; // Import EditDepartments
+import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
+import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
+import EditDepartments from '../Departments/EditDepartments'; // Import EditDepartments
 
 function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
