@@ -1,23 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
+import Picker from 'emoji-picker-react';
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
+import { Event } from "./InputEvent";
 import TagInput from "./AlbumTag";
 import MediaTag from '../../../../../public/assets/Media tag.svg'
+import EventTag from '../../../../../public/assets/EventTagIcon.svg'
 import "../css/InputBox.css";
 import "../../../Pages/Calendar/index.css";
+import Emoji from '../../../../../public/assets/EmojiIcon.svg'
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId }) {
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
     const [showPeoplePopup, setShowPeoplePopup] = useState(false);
+    const [showEventPopup, setShowEventPopup] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
     const [tags, setTags] = useState([]);
     const [mediaTagCount, setMediaTagCount] = useState(0);
-    // const [peopleCount, setPeopleCount] = useState(0);
-    const [chosenPeople, setChosenPeople] = useState([]); // Added chosenPeople state
+    const [showReactionPicker, setShowReactionPicker] = useState(false);
+    const [chosenPeople, setChosenPeople] = useState([]);
+    const [chosenEvent, setChosenEvent] = useState([]);
+    const [isAnnouncement, setIsAnnouncement] = useState(false);
+
 
 
     const textAreaRef = useRef(null);
@@ -32,7 +40,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     
         // Append common fields
         formData.append("user_id", userId);
-        formData.append("type", "post");
+        // formData.append("type", "post");
+        formData.append("type", isAnnouncement ? "announcement" : "post");
         formData.append("visibility", "public");
     
         if (!inputValue) {
@@ -59,6 +68,13 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
             const formattedMentions = `[${mentions}]`;
             formData.append("mentions", formattedMentions);
         }
+
+        // Handle mentions with spaces after commas
+        if (chosenEvent.length > 0) {
+            const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
+            const formattedEvents = `[${events}]`;
+            formData.append("event", formattedEvents);
+        }
     
         if (includeAccessibilities) {
             formData.append("accessibilities[0][accessable_type]", filterType);
@@ -80,16 +96,27 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 setFileNames([]);
                 setTags([]);
                 setChosenPeople([]); // Clear chosen people after sending
+                setChosenEvent([]);
                 window.location.reload();
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
     };
+
+
+    const handleToggleChange = () => {
+        setIsAnnouncement(!isAnnouncement);
+    };
     
     const handleFileUpload = (file) => {
         setAttachments((prevAttachments) => [...prevAttachments, file]);
         setFileNames((prevFileNames) => [...prevFileNames, file.name]);
+    };
+
+    const removeFile = (index) => {
+        setFileNames((prevFileNames) => prevFileNames.filter((_, i) => i !== index));
+        setAttachments((prevAttachments) => prevAttachments.filter((_, i) => i !== index));
     };
 
     const createFileInputHandler = (accept) => () => {
@@ -122,10 +149,16 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         setShowPeoplePopup(true);
     };
 
+    const handleClickEvent = () => {
+        // console.log("Hello");
+        setShowEventPopup(true);
+    }
+
     const closePopup = () => {
         setShowPollPopup(false);
         setShowPeoplePopup(false);
         setShowMediaTagPopup(false);
+        setShowEventPopup(false);
     };
 
     const handleSaveTags = () => {
@@ -138,9 +171,28 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         closePopup(); // Close the popup
     };
 
+    const handleSaveEvent = (selectedPeople) => {
+        setChosenEvent(selectedPeople); // Update chosenPeople state
+        closePopup(); // Close the popup
+    };
+
+    const handleReactionClick = (emojiObject) => {
+        setInputValue(inputValue + emojiObject.emoji);
+        setShowReactionPicker(false); // Close the reaction picker after selecting a reaction
+    };
+
+    const toggleReactionPicker = () => {
+        setShowReactionPicker(!showReactionPicker);
+    };
+
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800">
-            <div className="input-box-container  flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full">
+            <div
+                className={`flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
+                    variant === "comment" ? "comment-box-container" 
+                                            : "input-box-container"
+                }`}
+            >
                 <div className="flex flex-col w-[875px] " >
                     <textarea
                         ref={textAreaRef}
@@ -149,95 +201,181 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                         placeholder="Share Your Thoughts..."
                         className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline "
                     />
-                    <div className="flex mt-7 items-center  justify-between ">
-                        <div className="flex gap-4 items-center">
-                            <button onClick={handleClickPoll}>
-                                <img
-                                    loading="lazy"
-                                    src="assets/inputpolls.svg"
-                                    alt="Poll Icon"
-                                    className="w-[14px] h-[14px]"
-                                />
-                            </button>
-                            <button onClick={handleClickImg}>
-                                <img
-                                    loading="lazy"
-                                    src="assets/inputimg.svg"
-                                    alt="Image Icon"
-                                    className="w-[14px] h-[14px]"
-                                />
-                            </button>
-                            <button onClick={handleClickVid}>
-                                <img
-                                    loading="lazy"
-                                    src="assets/inputvid.svg"
-                                    alt="Video Icon"
-                                    className="w-[18px] h-[18px]"
-                                />
-                            </button>
-                            <button onClick={handleClickDoc}>
-                                <img
-                                    loading="lazy"
-                                    src="assets/inputdoc.svg"
-                                    alt="Document Icon"
-                                    className="w-[14px] h-[14px]"
-                                />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleClickMediaTag}
-                                className="relative text-md text-blue-500 hover:text-blue-700"
+                    {/* {fileNames.length > 0 && (
+                    <div className="file-names-container">
+                        {fileNames.map((name, index) => (
+                            <div
+                                // className="file-name-wrapper"
+                                className="flex items-center rounded-lg"
+                                key={index}
                             >
-                                <img src={MediaTag} alt="Tag Media" className="w-[18px] h-[18px]" />
-                                {mediaTagCount > 0 && (
-                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                        {mediaTagCount}
-                                    </span>
-                                )}
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleClickPeople}
-                                className="relative text-md text-blue-500 hover:text-blue-700"
-                            >
-                                <img
-                                    loading="lazy"
-                                    src="assets/inputpeople.svg"
-                                    alt="People Icon"
-                                    className="w-[16px] h-[16px]"
-                                />
-                                {chosenPeople.length > 0 && (
-                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                        {chosenPeople.length}
-                                    </span>
-                                )}
-                            </button>
-                        </div>
-
-                        <div
-                            className="file-names-container flex flex-wrap gap-2"
-                            style={{ minWidth: `${fileNames.length * 80}px` }}
-                        >
+                                <div className="file-name">
+                                    {name}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    )} */}
+                    {fileNames.length > 0 && (
+                        <div className="file-names-container">
                             {fileNames.map((name, index) => (
                                 <div
-                                    className="flex items-center px-2 py-1 bg-white rounded-lg shadow"
+                                    className="flex items-center rounded-lg"
                                     key={index}
                                 >
-                                    <div className="file-name text-xs truncate">
+                                    <div className="file-name">
                                         {name}
+                                    <button
+                                        className="ml-2 text-blue-500"
+                                        onClick={() => removeFile(index)}
+                                    >
+                                        x
+                                    </button>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <button onClick={handleClickSend} className="flex justify-center ">
-                    <div className="">
-                        <img
-                            loading="lazy"
-                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                            alt=""
-                        />
+                    )}
+
+                    <div className="flex mt-7 items-center  justify-between ">
+                        <div className="flex gap-4 items-center">
+                            {variant === "comment" && (
+                                <>
+                                    <button onClick={toggleReactionPicker}>
+                                        <img
+                                            loading="lazy"
+                                            src={Emoji}
+                                            alt="Emoji Icon"
+                                            className="w-[16px] h-[16px]"
+                                        />
+                                    </button>
+                                    {showReactionPicker && (
+                                        <div className="emoji-picker-container">
+                                            <Picker
+                                                reactionsDefaultOpen={true}
+                                                onReactionClick={handleReactionClick}
+                                                reactions={["1f600", "1f602", "1f923", "1f60d", "1f62e", "1f614"]}
+                                            />
+                                        </div>
+                                    )}
+                                    <button
+                                        type="button"
+                                        onClick={handleClickPeople}
+                                        className="relative text-md text-blue-500 hover:text-blue-700"
+                                    >
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputpeople.svg"
+                                            alt="People Icon"
+                                            className="w-[16px] h-[16px]"
+                                        />
+                                        {chosenPeople.length > 0 && (
+                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                {chosenPeople.length}
+                                            </span>
+                                        )}
+                                    </button>
+                                </>
+                            )}
+                            {variant !== "comment" && (
+                                <>
+                                    <button onClick={handleClickPoll}>
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputpolls.svg"
+                                            alt="Poll Icon"
+                                            className="w-[14px] h-[14px]"
+                                        />
+                                    </button>
+                                    <button onClick={handleClickImg}>
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputimg.svg"
+                                            alt="Image Icon"
+                                            className="w-[14px] h-[14px]"
+                                        />
+                                    </button>
+                                    <button onClick={handleClickVid}>
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputvid.svg"
+                                            alt="Video Icon"
+                                            className="w-[18px] h-[18px]"
+                                        />
+                                    </button>
+                                    <button onClick={handleClickDoc}>
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputdoc.svg"
+                                            alt="Document Icon"
+                                            className="w-[14px] h-[14px]"
+                                        />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleClickMediaTag}
+                                        className="relative text-md text-blue-500 hover:text-blue-700"
+                                    >
+                                        <img src={MediaTag} alt="Tag Media" className="w-[18px] h-[18px]" />
+                                        {mediaTagCount > 0 && (
+                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                {mediaTagCount}
+                                            </span>
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleClickPeople}
+                                        className="relative text-md text-blue-500 hover:text-blue-700"
+                                    >
+                                        <img
+                                            loading="lazy"
+                                            src="assets/inputpeople.svg"
+                                            alt="People Icon"
+                                            className="w-[16px] h-[16px]"
+                                        />
+                                        {chosenPeople.length > 0 && (
+                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                {chosenPeople.length}
+                                            </span>
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleClickEvent}
+                                        className="relative text-md text-blue-500 hover:text-blue-700"
+                                    >
+                                        <img
+                                            loading="lazy"
+                                            src={EventTag}
+                                            alt="Event Icon"
+                                            className="w-[18px] h-[18px]"
+                                        />
+                                        {chosenEvent.length > 0 && (
+                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                {chosenEvent.length}
+                                            </span>
+                                        )}
+                                    </button>
+                                    <div className="flex items-center ml-28">
+                                        <label className="switch">
+                                            <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
+                                            <span className="slider"></span>
+                                        </label>
+                                        <label className="ml-3">Set as Announcement?</label>
+                                    </div>
+                                </>
+                            )}
+                        </div>
                     </div>
-                </button>
+                    <div className="relative-container">
+                        <button onClick={handleClickSend} className="send-button">
+                            <img
+                                loading="lazy"
+                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                                alt="SEND"
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -257,6 +395,13 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     onClose={closePopup}
                     chosenPeople={chosenPeople} // Pass chosenPeople state
                     onSavePeople={handleSavePeople}
+                />
+            )}
+            {showEventPopup && (
+                <Event
+                    onClose={closePopup}
+                    chosenEvent={chosenEvent} // Pass chosenPeople state
+                    onSaveEvent={handleSaveEvent}
                 />
             )}
         </section>

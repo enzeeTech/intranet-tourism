@@ -4,6 +4,7 @@ import 'react-phone-input-2/lib/style.css';
 
 function ProfileDepartment({
     department,
+    departmentId,
     unit,
     jobtitle,
     position,
@@ -71,6 +72,9 @@ function ProfileDepartment({
         }
     };
 
+    console.log("DDDD", department);
+    
+
     const fetchBusinessUnits = async () => {
         let allUnits = [];
         let currentPage = 1;
@@ -78,7 +82,8 @@ function ProfileDepartment({
 
         try {
             while (currentPage <= lastPage) {
-                const response = await fetch(`/api/department/business_units?page=${currentPage}`, {
+                // const response = await fetch(`/api/department/business_units?page=${currentPage}`, {
+                const response = await fetch(`/api/department/business_units?department_id=${departmentId}&page=${currentPage}`, {
                     method: "GET",
                     headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
                 });
@@ -188,7 +193,7 @@ function ProfileDepartment({
                 <div className="flex flex-col w-full md:ml-0 md:w-full">
                     <table className="w-full text-left border-collapse table-auto">
                         <tbody>
-                            {renderField('Department', 'department', localFormData.department, departmentOptions, true, handleInputChange)}
+                            {renderField('Department', 'department', localFormData.department, departmentOptions, false, handleInputChange)}
                             {renderField('Unit', 'unit', localFormData.unit, unitOptions, true, handleInputChange)}
                             {renderField('Job Title', 'jobtitle', localFormData.jobtitle, jobTitleOptions, true, handleInputChange)}
                             {renderField('Position', 'position', localFormData.position, positionOptions, true, handleInputChange)}

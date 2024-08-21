@@ -109,13 +109,25 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const handleDotClick = () => {
+  // const handleDotClick = () => {
+  //   if (activePopupId === id) {
+  //     closePopup();
+  //   } else {
+  //     setActivePopupId(id);
+  //   }
+  // };
+
+  const handleDotClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (activePopupId === id) {
       closePopup();
     } else {
       setActivePopupId(id);
     }
   };
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {

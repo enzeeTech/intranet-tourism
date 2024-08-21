@@ -19,17 +19,19 @@ const DepartmentSearchBar = ({ onSearch, toggleCreateCommunity }) => {
       <div className="flex flex-col items-center space-y-4 staff-search-bar sm:flex-row sm:space-y-0 sm:space-x-3">
         <input
           type="text"
-          className="text-md px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 search-input-staff-search-bar sm:w-auto"
+          className="text-md px-6 bg-gray-100 border-gray-100 rounded-full flex-grow w-full py-3 sm:w-auto"
           placeholder="Search department name"
           value={searchTerm}
           onChange={handleSearch}
         />
-        <button
-          className="flex items-center text-sm font-bold px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700"
-          onClick={toggleCreateCommunity}>
-          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 my-1.5 mr-2" />
-          Department
-        </button>
+        <div className="flex justify-end max-md:w-full">
+          <button
+            className="flex items-center text-sm font-bold px-4 py-3 bg-red-500 text-white rounded-full hover:bg-red-700"
+            onClick={toggleCreateCommunity}>
+            <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 my-1.5 mr-2" />
+            Department
+          </button>
+        </div>
       </div>
     </div>
   );

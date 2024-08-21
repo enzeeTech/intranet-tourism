@@ -250,9 +250,9 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           </div>
         </div>
       )}
-      {isUpdatePopupOpen && (
+      {/* {isUpdatePopupOpen && (
         <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={croppedImage} />
-      )}
+      )} */}
     </>
   );
 }

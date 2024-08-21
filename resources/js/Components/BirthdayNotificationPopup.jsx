@@ -16,7 +16,9 @@ function BirthdayNotificationPopup({ onClose, userData }) {
             let totalPages = 1;
 
             while (currentPage <= totalPages) {
-                const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                // const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
+                const response = await fetch(`/api/profile/profiles?filter[]=dob&paginate=false`);
+
                 const data = await response.json();
 
                 if (data && data.data && Array.isArray(data.data.data)) {
@@ -56,6 +58,9 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
             // Sort the birthday events by name alphabetically
             birthdayEvents.sort((a, b) => a.name.localeCompare(b.name));
+
+            console.log('birthdayEvents', birthdayEvents);
+            
 
             setBirthdays(birthdayEvents);
         } catch (error) {
@@ -122,12 +127,14 @@ function BirthdayNotificationPopup({ onClose, userData }) {
                 {birthdays.length === 0 && (
                     <p className="text-sm text-gray-600 mt-1">No birthday today.</p>
                 )}
-                <button
-                    onClick={onClose}
-                    className="mt-2 text-sm text-blue-600 hover:underline block"
-                >
-                    Close
-                </button>
+                <div className="w-full flex justify-end">
+                    <button
+                        onClick={onClose}
+                        className="mt-2 text-sm text-blue-600 hover:underline block"
+                    >
+                        Close
+                    </button>
+                </div>
             </div>
 
             {/* Independent BirthdayCom Popup */}

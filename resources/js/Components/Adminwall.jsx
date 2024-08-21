@@ -57,7 +57,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
 
 
   return (
-    <header className="flex overflow-hidden relative flex-col px-11 py-9 w-[875px] h-[291.67px] text-white max-md:px-5 w-full rounded-t-xl max-md:-mt-12">
+    <header className="flex overflow-hidden relative flex-col px-11 py-9 h-[291.67px] max-md:h-[calc(66vw)] text-white max-md:px-5 w-full rounded-t-xl max-md:-mt-12">
       <img
         loading="lazy"
         src={banner || "https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&"}
@@ -79,7 +79,9 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
             onChange={handleInputChange}
           />
         ) : (
-          textContent
+          <p className="line-clamp-4 overflow-hidden text-ellipsis">
+            {textContent}
+          </p>
         )}
       </div>
       <img

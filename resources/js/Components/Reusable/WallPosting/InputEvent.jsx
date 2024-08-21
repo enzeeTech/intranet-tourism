@@ -20,11 +20,12 @@ function SearchPeopleInput({ onSearchResults }) {
     try {
       let allResults = [];
       let currentPage = 1;
-      let hasMorePages = true;
+    //   let hasMorePages = true;
 
-      while (hasMorePages) {
+    //   while () {
         const response = await fetch(
-          `/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`
+        //   `/api/crud/users?search=${query}&page=${currentPage}&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`
+        `/api/events/events?search=${query}&disabledPagination=true`
         );
 
         if (!response.ok) {
@@ -32,10 +33,12 @@ function SearchPeopleInput({ onSearchResults }) {
         }
 
         const data = await response.json();
-        allResults = [...allResults, ...data.data.data];
-        currentPage++;
-        hasMorePages = data.data.next_page_url !== null;
-      }
+        console.log("DATAAAA", data);
+        
+        allResults = data.data;
+        // currentPage++;
+        // hasMorePages = data.data.next_page_url !== null;
+    //   }
       onSearchResults(allResults);
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -55,23 +58,23 @@ function SearchPeopleInput({ onSearchResults }) {
   );
 }
 
-function ChosenPerson({ chosenPeople, onRemovePerson }) {
+function ChosenEvent({ chosenEvent, onRemoveEvent }) {
   return (
     <>
       <div className="mt-5 text-sm font-semibold text-neutral-500">Chosen</div>
       <div className="flex flex-wrap gap-2 mt-2">
-        {chosenPeople.map((person) => (
+        {chosenEvent.map((event) => (
           <div
-            key={person.id}
+            key={event.id}
             className="flex items-center gap-2 px-3 py-1 bg-[#EBF5FF] rounded-lg shadow-sm"
           >
-            <div className="text-neutral-800">{person.name}</div>
+            <div className="text-neutral-800">{event.title}</div>
             <img
               loading="lazy"
               src="assets/CloseIcon.svg"
               alt="Close icon"
               className="cursor-pointer w-[14px] h-[14px] object-contain"
-              onClick={() => onRemovePerson(person.id)}
+              onClick={() => onRemoveEvent(event.id)}
             />
           </div>
         ))}
@@ -81,56 +84,41 @@ function ChosenPerson({ chosenPeople, onRemovePerson }) {
 }
 
 
-function RecommendedPerson({ person, onAddPerson }) {
-  console.log("PERSON", person);
+function RecommendedEvent({ event, onAddEvent }) {
+  console.log("event", event);
   
   return (
     <div
       className="flex gap-4 mt-2.5 font-bold text-neutral-800 cursor-pointer"
-      onClick={() => onAddPerson(person)}
+      onClick={() => onAddEvent(event)}
     >
-      <img
-          // src={`/storage/${user.src}`}
-          // src={user.src ? `${user.src}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${user.fullName}`}
-          src={
-              !person.profile?.image // check if src variable is empty
-                ? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${person.name}` // if src is empty = src equals to this path
-                : person.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' //if person.profile?.image is not empty, check id person.profile?.image is equal to this path
-                ? person.profile?.image // if it is equal to the path, then src = person.profile?.image
-                : person.profile?.image.startsWith('avatar/') // if not equal, then check if person.profile?.image starts with user/
-                ? `/storage/${person.profile?.image}` // if yes, then src = storage/{person.profile?.image}
-                : `/storage/avatar/${person.profile?.image}`// If no then then src = 
-          }
-          // alt={user.alt}
-          style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
-      />
       <div className="flex-auto my-auto">
-        {person.name} ({person.employment_post?.department.name || "No Department"})
+        {event.title}
       </div>
     </div>
   );
 }
 
-export function People({ onClose, onSavePeople, chosenPeople }) {
+export function Event({ onClose, onSaveEvent, chosenEvent }) {
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedPeople, setSelectedPeople] = useState(chosenPeople); // Use passed chosenPeople
+  const [selectedEvent, setSelectedEvent] = useState(chosenEvent); // Use passed chosenEvent
 
   useEffect(() => {
-      setSelectedPeople(chosenPeople); // Update state when prop changes
-  }, [chosenPeople]);
+      setSelectedEvent(chosenEvent); // Update state when prop changes
+  }, [chosenEvent]);
 
-  const handleAddPerson = (person) => {
-      if (!selectedPeople.some((p) => p.id === person.id)) {
-          setSelectedPeople([...selectedPeople, person]);
+  const handleAddEvent = (person) => {
+      if (!selectedEvent.some((p) => p.id === person.id)) {
+          setSelectedEvent([...selectedEvent, person]);
       }
   };
 
-  const handleRemovePerson = (id) => {
-      setSelectedPeople(selectedPeople.filter((person) => person.id !== id));
+  const handleRemoveEvent = (id) => {
+      setSelectedEvent(selectedEvent.filter((person) => person.id !== id));
   };
 
   const handleSave = () => {
-      onSavePeople(selectedPeople);
+      onSaveEvent(selectedEvent);
   };
 
   return (
@@ -150,17 +138,17 @@ export function People({ onClose, onSavePeople, chosenPeople }) {
               </div>
               <div className="flex flex-col px-5 mt-1.5">
                   <SearchPeopleInput onSearchResults={setSearchResults} />
-                  <ChosenPerson
-                      chosenPeople={selectedPeople}
-                      onRemovePerson={handleRemovePerson}
+                  <ChosenEvent
+                      chosenEvent={selectedEvent}
+                      onRemoveEvent={handleRemoveEvent}
                   />
                   <div className="mt-5 text-sm font-semibold text-neutral-500">Recommended</div>
                   <div className="max-h-[300px] overflow-y-auto">
-                      {searchResults.map((person) => (
-                          <RecommendedPerson
-                              key={person.id}
-                              person={person}
-                              onAddPerson={handleAddPerson}
+                      {searchResults.map((event) => (
+                          <RecommendedEvent
+                              key={event.id}
+                              event={event}
+                              onAddEvent={handleAddEvent}
                           />
                       ))}
                   </div>

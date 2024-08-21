@@ -132,7 +132,9 @@ const Departments = () => {
           />
           <div className="dept-grid-container max-w-[1230px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2 sm:py-4 md:py-6 lg:py-8">
             {isLoading ? (
-              <div className="mt-20 ml-32 loading-spinner"></div>
+              <div className="flex items-center justify-center h-64 ml-[450px]">
+                  <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+              </div>
             ) : filteredDepartments.length === 0 ? (
               <p>No departments found.</p>
             ) : (
