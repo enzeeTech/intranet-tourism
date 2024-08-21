@@ -51,7 +51,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
   if (typeof departmentBanner === 'string' && departmentBanner.startsWith('banner/')) {
     banner = `/storage/${departmentBanner}`;
   } else {
-    banner = departmentBanner || 'https://cdn.builder.io/api/v1/image/assets/TEMP/bdd4e4b7e0f9ec45df838993c39761806ac75e1cc6917f44849c00849e5e2f19?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&';
+    banner = departmentBanner || '/assets/defaultCommunity.png';
   }
 
   return (
