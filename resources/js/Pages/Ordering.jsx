@@ -186,12 +186,27 @@ const Ordering = () => {
                                                                 {...provided.draggableProps}
                                                                 className="bg-white border-t border-gray-200"
                                                             >
-                                                                <td className="px-6 py-4 text-lg font-bold max-md:text-sm text-black pr-60 whitespace-nowrap bg-white" {...provided.dragHandleProps}>
-                                                                    <img src={getImageSource(item.imageUrl)} alt={item.name} className="inline-block object-cover w-19 h-12 mr-4 rounded-md" />
-                                                                    {item.name}
-                                                                    {item.isDeactivated && <span className="ml-2 text-red-500">(Deactivated)</span>}
+                                                                <td
+                                                                    className="py-4 text-lg font-bold max-md:text-sm text-black pr-12 whitespace-nowrap bg-white"
+                                                                    {...provided.dragHandleProps}
+                                                                    >
+                                                                    <div className="flex items-center">
+                                                                        <img
+                                                                        src={getImageSource(item.imageUrl)}
+                                                                        alt={item.name}
+                                                                        className="inline-block object-cover w-12 h-16 mr-4 max-md:w-9 max-md:h-12 max-md:mr-2 max-md:rounded-md rounded-md"
+                                                                        />
+                                                                        <div className="flex flex-col">
+                                                                        <span className="whitespace-normal overflow-hidden text-ellipsis">
+                                                                            {item.name}
+                                                                        </span>
+                                                                        {item.isDeactivated && (
+                                                                            <span className="text-red-500 text-sm mt-0">(Deactivated)</span>
+                                                                        )}
+                                                                        </div>
+                                                                    </div>
                                                                 </td>
-                                                                <td className="flex-col w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0">
+                                                                <td className="flex-col bg-white w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0">
                                                                     <button
                                                                         className="px-2"
                                                                         onClick={(e) => {
@@ -242,7 +257,7 @@ const Ordering = () => {
                         <hr className="file-directory-underline" />
                         <div>
                             <FeaturedEvents />
-                            <WhosOnline />
+                            {/* <WhosOnline /> */}
                         </div>
                     </aside>
                 </div>

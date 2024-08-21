@@ -294,7 +294,7 @@ const StaffDirectory = () => {
         <hr className="file-directory-underline" />
         <div>
           <FeaturedEvents />
-          <WhosOnline />
+          {/* <WhosOnline /> */}
         </div>
       </aside>
     </div>

@@ -256,12 +256,12 @@ const OrderingDepartments = () => {
                     `}
                 </style>
                 <div className="file-directory-header">
-                    <PageTitle title="Staff Directory" />
+                    <PageTitle title="Departments" />
                 </div>
                 <hr className="file-directory-underline" />
                 <div>
                     <FeaturedEvents />
-                    <WhosOnline />
+                    {/* <WhosOnline /> */}
                 </div>
             </aside>
         </div>

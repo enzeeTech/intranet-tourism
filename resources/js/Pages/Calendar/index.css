@@ -8,10 +8,10 @@
     padding: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1050;
-    width: 300px; /* Adjust width as needed */
+    width: 400px; /* Adjust width as needed */
     margin-left: 5px;
     margin-right: 5px;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 16px; /* Rounded corners */
   }
   
   .modal-close-button {

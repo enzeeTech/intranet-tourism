@@ -40,7 +40,7 @@ const Community = ({  }) => {
         id: community.id,
         name: community.name,
         type: community.type,
-        imageUrl: community.banner || '/assets/departmentsDefault.jpg', // Use banner if available
+        imageUrl: community.banner || '/assets/defaultCommunity.png', // Use banner if available
       }));
 
       setDepartmentsList(departmentData.sort((a, b) => a.name.localeCompare(b.name)));
@@ -118,7 +118,7 @@ const Community = ({  }) => {
         <hr className="file-directory-underline" />
         <div>
           <FeaturedEvents />
-          <WhosOnline />
+          {/* <WhosOnline /> */}
         </div>
       </aside>
       {isCreateCommunityOpen && (
