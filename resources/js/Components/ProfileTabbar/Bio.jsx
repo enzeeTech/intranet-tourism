@@ -63,7 +63,7 @@ function ProfileBio({
                         placeholder={label}
                     />
                 ) : (
-                    <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
+                    <div className="text-sm mt-1 block w-full rounded-md border-2 border-transparent text-neutral-800 text-opacity-80">
                         {value !== undefined && value !== null && value !== "" ? value : ""}
                     </div>
                 )}
