@@ -40,7 +40,7 @@ function Avatar({ src, alt, onImageChange }) {
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex gap-4 items-center mt-2 text-neutral-800">
+    <div className="flex gap-4 items-center justify-start w-full mt-2 text-neutral-800">
       <img
         loading="lazy"
         src={src}

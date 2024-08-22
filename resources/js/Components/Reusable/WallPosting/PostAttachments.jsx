@@ -59,29 +59,27 @@ function PostAttachments({ attachments }) {
       };
       
       return (
-        <article key={index} className="flex flex-col text-xs text-neutral-800 w-48">
-          <div className="p-1 bg-gray-200 rounded-xl">
-            <div
-              className="flex gap-3 items-start py-4 px-4 bg-white rounded-xl max-w-[600px]"
-              onClick={handleDownload}
-              style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
-              >
-              <img
-                src={
-                  attachment.extension === 'pdf' ? PDF :
-                  attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
-                  attachment.extension === 'xlsx' ? Excel :
-                  attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
-                  attachment.extension === 'txt' ? TXT :
-                  'path/to/default-icon.png'
-                }
-                style={{ width: '48px', height: '48px', objectFit: 'contain' }}
-                />
-              <div className="flex flex-col items-start flex-grow">
-                <span className="whitespace-normal break-all blue border-2">Download File</span>
-              </div>
-            </div>
+        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full">
+        <div
+          className="flex gap-3 items-start py-2 px-4 mb-2 bg-white rounded-xl border-4 border-gray-200 max-w-[900px]"
+          onClick={handleDownload}
+          style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
+          >
+          <img
+            src={
+              attachment.extension === 'pdf' ? PDF :
+              attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
+              attachment.extension === 'xlsx' ? Excel :
+              attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
+              attachment.extension === 'txt' ? TXT :
+              'path/to/default-icon.png'
+            }
+            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+            />
+          <div className="flex flex-col items-start flex-grow">
+            <span className="flex whitespace-normal items-center mt-0.5">Download File</span>
           </div>
+        </div>
         </article>
       );
     };

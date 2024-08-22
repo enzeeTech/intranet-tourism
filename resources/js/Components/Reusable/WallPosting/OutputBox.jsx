@@ -623,11 +623,11 @@ console.log("FINAL", finalPosts);
             <div key={post.id}>
               {/* Conditional Rendering for Announcement */}
               {post.type === 'announcement' && (
-                <div className="mt-10 p-2 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-rose-600">
+                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-[610px] relative pb-16 bg-[#FF5437]">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
-                    <div className="text-center font-bold text-xl	ml-2">
-                      Announcement 🔊 🔊
+                    <div className="text-white text-center font-bold text-lg	ml-2">
+                      Announcement
                     </div>
                   </div>
                 </div>
