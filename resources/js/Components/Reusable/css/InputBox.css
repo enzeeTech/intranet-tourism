@@ -1,4 +1,45 @@
-  .input-box-container {
+/* .mention-suggestions {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 20%;
+  z-index: 1000;
+}
+
+.mention-suggestion-item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.mention-suggestion-item:hover {
+  background-color: #f0f0f0;
+} */
+
+.mention-suggestions {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 20%;
+  z-index: 1000;
+}
+
+.mention-suggestion-item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.mention-suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+.input-box-container {
       background-color: #FFFFFF;
       padding: 15px;
       margin-bottom: 20px;

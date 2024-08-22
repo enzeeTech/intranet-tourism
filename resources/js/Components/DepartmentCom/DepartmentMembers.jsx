@@ -64,7 +64,9 @@ function UserCard({ src, alt, name, role, status }) {
 const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
   const [showPopup, setShowPopup] = useState(false);
 
-  const handleRemoveClick = () => {
+  const handleRemoveClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setShowPopup(true);
   };
 
@@ -72,7 +74,9 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
     setShowPopup(false);
   };
 
-  const handleConfirmRemove = () => {
+  const handleConfirmRemove = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     onRemove();
     setShowPopup(false);
     closePopup();

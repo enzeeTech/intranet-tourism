@@ -4,6 +4,12 @@
     height: 50px; /* Adjust size as needed */
     object-fit: cover; /* Ensures the image covers the container without stretching */
   }
+
+  .tagged-text {
+    color: blue;
+    font-weight: bold;
+}
+
   
   .attachment-grid {
     display: grid;

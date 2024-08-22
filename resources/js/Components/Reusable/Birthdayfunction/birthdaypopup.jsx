@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import '../../../../css/style.css';
 import { useCsrf } from '@/composables';
-import '../Birthdayfunction/birthday.css'
+import '../Birthdayfunction/birthday.css';
+import { People } from '../WallPosting/InputPeople';
 
 const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
@@ -10,6 +11,8 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
   const [inputText, setInputText] = useState(text);
   const [inputValue, setInputValue] = useState("");
   const [attachments, setAttachments] = useState([]);
+  const [taggedPeople, setTaggedPeople] = useState([name]); // State to store tagged people
+  const [showTaggingPopup, setShowTaggingPopup] = useState(false); // State to control tagging popup visibility
 
   const handleBackgroundChange = (imageSrc) => {
     setBackgroundImage(imageSrc);
@@ -48,6 +51,12 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     formData.append("type", "birthday");
     formData.append("visibility", "public");
     formData.append("content", inputValue);
+
+    // Append tagged people
+    taggedPeople.forEach(name => {
+      const formattedMentions = `["${name}"]`;
+      formData.append("mentions", formattedMentions); // Assuming your backend accepts an array of tagged user IDs
+    });
 
     // Append the selected background image as an attachment if it's a supported format
     fetch(backgroundImage)
@@ -91,32 +100,6 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
       });
   };
 
-  const createFileInputHandler = (accept) => () => {
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = accept;
-    fileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      // Check if the selected file format is supported
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp'];
-      if (!allowedFormats.includes(file.type)) {
-        alert('Only JPG, JPEG, PNG, WEBP, and BMP formats are supported for background images.');
-        return;
-      }
-
-      const fileUrl = URL.createObjectURL(file);
-      setBackgroundImage(fileUrl); // Update background image with the selected file
-
-      // Optionally, add to attachments array if you want to send it as an attachment
-      setAttachments([...attachments, file]);
-    };
-    fileInput.click();
-  };
-
-  const handleClickImg = createFileInputHandler("image/jpeg, image/png, image/webp, image/bmp");
-
   return (
     <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl w-full max-w-xl mx-auto">
       <div className="flex flex-col px-4 mt-3 w-full">
@@ -148,8 +131,9 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
             type="text"
             value={inputValue}
             onChange={handleChange}
-            className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white text-3xl font-black custom-placeholder"
+            className="absolute inset-0 w-full h-full bg-transparent border-none outline-none text-center text-white drop-shadow-custom text-3xl font-black custom-placeholder"
             placeholder="Make a wish..."
+            style={{ textShadow: '2px 2px 4px #000000' }}
           />
         </div>
 
@@ -247,16 +231,35 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
           />
           {/* Additional images */}
         </div>
-
+        
         <form className="flex flex-col w-full mt-4" onSubmit={handleSubmit}>
-          <div className="flex items-center">
+        <div className="flex items-center">
             <img
               src={profileImage}
               alt={`${name}'s avatar`}
               className="w-8 h-8 rounded-full mr-2"
             />
             <p className="my-auto font-semibold text-gray-800">{name}</p>
+            <button
+              onClick={() => setShowTaggingPopup(true)}
+              className="ml-auto text-sm text-blue-600 hover:underline"
+            >
+              Tag People
+            </button>
           </div>
+          {taggedPeople.length > 0 && (
+  <div className="flex flex-wrap gap-2 mt-2">
+    {taggedPeople.map((id) => (
+      <div
+        key={id}  // Ensure person.id is unique
+        className="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-lg shadow-sm"
+      >
+        <span className="text-neutral-800">{name}</span>
+      </div>
+    ))}
+  </div>
+)}
+
           <button
             type="submit"
             className="flex justify-center items-center px-16 py-2 mt-4 text-sm font-bold text-white bg-sky-500 rounded-xl"
@@ -266,6 +269,16 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
           </button>
         </form>
       </div>
+      {showTaggingPopup && (
+        <People
+          onClose={() => setShowTaggingPopup(false)}
+          onSavePeople={(people) => {
+            setTaggedPeople(people);
+            setShowTaggingPopup(false);
+          }}
+          chosenPeople={taggedPeople}
+        />
+      )}
     </section>
   );
 };

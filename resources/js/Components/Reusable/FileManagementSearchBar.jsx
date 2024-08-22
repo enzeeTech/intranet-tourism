@@ -8,6 +8,7 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [file, setFile] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [newFilename, setnewFilename] = useState('')
   const [tags, setTags] = useState([]);
   const csrfToken = useCsrf();
 
@@ -24,20 +25,22 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
+    setnewFilename(selectedFile.name);
     setShowPopup(true);
     event.target.value = null;
   };
 
   const handleFileUpload = async () => {
-    if (!file) return;
+    if (!file || !newFilename.trim()) return;
 
+    const renamedFile = new File([file], newFilename.trim(), { type: file.type });
   
     const formData = new FormData();
     formData.append("user_id", userId); // Assuming userId is accessible within this component
     formData.append("type", "files");
     formData.append("visibility", "public");
     formData.append("tag", JSON.stringify(tags));
-    formData.append("attachments[0]", file);
+    formData.append("attachments[0]", renamedFile);
   
     try {
       const response = await fetch("/api/posts/posts", {
@@ -60,6 +63,7 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
   
       // Clear file selection and close popup
       setFile(null);
+      setnewFilename('');
       setShowPopup(false);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -129,11 +133,21 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
               <div className="flex justify-start">
                 <p className="font-bold mb-2 items-start">Selected file:</p>
               </div>
-              <div className="flex justify-start w-full px-4 py-2 border-2 border-gray-400 rounded-md overflow-hidden">
+              <div className="flex justify-start w-full px-4 py-2 rounded-md overflow-hidden">
                 <p className="overflow-hidden text-ellipsis whitespace-nowrap">
                   {file ? file.name : 'No file selected'}
                 </p>
               </div>
+              <div className="flex justify-start mt-4">
+                <label className="font-bold">Rename file:</label>
+              </div>
+              <input
+                type="text"
+                value={newFilename}
+                onChange={(e) => setnewFilename(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border-2 border-gray-400 rounded-md"
+                placeholder="Enter new file name"
+              />
               <div className="flex flex-row justify-end mt-4 space-x-0">
                 <CancelButton onClick={handleFileDelete} /> {/* Add CancelButton with onClick handler */}
                 <button onClick={handleFileUpload} className="upload-btn font-bold bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-full">
