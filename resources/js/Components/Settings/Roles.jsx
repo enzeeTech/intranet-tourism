@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Roles.css";
 import { useCsrf } from "@/composables";
+import { set } from "date-fns";
 
 export default function Roles() {
     const [people, setPeople] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCommunity, setSelectedCommunity] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedPersonForSuperAdmin, setSelectedPersonForSuperAdmin] = useState(null);
+    const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
     const csrfToken = useCsrf();
 
     const roleNameMap = {
@@ -131,7 +137,7 @@ export default function Roles() {
                                     };
                                 }
 
-                                if (userRole.role_id === 3) { // Community Admin
+                                if (userRole.role_id === 3) { 
                                     const community = await fetchCommunityName(userRole.community_id);
                                     usersMap[userId].community = community;
                                 }
@@ -157,6 +163,46 @@ export default function Roles() {
         }
     };
 
+    const fetchAllSearchResults = async (query) => {
+        try {
+            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile`);
+            if (response.ok) {
+                const data = await response.json();
+                setSearchResults(data.data);
+            } else {
+                console.error('Failed to fetch search results:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
+
+    let debounceTimeout = null;
+
+    useEffect(() => {
+        clearTimeout(debounceTimeout);
+
+        if (searchTerm.trim() !== '') {
+            debounceTimeout = setTimeout(() => {
+                fetchAllSearchResults(searchTerm);
+            }, 1000); 
+        } else {
+            setSearchResults([]);  
+        }
+
+        return () => clearTimeout(debounceTimeout);
+
+    }, [searchTerm]);
+
+    const handleSearchInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSelectPerson = (person) => {
+        setSelectedPersonForSuperAdmin(person);
+        setShowConfirmationPopup(true);
+    };
+
     const handleCommunityClick = (community) => {
         setSelectedCommunity(community);
         setShowPopup(true);
@@ -165,6 +211,35 @@ export default function Roles() {
     useEffect(() => {
         fetchUsersWithRoles();
     }, [csrfToken]);
+
+    const handleAssignSuperAdmin = async () => {
+        try {
+            const response = await fetch('/api/permission/model-has-roles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+                body: JSON.stringify({
+                    role_id: [1], 
+                    model_id: selectedPersonForSuperAdmin.id,
+                }),
+            });
+    
+            if (response.ok) {
+                console.log('Super Admin assigned successfully.');
+                setShowConfirmationPopup(false);
+                setIsSearchPopupOpen(false);
+    
+                setLoading(true);
+                await fetchUsersWithRoles(); 
+            } else {
+                console.error('Failed to assign Super Admin:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error assigning Super Admin:', error);
+        }
+    };
 
     return (
         <div className="flow-root">
@@ -176,6 +251,12 @@ export default function Roles() {
                             View users with roles
                         </p>
                     </div>
+                    <button
+                        onClick={() => setIsSearchPopupOpen(true)}
+                        className="px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                    >
+                        Assign New Super Admin
+                    </button>
                 </div>
 
                 {loading ? (
@@ -223,7 +304,7 @@ export default function Roles() {
                                                         <img
                                                             alt=""
                                                             src={person.image.startsWith('avatar/') ? `/storage/${person.image}` : person.image}
-                                                            className="w-10 h-12 rounded-full"
+                                                            className="h-12 rounded-full w-11"
                                                         />
                                                     </div>
                                                     <div className="ml-4">
@@ -242,28 +323,42 @@ export default function Roles() {
                                                 {person.department.name}
                                             </td>
                                             <td className="px-3 py-5 text-sm text-gray-500 whitespace-nowrap">
-                                                {person.roles.map((role, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} ${role.name === 'Department Admin' ? 'hover:bg-blue-200 cursor-pointer' : ''} ${role.name === 'Community Admin' ? 'hover:bg-yellow-200 cursor-pointer' : ''}`}
-                                                    >
-                                                        {role.name === "Department Admin" ? (
+                                                {person.roles.map((role, index) => {
+                                                    if (role.name === "Department Admin") {
+                                                        return (
                                                             <a
+                                                                key={index}
                                                                 href={`/departmentInner?departmentId=${person.department.id}`}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-blue-200 cursor-pointer`}
                                                             >
                                                                 {role.name}
                                                             </a>
-                                                        ) : role.name === "Community Admin" && person.community ? (
-                                                            <button
-                                                                onClick={() => handleCommunityClick(person.community)}
+                                                        );
+                                                    } else if (role.name === "Community Admin" && person.community) {
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-yellow-200 cursor-pointer`}
+                                                            >
+                                                                <button
+                                                                    onClick={() => handleCommunityClick(person.community)}
+                                                                    className="flex items-center justify-center w-full h-full"
+                                                                >
+                                                                    {role.name}
+                                                                </button>
+                                                            </div>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor}`}
                                                             >
                                                                 {role.name}
-                                                            </button>
-                                                        ) : (
-                                                            role.name
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                            </div>
+                                                        );
+                                                    }
+                                                })}
                                             </td>
                                         </tr>
                                     ))}
@@ -273,11 +368,73 @@ export default function Roles() {
                     </div>
                 )}
 
+                {isSearchPopupOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white rounded-2xl pt-7 px-4 w-[400px] shadow-lg">
+                            <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Assign New Super Admin</h1>
+                            <input
+                                type="text"
+                                placeholder="Search name"
+                                value={searchTerm}
+                                onChange={handleSearchInputChange}
+                                className="w-[95%] py-2 px-4 mb-4 ml-[2.5%] border bg-gray-200 border-gray-200 rounded-full"
+                            />
+                            <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
+                                {searchResults.map((person, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-center p-2 cursor-pointer"
+                                        onClick={() => handleSelectPerson(person)}
+                                    >
+                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <div>
+                                            <div className="text-lg font-bold">{person.name}</div>
+                                            <div className="font-light text-gray-600">{person.employment_post?.business_post?.title || 'No title available'}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t-2 border-gray-400">
+                                <button
+                                    className="px-4 mb-4 mr-2 font-bold rounded-full text-[#222222]"
+                                    onClick={() => setIsSearchPopupOpen(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showConfirmationPopup && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white rounded-lg pt-7 px-6 py-6 w-[500px] shadow-lg">
+                            <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Confirm Action</h1>
+                            <p>Are you sure you want to promote <b>{selectedPersonForSuperAdmin.name}</b> to Super Admin?</p>
+                            <div className="flex justify-end mt-4 space-x-2">
+                                <button
+                                    className="px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400"
+                                    onClick={() => setShowConfirmationPopup(false)}
+                                >
+                                    No
+                                </button>
+                                <button
+                                    className="px-4 py-2 font-bold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                    onClick={handleAssignSuperAdmin}
+                                >
+                                    Yes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {showPopup && selectedCommunity && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="p-8 bg-white rounded-lg shadow-lg">
                             <h2 className="text-lg font-semibold text-gray-800">Community Information</h2>
-                            <p className="mt-2 text-gray-600">
+                            <hr className="my-1 border-gray-300 " />
+                            <p className="mt-4 text-gray-600">
                                 <a
                                     href={`/communityInner?communityId=${selectedCommunity.id}`}
                                     className="text-blue-600 underline"
@@ -285,10 +442,10 @@ export default function Roles() {
                                     {selectedCommunity.name}
                                 </a>
                             </p>
-                            <div className="flex justify-end mt-4">
+                            <div className="flex justify-end mt-10">
                                 <button
                                     onClick={() => setShowPopup(false)}
-                                    className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700"
+                                    className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
                                 >
                                     Close
                                 </button>

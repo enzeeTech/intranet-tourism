@@ -94,22 +94,34 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const csrfToken = useCsrf();
 
 
-    async function fetchData() {
+async function fetchData() {
   try {
-    const postsResponse = await fetch("/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities", {
-      method: "GET",
-    });
-    if (!postsResponse.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const postsData = await postsResponse.json();
+    let allPosts = [];
+    let currentPage = 1;
+    let lastPage = 1;
 
-    const posts = postsData.data.data.map((post) => {
-      post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
-      return post;
-    });
+    // Fetch posts data from all pages
+    do {
+      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}`, {
+        method: "GET",
+      });
+      if (!postsResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const postsData = await postsResponse.json();
 
-    const postsWithUserProfiles = await Promise.all(posts.map(async (post) => {
+      // Add the data from the current page to allPosts
+      allPosts = allPosts.concat(postsData.data.data.map((post) => {
+        post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
+        return post;
+      }));
+
+      // Update pagination info
+      currentPage++;
+      lastPage = postsData.data.last_page;
+    } while (currentPage <= lastPage);
+
+    const postsWithUserProfiles = await Promise.all(allPosts.map(async (post) => {
       const userProfileResponse = await fetch(`/api/users/users/${post.user_id}?with[]=profile`, {
         method: "GET",
       });
@@ -133,23 +145,21 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
       return post;
     }));
 
-    
     // Separate announcements and other posts
     const announcements = postsWithUserProfiles.filter(post => post.type === 'announcement');
     const otherPosts = postsWithUserProfiles.filter(post => post.type !== 'announcement');
     
-    // Sort announcements by created_at descending (latest first)
+    // Sort announcements by updated_at descending (latest first)
     announcements.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
+    
+    // Sort other posts by created_at descending (latest first)
     otherPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    
     // Merge announcements with other posts
     const sortedPosts = [...announcements, ...otherPosts];
     
     console.log("SORTEDPOST", sortedPosts);
     
-
     setPostData(sortedPosts);
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -158,10 +168,10 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   }
 }
 
+useEffect(() => {
+  fetchData();
+}, []);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
     // Filter posts based on accessable_type and accessable_id
   let filteredPostData = postData.filter(post => post.type !== 'story');
@@ -379,50 +389,6 @@ console.log("FINAL", finalPosts);
       setIsCommentPopupOpen(true);
     };
   
-    // const renderContentWithTags = (content) => {
-    //   const tagRegex = /@\w+(\s\w+)*\b/g;
-    //   const parts = content.split(tagRegex);
-    //   const tags = content.match(tagRegex) || [];
-    
-    //   const result = [];
-    //   parts.forEach((part, index) => {
-    //     result.push(part);
-    //     if (tags[index]) {
-    //       result.push(<span className="tagged-text">{tags[index]}</span>);
-    //     }
-    //   });
-    
-    //   return result;
-    // };
-
-
-    // const renderContentWithTags = (content) => {
-    //   // Regex to match tags (e.g., @username or @FirstName LastName)
-    //   const tagRegex = /@\w+(?:\s\w+)*\b/g;
-    
-    //   // Replace matched tags with a span containing the className
-    //   const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
-    //     if (index === 0) return [part];
-    //     const match = content.match(tagRegex)[index - 1];
-    //     return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
-    //   }, []);
-    
-    //   return formattedContent;
-    // };
-
-  //   const renderContentWithTags = (content) => {
-  //     // Regex to match tags (e.g., @username or @FirstName LastName)
-  //     const tagRegex = /@\w+(?:\s\w+)*\b/g;
-  
-  //     // Replace matched tags with a span containing the className
-  //     const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
-  //         if (index === 0) return [part];
-  //         const match = content.match(tagRegex)[index - 1];
-  //         return [...acc, <span className="tagged-text" key={index}>{match}</span>, part];
-  //     }, []);
-  
-  //     return formattedContent;
-  // };
 
   const renderContentWithTags = (content) => {
     // Regex to match tags (e.g., @username or @FirstName LastName)
@@ -435,42 +401,34 @@ console.log("FINAL", finalPosts);
         return text.split(urlRegex).reduce((acc, part, index) => {
             if (index === 0) return [part];
             const urlMatch = text.match(urlRegex)[index - 1];
-            return [...acc, <a href={urlMatch} key={index} target="_blank" rel="noopener noreferrer">{urlMatch}</a>, part];
+            return [...acc, 
+                <a 
+                    href={urlMatch} 
+                    key={index} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
+                >
+                    {urlMatch}
+                </a>, 
+                part
+            ];
         }, []);
     };
 
     // Replace tags with span and URLs with anchor tags
-    const parts = content.split(tagRegex);
-    const formattedContent = parts.reduce((acc, part, index) => {
+    const parts = content?.split(tagRegex);
+    const formattedContent = parts?.reduce((acc, part, index) => {
         if (index === 0) return replaceUrls(part);
-        const tagMatch = content.match(tagRegex)[index - 1];
+        const tagMatch = content?.match(tagRegex)[index - 1];
         return [...acc, <span className="tagged-text" key={`tag-${index}`}>{tagMatch}</span>, ...replaceUrls(part)];
     }, []);
   
     return formattedContent;
 };
-
-  
-
-
-    // const renderContentWithTags = (content) => {
-    //   // Regex to match the mention with at most two words (e.g., @FirstName LastName)
-    //   const tagRegex = /@(\w+\s\w+)/g;
     
-    //   // Replace matched tags with a span containing the className
-    //   const formattedContent = content?.split(tagRegex).reduce((acc, part, index) => {
-    //     if (index % 2 === 0) {
-    //       // Regular text part
-    //       return [...acc, part];
-    //     } else {
-    //       // Mention part (at most two words)
-    //       return [...acc, <span className="tagged-text" key={index}>@{part}</span>];
-    //     }
-    //   }, []);
     
-    //   return formattedContent;
-    // };
-    
+    console.log("HEHEHHE", postData);
     
   
 
@@ -709,38 +667,46 @@ console.log("FINAL", finalPosts);
                        </div>
                      )}
                    </header>
-                   {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
-                     {post.content}
-                   </div> */}
-                   <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                     {post.tag?.replace(/[\[\]"]/g, '') || ''}
-                   </p>
-                   <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                     {post.mentions?.replace(/[\[\]"]/g, '') || ''}
-                   </p>
-                   <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                     {post.event?.replace(/[\[\]"]/g, '') || ''}
-                   </p>
-                   {/* Attachments */}
-                   <div className="relative flex flex-wrap gap-2 mt-4">
-                     {post.attachments.map((attachment, idx) => (
-                       <div key={idx} className="relative w-full">
-                         <img
-                           src={`/storage/${attachment.path}`}
-                           alt={`Attachment ${idx + 1}`}
-                           className="rounded-xl w-full h-auto object-cover"
-                           style={{ maxHeight: '300px' }}  // Allowing the image to take up more vertical space
-                         />
-                         {idx === Math.floor(post.attachments.length / 2) && (
-                           <div className="absolute inset-0 flex justify-center items-center p-4">
-                             <span className="text-5xl font-black text-center text-white text-opacity-90 bg-black bg-opacity-50 rounded-lg" style={{ maxWidth: '90%', overflowWrap: 'break-word', wordWrap: 'break-word' }}>
-                               {post.content}
-                             </span>
-                           </div>
-                         )}
-                       </div>
-                     ))}
-                   </div>
+
+                   {!post.attachments || post.attachments.length === 0 ? (
+  // Render this block if there are no attachments
+  <>
+    <div>{post.content}</div>
+    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+      {post.mentions?.replace(/[\[\]"]/g, '') || ''}
+    </p>
+  </>
+) : (
+  // Render this block if there are attachments
+  <>
+    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+      {post.mentions?.replace(/[\[\]"]/g, '') || ''}
+    </p>
+    <div className="relative flex flex-wrap gap-2 mt-4">
+      {post.attachments.map((attachment, idx) => (
+        <div key={idx} className="relative w-full">
+          <img
+            src={`/storage/${attachment.path}`}
+            alt={`Attachment ${idx + 1}`}
+            className="rounded-xl w-full h-auto object-cover"
+            style={{ maxHeight: '300px' }} // Allowing the image to take up more vertical space
+          />
+          {idx === Math.floor(post.attachments.length / 2) && (
+            <div className="absolute inset-0 flex justify-center items-center p-4">
+              <span
+                className="text-5xl font-black text-center text-white text-opacity-90 bg-black bg-opacity-50 rounded-lg"
+                style={{ maxWidth: '90%', overflowWrap: 'break-word', wordWrap: 'break-word' }}
+              >
+                {post.content}
+              </span>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </>
+)}
+
                    <div className="flex items-center gap-4 mt-2">
                      <div className="flex items-center gap-2">
                        {isPostLikedByUser(post) ? (
@@ -763,7 +729,9 @@ console.log("FINAL", finalPosts);
                      <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                    </div>
                  </article>
-               )}
+                )}
+
+
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
               <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative`}>
