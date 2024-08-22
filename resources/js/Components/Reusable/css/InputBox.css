@@ -46,7 +46,7 @@
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
       width: 600px;
-      height: 150px;
+      height: auto;
     }
 
   .comment-box-container {
@@ -56,7 +56,7 @@
     border-radius: 16px;
     position: relative;
     width: 600px;
-    height: 135px;
+    height: auto;
   }
 
   .input-box-container textarea {
@@ -94,16 +94,16 @@
   } */
 
   .file-names-container {
-    display: flex;
-    gap: 5px;
-    background-color: #f1f1f1;
-    border-radius: 10px;
-    width: fit-content;
-    max-width: 530px;
-    overflow-x: scroll; /* Allows horizontal scrolling */
-    white-space: nowrap; /* Ensures the items stay in a single line */
-    padding: 10px 0; /* Adjust padding as needed */
-    margin-bottom: -25px;
+    /* display: flex; */
+    gap: 4px;
+    /* background-color: #f1f1f1; */
+    /* border-radius: 10px; */
+    /* width: fit-content; */
+    /* max-width: 530px; */
+    /* overflow-x: scroll; */
+    /* white-space: nowrap; */
+    /* padding: 10px 0; */
+    /* margin-bottom: -25px; */
     scrollbar-width: none; /* For Firefox */
 }
 
@@ -111,19 +111,17 @@
     display: none; /* For Chrome, Safari, and Edge */
 }
 
-.file-name-wrapper {
-    display: inline-flex; /* Allows the items to be placed next to each other horizontally */
-}
 
 .file-name {
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-    background-color: white;
-    border-radius: 10px;
-    margin: 0px 5px 0px 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: nowrap; /* Prevents text from wrapping */
+    /* display: flex; */
+    /* align-items: center; */
+    /* padding: 6px 12px; */
+    /* background-color: white; */
+    /* border: 2px; */
+    /* border-color: #ff0000; */
+    /* border-radius: 10px; */
+    /* margin: 0px 5px 0px 5px; */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 
@@ -135,9 +133,9 @@
   }
 
   .send-button {
-    position: absolute;
+    /* position: absolute; */
     right: 0;
-    bottom: 50px;
+    /* bottom: 50px; */
   }
 
   .send-button-icon {

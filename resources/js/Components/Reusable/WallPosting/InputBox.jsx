@@ -425,57 +425,35 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800 w-full">
             <div
-                className={`flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
-                    variant === "comment" ? "comment-box-container" 
-                                            : "input-box-container"
+                className={`flex flex-col gap-0 justify-between px-8 pt-5 pb-2 rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
+                    variant === "comment" ? "comment-box-container" : "input-box-container"
                 }`}
             >
-                <div className="flex flex-col w-[875px] w-full " >
+                <div className="flex flex-col w-full">
                     <textarea
                         ref={textAreaRef}
                         value={inputValue}
                         onChange={handleChange}
                         placeholder="Share Your Thoughts..."
-                        className="self-center mt-1 h-8 px-2 text-sm border-none appearance-none resize-none input-no-outline "
+                        className="self-center mt-1 h-8 px-2 mb-12 text-sm border-none appearance-none resize-none input-no-outline w-full"
                     />
-                    {/* {fileNames.length > 0 && (
-                    <div className="file-names-container">
-                        {fileNames.map((name, index) => (
-                            <div
-                                // className="file-name-wrapper"
-                                className="flex items-center rounded-lg"
-                                key={index}
-                            >
-                                <div className="file-name">
-                                    {name}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    )} */}
                     {fileNames.length > 0 && (
-                        <div className="file-names-container">
+                        <div className="file-names-container py-2 w-auto flex flex-col gap-2">
                             {fileNames.map((name, index) => (
-                                <div
-                                    className="flex items-center rounded-lg"
-                                    key={index}
-                                >
-                                    <div className="file-name">
+                                <div className="file-name inline-flex rounded-lg border-2 bg-gray-100 py-1 px-4 justify-between items-center overflow-hidden whitespace-nowrap text-ellipsis"
+                                    key={index}>
+                                    <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                                         {name}
-                                    <button
-                                        className="ml-2 text-blue-500"
-                                        onClick={() => removeFile(index)}
-                                    >
+                                    </span>
+                                    <button className="ml-2 text-blue-500" onClick={() => removeFile(index)}>
                                         x
                                     </button>
-                                    </div>
                                 </div>
                             ))}
                         </div>
                     )}
-
-                    <div className="flex mt-7 items-center  justify-between ">
-                    <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center ">
+                    <div className=" bg-white">
+                        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center">
                             {variant === "comment" && (
                                 <>
                                     <button onClick={toggleReactionPicker}>
@@ -516,112 +494,123 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
                             )}
                             {variant !== "comment" && (
                                 <>
-                                    <button onClick={handleClickPoll}>
-                                        <img
-                                            loading="lazy"
-                                            src="assets/inputpolls.svg"
-                                            alt="Poll Icon"
-                                            className="w-[14px] h-[14px]"
-                                        />
-                                    </button>
-                                    <button onClick={handleClickImg}>
-                                        <img
-                                            loading="lazy"
-                                            src="assets/inputimg.svg"
-                                            alt="Image Icon"
-                                            className="w-[14px] h-[14px]"
-                                        />
-                                    </button>
-                                    <button onClick={handleClickVid}>
-                                        <img
-                                            loading="lazy"
-                                            src="assets/inputvid.svg"
-                                            alt="Video Icon"
-                                            className="w-[18px] h-[18px]"
-                                        />
-                                    </button>
-                                    <button onClick={handleClickDoc}>
-                                        <img
-                                            loading="lazy"
-                                            src="assets/inputdoc.svg"
-                                            alt="Document Icon"
-                                            className="w-[14px] h-[14px]"
-                                        />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleClickMediaTag}
-                                        className="relative text-md text-blue-500 hover:text-blue-700"
-                                    >
-                                        <img src={MediaTag} alt="Tag Media" className="w-[18px] h-[18px]" />
-                                        {mediaTagCount > 0 && (
-                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                                {mediaTagCount}
-                                            </span>
-                                        )}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleClickPeople}
-                                        className="relative text-md text-blue-500 hover:text-blue-700"
-                                    >
-                                        <img
-                                            loading="lazy"
-                                            src="assets/inputpeople.svg"
-                                            alt="People Icon"
-                                            className="w-[14px] h-[14px]"
-                                        />
-                                        {chosenPeople.length > 0 && (
-                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                                {chosenPeople.length}
-                                            </span>
-                                        )}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleClickEvent}
-                                        className="relative text-md text-blue-500 hover:text-blue-700"
-                                    >
-                                        <img
-                                            loading="lazy"
-                                            src={EventTag}
-                                            alt="Event Icon"
-                                            className="w-[18px] h-[18px]"
-                                        />
-                                        {chosenEvent.length > 0 && (
-                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                                {chosenEvent.length}
-                                            </span>
-                                        )}
-                                    </button>
-                                    <div className="flex items-center ">
-                                        <label className="switch xs:ml-28 sm:ml-28 md:ml-24 lg:ml-28">
-                                            <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
-                                            <span className="slider w-10 h-4 "></span>
-                                        </label>
-                                        <label className="ml-3 sm:text-[8px] text-[8px] md:text-[10px] lg:text-[13px]">Set as Announcement?</label>
+                                    <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 lg: justify-between">
+                                        <div className="flex w-full flex-row justify-between lg:w-2/3 max-md:py">
+                                            <button onClick={handleClickPoll}>
+                                                <img
+                                                    loading="lazy"
+                                                    src="assets/inputpolls.svg"
+                                                    alt="Poll Icon"
+                                                    className="w-4 h-4"
+                                                />
+                                            </button>
+                                            <button onClick={handleClickImg}>
+                                                <img
+                                                    loading="lazy"
+                                                    src="assets/inputimg.svg"
+                                                    alt="Image Icon"
+                                                    className="w-4 h-4"
+                                                />
+                                            </button>
+                                            <button onClick={handleClickVid}>
+                                                <img
+                                                    loading="lazy"
+                                                    src="assets/inputvid.svg"
+                                                    alt="Video Icon"
+                                                    className="w-4 h-4"
+                                                />
+                                            </button>
+                                            <button onClick={handleClickDoc}>
+                                                <img
+                                                    loading="lazy"
+                                                    src="assets/inputdoc.svg"
+                                                    alt="Document Icon"
+                                                    className="w-3 h-3"
+                                                />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleClickMediaTag}
+                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                            >
+                                                <img src={MediaTag} alt="Tag Media" className="w-4 h-4" />
+                                                {mediaTagCount > 0 && (
+                                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                        {mediaTagCount}
+                                                    </span>
+                                                )}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleClickPeople}
+                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                            >
+                                                <img
+                                                    loading="lazy"
+                                                    src="assets/inputpeople.svg"
+                                                    alt="People Icon"
+                                                    className="w-4 h-4"
+                                                />
+                                                {chosenPeople.length > 0 && (
+                                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                        {chosenPeople.length}
+                                                    </span>
+                                                )}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleClickEvent}
+                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                            >
+                                                <img
+                                                    loading="lazy"
+                                                    src={EventTag}
+                                                    alt="Event Icon"
+                                                    className="w-4 h-4"
+                                                />
+                                                {chosenEvent.length > 0 && (
+                                                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                        {chosenEvent.length}
+                                                    </span>
+                                                )}
+                                            </button>
+                                        </div>
+
+                                        {/* column baru */}
+                                        <div className="flex flex-row w-full max-md:justify-between justify-end gap-4">
+                                            {variant !== "comment" && (
+                                                <div className="flex items-center">
+                                                    <label className="text-sm mr-3">Set as Announcement?</label>
+                                                    <label className="switch">
+                                                        <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
+                                                        <span className="slider"></span>
+                                                    </label>
+                                                </div>
+                                            )}
+                                            <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                                                <img
+                                                    loading="lazy"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                                                    alt="SEND"
+                                                    className="h-6 w-6"
+                                                />
+                                            </button>
+                                        </div>
+                                        {/* column sampaisini */}
                                     </div>
                                 </>
                             )}
                         </div>
                     </div>
-                    <div className="relative-container">
-                        <button onClick={handleClickSend} className="flex send-button w-full align-item justify-end">
-                            <img
-                                loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                                alt="SEND"
-                            />
-                        </button>
-                    </div>
                 </div>
             </div>
+    
             {showMediaTagPopup && (
                 <TagInput
-                tags={tags}
-                setTags={setTags}
-                onClose={closePopup}
-                onSave={handleSaveTags}
+                    tags={tags}
+                    setTags={setTags}
+                    onClose={closePopup}
+                    onSave={handleSaveTags}
                 />
             )}
             {showPollPopup && (
@@ -630,45 +619,25 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
             {showPeoplePopup && (
                 <People
                     onClose={closePopup}
-                    chosenPeople={chosenPeople} // Pass chosenPeople state
+                    chosenPeople={chosenPeople}
                     onSavePeople={handleSavePeople}
                 />
             )}
             {showEventPopup && (
                 <Event
                     onClose={closePopup}
-                    chosenEvent={chosenEvent} // Pass chosenPeople state
+                    chosenEvent={chosenEvent}
                     onSaveEvent={handleSaveEvent}
                 />
             )}
-           {/* {isMentioning && mentionQuery && (
-                <div 
-                    className="mention-suggestions"
-                    style={{
-                        top: `${mentionSuggestionsPosition.top}px`,
-                        left: `${mentionSuggestionsPosition.left}px`,
-                    }}
-                >
-                    {searchResults.filter(person => 
-                        person.name.toLowerCase().includes(mentionQuery.toLowerCase())
-                    ).map(person => (
-                        <div 
-                            key={person.id} 
-                            onClick={() => handleTagSelection(person.name)}
-                            className="mention-suggestion-item"
-                        >
-                            {person.name}
-                        </div>
-                    ))}
-                </div>
-            )} */}
+    
             {isMentioning && mentionQuery && (
                 <div className="mention-suggestions">
-                    {searchResults.filter(person => 
+                    {searchResults.filter(person =>
                         person.name.toLowerCase().includes(mentionQuery.toLowerCase())
                     ).map(person => (
-                        <div 
-                            key={person.id} 
+                        <div
+                            key={person.id}
                             onClick={() => handleTagSelection(person.name)}
                         >
                             {person.name}
@@ -676,10 +645,9 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
                     ))}
                 </div>
             )}
-
-
         </section>
     );
+    
 }
 
 export default ShareYourThoughts;
