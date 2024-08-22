@@ -131,7 +131,7 @@ export default function Roles() {
                                     };
                                 }
 
-                                if (userRole.role_id === 3) { // Community Admin
+                                if (userRole.role_id === 3) { 
                                     const community = await fetchCommunityName(userRole.community_id);
                                     usersMap[userId].community = community;
                                 }
@@ -223,7 +223,7 @@ export default function Roles() {
                                                         <img
                                                             alt=""
                                                             src={person.image.startsWith('avatar/') ? `/storage/${person.image}` : person.image}
-                                                            className="w-10 h-12 rounded-full"
+                                                            className="h-12 rounded-full w-11"
                                                         />
                                                     </div>
                                                     <div className="ml-4">
@@ -242,28 +242,42 @@ export default function Roles() {
                                                 {person.department.name}
                                             </td>
                                             <td className="px-3 py-5 text-sm text-gray-500 whitespace-nowrap">
-                                                {person.roles.map((role, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} ${role.name === 'Department Admin' ? 'hover:bg-blue-200 cursor-pointer' : ''} ${role.name === 'Community Admin' ? 'hover:bg-yellow-200 cursor-pointer' : ''}`}
-                                                    >
-                                                        {role.name === "Department Admin" ? (
+                                                {person.roles.map((role, index) => {
+                                                    if (role.name === "Department Admin") {
+                                                        return (
                                                             <a
+                                                                key={index}
                                                                 href={`/departmentInner?departmentId=${person.department.id}`}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-blue-200 cursor-pointer`}
                                                             >
                                                                 {role.name}
                                                             </a>
-                                                        ) : role.name === "Community Admin" && person.community ? (
-                                                            <button
-                                                                onClick={() => handleCommunityClick(person.community)}
+                                                        );
+                                                    } else if (role.name === "Community Admin" && person.community) {
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-yellow-200 cursor-pointer`}
+                                                            >
+                                                                <button
+                                                                    onClick={() => handleCommunityClick(person.community)}
+                                                                    className="flex items-center justify-center w-full h-full"
+                                                                >
+                                                                    {role.name}
+                                                                </button>
+                                                            </div>
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor}`}
                                                             >
                                                                 {role.name}
-                                                            </button>
-                                                        ) : (
-                                                            role.name
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                            </div>
+                                                        );
+                                                    }
+                                                })}
                                             </td>
                                         </tr>
                                     ))}
@@ -277,7 +291,8 @@ export default function Roles() {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="p-8 bg-white rounded-lg shadow-lg">
                             <h2 className="text-lg font-semibold text-gray-800">Community Information</h2>
-                            <p className="mt-2 text-gray-600">
+                            <hr className="my-1 border-gray-300 " />
+                            <p className="mt-4 text-gray-600">
                                 <a
                                     href={`/communityInner?communityId=${selectedCommunity.id}`}
                                     className="text-blue-600 underline"
@@ -285,10 +300,10 @@ export default function Roles() {
                                     {selectedCommunity.name}
                                 </a>
                             </p>
-                            <div className="flex justify-end mt-4">
+                            <div className="flex justify-end mt-10">
                                 <button
                                     onClick={() => setShowPopup(false)}
-                                    className="px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700"
+                                    className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
                                 >
                                     Close
                                 </button>
