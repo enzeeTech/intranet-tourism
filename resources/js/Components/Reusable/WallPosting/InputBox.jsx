@@ -25,15 +25,217 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [chosenPeople, setChosenPeople] = useState([]);
     const [chosenEvent, setChosenEvent] = useState([]);
     const [isAnnouncement, setIsAnnouncement] = useState(false);
+    const [cursorPosition, setCursorPosition] = useState(null);
+    const [isMentioning, setIsMentioning] = useState(false);
+const [mentionQuery, setMentionQuery] = useState("");
+const [searchResults, setSearchResults] = useState([]);
+const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ top: 0, left: 0 });
+
+
+
 
 
 
     const textAreaRef = useRef(null);
     const csrfToken = useCsrf();
 
+    // const handleChange = (event) => {
+    //     setInputValue(event.target.value);
+    // };
+
+    // const handleChange = (event) => {
+    //     const value = event.target.value;
+    //     setInputValue(value);
+    //     setCursorPosition(event.target.selectionStart); // Track cursor position
+    //     // Additional logic to detect tag initiation, e.g., @ symbol
+    // };
+
+    // const handleChange = (event) => {
+    //     const value = event.target.value;
+    //     const cursorPosition = event.target.selectionStart;
+    //     const beforeCursor = value.slice(0, cursorPosition);
+        
+    //     // Detect if the user is typing a mention
+    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
+        
+    //     if (mentionMatch) {
+    //         setIsMentioning(true);
+    //         setMentionQuery(mentionMatch[1]); // The part after '@'
+    //     } else {
+    //         setIsMentioning(false);
+    //         setMentionQuery("");
+    //     }
+    
+    //     setInputValue(value);
+    //     setCursorPosition(cursorPosition); // Track cursor position
+    // };
+
+    // const handleChange = (event) => {
+    //     const value = event.target.value;
+    //     const cursorPosition = event.target.selectionStart;
+    //     const beforeCursor = value.slice(0, cursorPosition);
+
+    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
+
+    //     if (mentionMatch) {
+    //         setIsMentioning(true);
+    //         setMentionQuery(mentionMatch[1]);
+            
+    //         // Calculate position of '@'
+    //         const textArea = textAreaRef.current;
+    //         const mentionIndex = mentionMatch.index;
+    //         const rect = textArea.getBoundingClientRect();
+    //         const offset = textArea.value.slice(0, mentionIndex).split('\n').length - 1; // Line offset
+            
+    //         // Adjust position of suggestions
+    //         setMentionSuggestionsPosition({
+    //             top: rect.top + textArea.scrollTop + (textArea.scrollHeight / textArea.rows) * (offset + 1) + 10,
+    //             left: rect.left + textArea.scrollLeft + textArea.value.slice(0, mentionIndex).split('\n').slice(-1).join('').length * 8 + 5 // Adjust for character width
+    //         });
+    //     } else {
+    //         setIsMentioning(false);
+    //         setMentionQuery("");
+    //     }
+
+    //     setInputValue(value);
+    //     setCursorPosition(cursorPosition);
+    // };
+    
+
+    // const handleTagSelection = (tag) => {
+    //     const beforeCursor = inputValue.slice(0, cursorPosition);
+    //     const afterCursor = inputValue.slice(cursorPosition);
+    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
+    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+        
+    //     setInputValue(updatedText);
+    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+    //     setIsMentioning(false); // Close mention suggestions
+    //     setMentionQuery("");
+    // };
+
+    // const handleChange = (event) => {
+    //     const value = event.target.value;
+    //     const cursorPosition = event.target.selectionStart;
+    //     const beforeCursor = value.slice(0, cursorPosition);
+
+    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
+
+    //     if (mentionMatch) {
+    //         setIsMentioning(true);
+    //         setMentionQuery(mentionMatch[1]);
+    //     } else {
+    //         setIsMentioning(false);
+    //         setMentionQuery("");
+    //     }
+
+    //     setInputValue(value);
+    //     setCursorPosition(cursorPosition);
+    // };
+
     const handleChange = (event) => {
-        setInputValue(event.target.value);
+        const value = event.target.value;
+        const cursorPosition = event.target.selectionStart;
+        const beforeCursor = value.slice(0, cursorPosition);
+        
+        // Check if the last character typed is a space
+        const isSpaceTyped = beforeCursor.endsWith(" ");
+        
+        const mentionMatch = beforeCursor.match(/@(\w*)$/);
+    
+        if (mentionMatch && !isSpaceTyped) {
+            setIsMentioning(true);
+            setMentionQuery(mentionMatch[1]);
+        } else {
+            setIsMentioning(false);
+            setMentionQuery("");
+        }
+    
+        setInputValue(value);
+        setCursorPosition(cursorPosition);
     };
+    
+
+    // const handleTagSelection = (tag) => {
+    //     const beforeCursor = inputValue.slice(0, cursorPosition);
+    //     const afterCursor = inputValue.slice(cursorPosition);
+    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
+    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+        
+    //     setInputValue(updatedText);
+    //     setMentions((prevMentions) => [...prevMentions, tag]);
+    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+    //     setIsMentioning(false); // Close mention suggestions
+    //     setMentionQuery("");
+    // };
+
+    // const handleTagSelection = (tag) => {
+    //     const beforeCursor = inputValue.slice(0, cursorPosition);
+    //     const afterCursor = inputValue.slice(cursorPosition);
+    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
+    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+        
+    //     setInputValue(updatedText);
+    //     setChosenPeople((prevPeople) => [...prevPeople, { name: tag }]); // Update here
+    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+    //     setIsMentioning(false); // Close mention suggestions
+    //     setMentionQuery("");
+    // };
+
+    const handleTagSelection = (tag) => {
+        const beforeCursor = inputValue.slice(0, cursorPosition);
+        const afterCursor = inputValue.slice(cursorPosition);
+        const mentionStartIndex = beforeCursor.lastIndexOf("@");
+        const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+        
+        setInputValue(updatedText);
+        setChosenPeople((prevPeople) => [...prevPeople, { name: tag }]); // Update here
+        setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+        setIsMentioning(false); // Close mention suggestions
+        setMentionQuery("");
+    };
+    
+    
+    
+
+    // useEffect(() => {
+    //     const handleTagSearch = async () => {
+    //         const atIndex = inputValue.lastIndexOf("@");
+    
+    //         // If there's no '@' or nothing typed after it, exit early
+    //         if (atIndex === -1 || cursorPosition <= atIndex + 1) {
+    //             return;
+    //         }
+    
+    //         // Extract the text after '@'
+    //         const searchTerm = inputValue.slice(atIndex + 1, cursorPosition).trim();
+    
+    //         if (searchTerm) {
+    //             try {
+    //                 const response = await fetch(
+    //                     `/api/crud/users?search=${searchTerm}&with[]=profile`
+    //                 );
+    
+    //                 if (response.ok) {
+    //                     const data = await response.json();
+    //                     setSearchResults(data.data.data); // Store the results for filtering
+    //                     // setShowPeoplePopup(true); 
+    //                 } else {
+    //                     console.error("Failed to fetch recommended people");
+    //                 }
+                    
+    //             } catch (error) {
+    //                 console.error("Error fetching recommended people:", error);
+    //             }
+    //         } else {
+    //             setShowPeoplePopup(false); // Hide popup if search term is cleared
+    //         }
+    //     };
+    
+    //     handleTagSearch();
+    // }, [inputValue, cursorPosition]);
+    
+    
 
     const handleClickSend = () => {
         const formData = new FormData();
@@ -63,11 +265,18 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         }
     
         // Handle mentions with spaces after commas
+        // if (chosenPeople.length > 0) {
+        //     const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+        //     const formattedMentions = `[${mentions}]`;
+        //     formData.append("mentions", formattedMentions);
+        // }
+
         if (chosenPeople.length > 0) {
             const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
             const formattedMentions = `[${mentions}]`;
             formData.append("mentions", formattedMentions);
         }
+        
 
         // Handle mentions with spaces after commas
         if (chosenEvent.length > 0) {
@@ -103,6 +312,34 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 console.error("Error:", error);
             });
     };
+
+    useEffect(() => {
+        const handleTagSearch = async () => {
+            const atIndex = inputValue.lastIndexOf("@");
+
+            if (atIndex === -1 || cursorPosition <= atIndex + 1) {
+                return;
+            }
+
+            const searchTerm = inputValue.slice(atIndex + 1, cursorPosition).trim();
+
+            if (searchTerm) {
+                try {
+                    const response = await fetch(`/api/crud/users?search=${searchTerm}&with[]=profile`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setSearchResults(data.data.data);
+                    } else {
+                        console.error("Failed to fetch recommended people");
+                    }
+                } catch (error) {
+                    console.error("Error fetching recommended people:", error);
+                }
+            }
+        };
+
+        handleTagSearch();
+    }, [inputValue, cursorPosition]);
 
 
     const handleToggleChange = () => {
@@ -186,14 +423,14 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     };
 
     return (
-        <section className="flex flex-col justify-center text-sm text-neutral-800">
+        <section className="flex flex-col justify-center text-sm text-neutral-800 w-full">
             <div
                 className={`flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
                     variant === "comment" ? "comment-box-container" 
                                             : "input-box-container"
                 }`}
             >
-                <div className="flex flex-col w-[875px] " >
+                <div className="flex flex-col w-[875px] w-full " >
                     <textarea
                         ref={textAreaRef}
                         value={inputValue}
@@ -238,7 +475,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     )}
 
                     <div className="flex mt-7 items-center  justify-between ">
-                        <div className="flex gap-4 items-center">
+                    <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center ">
                             {variant === "comment" && (
                                 <>
                                     <button onClick={toggleReactionPicker}>
@@ -332,7 +569,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             loading="lazy"
                                             src="assets/inputpeople.svg"
                                             alt="People Icon"
-                                            className="w-[16px] h-[16px]"
+                                            className="w-[14px] h-[14px]"
                                         />
                                         {chosenPeople.length > 0 && (
                                             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
@@ -357,19 +594,19 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             </span>
                                         )}
                                     </button>
-                                    <div className="flex items-center ml-28">
-                                        <label className="switch">
+                                    <div className="flex items-center ">
+                                        <label className="switch xs:ml-28 sm:ml-28 md:ml-24 lg:ml-28">
                                             <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
-                                            <span className="slider"></span>
+                                            <span className="slider w-10 h-4 "></span>
                                         </label>
-                                        <label className="ml-3">Set as Announcement?</label>
+                                        <label className="ml-3 sm:text-[8px] text-[8px] md:text-[10px] lg:text-[13px]">Set as Announcement?</label>
                                     </div>
                                 </>
                             )}
                         </div>
                     </div>
                     <div className="relative-container">
-                        <button onClick={handleClickSend} className="send-button">
+                        <button onClick={handleClickSend} className="flex send-button w-full align-item justify-end">
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
@@ -404,6 +641,43 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     onSaveEvent={handleSaveEvent}
                 />
             )}
+           {/* {isMentioning && mentionQuery && (
+                <div 
+                    className="mention-suggestions"
+                    style={{
+                        top: `${mentionSuggestionsPosition.top}px`,
+                        left: `${mentionSuggestionsPosition.left}px`,
+                    }}
+                >
+                    {searchResults.filter(person => 
+                        person.name.toLowerCase().includes(mentionQuery.toLowerCase())
+                    ).map(person => (
+                        <div 
+                            key={person.id} 
+                            onClick={() => handleTagSelection(person.name)}
+                            className="mention-suggestion-item"
+                        >
+                            {person.name}
+                        </div>
+                    ))}
+                </div>
+            )} */}
+            {isMentioning && mentionQuery && (
+                <div className="mention-suggestions">
+                    {searchResults.filter(person => 
+                        person.name.toLowerCase().includes(mentionQuery.toLowerCase())
+                    ).map(person => (
+                        <div 
+                            key={person.id} 
+                            onClick={() => handleTagSelection(person.name)}
+                        >
+                            {person.name}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+
         </section>
     );
 }
