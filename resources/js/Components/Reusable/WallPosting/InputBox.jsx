@@ -132,7 +132,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const sendBirthdayPost = (birthdayPerson, departmentId) => {
         const customFormData = new FormData();
         customFormData.append("user_id", "1");
-        customFormData.append("type", "birthday");
+        customFormData.append("type", "Admin Wish");
         customFormData.append("visibility", "public");
         customFormData.append("content", `Happy Birthday ${birthdayPerson.name}! 🎉`);
         
