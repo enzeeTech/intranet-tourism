@@ -98,7 +98,8 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
       <div className="card-body">
         <h3 className="staff-member-name">{name}</h3>
         <p className="staff-member-role">{role}</p>
-        <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p>
+        {/* <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p> */}
+        <p className="staff-member-role">{workNo}</p>
       </div>
       <div className="card-footer">
         <button className={`call-button ${isWorkNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleCall} disabled={isDeactivated || !isWorkNumberAvailable()}>

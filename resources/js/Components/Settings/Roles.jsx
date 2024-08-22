@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Roles.css";
 import { useCsrf } from "@/composables";
-import { set } from "date-fns";
 
 export default function Roles() {
     const [people, setPeople] = useState([]);
@@ -13,6 +12,8 @@ export default function Roles() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedPersonForSuperAdmin, setSelectedPersonForSuperAdmin] = useState(null);
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+    const [showDemotePopup, setShowDemotePopup] = useState(false);
+    const [personToDemote, setPersonToDemote] = useState(null);
     const csrfToken = useCsrf();
 
     const roleNameMap = {
@@ -241,6 +242,38 @@ export default function Roles() {
         }
     };
 
+    const handleDemoteToUser = async () => {
+        try {
+            const response = await fetch('/api/permission/model-has-roles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+                body: JSON.stringify({
+                    role_id: [4], 
+                    model_id: personToDemote.id,
+                }),
+            });
+
+            if (response.ok) {
+                console.log('User demoted successfully.');
+                setShowDemotePopup(false);
+                setLoading(true);
+                await fetchUsersWithRoles();
+            } else {
+                console.error('Failed to demote user:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error demoting user:', error);
+        }
+    };
+
+    const handleDemoteClick = (person) => {
+        setPersonToDemote(person);
+        setShowDemotePopup(true);
+    };
+
     return (
         <div className="flow-root">
             <div className="container p-8 mx-auto">
@@ -348,6 +381,20 @@ export default function Roles() {
                                                                 </button>
                                                             </div>
                                                         );
+                                                    } else if (role.name === "Super Admin") {
+                                                        return (
+                                                            <div key={index} className="flex flex-col items-center space-y-1 whitespace-nowrap">
+                                                                <div className={`flex items-center justify-center text-center w-full px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor}`}>
+                                                                    {role.name}
+                                                                </div>
+                                                                <button
+                                                                    onClick={() => handleDemoteClick(person)}
+                                                                    className="text-xs font-medium text-blue-600 hover:underline"
+                                                                >
+                                                                    Demote to User
+                                                                </button>
+                                                            </div>
+                                                        );
                                                     } else {
                                                         return (
                                                             <div
@@ -421,6 +468,29 @@ export default function Roles() {
                                 <button
                                     className="px-4 py-2 font-bold text-white bg-red-500 rounded-md hover:bg-red-600"
                                     onClick={handleAssignSuperAdmin}
+                                >
+                                    Yes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showDemotePopup && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white rounded-lg pt-7 px-6 py-6 w-[500px] shadow-lg">
+                            <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Confirm Demotion</h1>
+                            <p>Are you sure you want to demote <b>{personToDemote.name}</b> from Super Admin to User?</p>
+                            <div className="flex justify-end mt-4 space-x-2">
+                                <button
+                                    className="px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400"
+                                    onClick={() => setShowDemotePopup(false)}
+                                >
+                                    No
+                                </button>
+                                <button
+                                    className="px-4 py-2 font-bold text-white bg-red-500 rounded-md hover:bg-red-600"
+                                    onClick={handleDemoteToUser}
                                 >
                                     Yes
                                 </button>
