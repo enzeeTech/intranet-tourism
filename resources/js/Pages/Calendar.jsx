@@ -8,7 +8,7 @@ import searchIcon from '../../../public/assets/search.png';
 import printIcon from '../../../public/assets/PrintPDF.svg';
 import pencilIcon from '../../../public/assets/EditIcon.svg';
 import * as bootstrap from "bootstrap";
-import "./Calendar/index.css";
+import "./Calendar/ind.css";
 import Example from '@/Layouts/DashboardLayoutNew';
 import PrintCalendar from './Calendar/PrintCalendar';
 import { useCsrf } from "@/composables";
