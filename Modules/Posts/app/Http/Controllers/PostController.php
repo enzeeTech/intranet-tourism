@@ -6,16 +6,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Posts\Models\Post;
 use Modules\Posts\Models\PostAccessibility;
+use Illuminate\Http\Request;
 use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Start with a query builder instance
+        $query = Post::query();
+    
+        // Check if the 'filter' parameter is present
+        if ($request->has('filter')) {
+            // Apply the necessary filters to the query
+            if (in_array('birthday', $request->input('filter'))) {
+                $query->where('type', 'birthday');
+            }
+    
+            // If filters are present, paginate the filtered query
+            $data = $this->shouldPaginate($query);
+        } else {
+            // If no filters are present, paginate using the predefined queryable method
+            $data = $this->shouldPaginate(Post::queryable());
+        }
+    
         return response()->json([
-            'data' => $this->shouldPaginate(Post::queryable()),
+            'data' => $data,
         ]);
     }
+    
+
 
     public function show($id)
     {

@@ -11,7 +11,10 @@ import "../../../Pages/Calendar/index.css";
 import Emoji from '../../../../../public/assets/EmojiIcon.svg'
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant }) {
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant, birthdaysToday }) {
+    
+    
+    
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
@@ -27,112 +30,14 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [isAnnouncement, setIsAnnouncement] = useState(false);
     const [cursorPosition, setCursorPosition] = useState(null);
     const [isMentioning, setIsMentioning] = useState(false);
-const [mentionQuery, setMentionQuery] = useState("");
-const [searchResults, setSearchResults] = useState([]);
-const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ top: 0, left: 0 });
-
-
-
-
-
-
+    const [mentionQuery, setMentionQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ top: 0, left: 0 });
+    
+    
     const textAreaRef = useRef(null);
     const csrfToken = useCsrf();
-
-    // const handleChange = (event) => {
-    //     setInputValue(event.target.value);
-    // };
-
-    // const handleChange = (event) => {
-    //     const value = event.target.value;
-    //     setInputValue(value);
-    //     setCursorPosition(event.target.selectionStart); // Track cursor position
-    //     // Additional logic to detect tag initiation, e.g., @ symbol
-    // };
-
-    // const handleChange = (event) => {
-    //     const value = event.target.value;
-    //     const cursorPosition = event.target.selectionStart;
-    //     const beforeCursor = value.slice(0, cursorPosition);
-        
-    //     // Detect if the user is typing a mention
-    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
-        
-    //     if (mentionMatch) {
-    //         setIsMentioning(true);
-    //         setMentionQuery(mentionMatch[1]); // The part after '@'
-    //     } else {
-    //         setIsMentioning(false);
-    //         setMentionQuery("");
-    //     }
     
-    //     setInputValue(value);
-    //     setCursorPosition(cursorPosition); // Track cursor position
-    // };
-
-    // const handleChange = (event) => {
-    //     const value = event.target.value;
-    //     const cursorPosition = event.target.selectionStart;
-    //     const beforeCursor = value.slice(0, cursorPosition);
-
-    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
-
-    //     if (mentionMatch) {
-    //         setIsMentioning(true);
-    //         setMentionQuery(mentionMatch[1]);
-            
-    //         // Calculate position of '@'
-    //         const textArea = textAreaRef.current;
-    //         const mentionIndex = mentionMatch.index;
-    //         const rect = textArea.getBoundingClientRect();
-    //         const offset = textArea.value.slice(0, mentionIndex).split('\n').length - 1; // Line offset
-            
-    //         // Adjust position of suggestions
-    //         setMentionSuggestionsPosition({
-    //             top: rect.top + textArea.scrollTop + (textArea.scrollHeight / textArea.rows) * (offset + 1) + 10,
-    //             left: rect.left + textArea.scrollLeft + textArea.value.slice(0, mentionIndex).split('\n').slice(-1).join('').length * 8 + 5 // Adjust for character width
-    //         });
-    //     } else {
-    //         setIsMentioning(false);
-    //         setMentionQuery("");
-    //     }
-
-    //     setInputValue(value);
-    //     setCursorPosition(cursorPosition);
-    // };
-    
-
-    // const handleTagSelection = (tag) => {
-    //     const beforeCursor = inputValue.slice(0, cursorPosition);
-    //     const afterCursor = inputValue.slice(cursorPosition);
-    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
-    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
-        
-    //     setInputValue(updatedText);
-    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
-    //     setIsMentioning(false); // Close mention suggestions
-    //     setMentionQuery("");
-    // };
-
-    // const handleChange = (event) => {
-    //     const value = event.target.value;
-    //     const cursorPosition = event.target.selectionStart;
-    //     const beforeCursor = value.slice(0, cursorPosition);
-
-    //     const mentionMatch = beforeCursor.match(/@(\w*)$/);
-
-    //     if (mentionMatch) {
-    //         setIsMentioning(true);
-    //         setMentionQuery(mentionMatch[1]);
-    //     } else {
-    //         setIsMentioning(false);
-    //         setMentionQuery("");
-    //     }
-
-    //     setInputValue(value);
-    //     setCursorPosition(cursorPosition);
-    // };
-
     const handleChange = (event) => {
         const value = event.target.value;
         const cursorPosition = event.target.selectionStart;
@@ -142,7 +47,7 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
         const isSpaceTyped = beforeCursor.endsWith(" ");
         
         const mentionMatch = beforeCursor.match(/@(\w*)$/);
-    
+        
         if (mentionMatch && !isSpaceTyped) {
             setIsMentioning(true);
             setMentionQuery(mentionMatch[1]);
@@ -150,38 +55,12 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
             setIsMentioning(false);
             setMentionQuery("");
         }
-    
+        
         setInputValue(value);
         setCursorPosition(cursorPosition);
     };
     
-
-    // const handleTagSelection = (tag) => {
-    //     const beforeCursor = inputValue.slice(0, cursorPosition);
-    //     const afterCursor = inputValue.slice(cursorPosition);
-    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
-    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
-        
-    //     setInputValue(updatedText);
-    //     setMentions((prevMentions) => [...prevMentions, tag]);
-    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
-    //     setIsMentioning(false); // Close mention suggestions
-    //     setMentionQuery("");
-    // };
-
-    // const handleTagSelection = (tag) => {
-    //     const beforeCursor = inputValue.slice(0, cursorPosition);
-    //     const afterCursor = inputValue.slice(cursorPosition);
-    //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
-    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
-        
-    //     setInputValue(updatedText);
-    //     setChosenPeople((prevPeople) => [...prevPeople, { name: tag }]); // Update here
-    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
-    //     setIsMentioning(false); // Close mention suggestions
-    //     setMentionQuery("");
-    // };
-
+    
     const handleTagSelection = (tag) => {
         const beforeCursor = inputValue.slice(0, cursorPosition);
         const afterCursor = inputValue.slice(cursorPosition);
@@ -196,56 +75,300 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
     };
     
     
+    console.log("DATA", birthdaysToday);
+
+    birthdaysToday?.forEach((person) => {
+        if (person?.employment_posts?.length) {
+            console.log("BDAYYY", person.employment_posts[0]?.department_id);
+        } else {
+            console.log("No employment posts available for", person.name);
+        }
+    });
+
+    useEffect(() => {
+        const checkAndSendBirthdayPosts = async () => {
+            try {
+                // Fetch today's birthday posts
+                const response = await fetch("/api/posts/posts?filter[]=birthday");
+                const postsData = await response.json();
+                const posts = postsData.data.data;
+
+                console.log("KAKAKAKKA", posts);
+                
+    
+                // Get today's date in the same format as 'created_at' field (YYYY-MM-DD)
+                const today = new Date().toISOString().split('T')[0];
+    
+                // Filter posts for today only
+                const todaysPosts = posts.filter((post) => post.created_at.startsWith(today));
+    
+                // Collect names already mentioned in today's posts
+                const mentionedNames = todaysPosts
+                    .map((post) => JSON.parse(post.mentions))
+                    .flat();
+    
+                // Filter and send birthday posts
+                birthdaysToday.forEach((birthdayPerson) => {
+                    if (birthdayPerson?.employment_posts?.length > 0) {
+                        const departmentId = birthdayPerson.employment_posts[0]?.department_id;
+        
+                        if (departmentId && !mentionedNames.includes(birthdayPerson.name)) {
+                            sendBirthdayPost(birthdayPerson, departmentId);
+                        } else if (!departmentId) {
+                            console.error(`No department ID available for ${birthdayPerson.name}`);
+                        }
+                    } else {
+                        console.error(`No employment posts available for ${birthdayPerson.name}`);
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching today's posts:", error);
+            }
+        };
+    
+        checkAndSendBirthdayPosts();
+    }, [birthdaysToday]);
+    
+    const sendBirthdayPost = (birthdayPerson, departmentId) => {
+        const customFormData = new FormData();
+        customFormData.append("user_id", "1");
+        customFormData.append("type", "birthday");
+        customFormData.append("visibility", "public");
+        customFormData.append("content", `Happy Birthday ${birthdayPerson.name}! 🎉`);
+        
+        const formattedMentions = JSON.stringify([birthdayPerson.name]);
+        customFormData.append("mentions", formattedMentions);
+    
+        customFormData.append("accessibilities[0][accessable_type]", "Department");
+        customFormData.append("accessibilities[0][accessable_id]", departmentId);
+    
+        fetch("/api/posts/posts", {
+            method: "POST",
+            body: customFormData,
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error("Network response was not ok");
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+    };
+    
     
 
-    // useEffect(() => {
-    //     const handleTagSearch = async () => {
-    //         const atIndex = inputValue.lastIndexOf("@");
+    // const handleClickSend = (customFormData = null) => {
+    //     const formData = customFormData || new FormData();
     
-    //         // If there's no '@' or nothing typed after it, exit early
-    //         if (atIndex === -1 || cursorPosition <= atIndex + 1) {
-    //             return;
-    //         }
-    
-    //         // Extract the text after '@'
-    //         const searchTerm = inputValue.slice(atIndex + 1, cursorPosition).trim();
-    
-    //         if (searchTerm) {
-    //             try {
-    //                 const response = await fetch(
-    //                     `/api/crud/users?search=${searchTerm}&with[]=profile`
-    //                 );
-    
-    //                 if (response.ok) {
-    //                     const data = await response.json();
-    //                     setSearchResults(data.data.data); // Store the results for filtering
-    //                     // setShowPeoplePopup(true); 
-    //                 } else {
-    //                     console.error("Failed to fetch recommended people");
-    //                 }
-                    
-    //             } catch (error) {
-    //                 console.error("Error fetching recommended people:", error);
-    //             }
+    //     if (!customFormData) {
+    //         formData.append("user_id", userId);
+    //         formData.append("type", isAnnouncement ? "announcement" : "post");
+    //         formData.append("visibility", "public");
+
+    //         if (!inputValue) {
+    //             formData.append("tag", JSON.stringify(tags));
+    //             attachments.forEach((file, index) => {
+    //                 formData.append(`attachments[${index}]`, file);
+    //             });
     //         } else {
-    //             setShowPeoplePopup(false); // Hide popup if search term is cleared
+    //             formData.append("content", inputValue);
+    //             attachments.forEach((file, index) => {
+    //                 formData.append(`attachments[${index}]`, file);
+    //             });
     //         }
-    //     };
-    
-    //     handleTagSearch();
-    // }, [inputValue, cursorPosition]);
-    
-    
 
+    //         if (tags.length > 0) {
+    //             const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+    //             formData.append("tag", formattedTags);
+    //         }
+
+    //         if (chosenPeople.length > 0) {
+    //             const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+    //             const formattedMentions = `[${mentions}]`;
+    //             formData.append("mentions", formattedMentions);
+    //         }
+
+    //         if (chosenEvent.length > 0) {
+    //             const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
+    //             const formattedEvents = `[${events}]`;
+    //             formData.append("event", formattedEvents);
+    //         }
+
+    //         if (includeAccessibilities) {
+    //             formData.append("accessibilities[0][accessable_type]", filterType);
+    //             formData.append("accessibilities[0][accessable_id]", filterId);
+    //         }
+    //     }
+
+    //     fetch("/api/posts/posts", {
+    //         method: "POST",
+    //         body: formData,
+    //         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) throw new Error("Network response was not ok");
+    //         })
+    //         .then(() => {
+    //             // Reset state
+    //             setInputValue("");
+    //             setAttachments([]);
+    //             setFileNames([]);
+    //             setTags([]);
+    //             setChosenPeople([]);
+    //             setChosenEvent([]);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error:", error);
+    //         });
+    // };
+
+    // // Automatically send birthday wishes if there are birthdaysToday
+    // useEffect(() => {
+    //     if (birthdaysToday && birthdaysToday.length > 0) {
+    //         birthdaysToday.forEach((birthdayPerson) => {
+    //             if (birthdayPerson?.employment_posts?.length > 0) {
+    //                 const departmentId = birthdayPerson.employment_posts[0]?.department_id;
+    
+    //                 if (departmentId) {
+    //                     const customFormData = new FormData();
+    //                     customFormData.append("user_id", "1");
+    //                     customFormData.append("type", "birthday");
+    //                     customFormData.append("visibility", "public");
+    //                     customFormData.append("content", `Happy Birthday ${birthdayPerson.name}! 🎉`);
+    //                     const formattedMentions = JSON.stringify([birthdayPerson.name]);
+    //                 customFormData.append("mentions", formattedMentions);
+
+    
+    //                     // Correcting the typo: accessabilities -> accessibilities
+    //                     customFormData.append("accessibilities[0][accessable_type]", "Department");
+    //                     customFormData.append("accessibilities[0][accessable_id]", departmentId);
+    
+    //                     handleClickSend(customFormData);  // Send birthday wish for each person
+    //                 } else {
+    //                     console.error(`No department ID available for ${birthdayPerson.name}`);
+    //                 }
+    //             } else {
+    //                 console.error(`No employment posts available for ${birthdayPerson.name}`);
+    //             }
+    //         });
+    //     }
+    // }, [birthdaysToday]);
+
+
+    // const handleClickSend = (customFormData = null) => {
+    //     const formData = customFormData || new FormData();
+    
+    //     if (!customFormData) {
+    //         formData.append("user_id", userId);
+    //         formData.append("type", isAnnouncement ? "announcement" : "post");
+    //         formData.append("visibility", "public");
+
+    //         if (!inputValue) {
+    //             formData.append("tag", JSON.stringify(tags));
+    //             attachments.forEach((file, index) => {
+    //                 formData.append(`attachments[${index}]`, file);
+    //             });
+    //         } else {
+    //             formData.append("content", inputValue);
+    //             attachments.forEach((file, index) => {
+    //                 formData.append(`attachments[${index}]`, file);
+    //             });
+    //         }
+
+    //         if (tags.length > 0) {
+    //             const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+    //             formData.append("tag", formattedTags);
+    //         }
+
+    //         if (chosenPeople.length > 0) {
+    //             const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+    //             const formattedMentions = `[${mentions}]`;
+    //             formData.append("mentions", formattedMentions);
+    //         }
+
+    //         if (chosenEvent.length > 0) {
+    //             const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
+    //             const formattedEvents = `[${events}]`;
+    //             formData.append("event", formattedEvents);
+    //         }
+
+    //         if (includeAccessibilities) {
+    //             formData.append("accessibilities[0][accessable_type]", filterType);
+    //             formData.append("accessibilities[0][accessable_id]", filterId);
+    //         }
+    //     }
+
+    //     fetch("/api/posts/posts", {
+    //         method: "POST",
+    //         body: formData,
+    //         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) throw new Error("Network response was not ok");
+    //         })
+    //         .then(() => {
+    //             // Reset state
+    //             setInputValue("");
+    //             setAttachments([]);
+    //             setFileNames([]);
+    //             setTags([]);
+    //             setChosenPeople([]);
+    //             setChosenEvent([]);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error:", error);
+    //         });
+    // };
+
+    // // Automatically send birthday wishes if there are birthdaysToday
+    // useEffect(() => {
+    //     const today = new Date().toISOString().slice(0, 10); // Get today's date in YYYY-MM-DD format
+
+    //     if (birthdaysToday && birthdaysToday.length > 0) {
+    //         // Fetch today's posts to check for existing birthday wishes
+    //         fetch(`/api/posts?date=${today}`)
+    //             .then((response) => response.json())
+    //             .then((posts) => {
+    //                 birthdaysToday.forEach((birthdayPerson) => {
+    //                     const postExists = posts.some(post =>
+    //                         post.content.includes(`Happy Birthday ${birthdayPerson.name}`)
+    //                     );
+
+    //                     if (!postExists) {
+    //                         // If no post exists, create a new one
+    //                         const customFormData = new FormData();
+    //                         customFormData.append("user_id", userId);
+    //                         customFormData.append("type", "birthday_wish");
+    //                         customFormData.append("visibility", "private");
+    //                         customFormData.append("content", `Happy Birthday ${birthdayPerson.name}! 🎉`);
+
+    //                         // Always include accessibilities for birthday wishes
+    //                         customFormData.append("accessibilities[0][accessable_type]", filterType);
+    //                         customFormData.append("accessibilities[0][accessable_id]", filterId);
+
+    //                         handleClickSend(customFormData);  // Send birthday wish for each person
+    //                     }
+    //                 });
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error fetching posts:", error);
+    //             });
+    //     }
+    // }, [birthdaysToday]);
+    
+    
+    
+    
+    
     const handleClickSend = () => {
         const formData = new FormData();
-    
+        
         // Append common fields
         formData.append("user_id", userId);
         // formData.append("type", "post");
         formData.append("type", isAnnouncement ? "announcement" : "post");
         formData.append("visibility", "public");
-    
+        
         if (!inputValue) {
             formData.append("tag", JSON.stringify(tags));
             attachments.forEach((file, index) => {
@@ -264,12 +387,6 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
             formData.append("tag", formattedTags);
         }
     
-        // Handle mentions with spaces after commas
-        // if (chosenPeople.length > 0) {
-        //     const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
-        //     const formattedMentions = `[${mentions}]`;
-        //     formData.append("mentions", formattedMentions);
-        // }
 
         if (chosenPeople.length > 0) {
             const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
@@ -630,7 +747,6 @@ const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ t
                     onSaveEvent={handleSaveEvent}
                 />
             )}
-    
             {isMentioning && mentionQuery && (
                 <div className="mention-suggestions">
                     {searchResults.filter(person =>

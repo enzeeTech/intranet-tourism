@@ -10,6 +10,12 @@
     font-weight: bold;
 }
 
+.blue-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+
   
   .attachment-grid {
     display: grid;
