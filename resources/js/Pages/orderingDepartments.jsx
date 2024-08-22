@@ -184,7 +184,7 @@ const OrderingDepartments = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col px-5 py-4 bg-pink-100 rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8">
+                        <div className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1050px] mb-10 ml-8 mr-8">
                             {isLoading ? (
                                 <div className="flex items-center justify-center h-64">
                                     <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
@@ -194,57 +194,73 @@ const OrderingDepartments = () => {
                                     <DragDropContext onDragEnd={handleDragEnd}>
                                         <Droppable droppableId="departments">
                                             {(provided) => (
-                                                <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
-                                                    <thead>
-                                                        <tr>
-                                                            <th className="px-0 py-3 font-bold text-left text-gray-700 text-md lg:w-3/5 max-md:w-1/3">Name</th>
-                                                            <th className="px-14 max-md:px-0 py-3 font-bold text-right text-gray-700 text-md lg:w-1/5 max-md:w-1/3">Ordering</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {departments.map((item, index) => (
-                                                            <Draggable key={item.id} draggableId={String(item.id)} index={index}>
-                                                                {(provided) => (
-                                                                    <tr
-                                                                        ref={provided.innerRef}
-                                                                        {...provided.draggableProps}
-                                                                        className="bg-white border-t border-gray-200"
-                                                                    >
-                                                                        <td className="py-4 max-md:text-sm text-lg bg-indigo-300 font-bold text-black lg:pr-60 max-md:pr-0 whitespace-nowrap" {...provided.dragHandleProps}>
-                                                                            <img src={item.imageUrl} alt={item.name} className="inline-block w-[80px] h-[40px] mr-4 rounded-md object-cover object-center " />
-                                                                            {item.name}
-                                                                        </td>
-                                                                        <td className="flex-col bg-emerald-300 w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0"> 
-                                                                            <button
-                                                                                className="px-2"
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    handleMoveUp(index); // Move up
-                                                                                }}
-                                                                                disabled={index === 0}
-                                                                                style={{ opacity: index === 0 ? 0.6 : 1 }}
-                                                                            >
-                                                                                <img src="/assets/orderingup.svg" alt="Up" />
-                                                                            </button>
-                                                                            <button
-                                                                                className="px-2"
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    handleMoveDown(index); // Move down
-                                                                                }}
-                                                                                disabled={index === departments.length - 1}
-                                                                                style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
-                                                                            >
-                                                                                <img src="/assets/orderingdown.svg" alt="Down" />
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                )}
-                                                            </Draggable>
-                                                        ))}
-                                                        {provided.placeholder}
-                                                    </tbody>
-                                                </table>
+                                               <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                               <thead>
+                                                   <tr>
+                                                       <th className="px-0 py-3 font-bold text-left text-gray-700 text-md lg:w-3/5 max-md:w-1/3">
+                                                           Name
+                                                       </th>
+                                                       <th className="px-14 max-md:px-0 py-3 font-bold text-right text-gray-700 text-md lg:w-1/5 max-md:w-1/3">
+                                                           Ordering
+                                                       </th>
+                                                   </tr>
+                                               </thead>
+                                               <tbody>
+                                                   {departments.map((item, index) => (
+                                                       <Draggable key={item.id} draggableId={String(item.id)} index={index}>
+                                                           {(provided) => (
+                                                               <tr
+                                                                   ref={provided.innerRef}
+                                                                   {...provided.draggableProps}
+                                                                   className="bg-white border-t border-gray-200"
+                                                               >
+                                                                   <td
+                                                                       className="flex-wrap py-4 max-md:text-sm text-lg bg-white font-bold text-black lg:pr-60 max-md:pr-0 whitespace-normal w-full"
+                                                                       {...provided.dragHandleProps}
+                                                                   >
+                                                                       <div className="flex items-center">
+                                                                           <img
+                                                                               src={item.imageUrl}
+                                                                               alt={item.name}
+                                                                               className="inline-block w-[80px] h-[40px] mr-4 rounded-md object-cover object-center"
+                                                                           />
+                                                                           <span className="break-words">{item.name}</span>
+                                                                       </div>
+                                                                   </td>
+                                                                   <td
+                                                                       className="flex-col bg-white pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0"
+                                                                   >
+                                                                       <button
+                                                                           className="px-2"
+                                                                           onClick={(e) => {
+                                                                               e.stopPropagation();
+                                                                               handleMoveUp(index); // Move up
+                                                                           }}
+                                                                           disabled={index === 0}
+                                                                           style={{ opacity: index === 0 ? 0.6 : 1 }}
+                                                                       >
+                                                                           <img src="/assets/orderingup.svg" alt="Up" />
+                                                                       </button>
+                                                                       <button
+                                                                           className="px-2"
+                                                                           onClick={(e) => {
+                                                                               e.stopPropagation();
+                                                                               handleMoveDown(index); // Move down
+                                                                           }}
+                                                                           disabled={index === departments.length - 1}
+                                                                           style={{ opacity: index === departments.length - 1 ? 0.6 : 1 }}
+                                                                       >
+                                                                           <img src="/assets/orderingdown.svg" alt="Down" />
+                                                                       </button>
+                                                                   </td>
+                                                               </tr>
+                                                           )}
+                                                       </Draggable>
+                                                   ))}
+                                                   {provided.placeholder}
+                                               </tbody>
+                                           </table>
+                                           
                                             )}
                                         </Droppable>
                                     </DragDropContext>
