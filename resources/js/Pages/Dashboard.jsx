@@ -24,7 +24,7 @@ const Dashboard = () => {
       <div className="flex-row">
         <div className="">
           <main className="xl:pl-[calc(22%+4rem)] xl:pr-[calc(25%+2rem)] min-h-screen bg-gray-100">
-            <div className="flex flex-col items-center px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+            <div className="flex flex-col items-start px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <StoryNew userId={id} />
               <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
               <Filter className="mr-10" />

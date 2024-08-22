@@ -178,6 +178,10 @@
   color: #4780ff;
   cursor: pointer;
 }
+.custom-font-size {
+  font-size: 20px;
+}
+
 
 
   .remove-tag-button {
@@ -210,25 +214,28 @@
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
+  top: 2px;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
   border-radius: 34px;
+  font-size: 10px;
+  
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 14px;
-  width: 14px;
+  height: 10px;
+  width: 10px;
   left: 3px;
   bottom: 3px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
+  font-size: 7px;
 }
 
 input:checked + .slider {
@@ -243,13 +250,16 @@ input:checked + .slider:before {
 .slider::after {
   content: "OFF";
   position: absolute;
-  right: 5px;
-  font-size: 10px;
+  right: 14px;
+  bottom:7.5px;
+  font-size: 9px;
   color: white;
+  width: 10px;
+  height: 10px;
 }
 
 input:checked + .slider::after {
   content: "ON";
   left: 5px;
-  right: auto;
+  
 }

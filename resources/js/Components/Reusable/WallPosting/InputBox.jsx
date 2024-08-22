@@ -186,14 +186,14 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     };
 
     return (
-        <section className="flex flex-col justify-center text-sm text-neutral-800">
+        <section className="flex flex-col justify-center text-sm text-neutral-800 w-full">
             <div
                 className={`flex gap-5 justify-between px-8 pt-5 pb-2 bg-white rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
                     variant === "comment" ? "comment-box-container" 
                                             : "input-box-container"
                 }`}
             >
-                <div className="flex flex-col w-[875px] " >
+                <div className="flex flex-col w-[875px] w-full " >
                     <textarea
                         ref={textAreaRef}
                         value={inputValue}
@@ -238,7 +238,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     )}
 
                     <div className="flex mt-7 items-center  justify-between ">
-                        <div className="flex gap-4 items-center">
+                    <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center ">
                             {variant === "comment" && (
                                 <>
                                     <button onClick={toggleReactionPicker}>
@@ -332,7 +332,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             loading="lazy"
                                             src="assets/inputpeople.svg"
                                             alt="People Icon"
-                                            className="w-[16px] h-[16px]"
+                                            className="w-[14px] h-[14px]"
                                         />
                                         {chosenPeople.length > 0 && (
                                             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
@@ -357,19 +357,19 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             </span>
                                         )}
                                     </button>
-                                    <div className="flex items-center ml-28">
-                                        <label className="switch">
+                                    <div className="flex items-center ">
+                                        <label className="switch xs:ml-28 sm:ml-28 md:ml-24 lg:ml-28">
                                             <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
-                                            <span className="slider"></span>
+                                            <span className="slider w-10 h-4 "></span>
                                         </label>
-                                        <label className="ml-3">Set as Announcement?</label>
+                                        <label className="ml-3 sm:text-[8px] text-[8px] md:text-[10px] lg:text-[13px]">Set as Announcement?</label>
                                     </div>
                                 </>
                             )}
                         </div>
                     </div>
                     <div className="relative-container">
-                        <button onClick={handleClickSend} className="send-button">
+                        <button onClick={handleClickSend} className="flex send-button w-full align-item justify-end">
                             <img
                                 loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
