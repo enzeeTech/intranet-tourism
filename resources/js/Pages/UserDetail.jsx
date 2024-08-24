@@ -343,6 +343,8 @@ return (
                                         <ProfileIcons
                                             icon1={profileData.icon1}
                                             icon2={profileData.icon2}
+                                            user_id={profileData.id}
+                                            user_name={profileData.name}
                                             onEdit={() => handleEditBio()}
                                             isFirstIcon
                                         />

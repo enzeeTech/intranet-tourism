@@ -340,8 +340,8 @@ console.log("FINAL", finalPosts);
     // Function to handle liking a post
     const handleLike = async (postId) => {
       try {
-        const response = await fetch(`/api/posts/post/like/${postId}`, {
-          method: 'PUT',
+        const response = await fetch(`/api/posts/posts/${postId}/like`, {
+          method: 'POST',
           headers: { 'X-CSRF-Token': csrfToken },
         });
   
@@ -362,8 +362,8 @@ console.log("FINAL", finalPosts);
     // Function to handle unliking a post
     const handleUnlike = async (postId) => {
       try {
-        const response = await fetch(`/api/posts/post/unlike/${postId}`, {
-          method: 'PUT',
+        const response = await fetch(`/api/posts/posts/${postId}/unlike`, {
+          method: 'POST',
           headers: { 'X-CSRF-Token': csrfToken },
         });
   
@@ -395,7 +395,7 @@ console.log("FINAL", finalPosts);
 
   const renderContentWithTags = (content) => {
     // Regex to match tags (e.g., @username or @FirstName LastName)
-    const tagRegex = /@\w+(?:\s\w+)*\b/g;
+    const tagRegex = /@\w+(?:\s\w)*\b/g;
     // Regex to match URLs starting with https
     const urlRegex = /https:\/\/[^\s]+/g;
 
@@ -962,13 +962,18 @@ console.log("FINAL", finalPosts);
                     {renderContentWithTags(post.content)}
                 </article>
 
+                {post.tag?.length > 0 && (
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                  {/* {post.tag.replace(/[\[\]"]/, '')} */}
-                  {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                  Tagged Album: {post.tag?.replace(/[\[\]"]/g, '') || ''}
                 </p>
-                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                {post.mentions?.replace(/[\[\]"]/g, '') || ''}
-                </p>
+                )}
+
+                {post.mentions?.length > 0 && (
+                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                      Tagged People: {post.mentions.replace(/[\[\]"]/g, '')}
+                    </p>
+                )}
+
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                 {post.event?.replace(/[\[\]"]/g, '') || ''}
                 </p>
