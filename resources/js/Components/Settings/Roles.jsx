@@ -132,7 +132,7 @@ export default function Roles() {
                                         id: userId,
                                         title: titleName,
                                         department: department,
-                                        image: userData.data.profile.image || '/assets/dummyStaffPlaceHolder.jpg',
+                                        image: userData.data.profile.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
                                         status: userData.data.is_active,
                                         roles: [],
                                     };
@@ -336,7 +336,7 @@ export default function Roles() {
                                                     <div className="flex-shrink-0 h-11 w-11">
                                                         <img
                                                             alt=""
-                                                            src={person.image.startsWith('avatar/') ? `/storage/${person.image}` : person.image}
+                                                            src={person.image.startsWith('staff_image/') ? `/storage/${person.image}` : person.image}
                                                             className="h-12 rounded-full w-11"
                                                         />
                                                     </div>
@@ -433,7 +433,7 @@ export default function Roles() {
                                         className="flex items-center p-2 cursor-pointer"
                                         onClick={() => handleSelectPerson(person)}
                                     >
-                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <img src={person.profile && person.profile.staff_image ? `/storage/${person.profile.staff_image}` : '/assets/dummyStaffPlaceHolder.jpg'} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
                                             <div className="font-light text-gray-600">{person.employment_post?.business_post?.title || 'No title available'}</div>
