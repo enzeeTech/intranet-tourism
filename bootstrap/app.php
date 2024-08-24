@@ -21,9 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Overides\EnsureFrontendRequestsAreStateful::class,
         ]);
     })
-    ->withSchedule(function (Schedule $schedule) {
-        $schedule->job(DepartmentWishBirthday::class)->dailyAt('07:00');
-    })
+    // ->withSchedule(function (Schedule $schedule) {
+    //     $schedule->job(DepartmentWishBirthday::class)->dailyAt('07:00');
+    // })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
