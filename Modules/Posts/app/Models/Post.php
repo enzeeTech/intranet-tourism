@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
 use Modules\User\Models\User;;
+
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Traits\Attachable;
@@ -26,9 +27,12 @@ class Post extends Model implements AuditableContract
         'tag',
         'visibility',
         'pool_posting',
-        'likes',
-        'mentions',
+        // 'likes',
+        // 'mentions',
         'event'
+    ];
+    protected $cast = [
+        'likes' => 'array',
     ];
 
     public static function rules($scenario = 'create')
@@ -84,5 +88,4 @@ class Post extends Model implements AuditableContract
     {
         return $this->hasMany(PostComment::class);
     }
-
 }

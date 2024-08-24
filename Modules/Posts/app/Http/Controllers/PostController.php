@@ -15,26 +15,26 @@ class PostController extends Controller
     {
         // Start with a query builder instance
         $query = Post::query();
-    
+
         // Check if the 'filter' parameter is present
         if ($request->has('filter')) {
             // Apply the necessary filters to the query
             if (in_array('birthday', $request->input('filter'))) {
                 $query->where('type', 'birthday');
             }
-    
+
             // If filters are present, paginate the filtered query
             $data = $this->shouldPaginate($query);
         } else {
             // If no filters are present, paginate using the predefined queryable method
             $data = $this->shouldPaginate(Post::queryable());
         }
-    
+
         return response()->json([
             'data' => $data,
         ]);
     }
-    
+
 
 
     public function show($id)
@@ -137,16 +137,10 @@ class PostController extends Controller
 
     public function likePost($id)
     {
+        abort_unless(auth()->check(), 403);
+
         $post = Post::findOrFail($id);
-
-        $likesData = $post->likes ? json_decode($post->likes, true) : [];
-
-
-        $likesData['likes'] = isset($likesData['likes']) ? $likesData['likes'] + 1 : 1;
-
-
-        $post->likes = json_encode($likesData);
-
+        $post->likes = array_push($post->likes, auth()->id())->toArray();
         $post->save();
 
         return response()->json([
@@ -157,19 +151,10 @@ class PostController extends Controller
 
     public function unlikePost($id)
     {
+        abort_unless(auth()->check(), 403);
+
         $post = Post::findOrFail($id);
-
-        $likesData = $post->likes ? json_decode($post->likes, true) : [];
-
-        if (isset($likesData['likes']) && $likesData['likes'] > 0) {
-            $likesData['likes'] -= 1;
-        } else {
-            $likesData['likes'] = 0;
-        }
-
-        $post->likes = json_encode($likesData);
-
-
+        $post->likes = collect($post->likes)->distinct()->remove(auth()->id())->toArray();
         $post->save();
 
         return response()->json([
