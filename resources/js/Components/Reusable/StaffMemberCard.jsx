@@ -26,7 +26,13 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
     } else {
       setIsCallPopupOpen(true);
     }
-};      
+  };
+
+  let extension = null;
+  if (workNo) {
+    extension = workNo.slice(-4);
+  }
+  
 
   const handleWhatsApp = () => {
     if (!phoneNo || isDeactivated) return;
@@ -99,7 +105,7 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
         <h3 className="staff-member-name">{name}</h3>
         <p className="staff-member-role">{role}</p>
         {/* <p className={`staff-member-status ${isDeactivated ? 'deactiate-offline' : status.toLowerCase()}`}>{isDeactivated ? 'Offline' : status}</p> */}
-        <p className="staff-member-role">{workNo}</p>
+        <p className="staff-member-extension">{extension}</p>
       </div>
       <div className="card-footer">
         <button className={`call-button ${isWorkNumberAvailable() && !isDeactivated ? '' : 'disabled'}`} onClick={handleCall} disabled={isDeactivated || !isWorkNumberAvailable()}>
