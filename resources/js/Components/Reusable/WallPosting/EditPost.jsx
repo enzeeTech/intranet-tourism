@@ -69,7 +69,9 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
   
 
   return (
-    <div className="edit-post-modal p-6 bg-white rounded-xl shadow-lg">
+    <div className="edit-post-modal bg-white">
+      
+      <div className="font-bold text-2xl mb-4">Edit Post</div>
       <header className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
         <div className="flex gap-1.5">
           <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt="Profile image" className="shrink-0 aspect-square w-[53px] rounded-image" />
@@ -82,9 +84,9 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
         <textarea
           value={content}
           onChange={handleInputChange}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded-md"
           rows="4"
-          placeholder="Edit your content"
+          placeholder="Edit caption"
         />
         <input type="file" onChange={handleFileChange} className="mt-2" multiple />
         <div className="grid grid-cols-3 gap-2 mt-2">
@@ -105,19 +107,21 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
                   Your browser does not support the video tag.
                 </video>
               ) : (
-                <a href={`/storage/${attachment.path}`} download className="block w-full h-24 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
+                <a href={`/storage/${attachment.path}`} download className="block w-full h-24 pt-2 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
                   Download {attachment.file_name}
                 </a>
               )}
             </div>
           ))}
         </div>
-        <button type="submit" className="mt-2 p-2 bg-blue-500 text-white rounded">
-          Save
-        </button>
-        <button type="button" onClick={onClose} className="mt-2 p-2 bg-red-500 text-white rounded">
-          Cancel
-        </button>
+        <div className="flex w-full justify-end space-x-2">
+          <button type="button" onClick={onClose} className="mt-2 px-4 py-2 font-bold hover:bg-gray-400 hover:text-white border-2 border-gray-400 text-gray-400 rounded-full text-sm">
+            Cancel
+          </button>
+          <button type="submit" className="mt-2 px-4 py-2 font-bold hover:bg-blue-700 bg-blue-500 text-white rounded-full text-sm">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
