@@ -47,14 +47,18 @@ class PostController extends Controller
 
     public function store(Post $post)
     {
-        $validated = request()->validate(...Post::rules());
-        $validatedAccessibilities = [];
+        request()->merge(['user_id' => auth()->id()]);
         if (request()->has('accessibilities')) {
             $accessibilities = request('accessibilities');
             foreach ($accessibilities as $accessibility) {
                 $validatedAccessibilities[] = validator($accessibility, ...PostAccessibility::rules('createFromPost'))->validated();
             }
+        } else {
+            request()->merge(['visibility' => 'public']);
         }
+
+        $validated = request()->validate(...Post::rules());
+        $validatedAccessibilities = [];
 
         DB::beginTransaction();
         try {
@@ -135,30 +139,27 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function likePost($id)
+    public function like($id)
     {
         abort_unless(auth()->check(), 403);
 
         $post = Post::findOrFail($id);
-        $post->likes = array_push($post->likes, auth()->id())->toArray();
+        $post->likes = collect($post->likes)->push(auth()->id())->unique()->toArray();
         $post->save();
 
-        return response()->json([
-            'data' => $post
-        ]);
+        return response()->noContent();
     }
 
 
-    public function unlikePost($id)
+    public function unlike($id)
     {
         abort_unless(auth()->check(), 403);
 
         $post = Post::findOrFail($id);
-        $post->likes = collect($post->likes)->distinct()->remove(auth()->id())->toArray();
+        $post->likes = collect($post->likes)->filter(fn ($id) => $id != auth()->id())->unique()->toArray();
+        // $post->likes = null;
         $post->save();
 
-        return response()->json([
-            'data' => $post
-        ]);
+        return response()->noContent();
     }
 }

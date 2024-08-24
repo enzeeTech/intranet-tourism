@@ -31,7 +31,7 @@ class Post extends Model implements AuditableContract
         // 'mentions',
         'event'
     ];
-    protected $cast = [
+    protected $casts = [
         'likes' => 'array',
     ];
 
@@ -40,9 +40,9 @@ class Post extends Model implements AuditableContract
         $rules = [
             'create' => [
                 [
-                    'user_id' => ['string', 'required'],
+                    'user_id' => ['required'],
                     'type' => ['string', 'required'],
-                    'content' => ['string'],
+                    'content' => ['string', 'required'],
                     'title' => ['string'],
                     'tag' => ['string'],
                     'visibility' => ['string', 'required'],
