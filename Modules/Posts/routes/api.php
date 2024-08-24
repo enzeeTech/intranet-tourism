@@ -30,7 +30,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::prefix('posts')->group(function () {
-        Route::post('{id}/like', [PostController::class, 'like'])->name('post.like');
-        Route::post('{id}/unlike', [PostController::class, 'unlike'])->name('post.unlike');
+        Route::post('{post}/like', [PostController::class, 'like'])->name('post.like');
+        Route::post('{post}/unlike', [PostController::class, 'unlike'])->name('post.unlike');
+        Route::post('{post}/comment', [PostController::class, 'comment'])->name('post.comment');
+        Route::post('{post}/access', [PostController::class, 'access'])->name('post.access');
     });
 });

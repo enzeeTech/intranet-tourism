@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Modules\Posts\Models\Post;
 use Modules\Posts\Models\PostAccessibility;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Posts\Models\PostComment;
 use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
@@ -47,7 +49,7 @@ class PostController extends Controller
 
     public function store(Post $post)
     {
-        request()->merge(['user_id' => auth()->id()]);
+        request()->merge(['user_id' => Auth::id()]);
         if (request()->has('accessibilities')) {
             $accessibilities = request('accessibilities');
             foreach ($accessibilities as $accessibility) {
@@ -139,26 +141,47 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function like($id)
+    public function like(Post $post)
     {
-        abort_unless(auth()->check(), 403);
+        abort_unless(Auth::check(), 403);
 
-        $post = Post::findOrFail($id);
-        $post->likes = collect($post->likes)->push(auth()->id())->unique()->toArray();
+        $post->likes = collect($post->likes)->push(Auth::id())->unique()->toArray();
         $post->save();
 
         return response()->noContent();
     }
 
 
-    public function unlike($id)
+    public function unlike(Post $post)
     {
-        abort_unless(auth()->check(), 403);
+        abort_unless(Auth::check(), 403);
 
-        $post = Post::findOrFail($id);
-        $post->likes = collect($post->likes)->filter(fn ($id) => $id != auth()->id())->unique()->toArray();
-        // $post->likes = null;
+        $post->likes = collect($post->likes)->filter(fn($id) => $id != Auth::id())->unique()->toArray();
         $post->save();
+
+        return response()->noContent();
+    }
+
+    public function comment(Post $post)
+    {
+        request()->merge(['user_id' => Auth::id()]);
+        request()->merge(['type' => 'comment']);
+        request()->merge(['visibility' => 'public']);
+        $validated = request()->validate(...Post::rules());
+
+        $comment = Post::create($validated);
+        PostComment::create([
+            'post_id' => $post->id,
+            'comment_id' => $comment->id,
+        ]);
+
+        return response()->noContent();
+    }
+
+    public function access(Post $post)
+    {
+        $validated = request()->validate(...PostAccessibility::rules());
+        $post->accesssibilities()->create($validated);
 
         return response()->noContent();
     }

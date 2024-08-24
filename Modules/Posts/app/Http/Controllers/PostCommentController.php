@@ -24,14 +24,11 @@ class PostCommentController extends Controller
 
     public function store()
     {
-        $user_id = auth()->user()->id;
-        $post_type = 'posting_comment';
+        request()->merge(['user_id', auth()->id()]);
+        request()->merge(['type', 'comment']);
 
-        $post = Post::create([
-            'content' => request()->content,
-            'user_id' => $user_id,
-            'type' => $post_type
-        ]);
+        $validated = request()->validate(...Post::rules());
+        $post = Post::create($validated);
 
         request()->merge(['comment_id' => $post->id]);
 
@@ -44,7 +41,7 @@ class PostCommentController extends Controller
 
     public function update(PostComment $postComment)
     {
-        $user_id = auth()->user()->id;
+        $user_id = auth()->id();
 
 
         $post = $postComment->comment;
@@ -52,7 +49,7 @@ class PostCommentController extends Controller
             'content' => request()->content,
             'user_id' => $user_id,
         ]);
-        
+
 
         request()->merge(['comment_id' => $post->id]);
 
