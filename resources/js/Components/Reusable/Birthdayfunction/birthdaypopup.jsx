@@ -54,7 +54,8 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
 
     // Append tagged people
     taggedPeople.forEach(name => {
-      formData.append("mentions", name); // Assuming your backend accepts an array of tagged user IDs
+      const formattedMentions = `["${name}"]`;
+      formData.append("mentions", formattedMentions); // Assuming your backend accepts an array of tagged user IDs
     });
 
     // Append the selected background image as an attachment if it's a supported format

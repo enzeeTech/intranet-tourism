@@ -26,4 +26,10 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
         return Inertia::render('UserDetail', ['user' => $user, 'id' => auth()->id()]);
     }
+
+    public function profileQr($id)
+    {
+        $user = User::findOrFail($id);
+        return $user->vcard;
+    }
 }

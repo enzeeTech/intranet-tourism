@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Modules\Department\Jobs\DepartmentWishBirthday;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Overides\EnsureFrontendRequestsAreStateful::class,
         ]);
     })
+    // ->withSchedule(function (Schedule $schedule) {
+    //     $schedule->job(DepartmentWishBirthday::class)->dailyAt('07:00');
+    // })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

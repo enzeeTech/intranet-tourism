@@ -52,18 +52,18 @@ function ProfileBio({
     const renderField = (label, name, value, type) => (
         <tr key={name}>
             <td className="py-2 align-center font-semibold capitalize text-neutral-800 w-1/3">{label}</td>
-            <td className="py-2 align-center w-2/3">
+            <td className="py-2 align-center w-2/3 ">
                 {isEditing ? (
                     <input
                         type={type}
                         name={name}
                         value={value !== undefined && value !== null ? value : ""}
                         onChange={handleInputChange}
-                        className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4"
+                        className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full   max-w-[150px] mr-12 md:max-w-full lg:max-w-full rounded-full border-2 px-2 border-stone-300"
                         placeholder={label}
                     />
                 ) : (
-                    <div className="text-sm mt-1 block w-full rounded-md p-2 border-2 border-transparent text-neutral-800 text-opacity-80">
+                    <div className="text-sm mt-1 block w-full rounded-md border-2 border-transparent text-neutral-800 text-opacity-80">
                         {value !== undefined && value !== null && value !== "" ? value : ""}
                     </div>
                 )}
@@ -93,7 +93,7 @@ function ProfileBio({
         <div ref={formRef} className="flex-auto my-auto p-4">
             <div className="flex gap-5 sm:flex-col md:flex-col lg:flex-col sm:gap-4 lg:gap-6">
                 <div className="flex flex-col w-full max-md:ml-0 max-md:w-full">
-                    <table className="table-auto w-full text-left border-collapse">
+                    <table className="table-auto w-full text-left border-collapse ">
                         <tbody>
                             <tr>
                                 <td className="py-2 align-center w-1/3">
@@ -107,14 +107,14 @@ function ProfileBio({
                                             ?
                                         </button>
                                     </div>
-                                    <div className="text-xs text-blue-500">Recommended Image Ratio 3 : 4</div>
+                                    <div className="text-xs text-blue-500">Image Ratio 3:4</div>
                                 </td>
-                                <td className="py-2 align-start w-2/3">
-                                    <div className="flex items-center gap-4">
+                                <td className="py-2 align-start w-2/3 ">
+                                    <div className="flex items-center gap-4 w-20 flex-wrap">
                                         <img
                                             loading="lazy"
                                             src={source}
-                                            className="aspect-square rounded-md w-[90px] h-[120px] ml-4 object-cover"
+                                            className="aspect-square rounded-md sm:w-[90px] sm:h-[120px] md:w-[90px] md:h-[120px] lg:w-[90px] lg:h-[120px]  object-cover flex-wrap"
                                             alt="Staff's photo"
                                         />
                                         {isEditing && (
@@ -122,7 +122,7 @@ function ProfileBio({
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={handlePhotoChange}
-                                                className="text-xs"
+                                                className=" text-xs w-25 justify-start"
                                             />
                                         )}
                                     </div>
@@ -137,7 +137,7 @@ function ProfileBio({
                 </div>
             </div>
             {isEditing && (
-                <div className="flex justify-end mt-4 pb-3">
+                <div className="flex justify-end mt-4 pb-3 ">
                     <button onClick={() => {
                         setBioFormData(originalFormData); // Reset bioFormData to originalFormData
                         onCancelBio();

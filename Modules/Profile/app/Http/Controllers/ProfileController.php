@@ -36,10 +36,10 @@ class ProfileController extends Controller
             if ($filter === 'dob') {
                 $query->whereNotNull('dob');
             }
+            $query->select('bio', 'dob', 'image');
         }
     }
 
-    $query->select('bio', 'dob', 'image');
 
     $paginate = $request->has('paginate') ? (bool) $request->get('paginate') : true;
 

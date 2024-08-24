@@ -6,16 +6,38 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Posts\Models\Post;
 use Modules\Posts\Models\PostAccessibility;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Posts\Models\PostComment;
 use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Start with a query builder instance
+        $query = Post::query();
+
+        // Check if the 'filter' parameter is present
+        if ($request->has('filter')) {
+            // Apply the necessary filters to the query
+            if (in_array('birthday', $request->input('filter'))) {
+                $query->where('type', 'birthday');
+            }
+
+            // If filters are present, paginate the filtered query
+            $data = $this->shouldPaginate($query);
+        } else {
+            // If no filters are present, paginate using the predefined queryable method
+            $data = $this->shouldPaginate(Post::queryable());
+        }
+
         return response()->json([
-            'data' => $this->shouldPaginate(Post::queryable()),
+            'data' => $data,
         ]);
     }
+
+
 
     public function show($id)
     {
@@ -27,14 +49,18 @@ class PostController extends Controller
 
     public function store(Post $post)
     {
-        $validated = request()->validate(...Post::rules());
-        $validatedAccessibilities = [];
+        request()->merge(['user_id' => Auth::id()]);
         if (request()->has('accessibilities')) {
             $accessibilities = request('accessibilities');
             foreach ($accessibilities as $accessibility) {
                 $validatedAccessibilities[] = validator($accessibility, ...PostAccessibility::rules('createFromPost'))->validated();
             }
+        } else {
+            request()->merge(['visibility' => 'public']);
         }
+
+        $validated = request()->validate(...Post::rules());
+        $validatedAccessibilities = [];
 
         DB::beginTransaction();
         try {
@@ -115,45 +141,48 @@ class PostController extends Controller
         return response()->noContent();
     }
 
-    public function likePost($id)
+    public function like(Post $post)
     {
-        $post = Post::findOrFail($id);
+        abort_unless(Auth::check(), 403);
 
-        $likesData = $post->likes ? json_decode($post->likes, true) : [];
-
-
-        $likesData['likes'] = isset($likesData['likes']) ? $likesData['likes'] + 1 : 1;
-
-
-        $post->likes = json_encode($likesData);
-
+        $post->likes = collect($post->likes)->push(Auth::id())->unique()->toArray();
         $post->save();
 
-        return response()->json([
-            'data' => $post
-        ]);
+        return response()->noContent();
     }
 
 
-    public function unlikePost($id)
+    public function unlike(Post $post)
     {
-        $post = Post::findOrFail($id);
+        abort_unless(Auth::check(), 403);
 
-        $likesData = $post->likes ? json_decode($post->likes, true) : [];
-
-        if (isset($likesData['likes']) && $likesData['likes'] > 0) {
-            $likesData['likes'] -= 1;
-        } else {
-            $likesData['likes'] = 0;
-        }
-
-        $post->likes = json_encode($likesData);
-
-
+        $post->likes = collect($post->likes)->filter(fn($id) => $id != Auth::id())->unique()->toArray();
         $post->save();
 
-        return response()->json([
-            'data' => $post
+        return response()->noContent();
+    }
+
+    public function comment(Post $post)
+    {
+        request()->merge(['user_id' => Auth::id()]);
+        request()->merge(['type' => 'comment']);
+        request()->merge(['visibility' => 'public']);
+        $validated = request()->validate(...Post::rules());
+
+        $comment = Post::create($validated);
+        PostComment::create([
+            'post_id' => $post->id,
+            'comment_id' => $comment->id,
         ]);
+
+        return response()->noContent();
+    }
+
+    public function access(Post $post)
+    {
+        $validated = request()->validate(...PostAccessibility::rules());
+        $post->accesssibilities()->create($validated);
+
+        return response()->noContent();
     }
 }

@@ -112,6 +112,59 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
 function Navigation({ userId, departmentID, departmentName }) {
   const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
   const [polls, setPolls] = useState([]);
+  const [birthdaysToday, setBirthdaysToday] = useState([]);
+
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      let allUsers = [];
+      let page = 1;
+      let hasMoreData = true;
+  
+      while (hasMoreData) {
+        try {
+          const response = await fetch(`/api/users/users?page=${page}&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
+            method: "GET",
+          });
+  
+          const result = await response.json();
+          const { data } = result;
+  
+          // console.log("RESULTT", result);
+  
+          // Append the current page's users to the allUsers array
+          allUsers = [...allUsers, ...data.data];
+  
+          // Check if there are more pages to fetch
+          hasMoreData = data.next_page_url !== null;
+          page++;
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          hasMoreData = false;
+        }
+      }
+  
+      // Get today's date in MM-DD format
+      const today = new Date().toISOString().slice(5, 10);
+  
+      // Filter users whose birthday is today
+      const bdayToday = allUsers.filter(user => {
+        const dob = user.profile?.dob;
+        return dob && dob.slice(5, 10) === today;
+      });
+  
+      console.log("Filtered Birthdays Today", bdayToday);
+  
+      // Set the filtered list to state
+      setBirthdaysToday(bdayToday);
+    };
+  
+    fetchAllUsers();
+  }, []);
+  
+  
+  
+  
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
@@ -159,7 +212,14 @@ function Navigation({ userId, departmentID, departmentName }) {
         {activeTab === 'Post' && (
           <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
             <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
-              <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={departmentID} />
+              <ShareYourThoughts 
+                userId={userId} 
+                onCreatePoll={handleCreatePoll} 
+                includeAccessibilities={true} 
+                filterType="Department" 
+                filterId={departmentID} 
+                birthdaysToday={birthdaysToday.length > 0 ? birthdaysToday : null} 
+              />
               <Filter /><br />
               <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />
             </div>
