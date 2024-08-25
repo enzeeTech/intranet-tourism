@@ -39,12 +39,26 @@ class PostController extends Controller
 
 
 
+    // public function show($id)
+    // {
+    //     return response()->json([
+    //         'data' => Post::where('id', $id)->queryable()->firstOrFail(),
+    //     ]);
+    // }
+
     public function show($id)
     {
+        $post = Post::where('id', $id)->firstOrFail();
+
+        $post->load(['comments' => function ($query) {
+            $query->withPivot('id', 'comment_id');
+        }]);
+
         return response()->json([
-            'data' => Post::where('id', $id)->queryable()->firstOrFail(),
+            'data' => $post,
         ]);
     }
+
 
 
     public function store(Post $post)

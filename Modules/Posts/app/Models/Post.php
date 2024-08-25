@@ -84,8 +84,14 @@ class Post extends Model implements AuditableContract
         return $this->hasMany(PostAccessibility::class);
     }
 
+    // public function comments()
+    // {
+    //     return $this->belongsToMany(self::class, 'post_comment');
+    // }
+
     public function comments()
     {
-        return $this->belongsToMany(self::class, 'post_comment');
+        return $this->belongsToMany(self::class, 'post_comment', 'post_id', 'comment_id');
     }
+
 }
