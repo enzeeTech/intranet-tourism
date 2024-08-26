@@ -41,6 +41,12 @@
   
   .attachment-grid.four {
     grid-template-columns: repeat(2, 1fr);
+    gap: -9px;
+    scrollbar-width: none; /* For Firefox */
+    padding-bottom: 1px; /* py-2 */
+    width: auto;            /* w-auto */
+    display: flex;          /* flex */
+    flex-direction: column; /* flex-col */
   }
   
   .attachment-grid.more-than-four {
