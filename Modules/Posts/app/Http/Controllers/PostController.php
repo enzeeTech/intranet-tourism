@@ -39,12 +39,26 @@ class PostController extends Controller
 
 
 
+    // public function show($id)
+    // {
+    //     return response()->json([
+    //         'data' => Post::where('id', $id)->queryable()->firstOrFail(),
+    //     ]);
+    // }
+
     public function show($id)
     {
+        $post = Post::where('id', $id)->firstOrFail();
+
+        $post->load(['comments' => function ($query) {
+            $query->withPivot('id', 'comment_id');
+        }]);
+
         return response()->json([
-            'data' => Post::where('id', $id)->queryable()->firstOrFail(),
+            'data' => $post,
         ]);
     }
+
 
 
     public function store(Post $post)
@@ -136,9 +150,18 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        $post->delete();
-
-        return response()->noContent();
+        DB::beginTransaction();
+        try {
+            if ($post->type == 'comment') {
+                PostComment::where('comment_id', $post->id)->delete();
+            }
+            $post->delete();
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
     public function like(Post $post)
