@@ -29,10 +29,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         'post_comment' => PostCommentController::class,
     ]);
 
-    Route::prefix('post')->group(function () {
-
-        Route::put('/like/{id}', [PostController::class, 'likePost'])->name('post.like');
-        Route::put('/unlike/{id}', [PostController::class, 'unlikePost'])->name('post.unlike');
-
+    Route::prefix('posts')->group(function () {
+        Route::post('{post}/like', [PostController::class, 'like'])->name('post.like');
+        Route::post('{post}/unlike', [PostController::class, 'unlike'])->name('post.unlike');
+        Route::post('{post}/comment', [PostController::class, 'comment'])->name('post.comment');
+        Route::post('{post}/access', [PostController::class, 'access'])->name('post.access');
     });
 });

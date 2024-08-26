@@ -218,7 +218,7 @@ function ProfileDepartment({
                             </tr>
                             <tr>
                                 <td className="w-1/3 py-2 font-semibold capitalize align-center text-neutral-800">Office Number</td>
-                                <td className="w-2/3 py-2 align-center ml-20">
+                                <td className="w-2/3 py-2 align-center ml-20 text-neutral-800">
                                     {isEditing ? (
                                         <PhoneInput
                                         country={'my'}
@@ -227,7 +227,7 @@ function ProfileDepartment({
                                         containerClass="w-full sm:ml-[5px] md:ml-[4px] lg:ml-[1px] max-md:px-3" // Tailwind classes for margin adjustments
                                         inputStyle={{ width: '100%', marginLeft: '0px' }}                                      />
                                     ) : (
-                                        <div>
+                                        <div className="">
                                             +{localFormData.phone}
                                         </div>
                                     )}

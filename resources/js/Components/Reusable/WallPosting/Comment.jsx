@@ -1,6 +1,6 @@
 // CommentPopup.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PostAttachments from './PostAttachments';
 import { ShareYourThoughts, OutputData } from '@/Components/Reusable/WallPosting';
 import { formatDistanceToNow } from 'date-fns';
@@ -11,6 +11,30 @@ import { usePage } from '@inertiajs/react';
 const Comment = ({ post, onClose }) => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [polls, setPolls] = useState([]);
+  const [profileData, setProfileData] = useState({
+    name: "",
+    profileImage: "",
+  })
+
+  useEffect(() => {
+    fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
+        method: "GET",
+    })
+    .then((response) => response.json())
+    .then(({ data }) => {
+        setProfileData(pv => ({
+            ...pv, ...data,
+            name: data.name,
+            profileImage: data.profile?.image || '',
+        }));
+    })
+    .catch((error) => {
+        console.error("Error fetching user data:", error);
+    });
+  }, [id]);
+
+  console.log("DATA KE?", profileData);
+  
 
     
   const formatTimeAgo = (date) => {
@@ -79,17 +103,17 @@ const Comment = ({ post, onClose }) => {
         <div className="pt-4 pb-4 border-t flex justify-start">
             <img
                 src={
-                post.userProfile.profile?.image 
+                profileData.profileImage 
                     ? (
-                        post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
-                        ? post.userProfile.profile.image
-                        : post.userProfile.profile.image.startsWith('avatar/')
-                            ? `/storage/${post.userProfile.profile.image}`
-                            : `/avatar/${post.userProfile.profile.image}`
+                        profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+                        ? profileData.profileImage
+                        : profileData.profileImage.startsWith('avatar/')
+                            ? `/storage/${profileData.profileImage}`
+                            : `/avatar/${profileData.profileImage}`
                     )
-                    : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                    : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
                 } 
-                alt={post.user.name}
+                alt={profileData.name}
                 className="w-12 h-12 rounded-full mr-4 ml-3 mb-20"
             />
             <ShareYourThoughts

@@ -10,7 +10,7 @@ class BusinessGradeController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => BusinessGrade::queryable()->paginate(),
+            'data' => $this->shouldPaginate(BusinessGrade::queryable()),
         ]);
     }
 
