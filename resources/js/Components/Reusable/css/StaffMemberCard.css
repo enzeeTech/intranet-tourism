@@ -21,6 +21,71 @@
   object-position: center;
 }
 
+.card-footer {
+  display: flex;
+  justify-content: space-around;
+  height: 40px;
+  width: 180px;
+  background: #F9FAFC;
+  border-top: 1px solid #eeeeee;
+}
+
+@media (max-width: 768px) {
+  .staff-member-card {
+    width: 140px;
+    height: 310px;
+  }
+
+  .staff-member-image {
+    height: 184px;
+  }
+  
+  .card-footer {
+    justify-content: space-around;
+    height: 40px;
+    width: 140px;
+    background: #F9FAFC;
+    border-top: 1px solid #eeeeee;
+  }
+}
+
+@media (max-width: 480px) {
+  .staff-member-card {
+    width: 140px;
+    height: 310px;
+  }
+
+  .staff-member-image {
+    height: 184px;
+  }
+
+  .card-footer {
+    justify-content: space-around;
+    height: 40px;
+    width: 140px;
+    background: #F9FAFC;
+    border-top: 1px solid #eeeeee;
+  }
+}
+
+@media (max-width: 321px) {
+  .staff-member-card {
+    width: 120px;
+    height: 286px;
+  }
+
+  .staff-member-image {
+    height: 160px;
+  }
+
+  .card-footer {
+    justify-content: space-around;
+    height: 40px;
+    width: 120px;
+    background: #F9FAFC;
+    border-top: 1px solid #eeeeee;
+  }
+}
 /* .three-dot-button {
   position: absolute;
   top: 0px;
@@ -74,6 +139,36 @@
   font-family: 'Nunito Sans';
 }
 
+.staff-member-extension{
+  font-size: 12px;
+  font-family: 'Nunito Sans';
+}
+
+/* responsive text size */
+@media (max-width: 480px) {
+  .staff-member-name {
+    margin-top: 5%;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Nunito Sans';
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  
+  .staff-member-role {
+    color: #202224;
+    font-size: 10px;
+    font-family: 'Nunito Sans';
+  }
+  
+  .staff-member-status {
+    font-size: 8px;
+    font-family: 'Nunito Sans';
+  }
+}
+/* responsive text size */
 
 /* Color for Online Status */
 .staff-member-status.online {
@@ -98,7 +193,7 @@
   display: flex;
   justify-content: space-around;
   height: 40px;
-  width: 185px;
+  width: 180px;
   background: #F9FAFC;
   border-top: 1px solid #eeeeee;
 }

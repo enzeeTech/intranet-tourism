@@ -44,6 +44,12 @@ class Community extends Model implements AuditableContract
                 ],
                 // [],
             ],
+            'addMember' => [
+                [
+                    'user_id' => ['string', 'required'],
+                ],
+                // [],
+            ],
         ];
 
         return $rules[$scenario];

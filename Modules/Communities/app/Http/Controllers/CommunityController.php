@@ -3,6 +3,7 @@
 namespace Modules\Communities\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Modules\Communities\Models\Community;
 
 class CommunityController extends Controller
@@ -40,6 +41,15 @@ class CommunityController extends Controller
     public function destroy(Community $community)
     {
         $community->delete();
+
+        return response()->noContent();
+    }
+
+    public function addMember(Community $community)
+    {
+        request()->validate(Community::rules('addMember'));
+        $user = User::findOrFail(request()->user_id);
+        $community->members()->attach($user);
 
         return response()->noContent();
     }
