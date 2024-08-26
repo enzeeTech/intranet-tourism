@@ -737,7 +737,24 @@ console.log("FINAL", finalPosts);
               <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1 mt-2"></div>
-                  <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                  <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                    <div className="flex w-full items-center justify-between h-auto mb-4">
+                    <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
+                      {post.accessibilities?.map((accessibility, index) => (
+                        <span key={index}>{accessibility.accessable_type}{": "}</span>
+                      ))}
+                      {post.departmentNames ? post.departmentNames : post.type}
+                    </span>
+                    {post.type === 'announcement' && (
+                      <div className="bg-white relative">
+                        <img
+                          src={announce}
+                          className="flex-shrink-0 rounded-xl w-7 h-7"
+                          alt="Announcement Icon"
+                        />
+                      </div>
+                    )}
+                    </div>  
                     <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-1.5 -mt-1">
                         <img 
@@ -756,20 +773,20 @@ console.log("FINAL", finalPosts);
                           alt={post.user.name} 
                           className="shrink-0 aspect-square w-[53px] rounded-image" 
                         />
-                        <div className="flex flex-col my-auto">
+                        <div className="flex flex-col my-auto ml-1">
                           <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
                           <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                        {/* <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1 -mt-5">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>
                               {accessibility.accessable_type}{": "}
                             </span>
                           ))}
                           {post.departmentNames ? post.departmentNames : post.type}
-                        </span>
+                        </span> */}
                         <img 
                           loading="lazy" 
                           src="/assets/wallpost-dotbutton.svg" 
@@ -779,30 +796,31 @@ console.log("FINAL", finalPosts);
                         />
                       </div>
                     </div>
+                    
                   </div>
                   {isPopupOpen[index] && (
-                    <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
+                    <div className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10">
                       <p 
                         className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
                         onClick={() => handleEdit(post)}
                       >
-                        <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
+                        <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
                         Edit
                       </p>
-                      <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
+                      <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
                       <p 
                         className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
                         onClick={() => confirmDelete(post.id)}
                       >
-                        <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
+                        <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
                         Delete
                       </p>
-                      <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
+                      <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
                       <p 
                         className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
                         onClick={() => handleAnnouncement(post)}
                       >
-                        <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                        <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
                         Announcement
                       </p>
                     </div>

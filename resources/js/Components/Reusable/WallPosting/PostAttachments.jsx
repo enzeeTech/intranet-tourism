@@ -61,7 +61,7 @@ function PostAttachments({ attachments }) {
       return (
         <article key={index} className="flex flex-col text-xs text-neutral-800 w-full">
         <div
-          className="flex gap-3 items-start py-2 px-4 bg-white rounded-xl border-4 border-gray-200 max-w-[900px]"
+          className="flex gap-3 items-start py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
           onClick={handleDownload}
           style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
           >
