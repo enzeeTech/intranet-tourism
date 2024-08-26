@@ -1,9 +1,9 @@
 .department-dropdown-container {
-    display: flex;
-    align-items: center;
+    /* display: flex; */
+    /* align-items: center; */
     position: relative;
-    flex-direction: row;
-    width: 900px;
+    /* flex-direction: row; */
+    /* width: 900px; */
   }
   
   .dropdown-header {
@@ -36,7 +36,7 @@
     font-family: 'Nunito Sans';
     background: transparent;
     padding: 0;
-    margin: 0;
+    margin: 0 0 0 0 ;
     box-shadow: none;
   }
   
@@ -104,15 +104,15 @@
   }
   
   .visit-department-btn {
-    width: 150px;
+    /* width: 150px;
     height: auto;
-    margin-top: 5px;
+    margin-top: 5px; */
     /* margin-right: 15px; */
   }
   
   .add-person-btn {
     /* width: 150px; */
-    height: auto;
+    /* height: auto; */
   }
   
   
@@ -125,11 +125,11 @@
   .three-dot-btn {
     cursor: pointer;
     position: absolute;
-    right: 20px;
-    align-items: center;
-    height: auto;
-    margin-top: 5px;
-    width: 50px;
+    /* right: 20px; */
+    /* align-items: center; */
+    /* height: auto; */
+    /* margin-top: 5px; */
+    /* width: 50px; */
   }
   
   .staff-popup {

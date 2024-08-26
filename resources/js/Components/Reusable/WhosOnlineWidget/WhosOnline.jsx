@@ -22,11 +22,14 @@ const WhosOnline = () => {
                 setOnlineUsers(prevOnlineUsers => prevOnlineUsers.filter(onlineUser => onlineUser.id !== user.id));
             });
 
+            // console.log("USER_ID", onlineUsers.id);
         // Cleanup function to leave the channel when the component unmounts
         return () => {
             channel.leave();
         };
+        
     }, []);
+    
 
     return (
         <div className="whos-online-container border-2 shadow-2xl flex-col justify-start">
@@ -36,7 +39,9 @@ const WhosOnline = () => {
             <hr style={{ marginTop: '5px', marginBottom: '5px',}} className="underline" />
             <div className="online-users text-left flex justify-start">
                 {onlineUsers.map((user, index) => (
-                    <UserAvatar key={index} {...user} />
+                    console.log("USERRRR", user),
+                    console.log("USER_ID", user.id),
+                    <UserAvatar key={index} {...user} ID_USER={user.id} />
                 ))}
             </div>
             <hr style={{ marginTop: '5px', marginBottom: '5px' }} className="underline" />

@@ -3,6 +3,7 @@
 namespace Modules\Communities\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Modules\Communities\Models\Community;
 
 class CommunityController extends Controller
@@ -23,6 +24,7 @@ class CommunityController extends Controller
 
     public function store()
     {
+
         $validated = request()->validate(...Community::rules());
         Community::create($validated);
 
@@ -40,6 +42,36 @@ class CommunityController extends Controller
     public function destroy(Community $community)
     {
         $community->delete();
+
+        return response()->noContent();
+    }
+
+    public function addMember(Community $community)
+    {
+
+        request()->validate(Community::rules('addMember'));
+        $user = User::findOrFail(request()->user_id);
+
+        if (request()->has('role')) {
+            
+            $role = request('role');
+            $community->members()->attach($user, ['role' => $role]);
+
+        } else {
+            $community->members()->attach($user);
+        }
+
+        return response()->noContent();
+    }
+
+    public function deleteMember(Community $community)
+    {
+
+        request()->validate(Community::rules('addMember'));
+
+        $user = User::findOrFail(request()->user_id);
+
+        $community->members()->detach($user->id);
 
         return response()->noContent();
     }
