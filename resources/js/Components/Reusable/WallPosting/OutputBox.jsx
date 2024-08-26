@@ -340,8 +340,8 @@ console.log("FINAL", finalPosts);
     // Function to handle liking a post
     const handleLike = async (postId) => {
       try {
-        const response = await fetch(`/api/posts/post/like/${postId}`, {
-          method: 'PUT',
+        const response = await fetch(`/api/posts/posts/${postId}/like`, {
+          method: 'POST',
           headers: { 'X-CSRF-Token': csrfToken },
         });
   
@@ -362,8 +362,8 @@ console.log("FINAL", finalPosts);
     // Function to handle unliking a post
     const handleUnlike = async (postId) => {
       try {
-        const response = await fetch(`/api/posts/post/unlike/${postId}`, {
-          method: 'PUT',
+        const response = await fetch(`/api/posts/posts/${postId}/unlike`, {
+          method: 'POST',
           headers: { 'X-CSRF-Token': csrfToken },
         });
   
@@ -395,7 +395,7 @@ console.log("FINAL", finalPosts);
 
   const renderContentWithTags = (content) => {
     // Regex to match tags (e.g., @username or @FirstName LastName)
-    const tagRegex = /@\w+(?:\s\w+)*\b/g;
+    const tagRegex = /@\w+(?:\s\w)*\b/g;
     // Regex to match URLs starting with https
     const urlRegex = /https:\/\/[^\s]+/g;
 
@@ -483,7 +483,7 @@ console.log("FINAL", finalPosts);
         
         return (
         <div key={post.id} className="">
-          <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
+          <article className="mt-4 p-4 rounded-2xl bg-white border-2 shadow-xl w-full relative">
             <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
               <div className="flex gap-1 mt-2">
               </div>
@@ -504,7 +504,7 @@ console.log("FINAL", finalPosts);
                             : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                     }
                       alt={post.user.name} 
-                      className="shrink-0 aspect-square w-[53px] rounded-image" 
+                      className="shrink-0 aspect-square rounded-image" 
                     />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
@@ -962,13 +962,18 @@ console.log("FINAL", finalPosts);
                     {renderContentWithTags(post.content)}
                 </article>
 
+                {post.tag?.length > 0 && (
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                  {/* {post.tag.replace(/[\[\]"]/, '')} */}
-                  {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                  Tagged Album: {post.tag?.replace(/[\[\]"]/g, '') || ''}
                 </p>
-                <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                {post.mentions?.replace(/[\[\]"]/g, '') || ''}
-                </p>
+                )}
+
+                {post.mentions?.length > 0 && (
+                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                      Tagged People: {post.mentions.replace(/[\[\]"]/g, '')}
+                    </p>
+                )}
+
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                 {post.event?.replace(/[\[\]"]/g, '') || ''}
                 </p>

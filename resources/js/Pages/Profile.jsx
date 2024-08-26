@@ -431,6 +431,8 @@ export default function Profile() {
     //         )}
     //     </Example>
     // );
+    // console.log("profileData", profileData.id);
+    
     return (
         <Example>
             <main className="xl:pl-96 w-full">
@@ -465,6 +467,8 @@ export default function Profile() {
                                             <ProfileIcons
                                                 icon1={profileData.icon1}
                                                 icon2={profileData.icon2}
+                                                user_id={profileData.id}
+                                                user_name={profileData.name}
                                                 onEdit={() => handleEditBio()}
                                                 isFirstIcon
                                             />

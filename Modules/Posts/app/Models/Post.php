@@ -28,7 +28,7 @@ class Post extends Model implements AuditableContract
         'visibility',
         'pool_posting',
         // 'likes',
-        // 'mentions',
+        'mentions',
         'event'
     ];
     protected $casts = [
