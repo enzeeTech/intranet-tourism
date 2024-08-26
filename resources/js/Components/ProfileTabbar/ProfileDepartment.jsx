@@ -227,7 +227,7 @@ function ProfileDepartment({
                                         containerClass="w-full sm:ml-[5px] md:ml-[4px] lg:ml-[1px] max-md:px-3" // Tailwind classes for margin adjustments
                                         inputStyle={{ width: '100%', marginLeft: '0px' }}                                      />
                                     ) : (
-                                        <div className="">
+                                        <div className="text-neutral-800 text-opacity-80 font-normal">
                                             +{localFormData.phone}
                                         </div>
                                     )}
