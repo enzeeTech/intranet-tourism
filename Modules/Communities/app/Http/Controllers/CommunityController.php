@@ -24,6 +24,7 @@ class CommunityController extends Controller
 
     public function store()
     {
+
         $validated = request()->validate(...Community::rules());
         Community::create($validated);
 
@@ -50,6 +51,18 @@ class CommunityController extends Controller
         request()->validate(Community::rules('addMember'));
         $user = User::findOrFail(request()->user_id);
         $community->members()->attach($user);
+
+        return response()->noContent();
+    }
+
+    public function deleteMember(Community $community)
+    {
+
+        request()->validate(Community::rules('addMember'));
+
+        $user = User::findOrFail(request()->user_id);
+
+        $community->members()->detach($user->id);
 
         return response()->noContent();
     }
