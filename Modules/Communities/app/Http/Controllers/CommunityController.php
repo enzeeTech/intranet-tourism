@@ -48,9 +48,18 @@ class CommunityController extends Controller
 
     public function addMember(Community $community)
     {
+
         request()->validate(Community::rules('addMember'));
         $user = User::findOrFail(request()->user_id);
-        $community->members()->attach($user);
+
+        if (request()->has('role')) {
+            
+            $role = request('role');
+            $community->members()->attach($user, ['role' => $role]);
+
+        } else {
+            $community->members()->attach($user);
+        }
 
         return response()->noContent();
     }
