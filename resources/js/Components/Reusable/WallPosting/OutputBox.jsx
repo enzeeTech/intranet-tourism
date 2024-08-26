@@ -522,7 +522,7 @@ console.log("FINAL", finalPosts);
         
         return (
         <div key={post.id} className="">
-          <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[610px] relative">
+          <article className="mt-4 p-4 rounded-2xl bg-white border-2 shadow-xl w-full relative">
             <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
               <div className="flex gap-1 mt-2">
               </div>
@@ -543,7 +543,7 @@ console.log("FINAL", finalPosts);
                             : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                     }
                       alt={post.user.name} 
-                      className="shrink-0 aspect-square w-[53px] rounded-image" 
+                      className="shrink-0 aspect-square rounded-image" 
                     />
                     <div className="flex flex-col my-auto">
                       <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
