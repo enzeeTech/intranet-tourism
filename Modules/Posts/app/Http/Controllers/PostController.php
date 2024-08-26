@@ -136,9 +136,18 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        $post->delete();
-
-        return response()->noContent();
+        DB::beginTransaction();
+        try {
+            if ($post->type == 'comment') {
+                PostComment::where('comment_id', $post->id)->delete();
+            }
+            $post->delete();
+            DB::commit();
+            return response()->noContent();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
     public function like(Post $post)
