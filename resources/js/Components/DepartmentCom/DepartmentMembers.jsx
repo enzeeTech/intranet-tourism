@@ -168,7 +168,7 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
 
   return (
     <a href={`/user/${id}`}>
-    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center">
+    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center hover:bg-blue-100">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">

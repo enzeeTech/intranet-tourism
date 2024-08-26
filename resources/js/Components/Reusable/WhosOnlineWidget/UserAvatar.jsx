@@ -45,7 +45,7 @@ const source = () => {
   return (
     <div className="user-avatar">
       <img src={source()} alt={name} className="avatar-image" />
-      <div className="user-name text-start">{name}</div>
+      {/* <div className="user-name text-start">{name}</div> */}
     </div>
   );
 };
