@@ -579,7 +579,7 @@ const FileTable = ({ searchTerm }) => {
                                                                     index
                                                             )
                                                         }
-                                                        className="ml-2 text-sm text-blue-500 overflow-hidden text-ellipsis"
+                                                        className="ml-2 text-sm text-blue-500"
                                                     >
                                                         Save
                                                     </button>
