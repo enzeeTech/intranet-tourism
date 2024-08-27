@@ -132,41 +132,43 @@ function PostAttachments({ attachments }) {
             <button
               onClick={closePopup}
               className="absolute top-4 right-4 text-white text-lg"
-              >
+            >
               &times;
             </button>
-            <div className="bg-white p-4 rounded-lg max-w-3xl w-full relative">
+            <div className="bg-white lg:p-6 p-4 rounded-2xl max-w-3xl max-h-screen relative max-md:mx-4">
               <div className="flex justify-center w-full">
-                {imagesAndVideos[currentMediaIndex].mime_type.startsWith("image/") ? (
-                  <img
-                  key={imagesAndVideos[currentMediaIndex].path} // Unique key for image
-                  src={`/storage/${imagesAndVideos[currentMediaIndex].path}`}
-                  alt="Current attachment"
-                  className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                  />
-                ) : (
-                  <video
-                  key={imagesAndVideos[currentMediaIndex].path} // Unique key for video
-                  controls
-                  className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                  >
-                    <source src={`/storage/${imagesAndVideos[currentMediaIndex].path}`} />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
+                <div className="bg-gray-200 h-full w-full flex justify-center items-center">
+                  {imagesAndVideos[currentMediaIndex].mime_type.startsWith("image/") ? (
+                    <img
+                      key={imagesAndVideos[currentMediaIndex].path} // Unique key for image
+                      src={`/storage/${imagesAndVideos[currentMediaIndex].path}`}
+                      alt="Current attachment"
+                      className="w-[500px] h-[500px] object-contain rounded-none" // Fixed width and height
+                    />
+                  ) : (
+                    <video
+                      key={imagesAndVideos[currentMediaIndex].path} // Unique key for video
+                      controls
+                      className="w-[500px] h-[500px] object-curtain rounded-lg" // Fixed width and height
+                    >
+                      <source src={`/storage/${imagesAndVideos[currentMediaIndex].path}`} />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                </div>  
               </div>
               <div className="flex justify-center mt-4 overflow-x-auto w-full">
                 {imagesAndVideos.map((attachment, index) => (
                   <div
-                  key={index}
-                  className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
-                  onClick={() => setCurrentMediaIndex(index)}
+                    key={index}
+                    className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
+                    onClick={() => setCurrentMediaIndex(index)}
                   >
                     {attachment.mime_type.startsWith("image/") ? (
                       <img
-                      src={`/storage/${attachment.path}`}
-                      alt="Thumbnail"
-                      className="w-20 h-20 object-cover rounded-lg"
+                        src={`/storage/${attachment.path}`}
+                        alt="Thumbnail"
+                        className="w-20 h-20 object-cover rounded-lg"
                       />
                     ) : (
                       <video className="w-20 h-20 object-cover rounded-lg">
