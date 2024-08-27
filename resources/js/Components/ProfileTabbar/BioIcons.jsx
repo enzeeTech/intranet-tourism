@@ -342,65 +342,76 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
     }, [isPopupOpen]);
 
     const handleDownload = async (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-    
-        if (!qrCodeSvg) {
-            console.error("QR code SVG is not available.");
-            return;
-        }
-    
-        // Create a jsPDF instance
-        const pdf = new jsPDF();
-    
-        // Set the title font and add a centered title
-        pdf.setFontSize(20);
-        pdf.setFont("helvetica", "bold");
-        pdf.text("User Information", pdf.internal.pageSize.getWidth() / 2, 20, { align: "center" });
-    
-        // Add some space between the title and the user details
-        const yPosition = 35;
-    
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!qrCodeSvg) {
+        console.error("QR code SVG is not available.");
+        return;
+    }
+
+    // Create a jsPDF instance
+    const pdf = new jsPDF();
+
+    // Load the logo image
+    const logo = new Image();
+    logo.src = '/assets/logo_tourism.png';
+
+    // Once the logo image is loaded, proceed with the PDF creation
+    logo.onload = () => {
+        const logoWidth = 60; // Adjust logo size as needed
+        const logoHeight = 30;
+        const logoXPosition = (pdf.internal.pageSize.getWidth() - logoWidth) / 2;
+        const logoYPosition = 20;
+
+        // Add the logo to the PDF
+        pdf.addImage(logo, 'PNG', logoXPosition, logoYPosition, logoWidth, logoHeight);
+
+        // Set the Y position for user details below the logo
+        const yPosition = logoYPosition + logoHeight + 10;
+
         // Set the font for user details and add the user name and title
         pdf.setFontSize(16);
         pdf.setFont("helvetica", "normal");
         pdf.text(`Name: ${user_name}`, pdf.internal.pageSize.getWidth() / 2, yPosition, { align: "center" });
         pdf.text(`Title: ${user_title}`, pdf.internal.pageSize.getWidth() / 2, yPosition + 10, { align: "center" });
-    
+
         // Convert the SVG into an image
         const canvas = document.createElement('canvas');
         const svgBlob = new Blob([qrCodeSvg], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(svgBlob);
-    
+
         const img = new Image();
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-    
+
             // Convert the canvas to a data URL
             const imgData = canvas.toDataURL('image/png');
-    
+
             // Adjust the Y position for the image to be below the text
             const imageYPosition = yPosition + 30; // Place the image below the text
             const imageWidth = img.width / 4;
             const imageHeight = img.height / 4;
-    
+
             // Center the image on the page
             const imageXPosition = (pdf.internal.pageSize.getWidth() - imageWidth) / 2;
-    
+
             // Add the image to the PDF
             pdf.addImage(imgData, 'PNG', imageXPosition, imageYPosition, imageWidth, imageHeight);
-    
+
             // Download the PDF
             pdf.save(`${user_name} QR-Code.pdf`);
-    
+
             // Clean up
             URL.revokeObjectURL(url);
         };
         img.src = url;
     };
+};
+
     
     
 
@@ -436,9 +447,13 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
             {isPopupOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
                     <div className="bg-white p-6 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
-                    
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">User Information</h2>
-
+                    <div className="flex justify-center">
+                        <img 
+                        src="/assets/logo_tourism.png" 
+                        alt="Tourism Logo" 
+                        className="w-20 h-15 mr-2 align-middle"
+                        />
+                    </div>
                     <p className="text-lg font-bold text-gray-900"><span className="font-normal">{user_name}</span></p>
                     <p className="text-lg font-bold text-gray-900 mt-2"><span className="font-normal">{user_title}</span></p>
 
