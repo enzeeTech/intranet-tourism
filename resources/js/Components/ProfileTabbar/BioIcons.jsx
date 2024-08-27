@@ -344,45 +344,65 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
     const handleDownload = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-
+    
         if (!qrCodeSvg) {
             console.error("QR code SVG is not available.");
             return;
         }
-
+    
         // Create a jsPDF instance
         const pdf = new jsPDF();
-
-        // Set the font size and add the user name
+    
+        // Set the title font and add a centered title
+        pdf.setFontSize(20);
+        pdf.setFont("helvetica", "bold");
+        pdf.text("User Information", pdf.internal.pageSize.getWidth() / 2, 20, { align: "center" });
+    
+        // Add some space between the title and the user details
+        const yPosition = 35;
+    
+        // Set the font for user details and add the user name and title
         pdf.setFontSize(16);
-        pdf.text(`Name: ${user_name}`, 10, 20);
-
+        pdf.setFont("helvetica", "normal");
+        pdf.text(`Name: ${user_name}`, pdf.internal.pageSize.getWidth() / 2, yPosition, { align: "center" });
+        pdf.text(`Title: ${user_title}`, pdf.internal.pageSize.getWidth() / 2, yPosition + 10, { align: "center" });
+    
         // Convert the SVG into an image
         const canvas = document.createElement('canvas');
         const svgBlob = new Blob([qrCodeSvg], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(svgBlob);
-
+    
         const img = new Image();
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
-
+    
             // Convert the canvas to a data URL
             const imgData = canvas.toDataURL('image/png');
-
+    
+            // Adjust the Y position for the image to be below the text
+            const imageYPosition = yPosition + 30; // Place the image below the text
+            const imageWidth = img.width / 4;
+            const imageHeight = img.height / 4;
+    
+            // Center the image on the page
+            const imageXPosition = (pdf.internal.pageSize.getWidth() - imageWidth) / 2;
+    
             // Add the image to the PDF
-            pdf.addImage(imgData, 'PNG', 10, 30, img.width / 4, img.height / 4);
-
+            pdf.addImage(imgData, 'PNG', imageXPosition, imageYPosition, imageWidth, imageHeight);
+    
             // Download the PDF
             pdf.save(`${user_name} QR-Code.pdf`);
-
+    
             // Clean up
             URL.revokeObjectURL(url);
         };
         img.src = url;
     };
+    
+    
 
     const handleCopyLink = () => {
         if (!qrCodeLink) {
@@ -415,19 +435,23 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
             )}
             {isPopupOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
-                    <div className="bg-white p-2 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
-                        <p>NAME: {user_name}</p>
-                        <p>TITLE: {user_title}</p>
+                    <div className="bg-white p-6 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
+                    
+                    <h2 className="text-xl font-semibold text-gray-800 mb-4">User Information</h2>
+
+                    <p className="text-lg font-bold text-gray-900"><span className="font-normal">{user_name}</span></p>
+                    <p className="text-lg font-bold text-gray-900 mt-2"><span className="font-normal">{user_title}</span></p>
+
                         {qrCodeSvg ? (
                             <div
-                                className="qr-code-svg"
+                                className="qr-code-svg mt-4"
                                 dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
                             />
                         ) : (
                             <p>Loading QR code...</p>
                         )}
-                        <hr className="mb-4 w-full border-gray-300" />
-                        <div className="flex justify-between -mt-1 mx-20 max-md:mx-12 relative">
+                        <hr className="mb-4 mt-4 w-full border-gray-300" />
+                        <div className="flex justify-between -mt-1 mx-10 max-md:mx-6 relative space-x-4">
                             <button onClick={handleDownload} className="text-white py-2">
                                 <img src="/assets/DownloadIcon.png" alt="Download Icon" className="w-6 h-6 shrink-0" />
                             </button>
@@ -435,6 +459,7 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
                                 <img src="/assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
                             </button>
                         </div>
+
                     </div>
                 </div>
             )}
