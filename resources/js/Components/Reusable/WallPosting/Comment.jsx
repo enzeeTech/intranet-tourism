@@ -64,42 +64,21 @@ const Comment = ({ post, onClose }) => {
                         : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                 }
                 alt={post.user.name}
-                className="w-12 h-12 rounded-full"
+                className="w-[53px] rounded-full"
               />
               <div className="ml-3">
-                <div className="text-md font-semibold">{post.user.name}</div>
-                <time className="text-xs text-gray-500">{formatTimeAgo(post.created_at)}</time>
+                <div className="text-lg font-semibold">{post.user.name}</div>
+                <time className="text-sm text-gray-500">{formatTimeAgo(post.created_at)}</time>
               </div>
             </header>
             <div className="mt-4">
-              <p className="text-md">{post.content}</p>
+              <p className="text-lg mb-4">{post.content}</p>
               <PostAttachments attachments={post.attachments} />
             </div>
           </div>
         </div>
         {/* Comment Section */}
-        <div className="p-4 max-h-96 overflow-y-auto">
-          {/* Render comments here */}
-            <div className="space-y-4">
-                {/* Example comment */}
-                {/* <div className="flex items-start">
-                    <img
-                        src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=Commenter&rounded=true"
-                        alt="Commenter"
-                        className="w-8 h-8 rounded-full"
-                    />
-                    <div className="ml-3 bg-gray-100 p-2 rounded-lg w-full">
-                        <div className="text-sm">
-                        <span className="font-semibold">Commenter Name</span>
-                        <span className="ml-2 text-xs text-gray-500">2 hours ago</span>
-                        </div>
-                        <p className="text-sm mt-1">This is a sample comment.</p>
-                    </div>
-                </div> */}
-              <OutputData loggedInUserId={id} polls={polls} filterType={null} />
-
-            </div>
-        </div>
+        
         <div className="py-4 border-t flex flex-row justify-between items-start w-full">
             <img
                 src={
@@ -114,7 +93,7 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
                 } 
                 alt={profileData.name}
-                className="w-12 h-12 rounded-full mx-4"
+                className="w-[53px] rounded-full mx-4"
             />
             <ShareYourThoughts
                 variant="comment"

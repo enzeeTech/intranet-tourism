@@ -32,7 +32,7 @@ function PostAttachments({ attachments }) {
           <img
           src={`/storage/${attachment.path}`}
           alt="attachment"
-          className="w-full h-auto rounded-lg object-cover"
+          className="w-full h-auto rounded-xl object-cover"
           />
         ) : (
           <video controls className="w-full h-auto rounded-lg">
@@ -59,9 +59,9 @@ function PostAttachments({ attachments }) {
       };
       
       return (
-        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full">
+        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full mt-0">
         <div
-          className="flex gap-3 items-start py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
+          className="flex gap-3 items-center py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
           onClick={handleDownload}
           style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
           >
@@ -77,8 +77,9 @@ function PostAttachments({ attachments }) {
             style={{ width: '20px', height: '20px', objectFit: 'contain' }}
             />
           <div className="flex flex-col items-start flex-grow">
-            <span className="flex whitespace-normal items-center mt-0.5">Download File</span>
+            <span className="flex whitespace-normal items-center">Download File</span>
           </div>
+          <img src="/assets/downloadIcon2.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70"/>
         </div>
         </article>
       );
