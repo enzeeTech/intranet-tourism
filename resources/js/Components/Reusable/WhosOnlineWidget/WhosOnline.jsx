@@ -73,7 +73,7 @@ const WhosOnline = () => {
                     Who's Online
                 </h2>
                 <span className="online-count" style={{ fontFamily: "Nunito Sans", fontWeight: 'bold', fontSize: '18px' }}>
-                    ({onlineUsers.length})
+                    {onlineUsers.length}
                 </span>
             </div>
             <hr style={{ marginTop: '5px', marginBottom: '5px'}} className="underline" />

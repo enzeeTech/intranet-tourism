@@ -131,7 +131,8 @@ function ProfileBio({
                             {renderField('Name', 'name', bioFormData.name, 'text')}
                             {renderField('E-mail', 'email', bioFormData.email, 'email')}
                             {renderField('Date of Birth', 'dateofbirth', bioFormData.dateofbirth, 'date')}
-                            {renderField('WhatsApp Number', 'whatsapp', bioFormData.whatsapp, 'text')}
+                            {renderField('WhatsApp Number', 'whatsapp', bioFormData.whatsapp !== 'null' ? bioFormData.whatsapp : '', 'text')}
+
                         </tbody>
                     </table>
                 </div>

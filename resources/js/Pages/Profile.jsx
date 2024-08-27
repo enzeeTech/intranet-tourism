@@ -171,7 +171,14 @@ function ProfileContent() {
 
             if (newFormData.email) FfData.append('email', newFormData.email);
             if (newFormData.dateofbirth) FfData.append('dob', newFormData.dateofbirth);
-            if (newFormData.whatsapp) FfData.append('phone_no', newFormData.whatsapp);
+            // if (newFormData.whatsapp) FfData.append('phone_no', newFormData.whatsapp);
+
+            if (newFormData.whatsapp) {
+                FfData.append('phone_no', newFormData.whatsapp);
+            } else {
+                FfData.append('phone_no', 'null');
+            }
+
             if (newFormData.name) FfData.append('name', newFormData.name);
 
             if (newFormData.photo instanceof File) {
