@@ -65,27 +65,44 @@ const Departments = () => {
 
   const handleDelete = async () => {
     try {
-      // Delete all related employment posts first
-      const responseEmploymentPosts = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
-        method: 'DELETE',
+      // First, check if there are employment posts associated with the department
+      const checkPostsResponse = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-Token": csrfToken,
+          Accept: 'application/json',
         },
       });
   
-      if (!responseEmploymentPosts.ok) {
-        throw new Error('Error deleting related employment posts');
+      if (!checkPostsResponse.ok) {
+        throw new Error('Error checking employment posts');
+      }
+  
+      const employmentPostsData = await checkPostsResponse.json();
+  
+      // Check if employmentPosts is an array and has elements
+      if (Array.isArray(employmentPostsData) && employmentPostsData.length > 0) {
+        // If there are employment posts, delete them first
+        const responseEmploymentPosts = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
+        });
+  
+        if (!responseEmploymentPosts.ok) {
+          throw new Error('Error deleting related employment posts');
+        }
       }
   
       // Then delete the department
       const responseDepartment = await fetch(`/api/department/departments/${currentDepartmentId}`, {
         method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-Token": csrfToken,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken,
         },
       });
   
@@ -102,6 +119,7 @@ const Departments = () => {
       console.error('Error deleting department:', error);
     }
   };
+  
   
 
   const handleDeleteClick = (id) => {

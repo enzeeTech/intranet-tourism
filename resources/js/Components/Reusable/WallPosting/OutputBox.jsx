@@ -5,7 +5,7 @@ import Comment from './Comment';
 import './index.css'
 import { useCsrf } from "@/composables";
 import PostAttachments from './PostAttachments'
-import announce from '../../../../../public/assets/announcementIcon2.svg'
+import announce from '../../../../../public/assets/announcementIcon.svg'
 
 function Avatar({ src, alt }) {
   return <img loading="lazy" src={src} alt={alt} className="shrink-0 aspect-square w-[53px]" />;
@@ -580,7 +580,7 @@ console.log("FINAL", finalPosts);
           return (
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
-              {/* {post.type === 'announcement' && (
+              {post.type === 'announcement' && (
                 <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
@@ -589,24 +589,16 @@ console.log("FINAL", finalPosts);
                     </div>
                   </div>
                 </div>
-              )} */}
+              )}
 
                {/* Birthday Post */}
                {post.type === 'birthday' && (
-                 <article className={`mt-10 p-4 rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+                 <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                    <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
                      <div className="flex gap-1 mt-2"></div>
-                     <div className="flex-row justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
-                        <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1">
-                             {post.accessibilities?.map((accessibility, index) => (
-                               <span key={index}>
-                                 {accessibility.accessable_type}{": "}
-                               </span>
-                             ))}
-                             {post.departmentNames ? post.departmentNames : post.type}
-                           </span>
-                       <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full mt-3">
-                         <div className="flex gap-3">
+                     <div className="flex justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
+                       <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
+                         <div className="flex gap-1.5 -mt-1">
                            <img 
                              loading="lazy" 
                              src={
@@ -629,6 +621,14 @@ console.log("FINAL", finalPosts);
                            </div>
                          </div>
                          <div className="flex items-center gap-2">
+                           <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
+                             {post.accessibilities?.map((accessibility, index) => (
+                               <span key={index}>
+                                 {accessibility.accessable_type}{": "}
+                               </span>
+                             ))}
+                             {post.departmentNames ? post.departmentNames : post.type}
+                           </span>
                            <img 
                              loading="lazy" 
                              src="/assets/wallpost-dotbutton.svg" 
@@ -734,7 +734,7 @@ console.log("FINAL", finalPosts);
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-              <article className={`mt-10 p-4 rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+              <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1 mt-2"></div>
                   <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
@@ -746,10 +746,10 @@ console.log("FINAL", finalPosts);
                       {post.departmentNames ? post.departmentNames : post.type}
                     </span>
                     {post.type === 'announcement' && (
-                      <div className="relative">
+                      <div className="bg-white relative">
                         <img
                           src={announce}
-                          className="flex-shrink-0 rounded-lg w-7 h-7"
+                          className="flex-shrink-0 rounded-xl w-7 h-7"
                           alt="Announcement Icon"
                         />
                       </div>

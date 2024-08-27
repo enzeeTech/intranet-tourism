@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -12,6 +12,7 @@ import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/Wal
 import '../Components/Profile/profile.css';
 import { useCsrf } from '@/composables';
 import { ProfileDepartment } from '@/Components/ProfileTabbar';
+import { OnlineUsersProvider, OnlineUsersContext } from './OnlineUsersContext'; // Import the context
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -27,10 +28,11 @@ function SaveNotification({ title, content, onClose }) {
     );
 }
 
-export default function Profile() {
+function ProfileContent() {
     const csrfToken = useCsrf();
     const { props } = usePage();
     const { id, authToken } = props;
+    const { onlineUsers } = useContext(OnlineUsersContext); // Access online users from context
     const [polls, setPolls] = useState([]);
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
@@ -60,7 +62,7 @@ export default function Profile() {
         profileImage: "",
         name: "",
         username: "",
-        status: "Online",
+        status: onlineUsers.some(onlineUser => onlineUser.id === id) ? "Online" : "Offline", // Set initial status based on context
         icon1: "/assets/EditButton.svg",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
     });
@@ -108,6 +110,14 @@ export default function Profile() {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
+
+    useEffect(() => {
+        // Update status dynamically when onlineUsers change
+        setProfileData(prevData => ({
+            ...prevData,
+            status: onlineUsers.some(onlineUser => onlineUser.id === id) ? "Online" : "Offline"
+        }));
+    }, [onlineUsers, id]);
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -431,7 +441,14 @@ export default function Profile() {
     //         )}
     //     </Example>
     // );
-    // console.log("profileData", profileData.id);
+
+    // console.log("EMPLOYMENTPOST", profileData.employment_posts);
+    // console.log("TITLE", profileData.employment_posts?.business_post.title);
+
+
+    const employmentPostTitle = profileData.employment_posts?.length > 0 
+  ? profileData.employment_posts[0].business_post.title 
+  : '';
     
     return (
         <Example>
@@ -469,6 +486,7 @@ export default function Profile() {
                                                 icon2={profileData.icon2}
                                                 user_id={profileData.id}
                                                 user_name={profileData.name}
+                                                user_title={employmentPostTitle}
                                                 onEdit={() => handleEditBio()}
                                                 isFirstIcon
                                             />
@@ -587,5 +605,13 @@ export default function Profile() {
                 />
             )}
         </Example>
+    );
+}
+
+export default function Profile() {
+    return (
+        <OnlineUsersProvider>
+            <ProfileContent />
+        </OnlineUsersProvider>
     );
 }

@@ -265,7 +265,7 @@ function Calendar() {
             },
             body: JSON.stringify(eventPayload),
         })
-        .then(response => response.json())
+        // .then(response => response.json())
         .then(data => {
             if (data.errors) {
                 console.error('Error creating event: ', data.errors);
@@ -273,11 +273,13 @@ function Calendar() {
             }
             setEvents([...events, data]);
             closeModal();
+            window.location.reload();
+
         })
         .catch(error => {
             console.error('Error creating event: ', error);
             setIsModalOpen(false);
-            fetchEvents();
+            // fetchEvents();
         });
     };
     
@@ -375,7 +377,7 @@ function Calendar() {
         } catch (error) {
             console.error('Error updating event:', error);
             setIsEditModalOpen(false);
-            fetchEvents()
+            // fetchEvents()
         }
     };
 
@@ -392,6 +394,8 @@ function Calendar() {
             if (response.ok) {
                 setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
                 setIsEditModalOpen(false);
+                window.location.reload();
+                
             } else {
                 const errorData = await response.json();
                 console.error('Error deleting event:', errorData);

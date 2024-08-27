@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Picker from 'emoji-picker-react';
+// import { Tooltip } from "react-tooltip";
 import { Polls } from "./InputPolls";
 import { People } from "./InputPeople";
 import { Event } from "./InputEvent";
@@ -11,10 +12,7 @@ import "../../../Pages/Calendar/index.css";
 import Emoji from '../../../../../public/assets/EmojiIcon.svg'
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant, birthdaysToday }) {
-    
-    
-    
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant, postedId }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
@@ -59,130 +57,129 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         setInputValue(value);
         setCursorPosition(cursorPosition);
     };
-    
-    
+
     // const handleTagSelection = (tag) => {
+    //     const firstName = tag.split(" ")[0]; // Get only the first name
+        
     //     const beforeCursor = inputValue.slice(0, cursorPosition);
     //     const afterCursor = inputValue.slice(cursorPosition);
     //     const mentionStartIndex = beforeCursor.lastIndexOf("@");
-    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+    //     const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${firstName} ${afterCursor}`;
         
     //     setInputValue(updatedText);
     //     setChosenPeople((prevPeople) => [...prevPeople, { name: tag }]); // Update here
-    //     setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+    //     setCursorPosition(mentionStartIndex + firstName.length + 2); // Adjust cursor position
     //     setIsMentioning(false); // Close mention suggestions
     //     setMentionQuery("");
-    // };
+    // };    
 
-    const handleTagSelection = (tag) => {
-        const firstName = tag.split(" ")[0]; // Get only the first name
+    // const handleClickSend = () => {
+    //     const formData = new FormData();
+    
+    //     // Determine if it's a post or a comment
+    //     const isComment = variant === "comment";
+    //     const endpoint = isComment ? `/api/posts/posts/${postedId}/comment` : "/api/posts/posts";
         
-        const beforeCursor = inputValue.slice(0, cursorPosition);
-        const afterCursor = inputValue.slice(cursorPosition);
-        const mentionStartIndex = beforeCursor.lastIndexOf("@");
-        const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${firstName} ${afterCursor}`;
-        
-        setInputValue(updatedText);
-        setChosenPeople((prevPeople) => [...prevPeople, { name: tag }]); // Update here
-        setCursorPosition(mentionStartIndex + firstName.length + 2); // Adjust cursor position
-        setIsMentioning(false); // Close mention suggestions
-        setMentionQuery("");
-    };
+    //     // Append common fields
+    //     formData.append("type", isAnnouncement ? "announcement" : "post");
+    //     formData.append("visibility", "public");
     
-    
-    
-    // console.log("DATA", birthdaysToday);
-
-    // birthdaysToday?.forEach((person) => {
-    //     if (person?.employment_posts?.length) {
-    //         console.log("BDAYYY", person.employment_posts[0]?.department_id);
+    //     if (!inputValue) {
+    //         // formData.append("tag", JSON.stringify(tags));
+    //         attachments.forEach((file, index) => {
+    //             formData.append(`attachments[${index}]`, file);
+    //         });
     //     } else {
-    //         console.log("No employment posts available for", person.name);
+    //         formData.append("content", inputValue);
+    //         attachments.forEach((file, index) => {
+    //             formData.append(`attachments[${index}]`, file);
+    //         });
     //     }
-    // });
-
-    // useEffect(() => {
-    //     const checkAndSendBirthdayPosts = async () => {
-    //         try {
-    //             // Fetch today's birthday posts
-    //             const response = await fetch("/api/posts/posts?filter[]=birthday");
-    //             const postsData = await response.json();
-    //             const posts = postsData.data.data;
-
-    //             console.log("KAKAKAKKA", posts);
-                
     
-    //             // Get today's date in the same format as 'created_at' field (YYYY-MM-DD)
-    //             const today = new Date().toISOString().split('T')[0];
+    //     // Handle tags with spaces after commas
+    //     if (tags.length > 0) {
+    //         const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+    //         formData.append("tag", formattedTags);
+    //     }
     
-    //             // Filter posts for today only
-    //             const todaysPosts = posts.filter((post) => post.created_at.startsWith(today));
+    //     // Handle mentions
+    //     if (chosenPeople.length > 0) {
+    //         const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+    //         const formattedMentions = `[${mentions}]`;
+    //         formData.append("mentions", formattedMentions);
+    //     }
     
-    //             // Collect names already mentioned in today's posts
-    //             const mentionedNames = todaysPosts
-    //                 .map((post) => JSON.parse(post.mentions))
-    //                 .flat();
+    //     // Handle events
+    //     if (chosenEvent.length > 0) {
+    //         const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
+    //         const formattedEvents = `[${events}]`;
+    //         formData.append("event", formattedEvents);
+    //     }
     
-    //             // Filter and send birthday posts
-    //             birthdaysToday?.forEach((birthdayPerson) => {
-    //                 if (birthdayPerson?.employment_posts?.length > 0) {
-    //                     const departmentId = birthdayPerson.employment_posts[0]?.department_id;
-        
-    //                     if (departmentId && !mentionedNames.includes(birthdayPerson.name)) {
-    //                         sendBirthdayPost(birthdayPerson, departmentId);
-    //                     } else if (!departmentId) {
-    //                         console.error(`No department ID available for ${birthdayPerson.name}`);
-    //                     }
-    //                 } else {
-    //                     console.error(`No employment posts available for ${birthdayPerson.name}`);
-    //                 }
-    //             });
-    //         } catch (error) {
-    //             console.error("Error fetching today's posts:", error);
-    //         }
-    //     };
+    //     if (includeAccessibilities) {
+    //         formData.append("accessibilities[0][accessable_type]", filterType);
+    //         formData.append("accessibilities[0][accessable_id]", filterId);
+    //     }
     
-    //     checkAndSendBirthdayPosts();
-    // }, [birthdaysToday]);
-    
-    // const sendBirthdayPost = (birthdayPerson, departmentId) => {
-    //     const customFormData = new FormData();
-    //     customFormData.append("user_id", "1");
-    //     customFormData.append("type", "Admin Wish");
-    //     customFormData.append("visibility", "public");
-    //     customFormData.append("content", `Happy Birthday ${birthdayPerson.name}! 🎉`);
-        
-    //     const formattedMentions = JSON.stringify([birthdayPerson.name]);
-    //     customFormData.append("mentions", formattedMentions);
-    
-    //     customFormData.append("accessibilities[0][accessable_type]", "Department");
-    //     customFormData.append("accessibilities[0][accessable_id]", departmentId);
-    
-    //     fetch("/api/posts/posts", {
+    //     fetch(endpoint, {
     //         method: "POST",
-    //         body: customFormData,
+    //         body: formData,
     //         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
     //     })
     //     .then((response) => {
     //         if (!response.ok) throw new Error("Network response was not ok");
     //     })
+    //     .then(() => {
+    //         // Reset state
+    //         setInputValue("");
+    //         setAttachments([]);
+    //         setFileNames([]);
+    //         setTags([]);
+    //         setChosenPeople([]);
+    //         setChosenEvent([]);
+    //         if (!isComment) {
+    //             window.location.reload();
+    //         } else {
+    //             // Handle any other actions required after posting a comment, e.g., reloading comments
+    //             console.log("HELLO KOMEN KE TU");
+                
+    //         }
+    //     })
     //     .catch((error) => {
     //         console.error("Error:", error);
     //     });
     // };
-    
+
+
+    const handleTagSelection = (tag, id) => {
+        // const firstName = tag.name.split(" ")[0]; // Get only the first name
+        // console.log("HAHAHA", tag, id);
+        
+        
+        const beforeCursor = inputValue.slice(0, cursorPosition);
+        const afterCursor = inputValue.slice(cursorPosition);
+        const mentionStartIndex = beforeCursor.lastIndexOf("@");
+        const updatedText = `${beforeCursor.slice(0, mentionStartIndex)}@${tag} ${afterCursor}`;
+        
+        setInputValue(updatedText);
+        setChosenPeople((prevPeople) => [...prevPeople, { name: tag, id: id }]); // Store both name and user_id
+        setCursorPosition(mentionStartIndex + tag.length + 2); // Adjust cursor position
+        setIsMentioning(false); // Close mention suggestions
+        setMentionQuery("");
+    };
     
     const handleClickSend = () => {
         const formData = new FormData();
+    
+        // Determine if it's a post or a comment
+        const isComment = variant === "comment";
+        const endpoint = isComment ? `/api/posts/posts/${postedId}/comment` : "/api/posts/posts";
         
         // Append common fields
-        formData.append("user_id", userId);
-        // formData.append("type", "post");
         formData.append("type", isAnnouncement ? "announcement" : "post");
         formData.append("visibility", "public");
-        
+    
         if (!inputValue) {
-            formData.append("tag", JSON.stringify(tags));
             attachments.forEach((file, index) => {
                 formData.append(`attachments[${index}]`, file);
             });
@@ -199,15 +196,14 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
             formData.append("tag", formattedTags);
         }
     
-
+        // Handle mentions
         if (chosenPeople.length > 0) {
-            const mentions = chosenPeople.map(person => `"${person.name}"`).join(", ");
+            const mentions = chosenPeople.map(person => `{ "id": "${person.id}", "name": "${person.name}" }`).join(", ");
             const formattedMentions = `[${mentions}]`;
             formData.append("mentions", formattedMentions);
         }
-        
-
-        // Handle mentions with spaces after commas
+    
+        // Handle events
         if (chosenEvent.length > 0) {
             const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
             const formattedEvents = `[${events}]`;
@@ -219,28 +215,34 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
             formData.append("accessibilities[0][accessable_id]", filterId);
         }
     
-        fetch("/api/posts/posts", {
+        fetch(endpoint, {
             method: "POST",
             body: formData,
             headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
         })
-            .then((response) => {
-                if (!response.ok) throw new Error("Network response was not ok");
-            })
-            .then(() => {
-                // Reset state
-                setInputValue("");
-                setAttachments([]);
-                setFileNames([]);
-                setTags([]);
-                setChosenPeople([]); // Clear chosen people after sending
-                setChosenEvent([]);
+        .then((response) => {
+            if (!response.ok) throw new Error("Network response was not ok");
+        })
+        .then(() => {
+            // Reset state
+            setInputValue("");
+            setAttachments([]);
+            setFileNames([]);
+            setTags([]);
+            setChosenPeople([]);
+            setChosenEvent([]);
+            if (!isComment) {
                 window.location.reload();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+            } else {
+                // Handle any other actions required after posting a comment, e.g., reloading comments
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
     };
+    
+    
 
     useEffect(() => {
         const handleTagSearch = async () => {
@@ -258,6 +260,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     if (response.ok) {
                         const data = await response.json();
                         setSearchResults(data.data.data);
+                        console.log('searchResults', searchResults);
+                        
                     } else {
                         console.error("Failed to fetch recommended people");
                     }
@@ -359,13 +363,24 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 }`}
             >
                 <div className="flex flex-col w-full">
-                    <textarea
-                        ref={textAreaRef}
-                        value={inputValue}
-                        onChange={handleChange}
-                        placeholder="Share Your Thoughts..."
-                        className="self-center mt-1 h-8 px-2 mb-12 text-sm border-none appearance-none resize-none input-no-outline w-full"
-                    />
+                    {variant === "comment" && (
+                        <textarea
+                            ref={textAreaRef}
+                            value={inputValue}
+                            onChange={handleChange}
+                            placeholder="comment something..."
+                            className="self-center mt-1 h-8 px-2 mb-12 text-sm border-none appearance-none resize-none input-no-outline w-full"
+                        />
+                    )}
+                    {variant !== "comment" && (
+                        <textarea
+                            ref={textAreaRef}
+                            value={inputValue}
+                            onChange={handleChange}
+                            placeholder="Share Your Thoughts..."
+                            className="self-center mt-1 h-8 px-2 mb-12 text-sm border-none appearance-none resize-none input-no-outline w-full"
+                        />
+                    )}
                     {fileNames.length > 0 && (
                         <div className="file-names-container py-2 w-auto flex flex-col gap-2">
                             {fileNames.map((name, index) => (
@@ -385,13 +400,14 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                         <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center">
                             {variant === "comment" && (
                                 <>
-                                    <button onClick={toggleReactionPicker}>
+                                    <button className="tooltip" onClick={toggleReactionPicker}>
                                         <img
                                             loading="lazy"
                                             src={Emoji}
                                             alt="Emoji Icon"
                                             className="w-[16px] h-[16px]"
                                         />
+                                        <span className="tooltiptext">React 😀🤣😤</span>
                                     </button>
                                     {showReactionPicker && (
                                         <div className="emoji-picker-container">
@@ -405,7 +421,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                     <button
                                         type="button"
                                         onClick={handleClickPeople}
-                                        className="relative text-md text-blue-500 hover:text-blue-700"
+                                        className="tooltip relative text-md text-blue-500 hover:text-blue-700"
                                     >
                                         <img
                                             loading="lazy"
@@ -413,6 +429,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             alt="People Icon"
                                             className="w-[16px] h-[16px]"
                                         />
+                                        <span className="tooltiptext">Mentions People</span>
                                         {chosenPeople.length > 0 && (
                                             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
                                                 {chosenPeople.length}
@@ -425,44 +442,49 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                 <>
                                     <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 lg: justify-between">
                                         <div className="flex w-full flex-row justify-between lg:w-2/3 max-md:py">
-                                            <button onClick={handleClickPoll}>
+                                            <button className="tooltip" onClick={handleClickPoll}>
                                                 <img
                                                     loading="lazy"
                                                     src="assets/inputpolls.svg"
                                                     alt="Poll Icon"
                                                     className="w-4 h-4"
                                                 />
+                                                <span className="tooltiptext">Poll</span>
                                             </button>
-                                            <button onClick={handleClickImg}>
+                                            <button className="tooltip" onClick={handleClickImg}>
                                                 <img
                                                     loading="lazy"
                                                     src="assets/inputimg.svg"
                                                     alt="Image Icon"
                                                     className="w-4 h-4"
                                                 />
+                                                <span className="tooltiptext">Image</span>
                                             </button>
-                                            <button onClick={handleClickVid}>
+                                            <button className="tooltip" onClick={handleClickVid}>
                                                 <img
                                                     loading="lazy"
                                                     src="assets/inputvid.svg"
                                                     alt="Video Icon"
                                                     className="w-4 h-4"
                                                 />
+                                                <span className="tooltiptext">Video</span>
                                             </button>
-                                            <button onClick={handleClickDoc}>
+                                            <button className="tooltip" onClick={handleClickDoc}>
                                                 <img
                                                     loading="lazy"
                                                     src="assets/inputdoc.svg"
                                                     alt="Document Icon"
                                                     className="w-3 h-3"
                                                 />
+                                                <span className="tooltiptext">Document</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={handleClickMediaTag}
-                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                                className="tooltip relative text-md text-blue-500 hover:text-blue-700"
                                             >
                                                 <img src={MediaTag} alt="Tag Media" className="w-4 h-4" />
+                                                <span className="tooltiptext">Album Tag</span>
                                                 {mediaTagCount > 0 && (
                                                     <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
                                                         {mediaTagCount}
@@ -472,7 +494,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             <button
                                                 type="button"
                                                 onClick={handleClickPeople}
-                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                                className="tooltip relative text-md text-blue-500 hover:text-blue-700"
                                             >
                                                 <img
                                                     loading="lazy"
@@ -480,6 +502,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     alt="People Icon"
                                                     className="w-4 h-4"
                                                 />
+                                                <span className="tooltiptext">Mentions People</span>
                                                 {chosenPeople.length > 0 && (
                                                     <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
                                                         {chosenPeople.length}
@@ -489,7 +512,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             <button
                                                 type="button"
                                                 onClick={handleClickEvent}
-                                                className="relative text-md text-blue-500 hover:text-blue-700"
+                                                className=" tooltip relative text-md text-blue-500 hover:text-blue-700"
                                             >
                                                 <img
                                                     loading="lazy"
@@ -497,6 +520,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     alt="Event Icon"
                                                     className="w-4 h-4"
                                                 />
+                                                <span className="tooltiptext">Event Tag</span>
                                                 {chosenEvent.length > 0 && (
                                                     <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
                                                         {chosenEvent.length}
@@ -516,6 +540,11 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </label>
                                                 </div>
                                             )}
+                                        </div>
+                                        {/* column sampaisini */}
+                                    </div>
+                                </>
+                            )}
                                             <button onClick={handleClickSend} className="flex send-button align-item justify-end">
                                                 <img
                                                     loading="lazy"
@@ -524,11 +553,6 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     className="h-6 w-6"
                                                 />
                                             </button>
-                                        </div>
-                                        {/* column sampaisini */}
-                                    </div>
-                                </>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -566,7 +590,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     ).map(person => (
                         <div
                             key={person.id}
-                            onClick={() => handleTagSelection(person.name)}
+                            onClick={() => handleTagSelection(person.name, person.id)}
                         >
                             {person.name}
                         </div>
