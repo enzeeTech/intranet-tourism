@@ -826,47 +826,38 @@ const renderContentWithTags = (content, mentions) => {
                           </div>
                         )}
                       </div>  
-                      <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
-                        <div className="flex gap-1.5 -mt-1">
-                          <img 
-                            loading="lazy" 
-                            src={
-                              post.userProfile.profile?.image 
-                                  ? (
-                                      post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
-                                          ? post.userProfile.profile.image
-                                          : post.userProfile.profile.image.startsWith('avatar/')
-                                              ? `/storage/${post.userProfile.profile.image}`
-                                              : `/avatar/${post.userProfile.profile.image}`
-                                  )
-                                  : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-                            } 
-                            alt={post.user.name} 
-                            className="shrink-0 aspect-square w-[53px] rounded-image" 
-                          />
-                          <div className="flex flex-col my-auto ml-1">
-                            <div className="text-base font-semibold text-neutral-800">{post.user.name}</div>
-                            <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {/* <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1 -mt-5">
-                            {post.accessibilities?.map((accessibility, index) => (
-                              <span key={index}>
-                                {accessibility.accessable_type}{": "}
-                              </span>
-                            ))}
-                            {post.departmentNames ? post.departmentNames : post.type}
-                          </span> */}
-                          <img 
-                            loading="lazy" 
-                            src="/assets/wallpost-dotbutton.svg" 
-                            alt="Options" 
-                            className="shrink-0 my-auto aspect-[1.23] fill-red-500 w-6 cursor-pointer mt-1" 
-                            onClick={() => togglePopup(index)} 
-                          />
+                      <div className="flex gap-5 justify-between items-center w-full max-md:flex-wrap max-md:max-w-full">
+                      <div className="flex gap-1.5 items-center">
+                        <img 
+                          loading="lazy" 
+                          src={
+                            post.userProfile.profile?.image 
+                                ? (
+                                    post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
+                                        ? post.userProfile.profile.image
+                                        : post.userProfile.profile.image.startsWith('avatar/')
+                                            ? `/storage/${post.userProfile.profile.image}`
+                                            : `/avatar/${post.userProfile.profile.image}`
+                                )
+                                : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
+                          } 
+                          alt={post.user.name} 
+                          className="shrink-0 aspect-square w-[53px] rounded-image" 
+                        />
+                        <div className="flex flex-col ml-1">
+                          <div className="text-base max-md:text-sm font-semibold text-neutral-800">{post.user.name}</div>
+                          <time className="mt-1 text-xs text-neutral-800 text-opacity-50">{formatTimeAgo(post.created_at)}</time>
                         </div>
                       </div>
+                      <img 
+                        loading="lazy" 
+                        src="/assets/wallpost-dotbutton.svg" 
+                        alt="Options" 
+                        className="shrink-0 aspect-[1.23] w-6 cursor-pointer mt-1 max-md:mt-0" 
+                        onClick={() => togglePopup(index)} 
+                      />
+                    </div>
+
                     </div>
                       {isPopupOpen[index] && (
                         <div className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10">

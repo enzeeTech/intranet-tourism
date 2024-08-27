@@ -59,29 +59,31 @@ function PostAttachments({ attachments }) {
       };
       
       return (
-        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full mt-0">
-        <div
-          className="flex gap-3 items-center py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
-          onClick={handleDownload}
-          style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
-          >
-          <img
-            src={
-              attachment.extension === 'pdf' ? PDF :
-              attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
-              attachment.extension === 'xlsx' ? Excel :
-              attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
-              attachment.extension === 'txt' ? TXT :
-              'path/to/default-icon.png'
-            }
-            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-            />
-          <div className="flex flex-col items-start flex-grow">
-            <span className="flex whitespace-normal items-center">Download File</span>
-          </div>
-          <img src="/assets/downloadIcon2.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70"/>
+        <div className="bg-pink-400">
+          <article key={index} className="flex flex-col text-xs text-neutral-800 w-full mt-0">
+            <div
+              className="flex gap-3 items-center py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
+              onClick={handleDownload}
+              style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
+              >
+              <img
+                src={
+                  attachment.extension === 'pdf' ? PDF :
+                  attachment.extension === 'docx' || attachment.extension === 'doc' ? DOC :
+                  attachment.extension === 'xlsx' ? Excel :
+                  attachment.extension === 'pptx' || attachment.extension === 'ptx' ? PowerPoint :
+                  attachment.extension === 'txt' ? TXT :
+                  'path/to/default-icon.png'
+                }
+                style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                />
+              <div className="flex flex-col items-start flex-grow">
+                <span className="flex whitespace-normal items-center">Download File</span>
+              </div>
+              <img src="/assets/downloadIcon2.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70"/>
+            </div>
+          </article>
         </div>
-        </article>
       );
     };
     
@@ -128,7 +130,7 @@ function PostAttachments({ attachments }) {
         </div>
   
         {showPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="flex flex-row w-full justify-center items-start">
               <div className="bg-white lg:p-6 p-4 rounded-2xl max-w-3xl max-h-screen relative max-md:mx-4">
                 <button onClick={closePopup} className="absolute top-2 right-2">
@@ -177,12 +179,6 @@ function PostAttachments({ attachments }) {
                   ))}
                 </div>
               </div>
-              {/* <button onClick={closePopup} className="text-gray-800 ml-4 text-3xl bg-gray-100 rounded-full px-2 ">
-                &times;
-              </button> */}
-              {/* <button onClick={closePopup}>
-                <img src="/assets/cancel.svg" alt="Close icon" className="ml-4 w-6 h-6" />
-              </button> */}
             </div>
           </div>
         )}
