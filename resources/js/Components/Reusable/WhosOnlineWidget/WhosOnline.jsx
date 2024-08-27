@@ -14,7 +14,7 @@ const Tooltip = ({ item, position }) => {
         left: `${position.left + position.width / 2}px`,
         top: `${position.bottom}px`,
         transform: 'translateX(-50%)', // Center horizontally
-        marginTop: '0.5rem', // Space between the avatar and the tooltip
+        marginTop: '1rem', // Space between the avatar and the tooltip
         backgroundColor: '#1a1a1a',
         color: '#fff',
         fontSize: '0.75rem',
@@ -23,7 +23,6 @@ const Tooltip = ({ item, position }) => {
         zIndex: 9999,
         whiteSpace: 'nowrap',
     };
-
 
     return createPortal(
         <div style={tooltipStyles}>
@@ -69,11 +68,16 @@ const WhosOnline = () => {
 
     return (
         <div className="whos-online-container border-2 shadow-2xl flex-col justify-start">
-            <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '4px', fontFamily: "Nunito Sans" }}>
-                Who's Online
-            </h2>
-            <hr style={{ marginTop: '5px', marginBottom: '5px',}} className="underline" />
-            <div className="online-users text-left flex justify-start pb-2">
+            <div className="whos-online-header flex justify-between items-center">
+                <h2 style={{ fontWeight: 'bold', fontSize: '24px', fontFamily: "Nunito Sans" }}>
+                    Who's Online
+                </h2>
+                <span className="online-count" style={{ fontFamily: "Nunito Sans", fontWeight: 'bold', fontSize: '18px' }}>
+                    ({onlineUsers.length})
+                </span>
+            </div>
+            <hr style={{ marginTop: '5px', marginBottom: '5px'}} className="underline" />
+            <div className="online-users text-left flex justify-start">
                 {onlineUsers.map((user, index) => (
                     <div
                         key={index}
@@ -85,12 +89,14 @@ const WhosOnline = () => {
                 ))}
             </div>
             <hr style={{ marginTop: '5px', marginBottom: '5px' }} className="underline" />
-            <a href="../onlinelist">
-                <button style={{ fontFamily: "Nunito Sans" }} className="view-all-btn">
-                    VIEW ALL
-                    <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
-                </button>
-            </a>
+            <div className="view-all-container">
+                <a href="../onlinelist">
+                    <button style={{ fontFamily: "Nunito Sans" }} className="view-all-btn">
+                        VIEW ALL
+                        <img src={arrowRight} alt="Arrow right" className="arrow-icon" />
+                    </button>
+                </a>
+            </div>
             {tooltip.visible && <Tooltip item={tooltip.user} position={tooltip.position} />}
         </div>
     );
