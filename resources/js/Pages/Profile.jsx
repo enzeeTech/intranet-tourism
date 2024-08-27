@@ -592,7 +592,7 @@ function ProfileContent() {
                 <hr className="file-directory-underline" />
                 <div>
                     <FeaturedEvents />
-                    <WhosOnline />
+                    {/* <WhosOnline /> */}
                 </div>
             </aside>
             {isSaveNotificationOpen && (
