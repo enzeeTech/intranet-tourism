@@ -1,12 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import EditProfilePhoto from './EditProfilePhoto';
 import UpdatePhotoButton from './UpdatePhoto';
 import './profile.css';
 import { useCsrf } from '@/composables';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImage';
+import { OnlineUsersContext, OnlineUsersProvider } from '@/Pages/OnlineUsersContext';
 
-function ProfileImage({ name, src, alt, className, rounded, tag }) {
+function ProfileImage({ name, src, alt, className, rounded, tag, isOnline}) {
   // console.log("SRC", src);
 
   let source = null;
@@ -47,7 +48,9 @@ function ProfileImage({ name, src, alt, className, rounded, tag }) {
         className={`object-cover absolute inset-0 bottom-5 top-0 size-[158px] mb-12 ${rounded ? 'rounded-full' : ''} max-md:w-24 max-md:h-24 max-md:bottom-0`}
       />
       <div className="relative w-full h-0 flex justify-end mt-16 max-md:mt-2 max-md:mr-4">
-        <div className="absolute w-5 h-5 max-md:w-4 max-md:h-4 bg-green-500 rounded-full border-2 border-white border-solid stroke-[2px] bottom-0.5 right-0 left-14 max-md:left-auto max-md:right-0 max-md:bottom-0" />
+        <div
+          className={`absolute w-5 h-5 max-md:w-4 max-md:h-4 rounded-full border-2 border-white border-solid stroke-[2px] bottom-0.5 right-0 left-14 max-md:left-auto max-md:right-0 max-md:bottom-0 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}
+        />
       </div>
     </div>
   );
@@ -68,6 +71,9 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 
   const csrfToken = useCsrf();
   const authToken = localStorage.getItem('authToken');
+
+  const { onlineUsers } = useContext(OnlineUsersContext); // Access online users from context
+  const isOnline = onlineUsers.some(onlineUser => onlineUser.id === userId); // Check if user is online
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -191,13 +197,14 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 
   return (
     <>
+    <OnlineUsersProvider>
       <header
         className="flex overflow-hidden relative z-999 flex-col items-start px-8 pt-32 max-md:pt-12 -mt-6 max-md:-mt-10 w-full min-h-[400px] max-md:h-[100px] max-md:px-5 max-md:max-w-full"
         onClick={handleEditBanner}
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-[290px] max-md:h-1/3" />
         <div onClick={handleIconClick}>
-          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} tag={tag} />
+          <ProfileImage src={profileImage} alt={`${name}'s profile picture`} name={name} rounded={rounded} tag={tag} isOnline={isOnline} />
           {isPopupOpen && (
             <EditProfilePhoto
               onClose={handleCloseClick}
@@ -250,6 +257,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           </div>
         </div>
       )}
+      </OnlineUsersProvider>
       {/* {isUpdatePopupOpen && (
         <UpdatePhotoButton onClose={handleCloseUpdatePopup} file={croppedImage} />
       )} */}
