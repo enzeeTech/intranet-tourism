@@ -48,7 +48,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
                 if (dobMonth === currentMonth && dobDay === currentDay) {
                     acc.push({
                         name: profile.bio,
-                        profileId: profile.id,
+                        profileId: profile.user_id,
                         profileImage: getAvatarSource(profile.image, profile.bio),
                     });
                 }
@@ -92,6 +92,8 @@ function BirthdayNotificationPopup({ onClose, userData }) {
     }, []);
 
     const handleBirthdayClick = (birthday) => {
+        // console.log("BDAY", birthday);
+        
         setSelectedBirthday(birthday);
         setIsBirthdayComOpen(true); // Open the BirthdayCom popup
     };
@@ -102,6 +104,8 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
     const renderBirthdays = () => {
         return birthdays.map((birthday, index) => (
+            console.log("BIRTHDAYS", birthday),
+            
             <div
                 key={index}
                 className="cursor-pointer text-sm text-gray-600 mt-1 p-2 hover:bg-blue-100 rounded flex items-center"
@@ -139,9 +143,10 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
             {/* Independent BirthdayCom Popup */}
             {selectedBirthday && (
+                // console.log("SBDAY", selectedBirthday.id),
                 
                 <Popup isOpen={isBirthdayComOpen} onClose={closeBirthdayComPopup}>
-                    <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} />
+                    <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} selectedID={selectedBirthday.profileId} />
                 </Popup>
             )}
         </>
