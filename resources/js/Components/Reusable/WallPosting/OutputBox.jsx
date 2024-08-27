@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import EditPost from './EditPost';
 import Comment from './Comment';
+import MentionedName from './MentionedName';
 import './index.css'
 import { useCsrf } from "@/composables";
 import PostAttachments from './PostAttachments'
@@ -391,55 +392,75 @@ console.log("FINAL", finalPosts);
     };
   
 
-//   const renderContentWithTags = (content, mentions) => {
-//     console.log("CIOJNET$", content);
-//     console.log("ADJWDJWADJA$", mentions);
 
-    
-//     // Regex to match tags (e.g., @username or @FirstName LastName)
-//     const tagRegex = /@\w+(?:\s\w)*\b/g;
-//     // Regex to match URLs starting with https
-//     const urlRegex = /https:\/\/[^\s]+/g;
+// const renderContentWithTags = (content, mentions) => {
 
-//     // Replace URLs with anchor tags
-//     const replaceUrls = (text) => {
-//         return text.split(urlRegex).reduce((acc, part, index) => {
-//             if (index === 0) return [part];
-//             const urlMatch = text.match(urlRegex)[index - 1];
-//             return [...acc, 
-//                 <a 
-//                     href={urlMatch} 
-//                     key={index} 
-//                     target="_blank" 
-//                     rel="noopener noreferrer" 
-//                     style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
-//                 >
-//                     {urlMatch}
-//                 </a>, 
-//                 part
-//             ];
-//         }, []);
-//     };
-
-//     // Replace tags with span and URLs with anchor tags
-//     const parts = content?.split(tagRegex);
-//     const formattedContent = parts?.reduce((acc, part, index) => {
-//         if (index === 0) return replaceUrls(part);
-//         const tagMatch = content?.match(tagRegex)[index - 1];
-//         return [...acc, <span className="tagged-text" key={`tag-${index}`}>{tagMatch}</span>, ...replaceUrls(part)];
-//     }, []);
+//   console.log("GG", mentions);
   
-//     return formattedContent;
+  
+//   const mentionNames = mentions ? JSON.parse(mentions).map(person => person.name) : [];
+
+//   const tagRegex = new RegExp(mentionNames.map(name => `\\b${name}\\b`).join('|'), 'g');
+
+
+//   // Regex to match URLs starting with https
+//   const urlRegex = /https:\/\/[^\s]+/g;
+
+//   // Replace URLs with anchor tags
+//   const replaceUrls = (text) => {
+//       return text.split(urlRegex).reduce((acc, part, index) => {
+//           if (index === 0) return [part];
+//           const urlMatch = text.match(urlRegex)[index - 1];
+//           return [...acc, 
+//               <a 
+//                   href={urlMatch} 
+//                   key={index} 
+//                   target="_blank" 
+//                   rel="noopener noreferrer" 
+//                   style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
+//               >
+//                   {urlMatch}
+//               </a>, 
+//               part
+//           ];
+//       }, []);
+//   };
+
+//   // Replace tags with span and URLs with anchor tags
+//   const parts = content?.split(tagRegex);
+//   const formattedContent = parts?.reduce((acc, part, index) => {
+//       if (index === 0) return replaceUrls(part);
+
+//       // Get the matched tag
+//       const tagMatch = content?.match(tagRegex)[index - 1];
+//       const tagName = tagMatch.replace('@', '');
+
+//       // Check if the tag name matches any mention name
+//       const isMentioned = mentionNames.includes(tagName);
+
+//       // Apply the blue color if the tag is a mentioned name
+//       return [
+//           ...acc, 
+//           <span 
+//               className={`tagged-text ${isMentioned ? 'text-blue-500' : ''}`} 
+//               key={`tag-${index}`}
+//           >
+//               {tagMatch}
+//           </span>, 
+//           ...replaceUrls(part)
+//       ];
+//   }, []);
+
+//   return formattedContent;
 // };
 
+
 const renderContentWithTags = (content, mentions) => {
-  // Safely parse mentions to get the array of names, default to an empty array if mentions is null/undefined
-  const mentionNames = mentions ? JSON.parse(mentions).map(person => person.name) : [];
+  const mentionData = mentions ? JSON.parse(mentions) : [];
+  const mentionNames = mentionData.map(person => person.name);
+  const mentionIds = mentionData.map(person => person.id);
 
-  // Regex to match tags (e.g., @username or @FirstName LastName)
-  // const tagRegex = /@\w+(?:\s\w)*\b/g;
   const tagRegex = new RegExp(mentionNames.map(name => `\\b${name}\\b`).join('|'), 'g');
-
 
   // Regex to match URLs starting with https
   const urlRegex = /https:\/\/[^\s]+/g;
@@ -472,25 +493,24 @@ const renderContentWithTags = (content, mentions) => {
       // Get the matched tag
       const tagMatch = content?.match(tagRegex)[index - 1];
       const tagName = tagMatch.replace('@', '');
+      
+      // Find the mention data
+      const mention = mentionData.find(person => person.name === tagName);
+      
+      if (mention) {
+          return [
+              ...acc, 
+              <MentionedName key={`tag-${index}`} name={tagName} userId={mention.id} />,
+              ...replaceUrls(part)
+          ];
+      }
 
-      // Check if the tag name matches any mention name
-      const isMentioned = mentionNames.includes(tagName);
-
-      // Apply the blue color if the tag is a mentioned name
-      return [
-          ...acc, 
-          <span 
-              className={`tagged-text ${isMentioned ? 'text-blue-500' : ''}`} 
-              key={`tag-${index}`}
-          >
-              {tagMatch}
-          </span>, 
-          ...replaceUrls(part)
-      ];
+      return [...acc, tagMatch, ...replaceUrls(part)];
   }, []);
 
   return formattedContent;
 };
+
 
 
     
