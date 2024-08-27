@@ -307,9 +307,22 @@ function Calendar() {
         closePrintModal();
     };
 
+    // const handleEventClick = (eventInfo) => {
+    //     eventInfo.jsEvent.preventDefault();
+    //     // Trigger handleEditClick with the event data
+    //     handleEditClick(eventInfo.event);
+    // };
+
     const handleEventClick = (eventInfo) => {
         eventInfo.jsEvent.preventDefault();
-        // Trigger handleEditClick with the event data
+        
+        // Check if the event is a birthday event
+        if (eventInfo.event.extendedProps.isBirthday) {
+            // If it's a birthday event, do nothing (or you could add custom behavior here)
+            return;
+        }
+        
+        // Trigger handleEditClick with the event data for non-birthday events
         handleEditClick(eventInfo.event);
     };
     
