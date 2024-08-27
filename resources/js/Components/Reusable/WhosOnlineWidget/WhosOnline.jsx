@@ -73,7 +73,7 @@ const WhosOnline = () => {
                 Who's Online
             </h2>
             <hr style={{ marginTop: '5px', marginBottom: '5px',}} className="underline" />
-            <div className="online-users text-left flex justify-start">
+            <div className="online-users text-left flex justify-start pb-2">
                 {onlineUsers.map((user, index) => (
                     <div
                         key={index}

@@ -9,7 +9,6 @@
   }
 
   .online-users {
-    display: flex;
     text-align: left;
     align-items: start;
     justify-content: start;
