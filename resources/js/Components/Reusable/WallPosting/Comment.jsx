@@ -117,16 +117,18 @@ const Comment = ({ post, onClose }) => {
       setIsCommentPopupOpen(false);
     }
   };
+  
 
   
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2">
+      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2 overflow-auto max-h-[90vh] max-w-[90vw]">
         <div className="px-4 py-2 border-b">
-            <div className="mb-2 mt-2 flex justify-end">
-              <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" onClick={onClose}/>
-            </div>
+        <div className="sticky top-0 bg-white z-10 mb-2 mt-2 flex justify-end">
+          <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6 mt-2 mb-2" onClick={onClose} />
+        </div>
+
           {/* Post Content */}
           <div className="mb-4">
             <header className="flex items-center">
@@ -143,15 +145,15 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                 }
                 alt={post.user.name}
-                className="w-12 h-12 rounded-full"
+                className="w-[53px] rounded-full"
               />
               <div className="ml-3">
-                <div className="text-md font-semibold">{post.user.name}</div>
-                <time className="text-xs text-gray-500">{formatTimeAgo(post.created_at)}</time>
+                <div className="text-lg font-semibold">{post.user.name}</div>
+                <time className="text-sm text-gray-500">{formatTimeAgo(post.created_at)}</time>
               </div>
             </header>
             <div className="mt-4">
-              <p className="text-md">{post.content}</p>
+              <p className="text-lg mb-4">{post.content}</p>
               <PostAttachments attachments={post.attachments} />
             </div>
           </div>
@@ -229,7 +231,7 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
                 } 
                 alt={profileData.name}
-                className="w-12 h-12 rounded-full mx-4"
+                className="w-[53px] rounded-full mx-4"
             />
             <ShareYourThoughts
                 variant="comment"

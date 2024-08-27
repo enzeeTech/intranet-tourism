@@ -32,7 +32,7 @@ function PostAttachments({ attachments }) {
           <img
           src={`/storage/${attachment.path}`}
           alt="attachment"
-          className="w-full h-auto rounded-lg object-cover"
+          className="w-full h-auto rounded-xl object-cover"
           />
         ) : (
           <video controls className="w-full h-auto rounded-lg">
@@ -59,9 +59,9 @@ function PostAttachments({ attachments }) {
       };
       
       return (
-        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full">
+        <article key={index} className="flex flex-col text-xs text-neutral-800 w-full mt-0">
         <div
-          className="flex gap-3 items-start py-2 px-4 mb-2 bg-white rounded-xl border-4 border-gray-200 max-w-[900px]"
+          className="flex gap-3 items-center py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
           onClick={handleDownload}
           style={{ cursor: 'pointer' }} // Add cursor pointer to indicate it's clickable
           >
@@ -77,8 +77,9 @@ function PostAttachments({ attachments }) {
             style={{ width: '20px', height: '20px', objectFit: 'contain' }}
             />
           <div className="flex flex-col items-start flex-grow">
-            <span className="flex whitespace-normal items-center mt-0.5">Download File</span>
+            <span className="flex whitespace-normal items-center">Download File</span>
           </div>
+          <img src="/assets/downloadIcon2.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70"/>
         </div>
         </article>
       );
@@ -128,53 +129,60 @@ function PostAttachments({ attachments }) {
   
         {showPopup && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-            <button
-              onClick={closePopup}
-              className="absolute top-4 right-4 text-white text-lg"
-              >
-              &times;
-            </button>
-            <div className="bg-white p-4 rounded-lg max-w-3xl w-full relative">
-              <div className="flex justify-center w-full">
-                {imagesAndVideos[currentMediaIndex].mime_type.startsWith("image/") ? (
-                  <img
-                  key={imagesAndVideos[currentMediaIndex].path} // Unique key for image
-                  src={`/storage/${imagesAndVideos[currentMediaIndex].path}`}
-                  alt="Current attachment"
-                  className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                  />
-                ) : (
-                  <video
-                  key={imagesAndVideos[currentMediaIndex].path} // Unique key for video
-                  controls
-                  className="max-h-[80vh] max-w-full rounded-lg object-contain"
-                  >
-                    <source src={`/storage/${imagesAndVideos[currentMediaIndex].path}`} />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-              <div className="flex justify-center mt-4 overflow-x-auto w-full">
-                {imagesAndVideos.map((attachment, index) => (
-                  <div
-                  key={index}
-                  className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
-                  onClick={() => setCurrentMediaIndex(index)}
-                  >
-                    {attachment.mime_type.startsWith("image/") ? (
+            <div className="flex flex-row w-full justify-center items-start">
+              <div className="bg-white lg:p-6 p-4 rounded-2xl max-w-3xl max-h-screen relative max-md:mx-4">
+                <button onClick={closePopup} className="absolute top-2 right-2">
+                  <img src="/assets/cancel.svg" alt="Close icon" className="ml-4 w-5 h-5" />
+                </button>
+                <div className="flex justify-center w-full">
+                  <div className="bg-gray-200 h-full w-full flex justify-center items-center">
+                    {imagesAndVideos[currentMediaIndex].mime_type.startsWith("image/") ? (
                       <img
-                      src={`/storage/${attachment.path}`}
-                      alt="Thumbnail"
-                      className="w-20 h-20 object-cover rounded-lg"
+                        key={imagesAndVideos[currentMediaIndex].path} // Unique key for image
+                        src={`/storage/${imagesAndVideos[currentMediaIndex].path}`}
+                        alt="Current attachment"
+                        className="w-[500px] h-[500px] object-contain rounded-none" // Fixed width and height
                       />
                     ) : (
-                      <video className="w-20 h-20 object-cover rounded-lg">
-                        <source src={`/storage/${attachment.path}`} />
+                      <video
+                        key={imagesAndVideos[currentMediaIndex].path} // Unique key for video
+                        controls
+                        className="w-[500px] h-[500px] object-curtain rounded-lg" // Fixed width and height
+                      >
+                        <source src={`/storage/${imagesAndVideos[currentMediaIndex].path}`} />
+                        Your browser does not support the video tag.
                       </video>
                     )}
-                  </div>
-                ))}
+                  </div>  
+                </div>
+                <div className="flex justify-center mt-4 overflow-x-auto w-full">
+                  {imagesAndVideos.map((attachment, index) => (
+                    <div
+                      key={index}
+                      className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
+                      onClick={() => setCurrentMediaIndex(index)}
+                    >
+                      {attachment.mime_type.startsWith("image/") ? (
+                        <img
+                          src={`/storage/${attachment.path}`}
+                          alt="Thumbnail"
+                          className="w-20 h-20 object-cover rounded-lg"
+                        />
+                      ) : (
+                        <video className="w-20 h-20 object-cover rounded-lg">
+                          <source src={`/storage/${attachment.path}`} />
+                        </video>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
+              {/* <button onClick={closePopup} className="text-gray-800 ml-4 text-3xl bg-gray-100 rounded-full px-2 ">
+                &times;
+              </button> */}
+              {/* <button onClick={closePopup}>
+                <img src="/assets/cancel.svg" alt="Close icon" className="ml-4 w-6 h-6" />
+              </button> */}
             </div>
           </div>
         )}
