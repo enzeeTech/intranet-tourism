@@ -17,6 +17,35 @@
   background-color: #f0f0f0;
 } */
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #000000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position above the icon */
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+
 .mention-suggestions {
   position: absolute;
   background-color: white;
@@ -55,8 +84,9 @@
     margin-bottom: 5px;
     border-radius: 16px;
     position: relative;
-    width: 600px;
+    width: auto;
     height: auto;
+    margin-right: 24px;
   }
 
   .input-box-container textarea {
@@ -135,6 +165,7 @@
   .send-button {
     /* position: absolute; */
     right: 0;
+    flex: auto;
     /* bottom: 50px; */
   }
 

@@ -73,16 +73,27 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   );
 
   return (
-    <div className="department-dropdown-container flex" ref={dropdownRef}>
-      <div className={`dropdown-header ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Select Department"
-          className="font-bold dropdown-header-input"
-        />
-        <img style={{ width: '15px', marginRight: '10px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
+    <div className="department-dropdown-container flex max-md:flex-row max-md:justify-start justify-between" ref={dropdownRef}>
+      <div className="flex flex-row max-md:flex-col max-md:w-full max-md:gap-4 items-center">
+        <div className={`dropdown-header  ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Select Department"
+            className="font-bold dropdown-header-input"
+          />
+          <img style={{ width: '15px', marginRight: '10px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
+        </div>
+        <div className="max-md:w-full justify-start">
+          {selectedDepartment.id && (
+            <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
+              <button className="flex-1 text-sm font-bold rounded-full whitespace-nowrap px-4 md:py-2.5 md:mr-4 max-md:py-2.5 lg:py-2.5 bg-blue-500 text-white hover:bg-blue-700">
+                Visit Department
+              </button>
+            </a>      
+          )}
+        </div>  
       </div>
       {isOpen && (
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
@@ -93,27 +104,20 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
           ))}
         </ul>
       )}
-      <div className="relative flex items-center justify-start max-md:ml-8">
-        {selectedDepartment.id && (
-          <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
-            <button className="visit-department-btn text-sm font-bold rounded-full px-4 py-2.5 bg-blue-500 text-white hover:bg-blue-700 mb-2">
-              Visit Department
-            </button>
-          </a>      
-        )}
+      <div className="max-md:mt-4 relative flex flex-row items-center justify-between max-md:flex-row max-md:justify-between lg:ml-0 w-full">
         {selectedDepartment.id && (
         <button 
-          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700 -mt-1  max-md:mt-2" 
+          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
           onClick={toggleAddMemberPopup}
           >
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
           Member
         </button>
         )}
+        {selectedDepartment.id && (
+          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+        )}
       </div>
-      {selectedDepartment.id && (
-        <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
-      )}
       {isAddMemberPopupOpen && (
         <SearchPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}
