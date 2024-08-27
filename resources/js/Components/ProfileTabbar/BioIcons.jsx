@@ -353,13 +353,15 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
     // Create a jsPDF instance
     const pdf = new jsPDF();
 
+    
+
     // Load the logo image
     const logo = new Image();
     logo.src = '/assets/logo_tourism.png';
 
     // Once the logo image is loaded, proceed with the PDF creation
     logo.onload = () => {
-        const logoWidth = 60; // Adjust logo size as needed
+        const logoWidth = 70; // Adjust logo size as needed
         const logoHeight = 30;
         const logoXPosition = (pdf.internal.pageSize.getWidth() - logoWidth) / 2;
         const logoYPosition = 20;
@@ -368,13 +370,17 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
         pdf.addImage(logo, 'PNG', logoXPosition, logoYPosition, logoWidth, logoHeight);
 
         // Set the Y position for user details below the logo
-        const yPosition = logoYPosition + logoHeight + 10;
+        const marginTop = 40; // Adjust margin as needed
+        const yPosition = logoYPosition + logoHeight + marginTop;
+
+        pdf.setFontSize(24); // Larger font size for name
+        pdf.setFont("helvetica", "bold"); // Bold font style
+        pdf.text(`${user_name}`, pdf.internal.pageSize.getWidth() / 2, yPosition, { align: "center" });
 
         // Set the font for user details and add the user name and title
         pdf.setFontSize(16);
         pdf.setFont("helvetica", "normal");
-        pdf.text(`Name: ${user_name}`, pdf.internal.pageSize.getWidth() / 2, yPosition, { align: "center" });
-        pdf.text(`Title: ${user_title}`, pdf.internal.pageSize.getWidth() / 2, yPosition + 10, { align: "center" });
+        pdf.text(`${user_title}`, pdf.internal.pageSize.getWidth() / 2, yPosition + 10, { align: "center" });
 
         // Convert the SVG into an image
         const canvas = document.createElement('canvas');
@@ -393,8 +399,9 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
 
             // Adjust the Y position for the image to be below the text
             const imageYPosition = yPosition + 30; // Place the image below the text
-            const imageWidth = img.width / 4;
-            const imageHeight = img.height / 4;
+            const imageWidth = img.width / 2;
+            const imageHeight = img.height / 2;
+
 
             // Center the image on the page
             const imageXPosition = (pdf.internal.pageSize.getWidth() - imageWidth) / 2;
