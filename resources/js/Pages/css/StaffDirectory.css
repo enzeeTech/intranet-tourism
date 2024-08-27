@@ -79,7 +79,7 @@
 .staff-member-grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-gap: 20px;
+  grid-gap: 24px;
   padding: 16px;
   margin-left: -16px;
   margin-top: 16px;

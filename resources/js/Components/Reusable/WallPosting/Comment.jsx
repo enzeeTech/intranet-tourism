@@ -145,15 +145,15 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                 }
                 alt={post.user.name}
-                className="w-12 h-12 rounded-full"
+                className="w-[53px] rounded-full"
               />
               <div className="ml-3">
-                <div className="text-md font-semibold">{post.user.name}</div>
-                <time className="text-xs text-gray-500">{formatTimeAgo(post.created_at)}</time>
+                <div className="text-lg font-semibold">{post.user.name}</div>
+                <time className="text-sm text-gray-500">{formatTimeAgo(post.created_at)}</time>
               </div>
             </header>
             <div className="mt-4">
-              <p className="text-md">{post.content}</p>
+              <p className="text-lg mb-4">{post.content}</p>
               <PostAttachments attachments={post.attachments} />
             </div>
           </div>
@@ -231,7 +231,7 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
                 } 
                 alt={profileData.name}
-                className="w-12 h-12 rounded-full mx-4"
+                className="w-[53px] rounded-full mx-4"
             />
             <ShareYourThoughts
                 variant="comment"
