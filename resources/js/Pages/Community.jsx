@@ -9,8 +9,9 @@ import Example from '@/Layouts/DashboardLayoutNew';
 import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
+import PopupMenu from '../Components/Reusable/Community/CommunityPopUp';
 
-const Community = ({  }) => {
+const Community = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
   const { props } = usePage();
   const { id } = props; 
@@ -41,9 +42,19 @@ const Community = ({  }) => {
         name: community.name,
         type: community.type,
         imageUrl: community.banner || '/assets/defaultCommunity.png', // Use banner if available
+        isArchived: false, // Initialize with not archived
       }));
 
-      setDepartmentsList(departmentData.sort((a, b) => a.name.localeCompare(b.name)));
+      // Retrieve archived state from localStorage
+      const archivedState = JSON.parse(localStorage.getItem('archivedCommunities')) || {};
+
+      // Update the archived state based on localStorage data
+      const updatedDepartments = departmentData.map((department) => ({
+        ...department,
+        isArchived: archivedState[department.id] || false,
+      }));
+
+      setDepartmentsList(updatedDepartments.sort((a, b) => a.name.localeCompare(b.name)));
     } catch (error) {
       console.error('Error fetching departments:', error);
     } finally {
@@ -56,18 +67,36 @@ const Community = ({  }) => {
   }, []);
 
   const handleNewDepartment = (newDepartment) => {
-    setDepartmentsList((prevList) => [...prevList, newDepartment].sort((a, b) => a.name.localeCompare(b.name)));
+    setDepartmentsList((prevList) => [...prevList, { ...newDepartment, isArchived: false }].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
   const handleFilterChange = (selectedFilter) => {
     setFilter(selectedFilter);
   };
 
+  const handleArchiveToggle = (departmentId) => {
+    setDepartmentsList((prevList) => {
+      const updatedList = prevList.map((department) =>
+        department.id === departmentId ? { ...department, isArchived: !department.isArchived } : department
+      );
+
+      // Update localStorage with new archived state
+      const archivedState = updatedList.reduce((acc, department) => {
+        acc[department.id] = department.isArchived;
+        return acc;
+      }, {});
+
+      localStorage.setItem('archivedCommunities', JSON.stringify(archivedState));
+      return updatedList;
+    });
+  };
+
   const filteredDepartments = departmentsList
     .filter((community) => {
-      if (filter === 'All') return true;
-      if (filter === 'Public') return community.type === 'public';
-      if (filter === 'Private') return community.type === 'private';
+      if (filter === 'All') return !community.isArchived;
+      if (filter === 'Public') return community.type === 'public' && !community.isArchived;
+      if (filter === 'Private') return community.type === 'private' && !community.isArchived;
+      if (filter === 'Archive') return community.isArchived;
       return false;
     })
     .filter((community) =>
@@ -97,6 +126,7 @@ const Community = ({  }) => {
                   imageUrl={department.imageUrl}
                   communityID={department.id}
                   type={department.type}
+                  onArchiveToggle={() => handleArchiveToggle(department.id)}
                 />
               ))
             )}

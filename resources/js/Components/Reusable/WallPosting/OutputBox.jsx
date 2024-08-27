@@ -454,66 +454,51 @@ console.log("FINAL", finalPosts);
 //   return formattedContent;
 // };
 
-
 const renderContentWithTags = (content, mentions) => {
   const mentionData = mentions ? JSON.parse(mentions) : [];
   const mentionNames = mentionData.map(person => person.name);
-  const mentionIds = mentionData.map(person => person.id);
 
-  const tagRegex = new RegExp(mentionNames.map(name => `\\b${name}\\b`).join('|'), 'g');
-
-  // Regex to match URLs starting with https
+  // Regex to match mentions and URLs starting with https
+  const tagRegex = new RegExp(mentionNames.map(name => `@${name}`).join('|'), 'g');
   const urlRegex = /https:\/\/[^\s]+/g;
 
-  // Replace URLs with anchor tags
-  const replaceUrls = (text) => {
-      return text.split(urlRegex).reduce((acc, part, index) => {
-          if (index === 0) return [part];
-          const urlMatch = text.match(urlRegex)[index - 1];
-          return [...acc, 
-              <a 
-                  href={urlMatch} 
-                  key={index} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
-              >
-                  {urlMatch}
-              </a>, 
-              part
-          ];
-      }, []);
-  };
+  // Replace content with mentions and URLs
+  const replaceContent = (text) => {
+    const combinedRegex = new RegExp(`(${urlRegex.source}|${tagRegex.source})`, 'g');
+    
+    const parts = text?.split(combinedRegex).filter(Boolean);
 
-  // Replace tags with span and URLs with anchor tags
-  const parts = content?.split(tagRegex);
-  const formattedContent = parts?.reduce((acc, part, index) => {
-      if (index === 0) return replaceUrls(part);
-
-      // Get the matched tag
-      const tagMatch = content?.match(tagRegex)[index - 1];
-      const tagName = tagMatch.replace('@', '');
-      
-      // Find the mention data
-      const mention = mentionData.find(person => person.name === tagName);
-      
-      if (mention) {
-          return [
-              ...acc, 
-              <MentionedName key={`tag-${index}`} name={tagName} userId={mention.id} />,
-              ...replaceUrls(part)
-          ];
+    return parts?.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a 
+            href={part} 
+            key={`url-${index}`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style={{ color: 'blue', textDecoration: 'underline' }} 
+          >
+            {part}
+          </a>
+        );
       }
 
-      return [...acc, tagMatch, ...replaceUrls(part)];
-  }, []);
+      const mentionMatch = mentionNames.find(name => `@${name}` === part);
+      if (mentionMatch) {
+        const mention = mentionData.find(person => `@${person.name}` === part);
+        if (mention) {
+          return (
+            <MentionedName key={`mention-${index}`} name={mention.name} userId={mention.id} />
+          );
+        }
+      }
 
-  return formattedContent;
+      return part;
+    });
+  };
+
+  return replaceContent(content);
 };
-
-
-
-    
     
     console.log("HEHEHHE", postData);
     
@@ -677,7 +662,7 @@ const renderContentWithTags = (content, mentions) => {
                 </div>
               )} */}
 
-               {/* Birthday Post */}
+               {/* Birthday Post
                {post.type === 'birthday' && (
                  <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                    <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
@@ -815,7 +800,7 @@ const renderContentWithTags = (content, mentions) => {
                      <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                    </div>
                  </article>
-                )}
+                )} */}
 
 
               {/* Main Post Content */}
@@ -914,9 +899,9 @@ const renderContentWithTags = (content, mentions) => {
                     {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
                       {post.content}
                     </div> */}
-                    <article className="post-content">
+                      <article className="post-content">
                         {renderContentWithTags(post.content, post.mentions)}
-                    </article>
+                      </article>
 
                     <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
@@ -924,11 +909,11 @@ const renderContentWithTags = (content, mentions) => {
                     </p>
                   
 
-                  {post.mentions?.length > 0 && (
+                  {/* {post.mentions?.length > 0 && (
                       <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                           Tagged People: {JSON.parse(post.mentions).map(person => person.name).join(', ')}
                       </p>
-                  )}
+                  )} */}
 
                   <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                   {post.event?.replace(/[\[\]"]/g, '') || ''}

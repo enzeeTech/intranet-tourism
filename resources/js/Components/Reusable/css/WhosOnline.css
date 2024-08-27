@@ -9,9 +9,38 @@
   }
 
   .online-users {
-    display: flex;
     text-align: left;
     align-items: start;
     justify-content: start;
     overflow-x: auto;
   }
+
+  .online-users {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Prevent vertical scrolling */
+    padding-bottom: 0.5rem;
+    white-space: nowrap; /* Ensure items stay on one line */
+}
+
+.online-users > div {
+    flex-shrink: 0; /* Prevents the avatars from shrinking */
+    margin-right: 10px; /* Space between avatars */
+    margin-bottom: 10px; /* Space between avatars */
+    display: inline-block; /* Ensure div does not stretch */
+}
+
+.online-users img {
+    width: auto; /* Maintain original aspect ratio */
+    height: auto; /* Maintain original aspect ratio */
+    max-width: 50px; /* Limit the maximum width */
+    max-height: 50px; /* Limit the maximum height */
+    border-radius: 50%; /* Make the image circular, assuming it's square */
+}
+
+.whos-online-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}

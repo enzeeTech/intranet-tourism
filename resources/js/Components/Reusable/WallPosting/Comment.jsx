@@ -7,6 +7,9 @@ import { useCsrf } from "@/composables";
 
 
 const Comment = ({ post, onClose }) => {
+
+  console.log("POST", post);
+  
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
@@ -230,6 +233,7 @@ const Comment = ({ post, onClose }) => {
             />
             <ShareYourThoughts
                 variant="comment"
+                postedId={post.id}
             />
         </div>
       </div>
