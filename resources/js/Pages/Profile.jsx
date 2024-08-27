@@ -431,7 +431,14 @@ export default function Profile() {
     //         )}
     //     </Example>
     // );
-    // console.log("profileData", profileData.id);
+
+    // console.log("EMPLOYMENTPOST", profileData.employment_posts);
+    // console.log("TITLE", profileData.employment_posts?.business_post.title);
+
+
+    const employmentPostTitle = profileData.employment_posts?.length > 0 
+  ? profileData.employment_posts[0].business_post.title 
+  : '';
     
     return (
         <Example>
@@ -469,6 +476,7 @@ export default function Profile() {
                                                 icon2={profileData.icon2}
                                                 user_id={profileData.id}
                                                 user_name={profileData.name}
+                                                user_title={employmentPostTitle}
                                                 onEdit={() => handleEditBio()}
                                                 isFirstIcon
                                             />
