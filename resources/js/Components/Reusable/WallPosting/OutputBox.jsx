@@ -380,55 +380,122 @@ console.log("FINAL", finalPosts);
         console.error("Error unliking the post:", error);
       }
     };
-  
-    // Example function to determine if the user liked a post (use your logic)
+
     const isPostLikedByUser = (post) => {
-      return likedPosts[post.id] || false;
+      return post.likes && post.likes.includes(loggedInUserId);
     };
 
 
     const openCommentPopup = (post) => {
+      // console.log("Bukak Jap", post);
+      
       setSelectedPost(post);
       setIsCommentPopupOpen(true);
     };
   
 
-  const renderContentWithTags = (content) => {
-    // Regex to match tags (e.g., @username or @FirstName LastName)
-    const tagRegex = /@\w+(?:\s\w)*\b/g;
-    // Regex to match URLs starting with https
-    const urlRegex = /https:\/\/[^\s]+/g;
+//   const renderContentWithTags = (content, mentions) => {
+//     console.log("CIOJNET$", content);
+//     console.log("ADJWDJWADJA$", mentions);
 
-    // Replace URLs with anchor tags
-    const replaceUrls = (text) => {
-        return text.split(urlRegex).reduce((acc, part, index) => {
-            if (index === 0) return [part];
-            const urlMatch = text.match(urlRegex)[index - 1];
-            return [...acc, 
-                <a 
-                    href={urlMatch} 
-                    key={index} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
-                >
-                    {urlMatch}
-                </a>, 
-                part
-            ];
-        }, []);
-    };
+    
+//     // Regex to match tags (e.g., @username or @FirstName LastName)
+//     const tagRegex = /@\w+(?:\s\w)*\b/g;
+//     // Regex to match URLs starting with https
+//     const urlRegex = /https:\/\/[^\s]+/g;
 
-    // Replace tags with span and URLs with anchor tags
-    const parts = content?.split(tagRegex);
-    const formattedContent = parts?.reduce((acc, part, index) => {
-        if (index === 0) return replaceUrls(part);
-        const tagMatch = content?.match(tagRegex)[index - 1];
-        return [...acc, <span className="tagged-text" key={`tag-${index}`}>{tagMatch}</span>, ...replaceUrls(part)];
-    }, []);
+//     // Replace URLs with anchor tags
+//     const replaceUrls = (text) => {
+//         return text.split(urlRegex).reduce((acc, part, index) => {
+//             if (index === 0) return [part];
+//             const urlMatch = text.match(urlRegex)[index - 1];
+//             return [...acc, 
+//                 <a 
+//                     href={urlMatch} 
+//                     key={index} 
+//                     target="_blank" 
+//                     rel="noopener noreferrer" 
+//                     style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
+//                 >
+//                     {urlMatch}
+//                 </a>, 
+//                 part
+//             ];
+//         }, []);
+//     };
+
+//     // Replace tags with span and URLs with anchor tags
+//     const parts = content?.split(tagRegex);
+//     const formattedContent = parts?.reduce((acc, part, index) => {
+//         if (index === 0) return replaceUrls(part);
+//         const tagMatch = content?.match(tagRegex)[index - 1];
+//         return [...acc, <span className="tagged-text" key={`tag-${index}`}>{tagMatch}</span>, ...replaceUrls(part)];
+//     }, []);
   
-    return formattedContent;
+//     return formattedContent;
+// };
+
+const renderContentWithTags = (content, mentions) => {
+  // Safely parse mentions to get the array of names, default to an empty array if mentions is null/undefined
+  const mentionNames = mentions ? JSON.parse(mentions).map(person => person.name) : [];
+
+  // Regex to match tags (e.g., @username or @FirstName LastName)
+  // const tagRegex = /@\w+(?:\s\w)*\b/g;
+  const tagRegex = new RegExp(mentionNames.map(name => `\\b${name}\\b`).join('|'), 'g');
+
+
+  // Regex to match URLs starting with https
+  const urlRegex = /https:\/\/[^\s]+/g;
+
+  // Replace URLs with anchor tags
+  const replaceUrls = (text) => {
+      return text.split(urlRegex).reduce((acc, part, index) => {
+          if (index === 0) return [part];
+          const urlMatch = text.match(urlRegex)[index - 1];
+          return [...acc, 
+              <a 
+                  href={urlMatch} 
+                  key={index} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ color: 'blue', textDecoration: 'underline' }} // Style for blue URL
+              >
+                  {urlMatch}
+              </a>, 
+              part
+          ];
+      }, []);
+  };
+
+  // Replace tags with span and URLs with anchor tags
+  const parts = content?.split(tagRegex);
+  const formattedContent = parts?.reduce((acc, part, index) => {
+      if (index === 0) return replaceUrls(part);
+
+      // Get the matched tag
+      const tagMatch = content?.match(tagRegex)[index - 1];
+      const tagName = tagMatch.replace('@', '');
+
+      // Check if the tag name matches any mention name
+      const isMentioned = mentionNames.includes(tagName);
+
+      // Apply the blue color if the tag is a mentioned name
+      return [
+          ...acc, 
+          <span 
+              className={`tagged-text ${isMentioned ? 'text-blue-500' : ''}`} 
+              key={`tag-${index}`}
+          >
+              {tagMatch}
+          </span>, 
+          ...replaceUrls(part)
+      ];
+  }, []);
+
+  return formattedContent;
 };
+
+
     
     
     console.log("HEHEHHE", postData);
@@ -570,15 +637,14 @@ console.log("FINAL", finalPosts);
               </article>
             </div>
         )
-        }) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files').map((post, index) => {
+        }) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
-          try {
-            const likesObject = JSON.parse(post.likes);
-            likesCount = likesObject.likes || 0;
-          } catch (error) {
-            // console.error('Error parsing likes:', error);
+
+          if (Array.isArray(post.likes)) {
+            likesCount = post.likes?.length;
           }
+          
 
           return (
             <div key={post.id}>
@@ -959,7 +1025,7 @@ console.log("FINAL", finalPosts);
                   {post.content}
                 </div> */}
                 <article className="post-content">
-                    {renderContentWithTags(post.content)}
+                    {renderContentWithTags(post.content, post.mentions)}
                 </article>
 
                 {post.tag?.length > 0 && (
@@ -968,11 +1034,12 @@ console.log("FINAL", finalPosts);
                 </p>
                 )}
 
-                {post.mentions?.length > 0 && (
-                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
-                      Tagged People: {post.mentions.replace(/[\[\]"]/g, '')}
-                    </p>
-                )}
+{post.mentions?.length > 0 && (
+    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+        Tagged People: {JSON.parse(post.mentions).map(person => person.name).join(', ')}
+    </p>
+)}
+
 
                 <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                 {post.event?.replace(/[\[\]"]/g, '') || ''}

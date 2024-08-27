@@ -27,6 +27,8 @@ const PrintCalendar = ({ events, refetchEvents }) => {
         // Run the refetchEvents function after the print dialog is closed
         const handleAfterPrint = () => {
             refetchEvents();
+            window.location.reload();
+
         };
 
         window.addEventListener('afterprint', handleAfterPrint);
