@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import EditPost from './EditPost';
 import Comment from './Comment';
 import MentionedName from './MentionedName';
+import LikesPopup from './LikesPopup';
 import './index.css'
 import { useCsrf } from "@/composables";
 import PostAttachments from './PostAttachments'
@@ -89,7 +90,10 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
   const [currentEditPost, setCurrentEditPost] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [selectedPostId, setSelectedPostId] = useState(null);
   const [likedPosts, setLikedPosts] = useState({});
+  const [likedUsers, setLikedUsers] = useState({});
+  const [showLikesPopup, setShowLikesPopup] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
   const csrfToken = useCsrf();
@@ -158,6 +162,9 @@ async function fetchData() {
 
     // Merge announcements with other posts
     const sortedPosts = [...announcements, ...otherPosts];
+
+sortedPosts.forEach(post => fetchLikedUsers(post));
+
     
     console.log("SORTEDPOST", sortedPosts);
     
@@ -168,6 +175,33 @@ async function fetchData() {
     setLoading(false);
   }
 }
+
+const fetchLikedUsers = (comment) => {
+  if (Array.isArray(comment.likes)) {
+    const uniqueUserIds = [...new Set(comment.likes)];
+
+    uniqueUserIds.forEach(user_id => {
+      if (user_id) {
+        fetch(`/api/users/users/${user_id}?with[]=profile`, {
+          method: "GET",
+        })
+        .then((response) => response.json())
+        .then(({ data }) => {
+          setLikedUsers(prevState => ({
+            ...prevState,
+            [comment.id]: {
+              ...prevState[comment.id],
+              [user_id]: data.name,
+            }
+          }));
+        })
+        .catch((error) => {
+          console.error(`Error fetching user data for user_id ${user_id}:`, error);
+        });
+      }
+    });
+  }
+};
 
 useEffect(() => {
   fetchData();
@@ -501,7 +535,18 @@ const renderContentWithTags = (content, mentions) => {
 };
     
     console.log("HEHEHHE", postData);
+
+
+
+
     
+    const handleLikesClick = (postId) => {
+      // Handle the display of liked users
+      // const likedUserNames = likedUsers[postId] ? Object.values(likedUsers[postId]) : [];
+      // alert(`Liked by: ${likedUserNames.join(", ")}`);
+      setSelectedPostId(postId);
+      setShowLikesPopup(true);
+    };
   
 
   return (
@@ -1145,7 +1190,15 @@ const renderContentWithTags = (content, mentions) => {
                           onClick={() => handleLike(post.id)}
                         />
                       )}
-                      {likesCount > 0 && <span className="text-sm font-medium">{likesCount}</span>}
+                      {/* {likesCount > 0 && <span className="text-sm font-medium">{likesCount}</span>} */}
+                      {likesCount > 0 && (
+                        <span
+                          className="text-sm font-medium cursor-pointer"
+                          onClick={() => handleLikesClick(post.id)}
+                        >
+                          {likesCount}
+                        </span>
+                      )}
                     </div>
                     <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                   </div>
@@ -1218,9 +1271,15 @@ const renderContentWithTags = (content, mentions) => {
             </div>
         </div>
       )}
-
+{showLikesPopup && (
+  <LikesPopup 
+    likedUsers={likedUsers} 
+    onClose={() => setShowLikesPopup(false)} 
+    commentId={selectedPostId}
+  />
+)}
       {isCommentPopupOpen && selectedPost && (
-        <Comment post={selectedPost} onClose={() => setIsCommentPopupOpen(false)} />
+        <Comment post={selectedPost} onClose={() => setIsCommentPopupOpen(false)} loggedInUserId={loggedInUserId} />
       )}
     </>
   );
