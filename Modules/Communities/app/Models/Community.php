@@ -5,6 +5,7 @@ namespace Modules\Communities\Models;
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Settings\Models\CommunityPreference;
 use OwenIt\Auditing\Auditable;
@@ -57,7 +58,7 @@ class Community extends Model implements AuditableContract
 
     public function members()
     {
-        return $this->hasMany(CommunityMember::class);
+        return $this->belongsToMany(User::class, CommunityMember::class);
     }
 
     public function preferences()

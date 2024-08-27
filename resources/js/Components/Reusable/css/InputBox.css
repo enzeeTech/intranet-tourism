@@ -84,8 +84,9 @@
     margin-bottom: 5px;
     border-radius: 16px;
     position: relative;
-    width: 600px;
+    width: auto;
     height: auto;
+    margin-right: 24px;
   }
 
   .input-box-container textarea {

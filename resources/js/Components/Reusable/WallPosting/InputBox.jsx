@@ -396,7 +396,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                             ))}
                         </div>
                     )}
-                    <div className=" bg-white">
+                    <div className=" ">
                         <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center">
                             {variant === "comment" && (
                                 <>

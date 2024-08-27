@@ -23,3 +23,4 @@ Route::apiResources([
 ]);
 
 Route::post('communities/{community}/add-member', [CommunityController::class, 'addMember'])->name('community.addMember');
+Route::post('communities/{community}/delete-member', [CommunityController::class, 'deleteMember'])->name('community.delete');

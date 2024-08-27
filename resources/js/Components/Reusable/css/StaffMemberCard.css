@@ -25,7 +25,7 @@
   display: flex;
   justify-content: space-around;
   height: 40px;
-  width: 180px;
+  width: 184px;
   background: #F9FAFC;
   border-top: 1px solid #eeeeee;
 }
@@ -189,14 +189,6 @@
   color: #202224;
 }
 
-.card-footer {
-  display: flex;
-  justify-content: space-around;
-  height: 40px;
-  width: 180px;
-  background: #F9FAFC;
-  border-top: 1px solid #eeeeee;
-}
 
 .call-button {
   cursor: pointer;

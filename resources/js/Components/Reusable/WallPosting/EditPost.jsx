@@ -69,7 +69,7 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
   
 
   return (
-    <div className="edit-post-modal bg-white">
+    <div className="rounded-2xl">
       
       <div className="font-bold text-2xl mb-4">Edit Post</div>
       <header className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
@@ -89,32 +89,61 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
           placeholder="Edit caption"
         />
         <input type="file" onChange={handleFileChange} className="mt-2" multiple />
-        <div className="grid grid-cols-3 gap-2 mt-2">
+        {/* <div className="grid grid-cols-3 gap-2 mt-2 items-center"> */}
+        <div className="flex flex-col w-full gap-2 mt-2 items-center">
           {attachments.map((attachment, index) => (
-            <div key={index} className="relative attachment">
-              <button
-                type="button"
-                className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
-                onClick={() => handleDeleteAttachment(index)}
-              >
-                X
-              </button>
+            <div key={index} className="relative attachment w-full">
               {attachment.mime_type && attachment.mime_type.startsWith("image/") ? (
-                <img src={`/storage/${attachment.path}`} alt="attachment" className="w-full h-auto rounded-lg" />
+                <>
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 text-red-500"
+                    onClick={() => handleDeleteAttachment(index)}
+                  >
+                    X
+                  </button>
+                  <img
+                    src={`/storage/${attachment.path}`}
+                    alt="attachment"
+                    className="w-full h-auto rounded-lg"
+                  />
+                </>
               ) : attachment.mime_type && attachment.mime_type.startsWith("video/") ? (
-                <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
-                  <source src={`/storage/${attachment.path}`} alt="attachment" className="grow shrink-0 max-w-full aspect-[1.19] w-full" />
-                  Your browser does not support the video tag.
-                </video>
+                <>
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 text-red-500"
+                    onClick={() => handleDeleteAttachment(index)}
+                  >
+                    X
+                  </button>
+                  <video controls className="grow shrink-0 max-w-full aspect-[1.19] w-full">
+                    <source src={`/storage/${attachment.path}`} />
+                    Your browser does not support the video tag.
+                  </video>
+                </>
               ) : (
-                <a href={`/storage/${attachment.path}`} download className="block w-full h-24 pt-2 bg-gray-100 rounded-lg text-xs font-semibold text-center leading-24">
-                  Download {attachment.file_name}
-                </a>
+                <div className="flex items-center w-full h-10 bg-gray-100 border-2 border-gray-300 rounded-xl px-2">
+                  <a
+                    href={`/storage/${attachment.path}`}
+                    download
+                    className="flex-1 text-sm w-full font-semibold text-start ml-2"
+                  >
+                    Download {attachment.file_name}
+                  </a>
+                  <button
+                    type="button"
+                    className="text-blue-500 px-2"
+                    onClick={() => handleDeleteAttachment(index)}
+                  >
+                    X
+                  </button>
+                </div>
               )}
             </div>
           ))}
         </div>
-        <div className="flex w-full justify-end space-x-2">
+        <div className="flex w-full justify-end space-x-2 mt-4">
           <button type="button" onClick={onClose} className="mt-2 px-4 py-2 font-bold hover:bg-gray-400 hover:text-white border-2 border-gray-400 text-gray-400 rounded-full text-sm">
             Cancel
           </button>

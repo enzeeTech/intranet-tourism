@@ -119,11 +119,11 @@ const Comment = ({ post, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg w-[700px] mx-2">
-        <div className="p-4 border-b">
-          <div className="mb-4 -mt-2 flex justify-end">
-            <button onClick={onClose} className="text-blue-500">X</button>
-          </div>
+      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2">
+        <div className="px-4 py-2 border-b">
+            <div className="mb-2 mt-2 flex justify-end">
+              <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" onClick={onClose}/>
+            </div>
           {/* Post Content */}
           <div className="mb-4">
             <header className="flex items-center">
@@ -140,15 +140,15 @@ const Comment = ({ post, onClose }) => {
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                 }
                 alt={post.user.name}
-                className="w-10 h-10 rounded-full"
+                className="w-12 h-12 rounded-full"
               />
               <div className="ml-3">
-                <div className="text-sm font-semibold">{post.user.name}</div>
+                <div className="text-md font-semibold">{post.user.name}</div>
                 <time className="text-xs text-gray-500">{formatTimeAgo(post.created_at)}</time>
               </div>
             </header>
             <div className="mt-4">
-              <p className="text-sm">{post.content}</p>
+              <p className="text-md">{post.content}</p>
               <PostAttachments attachments={post.attachments} />
             </div>
           </div>
@@ -212,24 +212,25 @@ const Comment = ({ post, onClose }) => {
             })}
           </div>
         </div>
-
-        <div className="pt-4 pb-4 border-t flex justify-start">
-          <img
-            src={
-              profileData.profileImage 
-                ? (
-                    profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
-                      ? profileData.profileImage
-                      : profileData.profileImage.startsWith('avatar/')
-                        ? `/storage/${profileData.profileImage}`
-                        : `/avatar/${profileData.profileImage}`
-                  )
-                : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
-            } 
-            alt={profileData.name}
-            className="w-12 h-12 rounded-full mr-4 ml-3 mb-20"
-          />
-          <ShareYourThoughts variant="comment" postedId={post.id} />
+        <div className="py-4 border-t flex flex-row justify-between items-start w-full">
+            <img
+                src={
+                profileData.profileImage 
+                    ? (
+                        profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+                        ? profileData.profileImage
+                        : profileData.profileImage.startsWith('avatar/')
+                            ? `/storage/${profileData.profileImage}`
+                            : `/avatar/${profileData.profileImage}`
+                    )
+                    : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
+                } 
+                alt={profileData.name}
+                className="w-12 h-12 rounded-full mx-4"
+            />
+            <ShareYourThoughts
+                variant="comment"
+            />
         </div>
       </div>
       {showDeletePopup && (
