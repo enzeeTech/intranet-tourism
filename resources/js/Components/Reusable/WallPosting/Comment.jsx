@@ -117,16 +117,18 @@ const Comment = ({ post, onClose }) => {
       setIsCommentPopupOpen(false);
     }
   };
+  
 
   
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2">
+      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2 overflow-auto max-h-[90vh] max-w-[90vw]">
         <div className="px-4 py-2 border-b">
-            <div className="mb-2 mt-2 flex justify-end">
-              <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" onClick={onClose}/>
-            </div>
+        <div className="sticky top-0 bg-white z-10 mb-2 mt-2 flex justify-end">
+          <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6 mt-2 mb-2" onClick={onClose} />
+        </div>
+
           {/* Post Content */}
           <div className="mb-4">
             <header className="flex items-center">
