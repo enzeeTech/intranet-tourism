@@ -284,7 +284,9 @@
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf'; // Make sure you install jspdf using npm or yarn
 
-function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name }) {
+function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) {
+    console.log("TITLEEEDIANI APE", user_title);
+    
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [qrCodeSvg, setQrCodeSvg] = useState(null);
     const [qrCodeLink, setQrCodeLink] = useState(null); // Store the QR code link
@@ -414,7 +416,8 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name }) {
             {isPopupOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
                     <div className="bg-white p-2 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
-                        <p>{user_name}</p>
+                        <p>NAME: {user_name}</p>
+                        <p>TITLE: {user_title}</p>
                         {qrCodeSvg ? (
                             <div
                                 className="qr-code-svg"
