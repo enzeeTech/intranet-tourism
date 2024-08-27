@@ -582,7 +582,7 @@ console.log("FINAL", finalPosts);
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
               {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -735,7 +735,7 @@ console.log("FINAL", finalPosts);
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-              <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+              <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative`}>
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                   <div className="flex gap-1 mt-2"></div>
                   <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
