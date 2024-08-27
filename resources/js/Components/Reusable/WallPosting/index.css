@@ -14,59 +14,6 @@
   color: blue;
   text-decoration: underline;
 }
-
-.user-profile-card {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.user-info {
-  display: inline-block;
-  vertical-align: top;
-}
-
-
-.profile-popup {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ddd;
-  padding: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 1000;
-}
-
-.profile-popup img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.profile-popup h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.profile-popup p {
-  margin: 5px 0;
-  font-size: 14px;
-}
-
-
-
   
   .attachment-grid {
     display: grid;
@@ -128,3 +75,40 @@
     grid-row: span 2; /* Example: span two rows if needed */
   }
   
+
+  .profile-popup {
+    color: rgb(0, 0, 0);
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+  }
+  
+  .profile-popup img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .profile-popup h4 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .profile-popup p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .profile-link {
+    color: blue !important; /* Force the color to blue */
+    text-decoration: none; /* Optional: Remove the underline from the link */
+  }
+  
+  .profile-link:hover {
+    text-decoration: underline; /* Optional: Add an underline on hover for better visibility */
+  }
