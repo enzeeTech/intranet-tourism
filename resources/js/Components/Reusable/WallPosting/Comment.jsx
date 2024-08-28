@@ -228,7 +228,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
             <div className="px-6 py-2 border-b">
               <div className="flex flex-row w-full justify-between my-4">
                 <div className="w-full flex justify-center">
-                  <span className="font-bold text-2xl">Post</span>
+                  <span className="font-bold ml-14 text-2xl">Post</span>
                 </div>
                 <img
                   src="/assets/cancel.svg"
@@ -258,46 +258,15 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                     alt={post.user.name}
                     className="w-[53px] rounded-full"
                   />
-                  <div className="relative ml-3 bg-gray-100 p-2 rounded-lg w-full">
-                    <div className="flex text-sm">
-                      <span className="font-semibold">{post.user.name || 'Commenter'}</span>
-                      <span className="ml-2 text-xs text-gray-500">
+                  <div className="relative ml-3 w-full">
+                    <div className="flex-col text-lg">
+                      <div className="font-bold">{post.user.name || 'Commenter'}</div>
+                      <div className="text-xs text-gray-500">
                         {formatTimeAgo(post.created_at)}
-                      </span>
+                      </div>
                     </div>
-                    <p className="text-sm mt-1">{post.content}</p>
-                    <div className="flex items-center gap-2">
-                      {isPostLikedByUser(post) ? (
-                        <img
-                          src="/assets/Like.svg"
-                          alt="Unlike"
-                          className="w-5 h-5 cursor-pointer"
-                          onClick={() => handleUnlike(post.id)}
-                        />
-                      ) : (
-                        <img
-                          src="/assets/likeforposting.svg"
-                          alt="Like"
-                          className="w-5 h-3 mt-2 cursor-pointer"
-                          onClick={() => handleLike(post.id)}
-                        />
-                      )}
-                      {PostLikesCount > 0 && (
-                        <span
-                          className="text-sm font-medium cursor-pointer"
-                          onClick={() => handleLikesClick(post.id)}
-                        >
-                          {PostLikesCount}
-                        </span>
-                      )}
-                    </div>
-                    <img 
-                      loading="lazy" 
-                      src="/assets/wallpost-dotbutton.svg" 
-                      alt="Options" 
-                      className="absolute top-1 right-1 w-6 h-6 cursor-pointer" 
-                      onClick={() => handleClickTreeDots(post.id)} 
-                    />
+                    {/* <p className="text-sm mt-1">{post.content}</p> */}
+                    
                   </div>
                 </header>
                 <div className="mt-4">

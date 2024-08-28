@@ -270,7 +270,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     variant === "comment" ? "comment-box-container" : "input-box-container"
                 }`}
             >
-                <div className="flex flex-col w-full px-2">
+                <div className="flex flex-col w-full">
                     {variant === "comment" && (
                         <textarea
                             ref={textAreaRef}
@@ -305,7 +305,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                         </div>
                     )}
                     <div className=" ">
-                        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center mt-1">
+                        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center">
                             {variant === "comment" && (
                                 <>
                                     <button className="tooltip" onClick={toggleReactionPicker}>
@@ -315,7 +315,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             alt="Emoji Icon"
                                             className="w-[16px] h-[16px]"
                                         />
-                                        <span className="tooltiptext">React</span>
+                                        <span className="tooltiptext">React 😀🤣😤</span>
                                     </button>
                                     {showReactionPicker && (
                                         <div className="emoji-picker-container">
