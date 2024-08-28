@@ -126,7 +126,7 @@ export function Event({ onClose, onSaveEvent, chosenEvent }) {
       <div className="flex flex-col font-semibold rounded-2xl p-6 w-full max-w-[442px] bg-white" onClick={(e) => e.stopPropagation()}>
               <div className="flex w-full justify-between items-center mb-6">
                 <div className="text-2xl font-bold w-full">
-                    Tag People
+                    Tag Event
                   </div>
                   <div className="w-full flex justify-end">
                       <img

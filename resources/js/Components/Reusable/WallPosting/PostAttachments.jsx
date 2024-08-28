@@ -41,7 +41,7 @@ function PostAttachments({ attachments }) {
           </video>
         )}
         {isMore && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-semibold text-lg">
+          <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black bg-opacity-50 text-white font-semibold text-lg">
             +{attachments.length - 4} more
           </div>
         )}
@@ -59,7 +59,7 @@ function PostAttachments({ attachments }) {
       };
       
       return (
-        <div className="bg-pink-400">
+        <div className="bg-white">
           <article key={index} className="flex flex-col text-xs text-neutral-800 w-full mt-0">
             <div
               className="flex gap-3 items-center py-2 px-4 mb-2 bg-gray-100 rounded-xl border-2 border-gray-200 max-w-[900px]"
