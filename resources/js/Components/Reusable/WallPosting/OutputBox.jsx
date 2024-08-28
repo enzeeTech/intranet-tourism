@@ -611,7 +611,7 @@ const renderContentWithTags = (content, mentions) => {
           return (
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
-              {/* {post.type === 'announcement' && (
+              {post.type === 'announcement' && (
                 <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
@@ -620,7 +620,7 @@ const renderContentWithTags = (content, mentions) => {
                     </div>
                   </div>
                 </div>
-              )} */}
+              )}
 
                {/* Birthday Post */}
                {post.type === 'birthday' && (
