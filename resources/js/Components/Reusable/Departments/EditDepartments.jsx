@@ -109,61 +109,54 @@ function Card({
 
   const handleImageChange = (file) => {
     if (!file) return;
-
-    const objectUrl = URL.createObjectURL(file);
-    setImageSrc(objectUrl);
-    setImageFile(file); 
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageSrc(reader.result); // Use base64 string as the image source
+      setImageFile(reader.result); // Store the base64 string
+    };
+    reader.readAsDataURL(file);
   };
+  
 
   const handleSubmit = async () => {
-    if (!departmentName.trim()) {
-      setError('Department Name is required.');
-      return;
-    }
-
-    if (
-      departmentName === initialDepartmentName &&
-      imageSrc === initialImageSrc &&
-      selectedType === initialSelectedType &&
-      departmentDescription === initialDepartmentDescription
-    ) {
-      setError('No changes detected.');
-      return;
-    }
-
     setError('');
-
+  
     const formData = new FormData();
     formData.append('_method', 'PUT');
+  
+    // Always append the current or updated values
     formData.append("name", departmentName);
     formData.append("description", departmentDescription);
     formData.append("type", selectedType);
-
+  
     if (imageFile) {
-      formData.append('banner', imageFile);
+      formData.append('banner', imageFile); // imageFile is now a base64 string
+    } else {
+      formData.append('banner', initialImageSrc); // Ensure it sends a string URL
     }
-
+  
     const options = {
-      method: 'POST',
+      method: 'POST',  // Ensure this is 'POST' for sending FormData
       headers: {
         'Accept': 'application/json',
         "X-CSRF-Token": csrfToken,
         'Authorization': `Bearer ${authToken}`,
       },
-      body: formData
+      body: formData,  // Send the FormData object directly
     };
-
-    const url = `/api/department/departments/${department?.id}`;
-
+  
+    const url = `/api/communities/communities/${department?.id}`;
+  
     try {
       const response = await fetch(url, options);
       const text = await response.text();
-
+  
       if (!response.ok) {
         console.error('Server response not OK:', text);
         throw new Error('Failed to save department');
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
       console.log('Department saved:', responseData.data);
       onSave(responseData.data);
@@ -173,6 +166,8 @@ function Card({
       setError('An error occurred while saving the department.');
     }
   };
+  
+  
 
   return (
     <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px]">

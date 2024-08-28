@@ -312,45 +312,59 @@ const FileTable = ({ searchTerm }) => {
 
     const fetchFiles = async () => {
         try {
-            const response = await fetch(
-                "/api/resources/resources?with[]=author"
-            );
-            if (!response.ok) {
-                throw new Error("Failed to fetch files");
-            }
-            const responseData = await response.json();
-            console.log("RESPONSEDATA", responseData);
-
-            if (!Array.isArray(responseData.data?.data)) {
-                console.error(
-                    "Expected an array of files, but received:",
-                    responseData.data?.data
+            let currentPage = 1;
+            let totalPages = 1;
+            let allFilesData = [];
+    
+            while (currentPage <= totalPages) {
+                const response = await fetch(
+                    `/api/resources/resources?with[]=author&page=${currentPage}`
                 );
-                setLoading(false);
-                return;
+                if (!response.ok) {
+                    throw new Error("Failed to fetch files");
+                }
+                const responseData = await response.json();
+                console.log("RESPONSEDATA", responseData);
+    
+                if (!Array.isArray(responseData.data?.data)) {
+                    console.error(
+                        "Expected an array of files, but received:",
+                        responseData.data?.data
+                    );
+                    setLoading(false);
+                    return;
+                }
+    
+                const filesData = responseData.data.data.map((file) => ({
+                    ...file,
+                    uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
+                    metadata:
+                        typeof file.metadata === "string"
+                            ? JSON.parse(file.metadata)
+                            : file.metadata,
+                }));
+    
+                // Accumulate all files data across pages
+                allFilesData = [...allFilesData, ...filesData];
+    
+                // Determine the total number of pages
+                totalPages = responseData.data.last_page;
+                currentPage++;
             }
-
-            const filesData = responseData.data.data.map((file) => ({
-                ...file,
-                uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
-                metadata:
-                    typeof file.metadata === "string"
-                        ? JSON.parse(file.metadata)
-                        : file.metadata,
-            }));
-
+    
             // Sort files by the `created_at` date in descending order (newest first)
-            filesData.sort(
+            allFilesData.sort(
                 (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
-
-            setFiles(filesData);
+    
+            setFiles(allFilesData);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching files:", error);
             setLoading(false);
         }
     };
+    
 
     useEffect(() => {
         fetchFiles();
@@ -608,7 +622,7 @@ const FileTable = ({ searchTerm }) => {
                                                 item.created_at
                                             ).toLocaleDateString()}
                                         </td>
-                                        <td className="relative mt-3.5 flex">
+                                        <td className="relative mt-6 flex">
                                             <PopupContent
                                                 file={item}
                                                 onRename={() =>

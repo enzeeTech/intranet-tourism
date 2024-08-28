@@ -69,13 +69,13 @@ const StaffMemberCard = ({ id, name, role, status, imageUrl, phoneNo, workNo, is
 
   let source = null;
 
-    if (imageUrl.startsWith('staff_image/')) {
-        source = `/storage/${imageUrl}`;
-    } else {
-        source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
-            ? imageUrl 
-            : `/avatar/${imageUrl}`;
-    }
+  if (imageUrl.startsWith('staff_image/')) {
+      source = `/storage/${imageUrl}`;
+  } else {
+      source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+          ? imageUrl 
+          : `/avatar/${imageUrl}`;
+  }
 
   return (
     <div className={`staff-member-card ${isDeactivated ? 'deactivated' : ''}`}>
