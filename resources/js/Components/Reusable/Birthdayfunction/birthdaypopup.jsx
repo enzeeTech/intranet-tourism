@@ -4,7 +4,7 @@ import { useCsrf } from '@/composables';
 import '../Birthdayfunction/birthday.css';
 import { People } from '../WallPosting/InputPeople';
 
-const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
+const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
   const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
   const [text, setText] = useState('Make a wish...');
   const csrfToken = useCsrf();
@@ -53,10 +53,14 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     formData.append("content", inputValue);
 
     // Append tagged people
-    taggedPeople.forEach(name => {
-      const formattedMentions = `["${name}"]`;
-      formData.append("mentions", formattedMentions); // Assuming your backend accepts an array of tagged user IDs
-    });
+    // const mentions = taggedPeople.map(name => ({
+    //   id: selectedID,  // Assuming `selectedID` is related to the tagged person
+    //   name: name
+    // }));
+
+    const mentions = taggedPeople.map(name => `{ "id": "${selectedID}", "name": "${name}" }`).join(", ");
+    const formattedMentions = `[${mentions}]`;
+    formData.append("mentions", formattedMentions);
 
     // Append the selected background image as an attachment if it's a supported format
     fetch(backgroundImage)
@@ -100,15 +104,17 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
       });
   };
 
+  
+
   return (
-    <section className="flex flex-col pt-2 pb-3.5 bg-white rounded-xl w-full max-w-xl mx-auto">
-      <div className="flex flex-col px-4 mt-3 w-full">
-        <div className="flex flex-col gap-1 text-xs font-semibold text-neutral-800">
+    <section className="flex flex-col bg-white rounded-xl w-full max-w-xl mx-auto">
+      <div className="flex flex-col px-4 w-full">
+        <div className="flex flex-col gap-2 text-xs font-semibold text-neutral-800">
           <div className="flex justify-center">
-            <p className="text-xl">CREATE POST</p>
+            <p className="text-2xl -mt-6 mb-2">Create Post</p>
           </div>
-          <div className="w-full border-b-2 mb-2 mt-2"></div>
-          <div className="flex flex-row mb-2">
+          {/* <div className="w-full border-b-2 mb-2 mt-2"></div> */}
+          <div className="flex flex-row items-center mb-2">
             <img
               loading="lazy"
               src={source}
@@ -262,7 +268,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
 
           <button
             type="submit"
-            className="flex justify-center items-center px-16 py-2 mt-4 text-sm font-bold text-white bg-sky-500 rounded-xl"
+            className="flex justify-center items-center py-2 my-4 text-sm font-bold text-white bg-blue-500 rounded-xl"
             onClick={handleClickSend}
           >
             Post

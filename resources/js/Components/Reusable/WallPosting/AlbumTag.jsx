@@ -29,14 +29,23 @@ const TagInput = ({ tags, setTags, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
       <div className="flex flex-col font-semibold rounded-none max-w-[442px]">
-        <section className="flex flex-col pt-1.5 w-full bg-white rounded-3xl shadow-custom">
-          <header className="flex gap-5 mt-4 justify-between self-end max-w-full text-2xl font-bold leading-tight text-center text-neutral-950 w-[265px]">
-            <h1>Tag Album</h1>
-            <img loading="lazy" src="/assets/cancel.svg" className="w-6 h-6 mr-4" alt="Close AlbumTag Popup" onClick={onClose} />
-          </header>
-          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb95fa8e5f21e40306c92e50625664e1476952960dbc6acadb3e12bbdec9547f?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&&apiKey=23ce5a6ac4d345ebaa82bd6c33505deb" className="object-contain mt-1.5 w-full aspect-[500]" alt="Album cover" />
-          <div className="flex flex-col px-5 mt-2 mb-4 w-full">
-            <SearchBar value={searchTerm} onChange={handleSearchChange} placeholder="Search tags" />
+        <section className="flex flex-col pt-1.5 w-full bg-white rounded-2xl shadow-custom">
+          <div className="flex flex-row w-full items-center justify-between px-6 mt-4 mb-2">
+                <div className="text-2xl font-bold w-full">
+                  Tag Album
+                </div>
+                <div className="w-full flex justify-end">
+                    <img
+                        loading="lazy"
+                        src="/assets/cancel.svg"
+                        alt="Close icon"
+                        className="self-end w-6 aspect-square cursor-pointer"
+                        onClick={onClose}
+                    />
+                </div>
+              </div>
+            <div className="flex flex-col px-5 mt-1.5">
+            <SearchBar value={searchTerm} onChange={handleSearchChange} placeholder="Search tags"/>
             <div className="tags-container">
               {filteredTags.map((tag, index) => (
                 <div key={index} className="tag">
@@ -45,7 +54,7 @@ const TagInput = ({ tags, setTags, onClose, onSave }) => {
                 </div>
               ))}
             </div>
-            <h2 className="self-start ml-3 text-sm font-bold leading-none text-neutral-500 mb-0 mt-5">Tagged</h2>
+            <h2 className="self-start text-sm font-bold leading-none text-neutral-500 mb-0 mt-5">Tagged</h2>
             <div className="tagged-items-container">
               {tags.map((tag, index) => (
                 <TaggedItem key={index} tag={tag} onRemove={handleRemoveTag} />

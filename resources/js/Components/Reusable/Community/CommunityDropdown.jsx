@@ -73,6 +73,12 @@ function Filter({ onSelectFilter }) {
       text: 'Private',
       isActive: false,
     },
+    {
+      src: "/assets/lock.svg",
+      alt: 'Lock Icon',
+      text: 'Archive',
+      isActive: false,
+    },
   ]);
 
   const toggleDropdown = () => {

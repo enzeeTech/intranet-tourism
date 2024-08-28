@@ -63,4 +63,5 @@
 .phone-input-dropdown {
   max-height: 150px;
   overflow-y: auto;
+  height: 100px;
 }
