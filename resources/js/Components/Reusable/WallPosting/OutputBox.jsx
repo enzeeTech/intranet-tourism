@@ -176,9 +176,9 @@ sortedPosts.forEach(post => fetchLikedUsers(post));
   }
 }
 
-const fetchLikedUsers = (comment) => {
-  if (Array.isArray(comment.likes)) {
-    const uniqueUserIds = [...new Set(comment.likes)];
+const fetchLikedUsers = (post) => {
+  if (Array.isArray(post.likes)) {
+    const uniqueUserIds = [...new Set(post.likes)];
 
     uniqueUserIds.forEach(user_id => {
       if (user_id) {
@@ -189,9 +189,12 @@ const fetchLikedUsers = (comment) => {
         .then(({ data }) => {
           setLikedUsers(prevState => ({
             ...prevState,
-            [comment.id]: {
-              ...prevState[comment.id],
-              [user_id]: data.name,
+            [post.id]: {
+              ...prevState[post.id],
+              [user_id]: {
+                name: data.name,
+                image: data.profile?.image, // Assuming `data.profile.image` contains the image URL
+              }
             }
           }));
         })
