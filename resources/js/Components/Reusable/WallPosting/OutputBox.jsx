@@ -1191,7 +1191,7 @@ const renderContentWithTags = (content, mentions) => {
                     Yes
                 </button>
                 <button
-                    // onClick={handleClosePopup}
+                    onClick={() => setShowDeletePopup(false)}
                     style={{
                         backgroundColor: 'white',
                         color: '#333',
