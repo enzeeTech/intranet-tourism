@@ -4,11 +4,13 @@ import { ShareYourThoughts } from '@/Components/Reusable/WallPosting';
 import { formatDistanceToNow } from 'date-fns';
 import { usePage } from '@inertiajs/react';
 import { useCsrf } from "@/composables";
+import LikesPopup from './LikesPopup';
 
 
-const Comment = ({ post, onClose }) => {
 
-  console.log("POST", post);
+const Comment = ({ post, onClose, loggedInUserId }) => {
+
+  // console.log("POST", loggedInUserId);
   
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -18,10 +20,27 @@ const Comment = ({ post, onClose }) => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [comments, setComments] = useState([]);
   const [commentedUsers, setCommentedUsers] = useState({});
+  const [selectedCommentId, setSelectedCommentId] = useState(null);
+  const [likedPosts, setLikedPosts] = useState({});
+  const [showLikesPopup, setShowLikesPopup] = useState(false);
+  const [likedUsers, setLikedUsers] = useState({});
   const [profileData, setProfileData] = useState({
     name: "",
     profileImage: "",
   });
+
+  // const fetchComments = () => {
+  //   fetch(`/api/posts/posts/${post.id}?with[]=comments`, {
+  //     method: "GET",
+  //   })
+  //   .then((response) => response.json())
+  //   .then(({ data }) => {
+  //     setComments(data.comments); // Use the comments array from the response
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error fetching comments: ", error);
+  //   });
+  // };
 
   const fetchComments = () => {
     fetch(`/api/posts/posts/${post.id}?with[]=comments`, {
@@ -29,12 +48,75 @@ const Comment = ({ post, onClose }) => {
     })
     .then((response) => response.json())
     .then(({ data }) => {
-      setComments(data.comments); // Use the comments array from the response
+      const sortedComments = data.comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      setComments(sortedComments); // Set the sorted comments
+
+      sortedComments.forEach(comment => fetchLikedUsers(comment));
     })
     .catch((error) => {
       console.log("Error fetching comments: ", error);
     });
   };
+
+
+  // const fetchLikedUsers = (comment) => {
+  //   if (Array.isArray(comment.likes)) {
+  //     const uniqueUserIds = [...new Set(comment.likes)];
+
+  //     uniqueUserIds.forEach(user_id => {
+  //       if (user_id) {
+  //         fetch(`/api/users/users/${user_id}?with[]=profile`, {
+  //           method: "GET",
+  //         })
+  //         .then((response) => response.json())
+  //         .then(({ data }) => {
+  //           setLikedUsers(prevState => ({
+  //             ...prevState,
+  //             [comment.id]: {
+  //               ...prevState[comment.id],
+  //               [user_id]: data.name,
+  //             }
+  //           }));
+  //         })
+  //         .catch((error) => {
+  //           console.error(`Error fetching user data for user_id ${user_id}:`, error);
+  //         });
+  //       }
+  //     });
+  //   }
+  // };
+
+  const fetchLikedUsers = (comment) => {
+    if (Array.isArray(comment.likes)) {
+      const uniqueUserIds = [...new Set(comment.likes)];
+  
+      uniqueUserIds.forEach(user_id => {
+        if (user_id) {
+          fetch(`/api/users/users/${user_id}?with[]=profile`, {
+            method: "GET",
+          })
+          .then((response) => response.json())
+          .then(({ data }) => {
+            setLikedUsers(prevState => ({
+              ...prevState,
+              [comment.id]: {
+                ...prevState[comment.id],
+                [user_id]: {
+                  name: data.name,
+                  image: data.profile?.image, // Assuming `data.profile.image` contains the image URL
+                }
+              }
+            }));
+          })
+          .catch((error) => {
+            console.error(`Error fetching user data for user_id ${user_id}:`, error);
+          });
+        }
+      });
+    }
+  };
+  
+  
 
   useEffect(() => {
     fetchComments();
@@ -119,6 +201,64 @@ const Comment = ({ post, onClose }) => {
   };
   
 
+      // Function to handle liking a post
+      const handleLike = async (postId) => {
+        try {
+          const response = await fetch(`/api/posts/posts/${postId}/like`, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': csrfToken },
+          });
+    
+          if (response.ok) {
+            setLikedPosts((prevLikedPosts) => ({
+              ...prevLikedPosts,
+              [postId]: true,
+            }));
+            // fetchData(); // Refetch the data to update the post likes count
+            fetchComments();
+          } else {
+            console.error("Failed to like the post");
+          }
+        } catch (error) {
+          console.error("Error liking the post:", error);
+        }
+      };
+    
+      // Function to handle unliking a post
+      const handleUnlike = async (postId) => {
+        try {
+          const response = await fetch(`/api/posts/posts/${postId}/unlike`, {
+            method: 'POST',
+            headers: { 'X-CSRF-Token': csrfToken },
+          });
+    
+          if (response.ok) {
+            setLikedPosts((prevLikedPosts) => ({
+              ...prevLikedPosts,
+              [postId]: false,
+            }));
+            // fetchData(); // Refetch the data to update the post likes count
+            fetchComments();
+          } else {
+            console.error("Failed to unlike the post");
+          }
+        } catch (error) {
+          console.error("Error unliking the post:", error);
+        }
+      };
+  
+      const isPostLikedByUser = (comment) => {
+        return comment.likes && comment.likes.includes(loggedInUserId);
+      };
+
+
+      const handleLikesClick = (commentId) => {
+        // Handle the display of liked users
+        // const likedUserNames = likedUsers[commentId] ? Object.values(likedUsers[commentId]) : [];
+        // alert(`Liked by: ${likedUserNames.join(", ")}`);
+        setSelectedCommentId(commentId);
+        setShowLikesPopup(true);
+      }; 
   
 
   return (
@@ -163,9 +303,13 @@ const Comment = ({ post, onClose }) => {
         <div className="p-4 max-h-96 overflow-y-auto">
           <div className="space-y-4">
             {comments.map((comment) => {
+              let likesCount = 0;
+              if (Array.isArray(comment.likes)) {
+                likesCount = comment.likes.length;
+              }
+
               const user = commentedUsers[comment.user_id] || {};
-              // console.log("HAHAHA", comment.pivot.id);
-              
+
               return (
                 <div key={comment.id} className="relative flex items-start">
                   <img
@@ -191,6 +335,31 @@ const Comment = ({ post, onClose }) => {
                       </span>
                     </div>
                     <p className="text-sm mt-1">{comment.content}</p>
+                    <div className="flex items-center gap-2">
+                      {isPostLikedByUser(comment) ? (
+                        <img
+                          src="/assets/Like.svg"
+                          alt="Unlike"
+                          className="w-5 h-5 cursor-pointer"
+                          onClick={() => handleUnlike(comment.id)}
+                        />
+                      ) : (
+                        <img
+                          src="/assets/likeforposting.svg"
+                          alt="Like"
+                          className="w-5 h-5 cursor-pointer"
+                          onClick={() => handleLike(comment.id)}
+                        />
+                      )}
+                      {likesCount > 0 && (
+                        <span
+                          className="text-sm font-medium cursor-pointer"
+                          onClick={() => handleLikesClick(comment.id)}
+                        >
+                          {likesCount}
+                        </span>
+                      )}
+                    </div>
                     <img 
                       loading="lazy" 
                       src="/assets/wallpost-dotbutton.svg" 
@@ -236,9 +405,17 @@ const Comment = ({ post, onClose }) => {
             <ShareYourThoughts
                 variant="comment"
                 postedId={post.id}
+                onCommentPosted={fetchComments}
             />
         </div>
       </div>
+      {showLikesPopup && (
+  <LikesPopup 
+    likedUsers={likedUsers} 
+    onClose={() => setShowLikesPopup(false)} 
+    commentId={selectedCommentId}
+  />
+)}
       {showDeletePopup && (
         <div
             style={{

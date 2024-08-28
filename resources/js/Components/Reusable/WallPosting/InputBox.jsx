@@ -12,7 +12,7 @@ import "../../../Pages/Calendar/index.css";
 import Emoji from '../../../../../public/assets/EmojiIcon.svg'
 import { useCsrf } from "@/composables";
 
-function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant, postedId }) {
+function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filterType, filterId, variant, postedId, onCommentPosted }) {
     const [inputValue, setInputValue] = useState("");
     const [showPollPopup, setShowPollPopup] = useState(false);
     const [showMediaTagPopup, setShowMediaTagPopup] = useState(false);
@@ -142,6 +142,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 window.location.reload();
             } else {
                 // Handle any other actions required after posting a comment, e.g., reloading comments
+                onCommentPosted();
             }
         })
         .catch((error) => {

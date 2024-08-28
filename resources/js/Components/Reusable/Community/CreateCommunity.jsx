@@ -83,15 +83,22 @@ function Card({
   };
 
   const handleSubmit = async () => {
+    // Initialize the data object with required fields
     const data = {
       name: communityName,
-      banner: imageBase64, // Send the base64 string
-      description: communityDescription,
       type: selectedType,
       created_by: user.name,
       updated_by: user.name,
     };
-
+  
+    // Conditionally add optional fields
+    if (imageBase64) {
+      data.banner = imageBase64; // Only add if the banner is provided
+    }
+    if (communityDescription) {
+      data.description = communityDescription; // Only add if the description is provided
+    }
+  
     const options = {
       method: "POST",
       headers: {
@@ -101,16 +108,16 @@ function Card({
       },
       body: JSON.stringify(data),
     };
-
+  
     try {
       const response = await fetch("/api/communities/communities", options);
       const text = await response.text();
-
+  
       if (!response.ok) {
         console.error("Server response not OK:", text);
         throw new Error("Failed to create community");
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
       console.log("Community created:", responseData.data);
       onCreate(responseData.data);
@@ -119,6 +126,7 @@ function Card({
       console.error("Error creating community:", error.message);
     }
   };
+  
 
   return (
     <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
