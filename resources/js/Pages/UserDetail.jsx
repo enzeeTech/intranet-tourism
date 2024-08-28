@@ -318,6 +318,10 @@ const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.
 // Attribute to tag guest profile
 const tag="guest";
 
+const employmentPostTitle = profileData.employment_posts?.length > 0 
+? profileData.employment_posts[0].business_post.title 
+: '';
+
 return (
     <Example>
         <main className="xl:pl-96 w-full">
@@ -355,6 +359,7 @@ return (
                                             icon2={profileData.icon2}
                                             user_id={profileData.id}
                                             user_name={profileData.name}
+                                            user_title={employmentPostTitle}
                                             onEdit={() => handleEditBio()}
                                             isFirstIcon
                                         />
