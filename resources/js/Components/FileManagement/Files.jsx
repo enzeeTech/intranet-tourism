@@ -608,7 +608,7 @@ const FileTable = ({ searchTerm }) => {
                                                 item.created_at
                                             ).toLocaleDateString()}
                                         </td>
-                                        <td className="relative mt-3.5 flex">
+                                        <td className="relative mt-6 flex">
                                             <PopupContent
                                                 file={item}
                                                 onRename={() =>

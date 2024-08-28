@@ -32,7 +32,7 @@ const TagInput = ({ tags, setTags, onClose, onSave }) => {
         <section className="flex flex-col pt-1.5 w-full bg-white rounded-2xl shadow-custom">
           <div className="flex flex-row w-full items-center justify-between px-6 mt-4 mb-2">
                 <div className="text-2xl font-bold w-full">
-                  Tag People
+                  Tag Album
                 </div>
                 <div className="w-full flex justify-end">
                     <img

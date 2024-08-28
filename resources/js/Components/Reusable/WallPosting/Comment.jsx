@@ -261,71 +261,41 @@ const Comment = ({ post, onClose, loggedInUserId }) => {
       }; 
   
 
-  return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-[700px] mx-2 overflow-auto max-h-[90vh] max-w-[90vw]">
-        <div className="px-4 py-2 border-b">
-        <div className="sticky top-0 bg-white z-10 mb-2 mt-2 flex justify-end">
-          <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6 mt-2 mb-2" onClick={onClose} />
-        </div>
-
-          {/* Post Content */}
-          <div className="mb-4">
-            <header className="flex items-center">
-              <img
-                src={
-                  post.userProfile.profile?.image 
-                    ? (
-                        post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
-                          ? post.userProfile.profile.image
-                          : post.userProfile.profile.image.startsWith('avatar/')
-                            ? `/storage/${post.userProfile.profile.image}`
-                            : `/avatar/${post.userProfile.profile.image}`
-                      )
-                    : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
-                }
-                alt={post.user.name}
-                className="w-[53px] rounded-full"
-              />
-              <div className="ml-3">
-                <div className="text-lg font-semibold">{post.user.name}</div>
-                <time className="text-sm text-gray-500">{formatTimeAgo(post.created_at)}</time>
+      return (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl shadow-lg w-[600px] mx-2 overflow-hidden max-h-[90vh] max-w-[90vw] flex flex-col">
+            <div className="px-6 py-2 border-b">
+              <div className="flex flex-row w-full justify-between my-4">
+                <div className="w-full flex justify-center">
+                  <span className="font-bold text-2xl">Post</span>
+                </div>
+                <img
+                  src="/assets/cancel.svg"
+                  alt="Close icon"
+                  className="w-6 h-6"
+                  onClick={onClose}
+                />
               </div>
-            </header>
-            <div className="mt-4">
-              <p className="text-lg mb-4">{post.content}</p>
-              <PostAttachments attachments={post.attachments} />
             </div>
-          </div>
-        </div>
-
-        {/* Comment Section */}
-        <div className="p-4 max-h-96 overflow-y-auto">
-          <div className="space-y-4">
-            {comments.map((comment) => {
-              let likesCount = 0;
-              if (Array.isArray(comment.likes)) {
-                likesCount = comment.likes.length;
-              }
-
-              const user = commentedUsers[comment.user_id] || {};
-
-              return (
-                <div key={comment.id} className="relative flex items-start">
+      
+            {/* Scrollable Content */}
+            <div className="flex-grow overflow-y-auto">
+              <div className="my-4 px-6">
+                <header className="flex items-center">
                   <img
                     src={
-                      user.profileImage 
+                      post.userProfile.profile?.image 
                         ? (
-                            user.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
-                              ? user.profileImage
-                              : user.profileImage.startsWith('avatar/')
-                                ? `/storage/${user.profileImage}`
-                                : `/avatar/${user.profileImage}`
+                            post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
+                              ? post.userProfile.profile.image
+                              : post.userProfile.profile.image.startsWith('avatar/')
+                                ? `/storage/${post.userProfile.profile.image}`
+                                : `/avatar/${post.userProfile.profile.image}`
                           )
-                        : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(user.name || 'Commenter')}&rounded=true`
+                        : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`
                     }
-                    alt={user.name || 'Commenter'}
-                    className="w-8 h-8 rounded-full"
+                    alt={post.user.name}
+                    className="w-[53px] rounded-full"
                   />
                   <div className="relative ml-3 bg-gray-100 p-2 rounded-lg w-full">
                     <div className="flex text-sm">
@@ -368,110 +338,194 @@ const Comment = ({ post, onClose, loggedInUserId }) => {
                       onClick={() => handleClickTreeDots(comment.id)} 
                     />
                   </div>
-                  {isCommentPopupOpen === comment.id && (
-                    <div
-                      className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
-                    >
-                      <p 
-                        className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                        onClick={() => confirmDelete(comment.pivot.id)}
-                      >
-                        <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
-                        Delete
-                      </p>
-                    </div>
-                  )}
+                </header>
+                <div className="mt-4">
+                  <p className="text-lg mb-4">{post.content}</p>
+                  <PostAttachments attachments={post.attachments} />
+                  <hr className="my-6 border-1 border-gray-200"/>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="py-4 border-t flex flex-row justify-between items-start w-full">
-            <img
+              </div>
+      
+              {/* Comment Section */}
+              <div className="pb-4 px-6">
+                <div className="space-y-4">
+                  {comments.map((comment) => {
+                    let likesCount = 0;
+                    if (Array.isArray(comment.likes)) {
+                      likesCount = comment.likes.length;
+                    }
+      
+                    const user = commentedUsers[comment.user_id] || {};
+      
+                    return (
+                      <div key={comment.id} className="relative flex items-start">
+                        <img
+                          src={
+                            user.profileImage 
+                              ? (
+                                  user.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
+                                    ? user.profileImage
+                                    : user.profileImage.startsWith('avatar/')
+                                      ? `/storage/${user.profileImage}`
+                                      : `/avatar/${user.profileImage}`
+                                )
+                              : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(user.name || 'Commenter')}&rounded=true`
+                          }
+                          alt={user.name || 'Commenter'}
+                          className="w-10 h-10 rounded-full mt-1"
+                        />
+                        <div className="relative ml-3 bg-gray-100 p-2 rounded-lg w-full">
+                          <div className="flex text-sm items-end mx-1">
+                            <span className="font-semibold">{user.name || 'Commenter'}</span>
+                            <span className="ml-2 text-xs mb-[1px] text-gray-500">
+                              {formatTimeAgo(comment.created_at)}
+                            </span>
+                          </div>
+                          <p className="text-sm mt-1 mx-1">{comment.content}</p>
+                          <div className="flex items-center gap-2 mx-1 mt-2">
+                            {isPostLikedByUser(comment) ? (
+                              <img
+                                src="/assets/Like.svg"
+                                alt="Unlike"
+                                className="w-5 h-5 cursor-pointer"
+                                onClick={() => handleUnlike(comment.id)}
+                              />
+                            ) : (
+                              <img
+                                src="/assets/likeforposting.svg"
+                                alt="Like"
+                                className="w-5 h-5 cursor-pointer"
+                                onClick={() => handleLike(comment.id)}
+                              />
+                            )}
+                            {likesCount > 0 && (
+                              <span
+                                className="text-sm font-medium cursor-pointer"
+                                onClick={() => handleLikesClick(comment.id)}
+                              >
+                                {likesCount}
+                              </span>
+                            )}
+                          </div>
+                          <img 
+                            loading="lazy" 
+                            src="/assets/wallpost-dotbutton.svg" 
+                            alt="Options" 
+                            className="absolute top-2 right-4 w-5 h-5 cursor-pointer" 
+                            onClick={() => handleClickTreeDots(comment.id)} 
+                          />
+                        </div>
+                        {isCommentPopupOpen === comment.id && (
+                          <div
+                            className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
+                          >
+                            <p 
+                              className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                              onClick={() => confirmDelete(comment.pivot.id)}
+                            >
+                              <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
+                              Delete
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+      
+            {/* Fixed ShareYourThoughts Section */}
+            <div className="py-4 border-t flex flex-row justify-between items-center w-full">
+              <img
                 src={
-                profileData.profileImage 
+                  profileData.profileImage 
                     ? (
                         profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
                         ? profileData.profileImage
                         : profileData.profileImage.startsWith('avatar/')
-                            ? `/storage/${profileData.profileImage}`
-                            : `/avatar/${profileData.profileImage}`
-                    )
+                          ? `/storage/${profileData.profileImage}`
+                          : `/avatar/${profileData.profileImage}`
+                      )
                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
                 } 
                 alt={profileData.name}
                 className="w-[53px] rounded-full mx-4"
-            />
-            <ShareYourThoughts
+              />
+              <ShareYourThoughts
                 variant="comment"
                 postedId={post.id}
                 onCommentPosted={fetchComments}
-            />
-        </div>
-      </div>
-      {showLikesPopup && (
-  <LikesPopup 
-    likedUsers={likedUsers} 
-    onClose={() => setShowLikesPopup(false)} 
-    commentId={selectedCommentId}
-  />
-)}
-      {showDeletePopup && (
-        <div
-            style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                padding: '20px',
-                boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
-                zIndex: 10000,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '400px',
-            }}
-        >
-            <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
-                <h2>Delete Post?</h2>
+              />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <button
+      
+            {showLikesPopup && (
+              <LikesPopup 
+                likedUsers={likedUsers} 
+                onClose={() => setShowLikesPopup(false)} 
+                commentId={selectedCommentId}
+              />
+            )}
+      
+            {showDeletePopup && (
+              <div
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  padding: '20px',
+                  boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
+                  zIndex: 10000,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: '400px',
+                }}
+              >
+                <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
+                  <h2>Delete Post?</h2>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                  <button
                     onClick={handleDelete}
                     style={{
-                        backgroundColor: '#E53935',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '25px',
-                        width: '80px',
-                        padding: '10px 20px',
-                        cursor: 'pointer',
-                        marginRight: '10px',
+                      backgroundColor: '#E53935',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '25px',
+                      width: '80px',
+                      padding: '10px 20px',
+                      cursor: 'pointer',
+                      marginRight: '10px',
                     }}
-                >
+                  >
                     Yes
-                </button>
-                <button
+                  </button>
+                  <button
+                    onClick={handleClosePopup}
                     style={{
-                        backgroundColor: 'white',
-                        color: '#333',
-                        border: '1px solid #ccc',
-                        borderRadius: '25px',
-                        width: '80px',
-                        padding: '10px 20px',
-                        cursor: 'pointer',
+                      backgroundColor: 'white',
+                      color: '#333',
+                      border: '1px solid #ccc',
+                      borderRadius: '25px',
+                      width: '80px',
+                      padding: '10px 20px',
+                      cursor: 'pointer',
                     }}
-                >
+                  >
                     No
-                </button>
-            </div>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
-  );
+      );
+            
 };
 
 export default Comment;

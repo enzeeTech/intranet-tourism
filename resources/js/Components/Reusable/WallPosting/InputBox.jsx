@@ -315,7 +315,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             alt="Emoji Icon"
                                             className="w-[16px] h-[16px]"
                                         />
-                                        <span className="tooltiptext">React 😀🤣😤</span>
+                                        <span className="tooltiptext">React</span>
                                     </button>
                                     {showReactionPicker && (
                                         <div className="emoji-picker-container">
