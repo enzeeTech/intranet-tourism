@@ -68,11 +68,8 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
 
   return (
     <>
-    <div className="flex flex-row justify-between items-center w-full max-md:w-full mb-4">
+    <div className="flex flex-row justify-center items-center w-full max-md:w-full mb-4">
       <h2 className="font-bold text-2xl">Edit Post</h2>
-      <button onClick={onClose}>
-        <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-      </button>
     </div>
     <div className=" max-h-[80vh] overflow-y-auto pb-4">
         <header className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
