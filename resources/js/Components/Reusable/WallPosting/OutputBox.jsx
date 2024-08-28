@@ -1207,7 +1207,13 @@ const renderContentWithTags = (content, mentions) => {
             </div>
         </div>
       )}
-
+{showLikesPopup && (
+  <LikesPopup 
+    likedUsers={likedUsers} 
+    onClose={() => setShowLikesPopup(false)} 
+    commentId={selectedPostId}
+  />
+)}
       {isCommentPopupOpen && selectedPost && (
         <Comment post={selectedPost} onClose={() => setIsCommentPopupOpen(false)} />
       )}

@@ -270,7 +270,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     variant === "comment" ? "comment-box-container" : "input-box-container"
                 }`}
             >
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full px-2">
                     {variant === "comment" && (
                         <textarea
                             ref={textAreaRef}
@@ -305,7 +305,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                         </div>
                     )}
                     <div className=" ">
-                        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center">
+                        <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-4 items-center mt-1">
                             {variant === "comment" && (
                                 <>
                                     <button className="tooltip" onClick={toggleReactionPicker}>

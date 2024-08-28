@@ -297,9 +297,46 @@ const Comment = ({ post, onClose, loggedInUserId }) => {
                     alt={post.user.name}
                     className="w-[53px] rounded-full"
                   />
-                  <div className="ml-3">
-                    <div className="text-lg font-semibold">{post.user.name}</div>
-                    <time className="text-sm text-gray-500">{formatTimeAgo(post.created_at)}</time>
+                  <div className="relative ml-3 bg-gray-100 p-2 rounded-lg w-full">
+                    <div className="flex text-sm">
+                      <span className="font-semibold">{user.name || 'Commenter'}</span>
+                      <span className="ml-2 text-xs text-gray-500">
+                        {formatTimeAgo(comment.created_at)}
+                      </span>
+                    </div>
+                    <p className="text-sm mt-1">{comment.content}</p>
+                    <div className="flex items-center gap-2">
+                      {isPostLikedByUser(comment) ? (
+                        <img
+                          src="/assets/Like.svg"
+                          alt="Unlike"
+                          className="w-5 h-5 cursor-pointer"
+                          onClick={() => handleUnlike(comment.id)}
+                        />
+                      ) : (
+                        <img
+                          src="/assets/likeforposting.svg"
+                          alt="Like"
+                          className="w-5 h-3 mt-2 cursor-pointer"
+                          onClick={() => handleLike(comment.id)}
+                        />
+                      )}
+                      {likesCount > 0 && (
+                        <span
+                          className="text-sm font-medium cursor-pointer"
+                          onClick={() => handleLikesClick(comment.id)}
+                        >
+                          {likesCount}
+                        </span>
+                      )}
+                    </div>
+                    <img 
+                      loading="lazy" 
+                      src="/assets/wallpost-dotbutton.svg" 
+                      alt="Options" 
+                      className="absolute top-1 right-1 w-6 h-6 cursor-pointer" 
+                      onClick={() => handleClickTreeDots(comment.id)} 
+                    />
                   </div>
                 </header>
                 <div className="mt-4">
