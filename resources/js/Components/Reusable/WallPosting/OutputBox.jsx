@@ -1346,7 +1346,8 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: '400px',
+                minWidth: '200px',
+            maxWidth:'full',
             }}
         >
             <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
@@ -1369,7 +1370,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     Yes
                 </button>
                 <button
-                    // onClick={handleClosePopup}
+                    onClick={() => setShowDeletePopup(false)}
                     style={{
                         backgroundColor: 'white',
                         color: '#333',
