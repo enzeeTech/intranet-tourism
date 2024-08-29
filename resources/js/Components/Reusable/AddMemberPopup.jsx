@@ -389,14 +389,14 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             {isAddMemberPopupOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-2xl pt-7 px-4 w-[400px]">
-                        <h1 className="flex justify-start mx-4 mb-4 text-2xl font-bold text-neutral-800">Add staff</h1>
+                        <h1 className="flex justify-start mx-2 mb-4 text-2xl font-bold text-neutral-800">Add staff</h1>
                         <input
                             type="text"
                             placeholder="Search name"
                             value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={!!selectedPerson}
-                            className="w-[95%] py-2 px-4 mb-4 ml-[2.5%] border bg-gray-200 border-gray-200 rounded-full"
+                            className="w-full py-2 px-4 mb-4 border bg-gray-200 border-gray-200 rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
                             {loading ? (
@@ -410,7 +410,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         className="flex items-center p-2 cursor-pointer"
                                         onClick={() => handleSelectPerson(person)}
                                     >
-                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full" />
+                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full object-cover" />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
                                             <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
@@ -423,7 +423,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                         {selectedPerson && (
                             <div className="mx-0 my-2">
                                 <div className="mb-2">
-                                    <label className="block font-bold text-gray-700">Title</label>
+                                    <label className="block font-bold text-gray-700">Job Title</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
                                         <MenuButton className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border px-3 py-2 ${titleError ? 'border-red-500' : 'border-gray-300'} text-gray-700 hover:bg-gray-50`}>
                                             {title || "Select Title"}
@@ -530,7 +530,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             </div>
                         )}
                         {success && <div className="mt-2 text-green-500">{success}</div>}
-                        <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t-2 border-gray-400">
+                        <div className="flex justify-end -mx-4 pt-3 h-[70px] border-t border-gray-200">
                             <button
                                 className="px-4 mb-4 mr-2 font-bold rounded-full text-[#222222]"
                                 onClick={handleClose}

@@ -437,10 +437,15 @@
   border-right: 1px solid #E4E4E4;
 }
 
+.call-button:hover, .whatsapp-button:hover {
+  background-color: #c2dcfc;
+}
+
 .call-button img, .whatsapp-button img {
   width: 20px;
   height: 20px;
 }
+
 
 .call-button.disabled, .whatsapp-button.disabled {
   opacity: 0.5;
