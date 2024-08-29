@@ -94,7 +94,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
           <div className="flex justify-start w-full text-xl font-bold my-1">{title}</div>
           <div className="flex gap-5 mt-4 text-base font-medium">
             {croppedImage ? (
-              <div className="relative w-[500px] h-[300px]"> {/* Adjusted cropper area to match aspect ratio */}
+              <div className="relative w-[500px] max-md:w-[300px] h-[300px] max-md:h-[180px]"> {/* Adjusted cropper area to match aspect ratio */}
                 <Cropper
                   image={croppedImage}
                   crop={crop}

@@ -1,5 +1,5 @@
 const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage, hasNextButton }) => (
-    <div className="py-3">
+    <div className="py-3 flex w-full justify-center">
       {hasNextButton && <button
         disabled={!hasNextButton.prev_page_url}
         onClick={() => paginate(pv => pv - 1)}

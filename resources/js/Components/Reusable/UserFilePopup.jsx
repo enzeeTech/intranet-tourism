@@ -3,6 +3,8 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import threeDotsIcon from '../../../../public/assets/threedots.svg';
 import deleteIcon from '../../../../public/assets/deleteicon.svg';
 import downloadIcon from '../../../../public/assets/downloadicon.svg';
+import renameIcon from '../../../../public/assets/renameicon.svg';
+import ViewIcon from '../../../../public/assets/ViewIcon.svg';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -34,6 +36,20 @@ const PopupContent = ({ file }) => {
     window.location.href = `/api/downloadFile/${file.id}`;
   };
 
+  const handleRename = (e, close) => {
+    e.preventDefault();
+    onRename();
+    close(); // Close the popup
+  };
+
+  const handleViewClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const fileUrl = `/storage/${file.metadata.path}`; // Construct the file URL
+    window.open(fileUrl, '_blank'); // Open the file in a new tab
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -50,14 +66,28 @@ const PopupContent = ({ file }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 z-10 -mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <MenuItems className="absolute right-0 z-10 -mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
+          <MenuItem>
+              {({ active, close }) => (
+                <button
+                  onClick={(e) => handleRename(e, close)}
+                  className={classNames(
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    'group flex items-center px-4 py-2 text-sm w-full'
+                  )}
+                >
+                  <img src={renameIcon} alt="Rename" className="mr-3 h-7 w-7" />
+                  Rename
+                </button>
+              )}
+            </MenuItem>
             <MenuItem>
               {({ active }) => (
                 <button
                   onClick={handleDelete}
                   className={classNames(
-                    active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full text-left',
                   )}
                 >
@@ -76,7 +106,7 @@ const PopupContent = ({ file }) => {
                 <button
                   onClick={handleDownload}
                   className={classNames(
-                    active ? 'bg-blue-200 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full text-left',
                   )}
                 >
@@ -87,6 +117,20 @@ const PopupContent = ({ file }) => {
                     aria-hidden="true"
                   />
                   Download
+                </button>
+              )}
+            </MenuItem>
+            <MenuItem>
+              {({ active }) => (
+                <button
+                  onClick={handleViewClick}
+                  className={classNames(
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    'group flex items-center px-4 py-2 text-sm w-full'
+                  )}
+                >
+                  <img src={ViewIcon} alt="View" className="mr-3 h-7 w-7" />
+                  View
                 </button>
               )}
             </MenuItem>

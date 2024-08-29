@@ -265,9 +265,9 @@ const Pautan = () => {
     <Example>
       <>
         <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1500px] mx-8 my-10">
-          <div className="flex items-end justify-between mb-2 border-b border-gray-200">
+          <div className="flex items-start justify-between mb-2 border-b border-gray-200">
             <h2 className="mb-3 text-3xl font-bold text-gray-900">Manage Links</h2>
-            <div className="flex space-x-4 mb-2">
+            <div className="flex space-x-4">
               <button
                 className="text-gray-900 font-bold"
                 onClick={handleBackNavigation}

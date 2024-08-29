@@ -146,7 +146,7 @@ export default function Pautan() {
     <>
       <ul
         role="list"
-        className="divide-y divide-gray-100 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+        className="divide-y divide-gray-100 bg-white w-full shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
       >
         {extlink.map((refer, index) => {
           const isTop = index === 0;

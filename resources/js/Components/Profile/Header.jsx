@@ -199,7 +199,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
     <>
     <OnlineUsersProvider>
       <header
-        className="flex overflow-hidden relative z-999 flex-col items-start px-8 pt-32 max-md:pt-12 -mt-6 max-md:-mt-10 w-full min-h-[400px] max-md:h-[100px] max-md:px-5 max-md:max-w-full"
+        className="flex overflow-hidden bg-white relative z-999 flex-col items-start px-8 pt-32 max-md:pt-12 -mt-6 max-md:-mt-10 w-full min-h-[400px] max-md:h-[100px] max-md:px-5 max-md:max-w-full"
         onClick={handleEditBanner}
       >
         <img src={backgroundImage} alt="" className="object-cover absolute inset-0 w-full h-[290px] max-md:h-1/3" />

@@ -102,14 +102,14 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <MenuItem>
               {({ active, close }) => (
                 <button
                   onClick={(e) => handleRename(e, close)}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -123,7 +123,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleDownload}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -137,7 +137,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleDelete}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -151,7 +151,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleViewClick}
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
