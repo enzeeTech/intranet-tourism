@@ -9,6 +9,8 @@ import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import MyComponent from '@/Components/Reusable/CommunitySide';
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
+import InfoGraphic from '@/Components/Reusable/InfoGraphic';
+import AdvertisementDashboard from '@/Components/Reusable/AdvertisementDashboard';
 
 const Dashboard = () => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
@@ -63,6 +65,12 @@ const Dashboard = () => {
           <aside className="fixed bottom-0 right-0 hidden w-5/10 px-4 py-6 overflow-y-auto border-l border-gray-200 top-16 sm:px-6 lg:px-4 xl:block">
             <div>
               <MyComponent />
+            </div>
+            <div>
+              <AdvertisementDashboard />
+            </div>
+            <div>
+              <InfoGraphic />
             </div>
           </aside>
         </div>

@@ -277,7 +277,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
               </div>
       
               {/* Comment Section */}
-              <hr className="w-full border-1 border-gray-200"/>
+              {/* <hr className="w-full border-1 border-gray-200"/> */}
               <div className="pb-4 px-6">
                 <div className="space-y-4">
                   {comments.map((comment) => {
