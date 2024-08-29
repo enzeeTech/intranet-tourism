@@ -62,7 +62,7 @@ function Filter({ onFilterChange }) {
   };
 
   return (
-    <div className="flex flex-col justify-center text-sm w-[132px] text-neutral-800 relative mr-96 -mb-10">
+    <div className="flex flex-col justify-center text-sm w-[132px] text-neutral-800 relative mr-auto -mb-10">
       <div
         className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg mb-4"
         onClick={toggleDropdown}
