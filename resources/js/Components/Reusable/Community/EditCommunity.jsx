@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCsrf } from "@/composables";
-import { usePage } from '@inertiajs/react';
+import { usePage } from "@inertiajs/react";
 
 function Header({ title }) {
   return (
@@ -14,7 +14,7 @@ function Avatar({ src, alt, onImageChange }) {
   const [previewSrc, setPreviewSrc] = useState(src);
 
   const handleClick = () => {
-    document.getElementById('avatarInput').click();
+    document.getElementById("avatarInput").click();
   };
 
   const handleImageChange = (file) => {
@@ -25,10 +25,10 @@ function Avatar({ src, alt, onImageChange }) {
     }
   };
 
-  let banner = '';
+  let banner = "";
 
-  if (previewSrc && typeof previewSrc === 'string') {
-    if (previewSrc.startsWith('banner/')) {
+  if (previewSrc && typeof previewSrc === "string") {
+    if (previewSrc.startsWith("banner/")) {
       banner = `/storage/${previewSrc}`;
     } else {
       banner = previewSrc;
@@ -57,128 +57,128 @@ function Avatar({ src, alt, onImageChange }) {
       />
     </div>
   );
-  
 }
 
-
-
-function Card({ 
-  title, 
-  imgSrc, 
-  imgAlt, 
-  user,
-  department, 
-  description, 
-  cancelText, 
-  saveText, 
-  onCancel, 
-  onSave
+function Card({
+  title,
+  imgSrc,
+  imgAlt,
+  department,
+  cancelText,
+  saveText,
+  onCancel,
+  onSave,
 }) {
-
-  const [departmentName, setDepartmentName] = useState(department?.name || '');
-  const [initialDepartmentName, setInitialDepartmentName] = useState(department?.name || '');
+  const [departmentName, setDepartmentName] = useState(department?.name || "");
+  const [initialDepartmentName, setInitialDepartmentName] = useState(
+    department?.name || ""
+  );
 
   const [imageSrc, setImageSrc] = useState(department?.banner || imgSrc);
-  const [initialImageSrc, setInitialImageSrc] = useState(department?.banner || imgSrc);
+  const [initialImageSrc, setInitialImageSrc] = useState(
+    department?.banner || imgSrc
+  );
   const [imageFile, setImageFile] = useState(null); // New state to hold the file object
 
-  const [selectedType, setSelectedType] = useState(department?.type || '');
-  const [initialSelectedType, setInitialSelectedType] = useState(department?.type || '');
+  const [selectedType, setSelectedType] = useState(department?.type || "");
+  const [initialSelectedType, setInitialSelectedType] = useState(
+    department?.type || ""
+  );
 
-  const [departmentDescription, setDepartmentDescription] = useState(department?.description || '');
-  const [initialDepartmentDescription, setInitialDepartmentDescription] = useState(department?.description || '');
+  const [departmentDescription, setDepartmentDescription] = useState(
+    department?.description || ""
+  );
+  const [initialDepartmentDescription, setInitialDepartmentDescription] =
+    useState(department?.description || "");
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const csrfToken = useCsrf();
   const { props } = usePage();
-  const { id, authToken } = props;
+  const { authToken } = props;
 
   useEffect(() => {
-    setDepartmentName(department?.name || '');
-    setInitialDepartmentName(department?.name || '');
-    
+    setDepartmentName(department?.name || "");
+    setInitialDepartmentName(department?.name || "");
+
     setImageSrc(department?.banner || imgSrc);
     setInitialImageSrc(department?.banner || imgSrc);
-    
-    setSelectedType(department?.type || '');
-    setInitialSelectedType(department?.type || '');
 
-    setDepartmentDescription(department?.description || '');
-    setInitialDepartmentDescription(department?.description || '');
+    setSelectedType(department?.type || "");
+    setInitialSelectedType(department?.type || "");
+
+    setDepartmentDescription(department?.description || "");
+    setInitialDepartmentDescription(department?.description || "");
   }, [department, imgSrc]);
 
   const handleImageChange = (file) => {
     if (!file) return;
 
-    const objectUrl = URL.createObjectURL(file);
-    setImageSrc(objectUrl);
-    setImageFile(file); 
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageSrc(reader.result); // Use base64 string as the image source
+      setImageFile(reader.result); // Store the base64 string
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async () => {
-    if (!departmentName.trim()) {
-      setError('Department Name is required.');
-      return;
-    }
-
-    if (
-      departmentName === initialDepartmentName &&
-      imageSrc === initialImageSrc &&
-      selectedType === initialSelectedType &&
-      departmentDescription === initialDepartmentDescription
-    ) {
-      setError('No changes detected.');
-      return;
-    }
-
-    setError('');
-
+    setError(""); // Reset any previous errors
+  
     const formData = new FormData();
-    formData.append('_method', 'PUT');
+    formData.append("_method", "PUT"); // Indicate that this is an update operation
+    
+    // Append the current or updated values
     formData.append("name", departmentName);
-    formData.append("description", departmentDescription);
+    formData.append("description", departmentDescription || ''); // Use empty string if null
     formData.append("type", selectedType);
-
+  
     if (imageFile) {
-      formData.append('banner', imageFile);
+      formData.append("banner", imageFile); // Base64 string of the image file
+    } else {
+      formData.append("banner", initialImageSrc); // URL of the existing image
     }
-
+  
     const options = {
-      method: 'POST',
+      method: "POST", // Ensure this is 'POST' for sending FormData
       headers: {
-        'Accept': 'application/json',
+        Accept: "application/json",
         "X-CSRF-Token": csrfToken,
-        'Authorization': `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken}`,
       },
-      body: formData
+      body: formData, // Send the FormData object directly
     };
-
-    const url = `/api/department/departments/${department?.id}`;
-
+  
+    const url = `/api/communities/communities/${department?.id}`;
+  
     try {
       const response = await fetch(url, options);
       const text = await response.text();
-
+  
       if (!response.ok) {
-        console.error('Server response not OK:', text);
-        throw new Error('Failed to save department');
+        console.error("Server response not OK:", text);
+        throw new Error("Failed to save department");
       }
-
+  
       const responseData = text ? JSON.parse(text) : {};
-      console.log('Department saved:', responseData.data);
-      onSave(responseData.data);
+      console.log("Department saved:", responseData.data);
+  
+      // Call the onSave callback if provided
+      if (onSave) onSave(responseData.data);
+  
+      // Reload the page to reflect changes
       window.location.reload();
     } catch (error) {
-      console.error('Error saving department:', error.message);
-      setError('An error occurred while saving the department.');
+      console.error("Error saving department:", error.message);
+      setError("An error occurred while saving the department.");
     }
   };
+  
 
   return (
     <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px]">
       <Header title={title} />
       <div className="flex flex-col items-center w-full px-6">
-        <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange}/>
+        <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
         <input
           type="text"
           placeholder="Department name"
@@ -195,10 +195,7 @@ function Card({
         />
         {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
         <div className="flex justify-end w-full mt-4 space-x-2">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-black font-bold"
-          >
+          <button onClick={onCancel} className="px-4 py-2 text-black font-bold">
             {cancelText}
           </button>
           <button
@@ -213,9 +210,9 @@ function Card({
   );
 }
 
-const EditDepartments = ({ department, onCancel, onSave }) => (
+const EditCommunity = ({ department, onCancel, onSave }) => (
   <Card
-    title="Edit Department"
+    title="Edit Community"
     imgSrc="/assets/uploadAnImage.svg"
     imgAlt="Department Image"
     department={department}
@@ -226,4 +223,4 @@ const EditDepartments = ({ department, onCancel, onSave }) => (
   />
 );
 
-export default EditDepartments;
+export default EditCommunity;
