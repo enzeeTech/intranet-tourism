@@ -699,9 +699,9 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
             <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36c4e55abf5012ece1a90ed95737b46c9b6970a05e3182fdd6248adca09028e?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="mt-6 aspect-[4.55] w-[76px]" />
           </article>
         </div>
+      //profile
       ))}
       {/* {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => { */}
-      
       {userId ? PostDataFiltered.filter(post => {
     const isAuthor = post.user.id === userId;
     const isMentioned = post.mentions && JSON.parse(post.mentions).some(mention => mention.id == userId);
@@ -723,7 +723,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
               {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437] ">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -877,7 +877,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-                <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] z-5 relative`}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
@@ -1016,6 +1016,8 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
               )}
             </div>
           )
+
+          // wallposting
         }) : filteredFinalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
@@ -1340,7 +1342,8 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: '400px',
+                minWidth: '200px',
+            maxWidth:'full',
             }}
         >
             <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
@@ -1363,7 +1366,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     Yes
                 </button>
                 <button
-                    // onClick={handleClosePopup}
+                    onClick={() => setShowDeletePopup(false)}
                     style={{
                         backgroundColor: 'white',
                         color: '#333',

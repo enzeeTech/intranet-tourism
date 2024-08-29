@@ -257,7 +257,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                         {selectedPerson && (
                             <div className="my-2 mx-2">
                                 <div className="mb-2">
-                                    <label className="block text-gray-700 font-bold">Title</label>
+                                    <label className="block text-gray-700 font-bold">Job Title</label>
                                     <select
                                         value={title.title}
                                         onChange={(e) => {

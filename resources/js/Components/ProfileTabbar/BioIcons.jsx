@@ -456,39 +456,39 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
             )}
             {isPopupOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
-                    <div className="bg-white p-6 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
+                    <div className=" p-6 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-center">
                         <img 
                         src="/assets/logo_tourism.png" 
                         alt="Tourism Logo" 
-                        className="w-20 h-15 mr-2 align-middle"
+                        className="w-20 h-15 mr-2 align-middle my-4"
                         />
                     </div>
                     <div className="flex flex-col items-center justify-center">
-    <p className="text-lg font-bold text-gray-900">
-        <span className="font-normal">{user_name}</span>
-    </p>
-    <p className="text-lg font-bold text-gray-900 mt-2">
-        <span className="font-normal">{user_title}</span>
-    </p>
+                        <p className="text-lg font-bold text-gray-900">
+                            <span className="font-bold text-center w-full flex justify-center">{user_name}</span>
+                        </p>
+                        <p className="text-lg font-bold text-gray-900 mt-2">
+                            <span className="font-normal">{user_title}</span>
+                        </p>
 
-    {qrCodeSvg ? (
-        <div
-            className="qr-code-svg mt-4"
-            dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
-        />
-    ) : (
-        <p>Loading QR code...</p>
-    )}
-</div>
+                        {qrCodeSvg ? (
+                            <div
+                                className="qr-code-svg mt-4"
+                                dangerouslySetInnerHTML={{ __html: qrCodeSvg }}
+                            />
+                        ) : (
+                            <p>Loading QR code...</p>
+                        )}
+                    </div>
 
                         <hr className="mb-4 mt-4 w-full border-gray-300" />
-                        <div className="flex justify-between -mt-1 mx-10 max-md:mx-6 relative space-x-4">
-                            <button onClick={handleDownload} className="text-white py-2">
-                                <img src="/assets/DownloadIcon.png" alt="Download Icon" className="w-6 h-6 shrink-0" />
+                        <div className="flex w-full -mt-1 relative space-x-4">
+                            <button onClick={handleDownload} className="bg-white hover:bg-blue-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
+                                <img src="/assets/downloadiconblue.svg" alt="Download Icon" className="w-6 h-6 shrink-0" />
                             </button>
-                            <button onClick={handleCopyLink} className="text-white py-2">
-                                <img src="/assets/CopyLinkIcon.png" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
+                            <button onClick={handleDownload} className="bg-white hover:bg-blue-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
+                                <img src="/assets/copylinkiconblue.svg" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
                             </button>
                         </div>
 
