@@ -68,15 +68,14 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
 
   return (
     <>
-    <div className="flex flex-row justify-between items-center w-full max-md:w-full mb-4">
-      <h2 className="font-bold text-2xl w-full text-center ml-6">Edit Post</h2>
-      <button onClick={onClose}>
-        <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
-      </button>
-    </div>
-    <hr className="border-1 border-gray-200 mb-4"/>
-    <div className=" max-h-[80vh] overflow-y-auto pb-4">
-        <header className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full my-1">
+      <div className="flex flex-row justify-between items-center w-full max-md:w-full mb-4">
+        <h2 className="font-bold text-2xl">Edit Post</h2>
+        <button onClick={onClose}>
+          <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
+        </button>
+      </div>
+      <div className="max-h-[80vh] overflow-y-auto pb-4">
+        <header className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
           <div className="flex gap-1.5">
             <img loading="lazy" src={`/storage/${post.userProfile?.profile.image}` ?? `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(post.user.name)}&rounded=true`} alt="Profile image" className="shrink-0 aspect-square w-[53px] rounded-image" />
             <div className="flex flex-col my-auto">
@@ -146,7 +145,7 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
           </div>
         </form>
       </div>
-      <div className="flex w-full justify-end space-x-2 my-4">
+      <div className="flex w-full justify-end space-x-2 mt-4">
         <button type="button" onClick={onClose} className="mt-2 px-4 py-2 font-bold hover:bg-gray-400 hover:text-white border-2 border-gray-400 text-gray-400 rounded-full text-sm">
           Cancel
         </button>

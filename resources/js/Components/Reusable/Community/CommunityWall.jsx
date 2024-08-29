@@ -4,7 +4,7 @@ import DpMembers from '../../DepartmentCom/DepartmentMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
-import EditDepartments from '../Departments/EditDepartments'; // Import EditDepartments
+import EditCommunity from './CommunityDepartments';
 
 function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -223,7 +223,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
       <Navigation departmentID={departmentID} userId={userId} departmentName={departmentHeader} />
       {isEditPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <EditDepartments
+          <EditCommunity
             department={departmentData}
             onSave={handleSave}
             onCancel={handleCancel}
