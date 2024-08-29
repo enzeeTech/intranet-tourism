@@ -305,7 +305,7 @@ function DpMembers() {
         member => !fetchedAdmins.includes(member)
       );
   
-      // Add the flag attribute
+      // Flagging admins and members
       const updatedAdmins = fetchedAdmins.map(admin => ({ ...admin, flag: 'admin' }));
       const updatedNonAdmins = fetchedNonAdmins.map(nonAdmin => ({ ...nonAdmin, flag: 'member' }));
   
@@ -348,7 +348,6 @@ function DpMembers() {
 
   const handleAssign = async (user_id) => {
     try {
-      // Fetch the user's existing roles
       const rolesResponse = await fetch(`/api/permission/model-has-roles?model_id=${user_id}`, {
         method: 'GET',
         headers: {
@@ -365,14 +364,13 @@ function DpMembers() {
       const rolesData = await rolesResponse.json();
       const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
   
-      // Extract role_ids and maintain other properties
+
       const existingRoleIds = existingRoles.map(role => role.role_id);
       const departmentId = getDepartmentIdFromQuery();
 
 
       console.log("EXISTING ROLES", existingRoles);
 
-      // If the user already has a role for a department or community, preserve the existing IDs
       let communityId = null;
       existingRoles.forEach(role => {
         if (role.community_id) {
@@ -382,14 +380,12 @@ function DpMembers() {
 
       console.log("COMMUNITY_ID", communityId);
 
-      // Add new role id (2 for department admin) if not already present
       if (!existingRoleIds.includes(2)) {
         existingRoleIds.push(2);
       }
 
       console.log("EXISTING ROLE IDS", existingRoleIds);
 
-      // Prepare the updated roles body for the POST request
       const updatedRoles = {
         role_id: existingRoleIds,  
         model_id: user_id,
@@ -399,7 +395,6 @@ function DpMembers() {
 
       console.log("UPDATED ROLES", updatedRoles);
 
-      // Post the updated roles to the server
       const response = await fetch('/api/permission/model-has-roles', {
         method: 'POST',
         headers: {
@@ -421,6 +416,82 @@ function DpMembers() {
 
     closePopup(); 
   };
+
+  const handleDemotion = async (member) => {
+    try {
+      const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
+  
+      const rolesResponse = await fetch(rolesUrl, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken || '',
+        },
+      });
+  
+      if (rolesResponse.ok) {
+        const rolesData = await rolesResponse.json();
+        const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
+  
+        // get community ids
+        let communityId = null;
+        existingRoles.forEach(role => {
+          if (role.community_id) {
+            communityId = role.community_id;  
+          }
+        });
+
+        console.log("EXISTING ROLES", existingRoles);
+  
+        const updatedRoles = existingRoles.filter(
+          (role) => !(role.role_id === 2)
+        );
+
+        console.log("UPDATED ROLES", updatedRoles);
+
+        if (!updatedRoles.some(role => role.role_id === 4)) {
+          updatedRoles.push({
+            role_id: 4, 
+            model_id: member.user_id,
+          });
+        }
+
+        console.log("UPDATED ROLES", updatedRoles);
+  
+        const rolesPayload = {
+          role_id: updatedRoles.map(role => role.role_id),
+          model_id: member.user_id,
+          department_id: member.department_id, 
+          community_id: communityId,          
+        };
+
+        console.log("ROLES PAYLOAD", rolesPayload);
+  
+        const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
+          body: JSON.stringify(rolesPayload),
+        });
+  
+        if (updateRolesResponse.ok) {
+          console.log('User demoted successfully.');
+          await fetchMembersAndAdmins();  
+        } else {
+          console.error('Failed to update roles:', updateRolesResponse.statusText);
+        }
+      } else {
+        console.error('Failed to fetch roles:', rolesResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Error demoting user:', error);
+    }
+  
+    closePopup();
+  };
+
   
 
   const handleRemove = async (id) => {
@@ -447,6 +518,94 @@ function DpMembers() {
 
     closePopup();
   };
+
+  const handleAdminRemove = async (member) => {
+    const url = `/api/department/employment_posts/${member.employment_post_id}`;
+  
+    try {
+      // Delete the member from the department
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+      });
+  
+      if (response.ok) {
+        console.log('Member deleted successfully.');
+  
+        // Check if the member is an admin and fetch their roles
+        if (member.flag === 'admin') {
+          const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
+          
+          const rolesResponse = await fetch(rolesUrl, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
+          });
+  
+          if (rolesResponse.ok) {
+            const rolesData = await rolesResponse.json();
+            const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
+            
+            let communityId = null;
+            existingRoles.forEach(role => {
+              if (role.community_id) {
+                communityId = role.community_id;  
+              }
+            });
+  
+            // Filter out the admin role for this department
+            const updatedRoles = existingRoles.filter(
+              (role) => !(role.role_id === 2)
+            );
+
+            console.log("UPDATED ROLES", updatedRoles);
+  
+            const rolesPayload = {
+              role_id: updatedRoles.map(role => role.role_id),
+              model_id: member.user_id,
+              community_id: communityId,
+            };
+
+            console.log("ROLES PAYLOAD", rolesPayload);
+  
+            // Post the updated roles 
+            const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+              },
+              body: JSON.stringify(rolesPayload),
+            });
+  
+            if (updateRolesResponse.ok) {
+              console.log('Admin role removed successfully.');
+            } else {
+              console.error('Failed to update roles:', updateRolesResponse.statusText);
+            }
+          } else {
+            console.error('Failed to fetch roles:', rolesResponse.statusText);
+          }
+        }
+  
+        // Refresh the members and admins list after deletion
+        await fetchMembersAndAdmins();
+      } else {
+        console.error('Failed to delete member:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting member:', error);
+    }
+  
+    closePopup();
+  };
+  
+  
 
   const closePopup = () => {
     setActivePopupId(null);
@@ -516,8 +675,8 @@ function DpMembers() {
               isActive={admin.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
-              onAssign={handleAssign}
-              onRemove={handleRemove}
+              onAssign={() => handleDemotion(admin)}
+              onRemove={() => handleAdminRemove(admin)}
               closePopup={closePopup}
             />
           ))}
