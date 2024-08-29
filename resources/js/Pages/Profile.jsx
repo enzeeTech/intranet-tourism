@@ -66,6 +66,8 @@ function ProfileContent() {
         icon1: "/assets/EditButton.svg",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
     });
+  const [filterType, setFilterType] = useState(null);
+
 
     useEffect(() => {
         fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
@@ -456,6 +458,10 @@ function ProfileContent() {
     const employmentPostTitle = profileData.employment_posts?.length > 0 
   ? profileData.employment_posts[0].business_post.title 
   : '';
+
+  const handleFilterChange = (filter) => {
+    setFilterType(filter);
+  };
     
     return (
         <Example>
@@ -478,9 +484,10 @@ function ProfileContent() {
                             {activeTab === "activities" && (
                                 <div className="py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
                                     <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
-                                    <Filter className="mr-10" />
+                                    {/* <Filter className="mr-10" /> */}
+                                    <Filter className="mr-10" onFilterChange={handleFilterChange} />
                                     <div className="mb-20"></div>
-                                    <OutputData polls={polls} showUserPosts={true} userId={id} />
+                                    <OutputData polls={polls} showUserPosts={true} userId={id} postType={filterType} />
                                 </div>
                             )}
                             {activeTab === "bio" && (

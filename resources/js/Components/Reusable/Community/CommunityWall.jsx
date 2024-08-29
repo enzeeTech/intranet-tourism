@@ -4,7 +4,7 @@ import DpMembers from '../../DepartmentCom/DepartmentMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
-import EditCommunity from './CommunityDepartments';
+import EditCommunity from './EditCommunity';
 
 function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);

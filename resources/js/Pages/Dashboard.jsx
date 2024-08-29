@@ -4,7 +4,6 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
-// import Example from '../Layouts/DashboardLayoutNew';
 import Example from '@/Layouts/DashboardLayoutNew';
 import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
@@ -14,9 +13,14 @@ import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert'
 const Dashboard = () => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [polls, setPolls] = useState([]);
+  const [filterType, setFilterType] = useState(null);
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
+  };
+
+  const handleFilterChange = (filter) => {
+    setFilterType(filter);
   };
 
   return (
@@ -27,9 +31,9 @@ const Dashboard = () => {
             <div className="flex flex-col items-start px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <StoryNew userId={id} />
               <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
-              <Filter className="mr-10" />
+              <Filter className="mr-10" onFilterChange={handleFilterChange} />
               <div className="mb-4"></div>
-              <OutputData loggedInUserId={id} polls={polls} filterType={null} />
+              <OutputData loggedInUserId={id} polls={polls} filterType={null} postType={filterType} />
             </div>
           </main>
 
