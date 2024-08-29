@@ -1267,9 +1267,9 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         {renderContentWithTags(post.content, post.mentions)}
                       </article>
 
-                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                    <p className=" mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
-                      {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                      <div className='taging'>{post.tag?.replace(/[\[\]"]/g, '') || ''}</div>
                     </p>
                   
 
