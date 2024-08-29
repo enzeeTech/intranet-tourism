@@ -276,7 +276,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                             ref={textAreaRef}
                             value={inputValue}
                             onChange={handleChange}
-                            placeholder="comment something..."
+                            placeholder="Add comment..."
                             className="self-center mt-1 h-8 px-2 mb-12 text-sm border-none appearance-none resize-none input-no-outline w-full"
                         />
                     )}
@@ -458,7 +458,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     loading="lazy"
                                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
                                                     alt="SEND"
-                                                    className="h-6 w-6"
+                                                    className="h-6 w-6 max-md:mt-8"
                                                 />
                                             </button>
                         </div>

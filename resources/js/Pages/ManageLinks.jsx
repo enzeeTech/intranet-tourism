@@ -265,9 +265,9 @@ const Pautan = () => {
     <Example>
       <>
         <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1500px] mx-8 my-10">
-          <div className="flex items-start justify-between mb-2 border-b border-gray-200">
+          <div className="flex items-end justify-between mb-2 border-b border-gray-200">
             <h2 className="mb-3 text-3xl font-bold text-gray-900">Manage Links</h2>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mb-2">
               <button
                 className="text-gray-900 font-bold"
                 onClick={handleBackNavigation}
@@ -275,7 +275,7 @@ const Pautan = () => {
                 Back
               </button>
               <button
-                className="px-4 py-2 font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
+                className="px-4 py-2 font-bold text-white whitespace-nowrap bg-blue-500 hover:bg-blue-700 rounded-full"
                 onClick={() => { resetForm(); setIsAddModalVisible(true); }}
               >
                 + Add
@@ -288,10 +288,10 @@ const Pautan = () => {
                 <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                   <thead>
                     <tr>
-                      <th className="px-6 py-3 font-bold text-md text-start text-gray-500 label-column">App name</th>
-                      <th className="px-6 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
-                      <th className="px-6 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
-                      <th className="px-6 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
+                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 label-column">App name</th>
+                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
+                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
+                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -304,7 +304,7 @@ const Pautan = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap label-column">
+                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap label-column">
                               <input
                                 type="text"
                                 disabled={true}
@@ -314,7 +314,7 @@ const Pautan = () => {
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
                             </td>
-                            <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap url-column">
+                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap url-column">
                               <input
                                 type="text"
                                 disabled={true}
@@ -324,14 +324,14 @@ const Pautan = () => {
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
                             </td>
-                            <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap edit-column">
+                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap edit-column">
                               <div className="fixed-size-container">
                                 <button className="text-blue-100" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
                                   <img src="assets/EditIcon.svg" alt="Edit" className="fixed-size" />
                                 </button>
                               </div>
                             </td>
-                            <td className="px-6 py-4 text-sm font-semibold text-black whitespace-nowrap delete-column">
+                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap delete-column">
                               <div className="fixed-size-container">
                                 <button className="text-red-500" onClick={(e) => { e.stopPropagation(); setCurrentApp(app); setIsDeleteModalVisible(true); }}>
                                   <img src="assets/redDeleteIcon.svg" alt="Delete" className="fixed-size" />
