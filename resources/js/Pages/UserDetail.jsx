@@ -56,6 +56,7 @@ function UserDetailContent() {
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartments, setIsEditingDepartments] = useState([false, false]);
+    const [filterType, setFilterType] = useState(null);
     const [profileData, setProfileData] = useState({
         backgroundImage: "",
         profileImage: "",
@@ -318,6 +319,10 @@ const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.
 // Attribute to tag guest profile
 const tag="guest";
 
+const handleFilterChange = (filter) => {
+    setFilterType(filter);
+  };
+
 return (
     <Example>
         <main className="xl:pl-96 w-full">
@@ -340,9 +345,9 @@ return (
                         {activeTab === "activities" && (
                             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
                                 {/* <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} /> */}
-                                <Filter className="mr-10" />
+                                <Filter className="mr-10" onFilterChange={handleFilterChange} />
                                 <div className="mb-20"></div>
-                                <OutputData polls={polls} showUserPosts={true} userId={user.id} />
+                                <OutputData polls={polls} showUserPosts={true} userId={user.id} postType={filterType} />
                             </div>
                         )}
                         {activeTab === "bio" && (
