@@ -6,7 +6,7 @@
 }
 
 .tagged-text {
-  color: blue;
+  color: #4780FF;
   font-weight: bold;
 }
 
@@ -101,7 +101,7 @@ text-decoration: underline;
 }
 
 .profile-link {
-  color: blue !important; /* Force the color to blue */
+  color: #4780FF !important; /* Force the color to blue */
   text-decoration: none; /* Optional: Remove the underline from the link */
 }
 

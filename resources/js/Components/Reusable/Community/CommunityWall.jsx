@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import DpMembers from '../../DepartmentCom/DepartmentMembers';
+import DpMembers from './CommunityMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";

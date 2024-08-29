@@ -4,9 +4,9 @@ import './Popup.css'; // Make sure to create the relevant CSS for styling
 
 function IconButton({ icon, alt, onClick }) {
   return (
-    <button type="button" className="shrink-0 w-6 aspect-square" onClick={onClick}>
+    <div className="shrink-0 w-6 aspect-square cursor-pointer" onClick={onClick}>
       <img src={icon} alt={alt} />
-    </button>
+    </div>
   );
 }
 
@@ -16,9 +16,9 @@ const Popup = ({ isOpen, onClose, children }) => {
   return ReactDOM.createPortal(
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-content rounded-2xl max-md:mx-8" onClick={(e) => e.stopPropagation()}>
-        <button className="popup-close w-full flex justify-end">
+        <div className="popup-close w-full flex justify-end">
           <IconButton icon="/assets/cancel.svg" alt="Close icon" onClick={onClose}/>
-        </button>
+        </div>
         {children}
       </div>
     </div>,
