@@ -210,7 +210,7 @@ function Card({
 
 const EditCommunity = ({ department, onCancel, onSave }) => (
   <Card
-    title="Edit Department"
+    title="Edit Community"
     imgSrc="/assets/uploadAnImage.svg"
     imgAlt="Department Image"
     department={department}
