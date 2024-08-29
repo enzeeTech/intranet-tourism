@@ -81,7 +81,7 @@ function FeedbackOption({ optionText, onVote }) {
 }
 
 
-function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
+function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postType }) {
   const [pollos, setPollos] = useState(polls);
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -550,6 +550,117 @@ const renderContentWithTags = (content, mentions) => {
       setSelectedPostId(postId);
       setShowLikesPopup(true);
     };
+
+    // const postFilter = finalPosts.filter(post => {
+    //   if (!postType) return true;
+    //   if (postType === 'mention') {
+    //     return post.mentions && post.mentions.some(mention => mention.user_id === loggedInUserId);
+    //   }
+    //   return post.type === postType;
+    // });
+
+    // const postFilter = finalPosts.filter(post => {
+    //   if (!postType) return true;
+    
+    //   if (postType === 'mention') {
+    //     if (post.mentions) {
+    //       try {
+    //         const mentions = JSON.parse(post.mentions);
+    //         return Array.isArray(mentions) && mentions.some(mention => parseInt(mention.id) === loggedInUserId);
+    //       } catch (error) {
+    //         console.error('Error parsing mentions:', error);
+    //         return false;
+    //       }
+    //     }
+    //     return false;
+    //   }
+    
+    //   return post.type === postType;
+    // });
+
+
+    // const postFilter = finalPosts.filter(post => {
+    //   console.log("POSTING", post);
+      
+    //   if (!postType) return true;
+    //   if (postType === 'mention') {
+    //     return post.mentions && JSON.parse(post.mentions).length > 0;
+    //   }
+    //   return post.type === postType;
+    // });
+
+    // const postFilter = finalPosts.filter(post => {
+    //   console.log("POSTING", post);
+    
+    //   if (!postType) return true;
+    
+    //   // Handle mention type
+    //   if (postType === 'mention') {
+    //     return post.mentions && JSON.parse(post.mentions).length > 0;
+    //   }
+    
+    //   // Handle image, video, and file types based on the attachment extensions
+    //   if (postType === 'image' || postType === 'video' || postType === 'file') {
+    //     const validExtensions = {
+    //       image: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    //       video: ['mp4', 'mov', 'avi'],
+    //       file: ['pdf', 'doc', 'docx', 'xls', 'xlsx']
+    //     };
+    
+    //     return post.attachments.some(attachment => 
+    //       validExtensions[postType].includes(attachment.extension)
+    //     );
+    //   }
+    
+    //   // Handle announcement type
+    //   if (postType === 'announcement') {
+    //     return post.type === 'announcement';
+    //   }
+    
+    //   // Default filter by type
+    //   return post.type === postType;
+    // });
+    
+    
+
+    
+    // Define the filtering function
+const filterPosts = (post) => {
+  console.log("POSTING", post);
+
+  if (!postType) return true;
+
+  // Handle mention type
+  if (postType === 'mention') {
+    return post.mentions && JSON.parse(post.mentions).length > 0;
+  }
+
+  // Handle image, video, and file types based on the attachment extensions
+  if (postType === 'image' || postType === 'video' || postType === 'file') {
+    const validExtensions = {
+      image: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+      video: ['mp4', 'mov', 'avi'],
+      file: ['pdf', 'doc', 'docx', 'xls', 'xlsx']
+    };
+
+    return post.attachments.some(attachment => 
+      validExtensions[postType].includes(attachment.extension)
+    );
+  }
+
+  // Handle announcement type
+  if (postType === 'announcement') {
+    return post.type === 'announcement';
+  }
+
+  // Default filter by type
+  return post.type === postType;
+};
+
+// Apply the filter function to both postData and finalPosts
+const PostDataFiltered = postData.filter(filterPosts);
+const filteredFinalPosts = finalPosts.filter(filterPosts);
+    
   
 
   return (
@@ -591,13 +702,13 @@ const renderContentWithTags = (content, mentions) => {
       ))}
       {/* {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => { */}
       
-      {userId ? postData.filter(post => {
+      {userId ? PostDataFiltered.filter(post => {
     const isAuthor = post.user.id === userId;
     const isMentioned = post.mentions && JSON.parse(post.mentions).some(mention => mention.id == userId);
-    const isNotStoryOrFiles = post.type !== 'story' && post.type !== 'files';
+    const isNotStoryOrFiles = post.type !== 'story' && post.type !== 'files' && post.type !== 'comment';
 
     return (isAuthor || isMentioned) && isNotStoryOrFiles;
-}).map((post, index) => {
+    }).map((post, index) => {
         console.log("POSTDATAA", post);
         
           // Parse the likes string
@@ -905,7 +1016,7 @@ const renderContentWithTags = (content, mentions) => {
               )}
             </div>
           )
-        }) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
+        }) : filteredFinalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
 

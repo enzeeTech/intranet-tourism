@@ -217,7 +217,9 @@ const Departments = () => {
                   <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                 </button>
               </div>
-              <CreateDepartments Create={handleNewDepartment} userID={id} />
+              {/* <CreateDepartments Create={handleNewDepartment} userID={id} /> */}
+              <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
+
             </div>
           </div>
         </div>
