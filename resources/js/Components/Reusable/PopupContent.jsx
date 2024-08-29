@@ -12,7 +12,7 @@ function classNames(...classes) {
 }
 
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
-  console.log("FILE", file);
+  // console.log("FILE", file);
   
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");

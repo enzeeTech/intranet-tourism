@@ -1187,21 +1187,15 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                       <div className="flex w-full items-center justify-between h-auto mb-4">
+                      {/* {post.type !== 'announcement' && post.type !== 'post' ( */}
+                      {(post.type !== 'announcement' && post.type !== 'post') && (
                         <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
                             {post.departmentNames ? post.departmentNames : post.type}
                         </span>
-                        {post.type === 'announcement' && (
-                          <div className="bg-white relative">
-                            <img
-                              src={announce}
-                              className="flex-shrink-0 rounded-xl w-7 h-7"
-                              alt="Announcement Icon"
-                            />
-                          </div>
-                        )}
+                      )}
                       </div>  
                       <div className="flex gap-5 justify-between items-center w-full max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-1.5 items-center">

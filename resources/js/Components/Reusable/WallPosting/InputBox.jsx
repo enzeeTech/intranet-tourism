@@ -83,8 +83,13 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         const endpoint = isComment ? `/api/posts/posts/${postedId}/comment` : "/api/posts/posts";
         
         // Append common fields
-        formData.append("type", isAnnouncement ? "announcement" : "post");
+        // formData.append("type", isAnnouncement ? "announcement" : "post");
         formData.append("visibility", "public");
+
+        if (isAnnouncement) {
+            formData.append("type", "announcement");
+        }
+        
     
         if (!inputValue) {
             attachments.forEach((file, index) => {
@@ -118,6 +123,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         }
     
         if (includeAccessibilities) {
+            formData.append("type", "department");
             formData.append("accessibilities[0][accessable_type]", filterType);
             formData.append("accessibilities[0][accessable_id]", filterId);
         }

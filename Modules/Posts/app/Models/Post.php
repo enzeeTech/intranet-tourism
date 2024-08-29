@@ -41,7 +41,7 @@ class Post extends Model implements AuditableContract
             'create' => [
                 [
                     'user_id' => ['required'],
-                    'type' => ['string', 'required'],
+                    'type' => ['string'],
                     'content' => ['string'],
                     'title' => ['string'],
                     'tag' => ['string'],
