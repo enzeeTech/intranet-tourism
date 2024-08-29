@@ -733,7 +733,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                 </div>
               )}
 
-               {/* Birthday Post */}
+               {/* Birthday Post For Profile */}
                {post.type === 'birthday' && (
                   <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                     <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
@@ -1039,8 +1039,8 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                 </div>
               )}
 
-                              {/* Birthday Post */}
-                              {post.type === 'birthday' && (
+                {/* Birthday Post For Public Wall Posting */}
+                {/* {post.type === 'birthday' && (
                   <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                     <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
                       <div className="flex gap-1 mt-2"></div>
@@ -1177,7 +1177,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                       <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                     </div>
                   </article>
-                )}
+                )} */}
 
 
               {/* Main Post Content */}
