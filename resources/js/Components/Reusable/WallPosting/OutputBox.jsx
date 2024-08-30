@@ -107,7 +107,7 @@ async function fetchData() {
 
     // Fetch posts data from all pages
     do {
-      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}`, {
+      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}&with[]=comments`, {
         method: "GET",
       });
       if (!postsResponse.ok) {
@@ -1015,10 +1015,15 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
         }) : filteredFinalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
+          // let commentsCount = 0;
 
           if (Array.isArray(post.likes)) {
             likesCount = post.likes?.length;
           }
+
+          const commentsCount = Array.isArray(post.comments) ? post.comments.length : 0; // Count comments directly
+          console.log("couting", post.comments);
+          
           
 
           return (
@@ -1310,6 +1315,11 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                       )}
                     </div>
                     <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                    {commentsCount > 0 && (
+                    <span className="text-sm font-medium">
+                      {commentsCount}
+                    </span>
+                  )}
                   </div>
                 </article>
               )}
