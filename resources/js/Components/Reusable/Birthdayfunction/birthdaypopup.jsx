@@ -247,14 +247,14 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
               className="w-8 h-8 rounded-full mr-2"
             />
             <p className="my-auto font-semibold text-gray-800">{name}</p>
-            <button
+            {/* <button
               onClick={() => setShowTaggingPopup(true)}
               className="ml-auto text-sm text-blue-600 hover:underline"
             >
               Tag People
-            </button>
+            </button> */}
           </div>
-          {taggedPeople.length > 0 && (
+          {/* {taggedPeople.length > 0 && (
   <div className="flex flex-wrap gap-2 mt-2">
     {taggedPeople.map((id) => (
       <div
@@ -264,8 +264,8 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
         <span className="text-neutral-800">{name}</span>
       </div>
     ))}
-  </div>
-)}
+  </div> */}
+
 
           <button
             type="submit"
