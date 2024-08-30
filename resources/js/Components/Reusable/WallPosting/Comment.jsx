@@ -11,6 +11,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
   const csrfToken = useCsrf();
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [comments, setComments] = useState([]);
@@ -31,6 +32,8 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
     .then((response) => response.json())
     .then(({ data }) => {
       const sortedComments = data.comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      console.log("SORTED COMMENTS", sortedComments);
+      
       setComments(sortedComments); // Set the sorted comments
 
       sortedComments.forEach(comment => fetchLikedUsers(comment));
@@ -124,12 +127,16 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
     setIsCommentPopupOpen((prevState) => (prevState === commentId ? null : commentId));
   };
 
-  const confirmDelete = (commentId) => {
-    setCommentIdToDelete(commentId);
+  const confirmDelete = (comment) => {    
+    setCommentIdToDelete(comment.pivot.id);
+    setPostIdToDelete(comment.pivot.comment_id);
     setShowDeletePopup(true);
+    // console.log("HAHAHA", commentIdToDelete);
   };
+  
 
   const handleDelete = async () => {
+    
     try {
       const postResponse = await fetch(`/api/posts/post_comment/${commentIdToDelete}`, {
         method: 'DELETE',
@@ -137,7 +144,16 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
       });
   
       if (postResponse.ok) {
-        fetchComments();
+        // fetchComments();
+        const DeleteInsidePostTable = await fetch(`/api/posts/posts/${postIdToDelete}`, {
+          method: 'DELETE',
+          headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+        });
+        if (DeleteInsidePostTable.ok) {
+          fetchComments();
+        } else {
+          console.error(`Failed to delete post with ID ${postIdToDelete}.`);
+        }
       } else {
         console.error(`Failed to delete post with ID ${commentIdToDelete}.`);
       }
@@ -309,6 +325,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
           <div className="pb-4 px-6">
             <div className="space-y-4">
               {comments.map((comment) => {
+                
                 let likesCount = 0;
                 if (Array.isArray(comment.likes)) {
                   likesCount = comment.likes.length;
@@ -377,12 +394,13 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                       />
                     </div>
                     {isCommentPopupOpen === comment.id && (
+                console.log("COMMENT", comment.pivot),
                       <div
                         className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
                       >
                         <p 
                           className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                          onClick={() => confirmDelete(comment.pivot.id)}
+                          onClick={() => confirmDelete(comment)}
                         >
                           <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
                           Delete

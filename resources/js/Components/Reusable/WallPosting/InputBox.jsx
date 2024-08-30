@@ -136,7 +136,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
             if (includeAccessibilities) {
                 formData.append("type", "department");
                 formData.append("accessibilities[0][accessable_type]", filterType);
-                formData.append("accessabilities[0][accessable_id]", filterId);
+                formData.append("accessibilities[0][accessable_id]", filterId);
             }
     
             fetch(endpoint, {

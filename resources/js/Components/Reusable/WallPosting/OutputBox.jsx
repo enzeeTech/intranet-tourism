@@ -166,7 +166,7 @@ async function fetchData() {
 sortedPosts.forEach(post => fetchLikedUsers(post));
 
     
-    console.log("SORTEDPOST", sortedPosts);
+    // console.log("SORTEDPOST", sortedPosts);
     
     setPostData(sortedPosts);
   } catch (error) {
@@ -232,13 +232,13 @@ const nonAnnouncements = filteredPostData.filter(post => post.type !== 'announce
 // Reverse the non-announcement posts
 const reversedNonAnnouncements = filterType ? [...nonAnnouncements] : [...nonAnnouncements];
 
-console.log("REVERSEDNON", reversedNonAnnouncements);
+// console.log("REVERSEDNON", reversedNonAnnouncements);
 
 // Combine announcements at the top with the reversed non-announcement posts
 const finalPosts = [...announcements, ...reversedNonAnnouncements];
 
 
-console.log("FINAL", finalPosts);
+// console.log("FINAL", finalPosts);
 
 
 
@@ -270,6 +270,15 @@ console.log("FINAL", finalPosts);
     try {
       // Fetch the post to check if it has accessibilities
       const postToDelete = postData.find(post => post.id === postIdToDelete);
+
+      
+      // console.log("LLLL", postToDelete.comments.pivot.id);
+    //   postToDelete.comments.forEach(comment => {
+    //     console.log("LLLL", comment.pivot.comment_id);
+    // });
+    
+
+      
   
       if (!postToDelete) {
         console.error(`Post with ID ${postIdToDelete} not found.`);
@@ -287,6 +296,30 @@ console.log("FINAL", finalPosts);
           if (!response.ok) {
             console.error(`Failed to delete accessibility with ID ${accessibility.id}.`);
             return;
+          }
+        }
+      }
+
+      // If the post has comments, delete them first
+      if (postToDelete.comments && postToDelete.comments.length > 0) {
+        for (const comment of postToDelete.comments) {
+          const response = await fetch(`/api/posts/post_comment/${comment.pivot.id}`, {
+            method: 'DELETE',
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+          });
+  
+          if (response.ok) {
+            // console.error(`Failed to delete comment with ID ${comment.pivot.id}.`);
+            const response = await fetch(`/api/posts/posts/${comment.pivot.comment_id}`, {
+              method: 'DELETE',
+              headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+            });
+
+            if (!response.ok) {
+              console.error(`Failed to delete comment with ID ${comment.pivot.comment_id}.`);
+              return;
+            }
+            // return;
           }
         }
       }
@@ -537,7 +570,7 @@ const renderContentWithTags = (content, mentions) => {
   return replaceContent(content);
 };
     
-    console.log("HEHEHHE", postData);
+    // console.log("HEHEHHE", postData);
 
 
 
@@ -626,7 +659,7 @@ const renderContentWithTags = (content, mentions) => {
     
     // Define the filtering function
 const filterPosts = (post) => {
-  console.log("POSTING", post);
+  // console.log("POSTING", post);
 
   if (!postType) return true;
 
@@ -1022,7 +1055,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
           }
 
           const commentsCount = Array.isArray(post.comments) ? post.comments.length : 0; // Count comments directly
-          console.log("couting", post.comments);
+          // console.log("couting", post.comments);
           
           
 

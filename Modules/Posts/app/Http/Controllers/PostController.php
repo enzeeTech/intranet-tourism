@@ -13,29 +13,60 @@ use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     // Start with a query builder instance
+    //     $query = Post::query();
+
+    //     // Check if the 'filter' parameter is present
+    //     if ($request->has('filter')) {
+    //         // Apply the necessary filters to the query
+    //         if (in_array('birthday', $request->input('filter'))) {
+    //             $query->where('type', 'birthday');
+    //         }
+
+    //         // If filters are present, paginate the filtered query
+    //         $data = $this->shouldPaginate($query);
+    //     } else {
+    //         // If no filters are present, paginate using the predefined queryable method
+    //         $data = $this->shouldPaginate(Post::queryable());
+    //     }
+
+    //     return response()->json([
+    //         'data' => $data,
+    //     ]);
+    // }
+
+
     public function index(Request $request)
-    {
-        // Start with a query builder instance
-        $query = Post::query();
+{
+    // Start with a query builder instance
+    $query = Post::query();
 
-        // Check if the 'filter' parameter is present
-        if ($request->has('filter')) {
-            // Apply the necessary filters to the query
-            if (in_array('birthday', $request->input('filter'))) {
-                $query->where('type', 'birthday');
-            }
-
-            // If filters are present, paginate the filtered query
-            $data = $this->shouldPaginate($query);
-        } else {
-            // If no filters are present, paginate using the predefined queryable method
-            $data = $this->shouldPaginate(Post::queryable());
+    // Check if the 'filter' parameter is present
+    if ($request->has('filter')) {
+        // Apply the necessary filters to the query
+        if (in_array('birthday', $request->input('filter'))) {
+            $query->where('type', 'birthday');
         }
 
-        return response()->json([
-            'data' => $data,
-        ]);
+        // If filters are present, paginate the filtered query
+        $data = $this->shouldPaginate($query);
+    } else {
+        // If no filters are present, paginate using the predefined queryable method
+        $data = $this->shouldPaginate(Post::queryable());
     }
+
+    // Load the comments relationship with pivot data for all posts
+    $data->load(['comments' => function ($query) {
+        $query->withPivot('id', 'comment_id');
+    }]);
+
+    return response()->json([
+        'data' => $data,
+    ]);
+}
+
 
 
 
