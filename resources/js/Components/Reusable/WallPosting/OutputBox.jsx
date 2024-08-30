@@ -81,7 +81,7 @@ function FeedbackOption({ optionText, onVote }) {
 }
 
 
-function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postType }) {
+function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postType, variant }) {
   const [pollos, setPollos] = useState(polls);
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -882,21 +882,14 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                       <div className="flex w-full items-center justify-between h-auto mb-4">
+                      {(post.type !== 'announcement' && post.type !== 'post') && (
                         <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
                             {post.departmentNames ? post.departmentNames : post.type}
                         </span>
-                        {post.type === 'announcement' && (
-                          <div className="bg-white relative">
-                            <img
-                              src={announce}
-                              className="flex-shrink-0 rounded-xl w-7 h-7"
-                              alt="Announcement Icon"
-                            />
-                          </div>
-                        )}
+                      )}
                       </div>  
                       <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                         <div className="flex gap-1.5 -mt-1">
@@ -975,7 +968,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         {renderContentWithTags(post.content, post.mentions)}
                       </article>
 
-                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                    <p className="taging mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
                       {post.tag?.replace(/[\[\]"]/g, '') || ''}
                     </p>
@@ -1018,6 +1011,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
           )
 
           // wallposting
+
         }) : filteredFinalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
@@ -1031,7 +1025,8 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
               {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+                // <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+                <div className={`${variant === "department" ? "output-box-depart" : "mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]"}`}>
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -1184,7 +1179,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative z-5`}>
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'}` `${variant === 'department' ? 'w-16' : 'w-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative z-5`}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
