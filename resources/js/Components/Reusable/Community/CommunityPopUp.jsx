@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose }) => {
+const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete }) => {
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -27,7 +27,13 @@ const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose }) => {
       >
         Archive / Unarchive
       </button>
-      <button onClick={() => alert('Delete functionality not implemented yet.')} className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
+      <button
+        onClick={() => {
+          onDelete(selectedDepartmentId); // Call the delete function with the department ID
+          onClose(); // Close the popup after action
+        }}
+        className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-b-xl"
+      >
         Delete
       </button>
     </div>
