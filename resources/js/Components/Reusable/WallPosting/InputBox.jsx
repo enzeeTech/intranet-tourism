@@ -31,6 +31,9 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [mentionQuery, setMentionQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ top: 0, left: 0 });
+    const [isSending, setIsSending] = useState(false);
+    const emojiPickerRef = useRef(null);
+
     
     
     const textAreaRef = useRef(null);
@@ -75,87 +78,113 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         setMentionQuery("");
     };
     
-    const handleClickSend = () => {
-        const formData = new FormData();
     
-        // Determine if it's a post or a comment
-        const isComment = variant === "comment";
-        const endpoint = isComment ? `/api/posts/posts/${postedId}/comment` : "/api/posts/posts";
-        
-        // Append common fields
-        // formData.append("type", isAnnouncement ? "announcement" : "post");
-        formData.append("visibility", "public");
-
-        if (isAnnouncement) {
-            formData.append("type", "announcement");
-        }
-        
+        const handleClickSend = () => {
+            // Prevent triggering multiple times
+            if (isSending) return;
     
-        if (!inputValue) {
-            attachments.forEach((file, index) => {
-                formData.append(`attachments[${index}]`, file);
-            });
-        } else {
-            formData.append("content", inputValue);
-            attachments.forEach((file, index) => {
-                formData.append(`attachments[${index}]`, file);
-            });
-        }
-    
-        // Handle tags with spaces after commas
-        if (tags.length > 0) {
-            const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
-            formData.append("tag", formattedTags);
-        }
-    
-        // Handle mentions
-        if (chosenPeople.length > 0) {
-            const mentions = chosenPeople.map(person => `{ "id": "${person.id}", "name": "${person.name}" }`).join(", ");
-            const formattedMentions = `[${mentions}]`;
-            formData.append("mentions", formattedMentions);
-        }
-    
-        // Handle events
-        if (chosenEvent.length > 0) {
-            const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
-            const formattedEvents = `[${events}]`;
-            formData.append("event", formattedEvents);
-        }
-    
-        if (includeAccessibilities) {
-            formData.append("type", "department");
-            formData.append("accessibilities[0][accessable_type]", filterType);
-            formData.append("accessibilities[0][accessable_id]", filterId);
-        }
-    
-        fetch(endpoint, {
-            method: "POST",
-            body: formData,
-            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
-        })
-        .then((response) => {
-            if (!response.ok) throw new Error("Network response was not ok");
-        })
-        .then(() => {
-            // Reset state
-            setInputValue("");
-            setAttachments([]);
-            setFileNames([]);
-            setTags([]);
-            setChosenPeople([]);
-            setChosenEvent([]);
-            if (!isComment) {
-                window.location.reload();
-            } else {
-                // Handle any other actions required after posting a comment, e.g., reloading comments
-                onCommentPosted();
+            // Check if there is no content and no attachments
+            if (!inputValue && attachments.length === 0) {
+                return; // Do nothing and exit the function
             }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-    };
     
+            setIsSending(true); // Set the flag to true to prevent multiple sends
+    
+            const formData = new FormData();
+            
+            // Determine if it's a post or a comment
+            const isComment = variant === "comment";
+            const endpoint = isComment ? `/api/posts/posts/${postedId}/comment` : "/api/posts/posts";
+            
+            // Append common fields
+            formData.append("visibility", "public");
+    
+            if (isAnnouncement) {
+                formData.append("type", "announcement");
+            }
+            
+            // Append content and attachments only if they exist
+            if (inputValue) {
+                formData.append("content", inputValue);
+            }
+            if (attachments.length > 0) {
+                attachments.forEach((file, index) => {
+                    formData.append(`attachments[${index}]`, file);
+                });
+            }
+    
+            // Handle tags with spaces after commas
+            if (tags.length > 0) {
+                const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+                formData.append("tag", formattedTags);
+            }
+    
+            // Handle mentions
+            if (chosenPeople.length > 0) {
+                const mentions = chosenPeople.map(person => `{ "id": "${person.id}", "name": "${person.name}" }`).join(", ");
+                const formattedMentions = `[${mentions}]`;
+                formData.append("mentions", formattedMentions);
+            }
+    
+            // Handle events
+            if (chosenEvent.length > 0) {
+                const events = chosenEvent.map(event => `"${event.title}"`).join(", ");
+                const formattedEvents = `[${events}]`;
+                formData.append("event", formattedEvents);
+            }
+    
+            if (includeAccessibilities) {
+                formData.append("type", "department");
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+            }
+    
+            fetch(endpoint, {
+                method: "POST",
+                body: formData,
+                headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+            })
+            .then((response) => {
+                if (!response.ok) throw new Error("Network response was not ok");
+            })
+            .then(() => {
+                // Reset state
+                setInputValue("");
+                setAttachments([]);
+                setFileNames([]);
+                setTags([]);
+                setChosenPeople([]);
+                setChosenEvent([]);
+                if (!isComment) {
+                    window.location.reload();
+                } else {
+                    // Handle any other actions required after posting a comment, e.g., reloading comments
+                    onCommentPosted();
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                setIsSending(false); // Reset the flag once the request is complete
+            });
+        };    
+
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                    setShowReactionPicker(false);
+                }
+            };
+        
+            // Bind the event listener
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                // Unbind the event listener on clean up
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [emojiPickerRef]);
+        
     
 
     useEffect(() => {
@@ -260,15 +289,33 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
         closePopup(); // Close the popup
     };
 
-    const handleReactionClick = (emojiObject) => {
-        setInputValue(inputValue + emojiObject.emoji);
-        setShowReactionPicker(false); // Close the reaction picker after selecting a reaction
-    };
+    // const handleReactionClick = (emojiObject) => {
+    //     setInputValue(inputValue + emojiObject.emoji);
+    //     setShowReactionPicker(false); // Close the reaction picker after selecting a reaction
+    // };
 
+    // const toggleReactionPicker = () => {
+    //     setShowReactionPicker(!showReactionPicker);
+    // };
+    
+    const handleReactionClick = (emojiObject, event) => {
+        console.log('Emoji Object:', emojiObject);
+        console.log('Event:', event);
+    
+        // Get the selected emoji
+        const selectedEmoji = emojiObject.emoji || ''; 
+        setInputValue(prevValue => prevValue + selectedEmoji);
+        setShowReactionPicker(false);
+    };
+    
+    
+    
+    
+    
     const toggleReactionPicker = () => {
         setShowReactionPicker(!showReactionPicker);
     };
-
+    
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800 w-full">
             <div
@@ -324,14 +371,13 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         <span className="tooltiptext">React 😀🤣😤</span>
                                     </button>
                                     {showReactionPicker && (
-                                        <div className="emoji-picker-container">
+                                        <div ref={emojiPickerRef} className="emoji-picker-container">
                                             <Picker
-                                                reactionsDefaultOpen={true}
-                                                onReactionClick={handleReactionClick}
-                                                reactions={["1f600", "1f602", "1f923", "1f60d", "1f62e", "1f614"]}
+                                                onEmojiClick={handleReactionClick}  // Ensure this correctly triggers the handler
                                             />
                                         </div>
                                     )}
+
                                     <button
                                         type="button"
                                         onClick={handleClickPeople}
@@ -459,14 +505,15 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                     </div>
                                 </>
                             )}
-                                            <button onClick={handleClickSend} className="flex send-button align-item justify-end">
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                                                    alt="SEND"
-                                                    className="h-6 w-6 max-md:mt-8"
-                                                />
-                                            </button>
+                             <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                             {isSending ? "" : ""}
+                                 <img
+                                     loading="lazy"
+                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                                     alt="SEND"
+                                     className="h-6 w-6 max-md:mt-8"
+                                 />
+                             </button>
                         </div>
                     </div>
                 </div>

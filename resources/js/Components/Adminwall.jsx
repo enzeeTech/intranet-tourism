@@ -221,7 +221,7 @@ function Navigation({ userId, departmentID, departmentName }) {
                 birthdaysToday={birthdaysToday.length > 0 ? birthdaysToday : null} 
               />
               <Filter /><br />
-              <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />
+              <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} variant="department" />
             </div>
           </div>
         )}
