@@ -10,6 +10,7 @@ import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
 import PopupMenu from '../Components/Reusable/Community/CommunityPopUp';
+import { useCsrf } from '@/composables';
 
 const Community = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -19,6 +20,7 @@ const Community = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
   const [filter, setFilter] = useState('All'); // Default filter to show all
+  const csrfToken = useCsrf();
 
   const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
@@ -73,7 +75,7 @@ const Community = () => {
   const handleDelete = async (departmentId) => {
     try {
       const url = `http://localhost:8000/api/communities/communities/${departmentId}`;
-      const options = { method: 'DELETE', headers: { Accept: 'application/json' } };
+      const options = { method: 'DELETE', headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken, } };
 
       const response = await fetch(url, options);
       if (!response.ok) {
