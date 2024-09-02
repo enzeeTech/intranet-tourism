@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import AddMemberPopup from './CommunityMemberPopup'; 
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
+import { usePage } from '@inertiajs/react';
 
 function Avatar({ src, alt, className, status }) {
   let source = null;
@@ -244,7 +245,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
   );
 };
 
-function CmMembers({communityID, checkMembership}) {
+function CmMembers({communityID, loggedInID}) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [members, setMembers] = useState([]);
@@ -513,8 +514,13 @@ function CmMembers({communityID, checkMembership}) {
 
         if (response.ok) {
             console.log('Member deleted successfully.');
-            // await fetchMembersAndAdmins();
-            window.location.reload();
+            console.log("ID", id);
+            console.log("LOGGED IN ID", loggedInID);
+            if (id === loggedInID){
+              window.location.reload();
+            } else {
+              await fetchMembersAndAdmins();
+            }
             
         } else {
             const errorData = await response.json();

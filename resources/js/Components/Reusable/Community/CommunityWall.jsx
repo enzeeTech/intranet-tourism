@@ -270,7 +270,7 @@ function Navigation({ userId, communityID, departmentName, type}) {
         {activeTab === 'Members' && (
           <div className="flex justify-center w-full mt-4">
             <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
-              <CmMembers communityID={communityID} checkMembership={checkMembership} />
+              <CmMembers communityID={communityID} loggedInID={id} />
             </div>
           </div>
         )}
