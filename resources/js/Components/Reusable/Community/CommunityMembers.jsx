@@ -244,7 +244,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
   );
 };
 
-function CmMembers({type}) {
+function CmMembers({communityID}) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [members, setMembers] = useState([]);
@@ -261,9 +261,10 @@ function CmMembers({type}) {
 
   const fetchMembersAndAdmins = async () => {
     setIsLoading(true);
-    const departmentId = parseInt(getDepartmentIdFromQuery(), 10);
-    const membersUrl = `/api/department/employment_posts?department_id=${departmentId}`;
-    const rolesUrl = `/api/permission/model-has-roles?filter=2`;
+    const departmentId = communityID;
+    const membersUrl = `/api/communities/community_members?community_id=${communityID}`;
+    const rolesUrl = `/api/permission/model-has-roles?filter=3`;
+
   
     try {
       const [membersResponse, rolesResponse] = await Promise.all([
@@ -287,7 +288,7 @@ function CmMembers({type}) {
       const membersData = await membersResponse.json();
       const rolesData = await rolesResponse.json();
   
-      const fetchedMembers = membersData.members || [];
+      const fetchedMembers = membersData|| [];
       fetchedMembers.sort((a, b) => a.order - b.order);
   
       const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
