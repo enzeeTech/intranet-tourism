@@ -288,6 +288,22 @@ function Avatar({ src, alt, onImageChange }) {
     }
   }, [croppedAreaPixels, previewSrc, onImageChange]);
 
+  const handleRepositionClick = async () => {
+    setCropping(true);
+    // Re-fetch the original image from the server
+    try {
+      const response = await fetch(banner);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the image for repositioning');
+      }
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      setPreviewSrc(objectUrl);
+    } catch (error) {
+      console.error('Error fetching image:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center object-cover object-center">
       {cropping ? (
@@ -315,13 +331,21 @@ function Avatar({ src, alt, onImageChange }) {
       ) : (
         <>
           {previewSrc ? (
-            <img
-              loading="lazy"
-              src={banner}
-              alt={alt}
-              className="cursor-pointer w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
-              onClick={handleClick}
-            />
+            <div className="flex flex-col items-center">
+              <img
+                loading="lazy"
+                src={banner}
+                alt={alt}
+                className="cursor-pointer w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
+                onClick={handleClick}
+              />
+              <button
+                onClick={handleRepositionClick}
+                className="mt-2 px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+              >
+                Reposition Image
+              </button>
+            </div>
           ) : (
             <p>No image available</p>
           )}
@@ -498,4 +522,5 @@ const EditDepartments = ({ department, onCancel, onSave }) => (
 );
 
 export default EditDepartments;
+
 
