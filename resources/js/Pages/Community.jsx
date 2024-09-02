@@ -144,14 +144,15 @@ const Community = () => {
             ) : (
               filteredDepartments.map((department) => (
                 <CommunityCard
-                  key={department.id}
-                  name={department.name}
-                  imageUrl={department.imageUrl}
-                  communityID={department.id}
-                  type={department.type}
-                  onArchiveToggle={() => handleArchiveToggle(department.id)}
-                  onDelete={() => handleDelete(department.id)} // Pass the handleDelete function
-                />
+    key={department.id}
+    name={department.name}
+    imageUrl={department.imageUrl}
+    communityID={department.id}
+    type={department.type}
+    isArchived={department.isArchived} // Pass the archived state
+    onArchiveToggle={() => handleArchiveToggle(department.id)}
+    onDelete={() => handleDelete(department.id)}
+  />
               ))
             )}
           </div>
