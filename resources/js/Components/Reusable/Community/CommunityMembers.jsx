@@ -244,7 +244,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
   );
 };
 
-function DpMembers() {
+function CmMembers({type}) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [members, setMembers] = useState([]);
@@ -649,13 +649,13 @@ function DpMembers() {
             >
               Search
             </button>
-            <button
+            {/* <button
               onClick={handleInviteClick}
               className="flex items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
             >
               <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
               Member
-            </button>
+            </button> */}
           </div>
 
           <header className="flex self-start gap-5 mt-6 whitespace-nowrap">
@@ -722,4 +722,4 @@ function DpMembers() {
   );
 }
 
-export default DpMembers;
+export default CmMembers;

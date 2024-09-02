@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import DpMembers from './CommunityMembers';
+import CmMembers from './CommunityMembers';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
 import EditCommunity from './EditCommunity';
 
-function HeaderSection({ departmentID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
+function HeaderSection({ communityID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
   const [textContent, setTextContent] = useState('');
 
@@ -62,14 +62,14 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
         className="absolute inset-0 object-cover size-full"
         alt=""
       />
-      <div className="relative flex justify-between w-full gap-0 max-md:flex-wrap max-md:max-w-full py-2">
+      <div className="relative flex justify-between w-full gap-0 py-2 max-md:flex-wrap max-md:max-w-full">
         <div className="flex flex-col">
-          <h1 className="text-3xl drop-shadow-lg text-start font-extrabold shadow-neutral-100">{departmentHeader}</h1>
+          <h1 className="text-3xl font-extrabold drop-shadow-lg text-start shadow-neutral-100">{departmentHeader}</h1>
         </div>
         <div className="flex content-center self-start justify-between gap-5 text-sm font-medium">
         </div>
       </div>
-      <div className="relative -mt-2 text-md font-medium max-md:max-w-full drop-shadow-lg">
+      <div className="relative -mt-2 font-medium text-md max-md:max-w-full drop-shadow-lg">
         {isEditing ? (
           <textarea
             className="w-full h-32 p-2 text-white bg-inherit focus:outline-none focus:ring focus:ring-blue-500"
@@ -106,7 +106,7 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
 }
 
 
-function Navigation({ userId, departmentID, departmentName }) {
+function Navigation({ userId, communityID, departmentName, type}) {
   const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
   const [polls, setPolls] = useState([]);
 
@@ -118,6 +118,15 @@ function Navigation({ userId, departmentID, departmentName }) {
     setActiveTab(tab);
   };
 
+  // Dummy functions
+  const handleJoin = () => {
+    console.log('Join function triggered');
+  };
+
+  const handleAddMember = () => {
+    console.log('Add Member function triggered');
+  };
+
   return (
     <div className="flex flex-col">
       <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:max-w-full">
@@ -125,13 +134,20 @@ function Navigation({ userId, departmentID, departmentName }) {
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
         <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
+        <div className="ml-auto"> 
+          {type === 'public' ? (
+            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleJoin}>Join</button>
+          ) : (
+            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleAddMember}>Add Member</button>
+          )}
+        </div>
       </nav>
 
       <div className="relative">
         {activeTab === 'Members' && (
           <div className="flex justify-center w-full mt-4">
             <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
-              <DpMembers />
+              <CmMembers type={type} />
             </div>
           </div>
         )}
@@ -142,23 +158,23 @@ function Navigation({ userId, departmentID, departmentName }) {
               <SearchInput />
               <SearchButton />
             </div>
-            <Table departmentID={departmentID} />
+            <Table departmentID={communityID} />
           </div>
         )}
 
         {activeTab === "Gallery" && (
           <section>
-            <ImageProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
-            <VideoProfile selectedItem="All" accessableType="Department" accessableId={departmentID} filterBy="department" />
+            <ImageProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
+            <VideoProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
           </section>
         )}
 
         {activeTab === 'Post' && (
           <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
             <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
-              <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={departmentID} />
+              <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={communityID} />
               <Filter /><br />
-              <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} />
+              <OutputData polls={polls} filterType="Department" filterId={communityID} departmentName={departmentName} />
             </div>
           </div>
         )}
@@ -167,7 +183,7 @@ function Navigation({ userId, departmentID, departmentName }) {
   );
 }
 
-function Adminsection({ departmentID, departmentHeader, departmentDescription, userId, departmentBanner }) {
+function Adminsection({ communityID, departmentHeader, departmentDescription, userId, type, departmentBanner }) {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [departmentData, setDepartmentData] = useState(null);
 
@@ -175,7 +191,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
     // Fetch the department data here
     const fetchDepartmentData = async () => {
       try {
-        const response = await fetch(`/api/communities/communities/${departmentID}`); // Use departmentID
+        const response = await fetch(`/api/communities/communities/${communityID}`); // Use departmentID
 
         if (!response.ok) {
           throw new Error('Failed to fetch department data');
@@ -189,7 +205,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
     };
 
     fetchDepartmentData();
-  }, [departmentID]);
+  }, [communityID]);
 
   console.log("DEPARTMENT BANNER", departmentBanner);
 
@@ -214,13 +230,13 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
   return (
     <div className='w-[875px]'>
       <HeaderSection
-        departmentID={departmentID}
+        communityID={communityID}
         departmentHeader={departmentHeader}
         departmentBanner={departmentBanner} // Use departmentData.banner here
         departmentDescription={departmentDescription}
         onEditClick={handleEditClick}
       />
-      <Navigation departmentID={departmentID} userId={userId} departmentName={departmentHeader} />
+      <Navigation communityId={communityID} userId={userId} departmentName={departmentHeader} type={type} />
       {isEditPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <EditCommunity
@@ -235,14 +251,15 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
 }
 
 
-export default function CommunityWall({ departmentID, departmentHeader, departmentDescription, departmentBanner, userId }) {
+export default function CommunityWall({ communityID, departmentHeader, departmentDescription, departmentBanner, type, userId }) {
   return (
     <div className="flex flex-wrap mx-auto my-20 text-black justify-left max-w-7xl gap-y-10">
       <Adminsection
-        departmentID={departmentID}
+        communityID={communityID}
         departmentHeader={departmentHeader}
         departmentDescription={departmentDescription}
         departmentBanner={departmentBanner}
+        type={type}
         userId={userId}
       />
     </div>
