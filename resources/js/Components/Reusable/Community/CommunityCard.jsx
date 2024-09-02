@@ -4,7 +4,7 @@ import defaultImage from '../../../../../public/assets/dummyStaffImage.png';
 import { FaLock } from 'react-icons/fa'; // Import the lock icon
 import PopupMenu from './CommunityPopUp';
 
-const CommunityCard = ({ name, imageUrl, onArchiveToggle, communityID, type }) => {
+const CommunityCard = ({ name, imageUrl, onArchiveToggle, communityID, type, onDelete }) => {
   const isPrivate = type === 'private'; // Add a fallback check
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -29,6 +29,7 @@ const CommunityCard = ({ name, imageUrl, onArchiveToggle, communityID, type }) =
             onArchiveToggle={onArchiveToggle}
             selectedDepartmentId={communityID} // Pass communityID here
             onClose={() => setIsPopupOpen(false)}
+            onDelete={onDelete}
           />
         )}
       </div>

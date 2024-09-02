@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
-const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose }) => {
+const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -16,20 +17,60 @@ const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose }) => {
     };
   }, [onClose]);
 
+  const handleDeleteClick = () => {
+    setShowConfirm(true); // Show the confirmation popup
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(selectedDepartmentId); // Call the delete function with the department ID
+    setShowConfirm(false); // Hide the confirmation popup
+    onClose(); // Close the popup menu
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirm(false); // Hide the confirmation popup
+  };
+
   return (
-    <div ref={popupRef} className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-20">
-      <button
-        onClick={() => {
-          onArchiveToggle(selectedDepartmentId); // Call the archive toggle with the department ID
-          onClose(); // Close the popup after action
-        }}
-        className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-t-xl"
-      >
-        Archive / Unarchive
-      </button>
-      <button onClick={() => alert('Delete functionality not implemented yet.')} className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
-        Delete
-      </button>
+    <div ref={popupRef} className="relative z-50">
+      <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-20">
+        <button
+          onClick={() => {
+            onArchiveToggle(selectedDepartmentId); // Call the archive toggle with the department ID
+            onClose(); // Close the popup after action
+          }}
+          className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-t-xl"
+        >
+          Archive / Unarchive
+        </button>
+        <button
+          onClick={handleDeleteClick} // Show the confirmation popup
+          className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-b-xl"
+        >
+          Delete
+        </button>
+      </div>
+      {showConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <p className="mb-4 text-lg">Are you sure you want to delete this community?</p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleCancelDelete}
+                className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700"
+              >
+                No
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-8 py-1 text-base text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
