@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete }) => {
+const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete, isArchived }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const popupRef = useRef(null);
 
@@ -18,17 +18,17 @@ const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete })
   }, [onClose]);
 
   const handleDeleteClick = () => {
-    setShowConfirm(true); // Show the confirmation popup
+    setShowConfirm(true);
   };
 
   const handleConfirmDelete = () => {
-    onDelete(selectedDepartmentId); // Call the delete function with the department ID
-    setShowConfirm(false); // Hide the confirmation popup
-    onClose(); // Close the popup menu
+    onDelete(selectedDepartmentId);
+    setShowConfirm(false);
+    onClose();
   };
 
   const handleCancelDelete = () => {
-    setShowConfirm(false); // Hide the confirmation popup
+    setShowConfirm(false);
   };
 
   return (
@@ -36,15 +36,15 @@ const PopupMenu = ({ onArchiveToggle, selectedDepartmentId, onClose, onDelete })
       <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-20">
         <button
           onClick={() => {
-            onArchiveToggle(selectedDepartmentId); // Call the archive toggle with the department ID
-            onClose(); // Close the popup after action
+            onArchiveToggle(selectedDepartmentId);
+            onClose();
           }}
           className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-t-xl"
         >
-          Archive / Unarchive
+          {isArchived ? 'Unarchive' : 'Archive'}
         </button>
         <button
-          onClick={handleDeleteClick} // Show the confirmation popup
+          onClick={handleDeleteClick}
           className="flex items-center w-full px-4 py-2 text-sm font-extrabold text-gray-700 hover:bg-gray-100 hover:rounded-b-xl"
         >
           Delete
