@@ -5,6 +5,9 @@ import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/Wal
 import { SearchInput, SearchButton, Table } from "../../ProfileTabbar";
 import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
 import EditCommunity from './EditCommunity';
+import { useCsrf } from "@/composables";
+import { usePage } from '@inertiajs/react';
+import { add } from 'date-fns';
 
 function HeaderSection({ communityID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -44,7 +47,7 @@ function HeaderSection({ communityID, departmentHeader, departmentBanner, depart
     }
   };
 
-  console.log(departmentBanner);
+  // console.log(departmentBanner);
 
   // Check if departmentBanner is defined and a string
   let banner = null;
@@ -107,8 +110,34 @@ function HeaderSection({ communityID, departmentHeader, departmentBanner, depart
 
 
 function Navigation({ userId, communityID, departmentName, type}) {
-  const [activeTab, setActiveTab] = useState('Post'); // Default active tab set to 'Post'
+  const [activeTab, setActiveTab] = useState('Post'); 
   const [polls, setPolls] = useState([]);
+  const [hasJoined, setHasJoined] = useState(false);
+  const csrfToken = useCsrf();
+  const {props} = usePage();
+  const {id} = props;
+ 
+
+
+  useEffect(() => {
+    const checkMembership = async () => {
+      try {
+        const response = await fetch(`api/communities/community_members?user_id=${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          const isMember = data.some((member) => String(member.community_id) === String(communityID));
+          setHasJoined(isMember);
+        } else {
+          console.error('Failed to fetch membership data');
+        }
+      } catch (error) {
+        console.error('Error checking membership:', error);
+      }
+    };
+
+    checkMembership();
+  }, [id, communityID]);
+
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
@@ -118,9 +147,36 @@ function Navigation({ userId, communityID, departmentName, type}) {
     setActiveTab(tab);
   };
 
+  const addPublicMember = async () => {
+    const url = `api/communities/community_members`;
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
+        };
+
+        const body={
+            community_id: communityID,
+            user_id: String(id),
+        }
+
+        try {
+            const response = await fetch(url, { ...options, body: JSON.stringify(body) });
+            if (response.ok) {
+                console.log('Member added successfully');
+            } else {
+                throw new Error('Failed to add member');
+            }
+        }
+        catch (error) {
+            console.error('Error adding member:', error);
+        }
+  };
+
   // Dummy functions
   const handleJoin = () => {
-    console.log('Join function triggered');
+    if (!hasJoined) {
+      addPublicMember();
+    }
   };
 
   const handleAddMember = () => {
@@ -134,11 +190,21 @@ function Navigation({ userId, communityID, departmentName, type}) {
         <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
         <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
         <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
-        <div className="ml-auto"> 
+        <div className="ml-auto">
           {type === 'public' ? (
-            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleJoin}>Join</button>
+            <button
+              className={`px-4 py-2 text-white rounded-full ${
+                hasJoined ? 'bg-[#FF5437]' : 'bg-[#FF5437] hover:bg-red-700'
+              }`}
+              onClick={handleJoin}
+              disabled={hasJoined}
+            >
+              {hasJoined ? 'Already Joined' : 'Join'}
+            </button>
           ) : (
-            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleAddMember}>Add Member</button>
+            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleAddMember}>
+              Add Member
+            </button>
           )}
         </div>
       </nav>
@@ -207,7 +273,8 @@ function Adminsection({ communityID, departmentHeader, departmentDescription, us
     fetchDepartmentData();
   }, [communityID]);
 
-  console.log("DEPARTMENT BANNER", departmentBanner);
+  // console.log("DEPARTMENT BANNER", departmentBanner);
+  console.log("COMMUNITY ID", communityID);
 
   const handleEditClick = (isOpen) => {
     setIsEditPopupOpen(isOpen);
@@ -236,7 +303,7 @@ function Adminsection({ communityID, departmentHeader, departmentDescription, us
         departmentDescription={departmentDescription}
         onEditClick={handleEditClick}
       />
-      <Navigation communityId={communityID} userId={userId} departmentName={departmentHeader} type={type} />
+      <Navigation communityID={communityID} userId={userId} departmentName={departmentHeader} type={type} />
       {isEditPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <EditCommunity

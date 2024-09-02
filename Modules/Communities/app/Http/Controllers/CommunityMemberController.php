@@ -4,14 +4,22 @@ namespace Modules\Communities\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Communities\Models\CommunityMember;
+use Illuminate\Http\Request;
 
 class CommunityMemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            'data' => CommunityMember::queryable()->paginate(),
-        ]);
+        if ($request->has('user_id')) {
+            $userId = $request->query('user_id');
+
+            $communityMembers = CommunityMember::where('user_id', $userId)->get();
+
+            return response()->json($communityMembers);
+        }
+
+        $communityMembers = CommunityMember::all();
+        return response()->json($communityMembers);
     }
 
     public function show($id)
