@@ -4,9 +4,9 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import CommunityWall from '../Components/Reusable/Community/CommunityWall';
-import EditDepartments from '../Components/Reusable/Departments/EditDepartments';
 import './css/StaffDirectory.css';
 import Example from '@/Layouts/DashboardLayoutNew';
+import EditCommunity from '@/Components/Reusable/Community/EditCommunity';
 
 const CommunityInner = () => {
   const { id } = usePage().props;
@@ -88,7 +88,7 @@ const CommunityInner = () => {
 
       {isEditPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <EditDepartments
+          <EditCommunity
             department={departmentData}
             onCancel={() => setIsEditPopupOpen(false)}
             onSave={handleSave}
