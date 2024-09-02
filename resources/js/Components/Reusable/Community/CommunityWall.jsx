@@ -119,26 +119,26 @@ function Navigation({ userId, communityID, departmentName, type}) {
  
 
 
-  useEffect(() => {
-    const checkMembership = async () => {
-      try {
-        const url = `api/communities/community_members?user_id=${id}`;
-        const response = await fetch (url, {
-          method: 'GET',
-          headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
-        })
-        if (response.ok) {
-          const data = await response.json();
-          const isMember = data.some((member) => String(member.community_id) === String(communityID));
-          setHasJoined(isMember);
-        } else {
-          console.error('Failed to fetch membership data');
-        }
-      } catch (error) {
-        console.error('Error checking membership:', error);
+  const checkMembership = async () => {
+    try {
+      const url = `api/communities/community_members?user_id=${id}`;
+      const response = await fetch (url, {
+        method: 'GET',
+        headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
+      })
+      if (response.ok) {
+        const data = await response.json();
+        const isMember = data.some((member) => String(member.community_id) === String(communityID));
+        setHasJoined(isMember);
+      } else {
+        console.error('Failed to fetch membership data');
       }
-    };
+    } catch (error) {
+      console.error('Error checking membership:', error);
+    }
+  };
 
+  useEffect(() => {
     checkMembership();
   }, [id, communityID]);
 
@@ -152,14 +152,13 @@ function Navigation({ userId, communityID, departmentName, type}) {
   };
 
   const addPublicMember = async () => {
-    const url = `api/communities/community_members`;
+    const url = `api/communities/communities/${communityID}/add-member`;
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
         };
 
         const body={
-            community_id: communityID,
             user_id: String(id),
         }
 
@@ -217,7 +216,7 @@ function Navigation({ userId, communityID, departmentName, type}) {
         {activeTab === 'Members' && (
           <div className="flex justify-center w-full mt-4">
             <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
-              <CmMembers communityID={communityID}/>
+              <CmMembers communityID={communityID} checkMembership={checkMembership()}/>
             </div>
           </div>
         )}

@@ -244,7 +244,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
   );
 };
 
-function CmMembers({communityID}) {
+function CmMembers({communityID, checkMembership}) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [members, setMembers] = useState([]);
@@ -496,25 +496,32 @@ function CmMembers({communityID}) {
   
 
   const handleRemove = async (id) => {
-    const url = `/api/department/employment_posts/${id}`;
+    const url = `/api/communities/communities/${communityID}/delete-member`;
 
     try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-      });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({
+                user_id: String(id),
+            }),
+        });
 
-      if (response.ok) {
-        console.log('Member deleted successfully.');
-        await fetchMembersAndAdmins();
-      } else {
-        console.error('Failed to delete member:', response.statusText);
-      }
+        if (response.ok) {
+            console.log('Member deleted successfully.');
+            // await fetchMembersAndAdmins();
+            window.location.reload();
+            
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to delete member:', errorData.message || response.statusText);
+        }
     } catch (error) {
-      console.error('Error deleting member:', error);
+        console.error('Error deleting member:', error);
     }
 
     closePopup();
@@ -703,7 +710,7 @@ function CmMembers({communityID}) {
                   activePopupId={activePopupId}
                   setActivePopupId={setActivePopupId}
                   onAssign={() => handleAssign(member.user_id)}
-                  onRemove={handleRemove}
+                  onRemove={() => handleRemove(member.user_id)}
                   closePopup={closePopup}
                 />
               ))}
