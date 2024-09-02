@@ -10,6 +10,7 @@ import { usePage } from '@inertiajs/react';
 import './css/StaffDirectory.css';
 import CreateCommunity from '../Components/Reusable/Community/CreateCommunity';
 import PopupMenu from '../Components/Reusable/Community/CommunityPopUp';
+import { useCsrf } from '@/composables';
 
 const Community = () => {
   const [departmentsList, setDepartmentsList] = useState([]);
@@ -19,6 +20,7 @@ const Community = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isCreateCommunityOpen, setIsCreateCommunityOpen] = useState(false);
   const [filter, setFilter] = useState('All'); // Default filter to show all
+  const csrfToken = useCsrf();
 
   const toggleCreateCommunity = () => setIsCreateCommunityOpen(!isCreateCommunityOpen);
 
@@ -68,6 +70,27 @@ const Community = () => {
 
   const handleNewDepartment = (newDepartment) => {
     setDepartmentsList((prevList) => [...prevList, { ...newDepartment, isArchived: false }].sort((a, b) => a.name.localeCompare(b.name)));
+  };
+
+  const handleDelete = async (departmentId) => {
+    try {
+      const url = `http://localhost:8000/api/communities/communities/${departmentId}`;
+      const options = { method: 'DELETE', headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken, } };
+
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Failed to delete the department');
+      }
+
+      // Update the departments list after successful deletion
+      setDepartmentsList((prevList) =>
+        prevList.filter((department) => department.id !== departmentId)
+      );
+
+      console.log(`Department with ID ${departmentId} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting department:', error);
+    }
   };
 
   const handleFilterChange = (selectedFilter) => {
@@ -127,6 +150,7 @@ const Community = () => {
                   communityID={department.id}
                   type={department.type}
                   onArchiveToggle={() => handleArchiveToggle(department.id)}
+                  onDelete={() => handleDelete(department.id)} // Pass the handleDelete function
                 />
               ))
             )}
