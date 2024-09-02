@@ -466,21 +466,22 @@ function ProfileContent() {
     return (
         <Example>
             <main className="xl:pl-96 w-full">
-                <div className="mr-10 px-1 py-10 sm:px-6 lg:px-8 sm:py-10 md:py-6 lg:py-6 ">
-                    <div>
-                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] shadow-custom rounded-lg">
-                            <ProfileHeader
-                                backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
-                                name={profileData.name}
-                                username={profileData.username}
-                                status={profileData.status}
-                                onEditBanner={() => setIsPopupOpen(true)}
-                                rounded={true}
-                                userId={id}
-                                profileId={profileData.profile?.id}
-                            />
-                            <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                <div className="mr-10 px-1 sm:px-6 lg:px-8 sm:py-10 md:py-6 lg:py-6 ">
+                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] bg-white shadow-custom rounded-b-lg">
+                            <div className="flex-col w-full flex bg-white h-auto rounded-b-lg">
+                                <ProfileHeader
+                                    backgroundImage={profileData.backgroundImage}
+                                    profileImage={profileData.profileImage}
+                                    name={profileData.name}
+                                    username={profileData.username}
+                                    status={profileData.status}
+                                    onEditBanner={() => setIsPopupOpen(true)}
+                                    rounded={true}
+                                    userId={id}
+                                    profileId={profileData.profile?.id}
+                                />
+                                <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                            </div>
                             {activeTab === "activities" && (
                                 <div className="py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
                                     <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
@@ -577,7 +578,6 @@ function ProfileContent() {
                                 </div>
                             )}
                         </div>
-                    </div>
                 </div>
             </main>
             <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 xl:block">

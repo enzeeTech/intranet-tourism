@@ -10,11 +10,11 @@ function ProfileNav({ activeTab, setActiveTab }) {
 
     return (
         <>
-        <div className="bg-white mt-4 pb-5 flex w-full rounded-b-lg border-t-2 border-gray-100"
-            style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}
+        <div className="mt-6 max-md:mt-0 flex w-full rounded-b-lg border-t-2 bg-white border-gray-100"
+            style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0)' }}
             >
             {/* <hr className="max-md:mx-4 max-md:-mt-20 max-md:mb-6 border-gray-900 bg-gray-900" /> */}
-            <nav className="flex justify-between mt-5 mx-20 w-full max-w-full text-sm font-semibold text-center whitespace-nowrap text-neutral-800 text-opacity-30 max-md:flex-wrap max-md:mt-4 max-md:mb-2 max-md:mx-10">
+            <nav className="flex justify-between my-5 mx-20 w-full max-w-full text-sm font-semibold text-center whitespace-nowrap text-neutral-800 text-opacity-30 max-md:flex-wrap max-md:mt-4 max-md:mb-4 max-md:mx-5">
                 {tabs.map(tab => (
                     <span
                         key={tab.key}
