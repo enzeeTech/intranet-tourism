@@ -195,7 +195,7 @@ export default function Header({ setSidebarOpen }) {
                                 alt="Profile"
                             />
                             <span className="hidden lg:flex lg:items-center">
-                                <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
+                                <span className="ml-4 text-sm font-semibold leading-6 text-gray-900 text-start" aria-hidden="true">
                                     {userData.name}
                                 </span>
                                 <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" aria-hidden="true" />
