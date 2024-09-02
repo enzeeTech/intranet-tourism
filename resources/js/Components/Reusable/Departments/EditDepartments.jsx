@@ -61,7 +61,6 @@ function Avatar({ src, alt, onImageChange }) {
 }
 
 
-
 function Card({ 
   title, 
   imgSrc, 
