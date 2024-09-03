@@ -54,7 +54,7 @@ function UserInfo({ name, role, src }) {
   );
 }
 
-export function Polls({ onClose, onCreatePoll, id }) {
+export function Polls({ onClose, onCreatePoll, id, }) {
   const [inputValue, setInputValue] = useState("");
   const textAreaRef = useRef(null);
 
@@ -67,7 +67,7 @@ export function Polls({ onClose, onCreatePoll, id }) {
   });
 
   const [options, setOptions] = useState(["Yes", "No"]);
-  const [user, setUserData] = useState({ name: '', role: '', profileImage: '' });
+  const [user, setUser] = useState({ name: '', role: '', profileImage: '' });
 
   const handleRemoveOption = (index) => {
     const newOptions = [...options];
@@ -95,31 +95,29 @@ export function Polls({ onClose, onCreatePoll, id }) {
       const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
         method: "GET",
       });
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
+  
       const { data } = await response.json();
-      setUserData((pv) => ({
-        ...pv,
-        ...data,
+      setUser({
         name: data.name,
-        profileImage:
-          data.profile && data.profile.image
-            ? `/storage/${data.profile.image}`
-            : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`,
-      }));
+        role: data.role || 'User',  // Default role to 'User' if not provided
+        profileImage: data.profile?.image
+          ? `/storage/${data.profile.image}`
+          : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`,
+      });
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
 
   useEffect(() => {
-    if (id !== undefined) {
+    if (id) {
       fetchUser();
     }
-  }, [id]);
+  }, [id]);  
 
   const handlePostPoll = () => {
     const newPoll = {
