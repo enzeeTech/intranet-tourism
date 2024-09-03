@@ -4,25 +4,19 @@ import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
 import WhosOnline from '../Components/Reusable/WhosOnlineWidget/WhosOnline';
 import './css/StaffDirectory.css';
+// import Example from '../Layouts/DashboardLayoutNew';
 import Example from '@/Layouts/DashboardLayoutNew';
 import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import MyComponent from '@/Components/Reusable/CommunitySide';
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
-import InfoGraphic from '@/Components/Reusable/InfoGraphic';
-import AdvertisementDashboard from '@/Components/Reusable/AdvertisementDashboard';
 
 const Dashboard = () => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [polls, setPolls] = useState([]);
-  const [filterType, setFilterType] = useState(null);
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
-  };
-
-  const handleFilterChange = (filter) => {
-    setFilterType(filter);
   };
 
   return (
@@ -33,9 +27,9 @@ const Dashboard = () => {
             <div className="flex flex-col items-start px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <StoryNew userId={id} />
               <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
-              <Filter className="mr-10" onFilterChange={handleFilterChange} />
+              <Filter className="mr-10" />
               <div className="mb-4"></div>
-              <OutputData loggedInUserId={id} polls={polls} filterType={null} postType={filterType} />
+              <OutputData loggedInUserId={id} polls={polls} filterType={null} />
             </div>
           </main>
 
@@ -66,12 +60,6 @@ const Dashboard = () => {
             <div>
               <MyComponent />
             </div>
-            <div>
-              <AdvertisementDashboard />
-            </div>
-            <div>
-              <InfoGraphic />
-            </div>
           </aside>
         </div>
       </div>
@@ -79,4 +67,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Dashboard;
