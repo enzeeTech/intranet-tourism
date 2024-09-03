@@ -37,14 +37,20 @@ function MyComponent() {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      const communityData = data.data.data.map((community) => ({
-        id: community.id,
-        name: community.name,
-        category: community.type,
-        imgSrc: community.banner ? community.banner : 'assets/departmentsDefault.jpg',
-        altText: `${community.name} community image`,
-        createdAt: new Date(community.created_at),
-      }));
+      const archivedState = JSON.parse(localStorage.getItem('archivedCommunities')) || {};
+
+      const communityData = data.data.data
+        .map((community) => ({
+          id: community.id,
+          name: community.name,
+          category: community.type,
+          imgSrc: community.banner ? community.banner : 'assets/departmentsDefault.jpg',
+          altText: `${community.name} community image`,
+          createdAt: new Date(community.created_at),
+          isArchived: archivedState[community.id] || false, // Check if the community is archived
+        }))
+        .filter((community) => !community.isArchived); // Filter out archived communities
+
       setCommunities(
         communityData
           .sort((a, b) => b.createdAt - a.createdAt)

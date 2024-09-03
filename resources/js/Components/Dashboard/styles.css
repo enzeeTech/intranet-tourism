@@ -38,7 +38,7 @@
   }
   .form-group {
     margin-bottom: 20px;
-    width: 260px;
+    /* width: 260px; */
   }
   .label {
     display: block;

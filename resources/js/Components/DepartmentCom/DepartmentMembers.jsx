@@ -48,18 +48,64 @@ function UserCard({ src, alt, name, role, status }) {
   );
 }
 
-// const PopupMenu = ({onRemove, onAssign }) => (
-//   <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
-//     <button onClick={onAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
-//       <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" /> 
-//       Assign as Admin
-//     </button>
-//     <button onClick={onRemove} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
-//       <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" /> 
-//       Remove
-//     </button>
-//   </div>
-// );
+const PopupMenuAdmin = ({ onRemove, onAssign, closePopup }) => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleRemoveClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setShowPopup(true);
+  };
+
+  const handleAssign = () => {
+    event.preventDefault();
+    event.stopPropagation(); 
+    onAssign();
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
+  const handleConfirmRemove = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onRemove();
+    setShowPopup(false);
+    closePopup();
+  };
+
+  return (
+    <div className="relative">
+      <div className="absolute right-0 z-50 bg-white border shadow-lg w-[190px] rounded-xl -mt-3">
+        <button onClick={handleAssign} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-t-xl">
+          <img src="/assets/personIcon.svg" alt="Assign" className="w-6 h-6 mr-2" />
+          Assign as User
+        </button>
+        <button onClick={handleRemoveClick} className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-b-xl">
+          <img src="/assets/🦆 icon _image_.svg" alt="Remove" className="w-6 h-6 mr-2" />
+          Remove
+        </button>
+      </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
+            <h2 className="mb-4 text-xl font-bold text-center">Delete member?</h2>
+            <div className="flex justify-center space-x-4">
+              <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleClosePopup}>
+                No
+              </button>
+              <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleConfirmRemove}>
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -123,7 +169,7 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
 
 
 
-const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
 
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
@@ -177,11 +223,19 @@ const MemberCard = ({ id, employment_post_id, imageUrl, name, title, status, isA
         </button>
         {activePopupId === id && (
           <div ref={popupRef}>
-            <PopupMenu
-              onRemove={() => onRemove(employment_post_id)}
-              onAssign={() => onAssign(employment_post_id)}
-              closePopup={closePopup}
-            />
+            {flag === 'admin' ? (
+              <PopupMenuAdmin
+                onRemove={() => onRemove(employment_post_id)}
+                onAssign={() => onAssign(id)}
+                closePopup={closePopup}
+              />
+            ) : (
+              <PopupMenu
+                onRemove={() => onRemove(employment_post_id)}
+                onAssign={() => onAssign(id)}
+                closePopup={closePopup}
+              />
+            )}
           </div>
         )}
       </div>
@@ -207,10 +261,10 @@ function DpMembers() {
 
   const fetchMembersAndAdmins = async () => {
     setIsLoading(true);
-    const departmentId = parseInt(getDepartmentIdFromQuery(), 10); 
+    const departmentId = parseInt(getDepartmentIdFromQuery(), 10);
     const membersUrl = `/api/department/employment_posts?department_id=${departmentId}`;
     const rolesUrl = `/api/permission/model-has-roles?filter=2`;
-
+  
     try {
       const [membersResponse, rolesResponse] = await Promise.all([
         fetch(membersUrl, {
@@ -222,24 +276,21 @@ function DpMembers() {
           headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
         }),
       ]);
-
+  
       if (!membersResponse.ok) {
         throw new Error('Failed to fetch members');
       }
       if (!rolesResponse.ok) {
         throw new Error('Failed to fetch roles');
       }
-
+  
       const membersData = await membersResponse.json();
       const rolesData = await rolesResponse.json();
-
+  
       const fetchedMembers = membersData.members || [];
       fetchedMembers.sort((a, b) => a.order - b.order);
-
-      const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : []; 
-      
-      console.log('Admin Role Entries:', adminRoleEntries); 
-      console.log('Fetched Members:', fetchedMembers); 
+  
+      const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
 
       // Cross-check to determine which members are admins
       const fetchedAdmins = fetchedMembers.filter(member =>
@@ -249,30 +300,32 @@ function DpMembers() {
             parseInt(roleEntry.department_id, 10) === departmentId
         )
       );
-
+  
       const fetchedNonAdmins = fetchedMembers.filter(
         member => !fetchedAdmins.includes(member)
       );
-
-      console.log('Admins:', fetchedAdmins); 
-      console.log('Non-Admins:', fetchedNonAdmins); 
-
-      setAdmins(fetchedAdmins);
-      setMembers(fetchedNonAdmins);
+  
+      // Flagging admins and members
+      const updatedAdmins = fetchedAdmins.map(admin => ({ ...admin, flag: 'admin' }));
+      const updatedNonAdmins = fetchedNonAdmins.map(nonAdmin => ({ ...nonAdmin, flag: 'member' }));
+  
+      setAdmins(updatedAdmins);
+      setMembers(updatedNonAdmins);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
 
   useEffect(() => {
     fetchMembersAndAdmins();
   }, []);
 
-  console.log(members);
-  console.log(admins);
+  console.log("MEMBERS",members);
+  console.log("ADMINS", admins);
 
   useEffect(() => {
     const filteredMembers = members.filter((member) =>
@@ -295,22 +348,65 @@ function DpMembers() {
 
   const handleAssign = async (user_id) => {
     try {
+      const rolesResponse = await fetch(`/api/permission/model-has-roles?model_id=${user_id}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-TOKEN': csrfToken || '',
+        },
+      });
+  
+      if (!rolesResponse.ok) {
+        console.error('Failed to fetch existing roles:', rolesResponse.statusText);
+        return;
+      }
+  
+      const rolesData = await rolesResponse.json();
+      const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
+  
+
+      const existingRoleIds = existingRoles.map(role => role.role_id);
+      const departmentId = getDepartmentIdFromQuery();
+
+
+      console.log("EXISTING ROLES", existingRoles);
+
+      let communityId = null;
+      existingRoles.forEach(role => {
+        if (role.community_id) {
+          communityId = role.community_id;  
+        }
+      });
+
+      console.log("COMMUNITY_ID", communityId);
+
+      if (!existingRoleIds.includes(2)) {
+        existingRoleIds.push(2);
+      }
+
+      console.log("EXISTING ROLE IDS", existingRoleIds);
+
+      const updatedRoles = {
+        role_id: existingRoleIds,  
+        model_id: user_id,
+        department_id: departmentId,  
+        community_id: communityId,    
+      };
+
+      console.log("UPDATED ROLES", updatedRoles);
+
       const response = await fetch('/api/permission/model-has-roles', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': csrfToken || '',
         },
-        body: JSON.stringify({
-          role_id: [2],
-          model_id: user_id,
-          department_id: getDepartmentIdFromQuery(),
-        }),
+        body: JSON.stringify(updatedRoles),
       });
 
       if (response.ok) {
         console.log('Admin assigned successfully.');
-        await fetchMembersAndAdmins(); // Re-fetch data after successful admin assignment
+        await fetchMembersAndAdmins();  
       } else {
         console.error('Failed to assign admin:', response.statusText);
       }
@@ -318,8 +414,85 @@ function DpMembers() {
       console.error('Error assigning admin:', error);
     }
 
+    closePopup(); 
+  };
+
+  const handleDemotion = async (member) => {
+    try {
+      const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
+  
+      const rolesResponse = await fetch(rolesUrl, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken || '',
+        },
+      });
+  
+      if (rolesResponse.ok) {
+        const rolesData = await rolesResponse.json();
+        const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
+  
+        // get community ids
+        let communityId = null;
+        existingRoles.forEach(role => {
+          if (role.community_id) {
+            communityId = role.community_id;  
+          }
+        });
+
+        console.log("EXISTING ROLES", existingRoles);
+  
+        const updatedRoles = existingRoles.filter(
+          (role) => !(role.role_id === 2)
+        );
+
+        console.log("UPDATED ROLES", updatedRoles);
+
+        if (!updatedRoles.some(role => role.role_id === 4)) {
+          updatedRoles.push({
+            role_id: 4, 
+            model_id: member.user_id,
+          });
+        }
+
+        console.log("UPDATED ROLES", updatedRoles);
+  
+        const rolesPayload = {
+          role_id: updatedRoles.map(role => role.role_id),
+          model_id: member.user_id,
+          department_id: member.department_id, 
+          community_id: communityId,          
+        };
+
+        console.log("ROLES PAYLOAD", rolesPayload);
+  
+        const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
+          body: JSON.stringify(rolesPayload),
+        });
+  
+        if (updateRolesResponse.ok) {
+          console.log('User demoted successfully.');
+          await fetchMembersAndAdmins();  
+        } else {
+          console.error('Failed to update roles:', updateRolesResponse.statusText);
+        }
+      } else {
+        console.error('Failed to fetch roles:', rolesResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Error demoting user:', error);
+    }
+  
     closePopup();
   };
+
+  
 
   const handleRemove = async (id) => {
     const url = `/api/department/employment_posts/${id}`;
@@ -335,7 +508,7 @@ function DpMembers() {
 
       if (response.ok) {
         console.log('Member deleted successfully.');
-        await fetchMembersAndAdmins(); // Re-fetch data after successful deletion
+        await fetchMembersAndAdmins();
       } else {
         console.error('Failed to delete member:', response.statusText);
       }
@@ -346,12 +519,100 @@ function DpMembers() {
     closePopup();
   };
 
+  const handleAdminRemove = async (member) => {
+    const url = `/api/department/employment_posts/${member.employment_post_id}`;
+  
+    try {
+      // Delete the member from the department
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+      });
+  
+      if (response.ok) {
+        console.log('Member deleted successfully.');
+  
+        // Check if the member is an admin and fetch their roles
+        if (member.flag === 'admin') {
+          const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
+          
+          const rolesResponse = await fetch(rolesUrl, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
+          });
+  
+          if (rolesResponse.ok) {
+            const rolesData = await rolesResponse.json();
+            const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
+            
+            let communityId = null;
+            existingRoles.forEach(role => {
+              if (role.community_id) {
+                communityId = role.community_id;  
+              }
+            });
+  
+            // Filter out the admin role for this department
+            const updatedRoles = existingRoles.filter(
+              (role) => !(role.role_id === 2)
+            );
+
+            console.log("UPDATED ROLES", updatedRoles);
+  
+            const rolesPayload = {
+              role_id: updatedRoles.map(role => role.role_id),
+              model_id: member.user_id,
+              community_id: communityId,
+            };
+
+            console.log("ROLES PAYLOAD", rolesPayload);
+  
+            // Post the updated roles 
+            const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken,
+              },
+              body: JSON.stringify(rolesPayload),
+            });
+  
+            if (updateRolesResponse.ok) {
+              console.log('Admin role removed successfully.');
+            } else {
+              console.error('Failed to update roles:', updateRolesResponse.statusText);
+            }
+          } else {
+            console.error('Failed to fetch roles:', rolesResponse.statusText);
+          }
+        }
+  
+        // Refresh the members and admins list after deletion
+        await fetchMembersAndAdmins();
+      } else {
+        console.error('Failed to delete member:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting member:', error);
+    }
+  
+    closePopup();
+  };
+  
+  
+
   const closePopup = () => {
     setActivePopupId(null);
   };
 
   const handleNewMemberAdded = (newMember) => {
-    fetchMembersAndAdmins(); // Re-fetch data after new member added
+    fetchMembersAndAdmins(); 
   };
 
   const handleAddMember = (newMemberData) => {
@@ -406,6 +667,7 @@ function DpMembers() {
             <MemberCard
               key={index}
               id={admin.user_id}
+              flag={admin.flag}
               employment_post_id={admin.employment_post_id}
               imageUrl={admin.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
               name={admin.name}
@@ -413,8 +675,8 @@ function DpMembers() {
               isActive={admin.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
-              onAssign={handleAssign}
-              onRemove={handleRemove}
+              onAssign={() => handleDemotion(admin)}
+              onRemove={() => handleAdminRemove(admin)}
               closePopup={closePopup}
             />
           ))}
@@ -431,6 +693,7 @@ function DpMembers() {
                 <MemberCard
                   key={index}
                   id={member.user_id}
+                  flag={member.flag}
                   employment_post_id={member.employment_post_id}
                   imageUrl={member.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
                   name={member.name}

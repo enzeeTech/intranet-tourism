@@ -81,7 +81,7 @@ function FeedbackOption({ optionText, onVote }) {
 }
 
 
-function OutputData({ polls, filterType, filterId, userId, loggedInUserId }) {
+function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postType, variant }) {
   const [pollos, setPollos] = useState(polls);
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,7 +107,7 @@ async function fetchData() {
 
     // Fetch posts data from all pages
     do {
-      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}`, {
+      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}&with[]=comments`, {
         method: "GET",
       });
       if (!postsResponse.ok) {
@@ -166,7 +166,7 @@ async function fetchData() {
 sortedPosts.forEach(post => fetchLikedUsers(post));
 
     
-    console.log("SORTEDPOST", sortedPosts);
+    // console.log("SORTEDPOST", sortedPosts);
     
     setPostData(sortedPosts);
   } catch (error) {
@@ -232,13 +232,13 @@ const nonAnnouncements = filteredPostData.filter(post => post.type !== 'announce
 // Reverse the non-announcement posts
 const reversedNonAnnouncements = filterType ? [...nonAnnouncements] : [...nonAnnouncements];
 
-console.log("REVERSEDNON", reversedNonAnnouncements);
+// console.log("REVERSEDNON", reversedNonAnnouncements);
 
 // Combine announcements at the top with the reversed non-announcement posts
 const finalPosts = [...announcements, ...reversedNonAnnouncements];
 
 
-console.log("FINAL", finalPosts);
+// console.log("FINAL", finalPosts);
 
 
 
@@ -270,6 +270,15 @@ console.log("FINAL", finalPosts);
     try {
       // Fetch the post to check if it has accessibilities
       const postToDelete = postData.find(post => post.id === postIdToDelete);
+
+      
+      // console.log("LLLL", postToDelete.comments.pivot.id);
+    //   postToDelete.comments.forEach(comment => {
+    //     console.log("LLLL", comment.pivot.comment_id);
+    // });
+    
+
+      
   
       if (!postToDelete) {
         console.error(`Post with ID ${postIdToDelete} not found.`);
@@ -287,6 +296,30 @@ console.log("FINAL", finalPosts);
           if (!response.ok) {
             console.error(`Failed to delete accessibility with ID ${accessibility.id}.`);
             return;
+          }
+        }
+      }
+
+      // If the post has comments, delete them first
+      if (postToDelete.comments && postToDelete.comments.length > 0) {
+        for (const comment of postToDelete.comments) {
+          const response = await fetch(`/api/posts/post_comment/${comment.pivot.id}`, {
+            method: 'DELETE',
+            headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+          });
+  
+          if (response.ok) {
+            // console.error(`Failed to delete comment with ID ${comment.pivot.id}.`);
+            const response = await fetch(`/api/posts/posts/${comment.pivot.comment_id}`, {
+              method: 'DELETE',
+              headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+            });
+
+            if (!response.ok) {
+              console.error(`Failed to delete comment with ID ${comment.pivot.comment_id}.`);
+              return;
+            }
+            // return;
           }
         }
       }
@@ -537,7 +570,7 @@ const renderContentWithTags = (content, mentions) => {
   return replaceContent(content);
 };
     
-    console.log("HEHEHHE", postData);
+    // console.log("HEHEHHE", postData);
 
 
 
@@ -550,6 +583,117 @@ const renderContentWithTags = (content, mentions) => {
       setSelectedPostId(postId);
       setShowLikesPopup(true);
     };
+
+    // const postFilter = finalPosts.filter(post => {
+    //   if (!postType) return true;
+    //   if (postType === 'mention') {
+    //     return post.mentions && post.mentions.some(mention => mention.user_id === loggedInUserId);
+    //   }
+    //   return post.type === postType;
+    // });
+
+    // const postFilter = finalPosts.filter(post => {
+    //   if (!postType) return true;
+    
+    //   if (postType === 'mention') {
+    //     if (post.mentions) {
+    //       try {
+    //         const mentions = JSON.parse(post.mentions);
+    //         return Array.isArray(mentions) && mentions.some(mention => parseInt(mention.id) === loggedInUserId);
+    //       } catch (error) {
+    //         console.error('Error parsing mentions:', error);
+    //         return false;
+    //       }
+    //     }
+    //     return false;
+    //   }
+    
+    //   return post.type === postType;
+    // });
+
+
+    // const postFilter = finalPosts.filter(post => {
+    //   console.log("POSTING", post);
+      
+    //   if (!postType) return true;
+    //   if (postType === 'mention') {
+    //     return post.mentions && JSON.parse(post.mentions).length > 0;
+    //   }
+    //   return post.type === postType;
+    // });
+
+    // const postFilter = finalPosts.filter(post => {
+    //   console.log("POSTING", post);
+    
+    //   if (!postType) return true;
+    
+    //   // Handle mention type
+    //   if (postType === 'mention') {
+    //     return post.mentions && JSON.parse(post.mentions).length > 0;
+    //   }
+    
+    //   // Handle image, video, and file types based on the attachment extensions
+    //   if (postType === 'image' || postType === 'video' || postType === 'file') {
+    //     const validExtensions = {
+    //       image: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    //       video: ['mp4', 'mov', 'avi'],
+    //       file: ['pdf', 'doc', 'docx', 'xls', 'xlsx']
+    //     };
+    
+    //     return post.attachments.some(attachment => 
+    //       validExtensions[postType].includes(attachment.extension)
+    //     );
+    //   }
+    
+    //   // Handle announcement type
+    //   if (postType === 'announcement') {
+    //     return post.type === 'announcement';
+    //   }
+    
+    //   // Default filter by type
+    //   return post.type === postType;
+    // });
+    
+    
+
+    
+    // Define the filtering function
+const filterPosts = (post) => {
+  // console.log("POSTING", post);
+
+  if (!postType) return true;
+
+  // Handle mention type
+  if (postType === 'mention') {
+    return post.mentions && JSON.parse(post.mentions).length > 0;
+  }
+
+  // Handle image, video, and file types based on the attachment extensions
+  if (postType === 'image' || postType === 'video' || postType === 'file') {
+    const validExtensions = {
+      image: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+      video: ['mp4', 'mov', 'avi'],
+      file: ['pdf', 'doc', 'docx', 'xls', 'xlsx']
+    };
+
+    return post.attachments.some(attachment => 
+      validExtensions[postType].includes(attachment.extension)
+    );
+  }
+
+  // Handle announcement type
+  if (postType === 'announcement') {
+    return post.type === 'announcement';
+  }
+
+  // Default filter by type
+  return post.type === postType;
+};
+
+// Apply the filter function to both postData and finalPosts
+const PostDataFiltered = postData.filter(filterPosts);
+const filteredFinalPosts = finalPosts.filter(filterPosts);
+    
   
 
   return (
@@ -588,16 +732,16 @@ const renderContentWithTags = (content, mentions) => {
             <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d36c4e55abf5012ece1a90ed95737b46c9b6970a05e3182fdd6248adca09028e?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="mt-6 aspect-[4.55] w-[76px]" />
           </article>
         </div>
+      //profile
       ))}
       {/* {userId ? postData.filter(post => post.user.id === userId && post.type !== 'story' && post.type !== 'files').map((post, index) => { */}
-      
-      {userId ? postData.filter(post => {
+      {userId ? PostDataFiltered.filter(post => {
     const isAuthor = post.user.id === userId;
     const isMentioned = post.mentions && JSON.parse(post.mentions).some(mention => mention.id == userId);
-    const isNotStoryOrFiles = post.type !== 'story' && post.type !== 'files';
+    const isNotStoryOrFiles = post.type !== 'story' && post.type !== 'files' && post.type !== 'comment';
 
     return (isAuthor || isMentioned) && isNotStoryOrFiles;
-}).map((post, index) => {
+    }).map((post, index) => {
         console.log("POSTDATAA", post);
         
           // Parse the likes string
@@ -611,8 +755,8 @@ const renderContentWithTags = (content, mentions) => {
           return (
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
-              {/* {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+              {post.type === 'announcement' && (
+                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437] ">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -620,9 +764,9 @@ const renderContentWithTags = (content, mentions) => {
                     </div>
                   </div>
                 </div>
-              )} */}
+              )}
 
-               {/* Birthday Post */}
+               {/* Birthday Post For Profile */}
                {post.type === 'birthday' && (
                   <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                     <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
@@ -766,26 +910,19 @@ const renderContentWithTags = (content, mentions) => {
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-                <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] z-5 relative`}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                       <div className="flex w-full items-center justify-between h-auto mb-4">
+                      {(post.type !== 'announcement' && post.type !== 'post') && (
                         <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
                             {post.departmentNames ? post.departmentNames : post.type}
                         </span>
-                        {post.type === 'announcement' && (
-                          <div className="bg-white relative">
-                            <img
-                              src={announce}
-                              className="flex-shrink-0 rounded-xl w-7 h-7"
-                              alt="Announcement Icon"
-                            />
-                          </div>
-                        )}
+                      )}
                       </div>  
                       <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full">
                         <div className="flex gap-1.5 -mt-1">
@@ -864,7 +1001,7 @@ const renderContentWithTags = (content, mentions) => {
                         {renderContentWithTags(post.content, post.mentions)}
                       </article>
 
-                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                    <p className="taging mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
                       {post.tag?.replace(/[\[\]"]/g, '') || ''}
                     </p>
@@ -905,20 +1042,29 @@ const renderContentWithTags = (content, mentions) => {
               )}
             </div>
           )
-        }) : finalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
+
+          // wallposting
+
+        }) : filteredFinalPosts.filter(post => post.type !== 'story' && post.type !== 'files' && post.type !== 'comment').map((post, index) => {
           // Parse the likes string
           let likesCount = 0;
+          // let commentsCount = 0;
 
           if (Array.isArray(post.likes)) {
             likesCount = post.likes?.length;
           }
+
+          const commentsCount = Array.isArray(post.comments) ? post.comments.length : 0; // Count comments directly
+          // console.log("couting", post.comments);
+          
           
 
           return (
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
-              {/* {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+              {post.type === 'announcement' && (
+                // <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]">
+                <div className={`${variant === "department" ? "mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]" : "mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437]"}`}>
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -926,10 +1072,10 @@ const renderContentWithTags = (content, mentions) => {
                     </div>
                   </div>
                 </div>
-              )} */}
+              )}
 
-                              {/* Birthday Post */}
-                              {post.type === 'birthday' && (
+                {/* Birthday Post For Public Wall Posting */}
+                {/* {post.type === 'birthday' && (
                   <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
                     <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
                       <div className="flex gap-1 mt-2"></div>
@@ -1066,31 +1212,29 @@ const renderContentWithTags = (content, mentions) => {
                       <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                     </div>
                   </article>
-                )}
+                )} */}
 
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-                <article className={`${post.type === 'announcement' ? 'mt-10' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative`}>
+                <article className={`
+                  ${post.type === 'announcement' ? '-mt-16' : 'mt-10'} 
+                  ${variant === 'department' ? 'w-full lg:w-[610px] md:w-[610px] sm:w-[610px]' : 'w-full lg:w-full md:w-[610px] sm:w-[610px]'}
+                  p-4 border rounded-2xl bg-white border-2 shadow-xl relative z-5
+                `}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
                       <div className="flex w-full items-center justify-between h-auto mb-4">
+                      {/* {post.type !== 'announcement' && post.type !== 'post' ( */}
+                      {(post.type !== 'announcement' && post.type !== 'post') && (
                         <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
                             {post.departmentNames ? post.departmentNames : post.type}
                         </span>
-                        {post.type === 'announcement' && (
-                          <div className="bg-white relative">
-                            <img
-                              src={announce}
-                              className="flex-shrink-0 rounded-xl w-7 h-7"
-                              alt="Announcement Icon"
-                            />
-                          </div>
-                        )}
+                      )}
                       </div>  
                       <div className="flex gap-5 justify-between items-center w-full max-md:flex-wrap max-md:max-w-full">
                       <div className="flex gap-1.5 items-center">
@@ -1160,9 +1304,9 @@ const renderContentWithTags = (content, mentions) => {
                         {renderContentWithTags(post.content, post.mentions)}
                       </article>
 
-                    <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                    <p className=" mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
-                      {post.tag?.replace(/[\[\]"]/g, '') || ''}
+                      <div className='taging'>{post.tag?.replace(/[\[\]"]/g, '') || ''}</div>
                     </p>
                   
 
@@ -1203,7 +1347,12 @@ const renderContentWithTags = (content, mentions) => {
                         </span>
                       )}
                     </div>
-                    <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                    <img src="/assets/commentforposting.svg" alt="Comment" className="ml-5 w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                    {commentsCount > 0 && (
+                    <span className="text-sm font-medium">
+                      {commentsCount}
+                    </span>
+                  )}
                   </div>
                 </article>
               )}
@@ -1235,7 +1384,8 @@ const renderContentWithTags = (content, mentions) => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: '400px',
+                minWidth: '200px',
+            maxWidth:'full',
             }}
         >
             <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
@@ -1258,7 +1408,7 @@ const renderContentWithTags = (content, mentions) => {
                     Yes
                 </button>
                 <button
-                    // onClick={handleClosePopup}
+                    onClick={() => setShowDeletePopup(false)}
                     style={{
                         backgroundColor: 'white',
                         color: '#333',

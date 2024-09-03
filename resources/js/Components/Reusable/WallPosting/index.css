@@ -5,8 +5,59 @@
   object-fit: cover; /* Ensures the image covers the container without stretching */
 }
 
+.output-box-depart {
+  margin-top: 10px; /* mt-10 */
+  padding-top: 12px; /* py-2 */
+  padding-right: 6px; /* px-6 */
+  padding-bottom: 60px; /* pb-16 */
+  padding-left: 6px; /* px-6 */
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 1.25rem; /* rounded-2xl */
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+  width: 610px;
+  background-color: #FF5437;
+}
+
+@media (min-width: 1024px) { /* lg */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) { /* md */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+@media (max-width: 767px) { /* sm */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+
+@media (min-width: 1024px) { /* lg */
+  .default-output-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) { /* md */
+  .default-output-box {
+    width: 610px;
+  }
+}
+
+@media (max-width: 767px) { /* sm */
+  .default-output-box {
+    width: 610px;
+  }
+}
+
 .tagged-text {
-  color: blue;
+  color: #4780FF;
   font-weight: bold;
 }
 
@@ -101,7 +152,7 @@ text-decoration: underline;
 }
 
 .profile-link {
-  color: blue !important; /* Force the color to blue */
+  color: #4780FF !important; /* Force the color to blue */
   text-decoration: none; /* Optional: Remove the underline from the link */
 }
 

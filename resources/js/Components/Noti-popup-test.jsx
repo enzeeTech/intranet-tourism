@@ -94,16 +94,41 @@ class NotificationPopup extends React.Component {
                     status: 8,
                     read: false
                 },
-            ]
+                // ... other notifications
+            ],
+            isPopupOpen: true // Add a new state to control the popup visibility
         };
+
+        this.popupRef = React.createRef(); // Reference for the popup
     }
 
-    handleTabChange = tab => {
+    componentDidMount() {
+        // Add event listener for clicks
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        // Remove event listener for clicks
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside = (event) => {
+        // Check if the click is outside the popup
+        if (this.popupRef.current && !this.popupRef.current.contains(event.target)) {
+            this.setState({ isPopupOpen: false });
+        }
+    };
+
+    handleTabChange = (tab) => {
         this.setState({ activeTab: tab });
     };
 
     render() {
-        const { activeTab, notifications } = this.state;
+        const { activeTab, notifications, isPopupOpen } = this.state;
+
+        if (!isPopupOpen) {
+            return null; // Don't render the popup if it's closed
+        }
 
         // Filter notifications based on the active tab
         const filteredNotifications =
@@ -111,9 +136,11 @@ class NotificationPopup extends React.Component {
                 ? notifications.slice(0, 4) // Only display the first 4 notifications for 'all' tab
                 : notifications.filter(notification => !notification.read);
 
-
         return (
-            <div className="notification-box absolute right-0 mt-2 w-[360px] bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div 
+                className="notification-box absolute right-0 mt-2 w-[360px] bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                ref={this.popupRef} // Attach the reference to the popup div
+            >
                 <style>{`
                     .notification-message {
                         display: -webkit-box;
@@ -174,78 +201,7 @@ class NotificationPopup extends React.Component {
                     </li>
                 </ul>
                 <br />
-                {/* <div className="notification-list px-2 ">
-                    <ul>
-                        {filteredNotifications.map(notification => (
-                            <div className="flex flex-row h-[104px] mb-2 hover:bg-blue-100 items-center rounded-xl" key={notification.id}>
-                                <div className="flex items-center bg-gray h-16">
-                                    <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt=""
-                                        style={{
-                                            height: "80px",
-                                            width: "80px",
-                                            borderRadius: "100%"
-                                        }}
-                                    />
-                                    {notification.status === 1 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14" src="/assets/noti-icon-react/birthday_I.png" alt="" />
-                                    )}
-                                    {notification.status === 2 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/calendar_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 3 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/comment_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 4 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/community_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 6 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/filemanagement_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 7 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/home_I.png" alt="" />
-                                    )}
-                                    {notification.status === 8 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/like.png" alt="" />
-                                    )}
-                                    {notification.status === 9 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/link_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 10 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/media_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 11 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/noti_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 12 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/setting_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 13 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/share_I.svg" alt="" />
-                                    )}
-                                    {notification.status === 14 && (
-                                        <img className="absolute h-5 w-5 left-20 mt-14 bg-blue" src="/assets/noti-icon-react/staffdirectory_I.svg" alt="" />
-                                    )}
-                                </div>
-                                <div className="flex flex-col w-48 h-50 ml-2">
-                                    <div className="block px-2 py-1 text-sm notification-message">
-                                        <span className="font-bold">{notification.users}</span> <nbsp></nbsp>
-                                        <span>{notification.message}</span>
-                                    </div>
-                                    <div className="block px-2 py-1 text-sm font-medium text-neutral-800 text-opacity-50">{notification.timeAgo}</div>
-                                </div>
-                                <div>
-                                    {!notification.read && (
-                                        <img
-                                            src="/assets/orangeball.png"
-                                            alt="Unread"
-                                            style={{ width: '10px', height: '10px', marginLeft: '10px' }}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </ul>
-                </div> */}
+                {/* Notification list rendering... */}
                 <NotiComp />
                 <div onClick={handleClick} className="flex flex-row font-bold bg-slaute-400 h-10 px-2 w-full gap-2 cursor-pointer hover:bg-slate-200 rounded-lg items-center">
                     VIEW ALL

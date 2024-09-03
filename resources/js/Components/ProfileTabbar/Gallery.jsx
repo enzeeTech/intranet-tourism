@@ -144,9 +144,9 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
   
 
   return (
-    <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-6">
+    <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-4">
       <header>
-        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-0">
           Images
         </h1>
         <hr className="underline" />
@@ -243,7 +243,7 @@ const VideoProfile = ({ selectedItem, userId, accessableType, accessableId, filt
   return (
     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-lg shadow-custom mt-4">
       <header>
-        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-2">
+        <h1 className="text-2xl font-bold text-neutral-800 max-md:max-w-full pb-0">
           Videos
         </h1>
         <hr className="underline" />

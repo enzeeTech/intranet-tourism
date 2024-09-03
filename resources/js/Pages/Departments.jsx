@@ -192,21 +192,21 @@ const Departments = () => {
         </div>
       )}
       {isErrorModalOpen && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
-      <h2 className="mb-4 text-xl font-bold text-center text-red-600">Error</h2>
-      <p className="text-center text-gray-700">Members still exist in the department. Please delete all members first.</p>
-      <div className="flex justify-center mt-6">
-        <button
-          className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700"
-          onClick={() => setIsErrorModalOpen(false)} // Close the modal on click
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
+            <h2 className="mb-4 text-xl font-bold text-center text-red-600">Error</h2>
+            <p className="text-center text-gray-700">Members still exist in the department. Please delete all members first.</p>
+            <div className="flex justify-center mt-6">
+              <button
+                className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700"
+                onClick={() => setIsErrorModalOpen(false)} // Close the modal on click
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

@@ -13,29 +13,60 @@ use Modules\Resources\Models\Resource;
 
 class PostController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     // Start with a query builder instance
+    //     $query = Post::query();
+
+    //     // Check if the 'filter' parameter is present
+    //     if ($request->has('filter')) {
+    //         // Apply the necessary filters to the query
+    //         if (in_array('birthday', $request->input('filter'))) {
+    //             $query->where('type', 'birthday');
+    //         }
+
+    //         // If filters are present, paginate the filtered query
+    //         $data = $this->shouldPaginate($query);
+    //     } else {
+    //         // If no filters are present, paginate using the predefined queryable method
+    //         $data = $this->shouldPaginate(Post::queryable());
+    //     }
+
+    //     return response()->json([
+    //         'data' => $data,
+    //     ]);
+    // }
+
+
     public function index(Request $request)
-    {
-        // Start with a query builder instance
-        $query = Post::query();
+{
+    // Start with a query builder instance
+    $query = Post::query();
 
-        // Check if the 'filter' parameter is present
-        if ($request->has('filter')) {
-            // Apply the necessary filters to the query
-            if (in_array('birthday', $request->input('filter'))) {
-                $query->where('type', 'birthday');
-            }
-
-            // If filters are present, paginate the filtered query
-            $data = $this->shouldPaginate($query);
-        } else {
-            // If no filters are present, paginate using the predefined queryable method
-            $data = $this->shouldPaginate(Post::queryable());
+    // Check if the 'filter' parameter is present
+    if ($request->has('filter')) {
+        // Apply the necessary filters to the query
+        if (in_array('birthday', $request->input('filter'))) {
+            $query->where('type', 'birthday');
         }
 
-        return response()->json([
-            'data' => $data,
-        ]);
+        // If filters are present, paginate the filtered query
+        $data = $this->shouldPaginate($query);
+    } else {
+        // If no filters are present, paginate using the predefined queryable method
+        $data = $this->shouldPaginate(Post::queryable());
     }
+
+    // Load the comments relationship with pivot data for all posts
+    $data->load(['comments' => function ($query) {
+        $query->withPivot('id', 'comment_id');
+    }]);
+
+    return response()->json([
+        'data' => $data,
+    ]);
+}
+
 
 
 
@@ -65,8 +96,11 @@ class PostController extends Controller
     {
         request()->merge(['user_id' => Auth::id()]);
         if (request()->has('accessibilities')) {
+
+
             $accessibilities = request('accessibilities');
             foreach ($accessibilities as $accessibility) {
+
                 $validatedAccessibilities[] = validator($accessibility, ...PostAccessibility::rules('createFromPost'))->validated();
             }
         } else {
@@ -74,13 +108,13 @@ class PostController extends Controller
         }
 
         $validated = request()->validate(...Post::rules());
-        $validatedAccessibilities = [];
 
         DB::beginTransaction();
         try {
             $post->fill($validated)->save();
             $post->storeAttachments();
             if (request()->has('accessibilities')) {
+
                 $post->accessibilities()->createMany($validatedAccessibilities);
             }
             DB::commit();
@@ -120,22 +154,16 @@ class PostController extends Controller
 
             }
             if (request()->has('accessibilities')) {
-
                 $currentAccessibilities = $post->accessibilities()->get();
 
                 foreach ($validatedAccessibilities as $validatedAccessibility) {
-                    $accessibility = $currentAccessibilities->firstWhere('id', $validatedAccessibility['id'] ?? null);
-                    if ($accessibility) {
-                        $accessibility->update($validatedAccessibility);
-                    } else {
-                        $post->accessibilities()->create($validatedAccessibility);
-                    }
+                    $currentAccessibilities->each(function ($accessibility) use ($validatedAccessibility) {
+                        $accessibility->update([
+                            'accessable_type' => $validatedAccessibility['accessable_type'],
+                            'accessable_id'    => $validatedAccessibility['accessable_id']
+                        ]);
+                    });
                 }
-
-                $validatedIds = collect($validatedAccessibilities)->pluck('id')->filter()->all();
-
-                // delete if old access does not exist in new data
-                $post->accessibilities()->whereNotIn('id', $validatedIds)->delete();
             }
 
             DB::commit();

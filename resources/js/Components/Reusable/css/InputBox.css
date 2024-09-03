@@ -78,6 +78,7 @@
       height: auto;
     }
 
+
   .comment-box-container {
     background-color: #eaeaea;
     padding: 10px 15px;
@@ -239,6 +240,16 @@
   padding: 5px 10px;
   background-color: #f0f0f0;
   border-radius: 5px;
+}
+.taging {
+  display: inline-flex; /* Use inline-flex to shrink-wrap the content */
+  align-items: center;
+  padding-left: 1%;
+  padding-right: 1%;
+  background-color:#EBF5FF;
+  border-radius: 5px;
+  max-width: 100%; /* Ensure it doesn't exceed the parent's width */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
 }
 
 .tag button,
