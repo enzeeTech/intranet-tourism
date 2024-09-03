@@ -98,6 +98,33 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postT
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
   const csrfToken = useCsrf();
 
+  const popupRefs = useRef([]);
+
+    // Add ref to each popup and reset the ref array
+    const addPopupRef = (element, index) => {
+        popupRefs.current[index] = element;
+    };
+
+    // Function to handle clicks outside of the popup
+    const handleClickOutside = (event) => {
+        popupRefs.current.forEach((ref, index) => {
+            if (ref && !ref.contains(event.target)) {
+                setIsPopupOpen((prevState) => ({
+                    ...prevState,
+                    [index]: false,
+                }));
+            }
+        });
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
 
 async function fetchData() {
   try {
@@ -815,32 +842,26 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         </div>
                       </div>
                       {isPopupOpen[index] && (
-                        <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-6 right-0 w-[160px] h-auto z-10">
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleEdit(post)}
-                          >
-                            <img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />
-                            Edit
-                          </p>
-                          <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => confirmDelete(post.id)}
-                          >
-                            <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
-                            Delete
-                          </p>
-                          <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleAnnouncement(post)}
-                          >
-                            <img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />
-                            Announcement
-                          </p>
-                        </div>
-                      )}
+                                        <div
+                                            ref={(el) => addPopupRef(el, index)}
+                                            className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10"
+                                        >
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleEdit(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
+                                                Edit
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => confirmDelete(post.id)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
+                                                Delete
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                                                Announcement
+                                            </p>
+                                        </div>
+                                    )}
                     </header>
                     
                     {!post.attachments || post.attachments.length === 0 ? (
@@ -966,33 +987,27 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         </div>
                       </div>
                     </div>
-                      {isPopupOpen[index] && (
-                        <div className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10">
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleEdit(post)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
-                            Edit
-                          </p>
-                          <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => confirmDelete(post.id)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
-                            Delete
-                          </p>
-                          <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleAnnouncement(post)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
-                            Announcement
-                          </p>
-                        </div>
-                      )}
+                    {isPopupOpen[index] && (
+                                        <div
+                                            ref={(el) => addPopupRef(el, index)}
+                                            className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10"
+                                        >
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleEdit(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
+                                                Edit
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => confirmDelete(post.id)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
+                                                Delete
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                                                Announcement
+                                            </p>
+                                        </div>
+                                    )}
                     </header>
                     {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
                       {post.content}
@@ -1269,33 +1284,27 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     </div>
 
                     </div>
-                      {isPopupOpen[index] && (
-                        <div className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10">
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleEdit(post)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
-                            Edit
-                          </p>
-                          <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => confirmDelete(post.id)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
-                            Delete
-                          </p>
-                          <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
-                          <p 
-                            className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
-                            onClick={() => handleAnnouncement(post)}
-                          >
-                            <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
-                            Announcement
-                          </p>
-                        </div>
-                      )}
+                    {isPopupOpen[index] && (
+                                        <div
+                                            ref={(el) => addPopupRef(el, index)}
+                                            className="absolute bg-white border-2 rounded-xl p-1 shadow-custom mt-16 right-0 w-[180px] h-auto z-10"
+                                        >
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleEdit(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/EditIcon.svg" alt="Edit" />
+                                                Edit
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => confirmDelete(post.id)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
+                                                Delete
+                                            </p>
+                                            <div className="font-extrabold text-neutral-800 my-1 border-b-2 border-neutral-200"></div>
+                                            <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(post)}>
+                                                <img className="w-6 h-6 mr-2" src="/assets/AnnounceIcon.svg" alt="Announcement" />
+                                                Announcement
+                                            </p>
+                                        </div>
+                                    )}
                     </header>
                     {/* <div className="post-content break-words overflow-hidden" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
                       {post.content}
