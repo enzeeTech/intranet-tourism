@@ -78,6 +78,12 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
     setShowPopup(false);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleFileUpload();
+    }
+  };
+
   const CancelButton = ({ onClick }) => (
     <button
       className="self-end px-6 py-2 font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border-2 border-gray-400"
@@ -145,6 +151,7 @@ const SearchFile = ({ onSearch, userId, requiredData, onFileUploaded }) => {
                 type="text"
                 value={newFilename}
                 onChange={(e) => setnewFilename(e.target.value)}
+                onKeyDown={handleKeyDown} // Attach onKeyDown handler
                 className="w-full px-4 py-2 mt-1 border-2 border-gray-400 rounded-md"
                 placeholder="Enter new file name"
               />
