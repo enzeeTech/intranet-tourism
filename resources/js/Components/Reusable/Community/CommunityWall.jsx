@@ -7,7 +7,7 @@ import { ImageProfile, VideoProfile } from "../../ProfileTabbar/Gallery";
 import EditCommunity from './EditCommunity';
 import { useCsrf } from "@/composables";
 import { usePage } from '@inertiajs/react';
-import { add } from 'date-fns';
+import { add, set } from 'date-fns';
 
 function HeaderSection({ communityID, departmentHeader, departmentBanner, departmentDescription, onEditClick }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -119,26 +119,26 @@ function Navigation({ userId, communityID, departmentName, type}) {
  
 
 
-  useEffect(() => {
-    const checkMembership = async () => {
-      try {
-        const url = `api/communities/community_members?user_id=${id}`;
-        const response = await fetch (url, {
-          method: 'GET',
-          headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
-        })
-        if (response.ok) {
-          const data = await response.json();
-          const isMember = data.some((member) => String(member.community_id) === String(communityID));
-          setHasJoined(isMember);
-        } else {
-          console.error('Failed to fetch membership data');
-        }
-      } catch (error) {
-        console.error('Error checking membership:', error);
+  const checkMembership = async () => {
+    try {
+      const url = `api/communities/community_members?user_id=${id}`;
+      const response = await fetch (url, {
+        method: 'GET',
+        headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
+      })
+      if (response.ok) {
+        const data = await response.json();
+        const isMember = data.some((member) => String(member.community_id) === String(communityID));
+        setHasJoined(isMember);
+      } else {
+        console.error('Failed to fetch membership data');
       }
-    };
+    } catch (error) {
+      console.error('Error checking membership:', error);
+    }
+  };
 
+  useEffect(() => {
     checkMembership();
   }, [id, communityID]);
 
@@ -152,14 +152,13 @@ function Navigation({ userId, communityID, departmentName, type}) {
   };
 
   const addPublicMember = async () => {
-    const url = `api/communities/community_members`;
+    const url = `api/communities/communities/${communityID}/add-member`;
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
         };
 
         const body={
-            community_id: communityID,
             user_id: String(id),
         }
 
@@ -167,6 +166,7 @@ function Navigation({ userId, communityID, departmentName, type}) {
             const response = await fetch(url, { ...options, body: JSON.stringify(body) });
             if (response.ok) {
                 console.log('Member added successfully');
+                setHasJoined(true);
             } else {
                 throw new Error('Failed to add member');
             }
@@ -176,12 +176,43 @@ function Navigation({ userId, communityID, departmentName, type}) {
         }
   };
 
-  // Dummy functions
-  const handleJoin = () => {
-    if (!hasJoined) {
+  const removePublicMember = async () => {
+    const url = `api/communities/communities/${communityID}/delete-member`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+    };
+
+    const body = {
+      user_id: String(id),
+    };
+
+    try {
+      const response = await fetch(url, { ...options, body: JSON.stringify(body) });
+      if (response.ok) {
+        console.log('Member removed successfully');
+        window.location.reload();
+      } else {
+        throw new Error('Failed to remove member');
+      }
+    } catch (error) {
+      console.error('Error removing member:', error);
+    }
+  };
+
+  const handleJoinOrExit = () => {
+    if (hasJoined) {
+      removePublicMember();
+    } else {
       addPublicMember();
     }
   };
+
+
 
   const handleAddMember = () => {
     console.log('Add Member function triggered');
@@ -190,23 +221,45 @@ function Navigation({ userId, communityID, departmentName, type}) {
   return (
     <div className="flex flex-col">
       <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:max-w-full">
-        <div className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Post')}>Post</div>
-        <div className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Gallery')}>Gallery</div>
-        <div className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Files')}>Files</div>
-        <div className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`} onClick={() => handleTabClick('Members')}>Members</div>
+        <div
+          className={`cursor-pointer ${activeTab === 'Post' ? 'text-blue-500' : ''}`}
+          onClick={() => handleTabClick('Post')}
+        >
+          Post
+        </div>
+        <div
+          className={`cursor-pointer ${activeTab === 'Gallery' ? 'text-blue-500' : ''}`}
+          onClick={() => handleTabClick('Gallery')}
+        >
+          Gallery
+        </div>
+        <div
+          className={`cursor-pointer ${activeTab === 'Files' ? 'text-blue-500' : ''}`}
+          onClick={() => handleTabClick('Files')}
+        >
+          Files
+        </div>
+        <div
+          className={`cursor-pointer ${activeTab === 'Members' ? 'text-blue-500' : ''}`}
+          onClick={() => handleTabClick('Members')}
+        >
+          Members
+        </div>
         <div className="ml-auto">
           {type === 'public' ? (
             <button
               className={`px-4 py-2 text-white rounded-full ${
                 hasJoined ? 'bg-[#FF5437]' : 'bg-[#FF5437] hover:bg-red-700'
               }`}
-              onClick={handleJoin}
-              disabled={hasJoined}
+              onClick={handleJoinOrExit}
             >
-              {hasJoined ? 'Already Joined' : 'Join'}
+              {hasJoined ? 'Exit Group' : 'Join'}
             </button>
           ) : (
-            <button className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700" onClick={handleAddMember}>
+            <button
+              className="px-4 py-2 text-white bg-[#FF5437] rounded-full hover:bg-red-700"
+              onClick={handleAddMember}
+            >
               Invite
             </button>
           )}
@@ -217,12 +270,12 @@ function Navigation({ userId, communityID, departmentName, type}) {
         {activeTab === 'Members' && (
           <div className="flex justify-center w-full mt-4">
             <div className="max-w-[900px] w-full border-inherit rounded-2xl shadow-2xl">
-              <CmMembers communityID={communityID}/>
+              <CmMembers communityID={communityID} loggedInID={id} />
             </div>
           </div>
         )}
 
-        {activeTab === "Files" && (
+        {activeTab === 'Files' && (
           <div>
             <div className="flex gap-4 ml-12 whitespace-nowrap">
               <SearchInput />
@@ -232,19 +285,41 @@ function Navigation({ userId, communityID, departmentName, type}) {
           </div>
         )}
 
-        {activeTab === "Gallery" && (
+        {activeTab === 'Gallery' && (
           <section>
-            <ImageProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
-            <VideoProfile selectedItem="All" accessableType="Department" accessableId={communityID} filterBy="department" />
+            <ImageProfile
+              selectedItem="All"
+              accessableType="Department"
+              accessableId={communityID}
+              filterBy="department"
+            />
+            <VideoProfile
+              selectedItem="All"
+              accessableType="Department"
+              accessableId={communityID}
+              filterBy="department"
+            />
           </section>
         )}
 
         {activeTab === 'Post' && (
           <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
-            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
-              <ShareYourThoughts userId={userId} onCreatePoll={handleCreatePoll} includeAccessibilities={true} filterType="Department" filterId={communityID} />
-              <Filter /><br />
-              <OutputData polls={polls} filterType="Department" filterId={communityID} departmentName={departmentName} />
+            <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items">
+              <ShareYourThoughts
+                userId={userId}
+                onCreatePoll={handleCreatePoll}
+                includeAccessibilities={true}
+                filterType="Department"
+                filterId={communityID}
+              />
+              <Filter />
+              <br />
+              <OutputData
+                polls={polls}
+                filterType="Department"
+                filterId={communityID}
+                departmentName={departmentName}
+              />
             </div>
           </div>
         )}
