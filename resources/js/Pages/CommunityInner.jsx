@@ -59,15 +59,24 @@ const CommunityInner = () => {
     <Example>
     <main className="relative ml-4 mr-4 lg:w-full xl:pl-96 xl:pr-24 sm:pr-44 2xl:pl-80 lg:ml-10 lg:mr-24 bottom-10">
       <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 max-w-full lg:max-w-[900px] mx-auto ">
-          <CommunityWall
-            communityID={getCommunityIdFromQuery()}
-            departmentHeader={communityData?.name}
-            departmentDescription={communityData?.description}
-            departmentBanner={communityData?.banner ? communityData.banner : '/assets/defaultCommunity.png'}
-            userId={id}
-            type={type}
-            onEditClick={handleEditClick}
-          />
+          {isLoading ? (
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="flex items-center justify-center">
+                <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+              </div>
+              <p className="mt-4 ml-6 text-lg font-semibold text-gray-700">Loading community data...</p>
+            </div>
+          ) : (
+            <CommunityWall
+              communityID={getCommunityIdFromQuery()}
+              departmentHeader={communityData?.name}
+              departmentDescription={communityData?.description}
+              departmentBanner={communityData?.banner ? communityData.banner : '/assets/defaultCommunity.png'}
+              userId={id}
+              type={type}
+              onEditClick={handleEditClick}
+            />
+          )}
         </div>
       </main>
 
