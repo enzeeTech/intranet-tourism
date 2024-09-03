@@ -47,7 +47,7 @@ const Dashboard = () => {
               `}
             </style>
             <div className="file-directory-header">
-              <PageTitle title="My Wall" />
+              <PageTitle title="okay" />
             </div>
             <hr className="file-directory-underline" />
             <div>
