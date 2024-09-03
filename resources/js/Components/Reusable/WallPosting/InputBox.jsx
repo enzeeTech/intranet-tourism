@@ -383,12 +383,12 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         onClick={handleClickPeople}
                                         className="tooltip relative text-md text-blue-500 hover:text-blue-700"
                                     >
-                                        <img
+                                        {/* <img
                                             loading="lazy"
                                             src="assets/inputpeople.svg"
                                             alt="People Icon"
                                             className="w-[16px] h-[16px]"
-                                        />
+                                        /> */}
                                         <span className="tooltiptext">Mentions People</span>
                                         {chosenPeople.length > 0 && (
                                             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
