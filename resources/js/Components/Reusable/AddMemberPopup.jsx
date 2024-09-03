@@ -58,6 +58,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [success, setSuccess] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [gradeError, setGradeError] = useState(false);
+    const [unitError, setUnitError] = useState(false);
     const [grades, setGrades] = useState([]);
     const [selectedGrade, setSelectedGrade] = useState('');
     const [selectedGradeId, setSelectedGradeId] = useState('');
@@ -252,6 +253,26 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             return;
         }
 
+        // If the user has exactly one employment post, pre-fill form fields
+        if (person.employment_posts && person.employment_posts.length === 1) {
+            const employmentPost = person.employment_posts[0];
+            console.log('employmentPost', employmentPost);
+            setTitle(employmentPost.business_post?.title || '');
+            setTitleId(employmentPost.business_post_id || ''); 
+            setSelectedGrade(employmentPost.business_grade?.code || '');
+            setSelectedGradeId(employmentPost.business_grade_id || '');
+            setLocation(employmentPost.location || ''); 
+            setWorkPhoneNumber(employmentPost.work_phone || ''); 
+        } else {
+            // Reset form fields if there are no employment posts or more than one post
+            setTitle('');
+            setTitleId('');
+            setLocation('');
+            setWorkPhoneNumber('');
+            setSelectedGrade('');
+            setSelectedGradeId('');
+        }
+
         setSelectedPerson(person);
         setSearchTerm(person.name);
         setError('');  
@@ -281,6 +302,33 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const handleAdd = () => {
+        let hasError = false;
+    
+        if (!title) {
+            setTitleError(true);
+            hasError = true;
+        } else {
+            setTitleError(false);
+        }
+
+        if (!selectedGrade) {
+            setGradeError(true);
+            hasError = true;
+        } else {
+            setGradeError(false);
+        }
+
+        if (!unit) {
+            setUnitError(true);
+            hasError = true;
+        } else {
+            setUnitError(false);
+        }
+    
+        if (hasError) {
+            return;
+        }
+    
         if (selectedPerson?.employment_post) {
             setShowConfirmation(true);
         } else {
@@ -405,6 +453,9 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
     const getImageSource = (imageUrl) => {
         console.log('imageURL', imageUrl);
+        if (imageUrl === defaultImage) {
+            return defaultImage;
+        }
         if (imageUrl.startsWith('staff_image/')) {
             return `/storage/${imageUrl}`;
         } else {
@@ -419,10 +470,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             return <span className="font-light text-gray-600">No title available</span>;
         }
     
-        // Extract unique titles and filter out any empty values
         const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
     
-        // Check if there are any valid titles to display
         if (uniqueTitles.length === 0) {
             return <span className="font-light text-gray-600">No title available</span>;
         }
@@ -503,7 +552,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Unit</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
-                                        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-50">
+                                        <MenuButton className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border px-3 py-2 ${unitError ? 'border-red-500' : 'border-gray-300'} text-gray-700 hover:bg-gray-50`}>
                                             {unit || "Select Unit"}
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
@@ -519,7 +568,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                                 )}
                                             </MenuItem>
                                             {units.map((unit) => (
-                                                <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); }}>
+                                                <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); setUnitError(false); }}>
                                                     {({ active }) => (
                                                         <a
                                                             href="#"
@@ -532,6 +581,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             ))}
                                         </MenuItems>
                                     </Menu>
+                                    {unitError && <div className="mt-2 text-red-500">You must select a unit</div>}
                                 </div>
                                 {!selectedPerson.employment_post && (
                                     <div className="mb-4">
