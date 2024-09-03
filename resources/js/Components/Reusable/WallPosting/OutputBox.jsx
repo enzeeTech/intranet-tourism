@@ -847,14 +847,14 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                       // Render this block if there are no attachments
                       <>
                         <div>{post.content}</div>
-                        <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                        <p className="mt-0 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                           {post.mentions ? JSON.parse(post.mentions).map(mention => mention.name).join(', ') : ''}
                         </p>
                       </>
                     ) : (
                       // Render this block if there are attachments
                       <>
-                        <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                        <p className="mt-0 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                           {post.mentions ? JSON.parse(post.mentions).map(mention => mention.name).join(', ') : ''}
                         </p>
                         <div className="relative flex flex-wrap gap-2 mt-4">
@@ -1001,7 +1001,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         {renderContentWithTags(post.content, post.mentions)}
                       </article>
 
-                    <p className="taging mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                    <p className="taging mt-0 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                       {/* {post.tag.replace(/[\[\]"]/, '')} */}
                       {post.tag?.replace(/[\[\]"]/g, '') || ''}
                     </p>
@@ -1013,7 +1013,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                       </p>
                   )} */}
 
-                  <p className="mt-3.5 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
+                  <p className="mt-0 text-xs font-semibold leading-6 text-blue-500 max-md:max-w-full">
                   {post.event?.replace(/[\[\]"]/g, '') || ''}
                   </p>
                   <PostAttachments attachments={post.attachments} />
