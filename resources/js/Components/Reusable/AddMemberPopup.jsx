@@ -64,6 +64,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const csrfToken = useCsrf();
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showMaxDepartmentPopup, setShowMaxDepartmentPopup] = useState(false);
+
 
     useEffect(() => {
         fetchCurrentMembers();
@@ -239,10 +241,26 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             setError('This user is already in the department.');
             return;
         }
+        console.log('person', person);
+
+        // Check if the user has more than two employment posts
+        console.log('person.employment_posts', person.employment_posts);
+        console.log('person.employment_posts.length', person.employment_posts.length);
+        if (person.employment_posts && person.employment_posts.length >= 2) {
+            console.log('User has more than two employment posts:', person.employment_posts);
+            setShowMaxDepartmentPopup(true);
+            return;
+        }
+
         setSelectedPerson(person);
         setSearchTerm(person.name);
         setError('');  
     };
+
+    const handleCloseMaxDepartmentPopup = () => {
+        setShowMaxDepartmentPopup(false);
+    };
+    
 
     const handleClose = () => {
         setIsAddMemberPopupOpen(false);
@@ -590,6 +608,22 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                     onConfirm={handleConfirmation}
                     onCancel={handleClose}
                 />
+            )}
+            {showMaxDepartmentPopup && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-3xl pt-7 px-6 py-2 w-[500px] shadow-lg">
+                        <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Cannot Add User</h1>
+                        <p>A user can only be in maximum of two departments</p>
+                        <div className="flex flex-col mt-4">
+                            <button
+                                className="w-full px-4 py-2 mb-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
+                                onClick={handleCloseMaxDepartmentPopup}
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
