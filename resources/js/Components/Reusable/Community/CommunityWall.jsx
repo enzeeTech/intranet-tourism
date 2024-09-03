@@ -197,6 +197,61 @@ function Navigation({ userId, communityID, departmentName, type }) {
     setActiveTab(tab);
   };
 
+  
+  const addPublicMember = async () => {
+    const url = `api/communities/communities/${communityID}/add-member`;
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json', "X-CSRF-Token": csrfToken },
+        };
+
+        const body={
+            user_id: String(id),
+        }
+
+        try {
+            const response = await fetch(url, { ...options, body: JSON.stringify(body) });
+            if (response.ok) {
+                console.log('Member added successfully');
+                setHasJoined(true);
+            } else {
+                throw new Error('Failed to add member');
+            }
+        }
+        catch (error) {
+            console.error('Error adding member:', error);
+        }
+  };
+
+  const removePublicMember = async () => {
+    const url = `api/communities/communities/${communityID}/delete-member`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-CSRF-Token': csrfToken,
+      },
+    };
+
+    const body = {
+      user_id: String(id),
+    };
+
+    try {
+      const response = await fetch(url, { ...options, body: JSON.stringify(body) });
+      if (response.ok) {
+        console.log('Member removed successfully');
+        window.location.reload();
+      } else {
+        throw new Error('Failed to remove member');
+      }
+    } catch (error) {
+      console.error('Error removing member:', error);
+    }
+  };
+
+
   const handleJoinOrExit = () => {
     if (hasJoined) {
       removePublicMember();
