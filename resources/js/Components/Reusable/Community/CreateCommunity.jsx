@@ -293,7 +293,7 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
   return (
     <div className="flex flex-col items-center">
       <div
-        className="relative flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl w-[400px] h-[133px]"
+        className="relative flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl w-[400px] h-[300px]"
         onClick={handleClick}
       >
         {src && cropMode ? (
