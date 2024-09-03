@@ -112,23 +112,23 @@ export default function Header({ setSidebarOpen }) {
     };
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsMenuPopupVisible(false);
-            }
+        const handleClickOutsideNotification = (event) => {
+            // Only handle clicks outside the notification popup
             if (notificationRef.current && !notificationRef.current.contains(event.target)) {
                 setIsNotificationPopupVisible(false);
             }
-            if (birthdayNotificationRef.current && !birthdayNotificationRef.current.contains(event.target)) {
-                setIsBirthdayPopupVisible(false);
-            }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        // Attach event listener only for the bell notification popup
+        if (isNotificationPopupVisible) {
+            document.addEventListener('mousedown', handleClickOutsideNotification);
+        }
+
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            // Clean up the event listener for the bell notification popup
+            document.removeEventListener('mousedown', handleClickOutsideNotification);
         };
-    }, []);
+    }, [isNotificationPopupVisible]);
 
     return (
         <div className="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">
