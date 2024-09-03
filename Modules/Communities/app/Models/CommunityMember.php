@@ -29,7 +29,7 @@ class CommunityMember extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'community_id' => ['string', 'required'],
-                    'role' => ['string', 'required'],
+                    'role' => ['string'],
                 ],
                 // [],
             ],
@@ -37,7 +37,7 @@ class CommunityMember extends Model implements AuditableContract
                 [
                     'user_id' => ['string', 'required'],
                     'community_id' => ['string', 'required'],
-                    'role' => ['string', 'required'],
+                    'role' => ['string'],
                 ],
                 // [],
             ],

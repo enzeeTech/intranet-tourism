@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import AddMemberPopup from './CommunityMemberPopup'; 
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
+import { usePage } from '@inertiajs/react';
 
 function Avatar({ src, alt, className, status }) {
   let source = null;
@@ -244,7 +245,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
   );
 };
 
-function DpMembers() {
+function CmMembers({communityID, loggedInID}) {
   const [searchInput, setSearchInput] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [members, setMembers] = useState([]);
@@ -261,9 +262,10 @@ function DpMembers() {
 
   const fetchMembersAndAdmins = async () => {
     setIsLoading(true);
-    const departmentId = parseInt(getDepartmentIdFromQuery(), 10);
-    const membersUrl = `/api/department/employment_posts?department_id=${departmentId}`;
-    const rolesUrl = `/api/permission/model-has-roles?filter=2`;
+    const departmentId = communityID;
+    const membersUrl = `/api/communities/community_members?community_id=${communityID}`;
+    const rolesUrl = `/api/permission/model-has-roles?filter=3`;
+
   
     try {
       const [membersResponse, rolesResponse] = await Promise.all([
@@ -287,7 +289,7 @@ function DpMembers() {
       const membersData = await membersResponse.json();
       const rolesData = await rolesResponse.json();
   
-      const fetchedMembers = membersData.members || [];
+      const fetchedMembers = membersData|| [];
       fetchedMembers.sort((a, b) => a.order - b.order);
   
       const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
@@ -495,25 +497,37 @@ function DpMembers() {
   
 
   const handleRemove = async (id) => {
-    const url = `/api/department/employment_posts/${id}`;
+    const url = `/api/communities/communities/${communityID}/delete-member`;
 
     try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'X-CSRF-Token': csrfToken,
-        },
-      });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({
+                user_id: String(id),
+            }),
+        });
 
-      if (response.ok) {
-        console.log('Member deleted successfully.');
-        await fetchMembersAndAdmins();
-      } else {
-        console.error('Failed to delete member:', response.statusText);
-      }
+        if (response.ok) {
+            console.log('Member deleted successfully.');
+            console.log("ID", id);
+            console.log("LOGGED IN ID", loggedInID);
+            if (id === loggedInID){
+              window.location.reload();
+            } else {
+              await fetchMembersAndAdmins();
+            }
+            
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to delete member:', errorData.message || response.statusText);
+        }
     } catch (error) {
-      console.error('Error deleting member:', error);
+        console.error('Error deleting member:', error);
     }
 
     closePopup();
@@ -649,13 +663,13 @@ function DpMembers() {
             >
               Search
             </button>
-            <button
+            {/* <button
               onClick={handleInviteClick}
               className="flex items-center justify-center px-4 py-2 text-center bg-[#FF5437] rounded-full hover:bg-red-700 text-md whitespace-nowrap"
             >
               <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
               Member
-            </button>
+            </button> */}
           </div>
 
           <header className="flex self-start gap-5 mt-6 whitespace-nowrap">
@@ -702,7 +716,7 @@ function DpMembers() {
                   activePopupId={activePopupId}
                   setActivePopupId={setActivePopupId}
                   onAssign={() => handleAssign(member.user_id)}
-                  onRemove={handleRemove}
+                  onRemove={() => handleRemove(member.user_id)}
                   closePopup={closePopup}
                 />
               ))}
@@ -722,4 +736,4 @@ function DpMembers() {
   );
 }
 
-export default DpMembers;
+export default CmMembers;
