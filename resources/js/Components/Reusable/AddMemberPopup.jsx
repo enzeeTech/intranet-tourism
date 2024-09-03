@@ -271,6 +271,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const addMemberToDepartment = async () => {
+        setIsAddMemberPopupOpen(false);
         if (!title && !selectedPerson.employment_post && !selectedGrade) {
             setGradeError(true);
             setTitleError(true);
@@ -384,6 +385,17 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
     };
 
+    const getImageSource = (imageUrl) => {
+        console.log('imageURL', imageUrl);
+        if (imageUrl.startsWith('staff_image/')) {
+            return `/storage/${imageUrl}`;
+        } else {
+            return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? imageUrl 
+            : `/avatar/${imageUrl}`;
+        }
+    };
+
     return (
         <div>
             {isAddMemberPopupOpen && (
@@ -396,7 +408,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={!!selectedPerson}
-                            className="w-full py-2 px-4 mb-4 border bg-gray-200 border-gray-200 rounded-full"
+                            className="w-full px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
                             {loading ? (
@@ -410,7 +422,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         className="flex items-center p-2 cursor-pointer"
                                         onClick={() => handleSelectPerson(person)}
                                     >
-                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full object-cover" />
+                                        <img 
+                                            src={getImageSource(person.profile?.staff_image || defaultImage)} 
+                                            alt={person.name} 
+                                            className="object-cover w-10 h-10 mr-4 rounded-full" 
+                                            />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
                                             <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>

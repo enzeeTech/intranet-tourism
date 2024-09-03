@@ -629,6 +629,8 @@ function DpMembers() {
 
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
 
+  console.log("SHOW INVITE", showInvite); 
+
   return (
     <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">
       {isLoading ? (
