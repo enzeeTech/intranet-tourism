@@ -22,16 +22,8 @@ export default function Header({ setSidebarOpen }) {
     const notificationRef = useRef();
     const birthdayNotificationRef = useRef();
 
-    const toggleMenuPopup = () => {
-        setIsMenuPopupVisible(!isMenuPopupVisible);
-    };
-
-    const toggleNotificationPopup = () => {
-        setIsNotificationPopupVisible(!isNotificationPopupVisible);
-    };
-
-    const toggleBirthdayPopup = () => {
-        setIsBirthdayPopupVisible(!isBirthdayPopupVisible);
+    const togglePopupVisibility = (popupStateSetter) => {
+        popupStateSetter(prevState => !prevState);
     };
 
     useEffect(() => {
@@ -82,7 +74,7 @@ export default function Header({ setSidebarOpen }) {
         const birthDate = new Date(birthday);
 
         if (today.getMonth() === birthDate.getMonth() && today.getDate() === birthDate.getDate()) {
-            toggleBirthdayPopup();
+            setIsBirthdayPopupVisible(true);
         }
     };
 
@@ -119,18 +111,24 @@ export default function Header({ setSidebarOpen }) {
         return isBirthdayPopupVisible ? "/assets/Birthday Active.svg" : "/assets/Birthday Inactive.svg";
     };
 
-    // Close the menu popup when clicking outside
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsMenuPopupVisible(false);
+        const handleClickOutsideNotification = (event) => {
+            // Only handle clicks outside the notification popup
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setIsNotificationPopupVisible(false);
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
+
+        // Attach event listener only for the bell notification popup
+        if (isNotificationPopupVisible) {
+            document.addEventListener('mousedown', handleClickOutsideNotification);
+        }
+
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            // Clean up the event listener for the bell notification popup
+            document.removeEventListener('mousedown', handleClickOutsideNotification);
         };
-    }, [menuRef]);
+    }, [isNotificationPopupVisible]);
 
     return (
         <div className="sticky top-0 z-40 flex items-center h-16 px-4 bg-white border-b border-gray-200 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 sm:px-6 lg:px-8">
@@ -154,7 +152,7 @@ export default function Header({ setSidebarOpen }) {
                         <button
                             type="button"
                             className="birthday-icon -m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
-                            onClick={toggleBirthdayPopup}
+                            onClick={() => togglePopupVisibility(setIsBirthdayPopupVisible)}
                         >
                             <img src={getBirthdayIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
@@ -171,7 +169,7 @@ export default function Header({ setSidebarOpen }) {
                         <button
                             type="button"
                             className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500 -mt-0.5"
-                            onClick={toggleNotificationPopup}
+                            onClick={() => togglePopupVisibility(setIsNotificationPopupVisible)}
                         >
                             <img src={getBellIconSrc()} className="w-6 h-6" aria-hidden="true" />
                         </button>
@@ -187,7 +185,7 @@ export default function Header({ setSidebarOpen }) {
                         <button
                             type="button"
                             className="-m-1.5 flex items-center p-1.5"
-                            onClick={toggleMenuPopup}
+                            onClick={() => togglePopupVisibility(setIsMenuPopupVisible)}
                         >
                             <img
                                 className="w-8 h-8 rounded-full bg-gray-50"
@@ -207,8 +205,8 @@ export default function Header({ setSidebarOpen }) {
                                     <a
                                         key={item.name}
                                         href={item.href}
-                                        className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-blue-100"
-                                        onClick={item.name === 'Log out' ? handleLogout : null}
+                                        onClick={item.onClick ? item.onClick : null}
+                                        className="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50"
                                     >
                                         {item.name}
                                     </a>

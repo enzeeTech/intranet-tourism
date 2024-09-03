@@ -467,7 +467,7 @@ function ProfileContent() {
         <Example>
             <main className="xl:pl-96 w-full">
                 <div className="mr-10 px-1 sm:px-6 lg:px-8 sm:py-10 md:py-6 lg:py-6 ">
-                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] bg-white shadow-custom rounded-b-lg">
+                        <div className="profile-header ml-9 h-[400px] max-md:h-[385px] bg-white shadow-custom rounded-b-lg">
                             <div className="flex-col w-full flex bg-white h-auto rounded-b-lg">
                                 <ProfileHeader
                                     backgroundImage={profileData.backgroundImage}

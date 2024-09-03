@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useCsrf } from "@/composables";
-import { usePage } from "@inertiajs/react";
+import { usePage } from '@inertiajs/react';
+import Cropper from "react-easy-crop";
+import getCroppedImg from "./cropImgCommunity";
 
 function Header({ title }) {
   return (
@@ -12,49 +14,120 @@ function Header({ title }) {
 
 function Avatar({ src, alt, onImageChange }) {
   const [previewSrc, setPreviewSrc] = useState(src);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [cropping, setCropping] = useState(false);
 
   const handleClick = () => {
     document.getElementById("avatarInput").click();
   };
 
   const handleImageChange = (file) => {
-    if (file) {
+    if (file && file instanceof Blob) {
       const objectUrl = URL.createObjectURL(file);
       setPreviewSrc(objectUrl);
-      onImageChange(file);
+      setCropping(true);
+    } else {
+      console.error('Invalid file input:', file);
     }
   };
 
-  let banner = "";
+  let banner = '';
 
-  if (previewSrc && typeof previewSrc === "string") {
-    if (previewSrc.startsWith("banner/")) {
+  if (previewSrc && typeof previewSrc === 'string') {
+    if (previewSrc.startsWith('banner/')) {
       banner = `/storage/${previewSrc}`;
     } else {
       banner = previewSrc;
     }
   }
 
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCrop = useCallback(async () => {
+    try {
+      const croppedImage = await getCroppedImg(previewSrc, croppedAreaPixels);
+      onImageChange(croppedImage);
+      setPreviewSrc(URL.createObjectURL(croppedImage));
+      setCropping(false);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [croppedAreaPixels, previewSrc, onImageChange]);
+
+  const handleRepositionClick = async () => {
+    setCropping(true);
+    // Re-fetch the original image from the server
+    try {
+      const response = await fetch(banner);
+      if (!response.ok) {
+        throw new Error('Failed to fetch the image for repositioning');
+      }
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      setPreviewSrc(objectUrl);
+    } catch (error) {
+      console.error('Error fetching image:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center object-cover object-center">
-      {banner ? (
-        <img
-          loading="lazy"
-          src={banner}
-          alt={alt}
-          className="cursor-pointer w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
-          onClick={handleClick}
+  {cropping ? (
+    <>
+      <div className="relative w-[400px] h-[300px]">
+        <Cropper
+          image={previewSrc}
+          crop={crop}
+          zoom={zoom}
+          aspect={3 / 1} // Aspect ratio for banner
+          onCropChange={setCrop}
+          onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
         />
-      ) : (
-        <p>No image available</p>
+      </div>
+      <div className="flex justify-end w-full mt-4 space-x-2">
+            <button
+              onClick={handleCrop}
+              className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+            >
+              Apply Crop
+            </button>
+          </div>
+    </>
+  ) : (
+    <>
+          {previewSrc ? (
+            <div className="flex flex-col items-center">
+              <img
+                loading="lazy"
+                src={banner}
+                alt={alt}
+                className="cursor-pointer w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
+                onClick={handleClick}
+              />
+              <button
+                onClick={handleRepositionClick}
+                className="mt-2 px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+              >
+                Reposition Image
+              </button>
+            </div>
+          ) : (
+            <p>No image available</p>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            id="avatarInput"
+            onChange={(e) => handleImageChange(e.target.files[0])}
+            className="hidden"
+          />
+        </>
       )}
-      <input
-        type="file"
-        accept="image/*"
-        id="avatarInput"
-        onChange={(e) => handleImageChange(e.target.files[0])}
-        className="hidden w-[400px] h-[100px] rounded-xl border-4 border-gray-200 object-cover object-center"
-      />
     </div>
   );
 }
@@ -123,21 +196,21 @@ function Card({
 
   const handleSubmit = async () => {
     setError(""); // Reset any previous errors
-  
+
     const formData = new FormData();
     formData.append("_method", "PUT"); // Indicate that this is an update operation
-    
+
     // Append the current or updated values
     formData.append("name", departmentName);
     formData.append("description", departmentDescription || ''); // Use empty string if null
     formData.append("type", selectedType);
-  
+
     if (imageFile) {
       formData.append("banner", imageFile); // Base64 string of the image file
     } else {
       formData.append("banner", initialImageSrc); // URL of the existing image
     }
-  
+
     const options = {
       method: "POST", // Ensure this is 'POST' for sending FormData
       headers: {
@@ -147,24 +220,24 @@ function Card({
       },
       body: formData, // Send the FormData object directly
     };
-  
+
     const url = `/api/communities/communities/${department?.id}`;
-  
+
     try {
       const response = await fetch(url, options);
       const text = await response.text();
-  
+
       if (!response.ok) {
         console.error("Server response not OK:", text);
         throw new Error("Failed to save department");
       }
-  
+
       const responseData = text ? JSON.parse(text) : {};
       console.log("Department saved:", responseData.data);
-  
+
       // Call the onSave callback if provided
       if (onSave) onSave(responseData.data);
-  
+
       // Reload the page to reflect changes
       window.location.reload();
     } catch (error) {
@@ -172,23 +245,22 @@ function Card({
       setError("An error occurred while saving the department.");
     }
   };
-  
 
   return (
-    <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px]">
+    <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px] w-full px-10">
       <Header title={title} />
-      <div className="flex flex-col items-center w-full px-6">
+      <div className="flex flex-col items-center w-full px-6 ">
         <Avatar src={imageSrc} alt={imgAlt} onImageChange={handleImageChange} />
         <input
           type="text"
-          placeholder="Department name"
+          placeholder="Community name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
           className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-6 text-neutral-800 border-neutral-300"
         />
         <input
           type="text"
-          placeholder="Department description"
+          placeholder="Community description"
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
           className="self-stretch mt-3 border border-solid rounded-md text-neutral-800 border-neutral-300 font-bold"
@@ -213,8 +285,8 @@ function Card({
 const EditCommunity = ({ department, onCancel, onSave }) => (
   <Card
     title="Edit Community"
-    imgSrc="/assets/uploadAnImage.svg"
-    imgAlt="Department Image"
+    imgSrc="/assets/upload.png"
+    imgAlt="Community Banner"
     department={department}
     cancelText="Cancel"
     saveText="Save"
