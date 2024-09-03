@@ -52,7 +52,7 @@ const Dashboard = () => {
             <hr className="file-directory-underline" />
             <div>
               <FeaturedEvents />
-              {/* <WhosOnline /> */}
+              <WhosOnline />
             </div>
           </aside>
 
