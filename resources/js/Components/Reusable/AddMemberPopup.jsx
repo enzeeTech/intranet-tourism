@@ -121,7 +121,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         let allResults = [];
     
         try {
-            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`);
             
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -396,6 +396,26 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
     };
 
+    const renderTitles = (employmentPosts) => {
+        if (!employmentPosts || employmentPosts.length === 0) {
+            return <span className="font-light text-gray-600">No title available</span>;
+        }
+    
+        // Extract unique titles and filter out any empty values
+        const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
+    
+        // Check if there are any valid titles to display
+        if (uniqueTitles.length === 0) {
+            return <span className="font-light text-gray-600">No title available</span>;
+        }
+    
+        return uniqueTitles.map((title, index) => (
+            <div key={index} className="font-light text-gray-600">{title}</div>
+        ));
+    };
+    
+    
+
     return (
         <div>
             {isAddMemberPopupOpen && (
@@ -429,7 +449,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
-                                            <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
+                                            <div>{renderTitles(person.employment_posts)}</div> 
                                         </div>
                                     </div>
                                 ))
