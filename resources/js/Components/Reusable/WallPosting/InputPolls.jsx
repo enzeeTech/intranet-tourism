@@ -1,11 +1,180 @@
-import React, { useState, useRef, useEffect } from 'react';
+// import React, { useState, useRef } from 'react';
+// import Switch from 'react-switch';
+// import { useForm } from '@inertiajs/react';
+
+// function PollOption({ option, onRemove, onChange }) {
+//   return (
+//     <div className="flex gap-5 px-px mt-6 text-sm leading-5 text-neutral-800 max-md:flex-wrap">
+//       <div className="flex flex-auto gap-3 px-4 py-3.5 bg-gray-100 rounded-3xl max-md:flex-wrap">
+//         <div className="shrink-0 self-start w-3 bg-white rounded-full h-[13px]" />
+//         <input
+//           type="text"
+//           value={option}
+//           onChange={onChange}
+//           className="flex-auto bg-gray-100 outline-none"
+//         />
+//       </div>
+//       <img
+//         src="https://cdn.builder.io/api/v1/image/assets/TEMP/2b330e075518102f0d7cedcbac4231209eacd02d6ed1f3210266297b383a48d7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+//         alt="Remove option"
+//         className="shrink-0 my-auto aspect-square w-[19px]"
+//         onClick={onRemove}
+//       />
+//     </div>
+//   );
+// }
+
+// function AddOptionButton({ label, onClick }) {
+//   return (
+//     <div className="flex flex-auto gap-3 py-1.5 bg-gray-100 rounded-3xl pr-5" onClick={onClick}>
+//       <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-blue-500 rounded-3xl h-[30px] w-[30px]">
+//         +
+//       </div>
+//       <div className="flex-auto my-auto text-sm leading-5 text-neutral-800">
+//         {label}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export function Polls({ onClose, onCreatePoll }) {
+//   const [inputValue, setInputValue] = useState("");
+//   const textAreaRef = useRef(null);
+
+//   const handleChange = (event) => {
+//     setInputValue(event.target.value);
+//   };
+
+//   const { data, setData } = useForm({
+//     remember: false,
+//   });
+
+//   const [options, setOptions] = useState(["Yes", "No"]);
+
+//   const handleRemoveOption = (index) => {
+//     const newOptions = [...options];
+//     newOptions.splice(index, 1);
+//     setOptions(newOptions);
+//   };
+
+//   const handleAddOption = () => {
+//     setOptions([...options, `Option ${options.length + 1}`]);
+//   };
+
+//   const handleOptionChange = (index, event) => {
+//     const newOptions = [...options];
+//     newOptions[index] = event.target.value;
+//     setOptions(newOptions);
+//   };
+
+//   const handlePostPoll = () => {
+//     const newPoll = {
+//       id: Date.now(),
+//       content: inputValue,
+//       options: options,
+//       allowMultipleAnswers: data.remember,
+//       timestamp: new Date().toISOString(),
+//     };
+//     onCreatePoll(newPoll);
+//     onClose();
+//   };
+
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+//       <div className="bg-white p-2 rounded-xl shadow-lg max-w-3xl" onClick={(e) => e.stopPropagation()}>
+//         <header className="flex gap-5 self-end max-w-full text-2xl font-bold text-center text-neutral-800 w-[392px] max-md:mr-2.5">
+//           <h1 className="flex ml-32">Create Poll</h1>
+//           <button>
+//           <img
+//             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+//             alt="Close icon"
+//             className="shrink-0 self-start w-6 aspect-square ml-24"
+//             onClick={onClose}
+//           />
+//           </button>
+//         </header>
+//         <main className="flex flex-col px-5 mt-9 w-full max-md:pl-5 max-md:max-w-full">
+//           <div className="flex gap-4 self-start text-lg font-bold text-neutral-800">
+//             <img
+//               src="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+//               alt="User avatar"
+//               className="shrink-0 aspect-square w-[61px]"
+//             />
+//             <div className="flex-auto my-auto">Musa (Admin)</div>
+//           </div>
+//           <div className="mt-6 text-sm font-medium text-neutral-500 max-md:max-w-full">
+//             <textarea
+//               ref={textAreaRef}
+//               value={inputValue}
+//               onChange={handleChange}
+//               placeholder="Type something..."
+//               className="self-center px-2 text-xl font-bold text-neutral-800 w-full border-none appearance-none resize-none input-no-outline"
+//               rows="4"
+//               style={{ maxHeight: "30px", overflowY: "auto" }}
+//             />
+//           </div>
+//           <h2 className="mt-6 ml-1 text-2xl font-bold text-neutral-800 max-md:max-w-full">
+//             Add Poll
+//           </h2>
+//           {options.map((option, index) => (
+//             <PollOption
+//               key={index}
+//               option={option}
+//               onRemove={() => handleRemoveOption(index)}
+//               onChange={(e) => handleOptionChange(index, e)}
+//             />
+//           ))}
+//             <div className="flex gap-5 items-center mt-6">
+//                 <button className=''>
+//                 <AddOptionButton
+//                 label="Add option"
+//                 onClick={handleAddOption}
+//                 />
+//                 </button>
+//                 <label className="flex items-center mt-1">
+//                 <Switch
+//                     checked={data.remember}
+//                     onChange={(checked) => setData('remember', checked)}
+//                     onColor="#36c"
+//                     onHandleColor="#fff"
+//                     handleDiameter={24}
+//                     uncheckedIcon={false}
+//                     checkedIcon={false}
+//                     boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+//                     activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+//                     height={16}
+//                     width={40}
+//                     className="react-switch"
+//                 />
+//                 <span className="ms-2 text-sm text-blue-600">Allow multiple answers?</span>
+//                 </label>
+//             </div>
+//           <div className="justify-center items-start px-4 py-3.5 mt-4 max-w-full text-sm leading-5 bg-gray-100 rounded-3xl text-neutral-800 text-opacity-50 w-[258px] max-md:pr-5">
+//             Choose end date (opt.)
+//           </div>
+//           <button
+//             className="justify-center items-center px-16 py-3 mt-16 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 rounded-md max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
+//             onClick={handlePostPoll}
+//           >
+//             Post
+//           </button>
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+import React, { useState, useRef } from 'react';
 import Switch from 'react-switch';
 import { useForm } from '@inertiajs/react';
 
 function PollOption({ option, onRemove, onChange }) {
   return (
-    <div className="flex gap-5 px-px mt-3 text-sm leading-5 text-neutral-800 max-md:flex-wrap">
-      <div className="flex flex-auto gap-3 px-4 py-2 bg-gray-100 rounded-3xl max-md:flex-wrap">
+    <div className="flex gap-5 px-px mt-6 text-sm leading-5 text-neutral-800 max-md:flex-wrap">
+      <div className="flex flex-auto gap-3 px-4 py-3.5 bg-gray-100 rounded-3xl max-md:flex-wrap">
         <div className="shrink-0 self-start w-3 bg-white rounded-full h-[13px]" />
         <input
           type="text"
@@ -17,7 +186,7 @@ function PollOption({ option, onRemove, onChange }) {
       <img
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/2b330e075518102f0d7cedcbac4231209eacd02d6ed1f3210266297b383a48d7?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
         alt="Remove option"
-        className="shrink-0 my-auto aspect-square w-[19px] cursor-pointer"
+        className="shrink-0 my-auto aspect-square w-[19px]"
         onClick={onRemove}
       />
     </div>
@@ -26,8 +195,8 @@ function PollOption({ option, onRemove, onChange }) {
 
 function AddOptionButton({ label, onClick }) {
   return (
-    <div className="flex flex-auto gap-3 py-1.5 bg-gray-100 rounded-3xl pr-5 cursor-pointer" onClick={onClick}>
-      <div className="flex justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white bg-blue-500 rounded-3xl h-[30px] w-[30px]">
+    <div className="flex flex-auto gap-3 py-1.5 bg-gray-100 rounded-3xl pr-5" onClick={onClick}>
+      <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-blue-500 rounded-3xl h-[30px] w-[30px]">
         +
       </div>
       <div className="flex-auto my-auto text-sm leading-5 text-neutral-800">
@@ -37,24 +206,7 @@ function AddOptionButton({ label, onClick }) {
   );
 }
 
-function UserInfo({ name, role, src }) {
-  return (
-    <div className="flex gap-4 items-center justify-start w-full mt-2 text-neutral-800">
-      <img
-        loading="lazy"
-        src={src}
-        alt=""
-        className="shrink-0 aspect-square w-[42px] h-[42px] rounded-full object-cover object-center"
-      />
-      <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
-        <p className="text-lg font-bold">{name}</p>
-        <p className="-mt-1 text-sm">{role}</p>
-      </div>
-    </div>
-  );
-}
-
-export function Polls({ onClose, onCreatePoll, id, }) {
+export function Polls({ onClose, onCreatePoll }) {
   const [inputValue, setInputValue] = useState("");
   const textAreaRef = useRef(null);
 
@@ -67,7 +219,6 @@ export function Polls({ onClose, onCreatePoll, id, }) {
   });
 
   const [options, setOptions] = useState(["Yes", "No"]);
-  const [user, setUser] = useState({ name: '', role: '', profileImage: '' });
 
   const handleRemoveOption = (index) => {
     const newOptions = [...options];
@@ -77,11 +228,6 @@ export function Polls({ onClose, onCreatePoll, id, }) {
 
   const handleAddOption = () => {
     setOptions([...options, `Option ${options.length + 1}`]);
-    setTimeout(() => {
-      if (textAreaRef.current) {
-        textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight;
-      }
-    }, 0);
   };
 
   const handleOptionChange = (index, event) => {
@@ -90,115 +236,112 @@ export function Polls({ onClose, onCreatePoll, id, }) {
     setOptions(newOptions);
   };
 
-  const fetchUser = async () => {
-    try {
-      const response = await fetch(`/api/users/users/${id}?with[]=profile`, {
-        method: "GET",
-      });
-  
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-  
-      const { data } = await response.json();
-      setUser({
-        name: data.name,
-        role: data.role || 'User',  // Default role to 'User' if not provided
-        profileImage: data.profile?.image
-          ? `/storage/${data.profile.image}`
-          : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`,
-      });
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
+// const handlePostPoll = () => {
+//     const newPoll = {
+//       id: Date.now(),
+//       content: inputValue,
+//       options: options,
+//       allowMultipleAnswers: data.remember,
+//       timestamp: new Date().toISOString(),
+//     };
+//     onCreatePoll(newPoll);
+//     onClose();
+//   };
 
-  useEffect(() => {
-    if (id) {
-      fetchUser();
-    }
-  }, [id]);  
-
-  const handlePostPoll = () => {
-    const newPoll = {
+const handlePostPoll = () => {
+  const newPoll = {
       id: Date.now(),
       content: inputValue,
       options: options,
       allowMultipleAnswers: data.remember,
       timestamp: new Date().toISOString(),
-    };
-    onCreatePoll(newPoll);
-    onClose();
   };
+  onCreatePoll(newPoll);  // Pass the new poll data to the parent component
+  onClose();
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-5 rounded-3xl shadow-lg max-w-3xl w-full md:w-2/3" onClick={(e) => e.stopPropagation()}>
-        <header className="flex justify-between items-center mb-6 text-2xl font-bold text-neutral-800">
-          <h1>Create Poll</h1>
-          <button onClick={onClose}>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-              alt="Close icon"
-              className="w-6 cursor-pointer"
-            />
+      <div className="bg-white p-2 rounded-3xl shadow-lg max-w-3xl" onClick={(e) => e.stopPropagation()}>
+        <header className="flex gap-5 self-end max-w-full text-2xl font-bold text-center text-neutral-800 w-[392px] max-md:mr-2.5">
+          <h1 className="flex ml-32 mt-4">Create Poll</h1>
+          <button>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d5c01ea628264d796f4bd86723682019081b89678cb8451fb7b48173e320e5ff?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+            alt="Close icon"
+            className="shrink-0 self-start w-6 aspect-square ml-24 mt-4"
+            onClick={onClose}
+          />
           </button>
         </header>
-        <main className="flex flex-col space-y-4">
-          <div className="flex items-center gap-4">
-            <UserInfo name={user.name} role={user.role} src={user.profileImage} />
-          </div>
-          <textarea
-            ref={textAreaRef}
-            value={inputValue}
-            onChange={handleChange}
-            placeholder="Type something..."
-            className="w-full p-2 text-xl font-bold text-neutral-800 border rounded-md resize-none"
-            rows="4"
-            style={{ maxHeight: "100px", overflowY: "auto" }}
-          />
-          <h2 className="text-xl font-bold text-neutral-800">Add Poll</h2>
-          <div className="flex flex-col gap-3 max-h-40 overflow-y-auto">
-            {options.map((option, index) => (
-              <PollOption
-                key={index}
-                option={option}
-                onRemove={() => handleRemoveOption(index)}
-                onChange={(e) => handleOptionChange(index, e)}
-              />
-            ))}
-          </div>
-          <AddOptionButton label="Add option" onClick={handleAddOption} />
-          <div className="flex items-center gap-4">
-            <Switch
-              checked={data.remember}
-              onChange={(checked) => setData('remember', checked)}
-              onColor="#36c"
-              onHandleColor="#fff"
-              handleDiameter={24}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-              activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-              height={16}
-              width={40}
-              className="react-switch"
+        <main className="flex flex-col px-5 mt-6 w-full max-md:pl-5 max-md:max-w-full">
+          <div className="flex gap-4 self-start text-lg font-bold text-neutral-800">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/726408370b648407cc55fec1ee24245aad060d459ac0f498438d167758c3a165?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+              alt="User avatar"
+              className="shrink-0 aspect-square w-[61px]"
             />
-            <span className="text-sm text-blue-600">Allow multiple answers?</span>
+            <div className="flex-auto my-auto">Fareez Hishamuddin (Admin)</div>
           </div>
-          <div className="bg-gray-100 p-4 text-center text-sm text-neutral-800 rounded-3xl cursor-pointer">
+          <div className="mt-6 text-sm font-medium text-neutral-500 max-md:max-w-full">
+            <textarea
+              ref={textAreaRef}
+              value={inputValue}
+              onChange={handleChange}
+              placeholder="Type something..."
+              className="self-center px-2 py-8 text-xl font-bold text-neutral-800 w-full bg-gray-100 border-none rounded-xl appearance-none resize-none input-no-outline"
+              rows="4"
+              style={{ maxHeight: "30px", overflowY: "auto" }}
+            />
+          </div>
+          <h2 className="mt-4 ml-1 text-xl font-bold text-neutral-800 max-md:max-w-full">
+            Add Poll
+          </h2>
+          {options.map((option, index) => (
+            <PollOption
+              key={index}
+              option={option}
+              onRemove={() => handleRemoveOption(index)}
+              onChange={(e) => handleOptionChange(index, e)}
+            />
+          ))}
+            <div className="flex gap-5 items-center mt-6">
+                <button className=''>
+                <AddOptionButton
+                label="Add option"
+                onClick={handleAddOption}
+                />
+                </button>
+                <label className="flex items-center mt-1">
+                <Switch
+                    checked={data.remember}
+                    onChange={(checked) => setData('remember', checked)}
+                    onColor="#36c"
+                    onHandleColor="#fff"
+                    handleDiameter={24}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                    activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                    height={16}
+                    width={40}
+                    className="react-switch"
+                />
+                <span className="ms-2 text-sm text-blue-600">Allow multiple answers?</span>
+                </label>
+            </div>
+          <div className="justify-center items-start px-4 py-3.5 mt-4 max-w-full text-sm leading-5 bg-gray-100 rounded-3xl text-neutral-800 text-opacity-50 w-[258px] max-md:pr-5">
             Choose end date (opt.)
           </div>
           <button
-            className="w-full py-2 mt-4 text-white bg-blue-500 rounded-3xl"
+            className="justify-center items-center px-16 py-3 mt-10 mb-4 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 hover:bg-blue-700 rounded-2xl max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
             onClick={handlePostPoll}
           >
-            Post poll
+            Post
           </button>
         </main>
       </div>
     </div>
   );
 }
-
-export default Polls;

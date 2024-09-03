@@ -1347,7 +1347,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                         </span>
                       )}
                     </div>
-                    <img src="/assets/commentforposting.svg" alt="Comment" className="ml-5 w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
+                    <img src="/assets/commentforposting.svg" alt="Comment" className="w-6 h-6 cursor-pointer" onClick={() => openCommentPopup(post)} />
                     {commentsCount > 0 && (
                     <span className="text-sm font-medium">
                       {commentsCount}
