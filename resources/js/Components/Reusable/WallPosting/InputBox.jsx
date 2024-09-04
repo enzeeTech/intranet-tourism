@@ -385,38 +385,25 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             />
                                         </div>
                                     )}
-                                    <div className="flex flex-row w-full justify-between items-center mt-1">
-                                    <div>
-                                        {/* <button
-                                            type="button"
-                                            onClick={handleClickPeople}
-                                            className="tooltip relative text-md text-blue-500 hover:text-blue-700"
-                                        >
-                                            <img
-                                                loading="lazy"
-                                                src="assets/inputpeople.svg"
-                                                alt="People Icon"
-                                                className="w-[16px] h-[16px]"
-                                            />
-                                            <span className="tooltiptext">Mentions People</span>
-                                            {chosenPeople.length > 0 && (
-                                                <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                                    {chosenPeople.length}
-                                                </span>
-                                            )}
-                                        </button> */}
-                                    
-                                    </div>
-                                    {/* <button onClick={handleClickSend} className="flex send-button align-item justify-end">
-                                        {isSending ? "" : ""}
-                                            <img
-                                                loading="lazy"
-                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                                                alt="SEND"
-                                                className="h-6 w-6 max-md:mt-8"
-                                            />
-                                        </button> */}
-                             </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={handleClickPeople}
+                                        className="tooltip relative text-md text-blue-500 hover:text-blue-700"
+                                    >
+                                        {/* <img
+                                            loading="lazy"
+                                            src="assets/inputpeople.svg"
+                                            alt="People Icon"
+                                            className="w-[16px] h-[16px]"
+                                        /> */}
+                                        <span className="tooltiptext">Mentions People</span>
+                                        {chosenPeople.length > 0 && (
+                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                {chosenPeople.length}
+                                            </span>
+                                        )}
+                                    </button>
                                 </>
                             )}
                             {variant !== "comment" && (
