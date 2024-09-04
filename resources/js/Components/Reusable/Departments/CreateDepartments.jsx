@@ -278,7 +278,7 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex items-center gap-4 mt-5 text-neutral-800">
+    <div className="flex items-center gap-4 mt-5 text-neutral-800 w-full justify-start">
       <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px] h-[42px] rounded-full object-cover object-center" />
       <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
         <p className="text-lg font-bold">{name}</p>

@@ -451,7 +451,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </span>
                                                 )}
                                             </button>
-                                            <button
+                                            {/* <button
                                                 type="button"
                                                 onClick={handleClickPeople}
                                                 className="tooltip relative text-md text-blue-500 hover:text-blue-700"
@@ -468,7 +468,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                         {chosenPeople.length}
                                                     </span>
                                                 )}
-                                            </button>
+                                            </button> */}
                                             <button
                                                 type="button"
                                                 onClick={handleClickEvent}

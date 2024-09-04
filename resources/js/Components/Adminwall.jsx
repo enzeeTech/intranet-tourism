@@ -66,9 +66,9 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
       />
       <div className="relative flex justify-between w-full gap-0 max-md:flex-wrap max-md:max-w-full py-2">
         <div className="flex flex-col">
-          {/* <h1 className="text-3xl drop-shadow-lg text-start font-extrabold">{departmentHeader}</h1> */}
+          <h1 className="text-3xl drop-shadow-lg text-start font-extrabold ">{departmentHeader}</h1>
           {/* sini text ikut contrast */}
-          <h1 className="text-3xl drop-shadow-lg font-extrabold text-white mix-blend-difference">{departmentHeader}</h1>
+          {/* <h1 className="text-3xl drop-shadow-lg font-extrabold text-white mix-blend-difference">{departmentHeader}</h1> */}
         </div>
         <div className="flex content-center self-start justify-between gap-5 text-sm font-medium">
         </div>
