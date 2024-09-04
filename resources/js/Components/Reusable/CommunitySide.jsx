@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { FaLock } from 'react-icons/fa'; // Import the lock icon
 
-const CommunityItem = ({ name, category, imgSrc, altText }) => (
-  <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
-    <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase">
-      <img
-        src={imgSrc}
-        alt={altText}
-        className="w-[120px] h-[40px] rounded-md object-cover object-center"
-      />
-    </div>
-    <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">
-      <div className="flex items-center">
-        <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
-        {category === 'private' && (
-          <FaLock className="ml-2 h-3 w-3 text-gray-600 fill-black" /> // Lock icon for private communities
-        )}
+const CommunityItem = ({ id, name, category, imgSrc, altText }) => (
+  <a href={`/communityInner?communityId=${id}`}>
+    <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
+      <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase">
+        <img
+          src={imgSrc}
+          alt={altText}
+          className="w-[120px] h-[40px] rounded-md object-cover object-center"
+        />
       </div>
-      <p className="text-xs font-semibold text-neutral-600">{category}</p>
-    </div>
-  </article>
+      <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">
+        <div className="flex items-center">
+          <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
+          {category === 'private' && (
+            <FaLock className="ml-2 h-3 w-3 text-gray-600 fill-black" /> // Lock icon for private communities
+          )}
+        </div>
+        <p className="text-xs font-semibold text-neutral-600">{category}</p>
+      </div>
+    </article>
+  </a>
 );
 
 function MyComponent() {
@@ -77,6 +79,7 @@ function MyComponent() {
           communities.map((community, index) => (
             <CommunityItem
               key={index}
+              id={community.id} // Pass the id prop
               name={community.name}
               category={community.category}
               imgSrc={community.imgSrc}

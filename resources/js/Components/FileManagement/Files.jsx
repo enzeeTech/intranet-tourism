@@ -174,6 +174,12 @@ const FileTable = ({ searchTerm }) => {
     //     }
     // };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+          handleFileUpload(editingIndex, editingName);
+        }
+      };
+
     const handleRename = async (index, newName) => {
         const fileToRename = files[index];
         if (!fileToRename || !fileToRename.id) {
@@ -293,22 +299,26 @@ const FileTable = ({ searchTerm }) => {
 
                                 return (
                                     <tr key={index}>
-                                        <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 text-left overflow-hidden text-ellipsis">
+                                        <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-2 text-sm text-neutral-800 sm:pl-1 text-left overflow-hidden text-ellipsis">
                                             {isEditing ? (
                                                 <div
                                                     ref={inputRef}
                                                     className="flex items-center"
                                                 >
-                                                    <input
-                                                        type="text"
-                                                        value={editingName}
-                                                        onChange={(e) =>
-                                                            setEditingName(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-hidden text-ellipsis"
-                                                    />
+                                <input
+                                    type="text"
+                                    value={editingName}
+                                    onChange={(e) => setEditingName(e.target.value)}
+                                    onClick={() => setEditingName(editingName)}
+                                    onBlur={() => saveEditing(indexOfFirstItem + index)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault(); // Prevent default behavior
+                                            saveEditing(indexOfFirstItem + index);
+                                        }
+                                    }}
+                                    className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-hidden text-ellipsis"
+                                />
                                                     <button
                                                         onClick={() =>
                                                             saveEditing(

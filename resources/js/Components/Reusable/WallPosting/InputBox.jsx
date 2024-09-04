@@ -350,8 +350,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                     <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                                         {name}
                                     </span>
-                                    <button className="ml-2 text-blue-500" onClick={() => removeFile(index)}>
-                                        x
+                                    <button className=" text-blue-500" onClick={() => removeFile(index)}>
+                                        <img src="assets/cancel2.svg" alt="cancel icon"/>
                                     </button>
                                 </div>
                             ))}
@@ -451,7 +451,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </span>
                                                 )}
                                             </button>
-                                            <button
+                                            {/* <button
                                                 type="button"
                                                 onClick={handleClickPeople}
                                                 className="tooltip relative text-md text-blue-500 hover:text-blue-700"
@@ -468,7 +468,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                         {chosenPeople.length}
                                                     </span>
                                                 )}
-                                            </button>
+                                            </button> */}
                                             <button
                                                 type="button"
                                                 onClick={handleClickEvent}
