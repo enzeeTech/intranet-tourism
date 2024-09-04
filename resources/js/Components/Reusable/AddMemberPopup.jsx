@@ -12,10 +12,10 @@ const ConfirmationPopup = ({ selectedPerson, onConfirm, onCancel }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-3xl pt-7 px-6 w-[500px] shadow-lg">
-                <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Confirm Action</h1>
-                <p>This user currently exists in <b>{departmentTitle}</b>.</p>
-                <p>Do you want to remove this user from <b>{departmentTitle}</b>?</p>
+            <div className="bg-white rounded-3xl pt-7 px-6 w-[500px] shadow-lg max-md:mx-4">
+                <h1 className="flex justify-start mb-2 text-2xl max-md:text-lg font-bold text-neutral-800">Confirm Action</h1>
+                <p className="max-md:text-sm">This user currently exists in <b>{departmentTitle}</b>.</p>
+                <p className="max-md:text-sm">Do you want to remove this user from <b>{departmentTitle}</b>?</p>
                 <div className="flex flex-col mt-4">
                     <button
                         className="w-full px-4 py-2 mb-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -486,8 +486,8 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     return (
         <div>
             {isAddMemberPopupOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-2xl pt-7 px-4 max-md:mx-4 w-[400px]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black px-4 bg-opacity-50">
+                    <div className="bg-white rounded-2xl pt-7 px-4 max-md:w-full max-md:mx-8 w-[400px]">
                         <h1 className="flex justify-start mx-2 mb-4 text-2xl font-bold text-neutral-800">Add staff</h1>
                         <input
                             type="text"
