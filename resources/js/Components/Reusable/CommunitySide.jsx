@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaLock } from 'react-icons/fa'; // Import the lock icon
 
 const CommunityItem = ({ id, name, category, imgSrc, altText }) => (
-  <a href={`/communityInner?communityId=${id}`} className="hover:bg-gray-100 rounded-md block">
+  <a href={`/communityInner?communityId=${id}`}>
     <article className="flex items-start w-full gap-3 px-4 py-1 mt-1">
       <div className="flex flex-col items-center mt-2 text-xs font-semibold uppercase">
         <img
