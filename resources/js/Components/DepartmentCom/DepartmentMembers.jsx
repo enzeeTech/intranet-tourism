@@ -563,14 +563,6 @@ function DpMembers() {
               (role) => !(role.role_id === 2)
             );
 
-           // Check if the user has role ID 4; if not, add it
-            if (!updatedRoles.some(role => role.role_id === 4)) {
-              updatedRoles.push({
-                role_id: 4,
-                model_id: member.user_id,
-              });
-            }
-
             console.log("UPDATED ROLES", updatedRoles);
   
             const rolesPayload = {
@@ -636,8 +628,6 @@ function DpMembers() {
   };
 
   const displayedMembers = searchResults.length > 0 ? searchResults : members;
-
-  console.log("SHOW INVITE", showInvite); 
 
   return (
     <section className="flex flex-col h-auto max-w-full p-6 rounded-3xl max-md:px-5">

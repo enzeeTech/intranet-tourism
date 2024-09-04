@@ -20,7 +20,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [showEventPopup, setShowEventPopup] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
-    const [tag, setTag] = useState(''); // Single tag
+    const [tags, setTags] = useState([]);
     const [mediaTagCount, setMediaTagCount] = useState(0);
     const [showReactionPicker, setShowReactionPicker] = useState(false);
     const [chosenPeople, setChosenPeople] = useState([]);
@@ -113,16 +113,10 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 });
             }
     
-            // // Handle tags with spaces after commas
-            // if (tag.length > 0) {
-            //     const formattedTags = `[${tag.map(tag => `"${tag}"`).join(", ")}]`;
-            //     formData.append("tag", formattedTags);
-            // }
-
-            // Handle the single tag as a JSON array
-            if (tag) {
-               const formattedTag = JSON.stringify([tag]); // Convert the tag to a JSON array
-               formData.append("tag", formattedTag);
+            // Handle tags with spaces after commas
+            if (tags.length > 0) {
+                const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+                formData.append("tag", formattedTags);
             }
     
             // Handle mentions
@@ -158,8 +152,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 setInputValue("");
                 setAttachments([]);
                 setFileNames([]);
-                // setTag([]);
-                setTag(''); // Reset tag as it is a string
+                setTags([]);
                 setChosenPeople([]);
                 setChosenEvent([]);
                 if (!isComment) {
@@ -282,10 +275,9 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     };
 
     const handleSaveTags = () => {
-        setMediaTagCount(tag ? 1 : 0); // Set count to 1 if a tag is selected, otherwise 0
+        setMediaTagCount(tags.length); // Update the count when saving tags
         closePopup(); // Close the popup
     };
-    
 
     const handleSavePeople = (selectedPeople) => {
         setChosenPeople(selectedPeople); // Update chosenPeople state
@@ -391,12 +383,12 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         onClick={handleClickPeople}
                                         className="tooltip relative text-md text-blue-500 hover:text-blue-700"
                                     >
-                                        {/* <img
+                                        <img
                                             loading="lazy"
                                             src="assets/inputpeople.svg"
                                             alt="People Icon"
                                             className="w-[16px] h-[16px]"
-                                        /> */}
+                                        />
                                         <span className="tooltiptext">Mentions People</span>
                                         {chosenPeople.length > 0 && (
                                             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
@@ -459,7 +451,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </span>
                                                 )}
                                             </button>
-                                            {/* <button
+                                            <button
                                                 type="button"
                                                 onClick={handleClickPeople}
                                                 className="tooltip relative text-md text-blue-500 hover:text-blue-700"
@@ -476,7 +468,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                         {chosenPeople.length}
                                                     </span>
                                                 )}
-                                            </button> */}
+                                            </button>
                                             <button
                                                 type="button"
                                                 onClick={handleClickEvent}
@@ -529,8 +521,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     
             {showMediaTagPopup && (
                 <TagInput
-                    tag={tag}
-                    setTag={setTag}
+                    tags={tags}
+                    setTags={setTags}
                     onClose={closePopup}
                     onSave={handleSaveTags}
                 />

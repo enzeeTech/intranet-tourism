@@ -31,15 +31,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   };
 
   const toggleAddMemberPopup = (event) => {
-    event.preventDefault();
     event.stopPropagation();
     setIsAddMemberPopupOpen((prev) => !prev);
     setIsOpen(false);
   };
 
   const toggleDropdown = () => {
-    event.preventDefault();
-    event.stopPropagation();
     setSearchTerm('');
     setIsOpen((prev) => !prev);
   };
@@ -49,8 +46,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   };
 
   const handleClickOutside = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
       if (selectedDepartment.name){
@@ -78,8 +73,8 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   );
 
   return (
-    <div className="flex justify-between department-dropdown-container max-md:flex-row max-md:justify-start" ref={dropdownRef}>
-      <div className="flex flex-row items-center max-md:flex-col max-md:w-full max-md:gap-4">
+    <div className="department-dropdown-container flex max-md:flex-row max-md:justify-start justify-between" ref={dropdownRef}>
+      <div className="flex flex-row max-md:flex-col max-md:w-full max-md:gap-4 items-center">
         <div className={`dropdown-header  ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
           <input
             type="text"
@@ -90,7 +85,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
           />
           <img style={{ width: '15px', marginRight: '10px' }} src={isOpen ? dropDownUpArrow : dropDownDownArrow} alt="Toggle Dropdown" />
         </div>
-        <div className="justify-start max-md:w-full">
+        <div className="max-md:w-full justify-start">
           {selectedDepartment.id && (
             <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
               <button className="flex-1 text-sm font-bold rounded-full whitespace-nowrap px-4 md:py-2.5 md:mr-4 max-md:py-2.5 lg:py-2.5 bg-blue-500 text-white hover:bg-blue-700">
@@ -109,7 +104,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
           ))}
         </ul>
       )}
-      <div className="relative flex flex-row items-center justify-between w-full max-md:mt-4 max-md:flex-row max-md:justify-between lg:ml-0">
+      <div className="max-md:mt-4 relative flex flex-row items-center justify-between max-md:flex-row max-md:justify-between lg:ml-0 w-full">
         {selectedDepartment.id && (
         <button 
           className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 

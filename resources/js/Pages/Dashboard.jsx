@@ -10,20 +10,13 @@ import { StoryNew } from '@/Components/Dashboard';
 import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/WallPosting';
 import MyComponent from '@/Components/Reusable/CommunitySide';
 import Birthdaypopup from '@/Components/Reusable/Birthdayfunction/birthdayalert';
-import AdvertisementDashboard from '@/Components/Reusable/AdvertisementDashboard';
-import InfoGraphic from '@/Components/Reusable/InfoGraphic';
 
 const Dashboard = () => {
   const { id } = usePage().props; // Retrieve the user_id from the Inertia view
   const [polls, setPolls] = useState([]);
-  const [filterType, setFilterType] = useState(null);
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
-  };
-
-  const handleFilterChange = (filter) => {
-    setFilterType(filter);
   };
 
   return (
@@ -34,9 +27,9 @@ const Dashboard = () => {
             <div className="flex flex-col items-start px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <StoryNew userId={id} />
               <ShareYourThoughts userId={id} onCreatePoll={handleCreatePoll} />
-              <Filter className="mr-10" onFilterChange={handleFilterChange} />
+              <Filter className="mr-10" />
               <div className="mb-4"></div>
-              <OutputData loggedInUserId={id} polls={polls} filterType={null} postType={filterType} />
+              <OutputData loggedInUserId={id} polls={polls} filterType={null} />
             </div>
           </main>
 
@@ -64,9 +57,9 @@ const Dashboard = () => {
           </aside>
 
           <aside className="fixed bottom-0 right-0 hidden w-5/10 px-4 py-6 overflow-y-auto border-l border-gray-200 top-16 sm:px-6 lg:px-4 xl:block">
-            <div><MyComponent /></div>
-            <div><AdvertisementDashboard /></div>
-            <div><InfoGraphic /></div>
+            <div>
+              <MyComponent />
+            </div>
           </aside>
         </div>
       </div>

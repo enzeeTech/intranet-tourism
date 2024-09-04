@@ -138,7 +138,7 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                                 alt={user.alt}
                                 style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '8px', objectFit: 'cover' }}
                             />
-                            <div className="font-bold" style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.fullName ? user.fullName : "Your Story"}</div>
+                            <div style={{ fontSize: '14px', marginTop: '5px', marginLeft: '5px' }}>{user.fullName ? user.fullName : "Your Story"}</div>
                         </div>
                         <button
                             type="button"
@@ -227,54 +227,36 @@ const StoryViewer = ({ stories, onClose, user, onViewed }) => {
                         <h2>Delete Story?</h2>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <button
-                        onClick={handleDelete}
-                        style={{
-                            backgroundColor: 'white',
-                            color: '#333',
-                            border: '1px solid #ccc',
-                            borderRadius: '25px',
-                            width: '80px',
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            marginRight: '16px',
-                            transition: 'background-color 0.3s, color 0.3s', // For smooth transition
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#f5f5f5';
-                            e.target.style.color = '#000';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = 'white';
-                            e.target.style.color = '#333';
-                        }}
-                        >
-                        Yes
-                        </button>
-
                         <button
-                        onClick={handleClosePopup}
-                        style={{
-                            backgroundColor: '#E53935',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '25px',
-                            width: '80px',
-                            padding: '10px 20px',
-                            cursor: 'pointer',
-                            marginRight: '10px',
-                            transition: 'background-color 0.3s, color 0.3s', // For smooth transition
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = '#d32f2f';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = '#E53935';
-                        }}
+                            onClick={handleDelete}
+                            style={{
+                                backgroundColor: 'white',
+                                color: '#333',
+                                border: '1px solid #ccc',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                marginRight: '16px',
+                            }}
                         >
-                        No
+                            Yes
                         </button>
-
+                        <button
+                            onClick={handleClosePopup}
+                            style={{
+                                backgroundColor: '#E53935',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '25px',
+                                width: '80px',
+                                padding: '10px 20px',
+                                cursor: 'pointer',
+                                marginRight: '10px',
+                            }}
+                        >
+                            No
+                        </button>
                     </div>
                 </div>
             )}

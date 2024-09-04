@@ -196,58 +196,55 @@ function Card({
 
   const handleSubmit = async () => {
     setError(""); // Reset any previous errors
-  
+
     const formData = new FormData();
-    formData.append("_method", "PUT");
-  
-    // Ensure description is always a string
-    const finalDescription = departmentDescription || ""; // Default to empty string if null/undefined
-  
+    formData.append("_method", "PUT"); // Indicate that this is an update operation
+
     // Append the current or updated values
     formData.append("name", departmentName);
-    formData.append("description", finalDescription); // Ensure it is a string
+    formData.append("description", departmentDescription || ''); // Use empty string if null
     formData.append("type", selectedType);
-  
+
     if (imageFile) {
-      formData.append("banner", imageFile);
+      formData.append("banner", imageFile); // Base64 string of the image file
     } else {
-      formData.append("banner", initialImageSrc);
+      formData.append("banner", initialImageSrc); // URL of the existing image
     }
-  
+
     const options = {
-      method: "POST",
+      method: "POST", // Ensure this is 'POST' for sending FormData
       headers: {
         Accept: "application/json",
         "X-CSRF-Token": csrfToken,
         Authorization: `Bearer ${authToken}`,
       },
-      body: formData,
+      body: formData, // Send the FormData object directly
     };
-  
+
     const url = `/api/communities/communities/${department?.id}`;
-  
+
     try {
       const response = await fetch(url, options);
       const text = await response.text();
-  
+
       if (!response.ok) {
         console.error("Server response not OK:", text);
         throw new Error("Failed to save department");
       }
-  
+
       const responseData = text ? JSON.parse(text) : {};
       console.log("Department saved:", responseData.data);
-  
+
+      // Call the onSave callback if provided
       if (onSave) onSave(responseData.data);
-  
+
+      // Reload the page to reflect changes
       window.location.reload();
     } catch (error) {
       console.error("Error saving department:", error.message);
       setError("An error occurred while saving the department.");
     }
   };
-  
-  
 
   return (
     <section className="flex flex-col py-6 bg-white rounded-2xl shadow-sm max-w-[442px] w-full px-10">

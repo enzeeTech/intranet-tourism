@@ -5,64 +5,40 @@ namespace Modules\Communities\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Communities\Models\CommunityMember;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CommunityMemberController extends Controller
 {
     // public function index(Request $request)
     // {
-
-    //     $query = CommunityMember::query();
-
-
-    //     if ($request->has('community_id')) {
-    //         $communityId = $request->query('community_id');
-    //         $query->where('community_members.community_id', $communityId);
-    //     }
-
-
     //     if ($request->has('user_id')) {
     //         $userId = $request->query('user_id');
-    //         $query->where('community_members.user_id', $userId);
-    //     }
 
-
-    //     if ($request->has('community_id')) {
-    //         $communityMembers = $query
-    //             ->join('profiles', 'community_members.user_id', '=', 'profiles.user_id')
-    //             ->join('users', 'community_members.user_id', '=', 'users.id')
-    //             ->leftJoin('employment_posts', 'community_members.user_id', '=', 'employment_posts.user_id')
-    //             ->leftJoin('business_posts', 'employment_posts.business_post_id', '=', 'business_posts.id')
-    //             ->select(
-    //                 'community_members.*',
-    //                 'profiles.bio as name',
-    //                 'profiles.staff_image',
-    //                 'users.is_active',
-    //                 'business_posts.title as business_post_title'
-    //             )
-    //             ->get();
-
-    //         return response()->json($communityMembers);
-    //     } else {
-    //         $communityMembers = $query->get();
+    //         $communityMembers = CommunityMember::where('user_id', $userId)->get();
 
     //         return response()->json($communityMembers);
     //     }
+
+    //     $communityMembers = CommunityMember::all();
+    //     return response()->json($communityMembers);
     // }
 
     public function index(Request $request)
     {
+
         $query = CommunityMember::query();
+
 
         if ($request->has('community_id')) {
             $communityId = $request->query('community_id');
             $query->where('community_members.community_id', $communityId);
         }
 
+
         if ($request->has('user_id')) {
             $userId = $request->query('user_id');
             $query->where('community_members.user_id', $userId);
         }
+
 
         if ($request->has('community_id')) {
             $communityMembers = $query
@@ -75,13 +51,7 @@ class CommunityMemberController extends Controller
                     'profiles.bio as name',
                     'profiles.staff_image',
                     'users.is_active',
-                    DB::raw('STRING_AGG(DISTINCT business_posts.title, \', \') as business_post_titles')
-                )
-                ->groupBy(
-                    'community_members.id',
-                    'profiles.bio',
-                    'profiles.staff_image',
-                    'users.is_active'
+                    'business_posts.title as business_post_title'
                 )
                 ->get();
 
@@ -92,7 +62,6 @@ class CommunityMemberController extends Controller
             return response()->json($communityMembers);
         }
     }
-
 
     public function show($id)
     {

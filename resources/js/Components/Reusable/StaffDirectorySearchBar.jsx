@@ -19,7 +19,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
       let allResults = [];
 
       try {
-          const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`);
+          const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
           
           if (!response.ok) {
               throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -72,22 +72,6 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
     }
   };
 
-  const renderTitles = (employmentPosts) => {
-    if (!employmentPosts || employmentPosts.length === 0) {
-      return 'No title available';
-    }
-
-    const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
-
-    return (
-      <div className="text-right">
-        {uniqueTitles.map((title, index) => (
-          <p key={index} className="text-gray-600">{title}</p>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div className="staff-search-bar-container max-w-[1100px] p-4 bg-white rounded-2xl shadow-custom mb-5 sm:left">
       <div className="mb-1 staff-search-bar-title">
@@ -129,9 +113,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
                     <img src={getImageSource(result.profile?.staff_image || '/assets/dummyStaffPlaceHolder.jpg')} alt={result.name} className="w-10 h-10 mr-3 rounded-full cursor-pointer" />
                     <p className="font-semibold cursor-pointer">{result.name}</p>
                   </div>
-                  <div className="flex flex-col">
-                    {renderTitles(result.employment_posts)}
-                  </div>
+                  <p className="text-gray-600">{result.employment_post?.business_post.title || 'No title available'}</p>
                 </div>
               </a>
             ))
