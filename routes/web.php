@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
     Route::get('/manage-links', [ManageLinksController::class, 'index'])->name('manage-links');
+    Route::get('/Media-Album', [MediaController::class, 'managealbum'])->name('Media-Album');
 });
 
 require __DIR__ . '/auth.php';
