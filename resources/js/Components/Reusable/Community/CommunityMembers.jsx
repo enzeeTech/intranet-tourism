@@ -300,7 +300,7 @@ function CmMembers({communityID, loggedInID}) {
         adminRoleEntries.some(
           roleEntry =>
             parseInt(roleEntry.model_id, 10) === parseInt(member.user_id, 10) &&
-            parseInt(roleEntry.department_id, 10) === departmentId
+            parseInt(roleEntry.community_id, 10) === parseInt(departmentId)
         )
       );
   
@@ -369,22 +369,20 @@ function CmMembers({communityID, loggedInID}) {
   
 
       const existingRoleIds = existingRoles.map(role => role.role_id);
-      const departmentId = getDepartmentIdFromQuery();
+      let departmentId = null;
 
-
-      console.log("EXISTING ROLES", existingRoles);
-
-      let communityId = null;
+      // Check if the user has a department admin role (role ID 2)
       existingRoles.forEach(role => {
-        if (role.community_id) {
-          communityId = role.community_id;  
+        if (role.role_id === 2 && role.department_id) {
+          departmentId = role.department_id;
         }
       });
 
-      console.log("COMMUNITY_ID", communityId);
+      const communityId = communityID;
 
-      if (!existingRoleIds.includes(2)) {
-        existingRoleIds.push(2);
+      // Add the community admin role (role ID 3) if it doesn't already exist
+      if (!existingRoleIds.includes(3)) {
+        existingRoleIds.push(3);
       }
 
       console.log("EXISTING ROLE IDS", existingRoleIds);

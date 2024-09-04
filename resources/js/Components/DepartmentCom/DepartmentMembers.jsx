@@ -563,6 +563,14 @@ function DpMembers() {
               (role) => !(role.role_id === 2)
             );
 
+           // Check if the user has role ID 4; if not, add it
+            if (!updatedRoles.some(role => role.role_id === 4)) {
+              updatedRoles.push({
+                role_id: 4,
+                model_id: member.user_id,
+              });
+            }
+
             console.log("UPDATED ROLES", updatedRoles);
   
             const rolesPayload = {
