@@ -407,7 +407,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justifycenter items-start px-3.5 py-7 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-full rounded-md border border-solid border-neutral-300"
+          className="justify-center items-start px-3.5 pt-2 pb-12 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-full rounded-md border border-solid border-neutral-300"
         />
         <UserInfo name={userData.name} role={user.role} src={userData.profileImage} />
         <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
