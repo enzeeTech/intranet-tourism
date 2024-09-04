@@ -17,7 +17,7 @@ function Avatar({ src, alt, onImageChange }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl"
+        className="relative flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl w-[400px] h-[300px]"
         onClick={handleClick}
       >
         <img

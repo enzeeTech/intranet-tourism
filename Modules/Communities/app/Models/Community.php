@@ -40,7 +40,7 @@ class Community extends Model implements AuditableContract
                 [
                     'name' => ['string', 'required'],
                     'banner' => ['string'],
-                    'description' => ['string'],
+                    'description' => ['nullable', 'string'],
                     'type' => ['string', 'required'],
                 ],
                 // [],

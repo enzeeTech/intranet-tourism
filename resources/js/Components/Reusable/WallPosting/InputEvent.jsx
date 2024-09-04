@@ -140,11 +140,6 @@ export function Event({ onClose, onSaveEvent, chosenEvent }) {
                 </div>
               <div className="flex flex-col">
                   <SearchPeopleInput onSearchResults={setSearchResults} />
-                  <ChosenEvent
-                      chosenEvent={selectedEvent}
-                      onRemoveEvent={handleRemoveEvent}
-                  />
-                  <div className="mt-5 text-sm font-semibold text-neutral-500">Recommended</div>
                   <div className="max-h-[300px] overflow-y-auto">
                       {searchResults.map((event) => (
                           <RecommendedEvent

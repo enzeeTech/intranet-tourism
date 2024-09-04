@@ -299,7 +299,7 @@ const FileTable = ({ searchTerm }) => {
 
                                 return (
                                     <tr key={index}>
-                                        <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-4 text-sm text-neutral-800 sm:pl-1 text-left overflow-hidden text-ellipsis">
+                                        <td className="border-b border-r border-neutral-300 whitespace-nowrap px-3 py-2 text-sm text-neutral-800 sm:pl-1 text-left overflow-hidden text-ellipsis">
                                             {isEditing ? (
                                                 <div
                                                     ref={inputRef}

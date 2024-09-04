@@ -28,14 +28,21 @@ function Avatar({ src, alt, className, status }) {
   );
 }
 
-function UserInfo({ name, role, isActive }) {
+function UserInfo({ name, titles, isActive }) {
+
+  const titleArray = titles.split(',').map((title) => title.trim());
+
   return (
     <div className="flex flex-col ml-2">
       <div className="flex items-center gap-3">
-        <h2 className="text-xl font-bold">{name} </h2>
+        <h2 className="text-xl font-bold">{name}</h2>
         {isActive && <span className="font-semibold text-red-500 text-l">(Deactivated)</span>}
       </div>
-      <p className="text-xs font-medium">{role}</p>
+      <div className="text-xs font-medium">
+        {titleArray.map((title, index) => (
+          <p key={index}>{title}</p> 
+        ))}
+      </div>
     </div>
   );
 }
@@ -170,18 +177,10 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
 
 
 
-const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
+const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, titles, status, isActive, onAssign, onRemove, activePopupId, setActivePopupId, closePopup }) => {
 
   const popupRef = useRef(null);
   const buttonRef = useRef(null);
-
-  // const handleDotClick = () => {
-  //   if (activePopupId === id) {
-  //     closePopup();
-  //   } else {
-  //     setActivePopupId(id);
-  //   }
-  // };
 
   const handleDotClick = (event) => {
     event.preventDefault();
@@ -217,7 +216,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
     <a href={`/user/${id}`}>
     <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center hover:bg-blue-100">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
-      <UserInfo name={name} role={title} isActive={isActive} />
+      <UserInfo name={name} titles={titles} isActive={isActive} />
       <div className="ml-auto">
         <button ref={buttonRef} onClick={handleDotClick} className="relative p-2">
           <img src="/assets/threedots.svg" alt="Menu" className="h-8 w-9" />
@@ -291,6 +290,8 @@ function CmMembers({communityID, loggedInID}) {
   
       const fetchedMembers = membersData|| [];
       fetchedMembers.sort((a, b) => a.order - b.order);
+
+      console.log("MEMBERS DATA", membersData);
   
       const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
 
@@ -299,7 +300,7 @@ function CmMembers({communityID, loggedInID}) {
         adminRoleEntries.some(
           roleEntry =>
             parseInt(roleEntry.model_id, 10) === parseInt(member.user_id, 10) &&
-            parseInt(roleEntry.department_id, 10) === departmentId
+            parseInt(roleEntry.community_id, 10) === parseInt(departmentId)
         )
       );
   
@@ -368,22 +369,20 @@ function CmMembers({communityID, loggedInID}) {
   
 
       const existingRoleIds = existingRoles.map(role => role.role_id);
-      const departmentId = getDepartmentIdFromQuery();
+      let departmentId = null;
 
-
-      console.log("EXISTING ROLES", existingRoles);
-
-      let communityId = null;
+      // Check if the user has a department admin role (role ID 2)
       existingRoles.forEach(role => {
-        if (role.community_id) {
-          communityId = role.community_id;  
+        if (role.role_id === 2 && role.department_id) {
+          departmentId = role.department_id;
         }
       });
 
-      console.log("COMMUNITY_ID", communityId);
+      const communityId = communityID;
 
-      if (!existingRoleIds.includes(2)) {
-        existingRoleIds.push(2);
+      // Add the community admin role (role ID 3) if it doesn't already exist
+      if (!existingRoleIds.includes(3)) {
+        existingRoleIds.push(3);
       }
 
       console.log("EXISTING ROLE IDS", existingRoleIds);
@@ -685,7 +684,7 @@ function CmMembers({communityID, loggedInID}) {
               employment_post_id={admin.employment_post_id}
               imageUrl={admin.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
               name={admin.name}
-              title={admin.business_post_title}
+              titles={admin.business_post_titles}
               isActive={admin.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
@@ -711,7 +710,7 @@ function CmMembers({communityID, loggedInID}) {
                   employment_post_id={member.employment_post_id}
                   imageUrl={member.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
                   name={member.name}
-                  title={member.business_post_title}
+                  titles={member.business_post_titles}
                   isActive={member.is_active}
                   activePopupId={activePopupId}
                   setActivePopupId={setActivePopupId}

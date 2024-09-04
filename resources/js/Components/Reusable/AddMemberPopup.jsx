@@ -12,10 +12,10 @@ const ConfirmationPopup = ({ selectedPerson, onConfirm, onCancel }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-3xl pt-7 px-6 w-[500px] shadow-lg">
-                <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Confirm Action</h1>
-                <p>This user currently exists in <b>{departmentTitle}</b>.</p>
-                <p>Do you want to remove this user from <b>{departmentTitle}</b>?</p>
+            <div className="bg-white rounded-3xl pt-7 px-6 w-[500px] shadow-lg max-md:mx-4">
+                <h1 className="flex justify-start mb-2 text-2xl max-md:text-lg font-bold text-neutral-800">Confirm Action</h1>
+                <p className="max-md:text-sm">This user currently exists in <b>{departmentTitle}</b>.</p>
+                <p className="max-md:text-sm">Do you want to remove this user from <b>{departmentTitle}</b>?</p>
                 <div className="flex flex-col mt-4">
                     <button
                         className="w-full px-4 py-2 mb-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -58,12 +58,15 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const [success, setSuccess] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [gradeError, setGradeError] = useState(false);
+    const [unitError, setUnitError] = useState(false);
     const [grades, setGrades] = useState([]);
     const [selectedGrade, setSelectedGrade] = useState('');
     const [selectedGradeId, setSelectedGradeId] = useState('');
     const csrfToken = useCsrf();
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showMaxDepartmentPopup, setShowMaxDepartmentPopup] = useState(false);
+
 
     useEffect(() => {
         fetchCurrentMembers();
@@ -121,7 +124,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         let allResults = [];
     
         try {
-            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+            const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`);
             
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -239,10 +242,46 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             setError('This user is already in the department.');
             return;
         }
+        console.log('person', person);
+
+        // Check if the user has more than two employment posts
+        console.log('person.employment_posts', person.employment_posts);
+        console.log('person.employment_posts.length', person.employment_posts.length);
+        if (person.employment_posts && person.employment_posts.length >= 2) {
+            console.log('User has more than two employment posts:', person.employment_posts);
+            setShowMaxDepartmentPopup(true);
+            return;
+        }
+
+        // If the user has exactly one employment post, pre-fill form fields
+        if (person.employment_posts && person.employment_posts.length === 1) {
+            const employmentPost = person.employment_posts[0];
+            console.log('employmentPost', employmentPost);
+            setTitle(employmentPost.business_post?.title || '');
+            setTitleId(employmentPost.business_post_id || ''); 
+            setSelectedGrade(employmentPost.business_grade?.code || '');
+            setSelectedGradeId(employmentPost.business_grade_id || '');
+            setLocation(employmentPost.location || ''); 
+            setWorkPhoneNumber(employmentPost.work_phone || ''); 
+        } else {
+            // Reset form fields if there are no employment posts or more than one post
+            setTitle('');
+            setTitleId('');
+            setLocation('');
+            setWorkPhoneNumber('');
+            setSelectedGrade('');
+            setSelectedGradeId('');
+        }
+
         setSelectedPerson(person);
         setSearchTerm(person.name);
         setError('');  
     };
+
+    const handleCloseMaxDepartmentPopup = () => {
+        setShowMaxDepartmentPopup(false);
+    };
+    
 
     const handleClose = () => {
         setIsAddMemberPopupOpen(false);
@@ -263,6 +302,33 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const handleAdd = () => {
+        let hasError = false;
+    
+        if (!title) {
+            setTitleError(true);
+            hasError = true;
+        } else {
+            setTitleError(false);
+        }
+
+        if (!selectedGrade) {
+            setGradeError(true);
+            hasError = true;
+        } else {
+            setGradeError(false);
+        }
+
+        if (!unit) {
+            setUnitError(true);
+            hasError = true;
+        } else {
+            setUnitError(false);
+        }
+    
+        if (hasError) {
+            return;
+        }
+    
         if (selectedPerson?.employment_post) {
             setShowConfirmation(true);
         } else {
@@ -271,6 +337,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     };
 
     const addMemberToDepartment = async () => {
+        setIsAddMemberPopupOpen(false);
         if (!title && !selectedPerson.employment_post && !selectedGrade) {
             setGradeError(true);
             setTitleError(true);
@@ -384,11 +451,43 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
     };
 
+    const getImageSource = (imageUrl) => {
+        console.log('imageURL', imageUrl);
+        if (imageUrl === defaultImage) {
+            return defaultImage;
+        }
+        if (imageUrl.startsWith('staff_image/')) {
+            return `/storage/${imageUrl}`;
+        } else {
+            return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+            ? imageUrl 
+            : `/avatar/${imageUrl}`;
+        }
+    };
+
+    const renderTitles = (employmentPosts) => {
+        if (!employmentPosts || employmentPosts.length === 0) {
+            return <span className="font-light text-gray-600">No title available</span>;
+        }
+    
+        const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
+    
+        if (uniqueTitles.length === 0) {
+            return <span className="font-light text-gray-600">No title available</span>;
+        }
+    
+        return uniqueTitles.map((title, index) => (
+            <div key={index} className="font-light text-gray-600">{title}</div>
+        ));
+    };
+    
+    
+
     return (
         <div>
             {isAddMemberPopupOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-2xl pt-7 px-4 w-[400px]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black px-4 bg-opacity-50">
+                    <div className="bg-white rounded-2xl pt-7 px-4 max-md:w-full max-md:mx-8 w-[400px]">
                         <h1 className="flex justify-start mx-2 mb-4 text-2xl font-bold text-neutral-800">Add staff</h1>
                         <input
                             type="text"
@@ -396,7 +495,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                             value={selectedPerson ? selectedPerson.name : searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             disabled={!!selectedPerson}
-                            className="w-full py-2 px-4 mb-4 border bg-gray-200 border-gray-200 rounded-full"
+                            className="w-full px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-full"
                         />
                         <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
                             {loading ? (
@@ -410,10 +509,14 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                         className="flex items-center p-2 cursor-pointer"
                                         onClick={() => handleSelectPerson(person)}
                                     >
-                                        <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="w-10 h-10 mr-4 rounded-full object-cover" />
+                                        <img 
+                                            src={getImageSource(person.profile?.staff_image || defaultImage)} 
+                                            alt={person.name} 
+                                            className="object-cover w-10 h-10 mr-4 rounded-full" 
+                                            />
                                         <div>
                                             <div className="text-lg font-bold">{person.name}</div>
-                                            <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
+                                            <div>{renderTitles(person.employment_posts)}</div> 
                                         </div>
                                     </div>
                                 ))
@@ -449,7 +552,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 <div className="mb-2">
                                     <label className="block font-bold text-gray-700">Unit</label>
                                     <Menu as="div" className="relative inline-block w-full text-left">
-                                        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border border-gray-300 px-3 py-2 text-gray-700 hover:bg-gray-50">
+                                        <MenuButton className={`inline-flex w-full justify-between items-center gap-x-1.5 rounded-full border px-3 py-2 ${unitError ? 'border-red-500' : 'border-gray-300'} text-gray-700 hover:bg-gray-50`}>
                                             {unit || "Select Unit"}
                                             <ChevronDownIcon aria-hidden="true" className="w-5 h-5 -mr-1 text-gray-400" />
                                         </MenuButton>
@@ -465,7 +568,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                                 )}
                                             </MenuItem>
                                             {units.map((unit) => (
-                                                <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); }}>
+                                                <MenuItem key={unit.id} onClick={() => { setUnit(unit.name); setUnitId(unit.id); setUnitError(false); }}>
                                                     {({ active }) => (
                                                         <a
                                                             href="#"
@@ -478,6 +581,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                             ))}
                                         </MenuItems>
                                     </Menu>
+                                    {unitError && <div className="mt-2 text-red-500">You must select a unit</div>}
                                 </div>
                                 {!selectedPerson.employment_post && (
                                     <div className="mb-4">
@@ -554,6 +658,22 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                     onConfirm={handleConfirmation}
                     onCancel={handleClose}
                 />
+            )}
+            {showMaxDepartmentPopup && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-3xl pt-7 px-6 py-2 w-[500px] shadow-lg">
+                        <h1 className="flex justify-start mb-2 text-2xl font-bold text-neutral-800">Cannot Add User</h1>
+                        <p>A user can only be in maximum of two departments</p>
+                        <div className="flex flex-col mt-4">
+                            <button
+                                className="w-full px-4 py-2 mb-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
+                                onClick={handleCloseMaxDepartmentPopup}
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
