@@ -408,8 +408,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                             )}
                             {variant !== "comment" && (
                                 <>
-                                    <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 lg: justify-between">
-                                        <div className="flex w-full flex-row justify-between lg:w-2/3 max-md:py">
+                                    <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 justify-between">
+                                        <div className="flex w-full flex-row justify-between lg:w-2/3">
                                             <button className="tooltip" onClick={handleClickPoll}>
                                                 <img
                                                     loading="lazy"
@@ -497,23 +497,34 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             </button>
                                         </div>
 
-                                        {/* column baru */}
-                                        <div className="flex flex-row w-full max-md:justify-between justify-end gap-4">
-                                            {variant !== "comment" && (
-                                                <div className="flex items-center">
-                                                    <label className="text-sm mr-3">Set as Announcement?</label>
-                                                    <label className="switch">
-                                                        <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
-                                                        <span className="slider"></span>
-                                                    </label>
-                                                </div>
-                                            )}
+                                        <div className="flex flex-row w-full">
+                                            {/* column baru */}
+                                            <div className="flex flex-row w-full max-md:justify-between justify-end gap-4">
+                                                {variant !== "comment" && (
+                                                    <div className="flex items-center">
+                                                        <label className="text-sm mr-3">Set as Announcement?</label>
+                                                        <label className="switch">
+                                                            <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
+                                                            <span className="slider"></span>
+                                                        </label>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <button onClick={handleClickSend} className="flex send-button align-item justify-end ml-4">
+                                            {isSending ? "" : ""}
+                                                <img
+                                                    loading="lazy"
+                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                                                    alt="SEND"
+                                                    className="h-6 w-6"
+                                                />
+                                            </button>
+                                            {/* column sampaisini */}
                                         </div>
-                                        {/* column sampaisini */}
                                     </div>
                                 </>
                             )}
-                             <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                             {/* <button onClick={handleClickSend} className="flex send-button align-item justify-end">
                              {isSending ? "" : ""}
                                  <img
                                      loading="lazy"
@@ -521,7 +532,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                      alt="SEND"
                                      className="h-6 w-6 max-md:mt-8"
                                  />
-                             </button>
+                             </button> */}
                         </div>
                     </div>
                 </div>
