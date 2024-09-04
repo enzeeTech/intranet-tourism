@@ -20,7 +20,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [showEventPopup, setShowEventPopup] = useState(false);
     const [attachments, setAttachments] = useState([]);
     const [fileNames, setFileNames] = useState([]);
-    const [tag, setTag] = useState(''); // Single tag
+    const [tags, setTags] = useState([]);
     const [mediaTagCount, setMediaTagCount] = useState(0);
     const [showReactionPicker, setShowReactionPicker] = useState(false);
     const [chosenPeople, setChosenPeople] = useState([]);
@@ -113,16 +113,10 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 });
             }
     
-            // // Handle tags with spaces after commas
-            // if (tag.length > 0) {
-            //     const formattedTags = `[${tag.map(tag => `"${tag}"`).join(", ")}]`;
-            //     formData.append("tag", formattedTags);
-            // }
-
-            // Handle the single tag as a JSON array
-            if (tag) {
-               const formattedTag = JSON.stringify([tag]); // Convert the tag to a JSON array
-               formData.append("tag", formattedTag);
+            // Handle tags with spaces after commas
+            if (tags.length > 0) {
+                const formattedTags = `[${tags.map(tag => `"${tag}"`).join(", ")}]`;
+                formData.append("tag", formattedTags);
             }
     
             // Handle mentions
@@ -158,8 +152,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 setInputValue("");
                 setAttachments([]);
                 setFileNames([]);
-                // setTag([]);
-                setTag(''); // Reset tag as it is a string
+                setTags([]);
                 setChosenPeople([]);
                 setChosenEvent([]);
                 if (!isComment) {
@@ -282,10 +275,9 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     };
 
     const handleSaveTags = () => {
-        setMediaTagCount(tag ? 1 : 0); // Set count to 1 if a tag is selected, otherwise 0
+        setMediaTagCount(tags.length); // Update the count when saving tags
         closePopup(); // Close the popup
     };
-    
 
     const handleSavePeople = (selectedPeople) => {
         setChosenPeople(selectedPeople); // Update chosenPeople state
@@ -358,8 +350,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                     <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                                         {name}
                                     </span>
-                                    <button className=" text-blue-500" onClick={() => removeFile(index)}>
-                                        <img src="assets/cancel2.svg" alt="cancel icon"/>
+                                    <button className="ml-2 text-blue-500" onClick={() => removeFile(index)}>
+                                        x
                                     </button>
                                 </div>
                             ))}
@@ -385,31 +377,44 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             />
                                         </div>
                                     )}
-
-                                    <button
-                                        type="button"
-                                        onClick={handleClickPeople}
-                                        className="tooltip relative text-md text-blue-500 hover:text-blue-700"
-                                    >
-                                        {/* <img
-                                            loading="lazy"
-                                            src="assets/inputpeople.svg"
-                                            alt="People Icon"
-                                            className="w-[16px] h-[16px]"
-                                        /> */}
-                                        <span className="tooltiptext">Mentions People</span>
-                                        {chosenPeople.length > 0 && (
-                                            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                                {chosenPeople.length}
-                                            </span>
-                                        )}
-                                    </button>
+                                    <div className="flex flex-row w-full justify-between items-center mt-1">
+                                    <div>
+                                        {/* <button
+                                            type="button"
+                                            onClick={handleClickPeople}
+                                            className="tooltip relative text-md text-blue-500 hover:text-blue-700"
+                                        >
+                                            <img
+                                                loading="lazy"
+                                                src="assets/inputpeople.svg"
+                                                alt="People Icon"
+                                                className="w-[16px] h-[16px]"
+                                            />
+                                            <span className="tooltiptext">Mentions People</span>
+                                            {chosenPeople.length > 0 && (
+                                                <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                                    {chosenPeople.length}
+                                                </span>
+                                            )}
+                                        </button> */}
+                                    
+                                    </div>
+                                    {/* <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                                        {isSending ? "" : ""}
+                                            <img
+                                                loading="lazy"
+                                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
+                                                alt="SEND"
+                                                className="h-6 w-6 max-md:mt-8"
+                                            />
+                                        </button> */}
+                             </div>
                                 </>
                             )}
                             {variant !== "comment" && (
                                 <>
-                                    <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 justify-between">
-                                        <div className="flex w-full flex-row justify-between lg:w-2/3">
+                                    <div className="flex w-full max-md:flex-col lg:flex-row max-md:gap-4 lg: justify-between">
+                                        <div className="flex w-full flex-row justify-between lg:w-2/3 max-md:py">
                                             <button className="tooltip" onClick={handleClickPoll}>
                                                 <img
                                                     loading="lazy"
@@ -459,7 +464,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </span>
                                                 )}
                                             </button>
-                                            {/* <button
+                                            <button
                                                 type="button"
                                                 onClick={handleClickPeople}
                                                 className="tooltip relative text-md text-blue-500 hover:text-blue-700"
@@ -476,7 +481,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                         {chosenPeople.length}
                                                     </span>
                                                 )}
-                                            </button> */}
+                                            </button>
                                             <button
                                                 type="button"
                                                 onClick={handleClickEvent}
@@ -497,34 +502,23 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                             </button>
                                         </div>
 
-                                        <div className="flex flex-row w-full">
-                                            {/* column baru */}
-                                            <div className="flex flex-row w-full max-md:justify-between justify-end gap-4">
-                                                {variant !== "comment" && (
-                                                    <div className="flex items-center">
-                                                        <label className="text-sm mr-3">Set as Announcement?</label>
-                                                        <label className="switch">
-                                                            <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
-                                                            <span className="slider"></span>
-                                                        </label>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <button onClick={handleClickSend} className="flex send-button align-item justify-end ml-4">
-                                            {isSending ? "" : ""}
-                                                <img
-                                                    loading="lazy"
-                                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/bb9e6a4fb4fdc3ecfcef04a0984faf7c2720a004081fccbe4db40b1509a23780?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&"
-                                                    alt="SEND"
-                                                    className="h-6 w-6"
-                                                />
-                                            </button>
-                                            {/* column sampaisini */}
+                                        {/* column baru */}
+                                        <div className="flex flex-row w-full max-md:justify-between justify-end gap-4">
+                                            {variant !== "comment" && (
+                                                <div className="flex items-center">
+                                                    <label className="text-sm mr-3">Set as Announcement?</label>
+                                                    <label className="switch">
+                                                        <input type="checkbox" checked={isAnnouncement} onChange={handleToggleChange} />
+                                                        <span className="slider"></span>
+                                                    </label>
+                                                </div>
+                                            )}
                                         </div>
+                                        {/* column sampaisini */}
                                     </div>
                                 </>
                             )}
-                             {/* <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                             <button onClick={handleClickSend} className="flex send-button align-item justify-end">
                              {isSending ? "" : ""}
                                  <img
                                      loading="lazy"
@@ -532,7 +526,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                      alt="SEND"
                                      className="h-6 w-6 max-md:mt-8"
                                  />
-                             </button> */}
+                             </button>
                         </div>
                     </div>
                 </div>
@@ -540,8 +534,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     
             {showMediaTagPopup && (
                 <TagInput
-                    tag={tag}
-                    setTag={setTag}
+                    tags={tags}
+                    setTags={setTags}
                     onClose={closePopup}
                     onSave={handleSaveTags}
                 />
