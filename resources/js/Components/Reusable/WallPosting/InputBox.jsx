@@ -379,7 +379,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         <span className="tooltiptext">React 😀🤣😤</span>
                                     </button>
                                     {showReactionPicker && (
-                                        <div ref={emojiPickerRef} className="emoji-picker-container">
+                                        <div ref={emojiPickerRef} className="emoji-picker-container ">
                                             <Picker
                                                 onEmojiClick={handleReactionClick}  // Ensure this correctly triggers the handler
                                             />
