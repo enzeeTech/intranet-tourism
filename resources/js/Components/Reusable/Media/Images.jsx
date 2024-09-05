@@ -1,17 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-const ImageComponent = ({ src, alt, className }) => (
+const ImageComponent = ({ src, alt, className, onClick }) => (
   <img
     loading="lazy"
     src={src}
     alt={alt}
     className={className}
     style={{ objectFit: "cover", width: "100%", height: "100%" }}
+    onClick={onClick}
   />
 );
 
+const Modal = ({ imgSrc, alt, onClose }) => {
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50"
+      onClick={onClose}
+    >
+      <div className="relative">
+        <img
+          src={imgSrc}
+          alt={alt}
+          className="max-w-full max-h-full"
+          onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking on the image
+        />
+        <button
+          className="absolute top-0 right-0 mt-2 mr-2 text-white text-2xl"
+          onClick={onClose}
+        >
+          &times;
+        </button>
+      </div>
+    </div>
+  );
+};
+
 function Image({ selectedItem }) {
   const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetch("/api/crud/resources")
@@ -19,22 +45,23 @@ function Image({ selectedItem }) {
       .then((data) => {
         const imagePaths = data.data.data
           .filter((item) => {
-            // Check if the item is an image, you can adjust the condition based on your API response
             const fileExtension = item.path.split('.').pop().toLowerCase();
             return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
             alt: `Description ${item.id}`,
-            category: item.attachable_type // Adjust as per your condition
+            category: item.attachable_type,
           }));
         setImages(imagePaths);
       })
       .catch((error) => console.error("Error fetching images:", error));
   }, []);
 
-  // Filter images based on selectedItem
-  const filteredImages = selectedItem === 'All' ? images : images.filter(image => image.category === selectedItem);
+  const filteredImages =
+    selectedItem === "All"
+      ? images
+      : images.filter((image) => image.category === selectedItem);
 
   return (
     <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
@@ -52,7 +79,8 @@ function Image({ selectedItem }) {
                 <ImageComponent
                   src={img.src}
                   alt={img.alt}
-                  className="grow shrink-0 w-full h-full"
+                  className="grow shrink-0 w-full h-full cursor-pointer"
+                  onClick={() => setSelectedImage(img)}
                 />
               </figure>
             ))
@@ -61,6 +89,15 @@ function Image({ selectedItem }) {
           )}
         </div>
       </section>
+
+      {/* Modal for enlarged image */}
+      {selectedImage && (
+        <Modal
+          imgSrc={selectedImage.src}
+          alt={selectedImage.alt}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </section>
   );
 }
