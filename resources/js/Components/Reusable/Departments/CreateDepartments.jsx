@@ -216,8 +216,8 @@ const getCurrentUser = async () => {
 
 function Header({ title }) {
   return (
-    <header className="flex gap-5 items-start self-center px-5 w-full text-2xl font-bold text-center max-w-[358px] text-neutral-800">
-      <h1 className="flex-auto mt-3">{title}</h1>
+    <header className="flex items-center justify-center w-full px-5 py-3 text-2xl font-bold text-neutral-800">
+      <h1 className="text-center">{title}</h1>
     </header>
   );
 }
@@ -230,9 +230,9 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       <div
-        className="relative flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl w-[400px] h-[133px]"
+        className="relative flex items-center justify-center bg-gray-200 cursor-pointer rounded-xl w-full max-w-md h-[133px] overflow-hidden"
         onClick={handleClick}
       >
         {src && cropMode ? (
@@ -244,14 +244,14 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
             onCropChange={setCrop}
             onCropComplete={onCropComplete}
             onZoomChange={setZoom}
-            className="rounded-xl border-4 border-gray-200 object-cover object-center"
+            className="rounded-xl"
           />
         ) : (
           <img
             loading="lazy"
             src={src || "/assets/uploadAnImage.svg"}
             alt={alt}
-            className="aspect-square w-[400px] h-[133px] rounded-xl border-4 border-gray-200 object-cover object-center"
+            className="w-full h-full object-cover"
           />
         )}
       </div>
@@ -278,9 +278,9 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
 
 function UserInfo({ name, role, src }) {
   return (
-    <div className="flex items-center gap-4 mt-5 text-neutral-800 w-full justify-start">
-      <img loading="lazy" src={src} alt="" className="shrink-0 aspect-square w-[42px] h-[42px] rounded-full object-cover object-center" />
-      <div className="flex flex-col grow shrink-0 self-start mt-1.5 basis-0 w-fit">
+    <div className="flex items-center gap-4 mt-5 w-full">
+      <img loading="lazy" src={src} alt="" className="shrink-0 w-10 h-10 rounded-full object-cover" />
+      <div className="flex flex-col">
         <p className="text-lg font-bold">{name}</p>
       </div>
     </div>
@@ -297,7 +297,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   const [userData, setUserData] = useState({});
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [cropMode, setCropMode] = useState(false); // To toggle cropping mode
+  const [cropMode, setCropMode] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const csrfToken = useCsrf();
 
@@ -316,7 +316,9 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
         ...pv,
         ...data,
         name: data.name,
-        profileImage: data.profile && data.profile.image ? `/storage/${data.profile.image}` : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
+        profileImage: data.profile?.image
+          ? `/storage/${data.profile.image}`
+          : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${data.name}&rounded=true`
       }));
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -332,7 +334,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
-      setCropMode(false); // Reset crop mode when a new image is selected
+      setCropMode(false);
     };
     reader.readAsDataURL(file);
   };
@@ -366,7 +368,6 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
       const text = await response.text();
 
       if (!response.ok) {
-        console.error('Server response not OK:', text);
         throw new Error('Failed to create department');
       }
 
@@ -380,9 +381,9 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
   };
 
   return (
-    <section className="flex flex-col py-2.5 bg-white rounded-3xl max-w-[442px]">
+    <section className="flex flex-col p-5 bg-white rounded-3xl w-full max-w-xl mx-auto">
       <Header title={title} />
-      <div className="flex flex-col items-center w-full px-6 mt-3">
+      <div className="flex flex-col items-center w-full">
         <Avatar
           src={imageSrc}
           alt={imgAlt}
@@ -400,21 +401,23 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           placeholder="Department name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
-          className="self-stretch text-2xl font-extrabold border border-solid rounded-md mt-7 text-neutral-800 border-neutral-300"
+          className="w-full px-4 py-2 mt-6 text-2xl font-extrabold border border-gray-300 rounded-md"
         />
-        <input
-          type="text"
+        <textarea
           placeholder={description}
           value={departmentDescription}
           onChange={(e) => setDepartmentDescription(e.target.value)}
-          className="justify-center items-start px-3.5 pt-2 pb-12 mt-4 max-w-full text-base font-semibold whitespace-nowrap text-neutral-500 w-full rounded-md border border-solid border-neutral-300"
+          className="w-full px-4 py-2 mt-4 text-base font-semibold text-gray-500 border border-gray-300 rounded-md"
         />
         <UserInfo name={userData.name} role={user.role} src={userData.profileImage} />
-        <div className="flex self-end justify-between gap-5 mt-6 text-sm text-center whitespace-nowrap">
-          <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
+        <div className="flex justify-between w-full gap-5 mt-6 text-sm">
+          <button className="font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleSubmit}>
+          <button
+            className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+            onClick={handleSubmit}
+          >
             {createText}
           </button>
         </div>
