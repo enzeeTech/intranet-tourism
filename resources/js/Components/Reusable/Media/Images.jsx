@@ -80,7 +80,10 @@ function Image({ selectedItem }) {
                   src={img.src}
                   alt={img.alt}
                   className="grow shrink-0 w-full h-full cursor-pointer"
-                  onClick={() => setSelectedImage(img)}
+                  onClick={() => {
+                    console.log("Image clicked:", img);
+                    setSelectedImage(img);
+                  }}
                 />
               </figure>
             ))
@@ -95,7 +98,10 @@ function Image({ selectedItem }) {
         <Modal
           imgSrc={selectedImage.src}
           alt={selectedImage.alt}
-          onClose={() => setSelectedImage(null)}
+          onClose={() => {
+            console.log("Modal closed");
+            setSelectedImage(null);
+          }}
         />
       )}
     </section>
