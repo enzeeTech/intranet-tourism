@@ -317,14 +317,13 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                 {renderContentWithTags(post.content, post.mentions)}
               </div>
               <PostAttachments attachments={post.attachments} />
-              {/* <hr className="my-6 border-1 border-gray-200"/> */}
+              <hr className="my-6 border-1 border-gray-200"/>
             </div>
           </div>
   
           {/* Comment Section */}
           <div className="pb-4 px-6">
             <div className="space-y-4">
-               
               {comments.map((comment) => {
                 
                 let likesCount = 0;
@@ -335,9 +334,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                 const user = commentedUsers[comment.user_id] || {};
   
                 return (
-
                   <div key={comment.id} className="relative flex items-start">
-                    
                     <img
                       src={
                         user.profileImage 
@@ -399,7 +396,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                     {isCommentPopupOpen === comment.id && (
                 console.log("COMMENT", comment.pivot),
                       <div
-                        className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 mt-6"
+                        className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
                       >
                         <p 
                           className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
@@ -470,7 +467,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
             }}
           >
             <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
-              <h2>Delete Post?</h2>
+              <h2>Delete Comment?</h2>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <button
