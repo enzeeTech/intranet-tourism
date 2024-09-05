@@ -74,7 +74,7 @@ function Filter({ onSelectFilter }) {
       isActive: false,
     },
     {
-      src: "/assets/lock.svg",
+      src: "/assets/ArchiveIcon.svg",
       alt: 'Lock Icon',
       text: 'Archive',
       isActive: false,
@@ -107,7 +107,7 @@ function Filter({ onSelectFilter }) {
   return (
     <div className="flex flex-col justify-center text-sm max-w-[132px] text-neutral-800 relative mr-96 -mb-2 -mt-6">
       <div
-        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg mb-4 w-[160px] cursor-pointer"
+        className="flex gap-5 justify-between px-4 py-3 bg-white rounded-2xl shadow-lg mb-4 h-auto w-[160px] cursor-pointer"
         onClick={toggleDropdown}
       >
         <div className="flex items-center gap-3">
