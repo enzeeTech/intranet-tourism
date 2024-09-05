@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useCsrf } from "@/composables";
 import Cropper from 'react-easy-crop';
 import getCroppedImg from './cropImgCommunity';
+import './css/CreateCommunity.css'; // Import the CSS file where you added the scrollbar styles
 
 function Header({ title }) {
   return (
@@ -261,17 +262,19 @@ export default function CreateCommunity({ id, onCancel, onCreate }) {
   }, [id]);
 
   return (
-    <Card
-      title="Create New Community"
-      imgSrc="/assets/uploadAnImage.svg"
-      imgAlt="Community Header Photo"
-      user={user}
-      type="Type"
-      description="Description"
-      cancelText="Cancel"
-      createText="Create"
-      onCancel={onCancel}
-      onCreate={onCreate}
-    />
+    <div className="scrollable-container">
+      <Card
+        title="Create New Community"
+        imgSrc="/assets/uploadAnImage.svg"
+        imgAlt="Community Header Photo"
+        user={user}
+        type="Type"
+        description="Description"
+        cancelText="Cancel"
+        createText="Create"
+        onCancel={onCancel}
+        onCreate={onCreate}
+      />
+    </div>
   );
 }
