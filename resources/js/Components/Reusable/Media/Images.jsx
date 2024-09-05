@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+// Image component that accepts an onClick handler
 const ImageComponent = ({ src, alt, className, onClick }) => (
   <img
     loading="lazy"
@@ -11,6 +12,7 @@ const ImageComponent = ({ src, alt, className, onClick }) => (
   />
 );
 
+// Modal component that displays an image and closes on clicking outside of the image
 const Modal = ({ imgSrc, alt, onClose }) => {
   return (
     <div
@@ -22,7 +24,7 @@ const Modal = ({ imgSrc, alt, onClose }) => {
           src={imgSrc}
           alt={alt}
           className="max-w-full max-h-full"
-          onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking on the image
+          onClick={(e) => e.stopPropagation()} // Prevent closing the modal when clicking on the image
         />
         <button
           className="absolute top-0 right-0 mt-2 mr-2 text-white text-2xl"
@@ -35,18 +37,22 @@ const Modal = ({ imgSrc, alt, onClose }) => {
   );
 };
 
+// Main Image component that handles image fetching and modal logic
 function Image({ selectedItem }) {
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
+    // Fetch images from the API
     fetch("/api/crud/resources")
       .then((response) => response.json())
       .then((data) => {
         const imagePaths = data.data.data
           .filter((item) => {
-            const fileExtension = item.path.split('.').pop().toLowerCase();
-            return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExtension);
+            const fileExtension = item.path.split(".").pop().toLowerCase();
+            return ["jpg", "jpeg", "png", "gif", "bmp", "webp"].includes(
+              fileExtension
+            );
           })
           .map((item) => ({
             src: `/storage/${item.path}`,
@@ -58,6 +64,7 @@ function Image({ selectedItem }) {
       .catch((error) => console.error("Error fetching images:", error));
   }, []);
 
+  // Filter images based on the selected item (category)
   const filteredImages =
     selectedItem === "All"
       ? images
@@ -81,8 +88,8 @@ function Image({ selectedItem }) {
                   alt={img.alt}
                   className="grow shrink-0 w-full h-full cursor-pointer"
                   onClick={() => {
-                    console.log("Image clicked:", img);
-                    setSelectedImage(img);
+                    console.log("Image clicked:", img); // Verify click event
+                    setSelectedImage(img); // Set selected image for modal
                   }}
                 />
               </figure>
@@ -98,10 +105,7 @@ function Image({ selectedItem }) {
         <Modal
           imgSrc={selectedImage.src}
           alt={selectedImage.alt}
-          onClose={() => {
-            console.log("Modal closed");
-            setSelectedImage(null);
-          }}
+          onClose={() => setSelectedImage(null)} // Close modal on outside click
         />
       )}
     </section>
