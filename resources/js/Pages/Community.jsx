@@ -74,24 +74,33 @@ const Community = () => {
 
   const handleDelete = async (departmentId) => {
     try {
-      const url = `http://localhost:8000/api/communities/communities/${departmentId}`;
-      const options = { method: 'DELETE', headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken, } };
-
+      const url = `/api/communities/communities/${departmentId}`;
+      const options = {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken, // Ensure this token is being sent correctly
+        },
+      };
+  
       const response = await fetch(url, options);
+  
       if (!response.ok) {
-        throw new Error('Failed to delete the department');
+        throw new Error(`Failed to delete the department: ${response.statusText}`);
       }
-
+  
       // Update the departments list after successful deletion
       setDepartmentsList((prevList) =>
         prevList.filter((department) => department.id !== departmentId)
       );
-
+  
       console.log(`Department with ID ${departmentId} deleted successfully.`);
     } catch (error) {
-      console.error('Error deleting department:', error);
+      console.error('Error deleting department:', error.message);
+      // Optional: Show an error message to the user
     }
   };
+  
 
   const handleFilterChange = (selectedFilter) => {
     setFilter(selectedFilter);
