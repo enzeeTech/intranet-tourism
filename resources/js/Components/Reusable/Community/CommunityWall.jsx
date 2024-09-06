@@ -155,7 +155,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
     let allResults = [];
 
     try {
-      const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+      const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -321,6 +321,36 @@ function Navigation({ userId, communityID, departmentName, type }) {
     }
   };
 
+  const getImageSource = (imageUrl) => {
+    console.log('imageURL', imageUrl);
+    if (imageUrl === defaultImage) {
+        return defaultImage;
+    }
+    if (imageUrl.startsWith('staff_image/')) {
+        return `/storage/${imageUrl}`;
+    } else {
+        return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+        ? imageUrl 
+        : `/avatar/${imageUrl}`;
+    }
+};
+
+  const renderTitles = (employmentPosts) => {
+    if (!employmentPosts || employmentPosts.length === 0) {
+        return <span className="font-light text-gray-600">No title available</span>;
+    }
+
+    const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
+
+    if (uniqueTitles.length === 0) {
+        return <span className="font-light text-gray-600">No title available</span>;
+    }
+
+    return uniqueTitles.map((title, index) => (
+        <div key={index} className="font-light text-gray-600">{title}</div>
+    ));
+};
+
   return (
     <div className="flex flex-col">
       <nav className="flex items-start w-full gap-5 py-6 text-sm font-semibold text-center bg-white shadow-custom px-9 rounded-b-2xl text-stone-300 max-md:flex-wrap max-md:max-w-full">
@@ -463,10 +493,10 @@ function Navigation({ userId, communityID, departmentName, type }) {
                       className="flex items-center p-2 cursor-pointer"
                       onClick={() => handleSelectPerson(person)}
                     >
-                      <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="object-cover w-10 h-10 mr-4 rounded-full" />
+                      <img src={getImageSource(person.profile?.staff_image || defaultImage)} alt={person.name} className="object-cover w-10 h-10 mr-4 rounded-full" />
                       <div>
                         <div className="text-lg font-bold">{person.name}</div>
-                        <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
+                        <div className="font-light text-gray-600">{renderTitles(person.employment_posts)}</div>
                       </div>
                     </div>
                   ))
