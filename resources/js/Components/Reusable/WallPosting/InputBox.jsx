@@ -144,6 +144,13 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                 formData.append("accessibilities[0][accessable_type]", filterType);
                 formData.append("accessibilities[0][accessable_id]", filterId);
             }
+
+            // Adding community handling
+            if (includeAccessibilities) {
+                formData.append("type", "community");
+                formData.append("accessibilities[0][accessable_type]", filterType);
+                formData.append("accessibilities[0][accessable_id]", filterId);
+        }
     
             fetch(endpoint, {
                 method: "POST",

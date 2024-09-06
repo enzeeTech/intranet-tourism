@@ -126,56 +126,78 @@ function OutputData({ polls, filterType, filterId, userId, loggedInUserId, postT
     }, []);
 
 
-async function fetchData() {
-  try {
-    let allPosts = [];
-    let currentPage = 1;
-    let lastPage = 1;
-
-    // Fetch posts data from all pages
-    do {
-      const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}&with[]=comments`, {
-        method: "GET",
-      });
-      if (!postsResponse.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const postsData = await postsResponse.json();
-
-      // Add the data from the current page to allPosts
-      allPosts = allPosts.concat(postsData.data.data.map((post) => {
-        post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
-        return post;
-      }));
-
-      // Update pagination info
-      currentPage++;
-      lastPage = postsData.data.last_page;
-    } while (currentPage <= lastPage);
-
-    const postsWithUserProfiles = await Promise.all(allPosts.map(async (post) => {
-      const userProfileResponse = await fetch(`/api/users/users/${post.user_id}?with[]=profile`, {
-        method: "GET",
-      });
-      const userProfileData = await userProfileResponse.json();
-      post.userProfile = userProfileData.data;
-
-      if (Array.isArray(post.accessibilities) && post.accessibilities.length > 0) {
-        const departmentNames = await Promise.all(post.accessibilities.map(async (accessibility) => {
-          if (accessibility.accessable_type === accessibility.accessable_type) {
-            const departmentResponse = await fetch(`/api/department/departments/${accessibility.accessable_id}`);
-            const departmentData = await departmentResponse.json();
-            return departmentData.data.name;
+    async function fetchData() {
+      try {
+        let allPosts = [];
+        let currentPage = 1;
+        let lastPage = 1;
+    
+        // Fetch posts data from all pages
+        do {
+          const postsResponse = await fetch(`/api/posts/posts?with[]=user&with[]=attachments&with[]=accessibilities&page=${currentPage}&with[]=comments`, {
+            method: "GET",
+          });
+          if (!postsResponse.ok) {
+            throw new Error("Network response was not ok");
           }
-          return null;
+          const postsData = await postsResponse.json();
+    
+          // Add the data from the current page to allPosts
+          allPosts = allPosts.concat(postsData.data.data.map((post) => {
+            post.attachments = Array.isArray(post.attachments) ? post.attachments : [post.attachments];
+            return post;
+          }));
+    
+          // Update pagination info
+          currentPage++;
+          lastPage = postsData.data.last_page;
+        } while (currentPage <= lastPage);
+    
+        // Process posts and fetch the related user profiles and accessibilities
+        const postsWithUserProfiles = await Promise.all(allPosts.map(async (post) => {
+          // Fetch user profile
+          const userProfileResponse = await fetch(`/api/users/users/${post.user_id}?with[]=profile`, {
+            method: "GET",
+          });
+          const userProfileData = await userProfileResponse.json();
+          post.userProfile = userProfileData.data;
+    
+          // Fetch department and community names
+          if (Array.isArray(post.accessibilities) && post.accessibilities.length > 0) {
+            const departmentNames = await Promise.all(post.accessibilities.map(async (accessibility) => {
+              // Using your condition here
+              if (accessibility.accessable_type === accessibility.accessable_type) {
+                if (accessibility.accessable_type === 'department') {
+                  const departmentResponse = await fetch(`/api/department/departments/${accessibility.accessable_id}`);
+                  const departmentData = await departmentResponse.json();
+                  return departmentData.data.name;
+                }
+              }
+              return null;
+            }));
+    
+            const communityNames = await Promise.all(post.accessibilities.map(async (accessibility) => {
+              // Using your condition here
+              if (accessibility.accessable_type === accessibility.accessable_type) {
+                if (accessibility.accessable_type === 'community') {
+                  const communityResponse = await fetch(`/api/communities/communities/${accessibility.accessable_id}`);
+                  const communityData = await communityResponse.json();
+                  return communityData.data.name;
+                }
+              }
+              return null;
+            }));
+    
+            // Store the names in the post object separately
+            post.departmentNames = departmentNames.filter(name => name !== null).join(', ');
+            post.communityNames = communityNames.filter(name => name !== null).join(', ');
+          } else {
+            post.departmentNames = null;
+            post.communityNames = null;
+          }
+    
+          return post;
         }));
-        post.departmentNames = departmentNames.filter(name => name !== null).join(', ');
-      } else {
-        post.departmentNames = null;
-      }
-
-      return post;
-    }));
 
     // Separate announcements and other posts
     const announcements = postsWithUserProfiles.filter(post => post.type === 'announcement');
@@ -799,14 +821,23 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                     <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full ">
                       <div className="flex gap-1 mt-2"></div>
                       <div className="flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
-                        <span className="text-sm font-semibold text-neutral-800 bg-gray-200 rounded-md px-2 py-1 -mt-5">
-                          {post.accessibilities?.map((accessibility, index) => (
-                            <span key={index}>
-                              {accessibility.accessable_type}{": "}
-                            </span>
-                          ))}
-                          {post.departmentNames ? post.departmentNames : post.type}
-                        </span>
+                      <div className="flex w-full items-center justify-between h-auto mb-4">
+                        {(post.type !== 'announcement' && post.type !== 'post') && (
+                          <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
+                            {/* Dynamically displaying department or community names */}
+                            {post.accessibilities?.map((accessibility, index) => (
+                              <span key={index}>
+                                {accessibility.accessable_type}:&nbsp;
+                                {accessibility.accessable_type === 'department' && post.departmentNames
+                                  ? post.departmentNames
+                                  : accessibility.accessable_type === 'community' && post.communityNames
+                                  ? post.communityNames
+                                  : 'Unknown Type'}
+                              </span>
+                            ))}
+                          </span>
+                        )}
+                      </div>
                         <div className="flex gap-5 justify-between w-full max-md:flex-wrap max-md:max-w-full mt-4">
                           <div className="flex gap-1.5 -mt-1">
                             <img 
@@ -941,7 +972,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
-                            {post.departmentNames ? post.departmentNames : post.type}
+                            {post.departmentNames ? post.departmentNames : post.communityNames ? post.communityNames : post.type}
                         </span>
                       )}
                       </div>  
