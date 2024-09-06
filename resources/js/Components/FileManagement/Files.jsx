@@ -22,6 +22,8 @@ const FileTable = ({ searchTerm }) => {
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingName, setEditingName] = useState("");
     const [selectedFile, setSelectedFile] = useState(null); // For managing admin
+    const [isSaving, setIsSaving] = useState(false); // State to track saving status
+    const [showPopup, setShowPopup] = useState(false); // State to track popup visibility
     const csrfToken = useCsrf();
     const inputRef = useRef(null);
 
@@ -174,45 +176,25 @@ const FileTable = ({ searchTerm }) => {
     //     }
     // };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-          handleFileUpload(editingIndex, editingName);
-        }
-      };
 
-    const handleRename = async (index, newName) => {
+      const handleRename = async (index, newName) => {
+        setIsSaving(true);
         const fileToRename = files[index];
         if (!fileToRename || !fileToRename.id) {
             console.error("File ID is missing.");
             return;
         }
-    
-        // Ensure metadata is an object
-        let metadata = fileToRename.metadata;
-        if (typeof metadata === "string") {
-            try {
-                metadata = JSON.parse(metadata);
-            } catch (error) {
-                console.error("Failed to parse metadata:", error);
-                return;
-            }
-        }
-    
-        // Update the metadata object with the new name
+
+        
         const updatedMetadata = {
-            ...metadata,
+            ...fileToRename.metadata,
             original_name: newName,
         };
-    
-        // Convert updatedMetadata to a JSON string
-        const metadataString = JSON.stringify(updatedMetadata);
-    
-        // Create payload with the metadata as a JSON string
+
         const payload = {
-            metadata: metadataString,
+            metadata: JSON.stringify(updatedMetadata),
         };
-    
-        // Prepare API request
+
         const url = `/api/resources/resources/${fileToRename.id}`;
         const options = {
             method: "PUT",
@@ -223,21 +205,44 @@ const FileTable = ({ searchTerm }) => {
             },
             body: JSON.stringify(payload),
         };
-    
+
         try {
+            setIsSaving(true);  // Start the saving state
+
             const response = await fetch(url, options);
             if (!response.ok) {
                 const responseBody = await response.text();
                 console.error("Failed to rename file:", responseBody);
                 throw new Error(`Failed to rename file: ${response.statusText}`);
             }
-    
+
+            // Fetch the updated list of files after successful rename
+            await fetchFiles();
             console.log("File renamed successfully.");
-            await fetchFiles(); // Refresh file list after renaming
         } catch (error) {
             console.error("Error renaming file:", error);
         } finally {
+            setIsSaving(false); // Stop the saving state once the process is complete
             setEditingIndex(null); // Clear editing state
+        }
+    };
+
+    const SavingPopup = ({ isSaving }) => {
+        return isSaving ? (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                    <div className="flex items-center">
+                        <div className="loader spinner-border mr-4" role="status"></div>
+                        <span>Saving...</span>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Enter") {
+            handleRename(index, editingName);
         }
     };
     
@@ -247,6 +252,11 @@ const FileTable = ({ searchTerm }) => {
         const options = {
             method: "DELETE",
             headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
+        };
+
+        const startEditing = (index, currentName) => {
+            setEditingIndex(index);
+            setEditingName(currentName);
         };
 
         try {
@@ -270,6 +280,7 @@ const FileTable = ({ searchTerm }) => {
 
     return (
         <div className="w-full overflow-visible">
+            <SavingPopup isSaving={isSaving} />
             <div className="flow-root mt-8">
                 <div className="overflow-visible">
                     <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
@@ -290,10 +301,9 @@ const FileTable = ({ searchTerm }) => {
                             </tr>
                         </thead>
                         <tbody className="text-center divide-y-reverse rounded-full divide-neutral-300 mt-1">
-                            {currentItems.map((item, index) => {
+                            {files.map((item, index) => {
                                 const metadata = item.metadata || {};
-                                const isEditing =
-                                    editingIndex === indexOfFirstItem + index;
+                                const isEditing = editingIndex === index;
 
                                     console.log("METADATA", metadata);
 
@@ -309,38 +319,22 @@ const FileTable = ({ searchTerm }) => {
                                     type="text"
                                     value={editingName}
                                     onChange={(e) => setEditingName(e.target.value)}
-                                    onClick={() => setEditingName(editingName)}
-                                    onBlur={() => saveEditing(indexOfFirstItem + index)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") {
-                                            e.preventDefault(); // Prevent default behavior
-                                            saveEditing(indexOfFirstItem + index);
-                                        }
-                                    }}
+                                    onBlur={() => handleRename(index, editingName)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
                                     className="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full rounded-full p-2 border-2 border-stone-300 max-md:ml-4 overflow-hidden text-ellipsis"
                                 />
-                                                    <button
-                                                        onClick={() =>
-                                                            saveEditing(
-                                                                indexOfFirstItem +
-                                                                    index
-                                                            )
-                                                        }
-                                                        className="ml-2 text-sm text-blue-500"
-                                                    >
-                                                        Save
-                                                    </button>
+                                                    
+                                                        <button
+                                                            onClick={() => handleRename(index, editingName)}
+                                                            className="ml-2 text-blue-500"
+                                                        >
+                                                            Save
+                                                        </button>
                                                 </div>
                                             ) : (
                                                 <div
                                                     className="text-sm font-bold mt-1 block w-full rounded-md py-2 border-2 border-transparent text-neutral-800 text-opacity-80 overflow-hidden text-ellipsis"
-                                                    onDoubleClick={() =>
-                                                        startEditing(
-                                                            indexOfFirstItem +
-                                                                index,
-                                                            metadata.original_name
-                                                        )
-                                                    }
+                                                    onDoubleClick={() => startEditing(index, metadata.original_name)}
                                                 >
                                                     {metadata.original_name ||
                                                         "Unknown"}
