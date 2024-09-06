@@ -120,6 +120,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); 
   const csrfToken = useCsrf();
   const { props } = usePage();
   const { id } = props;
@@ -264,11 +265,34 @@ function Navigation({ userId, communityID, departmentName, type }) {
     setIsAddMemberPopupOpen(true);
   };
 
-  const handleSelectPerson = (person) => {
-    if (selectedUsers.some((user) => user.id === person.id)) {
-      setSelectedUsers(selectedUsers.filter((user) => user.id !== person.id));
-    } else {
-      setSelectedUsers([...selectedUsers, person]);
+  const handleSelectPerson = async (person) => {
+    try {
+      // Fetch the current community members
+      const response = await fetch(`/api/communities/community_members?community_id=${communityID}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch community members.');
+      }
+  
+      const members = await response.json();
+      
+      // Check if the selected person is already in the community
+      const isAlreadyMember = members.some((member) => String(member.user_id) === String(person.id));
+  
+      if (isAlreadyMember) {
+        setErrorMessage(`${person.name} is already a member of this community.`);
+      } else if (selectedUsers.some((user) => user.id === person.id)) {
+        setSelectedUsers(selectedUsers.filter((user) => user.id !== person.id)); 
+      } else {
+        setSelectedUsers([...selectedUsers, person]); 
+      }
+    } catch (error) {
+      console.error('Error checking membership:', error);
     }
   };
 
@@ -424,7 +448,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
                 type="text"
                 placeholder="Search name"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {setSearchTerm(e.target.value); setErrorMessage('');}}
                 className="w-full px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-full"
               />
               <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
@@ -447,8 +471,12 @@ function Navigation({ userId, communityID, departmentName, type }) {
                     </div>
                   ))
                 )}
-                {error && <div className="mt-2 text-red-500">{error}</div>}
               </div>
+
+              {errorMessage && (
+                <div className="mt-2 text-red-500">{errorMessage}</div>
+              )}
+              
               <div className="flex justify-end mt-4">
                 <button
                   className="px-4 py-2 mr-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -458,7 +486,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
                 </button>
                 <button
                   className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
-                  onClick={() => setIsAddMemberPopupOpen(false)}
+                  onClick={() => {setIsAddMemberPopupOpen(false); setSelectedUsers([]); setSearchResults([]); setSearchTerm(''); setErrorMessage('');}}
                 >
                   Cancel
                 </button>
