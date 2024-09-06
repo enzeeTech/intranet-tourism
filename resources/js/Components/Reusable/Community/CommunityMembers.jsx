@@ -684,7 +684,7 @@ function CmMembers({communityID, loggedInID}) {
               employment_post_id={admin.employment_post_id}
               imageUrl={admin.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
               name={admin.name}
-              titles={admin.business_post_titles}
+              titles={admin.business_post_titles? admin.business_post_titles : 'No Title Avialable'}
               isActive={admin.is_active}
               activePopupId={activePopupId}
               setActivePopupId={setActivePopupId}
@@ -710,7 +710,7 @@ function CmMembers({communityID, loggedInID}) {
                   employment_post_id={member.employment_post_id}
                   imageUrl={member.staff_image || '/assets/dummyStaffPlaceHolder.jpg'}
                   name={member.name}
-                  titles={member.business_post_titles}
+                  titles={member.business_post_titles ? member.business_post_titles : 'No Title Avialable'}
                   isActive={member.is_active}
                   activePopupId={activePopupId}
                   setActivePopupId={setActivePopupId}
