@@ -166,7 +166,7 @@
 
   .send-button {
     /* position: absolute; */
-    right: 0;
+    /* right: 0; */
     flex: auto;
     /* bottom: 50px; */
   }
@@ -188,10 +188,19 @@
 
   .emoji-picker-container {
     position: absolute;
-    z-index: 10;
-    margin-left: -40px;
-    bottom: 40px;
-  }
+    z-index: 1000; /* Ensure it's above other elements */
+    margin-left: 0px; /* Adjust the position based on your UI */
+    bottom: 100%; /* Position it above the input field */
+    left: 35%; /* Align it horizontally with the input */
+    transform: translateX(-50%); /* Center it horizontally */
+    background-color: white; /* Ensure the background is clear */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
+    border-radius: 10px; /* Smooth edges */
+    width: auto; /* Ensure the width is auto-adjusting */
+    max-width: 100%; /* Set a maximum width */
+    overflow-y: auto; /* Allow scrolling if the content is too tall */
+    
+}
 
 
 

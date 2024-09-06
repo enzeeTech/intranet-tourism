@@ -122,7 +122,7 @@ const TagInput = ({ tag, setTag, onClose, onSave }) => {
               />
             </div>
           </div>
-          <div className="flex flex-col px-5 mt-1.5">
+          <div className="flex flex-col px-5 mt-0">
             <SearchBar value={searchTerm} onChange={handleSearchChange} placeholder="Search tags"/>
             <div className="mt-2" style={{ minHeight: '20px' }}>
               {showWarning && (
