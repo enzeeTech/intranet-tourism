@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -12,6 +12,7 @@ import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/Wal
 import '../Components/Profile/profile.css';
 import { useCsrf } from '@/composables';
 import { ProfileDepartment } from '@/Components/ProfileTabbar';
+import { OnlineUsersProvider, OnlineUsersContext } from './OnlineUsersContext'; // Import the context
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -27,10 +28,11 @@ function SaveNotification({ title, content, onClose }) {
     );
 }
 
-export default function Profile() {
+function ProfileContent() {
     const csrfToken = useCsrf();
     const { props } = usePage();
     const { id, authToken } = props;
+    const { onlineUsers } = useContext(OnlineUsersContext); // Access online users from context
     const [polls, setPolls] = useState([]);
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
@@ -60,10 +62,12 @@ export default function Profile() {
         profileImage: "",
         name: "",
         username: "",
-        status: "Online",
+        status: onlineUsers.some(onlineUser => onlineUser.id === id) ? "Online" : "Offline", // Set initial status based on context
         icon1: "/assets/EditButton.svg",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
     });
+  const [filterType, setFilterType] = useState(null);
+
 
     useEffect(() => {
         fetch(`/api/users/users/${id}?with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
@@ -108,6 +112,14 @@ export default function Profile() {
             console.error("Error fetching user data:", error);
         });
     }, [id]);
+
+    useEffect(() => {
+        // Update status dynamically when onlineUsers change
+        setProfileData(prevData => ({
+            ...prevData,
+            status: onlineUsers.some(onlineUser => onlineUser.id === id) ? "Online" : "Offline"
+        }));
+    }, [onlineUsers, id]);
 
     const openSaveNotification = () => {
         setIsSaveNotificationOpen(true);
@@ -161,7 +173,14 @@ export default function Profile() {
 
             if (newFormData.email) FfData.append('email', newFormData.email);
             if (newFormData.dateofbirth) FfData.append('dob', newFormData.dateofbirth);
-            if (newFormData.whatsapp) FfData.append('phone_no', newFormData.whatsapp);
+            // if (newFormData.whatsapp) FfData.append('phone_no', newFormData.whatsapp);
+
+            if (newFormData.whatsapp) {
+                FfData.append('phone_no', newFormData.whatsapp);
+            } else {
+                FfData.append('phone_no', 'null');
+            }
+
             if (newFormData.name) FfData.append('name', newFormData.name);
 
             if (newFormData.photo instanceof File) {
@@ -431,32 +450,45 @@ export default function Profile() {
     //         )}
     //     </Example>
     // );
-    // console.log("profileData", profileData.id);
+
+    // console.log("EMPLOYMENTPOST", profileData.employment_posts);
+    // console.log("TITLE", profileData.employment_posts?.business_post.title);
+
+
+    const employmentPostTitle = profileData.employment_posts?.length > 0 
+  ? profileData.employment_posts[0].business_post.title 
+  : '';
+
+  const handleFilterChange = (filter) => {
+    setFilterType(filter);
+  };
     
     return (
         <Example>
             <main className="xl:pl-96 w-full">
-                <div className="mr-10 px-1 py-10 sm:px-6 lg:px-8 sm:py-10 md:py-6 lg:py-6 ">
-                    <div>
-                        <div className="profile-header ml-9 h-[485px] max-md:h-[385px] shadow-custom rounded-lg">
-                            <ProfileHeader
-                                backgroundImage={profileData.backgroundImage}
-                                profileImage={profileData.profileImage}
-                                name={profileData.name}
-                                username={profileData.username}
-                                status={profileData.status}
-                                onEditBanner={() => setIsPopupOpen(true)}
-                                rounded={true}
-                                userId={id}
-                                profileId={profileData.profile?.id}
-                            />
-                            <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                <div className="mr-10 px-1 sm:px-6 lg:px-8 sm:py-10 md:py-6 lg:py-6 ">
+                        <div className="profile-header ml-9 h-[400px] max-md:h-[385px] bg-white shadow-custom rounded-b-lg">
+                            <div className="flex-col w-full flex bg-white h-auto rounded-b-lg">
+                                <ProfileHeader
+                                    backgroundImage={profileData.backgroundImage}
+                                    profileImage={profileData.profileImage}
+                                    name={profileData.name}
+                                    username={profileData.username}
+                                    status={profileData.status}
+                                    onEditBanner={() => setIsPopupOpen(true)}
+                                    rounded={true}
+                                    userId={id}
+                                    profileId={profileData.profile?.id}
+                                />
+                                <ProfileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                            </div>
                             {activeTab === "activities" && (
                                 <div className="py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
                                     <ShareYourThoughts userId={id} postType={'post'} onCreatePoll={handleCreatePoll} />
-                                    <Filter className="mr-10" />
+                                    {/* <Filter className="mr-10" /> */}
+                                    <Filter className="mr-10" onFilterChange={handleFilterChange} />
                                     <div className="mb-20"></div>
-                                    <OutputData polls={polls} showUserPosts={true} userId={id} />
+                                    <OutputData polls={polls} showUserPosts={true} userId={id} postType={filterType} />
                                 </div>
                             )}
                             {activeTab === "bio" && (
@@ -469,6 +501,7 @@ export default function Profile() {
                                                 icon2={profileData.icon2}
                                                 user_id={profileData.id}
                                                 user_name={profileData.name}
+                                                user_title={employmentPostTitle}
                                                 onEdit={() => handleEditBio()}
                                                 isFirstIcon
                                             />
@@ -545,7 +578,6 @@ export default function Profile() {
                                 </div>
                             )}
                         </div>
-                    </div>
                 </div>
             </main>
             <aside className="fixed bottom-0 left-20 top-16 hidden w-1/4 max-w-sm overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 xl:block">
@@ -567,7 +599,7 @@ export default function Profile() {
                 <hr className="file-directory-underline" />
                 <div>
                     <FeaturedEvents />
-                    <WhosOnline />
+                    {/* <WhosOnline /> */}
                 </div>
             </aside>
             {isSaveNotificationOpen && (
@@ -587,5 +619,13 @@ export default function Profile() {
                 />
             )}
         </Example>
+    );
+}
+
+export default function Profile() {
+    return (
+        <OnlineUsersProvider>
+            <ProfileContent />
+        </OnlineUsersProvider>
     );
 }

@@ -4,14 +4,63 @@ namespace Modules\Communities\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Communities\Models\CommunityMember;
+use Illuminate\Http\Request;
 
 class CommunityMemberController extends Controller
 {
-    public function index()
+    // public function index(Request $request)
+    // {
+    //     if ($request->has('user_id')) {
+    //         $userId = $request->query('user_id');
+
+    //         $communityMembers = CommunityMember::where('user_id', $userId)->get();
+
+    //         return response()->json($communityMembers);
+    //     }
+
+    //     $communityMembers = CommunityMember::all();
+    //     return response()->json($communityMembers);
+    // }
+
+    public function index(Request $request)
     {
-        return response()->json([
-            'data' => CommunityMember::queryable()->paginate(),
-        ]);
+
+        $query = CommunityMember::query();
+
+
+        if ($request->has('community_id')) {
+            $communityId = $request->query('community_id');
+            $query->where('community_members.community_id', $communityId);
+        }
+
+
+        if ($request->has('user_id')) {
+            $userId = $request->query('user_id');
+            $query->where('community_members.user_id', $userId);
+        }
+
+
+        if ($request->has('community_id')) {
+            $communityMembers = $query
+                ->join('profiles', 'community_members.user_id', '=', 'profiles.user_id')
+                ->join('users', 'community_members.user_id', '=', 'users.id')
+                ->leftJoin('employment_posts', 'community_members.user_id', '=', 'employment_posts.user_id')
+                ->leftJoin('business_posts', 'employment_posts.business_post_id', '=', 'business_posts.id')
+                ->select(
+                    'community_members.*',
+                    'profiles.bio as name',
+                    'profiles.staff_image',
+                    'users.is_active',
+                    'business_posts.title as business_post_title'
+                )
+                ->get();
+
+            return response()->json($communityMembers);
+        } else {
+            $communityMembers = $query->get();
+
+            return response()->json($communityMembers);
+        }
     }
 
     public function show($id)

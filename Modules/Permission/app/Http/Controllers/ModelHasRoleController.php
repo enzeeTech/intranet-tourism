@@ -11,19 +11,27 @@ class ModelHasRoleController extends Controller
 {
     public function index()
     {
-        $filters = request()->query('filter');
+        // Retrieve filter parameters from the request query
+        $roleFilters = request()->query('filter');
+        $modelId = request()->query('model_id');
 
         $query = ModelHasRole::query();
 
-        // Apply filters if they exist
-        if ($filters) {
-            $roleIds = array_map('intval', explode(',', $filters[0]));
-
+        // Apply role_id filters if they exist
+        if ($roleFilters) {
+            $roleIds = array_map('intval', explode(',', $roleFilters[0]));
             $query->whereIn('role_id', $roleIds);
         }
 
+        // Apply model_id filter if it exists
+        if ($modelId) {
+            $query->where('model_id', intval($modelId));
+        }
+
+        // Fetch the filtered results with pagination
         $roles = $query->paginate();
 
+        // Return the results as a JSON response
         return response()->json([
             'data' => $roles,
         ]);

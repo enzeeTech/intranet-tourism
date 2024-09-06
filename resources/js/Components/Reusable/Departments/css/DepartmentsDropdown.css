@@ -9,7 +9,7 @@
   .dropdown-header {
     display: flex;
     align-items: center;
-    background: #FFFFFF;
+    background: #FF0000;
     justify-content: space-between;
     /* border-radius: 16px; */
     box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.3);

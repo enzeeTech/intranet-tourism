@@ -1,79 +1,161 @@
 .rounded-image {
-    border-radius: 50%; /* Makes the image round */
-    width: 50px; /* Adjust size as needed */
-    height: 50px; /* Adjust size as needed */
-    object-fit: cover; /* Ensures the image covers the container without stretching */
-  }
+  border-radius: 50%; /* Makes the image round */
+  width: 50px; /* Adjust size as needed */
+  height: 50px; /* Adjust size as needed */
+  object-fit: cover; /* Ensures the image covers the container without stretching */
+}
 
-  .tagged-text {
-    color: blue;
-    font-weight: bold;
+.output-box-depart {
+  margin-top: 10px; /* mt-10 */
+  padding-top: 12px; /* py-2 */
+  padding-right: 6px; /* px-6 */
+  padding-bottom: 60px; /* pb-16 */
+  padding-left: 6px; /* px-6 */
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 1.25rem; /* rounded-2xl */
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+  width: 610px;
+  background-color: #FF5437;
+}
+
+@media (min-width: 1024px) { /* lg */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) { /* md */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+@media (max-width: 767px) { /* sm */
+  .output-box-depart {
+    width: 610px;
+  }
+}
+
+
+@media (min-width: 1024px) { /* lg */
+  .default-output-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) { /* md */
+  .default-output-box {
+    width: 610px;
+  }
+}
+
+@media (max-width: 767px) { /* sm */
+  .default-output-box {
+    width: 610px;
+  }
+}
+
+.tagged-text {
+  color: #4780FF;
+  font-weight: bold;
 }
 
 .blue-link {
-  color: blue;
-  text-decoration: underline;
+color: blue;
+text-decoration: underline;
 }
 
 
-  
-  .attachment-grid {
-    display: grid;
-    gap: 4px;
-  }
-  
-  .attachment-grid.one {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  
-  .attachment-grid.two {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .attachment-grid.three {
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
-  }
-  
-  .attachment-grid.three .attachment:first-child {
-    grid-row: span 2; /* Ensure the first (tallest) image spans two rows */
-  }
-  
-  .attachment-grid.four {
-    grid-template-columns: repeat(2, 1fr);
-    gap: -9px;
-    scrollbar-width: none; /* For Firefox */
-    padding-bottom: 1px; /* py-2 */
-    width: auto;            /* w-auto */
-    display: flex;          /* flex */
-    flex-direction: column; /* flex-col */
-  }
-  
-  .attachment-grid.more-than-four {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .attachment {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .attachment img,
-  .attachment video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures the images fill the grid area without gaps */
-  }
-  
-  /* Add styles for tall images */
-  .attachment.tall {
-    grid-column: span 1; /* Adjust the width of tall images */
-    grid-row: span 2; /* You can adjust the row span if necessary */
-  }
-  
-  /* Example adjustment for the grid */
-  .attachment-grid.three .attachment.tall:first-child {
-    grid-column: span 1; /* Example: tall images in the first position span only one column */
-    grid-row: span 2; /* Example: span two rows if needed */
-  }
-  
+
+.attachment-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.attachment-grid.one {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.attachment-grid.two {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.attachment-grid.three {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.attachment-grid.three .attachment:first-child {
+  grid-row: span 2; /* Ensure the first (tallest) image spans two rows */
+}
+
+.attachment-grid.four {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.attachment-grid.more-than-four {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.attachment {
+  position: relative;
+  overflow: hidden;
+}
+
+.attachment img,
+.attachment video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the images fill the grid area without gaps */
+}
+
+/* Add styles for tall images */
+.attachment.tall {
+  grid-column: span 1; /* Adjust the width of tall images */
+  grid-row: span 2; /* You can adjust the row span if necessary */
+}
+
+/* Example adjustment for the grid */
+.attachment-grid.three .attachment.tall:first-child {
+  grid-column: span 1; /* Example: tall images in the first position span only one column */
+  grid-row: span 2; /* Example: span two rows if needed */
+}
+
+
+.profile-popup {
+  color: rgb(0, 0, 0);
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.profile-popup img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-popup h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.profile-popup p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.profile-link {
+  color: #4780FF !important; /* Force the color to blue */
+  text-decoration: none; /* Optional: Remove the underline from the link */
+}
+
+.profile-link:hover {
+  text-decoration: underline; /* Optional: Add an underline on hover for better visibility */
+}

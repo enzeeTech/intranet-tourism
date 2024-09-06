@@ -158,7 +158,7 @@ constructor(props) {
                             </div>
                             <div className="flex flex-col w-48 h-50 ml-2">
                                 <div className="block px-2 py-1 text-sm notification-message">
-                                    <span className="font-bold">{notification.users}</span> <nbsp></nbsp>
+                                    <span className="font-bold">{notification.users}</span>
                                     <span>{notification.message}</span>
                                 </div>
                                 <div className="block px-2 py-1 text-sm font-medium text-neutral-800 text-opacity-50">{notification.timeAgo}</div>

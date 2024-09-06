@@ -4,8 +4,8 @@ import { useCsrf } from '@/composables';
 import '../Birthdayfunction/birthday.css';
 import { People } from '../WallPosting/InputPeople';
 
-const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
-  const [backgroundImage, setBackgroundImage] = useState('https://cdn.builder.io/api/v1/image/assets/TEMP/a5f2b039b27282b6d5794f5fa883fc7c70e5fd79a56f9976119dd49c2054bc8e?apiKey=d66b6c2c936f4300b407b67b0a5e8c4d&');
+const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
+  const [backgroundImage, setBackgroundImage] = useState('/assets/abstract-gray-oil-paint-textured-background.jpg');
   const [text, setText] = useState('Make a wish...');
   const csrfToken = useCsrf();
   const [inputText, setInputText] = useState(text);
@@ -34,7 +34,8 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
   let source = null;
 
   if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
-    source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.name}`;
+    
+    source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.bio}`;
   } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
     source = `/storage/${loggedInUser.profile?.image}`;
   } else {
@@ -53,10 +54,14 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
     formData.append("content", inputValue);
 
     // Append tagged people
-    taggedPeople.forEach(name => {
-      const formattedMentions = `["${name}"]`;
-      formData.append("mentions", formattedMentions); // Assuming your backend accepts an array of tagged user IDs
-    });
+    // const mentions = taggedPeople.map(name => ({
+    //   id: selectedID,  // Assuming `selectedID` is related to the tagged person
+    //   name: name
+    // }));
+
+    const mentions = taggedPeople.map(name => `{ "id": "${selectedID}", "name": "${name}" }`).join(", ");
+    const formattedMentions = `[${mentions}]`;
+    formData.append("mentions", formattedMentions);
 
     // Append the selected background image as an attachment if it's a supported format
     fetch(backgroundImage)
@@ -99,6 +104,8 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
         });
       });
   };
+
+  
 
   return (
     <section className="flex flex-col bg-white rounded-xl w-full max-w-xl mx-auto">
@@ -240,14 +247,14 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
               className="w-8 h-8 rounded-full mr-2"
             />
             <p className="my-auto font-semibold text-gray-800">{name}</p>
-            <button
+            {/* <button
               onClick={() => setShowTaggingPopup(true)}
               className="ml-auto text-sm text-blue-600 hover:underline"
             >
               Tag People
-            </button>
+            </button> */}
           </div>
-          {taggedPeople.length > 0 && (
+          {/* {taggedPeople.length > 0 && (
   <div className="flex flex-wrap gap-2 mt-2">
     {taggedPeople.map((id) => (
       <div
@@ -257,12 +264,12 @@ const BirthdayCom = ({ profileImage, name, loggedInUser }) => {
         <span className="text-neutral-800">{name}</span>
       </div>
     ))}
-  </div>
-)}
+  </div> */}
+
 
           <button
             type="submit"
-            className="flex justify-center items-center py-2 my-4 text-sm font-bold text-white bg-blue-500 rounded-xl"
+            className="flex justify-center items-center py-2 my-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
             onClick={handleClickSend}
           >
             Post

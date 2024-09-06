@@ -72,7 +72,11 @@ const Media = () => {
         ))
       ));
     };
-    
+  
+    const handleManageAlbum = () => {
+      // Logic for managing the album goes here
+      window.location.href = route('Media-Album');
+    };
 
   return (
     <Example>
@@ -83,15 +87,32 @@ const Media = () => {
         <div
           style={{ width: '180px' }}
           className="flex justify-between gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl"
-        >
+          >
+            
+
+
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
                     {tagOptions.map((tag, index) => (
                     <option key={index} value={tag}>{tag}</option>
                     ))}
                 </select>
+                
                 </div>
+
+                <div className="ml-auto">
+          {/* Manage Album Button */}
+          <button
+            className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+            onClick={handleManageAlbum}
+          >
+            Manage Album
+          </button>
+        </div>
+
                 </div>
+
+                
                 <div>
                   <section className="flex flex-col px-4 pt-4 py-3 pb-3 max-w-[1500px] max-md:px-5 bg-white rounded-2xl shadow-lg mt-4">
                       <header>

@@ -21,6 +21,7 @@ const Departments = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentDepartmentId, setCurrentDepartmentId] = useState(null);
   const [isCreateDepartmentOpen, setIsCreateDepartmentOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); // State for error modal
   const csrfToken = useCsrf();
 
   const toggleCreateCommunity = () => setIsCreateDepartmentOpen(!isCreateDepartmentOpen);
@@ -65,27 +66,34 @@ const Departments = () => {
 
   const handleDelete = async () => {
     try {
-      // Delete all related employment posts first
-      const responseEmploymentPosts = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
-        method: 'DELETE',
+      // First, check if there are employment posts associated with the department
+      const checkPostsResponse = await fetch(`/api/department/employment_posts/${currentDepartmentId}`, {
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-Token": csrfToken,
+          Accept: 'application/json',
         },
       });
   
-      if (!responseEmploymentPosts.ok) {
-        throw new Error('Error deleting related employment posts');
+      if (!checkPostsResponse.ok) {
+        throw new Error('Error checking employment posts');
       }
   
-      // Then delete the department
+      const employmentPostsData = await checkPostsResponse.json();
+  
+      // Check if there are members in the department
+      if (Array.isArray(employmentPostsData) && employmentPostsData.length > 0) {
+        setIsErrorModalOpen(true); // Trigger error popup
+        setIsDeleteModalOpen(false); // Close delete confirmation modal
+        return;
+      }
+  
+      // Delete the department
       const responseDepartment = await fetch(`/api/department/departments/${currentDepartmentId}`, {
         method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-Token": csrfToken,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken,
         },
       });
   
@@ -100,9 +108,9 @@ const Departments = () => {
       setIsDeleteModalOpen(false);
     } catch (error) {
       console.error('Error deleting department:', error);
+      setIsErrorModalOpen(true); // Trigger the error modal
     }
-  };
-  
+  };  
 
   const handleDeleteClick = (id) => {
     setCurrentDepartmentId(id);
@@ -166,7 +174,6 @@ const Departments = () => {
         <hr className="file-directory-underline" />
         <div>
           <FeaturedEvents />
-          {/* <WhosOnline /> */}
         </div>
       </aside>
       {isDeleteModalOpen && (
@@ -184,6 +191,23 @@ const Departments = () => {
           </div>
         </div>
       )}
+      {isErrorModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative p-8 bg-white shadow-lg rounded-2xl w-96">
+            <h2 className="mb-4 text-xl font-bold text-center text-red-600">Error</h2>
+            <p className="text-center text-gray-700">Members still exist in the department. Please delete all members first.</p>
+            <div className="flex justify-center mt-6">
+              <button
+                className="px-8 py-1 text-white bg-red-500 rounded-full hover:bg-red-700"
+                onClick={() => setIsErrorModalOpen(false)} // Close the modal on click
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isCreateDepartmentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative p-4 bg-white shadow-lg rounded-2xl">
@@ -193,8 +217,10 @@ const Departments = () => {
                   <img src="/assets/cancel.svg" alt="Close icon" className="w-6 h-6" />
                 </button>
               </div>
+              {/* <CreateDepartments Create={handleNewDepartment} userID={id} /> */}
+              <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
+
             </div>
-            <CreateDepartments onCancel={toggleCreateCommunity} onCreate={handleNewDepartment} userID={id} />
           </div>
         </div>
       )}

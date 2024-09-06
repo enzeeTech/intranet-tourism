@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext  } from 'react';
 import { usePage } from '@inertiajs/react';
 import PageTitle from '../Components/Reusable/PageTitle';
 import FeaturedEvents from '../Components/Reusable/FeaturedEventsWidget/FeaturedEvents';
@@ -12,6 +12,7 @@ import { ShareYourThoughts, Filter, OutputData } from '@/Components/Reusable/Wal
 import '../Components/Profile/profile.css';
 import { useCsrf } from '@/composables';
 import { ProfileDepartment } from '@/Components/ProfileTabbar';
+import { OnlineUsersProvider, OnlineUsersContext } from './OnlineUsersContext'; // Import the context
 
 function SaveNotification({ title, content, onClose }) {
     return (
@@ -27,10 +28,11 @@ function SaveNotification({ title, content, onClose }) {
     );
 }
 
-export default function UserDetail() {
+function UserDetailContent() {
     const csrfToken = useCsrf();
     const { props } = usePage();
     const { user, selectedUserId, authToken } = props; // Ensure authToken is passed via Inertia
+    const { onlineUsers } = useContext(OnlineUsersContext); // Access online users from context
     const [polls, setPolls] = useState([]);
     const [activeTab, setActiveTab] = useState("bio");
     const [isSaveNotificationOpen, setIsSaveNotificationOpen] = useState(false);
@@ -54,12 +56,13 @@ export default function UserDetail() {
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [isEditingDepartments, setIsEditingDepartments] = useState([false, false]);
+    const [filterType, setFilterType] = useState(null);
     const [profileData, setProfileData] = useState({
         backgroundImage: "",
         profileImage: "",
         name: "", // Initialize with an empty string or placeholder
         username: "",
-        status: "Online",
+        status: onlineUsers.some(onlineUser => onlineUser.id === user.id) ? "Online" : "Offline", // Set initial status based on context
         icon1: "/assets/EditButton.svg",
         icon2: "https://cdn.builder.io/api/v1/image/assets/TEMP/c509bd2e6bfcd3ab7723a08c590219ec47ac648338970902ce5e506f7e419cb7?",
     });
@@ -106,6 +109,14 @@ export default function UserDetail() {
             console.error("Error fetching user data:", error);
         });
     }, [selectedUserId]);
+
+    useEffect(() => {
+        // Update status dynamically when onlineUsers change
+        setProfileData(prevData => ({
+            ...prevData,
+            status: onlineUsers.some(onlineUser => onlineUser.id === user.id) ? "Online" : "Offline"
+        }));
+    }, [onlineUsers, user.id]);
 
     console.log("PDATA", profileData);
     
@@ -308,6 +319,14 @@ const sortedEmploymentPosts = formData.employmentPosts.slice().sort((a, b) => a.
 // Attribute to tag guest profile
 const tag="guest";
 
+const employmentPostTitle = profileData.employment_posts?.length > 0 
+? profileData.employment_posts[0].business_post.title 
+: '';
+
+const handleFilterChange = (filter) => {
+    setFilterType(filter);
+  };
+
 return (
     <Example>
         <main className="xl:pl-96 w-full">
@@ -330,9 +349,9 @@ return (
                         {activeTab === "activities" && (
                             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 flex flex-col items-center ">
                                 {/* <ShareYourThoughts userId={user.id} postType={'post'} onCreatePoll={handleCreatePoll} /> */}
-                                <Filter className="mr-10" />
+                                <Filter className="mr-10" onFilterChange={handleFilterChange} />
                                 <div className="mb-20"></div>
-                                <OutputData polls={polls} showUserPosts={true} userId={user.id} />
+                                <OutputData polls={polls} showUserPosts={true} userId={user.id} postType={filterType} />
                             </div>
                         )}
                         {activeTab === "bio" && (
@@ -345,6 +364,7 @@ return (
                                             icon2={profileData.icon2}
                                             user_id={profileData.id}
                                             user_name={profileData.name}
+                                            user_title={employmentPostTitle}
                                             onEdit={() => handleEditBio()}
                                             isFirstIcon
                                         />
@@ -442,7 +462,7 @@ return (
             <hr className="file-directory-underline" />
             <div>
                 <FeaturedEvents />
-                <WhosOnline />
+                {/* <WhosOnline /> */}
             </div>
         </aside>
         {isSaveNotificationOpen && (
@@ -463,4 +483,12 @@ return (
         )}
     </Example>
 );
+}
+
+export default function UserDetail() {
+    return (
+        <OnlineUsersProvider>
+            <UserDetailContent />
+        </OnlineUsersProvider>
+    );
 }

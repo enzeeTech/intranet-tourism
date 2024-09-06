@@ -17,6 +17,35 @@
   background-color: #f0f0f0;
 } */
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #000000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position above the icon */
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+
 .mention-suggestions {
   position: absolute;
   background-color: white;
@@ -49,9 +78,10 @@
       height: auto;
     }
 
+
   .comment-box-container {
     background-color: #eaeaea;
-    padding: 15px;
+    padding: 10px 15px;
     margin-bottom: 5px;
     border-radius: 16px;
     position: relative;
@@ -136,6 +166,7 @@
   .send-button {
     /* position: absolute; */
     right: 0;
+    flex: auto;
     /* bottom: 50px; */
   }
 
@@ -156,7 +187,8 @@
 
   .emoji-picker-container {
     position: absolute;
-    margin-left: -120px;
+    z-index: 10;
+    margin-left: -40px;
     bottom: 40px;
   }
 
@@ -209,6 +241,16 @@
   background-color: #f0f0f0;
   border-radius: 5px;
 }
+.taging {
+  display: inline-flex; /* Use inline-flex to shrink-wrap the content */
+  align-items: center;
+  padding-left: 1%;
+  padding-right: 1%;
+  background-color:#EBF5FF;
+  border-radius: 5px;
+  max-width: 100%; /* Ensure it doesn't exceed the parent's width */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+}
 
 .tag button,
 .tagged-item button {
@@ -241,7 +283,7 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 43px;
+  width: 40px;
   height: 20px;
 }
 
@@ -271,7 +313,7 @@
   height: 10px;
   width: 10px;
   left: 3px;
-  bottom: 3px;
+  bottom: 4px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
@@ -291,7 +333,7 @@ input:checked + .slider:before {
   content: "OFF";
   position: absolute;
   right: 14px;
-  bottom:7.5px;
+  bottom: 9px;
   font-size: 9px;
   color: white;
   width: 10px;

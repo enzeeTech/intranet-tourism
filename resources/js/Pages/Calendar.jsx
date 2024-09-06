@@ -49,33 +49,84 @@ function Calendar() {
         filterEvents();
     }, [searchTerm, events]);
 
-    const fetchEvents = () => {
-        fetch('/api/events/events?with[]=author')
-            .then(response => response.json())
-            .then(data => {
-                console.log("DATAAA", data);
+    // const fetchEvents = () => {
+    //     fetch('/api/events/events?with[]=author')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log("DATAAA", data);
                 
-                const formattedEvents = data.data.data.map(event => ({
-                    id: event.id,
-                    title: event.title,
-                    start: event.start_at,
-                    end: event.end_at,
-                    description: event.description,
-                    venue: event.venue,
-                    color: event.color,
-                    userName: event.author.name,
-                    url: event.url,
-                }));
-                setEvents(prevEvents => [...prevEvents, ...formattedEvents]);
-                setFilteredEvents(prevEvents => [...prevEvents, ...formattedEvents]);
-                if (calendarRef.current) {
-                    calendarRef.current.getApi().gotoDate(new Date());
+    //             const formattedEvents = data.data.data.map(event => ({
+    //                 id: event.id,
+    //                 title: event.title,
+    //                 start: event.start_at,
+    //                 end: event.end_at,
+    //                 description: event.description,
+    //                 venue: event.venue,
+    //                 color: event.color,
+    //                 userName: event.author.name,
+    //                 url: event.url,
+    //             }));
+    //             setEvents(prevEvents => [...prevEvents, ...formattedEvents]);
+    //             setFilteredEvents(prevEvents => [...prevEvents, ...formattedEvents]);
+    //             if (calendarRef.current) {
+    //                 calendarRef.current.getApi().gotoDate(new Date());
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching events: ', error);
+    //         });
+    // };
+
+
+    const fetchEvents = async () => {
+        try {
+            let allEvents = [];
+            let currentPage = 1;
+            let totalPages = 1;
+    
+            while (currentPage <= totalPages) {
+                const response = await fetch(`/api/events/events?with[]=author&page=${currentPage}`);
+                const data = await response.json();
+    
+                if (data && data.data && Array.isArray(data.data.data)) {
+                    const formattedEvents = data.data.data.map(event => ({
+                        id: event.id,
+                        title: event.title,
+                        start: event.start_at,
+                        end: event.end_at,
+                        description: event.description,
+                        venue: event.venue,
+                        color: event.color,
+                        userName: event.author.name,
+                        url: event.url,
+                    }));
+    
+                    allEvents = [...allEvents, ...formattedEvents];
+    
+                    totalPages = data.data.last_page;
+                    currentPage++;
+                } else {
+                    console.error('Error: Expected an array, but got:', data);
+                    break;
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching events: ', error);
-            });
+            }
+    
+            console.log("All Events:", allEvents);
+    
+            // Set events in state
+            setEvents(prevEvents => [...prevEvents, ...allEvents]);
+            setFilteredEvents(prevEvents => [...prevEvents, ...allEvents]);
+    
+            if (calendarRef.current) {
+                calendarRef.current.getApi().gotoDate(new Date());
+            }
+    
+        } catch (error) {
+            console.error('Error fetching events: ', error);
+        }
     };
+    
+    
     
     const fetchBirthdayEvents = async () => {
         try {
@@ -265,7 +316,7 @@ function Calendar() {
             },
             body: JSON.stringify(eventPayload),
         })
-        .then(response => response.json())
+        // .then(response => response.json())
         .then(data => {
             if (data.errors) {
                 console.error('Error creating event: ', data.errors);
@@ -273,11 +324,13 @@ function Calendar() {
             }
             setEvents([...events, data]);
             closeModal();
+            window.location.reload();
+
         })
         .catch(error => {
             console.error('Error creating event: ', error);
             setIsModalOpen(false);
-            fetchEvents();
+            // fetchEvents();
         });
     };
     
@@ -305,9 +358,22 @@ function Calendar() {
         closePrintModal();
     };
 
+    // const handleEventClick = (eventInfo) => {
+    //     eventInfo.jsEvent.preventDefault();
+    //     // Trigger handleEditClick with the event data
+    //     handleEditClick(eventInfo.event);
+    // };
+
     const handleEventClick = (eventInfo) => {
         eventInfo.jsEvent.preventDefault();
-        // Trigger handleEditClick with the event data
+        
+        // Check if the event is a birthday event
+        if (eventInfo.event.extendedProps.isBirthday) {
+            // If it's a birthday event, do nothing (or you could add custom behavior here)
+            return;
+        }
+        
+        // Trigger handleEditClick with the event data for non-birthday events
         handleEditClick(eventInfo.event);
     };
     
@@ -375,7 +441,7 @@ function Calendar() {
         } catch (error) {
             console.error('Error updating event:', error);
             setIsEditModalOpen(false);
-            fetchEvents()
+            // fetchEvents()
         }
     };
 
@@ -392,6 +458,8 @@ function Calendar() {
             if (response.ok) {
                 setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
                 setIsEditModalOpen(false);
+                window.location.reload();
+                
             } else {
                 const errorData = await response.json();
                 console.error('Error deleting event:', errorData);
@@ -449,7 +517,6 @@ function Calendar() {
                         console.log("eventDidMount called for event:", info.event);
                     
                         if (info.event.extendedProps.isBirthday) {
-                            console.log("BD", );
                             
                             console.log("Birthday event detected:", info.event.extendedProps.names);
                     
@@ -545,7 +612,7 @@ function Calendar() {
                                         aria-label="cake"
                                         style={{
                                             position: 'absolute',
-                                            top: '-30px', // Adjust to position as needed
+                                            bottom: '0', // Adjust to position as needed
                                             left: '5px', // Adjust to position as needed
                                             fontSize: '1.8em',
                                             cursor: 'pointer',
