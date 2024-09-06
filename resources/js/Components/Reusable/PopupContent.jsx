@@ -76,14 +76,17 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       console.error("Failed to download the file:", error);
     }
   };
+  
+    const handleViewClick = () => {
+    if (file.metadata.path.endsWith('.pdf')) {
+      const fileUrl = `/storage/${file.metadata.path}`;
+      window.open(fileUrl, '_blank');
+    } else {
+      alert("Viewing is only available for PDF files.");
+    }
+  };
 
-  const handleViewClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const fileUrl = `/storage/${file.metadata.path}`; // Construct the file URL
-    window.open(fileUrl, '_blank'); // Open the file in a new tab
-};
+  const isPdf = file.metadata.path.endsWith('.pdf'); // Check if the file is a PDF
 
 
   return (
@@ -146,20 +149,22 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 </button>
               )}
             </MenuItem>
-            <MenuItem>
-              {({ active }) => (
-                <button
-                  onClick={handleViewClick}
-                  className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full'
-                  )}
-                >
-                  <img src={ViewIcon} alt="View" className="mr-3 h-5 w-5" />
-                  View
-                </button>
-              )}
-            </MenuItem>
+            {isPdf && (
+              <MenuItem>
+                {({ active }) => (
+                  <button
+                    onClick={handleViewClick}
+                    className={classNames(
+                      active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                      'group flex items-center px-4 py-2 text-sm w-full'
+                    )}
+                  >
+                    <img src={ViewIcon} alt="View" className="mr-3 h-5 w-5" />
+                    View
+                  </button>
+                )}
+              </MenuItem>
+            )}
           </div>
         </MenuItems>
       </Transition>
