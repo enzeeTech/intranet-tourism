@@ -8,6 +8,8 @@ use App\Models\Traits\QueryableApi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Modules\Communities\Models\Community;
+
 
 class ModelHasRole extends Model implements AuditableContract
 {
@@ -32,7 +34,9 @@ class ModelHasRole extends Model implements AuditableContract
                     // 'model_type' => [ 'required'],
                     'model_id' => ['required'],
                     'department_id' => ['nullable', 'integer'],
-                    'community_id' => ['nullable', 'integer'],
+                    'community_id' => ['nullable', 'array'],
+                    'community_id.*' => ['integer'],
+
                 ],
                 // [],
             ],
@@ -42,7 +46,8 @@ class ModelHasRole extends Model implements AuditableContract
                     // 'model_type' => [ 'required'],
                     'model_id' => ['required'],
                     'department_id' => ['nullable', 'integer'],
-                    'community_id' => ['nullable', 'integer'],
+                    'community_id' => ['nullable', 'array'],
+                    'community_id.*' => ['integer'],
                 ],
                 // [],
             ],
@@ -54,5 +59,11 @@ class ModelHasRole extends Model implements AuditableContract
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function communities()
+    {
+        return $this->belongsToMany(Community::class, 'model_has_roles_communities', 'model_id', 'community_id', 'model_id', 'id')
+            ->select('community_id');
     }
 }
