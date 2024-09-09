@@ -6,6 +6,8 @@ import downloadIcon from '../../../../public/assets/downloadicon.svg';
 import renameIcon from '../../../../public/assets/renameicon.svg';
 import ViewIcon from '../../../../public/assets/ViewIcon.svg';
 import ViewAdminPopup from '../Reusable/ViewAdminPopup';
+import ConfirmationModal from './ConfirmationModal.jsx';
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -13,6 +15,7 @@ function classNames(...classes) {
 
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   // console.log("FILE", file);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
@@ -25,13 +28,17 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
     close(); // Close the popup
   };
 
-  const handleDelete = (e) => {
-    e.preventDefault();
-    if (window.confirm("Are you sure you want to delete this file?")) {
-      onDelete(file.id);
-    }
-  };
+  // const handleDelete = (e) => {
+  //   e.preventDefault();
+  //   if (window.confirm("Are you sure you want to delete this file?")) {
+  //     onDelete(file.id);
+  //   }
+  // };
 
+  const confirmDelete = () => {
+    onDelete(file.id);
+    setIsModalOpen(false); // Close the modal after confirming
+  };
 
   const handleDownload = async (e) => {
     e.preventDefault();
@@ -90,6 +97,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
 
 
   return (
+    <div>
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <MenuButton className="inline-flex justify-center items-center w-full pl-5 max-md:pl-1">
@@ -137,16 +145,16 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
             </MenuItem>
             <MenuItem>
               {({ active }) => (
-                <button
-                  onClick={handleDelete}
-                  className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
-                    'group flex items-center px-4 py-2 text-sm w-full'
-                  )}
-                >
-                  <img src={deleteIcon} alt="Delete" className="mr-3 h-5 w-5" />
-                  Delete
-                </button>
+    <button
+    onClick={() => setIsModalOpen(true)} // Trigger the confirmation modal instead of directly handling delete
+    className={classNames(
+      active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+      'group flex items-center px-4 py-2 text-sm w-full'
+    )}
+  >
+    <img src={deleteIcon} alt="Delete" className="mr-3 h-5 w-5" />
+    Delete
+  </button>
               )}
             </MenuItem>
             {isPdf && (
@@ -169,6 +177,12 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
         </MenuItems>
       </Transition>
     </Menu>
+          <ConfirmationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={confirmDelete}
+        />
+        </div>
   );
 };
 

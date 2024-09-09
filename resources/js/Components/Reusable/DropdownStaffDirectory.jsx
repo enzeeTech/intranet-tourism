@@ -6,15 +6,17 @@ import SearchPopup from './AddMemberPopup';
 import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
-
-const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded, fetchStaffMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(() => {
     const savedDepartment = localStorage.getItem('selectedDepartment');
     return savedDepartment ? JSON.parse(savedDepartment) : { id: '', name: '' };
   });
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(selectedDepartment.name || '');
+  const [searchTerm, setSearchTerm] = useState(() => {
+    const savedSearchTerm = localStorage.getItem('searchTerm');
+    return savedSearchTerm || '';
+  });
   const dropdownRef = useRef(null);
 
   const people = [
@@ -28,24 +30,13 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   ];
 
   const handleSelect = (department) => {
-    // Simulate fetching department members and details (replace with real fetch logic)
-    const departmentDetails = {
-      ...department,
-    members: [
-      { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-      { name: 'Ben Tan', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-      { name: 'Nick', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
-      { name: 'Sarah', position: 'Setiausaha Pejabat', avatar: dummyStaffPlaceHolder },
-      { name: 'Thomas', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },
-      { name: 'Zack', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
-      { name: 'Zara', position: 'Pegawai', avatar: dummyStaffPlaceHolder },
-    ]
-  };
-  setSelectedDepartment(departmentDetails);
-  localStorage.setItem('selectedDepartment', JSON.stringify(departmentDetails)); // Persist selection in localStorage
-  onSelectDepartment(department.id);
-  setIsOpen(false);
-  setSearchTerm(department.name);
+    setSelectedDepartment(department);
+    localStorage.setItem('selectedDepartment', JSON.stringify(department));
+    onSelectDepartment(department.id);
+    setIsOpen(false);
+    setSearchTerm(department.name);
+    localStorage.setItem('searchTerm', department.name);
+    fetchStaffMembers(department.id);
   };
 
   const toggleAddMemberPopup = (event) => {
@@ -79,24 +70,6 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
     }
     
   };
-  const handleRefreshOrBack = () => {
-    // Rehydrate the department info from localStorage (if present)
-    const savedDepartment = localStorage.getItem('selectedDepartment');
-    if (savedDepartment) {
-      const departmentDetails = JSON.parse(savedDepartment);
-      setSelectedDepartment(departmentDetails);
-      setSearchTerm(departmentDetails.name);
-    }
-  };
-
-  useEffect(() => {
-    // Add event listener to handle refresh or back
-    window.addEventListener('popstate', handleRefreshOrBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleRefreshOrBack);
-    };
-  }, []);
   
   useEffect(() => {
     if (isOpen) {
@@ -109,20 +82,10 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
     };
   }, [isOpen]);
 
-    // Restore the department name in the search term on component mount
-    useEffect(() => {
-      // Check localStorage on component mount to restore selected department and staff
-      const savedDepartment = localStorage.getItem('selectedDepartment');
-      if (savedDepartment) {
-        const departmentDetails = JSON.parse(savedDepartment);
-        setSelectedDepartment(departmentDetails);
-        setSearchTerm(departmentDetails.name);
-      }
-    }, []);
-
   const filteredDepartments = departments.filter(dept =>
     dept.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   return (
     <div className="flex justify-between department-dropdown-container max-md:flex-row max-md:justify-start" ref={dropdownRef}>
@@ -151,30 +114,31 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
           {filteredDepartments.map((dept) => (
             <li key={dept.id} onClick={() => handleSelect(dept)}>
-              {dept.name} 
+              {dept.name}
             </li>
           ))}
         </ul>
       )}
-      {selectedDepartment.id && (
       <div className="relative flex flex-row items-center justify-between w-full max-md:mt-4 max-md:flex-row max-md:justify-between lg:ml-0">
-        
-        <button 
-          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
-          onClick={toggleAddMemberPopup}
+        {selectedDepartment.id && (
+          <button 
+            className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
+            onClick={toggleAddMemberPopup}
           >
-          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
-          Member
-        </button>
-        <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
-        </div>
-      )}
+            <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
+            Member
+          </button>
+        )}
+        {selectedDepartment.id && (
+          <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
+        )}
+      </div>
       {isAddMemberPopupOpen && (
         <SearchPopup
           isAddMemberPopupOpen={isAddMemberPopupOpen}
           setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
           departmentId={selectedDepartment.id}
-          people={selectedDepartment.members}
+          people={staffMembers}  // Ensure `staffMembers` is being used here
           onNewMemberAdded={onNewMemberAdded}
         />
       )}
