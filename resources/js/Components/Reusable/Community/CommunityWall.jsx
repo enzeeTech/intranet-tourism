@@ -120,6 +120,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); 
   const csrfToken = useCsrf();
   const { props } = usePage();
   const { id } = props;
@@ -154,7 +155,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
     let allResults = [];
 
     try {
-      const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
+      const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
@@ -264,11 +265,34 @@ function Navigation({ userId, communityID, departmentName, type }) {
     setIsAddMemberPopupOpen(true);
   };
 
-  const handleSelectPerson = (person) => {
-    if (selectedUsers.some((user) => user.id === person.id)) {
-      setSelectedUsers(selectedUsers.filter((user) => user.id !== person.id));
-    } else {
-      setSelectedUsers([...selectedUsers, person]);
+  const handleSelectPerson = async (person) => {
+    try {
+      // Fetch the current community members
+      const response = await fetch(`/api/communities/community_members?community_id=${communityID}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch community members.');
+      }
+  
+      const members = await response.json();
+      
+      // Check if the selected person is already in the community
+      const isAlreadyMember = members.some((member) => String(member.user_id) === String(person.id));
+  
+      if (isAlreadyMember) {
+        setErrorMessage(`${person.name} is already a member of this community.`);
+      } else if (selectedUsers.some((user) => user.id === person.id)) {
+        setSelectedUsers(selectedUsers.filter((user) => user.id !== person.id)); 
+      } else {
+        setSelectedUsers([...selectedUsers, person]); 
+      }
+    } catch (error) {
+      console.error('Error checking membership:', error);
     }
   };
 
@@ -296,6 +320,36 @@ function Navigation({ userId, communityID, departmentName, type }) {
       console.error('Error adding members:', error);
     }
   };
+
+  const getImageSource = (imageUrl) => {
+    console.log('imageURL', imageUrl);
+    if (imageUrl === defaultImage) {
+        return defaultImage;
+    }
+    if (imageUrl.startsWith('staff_image/')) {
+        return `/storage/${imageUrl}`;
+    } else {
+        return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
+        ? imageUrl 
+        : `/avatar/${imageUrl}`;
+    }
+};
+
+  const renderTitles = (employmentPosts) => {
+    if (!employmentPosts || employmentPosts.length === 0) {
+        return <span className="font-light text-gray-600">No title available</span>;
+    }
+
+    const uniqueTitles = [...new Set(employmentPosts.map(post => post.business_post?.title).filter(Boolean))];
+
+    if (uniqueTitles.length === 0) {
+        return <span className="font-light text-gray-600">No title available</span>;
+    }
+
+    return uniqueTitles.map((title, index) => (
+        <div key={index} className="font-light text-gray-600">{title}</div>
+    ));
+};
 
   return (
     <div className="flex flex-col">
@@ -424,7 +478,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
                 type="text"
                 placeholder="Search name"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {setSearchTerm(e.target.value); setErrorMessage('');}}
                 className="w-full px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-full"
               />
               <div className="overflow-y-auto max-h-[290px] pl-2 custom-scrollbar">
@@ -439,16 +493,20 @@ function Navigation({ userId, communityID, departmentName, type }) {
                       className="flex items-center p-2 cursor-pointer"
                       onClick={() => handleSelectPerson(person)}
                     >
-                      <img src={person.profile && person.profile.staff_image ? `/avatar/${person.profile.staff_image}` : defaultImage} alt={person.name} className="object-cover w-10 h-10 mr-4 rounded-full" />
+                      <img src={getImageSource(person.profile?.staff_image || defaultImage)} alt={person.name} className="object-cover w-10 h-10 mr-4 rounded-full" />
                       <div>
                         <div className="text-lg font-bold">{person.name}</div>
-                        <div className="font-light text-gray-600">{person.employment_post?.business_post.title || 'No title available'}</div>
+                        <div className="font-light text-gray-600">{renderTitles(person.employment_posts)}</div>
                       </div>
                     </div>
                   ))
                 )}
-                {error && <div className="mt-2 text-red-500">{error}</div>}
               </div>
+
+              {errorMessage && (
+                <div className="mt-2 text-red-500">{errorMessage}</div>
+              )}
+              
               <div className="flex justify-end mt-4">
                 <button
                   className="px-4 py-2 mr-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -458,7 +516,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
                 </button>
                 <button
                   className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
-                  onClick={() => setIsAddMemberPopupOpen(false)}
+                  onClick={() => {setIsAddMemberPopupOpen(false); setSelectedUsers([]); setSearchResults([]); setSearchTerm(''); setErrorMessage('');}}
                 >
                   Cancel
                 </button>
