@@ -92,7 +92,6 @@ const StaffDirectory = () => {
   useEffect(() => {
     setStaffMembers([]);
     fetchDepartments("/api/department/departments");
-    fetchStaffMembers(selectedDepartmentId);
   }, []);
 
   useEffect(() => {
