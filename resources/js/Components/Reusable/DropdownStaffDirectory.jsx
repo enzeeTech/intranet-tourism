@@ -19,6 +19,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   });
   const dropdownRef = useRef(null);
 
+    // Clear local storage on reload
+    useEffect(() => {
+      localStorage.clear();
+    }, []); // Empty dependency array ensures it runs once when the component is mounted
+
+
   const people = [
     { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },
     { name: 'Ben Tan', position: 'Timbalan Pengarah Kanan', avatar: dummyStaffPlaceHolder },

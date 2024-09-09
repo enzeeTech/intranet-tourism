@@ -11,6 +11,7 @@ import Sidebar from '../Components/SideNavBar';
 import './css/StaffDirectory.css';
 import Example from '../Layouts/DashboardLayoutNew';
 import { useCsrf } from '@/composables';
+import { set } from 'date-fns';
 
 const StaffDirectory = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState('');
@@ -89,15 +90,29 @@ const StaffDirectory = () => {
   };
 
   useEffect(() => {
+    setStaffMembers([]);
     fetchDepartments("/api/department/departments");
-    fetchStaffMembers(selectedDepartmentId);
   }, []);
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const departmentIdFromUrl = urlParams.get('departmentId');
+
+    if (departmentIdFromUrl) {
+      setSelectedDepartmentId(departmentIdFromUrl);
+    }
+
     if (selectedDepartmentId) {
+      setStaffMembers([]);
       fetchStaffMembers(selectedDepartmentId);
     }
   }, [selectedDepartmentId]);
+
+  // useEffect(() => {
+  //   if (selectedDepartmentId) {
+  //     fetchStaffMembers(selectedDepartmentId);
+  //   }
+  // }, [selectedDepartmentId]);
 
   const handleOutsideClick = (event) => {
     if (activePopupRef && !activePopupRef.contains(event.target)) {
@@ -119,6 +134,7 @@ const StaffDirectory = () => {
   }, [activePopupRef]);
 
   const handleSelectDepartment = (departmentId) => {
+    setStaffMembers([]);
     setSelectedDepartmentId(departmentId);
   };
 
