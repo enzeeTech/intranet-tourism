@@ -414,7 +414,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         </button> */}
                                     
                                     </div>
-                                    {/* <button onClick={handleClickSend} className="flex send-button align-item justify-end">
+                                    <button onClick={handleClickSend} className="flex send-button align-item justify-end">
                                         {isSending ? "" : ""}
                                             <img
                                                 loading="lazy"
@@ -422,7 +422,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                 alt="SEND"
                                                 className="h-6 w-6 max-md:mt-8"
                                             />
-                                        </button> */}
+                                        </button>
                              </div>
                                 </>
                             )}

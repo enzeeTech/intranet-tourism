@@ -269,7 +269,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-[600px] mx-2 overflow-hidden max-h-[90vh] max-w-[90vw] flex flex-col">
+      <div className="bg-white rounded-2xl shadow-lg w-[600px] mx-2 max-h-[90vh] max-w-[90vw] flex flex-col">
         <div className="px-6 py-2 border-b">
           <div className="flex flex-row w-full justify-between my-4">
             <div className="w-full flex justify-center">

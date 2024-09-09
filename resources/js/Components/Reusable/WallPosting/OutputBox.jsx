@@ -1377,62 +1377,37 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
           </div>
         </div>
       )}
+      
       {showDeletePopup && (
-        <div
-            style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                padding: '20px',
-                boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.2)',
-                zIndex: 10000,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '200px',
-            maxWidth:'full',
-            }}
-        >
-            <div style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: 'larger', borderRadius: '24px',}}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+        {/* Background overlay with opacity */}
+        <div className="fixed inset-0 bg-black opacity-50"></div>
+
+        {/* Centered Modal */}
+        <div className="bg-white rounded-lg p-6 shadow-lg z-50 flex flex-col items-center justify-center min-w-[200px] max-w-[400px]">
+            <div className="mb-4 font-bold text-lg">
                 <h2>Delete Post?</h2>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+
+            <div className="flex justify-center w-full">
                 <button
                     onClick={handleDelete}
-                    style={{
-                        backgroundColor: '#E53935',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '25px',
-                        width: '80px',
-                        padding: '10px 20px',
-                        cursor: 'pointer',
-                        marginRight: '10px',
-                    }}
+                    className="bg-red-600 text-white rounded-full w-20 py-2 px-4 mr-2"
                 >
                     Yes
                 </button>
                 <button
                     onClick={() => setShowDeletePopup(false)}
-                    style={{
-                        backgroundColor: 'white',
-                        color: '#333',
-                        border: '1px solid #ccc',
-                        borderRadius: '25px',
-                        width: '80px',
-                        padding: '10px 20px',
-                        cursor: 'pointer',
-                    }}
+                    className="bg-white text-gray-800 border border-gray-300 rounded-full w-20 py-2 px-4"
                 >
                     No
                 </button>
             </div>
         </div>
-      )}
+    </div>
+)}
+
+      
 {showLikesPopup && (
   <LikesPopup 
     likedUsers={likedUsers} 

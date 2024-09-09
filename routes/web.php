@@ -18,6 +18,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\OrderingController;
 use App\Http\Controllers\ManageLinksController;
+use App\Http\Controllers\ManageFoldersController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -70,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
     Route::get('/manage-links', [ManageLinksController::class, 'index'])->name('manage-links');
     Route::get('/Album', [MediaController::class, 'indexalbum'])->name('Album');
+    Route::get('/manage-folders', [ManageFoldersController::class, 'index'])->name('manage-folders');
 });
 
 require __DIR__ . '/auth.php';
