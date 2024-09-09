@@ -282,7 +282,7 @@ const FileTable = ({ searchTerm }) => {
         <div className="w-full overflow-visible">
             <SavingPopup isSaving={isSaving} />
             <div className="flow-root mt-8">
-                <div className="overflow-visible">
+                <div className="max-h-[calc(100vh-150px)] overflow-auto p-4">
                     <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
                         <thead>
                             <tr>

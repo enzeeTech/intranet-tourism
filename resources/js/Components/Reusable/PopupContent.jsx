@@ -5,7 +5,6 @@ import deleteIcon from '../../../../public/assets/deleteicon.svg';
 import downloadIcon from '../../../../public/assets/downloadicon.svg';
 import renameIcon from '../../../../public/assets/renameicon.svg';
 import ViewIcon from '../../../../public/assets/ViewIcon.svg';
-import ViewAdminPopup from '../Reusable/ViewAdminPopup';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -99,7 +98,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-48 overflow-y-auto">
             <div className="py-1">
               <MenuItem>
                 {({ active, close }) => (
@@ -132,7 +131,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
               <MenuItem>
                 {({ active }) => (
                   <button
-                    onClick={handleDeleteClick} // Open confirmation popup
+                    onClick={handleDeleteClick}
                     className={classNames(
                       active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
                       'group flex items-center px-4 py-2 text-sm w-full'
@@ -167,7 +166,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       {/* Confirmation Modal */}
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-h-96 overflow-y-auto">
             <p className="mb-4 text-lg">Are you sure you want to delete this file?</p>
             <div className="flex justify-end">
               <button
