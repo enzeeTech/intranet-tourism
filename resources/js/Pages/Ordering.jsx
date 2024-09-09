@@ -132,13 +132,13 @@ const Ordering = () => {
 
         setTimeout(() => {
             setIsNotificationVisible(false);
-            window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
+            window.location.href = `/staffDirectory?departmentId=${departmentId}`;
         }, 1500);
     };
 
     const handleBack = () => {
-        fetchStaffMembers();
-        window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
+        // fetchStaffMembers(departmentId);
+        window.location.href = `/staffDirectory?departmentId=${departmentId}`;
     };
 
     console.log(staffMembers);
@@ -171,11 +171,11 @@ const Ordering = () => {
                             <DragDropContext onDragEnd={handleDragEnd}>
                                 <Droppable droppableId="staff">
                                     {(provided) => (
-                                        <table className="w-full table-fixed bg-white divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
+                                        <table className="w-full bg-white divide-y divide-gray-200 table-fixed" {...provided.droppableProps} ref={provided.innerRef}>
                                             <thead>
                                                 <tr>
-                                                    <th className="px-0 py-3 font-bold text-left text-gray-700 text-md w-3/5">Name</th>
-                                                    <th className="px-14 max-md:px-0 py-3 font-bold text-right text-gray-700 text-md w-1/5">Ordering</th>
+                                                    <th className="w-3/5 px-0 py-3 font-bold text-left text-gray-700 text-md">Name</th>
+                                                    <th className="w-1/5 py-3 font-bold text-right text-gray-700 px-14 max-md:px-0 text-md">Ordering</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -188,26 +188,26 @@ const Ordering = () => {
                                                                 className="bg-white border-t border-gray-200"
                                                             >
                                                                 <td
-                                                                    className="py-4 text-lg font-bold max-md:text-sm text-black pr-12 whitespace-nowrap bg-white"
+                                                                    className="py-4 pr-12 text-lg font-bold text-black bg-white max-md:text-sm whitespace-nowrap"
                                                                     {...provided.dragHandleProps}
                                                                     >
                                                                     <div className="flex items-center">
                                                                         <img
                                                                         src={getImageSource(item.imageUrl)}
                                                                         alt={item.name}
-                                                                        className="inline-block object-cover w-12 h-16 mr-4 max-md:w-9 max-md:h-12 max-md:mr-2 max-md:rounded-md rounded-md"
+                                                                        className="inline-block object-cover w-12 h-16 mr-4 rounded-md max-md:w-9 max-md:h-12 max-md:mr-2 max-md:rounded-md"
                                                                         />
                                                                         <div className="flex flex-col">
-                                                                        <span className="whitespace-normal overflow-hidden text-ellipsis">
+                                                                        <span className="overflow-hidden whitespace-normal text-ellipsis">
                                                                             {item.name}
                                                                         </span>
                                                                         {item.isDeactivated && (
-                                                                            <span className="text-red-500 text-sm mt-0">(Deactivated)</span>
+                                                                            <span className="mt-0 text-sm text-red-500">(Deactivated)</span>
                                                                         )}
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td className="flex-col bg-white w-full pl-24 max-md:pl-6 items-center justify-end max-md:justify-end px-4 py-4 space-x-0">
+                                                                <td className="flex-col items-center justify-end w-full px-4 py-4 pl-24 space-x-0 bg-white max-md:pl-6 max-md:justify-end">
                                                                     <button
                                                                         className="px-2"
                                                                         onClick={(e) => {
@@ -265,7 +265,7 @@ const Ordering = () => {
             </div>
             {isNotificationVisible && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="p-4 bg-green-100 rounded-2xl shadow-lg">
+                    <div className="p-4 bg-green-100 shadow-lg rounded-2xl">
                         <p className="text-lg font-semibold text-green-800">{notificationMessage}</p>
                     </div>
                 </div>
