@@ -15,4 +15,8 @@ class MediaController extends Controller
     {
         return Inertia::render('Media', ['id' => auth()->id()]);
     }
+    public function indexalbum()
+    {
+        return Inertia::render('ManageAlbum', ['id' => auth()->id()]);
+    }
 }

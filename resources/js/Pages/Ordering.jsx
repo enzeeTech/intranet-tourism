@@ -137,6 +137,7 @@ const Ordering = () => {
     };
 
     const handleBack = () => {
+        fetchStaffMembers();
         window.location.href = `/staffDirectory?departmentId=${props.departmentId}`;
     };
 

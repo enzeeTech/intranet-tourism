@@ -11,11 +11,11 @@ const CommunityItem = ({ id, name, category, imgSrc, altText, memberCount }) => 
           className="w-[120px] h-[40px] rounded-md object-cover object-center"
         />
       </div>
-      <div className="w-full flex flex-col mt-2 text-md font-bold text-ellipsis overflow-hidden whitespace-nowrap">
+      <div className="flex flex-col w-full mt-2 overflow-hidden font-bold text-md text-ellipsis whitespace-nowrap">
         <div className="flex items-center">
-          <h2 className="text-ellipsis overflow-hidden whitespace-nowrap">{name}</h2>
+          <h2 className="overflow-hidden text-ellipsis whitespace-nowrap">{name}</h2>
           {category === 'private' && (
-            <FaLock className="ml-2 h-3 w-3 text-gray-600 fill-black" /> // Lock icon for private communities
+            <FaLock className="w-3 h-3 ml-2 text-gray-600 fill-black" /> // Lock icon for private communities
           )}
         </div>
         <p className="text-xs font-semibold text-neutral-600">{memberCount} followers</p>
@@ -85,28 +85,32 @@ function MyComponent() {
   return (
     <div className="flex flex-col justify-center max-w-[320px] text-neutral-800 mb-20">
       <section className="flex flex-col items-start py-2 bg-white border-2 rounded-2xl shadow-custom">
-        <h1 className="ml-4 mt-2 text-2xl font-bold">Communities</h1>
+        <h1 className="mt-2 ml-4 text-2xl font-bold">Communities</h1>
         <hr className="border border-gray-200 w-[270px] mx-4 -mt-4"></hr>
-        {isLoading ? (
-          <div className="mt-20 ml-20 loading-spinner"></div>
-        ) : (
-          communities.map((community, index) => (
-            <CommunityItem
-              key={index}
-              id={community.id}
-              name={community.name}
-              category={community.category}
-              imgSrc={community.imgSrc}
-              altText={community.altText}
-              memberCount={community.memberCount} // Pass member count as a prop
-            />
-          ))
-        )}
+        <div className="flex flex-col justify-center w-full py-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+                <div className="w-16 h-16 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            communities.map((community, index) => (
+              <CommunityItem
+                key={index}
+                id={community.id}
+                name={community.name}
+                category={community.category}
+                imgSrc={community.imgSrc}
+                altText={community.altText}
+                memberCount={community.memberCount} 
+              />
+            ))
+          )}
+        </div>
         <hr className="border border-gray-200 w-[270px] mx-4 mt-2"></hr>
         <a href='../community'>
-          <button className="ml-4 my-2 font-bold text-sm flex items-center">
+          <button className="flex items-center my-2 ml-4 text-sm font-bold">
             VIEW ALL
-            <img src="assets/viewAllArrow.png" alt="Arrow right" className="ml-2 h-3 w-4" />
+            <img src="assets/viewAllArrow.png" alt="Arrow right" className="w-4 h-3 ml-2" />
           </button>
         </a>
       </section>

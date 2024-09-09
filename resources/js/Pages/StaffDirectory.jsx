@@ -90,6 +90,7 @@ const StaffDirectory = () => {
 
   useEffect(() => {
     fetchDepartments("/api/department/departments");
+    fetchStaffMembers(selectedDepartmentId);
   }, []);
 
   useEffect(() => {
@@ -244,6 +245,7 @@ const StaffDirectory = () => {
                 departments={departments}
                 onSelectDepartment={handleSelectDepartment}
                 onNewMemberAdded={handleAddMember}
+                fetchStaffMembers={fetchStaffMembers}  // Pass fetchStaffMember here
               />
               {isLoading ? (
                 <div className="staff-member-grid-container max-w-[1200px]">

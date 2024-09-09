@@ -6,11 +6,17 @@ import SearchPopup from './AddMemberPopup';
 import ThreeDotButton from './ThreeDotButton'; 
 import './css/DropdownStaffDirectory.css';
 
-const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded }) => {
+const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded, fetchStaffMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState({ id: '', name: '' });
+  const [selectedDepartment, setSelectedDepartment] = useState(() => {
+    const savedDepartment = localStorage.getItem('selectedDepartment');
+    return savedDepartment ? JSON.parse(savedDepartment) : { id: '', name: '' };
+  });
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(() => {
+    const savedSearchTerm = localStorage.getItem('searchTerm');
+    return savedSearchTerm || '';
+  });
   const dropdownRef = useRef(null);
 
   const people = [
@@ -25,9 +31,12 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
 
   const handleSelect = (department) => {
     setSelectedDepartment(department);
+    localStorage.setItem('selectedDepartment', JSON.stringify(department));
     onSelectDepartment(department.id);
     setIsOpen(false);
     setSearchTerm(department.name);
+    localStorage.setItem('searchTerm', department.name);
+    fetchStaffMembers(department.id);
   };
 
   const toggleAddMemberPopup = (event) => {
@@ -61,7 +70,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
     }
     
   };
-
+  
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -76,6 +85,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   const filteredDepartments = departments.filter(dept =>
     dept.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
   return (
     <div className="flex justify-between department-dropdown-container max-md:flex-row max-md:justify-start" ref={dropdownRef}>
@@ -104,20 +114,20 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
           {filteredDepartments.map((dept) => (
             <li key={dept.id} onClick={() => handleSelect(dept)}>
-              {dept.name} 
+              {dept.name}
             </li>
           ))}
         </ul>
       )}
       <div className="relative flex flex-row items-center justify-between w-full max-md:mt-4 max-md:flex-row max-md:justify-between lg:ml-0">
         {selectedDepartment.id && (
-        <button 
-          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
-          onClick={toggleAddMemberPopup}
+          <button 
+            className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
+            onClick={toggleAddMemberPopup}
           >
-          <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
-          Member
-        </button>
+            <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />
+            Member
+          </button>
         )}
         {selectedDepartment.id && (
           <ThreeDotButton selectedDepartmentId={selectedDepartment.id} />
@@ -128,7 +138,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
           isAddMemberPopupOpen={isAddMemberPopupOpen}
           setIsAddMemberPopupOpen={setIsAddMemberPopupOpen}
           departmentId={selectedDepartment.id}
-          people={people}
+          people={staffMembers}  // Ensure `staffMembers` is being used here
           onNewMemberAdded={onNewMemberAdded}
         />
       )}

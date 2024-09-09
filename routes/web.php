@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::get('/media', [MediaController::class, 'index'])->name('Media');
     Route::get('/manage-links', [ManageLinksController::class, 'index'])->name('manage-links');
+    Route::get('/Album', [MediaController::class, 'indexalbum'])->name('Album');
     Route::get('/manage-folders', [ManageFoldersController::class, 'index'])->name('manage-folders');
 });
 
