@@ -783,7 +783,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
             <div className="w-full" key={post.id}>
               {/* Conditional Rendering for Announcement */}
               {post.type === 'announcement' && (
-                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] relative pb-16 bg-[#FF5437] ">
+                <div className="mt-10 py-2 px-6 border rounded-2xl border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-full relative pb-16 bg-[#FF5437] ">
                   <div className="mb-2 flex items-center gap-1">
                     <img src={announce} className="flex-shrink-0 rounded-xl w-7 h-7" alt="Announcement" />
                     <div className="text-white text-center font-bold text-lg	ml-2">
@@ -931,7 +931,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
 
               {/* Main Post Content */}
               {post.type !== 'birthday' && (
-                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-[610px] md:w-[610px] sm:w-[610px] z-5 relative`}>
+                <article className={`${post.type === 'announcement' ? '-mt-16' : 'mt-10'} p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-full z-5 relative`}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                     <div className="flex gap-1 mt-2"></div>
                     <div className="flex flex-col justify-between items-start px-1 w-full mb-4 p-2 -ml-2 -mt-3">
@@ -1234,7 +1234,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
               {post.type !== 'birthday' && (
                 <article className={`
                   ${post.type === 'announcement' ? '-mt-16' : 'mt-10'} 
-                  ${variant === 'department' ? 'w-full lg:w-[610px] md:w-[610px] sm:w-[610px]' : 'w-full lg:w-full md:w-[610px] sm:w-[610px]'}
+                  ${variant === 'department' ? 'w-full lg:w-full md:w-full sm:w-full' : 'w-full lg:w-full md:w-[610px] sm:w-[610px]'}
                   p-4 border rounded-2xl bg-white border-2 shadow-xl relative z-5
                 `}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
@@ -1243,7 +1243,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
                       <div className="flex w-full items-center justify-between h-auto mb-4">
                       {/* {post.type !== 'announcement' && post.type !== 'post' ( */}
                       {(post.type !== 'announcement' && post.type !== 'post') && (
-                        <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1">
+                        <span className="text-sm font-semibold text-neutral-600 bg-gray-200 rounded-lg px-2 py-1 whitespace-normal">
                           {post.accessibilities?.map((accessibility, index) => (
                             <span key={index}>{accessibility.accessable_type}{": "}</span>
                           ))}
