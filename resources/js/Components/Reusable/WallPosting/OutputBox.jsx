@@ -1234,7 +1234,7 @@ const filteredFinalPosts = finalPosts.filter(filterPosts);
               {post.type !== 'birthday' && (
                 <article className={`
                   ${post.type === 'announcement' ? '-mt-16' : 'mt-10'} 
-                  ${variant === 'department' ? 'w-full lg:w-full md:w-full sm:w-full' : 'w-full lg:w-full md:w-[610px] sm:w-[610px]'}
+                  ${variant === 'department' ? 'w-full lg:w-full md:w-full sm:w-full' : 'w-full lg:w-full md:w-full sm:w-full'}
                   p-4 border rounded-2xl bg-white border-2 shadow-xl relative z-5
                 `}>
                   <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">

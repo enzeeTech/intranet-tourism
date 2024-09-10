@@ -78,7 +78,7 @@
 
 @media (min-width: 768px) {
   .input-box-container {
-    width: 610px;
+    width: 100%;
   }
 }
 
