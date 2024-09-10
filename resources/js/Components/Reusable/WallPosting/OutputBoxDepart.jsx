@@ -45,7 +45,7 @@
             <time className="mt-3 text-xs text-neutral-800 text-opacity-50">{timeAgo}</time>
             </div>
         </div>
-        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/e3c193bbbcd5eca7bf933dad4a6932d076b04eb038d7635c591737bbebdc61ef?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="shrink-0 self-start aspect-[3.85] w-[19px]" />
+        {/* <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/e3c193bbbcd5eca7bf933dad4a6932d076b04eb038d7635c591737bbebdc61ef?apiKey=23ce5a6ac4d345ebaa82bd6c33505deb&" alt="" className="shrink-0 self-start aspect-[3.85] w-[19px]" /> */}
         </header>
     );
     }
@@ -227,7 +227,7 @@
         {postData && postData.map((post, index) => (
             <div key={post.id} className="">
 
-            <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-[875px] relative">
+            <article className="mt-4 p-4 border rounded-2xl bg-white border-2 shadow-xl w-full lg:w-full md:w-[610px] sm:w-full relative">
                 <header className="flex px-px w-full max-md:flex-wrap max-md:max-w-full">
                 <div className="flex gap-1 mt-2">
                 </div>

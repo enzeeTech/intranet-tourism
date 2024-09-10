@@ -67,17 +67,26 @@
 }
 
 
-
-
 .input-box-container {
-      background-color: #FFFFFF;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      width: 600px;
-      height: auto;
-    }
+  background-color: #FFFFFF;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .input-box-container {
+    width: 610px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .input-box-container {
+    width: 100%;
+  }
+}
 
 
   .comment-box-container {
