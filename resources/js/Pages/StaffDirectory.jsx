@@ -100,6 +100,8 @@ const StaffDirectory = () => {
 
     if (departmentIdFromUrl) {
       setSelectedDepartmentId(departmentIdFromUrl);
+      urlParams.delete('departmentId');
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
     }
 
     if (selectedDepartmentId) {

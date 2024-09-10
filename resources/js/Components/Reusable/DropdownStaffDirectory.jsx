@@ -19,11 +19,19 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   });
   const dropdownRef = useRef(null);
 
-    // Clear local storage on reload
+    // Clear local storage
     useEffect(() => {
-      localStorage.clear();
-    }, []); // Empty dependency array ensures it runs once when the component is mounted
-
+      // Clear only the dropdown selection related to department
+      localStorage.removeItem('selectedDepartment'); 
+      localStorage.removeItem('searchTerm');
+    
+      // Reset state for dropdown
+      setSelectedDepartment({ id: '', name: '' });
+      setSearchTerm(''); 
+    
+      // Optionally set dropdown to closed when clearing
+      setIsOpen(false);
+    }, []); 
 
   const people = [
     { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },
