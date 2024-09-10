@@ -125,37 +125,42 @@ const Departments = () => {
 
   const PautanHandleAddApp = () => {
     if (!isValidUrl(newAppUrl)) {
-      setUrlError('URL must start with http:// or https://');
-      return;
+        setUrlError('URL must start with http:// or https://');
+        return;
     } else {
-      setUrlError('');
-      window.location.reload();
+        setUrlError('');
     }
 
+    // Check for duplicates
     const { isNameDuplicate, isUrlDuplicate } = isDuplicateApp(newAppName, newAppUrl, apps);
     if (isNameDuplicate) {
-      alert('App name already exists.');
-      return;
+        alert('App name already exists.');
+        return;
     } else if (isUrlDuplicate) {
-      alert('App URL already exists.');
-      return;
+        alert('App URL already exists.');
+        return;
     }
 
-    const newApp = { label: newAppName, url: newAppUrl };
+    // Include department info in label
+    const departmentInfo = '(dept)'; // Replace with actual department info if available
+    const labelWithDept = `${newAppName} ${departmentInfo}`;
+
+    const newApp = { label: labelWithDept, url: newAppUrl };
 
     fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
-      body: JSON.stringify(newApp)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
+        body: JSON.stringify(newApp)
     })
-      .then(response => response.json())
-      .then(data => {
-        setApps(sortAlphabetically([...apps, data]));
-        setIsAddModalVisible(false);
-        resetForm();
-      })
-      .catch(error => console.error('Error adding app:', error));
-  };
+        .then(response => response.json())
+        .then(data => {
+            setApps(sortAlphabetically([...apps, data]));
+            setIsAddModalVisible(false);
+            resetForm();
+        })
+        .catch(error => console.error('Error adding app:', error));
+};
+
 
   const PautanHandleEditApp = (app) => {
     console.log('Editing app:', app); // Debug log to check the app object

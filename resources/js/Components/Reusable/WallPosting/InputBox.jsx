@@ -334,7 +334,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     return (
         <section className="flex flex-col justify-center text-sm text-neutral-800 w-full">
             <div
-                className={`flex flex-col gap-0 justify-between px-8 pt-5 pb-2 rounded-2xl shadow-sm max-md:flex-wrap max-md:px-5 max-w-full ${
+                className={`flex flex-col gap-0 justify-between px-8 pt-5 pb-2 rounded-2xl shadow-custom border-2 border-gray-200 max-md:flex-wrap max-md:px-5 max-w-full ${
                     variant === "comment" ? "comment-box-container" : "input-box-container"
                 }`}
             >

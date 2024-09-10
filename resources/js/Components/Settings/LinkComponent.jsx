@@ -58,6 +58,9 @@ export default function Pautan({ displayType }) {
         {linksToDisplay.map((refer, index) => {
           const isTop = index === 0;
           const isBottom = index === linksToDisplay.length - 1;
+          // Remove "(dept)" from the label if displayType is 'department'
+          const displayLabel = displayType === 'department' ? refer.label.replace(/\s*\(dept\)$/, '') : refer.label;
+
           return (
             <li
               key={refer.id}
@@ -68,12 +71,12 @@ export default function Pautan({ displayType }) {
               <a href={refer.url} target="_blank" rel="noopener noreferrer" className="flex min-w-0 gap-x-4 w-full px-4">
                 <img
                   src={`https://icons.duckduckgo.com/ip2/${new URL(refer.url).hostname}.ico`}
-                  alt={`${refer.label} favicon`}
+                  alt={`${displayLabel} favicon`}
                   className="h-6 w-6 flex-none"
                 />
                 <div className="min-w-0 flex-auto self-center pl-2">
                   <p className="text-md font-semibold leading-5 text-gray-900">
-                    {refer.label}
+                    {displayLabel}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-x-2">
