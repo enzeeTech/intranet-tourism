@@ -515,6 +515,20 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     </span>
                                                 )}
                                             </button>
+                                            <button className="tooltip" onClick={toggleReactionPicker}>
+                                        <img
+                                            loading="lazy"
+                                            src={Emoji}
+                                            alt="Emoji Icon"
+                                            className="w-[16px] h-[16px]"
+                                        />
+                                        <span className="tooltiptext">React 😁😂😤</span>
+                                    </button>
+                                    {showReactionPicker && (
+                                        <div ref={emojiPickerRef} className="emoji-picker-container">
+                                            <Picker onEmojiClick={handleReactionClick} />
+                                        </div>
+                                    )}
                                         </div>
 
                                         {/* column baru */}

@@ -98,6 +98,9 @@ const Pautan = () => {
     updateOrder(newApps);
   };
 
+  const filteredApps = apps.filter(app => !app.label.includes('(dept)'));
+
+
   const handleMoveDown = (index) => {
     if (index === apps.length - 1) return;
     const newApps = [...apps];
@@ -295,7 +298,7 @@ const Pautan = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {apps.map((app, index) => (
+                  {filteredApps.map((app, index) => (
                       <Draggable key={app.id} draggableId={String(app.id)} index={index}>
                         {(provided, snapshot) => (
                           <tr
