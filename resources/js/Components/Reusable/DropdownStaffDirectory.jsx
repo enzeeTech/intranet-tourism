@@ -19,19 +19,27 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
   });
   const dropdownRef = useRef(null);
 
-    // Clear local storage
-    useEffect(() => {
-      // Clear only the dropdown selection related to department
-      localStorage.removeItem('selectedDepartment'); 
+  useEffect(() => {
+    // Function to check if 'departmentId' is present in the URL
+    const hasDepartmentId = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.has('departmentId');
+    };
+  
+    if (!hasDepartmentId()) {
+      // Clear local storage and reset state only if 'departmentId' is not present
+      localStorage.removeItem('selectedDepartment');
       localStorage.removeItem('searchTerm');
-    
+  
       // Reset state for dropdown
       setSelectedDepartment({ id: '', name: '' });
       setSearchTerm(''); 
-    
+  
       // Optionally set dropdown to closed when clearing
       setIsOpen(false);
-    }, []); 
+    }
+  }, []); // Empty dependency array ensures this runs once when the component is mounted
+  
 
   const people = [
     { name: 'Aisha Binti SOmething shas as dasd asd', position: 'Pengarah Kanan', avatar: dummyStaffPlaceHolder },

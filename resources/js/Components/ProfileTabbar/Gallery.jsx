@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-const ImageComponent = ({ src, alt, className }) => (
+const ImageComponent = ({ src, alt, className, onClick }) => (
   <img
     loading="lazy"
     src={src}
     alt={alt}
     className={className}
-    style={{ objectFit: "cover", width: "100%", height: "100%" }}
+    style={{ objectFit: "cover", width: "100%", height: "100%", cursor: "pointer" }}
+    onClick={onClick}
   />
 );
 
@@ -105,6 +106,17 @@ const ImageComponent = ({ src, alt, className }) => (
 
 const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filterBy }) => {
   const [images, setImages] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
+  const openPopup = (index) => {
+    setCurrentMediaIndex(index);
+    setShowPopup(true);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     let apiUrl = '/api/resources/resources?';
@@ -160,6 +172,7 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
                   src={img.src}
                   alt={img.alt}
                   className="grow shrink-0 w-full h-full"
+                  onClick={() => openPopup(index)}
                 />
               </figure>
             ))
@@ -168,6 +181,42 @@ const ImageProfile = ({ selectedItem, userId, accessableType, accessableId, filt
           )}
         </div>
       </section>
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="flex flex-row w-full justify-center items-start">
+            <div className="bg-white lg:p-6 p-4 rounded-2xl max-w-3xl max-h-screen relative max-md:mx-4">
+              <button onClick={closePopup} className="absolute top-2 right-2">
+                <img src="/assets/cancel.svg" alt="Close icon" className="ml-4 w-5 h-5" />
+              </button>
+              <div className="flex justify-center w-full">
+                <div className="bg-gray-200 h-full w-full flex justify-center items-center">
+                  <img
+                    key={images[currentMediaIndex].src}
+                    src={images[currentMediaIndex].src}
+                    alt="Current attachment"
+                    className="w-[500px] h-[500px] object-contain rounded-none"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center mt-4 overflow-x-auto w-full">
+                {images.map((img, index) => (
+                  <div
+                    key={index}
+                    className={`cursor-pointer mx-1 ${currentMediaIndex === index ? 'border-2 border-blue-500' : ''}`}
+                    onClick={() => setCurrentMediaIndex(index)}
+                  >
+                    <img
+                      src={img.src}
+                      alt="Thumbnail"
+                      className="w-20 h-20 object-cover rounded-lg"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
