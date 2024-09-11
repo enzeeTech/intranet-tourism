@@ -33,6 +33,8 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const [mentionSuggestionsPosition, setMentionSuggestionsPosition] = useState({ top: 0, left: 0 });
     const [isSending, setIsSending] = useState(false);
     const emojiPickerRef = useRef(null);
+    const [showMaxSizePopup, setShowMaxSizePopup] = useState(false); // Popup state
+    const maxSizeLimit = 20 * 1024 * 1024; // 20MB in bytes
 
     
     
@@ -80,6 +82,19 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     
     
         const handleClickSend = () => {
+            // Get the file size from the state (assuming you store the file object)
+            const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+
+            if (attachments.length > 0) {
+                const file = attachments[0]; // You can check for multiple files if needed
+        
+                // Check if the file size exceeds the limit
+                if (file.size > maxSize) {
+                    setShowMaxSizePopup(true); // Trigger the popup
+                    return; // Do not proceed with sending
+                }
+            }
+
             // Prevent triggering multiple times
             if (isSending) return;
     
@@ -190,6 +205,10 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                     setShowReactionPicker(false);
                 }
             };
+
+            const handleCloseMaxSizePopup = () => {
+                setShowMaxSizePopup(false); // Close popup
+            };
         
             // Bind the event listener
             document.addEventListener('mousedown', handleClickOutside);
@@ -239,6 +258,27 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     const handleFileUpload = (file) => {
         setAttachments((prevAttachments) => [...prevAttachments, file]);
         setFileNames((prevFileNames) => [...prevFileNames, file.name]);
+        const maxSize = 20 * 1024 * 1024; // 20MB in bytes
+        if (file && file.size > maxSize) {
+            setShowMaxSizePopup(true);
+        } else {
+            setShowMaxSizePopup(false);
+        }
+            // File type handling
+    const fileType = file.type;
+    
+    // Check if it's an image (e.g., png, jpeg)
+    if (fileType.startsWith("image/")) {
+        console.log("This is an image.");
+    }
+    // Check if it's a video (e.g., mp4, mov)
+    else if (fileType.startsWith("video/")) {
+        console.log("This is a video.");
+    }
+    // Handle other file types (e.g., pdf, doc)
+    else {
+        console.log("This is a document or other file type.");
+    }
     };
 
     const removeFile = (index) => {
@@ -563,6 +603,23 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                     className="h-6 w-6"
                                                 />
                                             </button>
+                                                                                                {/* Popup alert for files exceeding size limit */}
+            {showMaxSizePopup && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white rounded-3xl pt-7 px-6 py-2 w-[500px] max-md:w-full max-md:mx-4 shadow-lg">
+                        <h1 className="flex justify-start mb-2 text-2xl font-bold text-start text-neutral-800">File Size Limit Exceeded</h1>
+                        <p>The file size exceeds the limit of 20MB.</p>
+                        <div className="flex flex-col mt-4">
+                            <button
+                                className="w-full px-4 py-2 mb-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
+                                onClick={() => setShowMaxSizePopup(false)}
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
                                         </div>
                                         {/* column sampaisini */}
                                         

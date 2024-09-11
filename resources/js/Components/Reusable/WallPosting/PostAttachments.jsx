@@ -77,7 +77,7 @@ function PostAttachments({ attachments }) {
             window.open(fileUrl, '_blank');
         } else {
             handleDownload(e, attachment); 
-        }
+        }   
     };
 
         return (
@@ -97,7 +97,7 @@ function PostAttachments({ attachments }) {
                 <div className="flex flex-col items-start flex-grow">
                     <span className="flex whitespace-normal items-center text-sm">Download File</span>
                 </div>
-                <img src="/assets/downloadIcon2.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70 cursor-auto" 
+                <img src="/assets/downloadIcon3.svg" alt="Download Icon" className="w-3.5 h-3.5 opacity-70 cursor-auto" 
                 onClick={(e) =>{e.stopPropagation();  handleDownload(e, attachment);
     }}/>
             </article>
