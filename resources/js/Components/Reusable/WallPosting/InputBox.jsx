@@ -314,14 +314,24 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
     // };
     
     const handleReactionClick = (emojiObject, event) => {
-        console.log('Emoji Object:', emojiObject);
-        console.log('Event:', event);
+        try {
+            console.log('Emoji Object:', emojiObject);
+            console.log('Event:', event);
     
-        // Get the selected emoji
-        const selectedEmoji = emojiObject.emoji || ''; 
-        setInputValue(prevValue => prevValue + selectedEmoji);
-        setShowReactionPicker(false);
+            // Check if emojiObject is valid
+            if (!emojiObject || typeof emojiObject.emoji !== 'string') {
+                throw new Error('Invalid emoji object.');
+            }
+    
+            // Get the selected emoji
+            const selectedEmoji = emojiObject.emoji || ''; 
+            setInputValue(prevValue => prevValue + selectedEmoji);
+            setShowReactionPicker(false);
+        } catch (error) {
+            console.error('An error occurred in handleReactionClick:', error.message);
+        }
     };
+    
     
     
     
@@ -525,7 +535,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                         <span className="tooltiptext">React 😁😂😤</span>
                                     </button>
                                     {showReactionPicker && (
-                                        <div ref={emojiPickerRef} className="emoji-picker-container">
+                                        <div ref={emojiPickerRef} className="emoji-picker-container-inputbox">
                                             <Picker onEmojiClick={handleReactionClick} />
                                         </div>
                                     )}
