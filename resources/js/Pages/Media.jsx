@@ -81,26 +81,21 @@ const Media = () => {
   return (
     <Example>
     <main className="min-h-screen bg-gray-100 xl:pl-96">
+      <div>
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-            <div>
-            <div className="relative flex flex-col justify-center max-w-full text-sm text-neutral-800">
+            <div classname="flex-row w-full justify-between">
+            <div className="relative flex flex-row justify-between max-w-full text-sm text-neutral-800">
         <div
           style={{ width: '180px' }}
           className="flex justify-between gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl"
           >
-            
-
-
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
                     {tagOptions.map((tag, index) => (
                     <option key={index} value={tag}>{tag}</option>
                     ))}
-                </select>
-                
-                </div>
-
-                <div className="ml-auto">
+                </select> 
+              </div>
           {/* Manage Album Button */}
           <button
             className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
@@ -108,8 +103,7 @@ const Media = () => {
           >
             Manage Album
           </button>
-        </div>
-
+              </div>
                 </div>
 
                 
