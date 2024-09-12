@@ -84,10 +84,10 @@ const Media = () => {
       <div>
         <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
             <div classname="flex-row w-full justify-between">
-            <div className="relative  bg-pink-400 flex flex-row max-md:flex-col justify-between max-md:justify-normal max-w-full text-sm text-neutral-800">
+            <div className="relative bg-pink-400 flex flex-row max-md:flex-col max-md:flex max-md:w-full items-center justify-between max-md:justify-start max-w-full text-sm text-neutral-800 ">
         <div
           style={{ width: '180px' }}
-          className="flex justify-between item-center gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl"
+          className="flex justify-between item-center gap-5 px-4 py-1 bg-white shadow-custom cursor-pointer rounded-2xl max-md:w-ful max-md:justify-start"
           >
                 <select value={selectedTag} onChange={handleTagChange}>
                     <option value="">All</option>
@@ -97,9 +97,9 @@ const Media = () => {
                 </select> 
               </div>
           {/* Manage Album Button */}
-          <div>
+          <div classname= "max-md:mt-2">
             <button
-              className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 max-md:w-auto"
+              className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 max-md:w-auto max-md:mt-4"
               onClick={handleManageAlbum}
             >
               Manage Album
