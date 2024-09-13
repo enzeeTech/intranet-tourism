@@ -606,7 +606,7 @@ function ShareYourThoughts({ userId, onCreatePoll, includeAccessibilities, filte
                                                                                                 {/* Popup alert for files exceeding size limit */}
             {showMaxSizePopup && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-3xl pt-7 px-6 py-2 w-[500px] max-md:w-full max-md:mx-4 shadow-lg">
+                    <div className="bg-white rounded-3xl pt-7 px-6 py-2 w-[500px] max-md:w-full max-md:mr-14 shadow-lg">
                         <h1 className="flex justify-start mb-2 text-2xl font-bold text-start text-neutral-800">File Size Limit Exceeded</h1>
                         <p>The file size exceeds the limit of 20MB.</p>
                         <div className="flex flex-col mt-4">
