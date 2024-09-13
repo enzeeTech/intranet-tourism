@@ -262,7 +262,7 @@ const Pautan = () => {
       <>
         <section className="flex flex-col px-5 py-4 bg-white rounded-2xl shadow-custom max-w-[1500px] mx-8 my-10">
           <div className="flex items-start justify-between mb-2 border-b border-gray-200">
-            <h2 className="mb-3 text-3xl font-bold text-gray-900">Manage File</h2>
+            <h2 className="mb-3 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">Manage File</h2>
             <div className="flex space-x-4">
               <button
                 className="text-gray-900 font-bold"
@@ -284,10 +284,10 @@ const Pautan = () => {
                 <table className="min-w-full divide-y divide-gray-200" {...provided.droppableProps} ref={provided.innerRef}>
                   <thead>
                     <tr>
-                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 label-column">Department name</th>
-                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
-                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
-                      <th className="px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
+                      <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 label-column">Department name</th>
+                      <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
+                      <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
+                      <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -306,7 +306,7 @@ const Pautan = () => {
                                 disabled={true}
                                 value={removeDeptLabel(app.label)}
                                 readOnly
-                                className="w-full p-1 outline-none border-none"
+                                className="w-full p-1 outline-none border-none text-xs sm:text-xs md:text-md lg:text-lg overflow"
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
                             </td>
@@ -316,11 +316,11 @@ const Pautan = () => {
                                 disabled={true}
                                 value={app.url}
                                 readOnly
-                                className="w-full p-1 outline-none border-none"
+                                className="w-full p-1 outline-none border-none text-xs sm:text-xs md:text-md lg:text-lg"
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
                             </td>
-                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap edit-column">
+                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-normal edit-column">
                               <div className="fixed-size-container">
                                 <button className="text-blue-100" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
                                   <img src="assets/EditIcon.svg" alt="Edit" className="fixed-size" />
@@ -348,7 +348,7 @@ const Pautan = () => {
 
         {isAddModalVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
+            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96 m-4">
               <h2 className="mb-4 text-xl font-bold">Add New Link</h2>
               <input
                 type="text"
@@ -379,7 +379,7 @@ const Pautan = () => {
 
 {isEditModalVisible && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
+    <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96 m-4">
       <h2 className="mb-4 text-xl font-bold">Edit Link</h2>
       <input
         type="text"
@@ -411,7 +411,7 @@ const Pautan = () => {
 
         {isDeleteModalVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96">
+            <div className="relative px-8 py-6 bg-white rounded-2xl shadow-lg w-96 m-4">
               <h2 className="mb-4 text-xl font-bold text-center">Delete this link?</h2>
               <div className="flex justify-center space-x-4">
                 <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white hover:bg-gray-400 hover:text-white rounded-full border border-gray-400" onClick={() => setIsDeleteModalVisible(false)}>
