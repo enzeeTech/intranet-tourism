@@ -128,7 +128,7 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
           </div>
         </div>
         <p className="w-1/4 max-md:mx-2  max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10 ">change to</p>
-        <div className="flex items-center w-1/4 max-md:flex-col max-md:w-1/3">
+        <div className="flex items-center ml-2 w-1/4 max-md:flex-col max-md:w-1/3">
           <img className="w-10 h-10 rounded-full cursor-pointer"
             src={changeImage}
             alt="Change"
@@ -174,8 +174,8 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
             <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
           </div>
         </div>
-        <p className="w-1/4 max-md:mx-2  max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10">change of</p>
-        <div className="flex items-center w-1/4 max-md:flex-col max-md:w-1/3">
+        <p className="w-1/4 max-md:mx-2 max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10">change of</p>
+        <div className="flex items-center ml-2 w-1/4 max-md:flex-col max-md:w-1/3">
           <p className="font-medium text-blue-500 cursor-pointer max-md:mr-10" onClick={() => setIsPopupVisible(true)}>
             {changeType}
           </p>
