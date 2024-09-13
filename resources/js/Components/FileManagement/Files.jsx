@@ -279,11 +279,11 @@ const FileTable = ({ searchTerm }) => {
     };
 
     return (
-        <div className="w-full overflow-visible">
+        <div className="w-full overflow-x-auto">
             <SavingPopup isSaving={isSaving} />
             <div className="flow-root mt-8">
                 <div className="max-h-[calc(100vh-150px)] overflow-auto p-4">
-                    <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
+                    <table className="w-full min-w-[600px] p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
                         <thead>
                             <tr>
                                 <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
