@@ -20,11 +20,11 @@ const Settings = () => {
           <h1 className="text-4xl font-bold text-gray-900">Link</h1>
         </div>
 
-        <div className="flex flex-row w-full">
-          {/* Left section for Department Links */}
-          <div className="flex flex-col w-1/2 p-4 sm:p-6 lg:p-8">
+        <div className="flex flex-col md:flex-row w-full">
+          {/* Top section for Department Links */}
+          <div className="flex flex-col w-full md:w-1/2 p-4 sm:p-6 lg:p-8 md:border-r border-gray-300">
             <div className="flex items-center justify-between mb-4">
-              <PageTitle title="System" />
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">Systems</h1>
               <button
                 className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
                 onClick={handleLinkNavigation}
@@ -33,13 +33,14 @@ const Settings = () => {
               </button>
             </div>
             {/* Display only department links */}
-            <Pautan displayType="non-department" />
+            <Pautan displayType="nonDepartment" />
           </div>
 
-          {/* Right section for Non-Department Links */}
-          <div className="flex flex-col w-1/2 p-4 sm:p-6 lg:p-8 border-l border-gray-300">
+          {/* Bottom section for Non-Department Links */}
+          <div className="flex flex-col w-full md:w-1/2 p-4 sm:p-6 lg:p-8">
             <div className="flex items-center justify-between mb-4">
-              <PageTitle title="Official File" />
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">Official File</h1>
+
               <button
                 className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
                 onClick={handleFolderNavigation}

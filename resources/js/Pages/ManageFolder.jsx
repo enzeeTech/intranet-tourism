@@ -161,44 +161,78 @@ const Pautan = () => {
         resetForm();
       })
       .catch(error => console.error('Error adding app:', error));
+      window.location.reload();
   };
   
 
   const PautanHandleEditApp = (app) => {
+    // Set the current app in local state (including dept in the back-end)
     setCurrentApp(app);
-    setNewAppName(removeDeptLabel(app.label));
+  
+    // Remove the department label for display purposes only (front-end logic)
+    const displayAppName = removeDeptLabel(app.label);
+  
+    // Update the UI with the stripped app name (without dept)
+    setNewAppName(displayAppName);
+  
+    // Keep the original app URL for front-end display
     setNewAppUrl(app.url);
+  
+    // Clear any URL-related errors on the front-end
     setUrlError('');
+  
+    // Show the edit modal
     setIsEditModalVisible(true);
   };
+  
+  
 
   const PautanHandleUpdateApp = () => {
+    // Validate URL format before submission
     if (newAppUrl && !isValidUrl(newAppUrl)) {
       setUrlError('URL must start with http:// or https://');
       return;
     } else {
       setUrlError('');
     }
-
+  
+    // Ensure that the (dept) label is kept in the back-end data
     const updatedApp = {};
-    if (newAppName) updatedApp.label = newAppName;
-    if (newAppUrl) updatedApp.url = newAppUrl;
-
+    
+    // If a new name is provided, append the department label back
+    if (newAppName) {
+      const originalDeptLabel = currentApp.label.match(/\(.*?\)/)?.[0] || ''; // Extract the (dept) from the original label
+      updatedApp.label = `${newAppName} ${originalDeptLabel}`.trim(); // Append the department label to the new app name
+    }
+  
+    if (newAppUrl) {
+      updatedApp.url = newAppUrl;
+    }
+  
+    // Create the API URL with the app ID
     const updateUrl = urlTemplate.replace('{id}', currentApp.id);
-
+  
+    // Send the updated app data to the back end
     fetch(updateUrl, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', "X-CSRF-Token": csrfToken },
       body: JSON.stringify(updatedApp)
     })
+      .then(response => response.json())
       .then(data => {
+        // Update the list of apps with the updated app data
         setApps(sortAlphabetically(apps.map(app => (app.id === data.id ? data : app))));
+        
+        // Reset the form and hide the edit modal
         resetForm();
         setIsEditModalVisible(false);
-        fetchData();
+        fetchData(); // Fetch the updated data after the update
       })
       .catch(error => console.error('Error updating app:', error));
+      window.location.reload();
+
   };
+  
 
   const PautanHandleDeleteApp = () => {
     const deleteUrl = urlTemplate.replace('{id}', currentApp.id);
