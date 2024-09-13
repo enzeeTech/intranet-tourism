@@ -31,27 +31,18 @@ function FileInputSection({ onFileSelect }) {
 function ImageSection({ imageSrc, onDelete }) {
   return (
     <section className="flex gap-5 justify-between mt-3.5">
-      <figure className="flex justify-center items-center w-[190px] h-[50px] rounded-xl border border-solid border-neutral-200 overflow-hidden">
+      <figure className="flex justify-center items-center w-[190px] h-[50px] rounded-xl border border-solid border-neutral-200 overflow-hidden max-md:w-[200px] max-md:h-[100px]">
         {imageSrc ? (
           <img
             loading="lazy"
             src={imageSrc}
             alt="Uploaded"
-            className="object-cover w-full h-full"
+            className="object-contain w-[80%] h-[80%] max-md:w-[70%] max-md:h-[70%] mx-auto my-auto"
           />
         ) : (
           <span className="text-xs text-neutral-800">No image</span>
         )}
       </figure>
-      <div className="flex items-end">
-        <img
-          onClick={onDelete}
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/afe3477ad4cf3bf53704463467275bf23818a2768045ef6be28ddcea6fc246d6?apiKey=285d536833cc4168a8fbec258311d77b&"
-          alt="Delete icon"
-          className={`aspect-square w-[26px] cursor-pointer ${imageSrc ? 'block' : 'hidden'}`}
-        />
-      </div>
     </section>
   );
 }
@@ -86,6 +77,15 @@ function LogoUploader() {
       >
         Save
       </button>
+      {imageSrc && (
+          <img
+            onClick={handleDelete}
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/afe3477ad4cf3bf53704463467275bf23818a2768045ef6be28ddcea6fc246d6?apiKey=285d536833cc4168a8fbec258311d77b&"
+            alt="Delete icon"
+            className="aspect-square w-[38px] cursor-pointer ml-44 -mt-10"
+          />
+        )}
       {savedImage && (
         <div className="mt-5">
           <p className="text-sm text-neutral-800">Saved Image:</p>

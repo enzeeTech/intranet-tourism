@@ -58,49 +58,57 @@ const formatTime = (time) => {
 // Reusable Row Components
 const GroupJoinRow = ({ name, department, time, group, followers, profileImage, groupImage }) => (
   <div className="flex items-center justify-between py-4 border-t border-gray-200">
-    <div className="flex items-center w-1/4">
-      <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
-      <div className="ml-3">
-        <p className="text-sm font-bold text-black">{name} ({department})</p>
-        <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+    <div className="flex flex-row max-md:flex-col justify-between w-full items-center">
+      <div className="flex flex-row w-full items-center justify-between mr-20 max-md:w-full max-md:mr-0">
+        <div className="flex max-md:flex-col max-md:items-start items-center w-1/4 max-md:w-1/3 justify-start">
+          <img className="w-10 h-10 rounded-full max-md:mr-10" src={profileImage} alt="User profile" />
+          <div className="ml-3 max-md:ml-0">
+          <p className="text-sm font-bold text-black">{name} ({department})</p>
+          <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+        </div>
       </div>
-    </div>
-    <p className="w-1/4 text-xs font-semibold text-center text-black">to join</p>
-    <div className="flex items-center w-1/4">
-      <img className="w-10 h-10 rounded-full" src={groupImage} alt="Group" />
-      <div className="ml-3">
+    <p className="w-1/4 max-md:mx-2  max-md:w-1/3 text-xs font-semibold text-center text-black ml-10 max-md:items-start max-md:mr-10">to join</p>
+    <div className="flex items-center w-1/4 max-md:flex-col max-md:items-start max-md:w-1/3">
+      <img className="w-10 h-10 rounded-full items-start" src={groupImage} alt="Group" />
+      <div className="ml-3 max-md:ml-0">
         <p className="text-sm font-bold text-black">{group}</p>
         <p className="text-xs text-gray-400">{followers}</p>
       </div>
     </div>
-    <div className="flex justify-end w-1/4">
-      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
-      <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
     </div>
+    <div className="flex justify-end w-1/4 max-md:justify-end max-md:w-full max-md:mt-4 max-md:flex-col max-md:space-y-2">
+      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+      <button className="px-4 py-1 text-sm ml-2 font-bold text-white bg-[#FF5436] rounded-full max-md:ml-0">Reject</button>
+    </div>
+  </div>
   </div>
 );
 
 const CommunityCreationRow = ({ name, department, time, group, followers, profileImage, groupImage }) => (
   <div className="flex items-center justify-between py-4 border-t border-gray-200">
-    <div className="flex items-center w-1/4">
-      <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
-      <div className="ml-3">
-        <p className="text-sm font-bold text-black">{name} ({department})</p>
-        <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+     <div className="flex flex-row max-md:flex-col justify-between w-full items-center">
+      <div className="flex flex-row w-full items-center justify-between mr-20 max-md:w-full max-md:mr-0">
+        <div className="flex max-md:flex-col items-center w-1/4 max-md:w-1/3 max-md:items-start">
+          <img className="w-10 h-10 rounded-full max-md:mr-10" src={profileImage} alt="User profile" />
+          <div className="ml-3 max-md:ml-0">
+            <p className="text-sm font-bold text-black">{name} ({department})</p>
+            <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
+          </div>
+        </div>
+        <p className="w-1/4 max-md:mx-2 max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10">wants to create</p>
+        <div className="flex items-center ml-2 w-1/4 max-md:flex-col max-md:w-1/3 max-md:items-start">
+          <img className="w-10 h-10 rounded-full" src={groupImage} alt="Group" />
+          <div className="ml-3 max-md:ml-0">
+            <p className="text-sm font-bold text-black">{group}</p>
+            <p className="text-xs text-gray-400">{followers}</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <p className="w-1/4 text-xs font-semibold text-center text-black">wants to create</p>
-    <div className="flex items-center w-1/4">
-      <img className="w-10 h-10 rounded-full" src={groupImage} alt="Group" />
-      <div className="ml-3">
-        <p className="text-sm font-bold text-black">{group}</p>
-        <p className="text-xs text-gray-400">{followers}</p>
+      <div className="flex justify-end w-1/4 max-md:justify-end max-md:w-full max-md:mt-4 max-md:flex-col max-md:space-y-2">
+        <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+        <button className="px-4 py-1 text-sm ml-2 font-bold text-white bg-[#FF5436] rounded-full max-md:ml-0">Reject</button>
       </div>
-    </div>
-    <div className="flex justify-end w-1/4">
-      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
-      <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
-    </div>
+    </div> 
   </div>
 );
 
@@ -109,27 +117,29 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
 
   return (
     <>
-      <div className="relative flex items-center justify-between py-4 border-t border-gray-200">
-        <div className="flex items-center w-1/4">
-          <img className="w-10 h-10 rounded-full" src={currentImage} alt="User profile" />
-          <div className="ml-3">
+      <div className="flex items-center justify-between py-4 border-t border-gray-200">
+      <div className="flex flex-row max-md:flex-col justify-between w-full items-center">
+      <div className="flex flex-row w-full items-center justify-between mr-20 max-md:w-full max-md:mr-0">
+        <div className="flex max-md:flex-col w-1/4 max-md:w-1/3 items-start">
+          <img className="w-10 h-10 rounded-full max-md:mr-10" src={currentImage} alt="User profile" />
+          <div className="ml-3 max-md:ml-0">
             <p className="text-sm font-bold text-black">{name} ({department})</p>
             <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
           </div>
         </div>
-        <p className="w-1/4 text-xs font-semibold text-center text-black">change to</p>
-        <div className="flex items-center w-1/4">
-          <img
-            className="w-10 h-10 rounded-full cursor-pointer"
+        <p className="w-1/4 max-md:mx-2  max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10 ">change to</p>
+        <div className="flex items-center ml-2 w-1/4 max-md:flex-col max-md:w-1/3">
+          <img className="w-10 h-10 rounded-full cursor-pointer"
             src={changeImage}
             alt="Change"
-            onClick={() => setIsPopupVisible(true)}
-          />
+            onClick={() => setIsPopupVisible(true)}/>
         </div>
-        <div className="flex justify-end w-1/4">
+        </div>
+        <div className="flex justify-end w-1/4 max-md:justify-end max-md:w-full max-md:mt-4 max-md:flex-col max-md:space-y-2 ">
           <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
-          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
+          <button className="px-4 py-1 text-sm ml-2 font-bold text-white bg-[#FF5436] rounded-full max-md:ml-0">Reject</button>
         </div>
+      </div>
       </div>
 
       {isPopupVisible && (
@@ -154,24 +164,28 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
 
   return (
     <>
-      <div className="relative flex items-center justify-between py-4 border-t border-gray-200">
-        <div className="flex items-center w-1/4">
-          <img className="w-10 h-10 rounded-full" src={profileImage} alt="User profile" />
-          <div className="ml-3">
+      <div className="flex items-center justify-between py-4 border-t border-gray-200">
+      <div className="flex flex-row max-md:flex-col justify-between w-full items-center">
+      <div className="flex flex-row w-full items-center justify-between mr-20 max-md:w-full max-md:mr-0">
+        <div className="flex max-md:flex-col items-center w-1/4 max-md:w-1/3 max-md:items-start">
+          <img className="w-10 h-10 rounded-full max-md:mr-10" src={profileImage} alt="User profile" />
+          <div className="ml-3 max-md:ml-0">
             <p className="text-sm font-bold text-black">{name} ({department})</p>
             <p className="text-xs font-semibold text-black">{formatTime(time)}</p>
           </div>
         </div>
-        <p className="w-1/4 text-xs font-semibold text-center text-black">change of</p>
-        <div className="flex items-center w-1/4">
-          <p className="font-medium text-blue-500 cursor-pointer" onClick={() => setIsPopupVisible(true)}>
+        <p className="w-1/4 max-md:mx-2 max-md:w-1/3 text-xs font-semibold text-center text-black -mr-10">change of</p>
+        <div className="flex items-center ml-2 w-1/4 max-md:flex-col max-md:w-1/3">
+          <p className="font-medium text-blue-500 cursor-pointer max-md:mr-10" onClick={() => setIsPopupVisible(true)}>
             {changeType}
           </p>
         </div>
-        <div className="flex justify-end w-1/4">
-          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
-          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
         </div>
+        <div className="flex justify-end w-1/4 max-md:justify-end max-md:w-full max-md:mt-4 max-md:flex-col max-md:space-y-2">
+          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full max-md:ml-0">Reject</button>
+        </div>
+      </div>
       </div>
 
       {isPopupVisible && (
