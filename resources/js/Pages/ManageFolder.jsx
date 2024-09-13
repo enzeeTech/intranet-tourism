@@ -285,7 +285,7 @@ const Pautan = () => {
                   <thead>
                     <tr>
                       <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 label-column">Department name</th>
-                      <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th>
+                      {/* <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-start text-gray-500 url-column">URL</th> */}
                       <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 edit-column">Edit</th>
                       <th className="text-xs sm:text-xs md:text-md lg:text-lg px-6 max-md:px-2 py-3 font-bold text-md text-center text-gray-500 delete-column">Delete</th>
                     </tr>
@@ -310,7 +310,7 @@ const Pautan = () => {
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
                             </td>
-                            <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap url-column">
+                            {/* <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-nowrap url-column">
                               <input
                                 type="text"
                                 disabled={true}
@@ -319,7 +319,7 @@ const Pautan = () => {
                                 className="w-full p-1 outline-none border-none text-xs sm:text-xs md:text-md lg:text-lg"
                                 style={{ borderColor: '#E4E4E4', borderRadius: '0.375rem', borderWidth: '1px' }}
                               />
-                            </td>
+                            </td> */}
                             <td className="px-6 max-md:px-2 py-4 text-sm font-semibold text-black whitespace-normal edit-column">
                               <div className="fixed-size-container">
                                 <button className="text-blue-100" onClick={(e) => { e.stopPropagation(); PautanHandleEditApp(app); }}>
