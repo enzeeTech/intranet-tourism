@@ -471,7 +471,7 @@ function Calendar() {
 
     return (
         <Example>
-            <div className="container mx-auto mt-4 " style={{ maxWidth: '90%' }}>
+            <div className="container mx-auto mt-4" style={{ maxWidth: '90%' }}>
                 <h1 className="mb-3 font-sans text-4xl font-bold text-left">Calendar</h1>
                 <hr className="mx-auto my-2" style={{ borderColor: '#E4E4E4', borderWidth: '1px' }} />
                 <div className="flex flex-col items-center w-full mt-3 mb-8">

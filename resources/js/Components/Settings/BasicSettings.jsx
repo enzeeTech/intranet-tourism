@@ -8,7 +8,7 @@ function FileInputSection({ onFileSelect }) {
   };
 
   return (
-    <section className="flex gap-2.5 mt-5 text-center">
+    <section className="flex gap-2.5 mt-5 text-center justify-between">
       <input
         type="file"
         id="fileInput"
@@ -21,7 +21,7 @@ function FileInputSection({ onFileSelect }) {
       >
         Choose file
       </button>
-      <span className="flex-auto my-auto text-xs font-medium text-opacity-50 text-neutral-800">
+      <span className="my-auto text-xs font-medium text-opacity-50 text-neutral-800">
         No file Chosen
       </span>
     </section>
@@ -30,14 +30,14 @@ function FileInputSection({ onFileSelect }) {
 
 function ImageSection({ imageSrc, onDelete }) {
   return (
-    <section className="flex gap-5 justify-between mt-3.5">
-      <figure className="flex justify-center items-center w-[190px] h-[50px] rounded-xl border border-solid border-neutral-200 overflow-hidden max-md:w-[200px] max-md:h-[100px]">
+    <section className="flex mt-3.5">
+      <figure className="flex justify-center items-center w-full h-[50px] rounded-xl border border-solid border-neutral-200 overflow-hidden max-md:w-full max-md:h-[100px]">
         {imageSrc ? (
           <img
             loading="lazy"
             src={imageSrc}
             alt="Uploaded"
-            className="object-contain w-[80%] h-[80%] max-md:w-[70%] max-md:h-[70%] mx-auto my-auto"
+            className="object-contain w-[80%] h-[80%] max-md:h-[70%] mx-auto my-auto"
           />
         ) : (
           <span className="text-xs text-neutral-800">No image</span>
@@ -71,9 +71,10 @@ function LogoUploader() {
       </header>
       <FileInputSection onFileSelect={handleFileSelect} />
       <ImageSection imageSrc={imageSrc} onDelete={handleDelete} />
+      <div className="flex flex-row justify-end gap-2 mt-4">
       <button
         onClick={handleSave}
-        className="self-center px-4 py-2 mt-5 text-white bg-blue-500 rounded-full"
+        className="self-center px-4 py-2 text-white bg-blue-500 rounded-full"
       >
         Save
       </button>
@@ -83,9 +84,10 @@ function LogoUploader() {
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/afe3477ad4cf3bf53704463467275bf23818a2768045ef6be28ddcea6fc246d6?apiKey=285d536833cc4168a8fbec258311d77b&"
             alt="Delete icon"
-            className="aspect-square w-[38px] cursor-pointer ml-44 -mt-10"
+            className="aspect-square w-[38px] cursor-pointer"
           />
         )}
+  </div>
       {savedImage && (
         <div className="mt-5">
           <p className="text-sm text-neutral-800">Saved Image:</p>
