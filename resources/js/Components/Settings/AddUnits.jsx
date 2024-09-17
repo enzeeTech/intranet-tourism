@@ -184,7 +184,7 @@ const AddUnits = () => {
         <div className="flex max-md:justify-end max-md:w-full">
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 max-md:w-full"
           disabled={!selectedDepartmentId}
         >
           Add New Unit
