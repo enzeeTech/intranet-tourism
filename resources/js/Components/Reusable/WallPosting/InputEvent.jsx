@@ -123,7 +123,7 @@ export function Event({ onClose, onSaveEvent, chosenEvent }) {
 
   return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="flex flex-col font-semibold rounded-2xl p-6 w-full max-w-[442px] bg-white" onClick={(e) => e.stopPropagation()}>
+      <div className="flex flex-col font-semibold rounded-2xl p-6 w-full max-w-[442px] max-md:mx-8 bg-white" onClick={(e) => e.stopPropagation()}>
               <div className="flex w-full justify-between items-center mb-6">
                 <div className="text-2xl font-bold w-full">
                     Tag Event

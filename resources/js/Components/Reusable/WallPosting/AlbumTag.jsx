@@ -106,7 +106,7 @@ const TagInput = ({ tag, setTag, onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="flex flex-col font-semibold rounded-none max-w-[442px]">
+      <div className="flex flex-col font-semibold rounded-none max-w-[442px] max-md:mx-8">
         <section className="flex flex-col pt-1.5 w-full bg-white rounded-2xl shadow-custom">
           <div className="flex flex-row w-full items-center justify-between px-6 mt-4 mb-2">
             <div className="text-2xl font-bold w-full">
