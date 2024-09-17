@@ -123,7 +123,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
     return (
         <>
-            <div className="absolute right-0 z-10 mt-2.5 w-60 p-4 bg-white border border-gray-200 rounded-lg shadow-lg">
+            <div className="absolute right-0 z-10 mt-2.5 w-60 p-4 bg-white border border-gray-200 rounded-lg shadow-lg max-md:left-0 -ml-28">
                 <p className="text-sm font-semibold text-gray-900">
                     Today's Birthdays
                 </p>
