@@ -277,17 +277,17 @@ export default function Roles() {
     return (
         <div className="flow-root">
             <div className="container p-8 mx-auto">
-                <div className="flex items-center justify-between mb-8 max-md:flex-col max-md:w-full max-md:gap-4">
+                <div className="flex items-center justify-between mb-8 max-md:flex-col max-md:w-full max-md:gap-4 -ml-4">
                     <div className="max-md:w-full">
                         <h1 className="text-3xl font-bold text-gray-900">Roles</h1>
                         <p className="text-gray-600">
                             View users with roles
                         </p>
                     </div>
-                    <div className="flex max-md:justify-end max-md:w-full">
+                    <div className="flex max-md:w-full">
                     <button
                         onClick={() => setIsSearchPopupOpen(true)}
-                        className="px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                        className="px-4 py-2 max-md:w-full font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700"
                     >
                         Assign New Super Admin
                     </button>
