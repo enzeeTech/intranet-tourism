@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained('users');
             $table->string('type')->nullable()->default('post')->comment('post,comment,announcement,poll')->index();
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->string('title')->nullable();
             $table->json('tag')->nullable();  // ['AkuKauDanDia', 'GegearVaganza']
             $table->string('visibility')->nullable()->default('public')->comment('public, department, file')->index();

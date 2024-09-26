@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            //
             $table->json('event')->nullable();
         });
     }
@@ -23,7 +22,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            //
             $table->dropColumn('event')->nullable();
         });
     }

@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AuthSeeder::class,
             UserSeeder::class,
-            // CustomSqlSeeder::class,
+            CustomSqlSeeder::class,
         ]);
     }
 }

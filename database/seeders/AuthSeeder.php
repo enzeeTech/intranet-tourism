@@ -52,24 +52,5 @@ class AuthSeeder extends Seeder
             $role->givePermissionTo(collect($permissionList)->flatMap(fn($item) => $item)->keys()->toArray());
         }
 
-        $admin = User::factory()->create(['email' => 'admin@enzee.com']);
-        Profile::factory()->create(['user_id' => $admin->id, 'bio' => $admin->name]);
-        $admin->assignRole($adminRole->name);
-
-        if (! app()->isProduction()) {
-            $user = User::factory()->create(['email' => 'test@example.com']);
-            Profile::factory()->create(['user_id' => $user->id, 'bio' => $user->name]);
-            $user->assignRole($userRole->name);
-
-            User::factory(3)->create()->each(function ($user) use ($adminRole) {
-                $user->assignRole($adminRole->name);
-                Profile::factory()->create(['user_id' => $user->id, 'bio' => $user->name]);
-            });
-
-            User::factory(10)->create()->each(function ($user) use ($userRole) {
-                $user->assignRole($userRole->name);
-                Profile::factory()->create(['user_id' => $user->id, 'bio' => $user->name]);
-            });
-        }
     }
 }

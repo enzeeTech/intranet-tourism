@@ -1,25 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tailwind-base, primereact, tailwind-utilities;
+
+/* IMPORTANT: In "styled" mode you must add the PrimeReact Theme here. Do NOT include in "unstyled" mode */
+@import 'primereact/resources/themes/lara-light-blue/theme.css';
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
 
 
 .input-no-outline:focus {
     outline: none !important;
-    box-shadow: none !important; 
+    box-shadow: none !important;
 }
 
 .input-focus-style:focus {
     outline: none;
     border: 1px solid #4880FF;
-    border-radius: 1.5rem; 
-    box-shadow: none; 
+    border-radius: 1.5rem;
+    box-shadow: none;
   }
 
 /* For the 'File' and 'Date' columns */
 .th-file, .td-file, .th-date, .td-date {
   border: 2px solid #3182ce; /* Tailwind blue-500 */
 }
-  
+
 .avatar-hover:hover {
   filter: grayscale(100%); /* Converts the image to grayscale on hover */
 }
@@ -175,7 +185,7 @@
 }
 
 @layer base {
-  
+
   :primary {
 
   }

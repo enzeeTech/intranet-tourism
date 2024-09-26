@@ -24,6 +24,7 @@
         "owen-it/laravel-auditing": "^13.6",
         "socialiteproviders/microsoft-azure": "^5.2",
         "spatie/laravel-permission": "^6.9",
+        "staudenmeir/laravel-adjacency-list": "^1.0",
         "tightenco/ziggy": "^2.2"
     },
     "require-dev": {

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
-            $table->string('venue');
+            $table->string('venue')->nullable();
             $table->string('url')->nullable();
             $table->string('description')->nullable();
             $table->string('color')->nullable();
