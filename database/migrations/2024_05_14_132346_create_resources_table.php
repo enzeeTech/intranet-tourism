@@ -25,13 +25,13 @@ return new class extends Migration
         //     $table->auditable();
         // });
 
-        Schema::create('resource_access', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignUuid('resource_id')->constrained();
-            $table->json('ability')->nullable()->default('["VIEW"]')->comment('VIEW, EDIT, DELETE, SHARE, DOWNLOAD');
-            $table->auditable();
-        });
+        // Schema::create('resource_access', function (Blueprint $table) {
+        //     $table->uuid('id')->primary();
+        //     $table->foreignId('user_id')->constrained();
+        //     $table->foreignUuid('resource_id')->constrained();
+        //     $table->json('ability')->nullable()->default('["VIEW"]')->comment('VIEW, EDIT, DELETE, SHARE, DOWNLOAD');
+        //     $table->auditable();
+        // });
     }
 
     /**

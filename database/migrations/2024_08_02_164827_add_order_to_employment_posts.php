@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employment_posts', function (Blueprint $table) {
-            $table->dropColumn('schema_grade');
-            $table->dropColumn('title');
+            // $table->dropColumn('schema_grade');
+            // $table->dropColumn('title');
             $table->integer('order')->after('user_id')->default(1);
         });
     }

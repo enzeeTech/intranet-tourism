@@ -48,9 +48,15 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained();
             $table->foreignId('business_unit_id')->nullable()->constrained();
             $table->foreignId('business_post_id')->constrained();
-            $table->foreignId('business_grade_id')->constrained();
+            $table->foreignId('business_grade_id')->nullable()->constrained();
             $table->foreignId('business_scheme_id')->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
+            // $table->string('department_id')->nullable();
+            // $table->string('business_unit_id')->nullable();
+            // $table->string('business_post_id')->nullable();
+            // $table->string('business_grade_id')->nullable();
+            // $table->string('business_scheme_id')->nullable();
+            // $table->string('user_id')->nullable();
             $table->auditable();
         });
 
