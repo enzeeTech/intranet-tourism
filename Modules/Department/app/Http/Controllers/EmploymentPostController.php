@@ -18,6 +18,7 @@ class EmploymentPostController extends Controller
                 ->join('profiles', 'users.id', '=', 'profiles.user_id')
                 ->join('business_posts', 'employment_posts.business_post_id', '=', 'business_posts.id')
                 ->join('business_grades', 'employment_posts.business_grade_id', '=', 'business_grades.id')
+                ->leftJoin('supervisors', 'supervisors.child_id', '=', 'employment_posts.id')
                 ->select(
                     'users.id as user_id',
                     'employment_posts.id as employment_post_id',
@@ -29,6 +30,7 @@ class EmploymentPostController extends Controller
                     'profiles.staff_image',
                     'employment_posts.work_phone',
                     'profiles.phone_no',
+                    'supervisors.parent_id',
                 )
                 ->get()
                 ->map(function ($member) {

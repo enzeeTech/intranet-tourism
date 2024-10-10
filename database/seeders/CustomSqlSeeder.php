@@ -152,6 +152,12 @@ class CustomSqlSeeder extends Seeder
                 n.email IS NOT NULL;
             SQL;
 
+            // TODO insert reporting structure
+            // INSERT INTO supervisors (
+            //     child_id,
+            //     parent_id,
+            // )
+
             // Execute SQL script
             DB::unprepared($sql);
         });

@@ -28,51 +28,6 @@ const StaffDirectory = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const csrfToken = useCsrf();
 
-    const [data] = useState([
-        {
-            label: "Pengarah",
-            expanded: true,
-            children: [
-                {
-                    label: "Pembantu",
-                    expanded: true,
-                },
-                {
-                    label: "Pembantu",
-                    expanded: true,
-                    children: [
-                        {
-                            label: "Pembantu",
-                            expanded: true,
-                        },
-                        {
-                            label: "Pembantu",
-                            expanded: true,
-                        },
-                        {
-                            label: "Pembantu",
-                            expanded: true,
-                        },
-                    ],
-                },
-                {
-                    label: "Pembantu",
-                    expanded: true,
-                    children: [
-                        {
-                            label: "Pembantu",
-                            expanded: true,
-                        },
-                        {
-                            label: "Pembantu",
-                            expanded: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    ]);
-
     const fetchDepartments = async (url) => {
         try {
             const response = await fetch(url, {
@@ -121,6 +76,8 @@ const StaffDirectory = () => {
 
             const members = data.members.map((member) => ({
                 id: member.user_id,
+                post_id: member.employment_post_id,
+                report_to: member.parent_id,
                 name: member.name,
                 role: member.business_post_title,
                 status: "Online",
@@ -204,6 +161,12 @@ const StaffDirectory = () => {
         .filter((member) =>
             member.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
+        .map((member) => ({
+            ...member,
+            label: member.name,
+            expanded: true,
+            type: "person",
+        }))
         .sort((a, b) => parseInt(a.order) - parseInt(b.order));
 
     const updateIsActiveStatus = async (memberId, isActive) => {
@@ -260,7 +223,7 @@ const StaffDirectory = () => {
         }
     };
 
-    console.log("staffMembers", staffMembers);
+    // console.log("staffMembers", staffMembers);
 
     const handleNewMemberAdded = (newMember) => {
         const newMembers = [...staffMembers, newMember];
@@ -287,6 +250,94 @@ const StaffDirectory = () => {
         handleNewMemberAdded(newMember);
     };
 
+    const reportingStructures = buildTree(
+        staffMembers
+            .filter((member) =>
+                member.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .map((member) => ({
+                data: member,
+                id: member.post_id,
+                parent_id: member.report_to,
+                label: member.name,
+                className: "border rounded-lg p-3 shadow-md",
+                // className: "staff-member-card p-0",
+                // style: { borderRadius: '12px' },
+                expanded: true,
+                type: "person",
+            }))
+    );
+
+    console.log("reportingStructures", reportingStructures);
+
+    function buildTree(members) {
+        const idMapping = members.reduce((acc, el, i) => {
+            acc[el.id] = i;
+            return acc;
+        }, {});
+        const ids = members.map((member) => member.id);
+        let root = [];
+        members.forEach((el) => {
+            // Handle the root element
+            if (el.parent_id === null || !ids.includes(el.parent_id)) {
+                if (!root.length) root.push(el);
+                return;
+            }
+
+            // Use our mapping to locate the parent element in the array
+            const parentEl = members[idMapping[el.parent_id]];
+
+            // Add the current element to the parent's 'children' array
+            parentEl.children = [...(parentEl.children || []), el];
+        });
+        // return members;
+        return root;
+    }
+
+    const memberNodeTemplate = (node) => {
+        if (node.type === "person") {
+            return (
+                // <div className="flex flex-col items-center gap-2">
+                //     <div className="border shadow-md w-20 h-20 rounded-full overflow-hidden">
+                //         <img class="object-contain h-20 w-20" src={node.data.imageUrl} />
+                //     </div>
+                //     <div className="font-bold text-sm">{node.data.name}</div>
+                //     <div className="text-sm">{node.data.role}</div>
+                // </div>
+                <StaffMemberCard
+                    withWrapperClass={false}
+                    key={node.data.id}
+                    id={node.data.id}
+                    name={node.data.name}
+                    role={node.data.role}
+                    status={node.data.status}
+                    imageUrl={node.data.imageUrl}
+                    workNo={node.data.workNo}
+                    phoneNo={node.data.phoneNo}
+                    isDeactivated={node.data.isDeactivated}
+                    onDeactivateClick={() =>
+                        handleDeactivateClick(node.data.id)
+                    }
+                    onActivateClick={() => handleActivateClick(node.data.id)}
+                    isPopupOpen={activePopupId === node.data.id}
+                    setActivePopup={() => {
+                        setActivePopupId(node.data.id);
+                        setActivePopupRef(
+                            document.getElementById(
+                                `staff-popup-${node.data.id}`
+                            )
+                        );
+                    }}
+                    closePopup={() => {
+                        setActivePopupId(null);
+                        setActivePopupRef(null);
+                    }}
+                />
+            );
+        }
+
+        return node.label;
+    };
     return (
         <Example>
             <div className="flex-row">
@@ -311,34 +362,55 @@ const StaffDirectory = () => {
                                 <div className="staff-member-grid-container max-w-[1200px]">
                                     <div className="mt-20 ml-32 loading-spinner"></div>
                                 </div>
+                            ) : isOrgChartActive ? (
+                                // <div>asd</div>
+                                <div className="staff-member-grid-container max-w-[1200px]">
+                                    {reportingStructures.length ? (
+                                        <OrganizationChart
+                                            value={reportingStructures}
+                                            nodeTemplate={memberNodeTemplate}
+                                        />
+                                    ) : (
+                                        <div></div>
+                                    )}
+                                </div>
                             ) : (
-                                <OrganizationChart value={data} />
-                                // <div className="staff-member-grid-container max-w-[1200px]">
-                                //   {filteredStaffMembers.map((member) => (
-                                //     <StaffMemberCard
-                                //       key={member.id}
-                                //       id={member.id}
-                                //       name={member.name}
-                                //       role={member.role}
-                                //       status={member.status}
-                                //       imageUrl={member.imageUrl}
-                                //       workNo={member.workNo}
-                                //       phoneNo={member.phoneNo}
-                                //       isDeactivated={member.isDeactivated}
-                                //       onDeactivateClick={() => handleDeactivateClick(member.id)}
-                                //       onActivateClick={() => handleActivateClick(member.id)}
-                                //       isPopupOpen={activePopupId === member.id}
-                                //       setActivePopup={() => {
-                                //         setActivePopupId(member.id);
-                                //         setActivePopupRef(document.getElementById(`staff-popup-${member.id}`));
-                                //       }}
-                                //       closePopup={() => {
-                                //         setActivePopupId(null);
-                                //         setActivePopupRef(null);
-                                //       }}
-                                //     />
-                                //   ))}
-                                // </div>
+                                <div className="staff-member-grid-container max-w-[1200px]">
+                                    {filteredStaffMembers.map((member) => (
+                                        <StaffMemberCard
+                                            key={member.id}
+                                            id={member.id}
+                                            name={member.name}
+                                            role={member.role}
+                                            status={member.status}
+                                            imageUrl={member.imageUrl}
+                                            workNo={member.workNo}
+                                            phoneNo={member.phoneNo}
+                                            isDeactivated={member.isDeactivated}
+                                            onDeactivateClick={() =>
+                                                handleDeactivateClick(member.id)
+                                            }
+                                            onActivateClick={() =>
+                                                handleActivateClick(member.id)
+                                            }
+                                            isPopupOpen={
+                                                activePopupId === member.id
+                                            }
+                                            setActivePopup={() => {
+                                                setActivePopupId(member.id);
+                                                setActivePopupRef(
+                                                    document.getElementById(
+                                                        `staff-popup-${member.id}`
+                                                    )
+                                                );
+                                            }}
+                                            closePopup={() => {
+                                                setActivePopupId(null);
+                                                setActivePopupRef(null);
+                                            }}
+                                        />
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </main>
