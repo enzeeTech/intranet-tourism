@@ -6,6 +6,7 @@ use App\Models\BaseModel as Model;
 use App\Models\Traits\Attachable;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Database\Factories\DepartmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Settings\Models\DepartmentPreference;
@@ -14,7 +15,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Department extends Model implements AuditableContract
 {
-    use Auditable, Authorizable, HasFactory, QueryableApi , Attachable;
+    use Auditable, Authorizable, HasFactory, QueryableApi, Attachable;
 
     protected static function newFactory()
     {
@@ -35,19 +36,19 @@ class Department extends Model implements AuditableContract
         $rules = [
             'create' => [
                 [
-                    'name' => ['string' , 'required'],
-                    'banner' => [ 'file'],
-                    'description' => ['string' , 'nullable'],
-                    'order' => ['integer' ,'nullable'],
+                    'name' => ['string', 'required'],
+                    'banner' => ['file'],
+                    'description' => ['string', 'nullable'],
+                    'order' => ['integer', 'nullable'],
                 ],
                 // [],
             ],
             'update' => [
                 [
-                    'name' => ['string','required'],
+                    'name' => ['string', 'required'],
                     'banner' => ['file'],
-                    'description' => ['string' , 'nullable'],
-                    'order' => ['integer' ,'nullable'],
+                    'description' => ['string', 'nullable'],
+                    'order' => ['integer', 'nullable'],
                 ],
                 // [],
             ],
@@ -64,5 +65,9 @@ class Department extends Model implements AuditableContract
     public function employmentPosts()
     {
         return $this->hasMany(EmploymentPost::class);
+    }
+    public function members()
+    {
+        return $this->belongsToMany(User::class, EmploymentPost::class);
     }
 }

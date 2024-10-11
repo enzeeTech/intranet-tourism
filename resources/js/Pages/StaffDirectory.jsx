@@ -12,6 +12,7 @@ import "./css/StaffDirectory.css";
 import Example from "../Layouts/DashboardLayoutNew";
 import { useCsrf } from "@/composables";
 import { OrganizationChart } from "primereact/organizationchart";
+import { stratify, hierarchy, treemap } from "d3";
 
 const StaffDirectory = () => {
     const [selectedDepartmentId, setSelectedDepartmentId] = useState("");
@@ -78,7 +79,12 @@ const StaffDirectory = () => {
                 id: member.user_id,
                 post_id: member.employment_post_id,
                 report_to: member.parent_id,
+                is_hod: member.is_hod,
                 name: member.name,
+                department_id: member.department_id,
+                department_name: member.department_name,
+                unit_id: member.unit_id,
+                unit_name: member.unit_name,
                 role: member.business_post_title,
                 status: "Online",
                 imageUrl:
@@ -261,8 +267,6 @@ const StaffDirectory = () => {
                 parent_id: member.report_to,
                 label: member.name,
                 className: "border rounded-lg p-3 shadow-md",
-                // className: "staff-member-card p-0",
-                // style: { borderRadius: '12px' },
                 expanded: true,
                 type: "person",
             }))
@@ -271,27 +275,51 @@ const StaffDirectory = () => {
     console.log("reportingStructures", reportingStructures);
 
     function buildTree(members) {
-        const idMapping = members.reduce((acc, el, i) => {
-            acc[el.id] = i;
-            return acc;
-        }, {});
-        const ids = members.map((member) => member.id);
-        let root = [];
-        members.forEach((el) => {
-            // Handle the root element
-            if (el.parent_id === null || !ids.includes(el.parent_id)) {
-                if (!root.length) root.push(el);
-                return;
-            }
+        if (!members.length) return [];
+        const firstMember = members.find((member) => member.parent_id === null);
 
-            // Use our mapping to locate the parent element in the array
-            const parentEl = members[idMapping[el.parent_id]];
+        const treeMember = members.filter(
+            (member) => member.parent_id !== null || member.id == firstMember.id
+        );
 
-            // Add the current element to the parent's 'children' array
-            parentEl.children = [...(parentEl.children || []), el];
-        });
-        // return members;
-        return root;
+        const hodGroup = treeMember
+            .filter((member) => member.data.is_hod && member.parent_id != null)
+            .map((member) => ({
+                id: `u-${member.data.unit_id}`,
+                type: "group",
+                label: member.data.unit_name,
+                parent_id: member.parent_id,
+            }));
+
+        const structure = treeMember
+            .map((member) =>
+                member.data.is_hod && member.parent_id != null
+                    ? { ...member, parent_id: `u-${member.data.unit_id}` }
+                    : member
+            )
+            .concat(hodGroup);
+        console.log(structure);
+
+        const convertToTree = (data) => {
+            // Create a map of nodes
+            const nodeMap = {};
+            data.forEach((item) => {
+                nodeMap[item.id] = { ...item, children: [] };
+            });
+
+            // Build the tree structure
+            const tree = [];
+            data.forEach((item) => {
+                if (item.parent_id) {
+                    nodeMap[item.parent_id].children.push(nodeMap[item.id]);
+                } else {
+                    tree.push(nodeMap[item.id]); // Add root nodes
+                }
+            });
+
+            return tree;
+        };
+        return convertToTree(structure);
     }
 
     const memberNodeTemplate = (node) => {
@@ -335,8 +363,7 @@ const StaffDirectory = () => {
                 />
             );
         }
-
-        return node.label;
+        return <div className="font-bold text-sm">{node.label}</div>;
     };
     return (
         <Example>

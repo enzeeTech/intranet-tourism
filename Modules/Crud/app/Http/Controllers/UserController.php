@@ -5,6 +5,7 @@ namespace Modules\Crud\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Crud\Models\User;
 use Illuminate\Http\Request;
+use Modules\Department\Models\Department;
 
 class UserController extends Controller
 {
@@ -28,7 +29,6 @@ class UserController extends Controller
 
         return response()->json(['data' => $data]);
     }
-
     public function show($id)
     {
         return response()->json([

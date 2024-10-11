@@ -51,12 +51,7 @@ return new class extends Migration
             $table->foreignId('business_grade_id')->nullable()->constrained();
             $table->foreignId('business_scheme_id')->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
-            // $table->string('department_id')->nullable();
-            // $table->string('business_unit_id')->nullable();
-            // $table->string('business_post_id')->nullable();
-            // $table->string('business_grade_id')->nullable();
-            // $table->string('business_scheme_id')->nullable();
-            // $table->string('user_id')->nullable();
+            $table->boolean('is_hod')->default(false);
             $table->auditable();
         });
 

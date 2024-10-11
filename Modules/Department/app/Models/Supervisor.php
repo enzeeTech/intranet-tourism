@@ -5,6 +5,7 @@ namespace Modules\Department\Models;
 use App\Models\BaseModel as Model;
 use App\Models\Traits\Authorizable;
 use App\Models\Traits\QueryableApi;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
@@ -50,5 +51,10 @@ class Supervisor extends Model implements AuditableContract
     public function parent()
     {
         return $this->belongsTo(EmploymentPost::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOneThrough(User::class, EmploymentPost::class, 'id', 'id', 'parent_id', 'user_id');
     }
 }

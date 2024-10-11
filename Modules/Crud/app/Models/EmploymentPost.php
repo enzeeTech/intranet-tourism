@@ -109,8 +109,13 @@ class EmploymentPost extends Model implements AuditableContract
         return $this->belongsTo(User::class);
     }
 
-    public function supervisors()
+    public function supervisor()
     {
-        return $this->hasMany(Supervisor::class);
+        return $this->hasOne(Supervisor::class, 'child_id')->latestOfMany();
+    }
+
+    public function underlings()
+    {
+        return $this->hasMany(Supervisor::class, 'parent_id');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Crud\Http\Controllers\UserController;
+use Modules\User\Http\Controllers\UserController;
 use Modules\Department\Http\Controllers\BusinessGradeController;
 use Modules\Department\Http\Controllers\BusinessPostController;
 use Modules\Department\Http\Controllers\BusinessSchemeController;
@@ -31,3 +31,5 @@ Route::apiResources([
     'users' => UserController::class,
     'birthday_reminders' => BirthdayReminderController::class,
 ]);
+
+Route::get('by-department/{department}', [UserController::class, 'byDepartment'])->name('user.byDepartment');

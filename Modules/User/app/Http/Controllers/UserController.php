@@ -5,6 +5,7 @@ namespace Modules\User\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\User\Models\User;
 use Illuminate\Http\Request;
+use Modules\Department\Models\Department;
 
 class UserController extends Controller
 {
@@ -45,6 +46,15 @@ class UserController extends Controller
         }
 
         return response()->json(['data' => $data]);
+    }
+
+    public function byDepartment(Department $department)
+    {
+        return response()->json([
+            'data' => [
+                'data' => $department->members()->has('employmentPost')->get(),
+            ],
+        ]);
     }
 
     public function show($id)

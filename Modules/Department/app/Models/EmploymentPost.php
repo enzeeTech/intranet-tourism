@@ -32,6 +32,7 @@ class EmploymentPost extends Model implements AuditableContract
         'business_grade_id',
         'business_scheme_id',
         'user_id',
+        'is_hod',
         'location',
         'order',
         'work_phone',
@@ -57,6 +58,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'order' => ['numeric'],
                     'work_phone' => ['string'],
                     'position' => ['string'],
+                    'is_hod' => ['boolean'],
                 ],
                 // [],
             ],
@@ -72,6 +74,7 @@ class EmploymentPost extends Model implements AuditableContract
                     'order' => ['numeric'],
                     'work_phone' => ['string'],
                     'position' => ['string'],
+                    'is_hod' => ['boolean'],
                 ],
                 // [],
             ],
@@ -118,8 +121,8 @@ class EmploymentPost extends Model implements AuditableContract
         return $this->belongsTo(User::class);
     }
 
-    public function supervisors()
+    public function supervisor()
     {
-        return $this->hasMany(Supervisor::class);
+        return $this->hasOne(Supervisor::class, 'child_id');
     }
 }
