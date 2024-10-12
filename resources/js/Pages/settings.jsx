@@ -33,11 +33,11 @@
 //                 <div className="file-directory-header"></div>
 //                 <PageTitle title="Settings" />
 //                 <hr className="file-directory-underline" />
-                
+
 //                 <SettingsSubmenu data={currentPage} setData={handlePageChange} />
 //                 <SettingNavigation current={currentPage} setCurrent={handlePageChange} />
 //                 <div></div>
-//             </aside>    
+//             </aside>
 //         </Example>
 //     );
 // };

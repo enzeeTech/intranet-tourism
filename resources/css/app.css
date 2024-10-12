@@ -1,17 +1,157 @@
 @layer tailwind-base, primereact, tailwind-utilities;
 
 /* IMPORTANT: In "styled" mode you must add the PrimeReact Theme here. Do NOT include in "unstyled" mode */
-@import 'primereact/resources/themes/lara-light-blue/theme.css';
+@import "primereact/resources/themes/lara-light-blue/theme.css";
 
 @layer tailwind-base {
-  @tailwind base;
+    @tailwind base;
+
+    :root {
+        --theme-color-50: #f5f9ff;
+        --theme-color-100: #d0e1fd;
+        --theme-color-200: #abc9fb;
+        --theme-color-300: #85b2f9;
+        --theme-color-400: #609af8;
+        --theme-color-500: #3b82f6;
+        --theme-color-600: #326fd1;
+        --theme-color-700: #295bac;
+        --theme-color-800: #204887;
+        --theme-color-900: #183462;
+    }
+    .theme-blue {
+        --theme-color-50: #f5f9ff;
+        --theme-color-100: #d0e1fd;
+        --theme-color-200: #abc9fb;
+        --theme-color-300: #85b2f9;
+        --theme-color-400: #609af8;
+        --theme-color-500: #3b82f6;
+        --theme-color-600: #326fd1;
+        --theme-color-700: #295bac;
+        --theme-color-800: #204887;
+        --theme-color-900: #183462;
+    }
+    .theme-green {
+        --theme-color-50: #f4fcf7;
+        --theme-color-100: #caf1d8;
+        --theme-color-200: #a0e6ba;
+        --theme-color-300: #76db9b;
+        --theme-color-400: #4cd07d;
+        --theme-color-500: #22c55e;
+        --theme-color-600: #1da750;
+        --theme-color-700: #188a42;
+        --theme-color-800: #136c34;
+        --theme-color-900: #0e4f26;
+    }
+    .theme-yellow {
+        --theme-color-50: #fefbf3;
+        --theme-color-100: #faedc4;
+        --theme-color-200: #f6de95;
+        --theme-color-300: #f2d066;
+        --theme-color-400: #eec137;
+        --theme-color-500: #eab308;
+        --theme-color-600: #c79807;
+        --theme-color-700: #a47d06;
+        --theme-color-800: #816204;
+        --theme-color-900: #5e4803;
+    }
+    .theme-cyan {
+        --theme-color-50: #f3fbfd;
+        --theme-color-100: #c3edf5;
+        --theme-color-200: #94e0ed;
+        --theme-color-300: #65d2e4;
+        --theme-color-400: #35c4dc;
+        --theme-color-500: #06b6d4;
+        --theme-color-600: #059bb4;
+        --theme-color-700: #047f94;
+        --theme-color-800: #036475;
+        --theme-color-900: #024955;
+    }
+    .theme-pink {
+        --theme-color-50: #fef6fa;
+        --theme-color-100: #fad3e7;
+        --theme-color-200: #f7b0d3;
+        --theme-color-300: #f38ec0;
+        --theme-color-400: #f06bac;
+        --theme-color-500: #ec4899;
+        --theme-color-600: #c93d82;
+        --theme-color-700: #a5326b;
+        --theme-color-800: #822854;
+        --theme-color-900: #5e1d3d;
+    }
+    .theme-indigo {
+        --theme-color-50: #f7f7fe;
+        --theme-color-100: #dadafc;
+        --theme-color-200: #bcbdf9;
+        --theme-color-300: #9ea0f6;
+        --theme-color-400: #8183f4;
+        --theme-color-500: #6366f1;
+        --theme-color-600: #5457cd;
+        --theme-color-700: #4547a9;
+        --theme-color-800: #363885;
+        --theme-color-900: #282960;
+    }
+    .theme-teal {
+        --theme-color-50: #f3fbfb;
+        --theme-color-100: #c7eeea;
+        --theme-color-200: #9ae0d9;
+        --theme-color-300: #6dd3c8;
+        --theme-color-400: #41c5b7;
+        --theme-color-500: #14b8a6;
+        --theme-color-600: #119c8d;
+        --theme-color-700: #0e8174;
+        --theme-color-800: #0b655b;
+        --theme-color-900: #084a42;
+    }
+    .theme-orange {
+        --theme-color-50: #fff8f3;
+        --theme-color-100: #feddc7;
+        --theme-color-200: #fcc39b;
+        --theme-color-300: #fba86f;
+        --theme-color-400: #fa8e42;
+        --theme-color-500: #f97316;
+        --theme-color-600: #d46213;
+        --theme-color-700: #ae510f;
+        --theme-color-800: #893f0c;
+        --theme-color-900: #642e09;
+    }
+    .theme-purple {
+        --theme-color-50: #fbf7ff;
+        --theme-color-100: #ead6fd;
+        --theme-color-200: #dab6fc;
+        --theme-color-300: #c996fa;
+        --theme-color-400: #b975f9;
+        --theme-color-500: #a855f7;
+        --theme-color-600: #8f48d2;
+        --theme-color-700: #763cad;
+        --theme-color-800: #5c2f88;
+        --theme-color-900: #432263;
+    }
+    .theme-red {
+        --theme-color-50: #fff5f5;
+        --theme-color-100: #ffd0ce;
+        --theme-color-200: #ffaca7;
+        --theme-color-300: #ff8780;
+        --theme-color-400: #ff6259;
+        --theme-color-500: #ff3d32;
+        --theme-color-600: #d9342b;
+        --theme-color-700: #b32b23;
+        --theme-color-800: #8c221c;
+        --theme-color-900: #661814;
+    }
+
+    /* .blue-theme {
+        --theme-color: @apply bg-blue-500;
+    }
+
+    .red-theme {
+        --theme-color: @apply bg-red-500;
+    } */
 }
 
 @layer tailwind-utilities {
-  @tailwind components;
-  @tailwind utilities;
+    @tailwind components;
+    @tailwind utilities;
 }
-
 
 .input-no-outline:focus {
     outline: none !important;
@@ -20,173 +160,176 @@
 
 .input-focus-style:focus {
     outline: none;
-    border: 1px solid #4880FF;
+    border: 1px solid #4880ff;
     border-radius: 1.5rem;
     box-shadow: none;
-  }
+}
 
 /* For the 'File' and 'Date' columns */
-.th-file, .td-file, .th-date, .td-date {
-  border: 2px solid #3182ce; /* Tailwind blue-500 */
+.th-file,
+.td-file,
+.th-date,
+.td-date {
+    border: 2px solid #3182ce; /* Tailwind blue-500 */
 }
 
 .avatar-hover:hover {
-  filter: grayscale(100%); /* Converts the image to grayscale on hover */
+    filter: grayscale(100%); /* Converts the image to grayscale on hover */
 }
 
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* High z-index to cover other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+    ); /* semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* High z-index to cover other content */
 }
 
 .blurred-background {
-  filter: blur(8px); /* Adjust blur level as needed */
+    filter: blur(8px); /* Adjust blur level as needed */
 }
 
 .avatar-container {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Creates 6 columns */
-  gap: 10px; /* Space between items */
-  margin-top: 10px; /* Top margin */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Creates 6 columns */
+    gap: 10px; /* Space between items */
+    margin-top: 10px; /* Top margin */
 }
 
 .app {
-  font-family: Arial, sans-serif;
-  text-align: center;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 .popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .popup-content {
-  padding: 20px;
+    padding: 20px;
 }
 
 .popup-buttons {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .popup-buttons button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .popup-buttons button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .input-container {
-  margin-bottom: 20px;
-  text-align: left;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .input-container label {
-  display: block;
-  margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .input-container input {
-  width: 100%;
-  padding: 8px;
-  /* border: 1px solid #ccc; */
-  border-radius: 5px;
+    width: 100%;
+    padding: 8px;
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
 }
 
 .search-input {
-  display: flex;
-  width: 100%;
-  padding: 8px;
-  border-radius: 999px;
-  /* border: red; */
-  background: f3f4f6;
-  align-items: center;
+    display: flex;
+    width: 100%;
+    padding: 8px;
+    border-radius: 999px;
+    /* border: red; */
+    background: f3f4f6;
+    align-items: center;
 }
 
 .success-popup {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #4caf50;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,  0,  0,  0.2);
 }
 
 .search-icon {
-  width: 24px;
-  margin-right: 8px;
+    width: 24px;
+    margin-right: 8px;
 }
 
 .search-box {
-  width: 100%;
-  border: none;
-  outline: none;
+    width: 100%;
+    border: none;
+    outline: none;
 }
 
 .search-button {
-  padding: 10px 20px;
-  background-color: blue;
-  color: white;
-  border-radius: 20px;
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border-radius: 20px;
 }
 
 .table-container {
-  margin: 8px;
+    margin: 8px;
 }
 
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 @media (max-width: 600px) {
-  .search-button, .search-input, .page-button {
-    font-size: 14px;
-  }
+    .search-button,
+    .search-input,
+    .page-button {
+        font-size: 14px;
+    }
 }
 
 .blur-background::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 10;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 10;
 }
 
 .sticky {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-
-@layer base {
-
-  :primary {
-
-  }
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 40;
 }
