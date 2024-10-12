@@ -26,7 +26,7 @@
 //           onChange={handleSearch}
 //         />
 //         <div className="flex w-full space-x-3 sm:justify-end sm:w-auto">
-//           <button onClick={handleSearch} className="text-md px-4 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-700">
+//           <button onClick={handleSearch} className="text-md px-4 py-3 bg-primary-500 text-white rounded-full hover:bg-primary-700">
 //           Search
 //         </button>
 //         </div>

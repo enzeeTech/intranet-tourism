@@ -18,7 +18,7 @@ const ConfirmationPopup = ({ selectedPerson, onConfirm, onCancel }) => {
                 <p>Do you want to remove this user from <b>{departmentTitle}</b>?</p>
                 <div className="flex flex-col mt-4">
                     <button
-                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                        className="w-full px-4 py-2 mb-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
                         onClick={() => onConfirm('remove')}
                     >
                         Yes, Remove
@@ -78,10 +78,10 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
             setLoading(true);
             debounceTimeout = setTimeout(() => {
                 fetchAllSearchResults(searchTerm);
-            }, 1000); 
+            }, 1000);
         } else {
-            setSearchResults([]);  
-            setLoading(false); 
+            setSearchResults([]);
+            setLoading(false);
         }
 
         return () => clearTimeout(debounceTimeout);
@@ -119,25 +119,25 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const fetchAllSearchResults = async (query) => {
         setError('');
         let allResults = [];
-    
+
         try {
             const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-            
+
             if (!response.ok) {
                 throw new Error(`Failed to fetch: ${response.statusText}`);
             }
-    
+
             const responseText = await response.text();
             const data = responseText ? JSON.parse(responseText) : {};
-    
+
             allResults = data.data;
-    
+
             setSearchResults(allResults);
         } catch (error) {
             console.error('Error fetching search results:', error);
             setError('Failed to fetch search results. Please try again.');
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -172,7 +172,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
     const fetchUnits = async (url) => {
         let allUnits = [];
         let hasMorePages = true;
-    
+
         try {
             while (hasMorePages) {
                 const response = await fetch(url, {
@@ -183,14 +183,14 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                     throw new Error("Network response was not ok");
                 }
                 const data = await response.json();
-    
+
                 const unitData = data.data.map((unit) => ({
                     id: unit.id,
                     name: unit.name
                 }));
-    
+
                 allUnits = [...allUnits, ...unitData];
-    
+
                 if (data.next_page_url) {
                     const urlObj = new URL(data.next_page_url);
                     const params = new URLSearchParams(urlObj.search);
@@ -241,7 +241,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         }
         setSelectedPerson(person);
         setSearchTerm(person.name);
-        setError('');  
+        setError('');
     };
 
     const handleClose = () => {
@@ -254,11 +254,11 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
         setLocation('');
         setWorkPhoneNumber('');
         setError('');
-        setSuccess(''); 
+        setSuccess('');
         setTitleError(false);
         setGradeError(false);
         setSelectedGrade('');
-        setSelectedGradeId(''); 
+        setSelectedGradeId('');
         setShowConfirmation(false);
     };
 
@@ -297,7 +297,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         const userId = selectedPerson.id;
         const businessPostId = titleId;
-        const order = '0';        
+        const order = '0';
 
         const body = {
             department_id: String(departmentId),
@@ -332,7 +332,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
             const newMember = {
                 id: userId,
-                name: selectedPerson.name,  
+                name: selectedPerson.name,
                 role: title,
                 status: 'Online',
                 imageUrl: selectedPerson.profile.staff_image || '/assets/dummyStaffPlaceHolder.jpg',
@@ -340,7 +340,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                 phoneNo: selectedPerson.profile.phone_no,
                 isDeactivated: selectedPerson.is_active,
                 order: order,
-            };  
+            };
 
             onNewMemberAdded(newMember);
 
@@ -352,7 +352,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
 
         setTimeout(() => {
             handleClose();
-        }, 1000); 
+        }, 1000);
     };
 
     const handleConfirmation = async (action) => {
@@ -517,7 +517,7 @@ const SearchPopup = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, department
                                 <div className="mb-4">
                                     <label className="block font-bold text-gray-700">Work Phone Number</label>
                                     <PhoneInput
-                                        country={'my'}  
+                                        country={'my'}
                                         value={workPhoneNumber}
                                         onChange={setWorkPhoneNumber}
                                         inputClass="text-sm text-neutral-800 text-opacity-80 mt-1 block w-full h-12 rounded-full p-2 border-2 border-stone-300 max-md:ml-4"

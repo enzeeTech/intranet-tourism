@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function MenuItem({ src, alt, text, onClick }) {
   return (
     <div
-      className="flex items-center gap-3 p-2 hover:bg-blue-100 rounded-md cursor-pointer"
+      className="flex items-center gap-3 p-2 hover:bg-primary-100 rounded-md cursor-pointer"
       onClick={onClick}
     >
       <img

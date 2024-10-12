@@ -13,7 +13,7 @@
 //         linedown: {
 //             className: classNames(
 //                 'mx-auto my-0 w-px h-[20px] bg-gray-300',
-//                 'dark:bg-blue-900/40' //Dark Mode
+//                 'dark:bg-primary-900/40' //Dark Mode
 //             )
 //         },
 //         lineleft: ({ context }) => ({

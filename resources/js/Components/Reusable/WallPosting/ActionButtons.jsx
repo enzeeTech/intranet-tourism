@@ -6,7 +6,7 @@
 //       <button className="gap-2 self-stretch py-2 w-20 text-md bg-white rounded-full text-neutral-950">
 //         Cancel
 //       </button>
-//       <button className="gap-2 self-stretch py-2 px-4 text-md text-white bg-blue-500 hover:bg-blue-700 rounded-full">
+//       <button className="gap-2 self-stretch py-2 px-4 text-md text-white bg-primary-500 hover:bg-primary-700 rounded-full">
 //         Save
 //       </button>
 //     </footer>
@@ -24,7 +24,7 @@ function ActionButtons({ onSave, onCancel }) {
       <button onClick={onCancel} className="gap-2 self-stretch py-2 w-20 text-md bg-white rounded-full text-neutral-950">
         Cancel
       </button>
-      <button onClick={onSave} className="gap-2 self-stretch py-2 px-4 text-md text-white bg-blue-500 hover:bg-blue-700 rounded-full">
+      <button onClick={onSave} className="gap-2 self-stretch py-2 px-4 text-md text-white bg-primary-500 hover:bg-primary-700 rounded-full">
         Add
       </button>
     </footer>

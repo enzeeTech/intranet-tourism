@@ -20,7 +20,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
 
       try {
           const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-          
+
           if (!response.ok) {
               throw new Error(`Failed to fetch: ${response.statusText}`);
           }
@@ -48,9 +48,9 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
           setLoading(true);
           debounceTimeout = setTimeout(() => {
               fetchAllSearchResults(searchTerm);
-          }, 1000); 
+          }, 1000);
       } else {
-          setSearchResults([]);  
+          setSearchResults([]);
       }
 
       return () => clearTimeout(debounceTimeout);
@@ -66,8 +66,8 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
     if (imageUrl.startsWith('staff_image/')) {
       return `/storage/${imageUrl}`;
     } else {
-      return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
-        ? imageUrl 
+      return imageUrl === '/assets/dummyStaffPlaceHolder.jpg'
+        ? imageUrl
         : `/avatar/${imageUrl}`;
     }
   };
@@ -86,7 +86,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="flex w-full space-x-3 sm:justify-end sm:w-auto">
-          <button onClick={handleSearch} className="font-bold mt-0 text-md px-4 py-2 items-center bg-blue-500 text-white rounded-full hover:bg-blue-700 h-[43px]">
+          <button onClick={handleSearch} className="font-bold mt-0 text-md px-4 py-2 items-center bg-primary-500 text-white rounded-full hover:bg-primary-700 h-[43px]">
             Search
           </button>
           <button onClick={handleStaffListButton} className="shrink=0 w-10 aspect-square">
@@ -104,7 +104,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
           ) : error ? (
             <p className="p-2">{error}</p>
           ) : searchResults.length === 0 ? (
-            <p className="p-2">No members found.</p>  
+            <p className="p-2">No members found.</p>
           ) : (
             searchResults.map((result) => (
               <a key={result.id} href={`/user/${result.id}`}>

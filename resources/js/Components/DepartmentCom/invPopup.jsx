@@ -109,7 +109,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
     const fetchUnits = async (url) => {
         let allUnits = [];
         let hasMorePages = true;
-    
+
         try {
             while (hasMorePages) {
                 const response = await fetch(url, {
@@ -120,14 +120,14 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                     throw new Error("Network response was not ok");
                 }
                 const data = await response.json();
-    
+
                 const unitData = data.data.map((unit) => ({
                     id: unit.id,
                     name: unit.name
                 }));
-    
+
                 allUnits = [...allUnits, ...unitData];
-    
+
                 if (data.next_page_url) {
                     const urlObj = new URL(data.next_page_url);
                     const params = new URLSearchParams(urlObj.search);
@@ -149,7 +149,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
             return;
         }
         setSelectedPerson(person);
-        setError('');  
+        setError('');
     };
 
     const handleClose = () => {
@@ -175,7 +175,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
         const businessPostId = titleId;
         const businessUnitId = unitId;
         const locationValue = location;
-        const order = '1';        
+        const order = '1';
 
         const body = JSON.stringify({
             department_id: String(departmentId),
@@ -187,7 +187,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
             location: locationValue,
             order: order,
         });
-        
+
         console.log('Body:', body);
 
         try {
@@ -308,7 +308,7 @@ const Invite = ({ isAddMemberPopupOpen, setIsAddMemberPopupOpen, departmentId, o
                                 Cancel
                             </button>
                             <button
-                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full"
+                                className="w-[100px] px-4 mb-4 mr-4 text-white bg-primary-500 hover:bg-primary-700 rounded-full"
                                 onClick={handleAdd}
                                 disabled={!selectedPerson || !title || !unit || !location}
                             >

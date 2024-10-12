@@ -33,20 +33,20 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
       formData.append('type', 'story'); // Append type to the form data
       formData.append('visibility', 'public'); // Append visibility to the form data
       formData.append('tag', JSON.stringify([])); // Append an empty array for tags
-  
+
       if (image) {
         formData.append('attachments[0]', image); // Append the image file to the form data
-      }      
+      }
     } else {
       formData.append('user_id', userId); // Append user ID to the form data
       formData.append('type', 'story'); // Append type to the form data
       formData.append('visibility', 'public'); // Append visibility to the form data
       formData.append('content', text); // Append text content to the form data
       formData.append('tag', JSON.stringify([])); // Append an empty array for tags
-  
+
       if (image) {
         formData.append('attachments[0]', image); // Append the image file to the form data
-      } 
+      }
     }
 
     try {
@@ -84,7 +84,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
       <hr className="border-t border-gray-200 mb-4 " />
 
       <div className="flex flex-col md:flex-row md:space-x-10">
-        
+
         <div className="flex justify-center items-center mt-6 max-md:mt-2 max-md:mb-4 md:mt-0 md:w-1/2">
           {previewUrl && (
             <div className="image-preview relative">
@@ -121,7 +121,7 @@ const CreateImageStory = ({ file, onClose, onPostStory, userId, onGoBack }) => {
             </div>
             <div className="flex justify-end gap-2 my-4">
               <button type="button" className="w-full py-2 max-md:py-0 max-md:mb-2 px-4 font-bold border-2 text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white rounded-full" onClick={onGoBack}>Cancel</button>
-              <button type="submit" className="w-full py-2 max-md:py-2 px-4 font-bold bg-blue-500 hover:bg-blue-700 text-white rounded-full mb-2 md:mb-0">Post</button>
+              <button type="submit" className="w-full py-2 max-md:py-2 px-4 font-bold bg-primary-500 hover:bg-primary-700 text-white rounded-full mb-2 md:mb-0">Post</button>
             </div>
           </form>
         </div>

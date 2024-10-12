@@ -74,7 +74,7 @@ const GroupJoinRow = ({ name, department, time, group, followers, profileImage, 
       </div>
     </div>
     <div className="flex justify-end w-1/4">
-      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+      <button className="px-4 py-1 text-sm font-bold text-white bg-primary-500 rounded-full">Approve</button>
       <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
     </div>
   </div>
@@ -98,7 +98,7 @@ const CommunityCreationRow = ({ name, department, time, group, followers, profil
       </div>
     </div>
     <div className="flex justify-end w-1/4">
-      <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+      <button className="px-4 py-1 text-sm font-bold text-white bg-primary-500 rounded-full">Approve</button>
       <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
     </div>
   </div>
@@ -127,7 +127,7 @@ const OrgChartPhotoChangeRow = ({ name, department, time, currentImage, changeIm
           />
         </div>
         <div className="flex justify-end w-1/4">
-          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 text-sm font-bold text-white bg-primary-500 rounded-full">Approve</button>
           <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
         </div>
       </div>
@@ -169,7 +169,7 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
           </p>
         </div>
         <div className="flex justify-end w-1/4">
-          <button className="px-4 py-1 text-sm font-bold text-white bg-blue-500 rounded-full">Approve</button>
+          <button className="px-4 py-1 text-sm font-bold text-white bg-primary-500 rounded-full">Approve</button>
           <button className="px-4 py-1 ml-2 text-sm font-bold text-white bg-[#FF5436] rounded-full">Reject</button>
         </div>
       </div>
@@ -188,7 +188,7 @@ const ProfileInformationRow = ({ name, department, time, profileImage, changeTyp
               <hr className="border-t border-gray-300" style={{ borderColor: '#E4E4E4', width: '100%' }} />
               <p className="mt-4 mb-2 text-xl font-bold text-left">{changeType}: {currentValue}</p>
               <p className="mb-4 text-xl font-bold text-left">To: <a className="text-xl font-bold text-blue-500">{newValue}</a></p>
-              <button className="px-4 py-2 text-white bg-blue-500 rounded-full" onClick={() => setIsPopupVisible(false)}>Back</button>
+              <button className="px-4 py-2 text-white bg-primary-500 rounded-full" onClick={() => setIsPopupVisible(false)}>Back</button>
             </div>
           </div>
         </div>

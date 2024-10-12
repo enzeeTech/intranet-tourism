@@ -37,18 +37,18 @@ const AddUnits = () => {
       if (data.data.next_page_url) {
         fetchDepartments(data.data.next_page_url);
       } else {
-        setIsLoadingDepartments(false); 
+        setIsLoadingDepartments(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      setIsLoadingDepartments(false); 
+      setIsLoadingDepartments(false);
     }
   };
 
   const fetchUnits = async (url) => {
     let allUnits = [];
     let hasMorePages = true;
-    setIsLoadingUnits(true); 
+    setIsLoadingUnits(true);
 
     try {
       while (hasMorePages) {
@@ -81,7 +81,7 @@ const AddUnits = () => {
       setIsLoadingUnits(false);
     } catch (error) {
       console.error("Error fetching units:", error);
-      setIsLoadingUnits(false); 
+      setIsLoadingUnits(false);
     }
   };
 
@@ -102,7 +102,7 @@ const AddUnits = () => {
 
   const createUnit = () => {
     if (newUnit.trim() === "" || !selectedDepartmentId) return;
-  
+
     fetch("/api/department/business_units", {
       method: "POST",
       headers: {
@@ -183,7 +183,7 @@ const AddUnits = () => {
         </div>
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
           disabled={!selectedDepartmentId}
         >
           Add New Unit
@@ -311,7 +311,7 @@ const AddUnits = () => {
               </button>
               <button
                 onClick={createUnit}
-                className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                className="px-4 py-2 text-white bg-primary-500 rounded-full hover:bg-primary-700"
                 disabled={!selectedDepartmentId}
               >
                 Add

@@ -149,7 +149,7 @@ function EditPost({ post, onClose, loggedInUserId, onClosePopup, refetchPost }) 
         <button type="button" onClick={onClose} className="mt-2 px-4 py-2 font-bold hover:bg-gray-400 hover:text-white border-2 border-gray-400 text-gray-400 rounded-full text-sm">
           Cancel
         </button>
-        <button type="submit" className="mt-2 px-4 py-2 font-bold hover:bg-blue-700 bg-blue-500 text-white rounded-full text-sm">
+        <button type="submit" className="mt-2 px-4 py-2 font-bold hover:bg-primary-700 bg-primary-500 text-white rounded-full text-sm">
           Save
         </button>
       </div>

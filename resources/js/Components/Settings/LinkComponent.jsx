@@ -154,7 +154,7 @@ export default function Pautan() {
           return (
             <li
               key={refer.id}
-              className={`relative flex justify-between gap-x-4 px-2 py-4 hover:bg-blue-100 sm:px-4 ${
+              className={`relative flex justify-between gap-x-4 px-2 py-4 hover:bg-primary-100 sm:px-4 ${
                 isTop ? 'rounded-t-lg' : isBottom ? 'rounded-b-lg' : ''
               }`}
             >
@@ -180,10 +180,3 @@ export default function Pautan() {
     </>
   );
 }
-
-
-
-
-
-
-

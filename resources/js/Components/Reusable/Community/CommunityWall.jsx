@@ -92,11 +92,11 @@ function HeaderSection({ communityID, departmentHeader, departmentBanner, depart
       />
       <div className="absolute inset-x-0 bottom-0 flex items-center justify-start gap-4 py-4 px-11 max-md:px-5">
         {isEditing ? (
-          <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md" onClick={handleSaveClick}>
+          <button className="flex items-center px-4 py-2 text-white bg-primary-500 rounded-md" onClick={handleSaveClick}>
             Save
           </button>
         ) : (
-          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 mb-4 text-white bg-blue-500 rounded-full" onClick={handleEditClick}>
+          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 mb-4 text-white bg-primary-500 rounded-full" onClick={handleEditClick}>
             <img
               src="/assets/pencil.svg"
               alt="Edit Icon"
@@ -111,7 +111,7 @@ function HeaderSection({ communityID, departmentHeader, departmentBanner, depart
 
 
 function Navigation({ userId, communityID, departmentName, type }) {
-  const [activeTab, setActiveTab] = useState('Post'); 
+  const [activeTab, setActiveTab] = useState('Post');
   const [polls, setPolls] = useState([]);
   const [hasJoined, setHasJoined] = useState(false);
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState(false);
@@ -155,7 +155,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
 
     try {
       const response = await fetch(`/api/users/users?search=${query}&disabledPagination=true&with[]=profile&with[]=employmentPost.department&with[]=employmentPost.businessPost&with[]=employmentPost.businessUnit`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.statusText}`);
       }
@@ -170,7 +170,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
       console.error('Error fetching search results:', error);
       setError('Failed to fetch search results. Please try again.');
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -197,7 +197,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
     setActiveTab(tab);
   };
 
-  
+
   const addPublicMember = async () => {
     const url = `api/communities/communities/${communityID}/add-member`;
         const options = {
@@ -409,7 +409,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
               <h1 className="flex justify-start mx-2 mb-4 text-2xl font-bold text-neutral-800">Add staff</h1>
               <div className="flex flex-wrap gap-2 mb-4">
                 {selectedUsers.map((user) => (
-                  <span key={user.id} className="flex items-center px-3 py-1 text-blue-700 bg-blue-100 rounded-full">
+                  <span key={user.id} className="flex items-center px-3 py-1 text-blue-700 bg-primary-100 rounded-full">
                     {user.name}
                     <button
                       className="ml-2 text-red-500"
@@ -451,7 +451,7 @@ function Navigation({ userId, communityID, departmentName, type }) {
               </div>
               <div className="flex justify-end mt-4">
                 <button
-                  className="px-4 py-2 mr-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                  className="px-4 py-2 mr-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
                   onClick={handleAddMembersToCommunity}
                 >
                   Add Members

@@ -11,7 +11,7 @@ function ProfileBio({
     onSaveBio,
     userId
 }) {
-    const [bioFormData, setBioFormData] = useState(formData || {}); 
+    const [bioFormData, setBioFormData] = useState(formData || {});
     const [isPhotoChangeNotificationOpen, setIsPhotoChangeNotificationOpen] = useState(false); // State for photo change notification popup
     const formRef = useRef(null);
 
@@ -77,10 +77,10 @@ function ProfileBio({
         if (bioFormData.photo.startsWith('staff_image/')) {
             source = `/storage/${bioFormData.photo}`;
         } else {
-            source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg' 
-                ? bioFormData.photo 
-                : bioFormData.photo.startsWith('data:image') 
-                ? bioFormData.photo 
+            source = bioFormData.photo === '/assets/dummyStaffPlaceHolder.jpg'
+                ? bioFormData.photo
+                : bioFormData.photo.startsWith('data:image')
+                ? bioFormData.photo
                 : `/avatar/${bioFormData.photo}`;
         }
     } else {
@@ -143,7 +143,7 @@ function ProfileBio({
                         setBioFormData(originalFormData); // Reset bioFormData to originalFormData
                         onCancelBio();
                     }} className="bg-white text-gray-400 border border-gray-400 hover:bg-gray-400 hover:text-white px-4 py-2 rounded-full">Cancel</button>
-                    <button onClick={() => onSaveBio({ ...bioFormData, user_id: userId })} className="ml-2 bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</button>
+                    <button onClick={() => onSaveBio({ ...bioFormData, user_id: userId })} className="ml-2 bg-primary-500 hover:bg-primary-700 text-white px-4 py-2 rounded-full">Save</button>
                 </div>
             )}
             {isPhotoChangeNotificationOpen && (
@@ -152,7 +152,7 @@ function ProfileBio({
                         <h2 className="text-xl font-bold mb-2">Photo Change Request</h2>
                         <p>The staff’s photo change request has been submitted for review.</p>
                         <div className="flex justify-end mt-4">
-                            <button onClick={handleCloseNotification} className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">OK</button>
+                            <button onClick={handleCloseNotification} className="bg-primary-500 hover:bg-primary-700 text-white px-4 py-2 rounded-full">OK</button>
                         </div>
                     </div>
                 </div>

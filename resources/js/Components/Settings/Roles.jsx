@@ -18,7 +18,7 @@ export default function Roles() {
 
     const roleNameMap = {
         1: { name: "Super Admin", bgColor: "bg-red-100 text-red-700" },
-        2: { name: "Department Admin", bgColor: "bg-blue-100 text-blue-700" },
+        2: { name: "Department Admin", bgColor: "bg-primary-100 text-blue-700" },
         3: { name: "Community Admin", bgColor: "bg-yellow-100 text-yellow-700" }
     };
 
@@ -138,7 +138,7 @@ export default function Roles() {
                                     };
                                 }
 
-                                if (userRole.role_id === 3) { 
+                                if (userRole.role_id === 3) {
                                     const community = await fetchCommunityName(userRole.community_id);
                                     usersMap[userId].community = community;
                                 }
@@ -186,9 +186,9 @@ export default function Roles() {
         if (searchTerm.trim() !== '') {
             debounceTimeout = setTimeout(() => {
                 fetchAllSearchResults(searchTerm);
-            }, 1000); 
+            }, 1000);
         } else {
-            setSearchResults([]);  
+            setSearchResults([]);
         }
 
         return () => clearTimeout(debounceTimeout);
@@ -222,18 +222,18 @@ export default function Roles() {
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
                 body: JSON.stringify({
-                    role_id: [1], 
+                    role_id: [1],
                     model_id: selectedPersonForSuperAdmin.id,
                 }),
             });
-    
+
             if (response.ok) {
                 console.log('Super Admin assigned successfully.');
                 setShowConfirmationPopup(false);
                 setIsSearchPopupOpen(false);
-    
+
                 setLoading(true);
-                await fetchUsersWithRoles(); 
+                await fetchUsersWithRoles();
             } else {
                 console.error('Failed to assign Super Admin:', response.statusText);
             }
@@ -251,7 +251,7 @@ export default function Roles() {
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
                 body: JSON.stringify({
-                    role_id: [4], 
+                    role_id: [4],
                     model_id: personToDemote.id,
                 }),
             });
@@ -286,7 +286,7 @@ export default function Roles() {
                     </div>
                     <button
                         onClick={() => setIsSearchPopupOpen(true)}
-                        className="px-4 py-2 font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                        className="px-4 py-2 font-bold text-white bg-primary-600 rounded-md hover:bg-primary-700"
                     >
                         Assign New Super Admin
                     </button>
@@ -362,7 +362,7 @@ export default function Roles() {
                                                             <a
                                                                 key={index}
                                                                 href={`/departmentInner?departmentId=${person.department.id}`}
-                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-blue-200 cursor-pointer`}
+                                                                className={`flex items-center justify-center text-center px-4 py-2 mt-2 text-xs font-medium rounded-full ${role.bgColor} hover:bg-primary-200 cursor-pointer`}
                                                             >
                                                                 {role.name}
                                                             </a>
@@ -515,7 +515,7 @@ export default function Roles() {
                             <div className="flex justify-end mt-10">
                                 <button
                                     onClick={() => setShowPopup(false)}
-                                    className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                                    className="px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
                                 >
                                     Close
                                 </button>

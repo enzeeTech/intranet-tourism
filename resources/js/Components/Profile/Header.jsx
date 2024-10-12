@@ -17,8 +17,8 @@ function ProfileImage({ name, src, alt, className, rounded, tag, isOnline}) {
   //   source = `/storage/${src}`;
   // } else {
   //   // If src doesn't start with 'avatar/', check if it's a placeholder or not
-  //   source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-  //     ? src 
+  //   source = src === '/assets/dummyStaffPlaceHolder.jpg'
+  //     ? src
   //     : `/avatar/${src}`;
   // }
 
@@ -30,15 +30,15 @@ function ProfileImage({ name, src, alt, className, rounded, tag, isOnline}) {
     source = `/storage/${src}`;
   } else {
     // If src doesn't start with 'avatar/', check if it's a placeholder or not
-    source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-      ? src 
+    source = src === '/assets/dummyStaffPlaceHolder.jpg'
+      ? src
       : `/avatar/${src}`;
   }
-  
-  
+
+
   console.log("SOURCE", source);
-  
-    
+
+
   return (
     <div className={`flex overflow-hidden relative z-10 max-w-full aspect-square ${className} max-md:w-32 max-md:justify-start`}>
       <img
@@ -47,7 +47,7 @@ function ProfileImage({ name, src, alt, className, rounded, tag, isOnline}) {
         alt={alt}
         className={`object-cover w-40 h-40 ${rounded ? 'rounded-full' : ''} max-md:w-24 max-md:h-24 max-md:bottom-0`}
       />
-      <div 
+      <div
         className={`absolute w-5 h-5 max-md:w-4 max-md:h-4 rounded-full border-2 border-white border-solid stroke-[2px] bottom-2 right-0 left-28 max-md:left-auto max-md:right-8 max-md:bottom-16 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}>
       </div>
     </div>
@@ -57,7 +57,7 @@ function ProfileImage({ name, src, alt, className, rounded, tag, isOnline}) {
 function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBanner, rounded, username, userId, profileId, tag }) {
   console.log("hhhhhhh", name);
   console.log("PIMAGE", profileImage)
-  
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
@@ -145,13 +145,13 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 
   const uploadProfilePhoto = async (file, id, setCurrentProfileImage, setSelectedFile, csrfToken, authToken) => {
     const url = `/api/profile/profiles/${profileId}`;
-  
+
     const formData = new FormData();
     formData.append('image', file);
     formData.append('user_id', id);
     formData.append('_method', 'PUT');
     formData.append('name', name); // Add _method to the form data
-  
+
     const options = {
       method: 'POST',
       headers: {
@@ -161,22 +161,22 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       },
       body: formData,
     };
-  
+
     try {
       const response = await fetch(url, options);
-  
+
       // Check if the response is ok
       if (!response.ok) {
         console.error('Error response from server:', response.statusText);
         throw new Error('Network response was not ok');
       }
-  
+
       // Check if the response content is JSON
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.indexOf('application/json') !== -1) {
         const data = await response.json();
         console.log('Profile photo updated successfully:', data);
-  
+
         if (data.profile && data.profile.image) {
           const fullPath = data.profile.image;
           setCurrentProfileImage(fullPath);
@@ -191,7 +191,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
       window.location.reload();
     }
   };
-  
+
 
   return (
     <>
@@ -205,10 +205,10 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
         <div className="flex-row max-md:flex-col z-100 w-auto h-auto bg-white flex gap-4 -mt-16 max-md:-mt-14 max-md:-ml-7 px-10">
           <div onClick={handleIconClick}>
             <div className=" flex">
-              <ProfileImage 
-                src={profileImage} 
-                alt={`${name}'s profile picture`} 
-                name={name} rounded={rounded} tag={tag} isOnline={isOnline} 
+              <ProfileImage
+                src={profileImage}
+                alt={`${name}'s profile picture`}
+                name={name} rounded={rounded} tag={tag} isOnline={isOnline}
                 className="w-40 h-40"
               />
               {isPopupOpen && (
@@ -248,7 +248,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
               />
             </div>
             <div className="flex justify-end mt-4">
-              <button onClick={handleCropImage} className="bg-blue-500 text-white px-4 py-2 rounded-full">
+              <button onClick={handleCropImage} className="bg-primary-500 text-white px-4 py-2 rounded-full">
                 Crop
               </button>
             </div>
@@ -260,7 +260,7 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
           <div className="relative bg-white p-6 rounded-lg w-full max-w-md">
             <img src={croppedImage} alt="Cropped" className="w-full mb-4" />
             <div className="flex justify-end mt-4">
-              <button onClick={handleSaveCroppedImage} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button onClick={handleSaveCroppedImage} className="bg-primary-500 text-white px-4 py-2 rounded">
                 Save
               </button>
             </div>
@@ -276,9 +276,3 @@ function ProfileHeader({ backgroundImage, profileImage, name, status, onEditBann
 }
 
 export default ProfileHeader;
-
-
-
-
-
-

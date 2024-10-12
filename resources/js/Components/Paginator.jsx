@@ -6,12 +6,12 @@ const Pagination = ({ totalItems, itemsPerPage, paginate, currentPage, hasNextBu
         className={`px-4 py-2 mx-1 rounded-lg ${hasNextButton.prev_page_url? 'text-blue-500' : 'text-black-500'}`}
         children={"PREV"}
       />}
-        
+
       {Array.from({ length: Math.ceil(totalItems / itemsPerPage) }, (_, i) => (
         <button
           key={i}
           onClick={() => paginate(i + 1)}
-          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i + 1 ? 'bg-blue-200 text-blue-500' : 'bg-white text-blue-500'}`}
+          className={`px-4 py-2 mx-1 rounded-lg ${currentPage === i + 1 ? 'bg-primary-200 text-blue-500' : 'bg-white text-blue-500'}`}
         >
           {i + 1}
         </button>

@@ -33,7 +33,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
     .then(({ data }) => {
       const sortedComments = data.comments.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
       console.log("SORTED COMMENTS", sortedComments);
-      
+
       setComments(sortedComments); // Set the sorted comments
 
       sortedComments.forEach(comment => fetchLikedUsers(comment));
@@ -46,7 +46,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
   const fetchLikedUsers = (comment) => {
     if (Array.isArray(comment.likes)) {
       const uniqueUserIds = [...new Set(comment.likes)];
-  
+
       uniqueUserIds.forEach(user_id => {
         if (user_id) {
           fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -72,7 +72,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
       });
     }
   };
-  
+
   useEffect(() => {
     fetchComments();
   }, [post.id]);
@@ -96,7 +96,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
   useEffect(() => {
     // Fetch user data for each unique user_id in the comments array
     const uniqueUserIds = [...new Set(comments.map(comment => comment.user_id))];
-    
+
     uniqueUserIds.forEach(user_id => {
       if (user_id) {
         fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -127,22 +127,22 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
     setIsCommentPopupOpen((prevState) => (prevState === commentId ? null : commentId));
   };
 
-  const confirmDelete = (comment) => {    
+  const confirmDelete = (comment) => {
     setCommentIdToDelete(comment.pivot.id);
     setPostIdToDelete(comment.pivot.comment_id);
     setShowDeletePopup(true);
     // console.log("HAHAHA", commentIdToDelete);
   };
-  
+
 
   const handleDelete = async () => {
-    
+
     try {
       const postResponse = await fetch(`/api/posts/post_comment/${commentIdToDelete}`, {
         method: 'DELETE',
         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
       });
-  
+
       if (postResponse.ok) {
         // fetchComments();
         const DeleteInsidePostTable = await fetch(`/api/posts/posts/${postIdToDelete}`, {
@@ -216,7 +216,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
   const handleLikesClick = (commentId) => {
     setSelectedCommentId(commentId);
     setShowLikesPopup(true);
-  }; 
+  };
 
   // Function to render content with tags and mentions
   const renderContentWithTags = (content, mentions) => {
@@ -230,18 +230,18 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
     // Replace content with mentions and URLs
     const replaceContent = (text) => {
       const combinedRegex = new RegExp(`(${urlRegex.source}|${tagRegex.source})`, 'g');
-      
+
       const parts = text?.split(combinedRegex).filter(Boolean);
 
       return parts?.map((part, index) => {
         if (urlRegex.test(part)) {
           return (
-            <a 
-              href={part} 
-              key={`url-${index}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={{ color: 'blue', textDecoration: 'underline' }} 
+            <a
+              href={part}
+              key={`url-${index}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'blue', textDecoration: 'underline' }}
             >
               {part}
             </a>
@@ -283,14 +283,14 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
             />
           </div>
         </div>
-  
+
         {/* Scrollable Content */}
         <div className="flex-grow overflow-y-auto">
           <div className="my-4 px-6">
             <header className="flex items-center">
               <img
                 src={
-                  post.userProfile.profile?.image 
+                  post.userProfile.profile?.image
                     ? (
                         post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
                           ? post.userProfile.profile.image
@@ -320,24 +320,24 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
               <hr className="my-6 border-1 border-gray-200"/>
             </div>
           </div>
-  
+
           {/* Comment Section */}
           <div className="pb-4 px-6">
             <div className="space-y-4">
               {comments.map((comment) => {
-                
+
                 let likesCount = 0;
                 if (Array.isArray(comment.likes)) {
                   likesCount = comment.likes.length;
                 }
-  
+
                 const user = commentedUsers[comment.user_id] || {};
-  
+
                 return (
                   <div key={comment.id} className="relative flex items-start">
                     <img
                       src={
-                        user.profileImage 
+                        user.profileImage
                           ? (
                               user.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
                                 ? user.profileImage
@@ -385,12 +385,12 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                           </span>
                         )}
                       </div>
-                      <img 
-                        loading="lazy" 
-                        src="/assets/wallpost-dotbutton.svg" 
-                        alt="Options" 
-                        className="absolute top-2 right-4 w-5 h-5 cursor-pointer" 
-                        onClick={() => handleClickTreeDots(comment.id)} 
+                      <img
+                        loading="lazy"
+                        src="/assets/wallpost-dotbutton.svg"
+                        alt="Options"
+                        className="absolute top-2 right-4 w-5 h-5 cursor-pointer"
+                        onClick={() => handleClickTreeDots(comment.id)}
                       />
                     </div>
                     {isCommentPopupOpen === comment.id && (
@@ -398,8 +398,8 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                       <div
                         className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
                       >
-                        <p 
-                          className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+                        <p
+                          className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl p-2"
                           onClick={() => confirmDelete(comment)}
                         >
                           <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
@@ -413,12 +413,12 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
             </div>
           </div>
         </div>
-  
+
         {/* Fixed ShareYourThoughts Section */}
         <div className="py-4 border-t flex flex-row justify-between items-center w-full">
           <img
             src={
-              profileData.profileImage 
+              profileData.profileImage
                 ? (
                     profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
                     ? profileData.profileImage
@@ -427,7 +427,7 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
                       : `/avatar/${profileData.profileImage}`
                   )
                 : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
-            } 
+            }
             alt={profileData.name}
             className="w-[53px] rounded-full mx-4"
           />
@@ -437,15 +437,15 @@ const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
             onCommentPosted={fetchComments}
           />
         </div>
-  
+
         {showLikesPopup && (
-          <LikesPopup 
-            likedUsers={likedUsers} 
-            onClose={() => setShowLikesPopup(false)} 
+          <LikesPopup
+            likedUsers={likedUsers}
+            onClose={() => setShowLikesPopup(false)}
             commentId={selectedCommentId}
           />
         )}
-  
+
         {showDeletePopup && (
           <div
             style={{
@@ -523,7 +523,7 @@ export default Comment;
 // const Comment = ({ post, onClose, loggedInUserId, PostLikesCount }) => {
 
 //   console.log("POST", post);
-  
+
 //   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(null);
 //   const [showDeletePopup, setShowDeletePopup] = useState(false);
 //   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
@@ -562,7 +562,7 @@ export default Comment;
 //   const fetchLikedUsers = (comment) => {
 //     if (Array.isArray(comment.likes)) {
 //       const uniqueUserIds = [...new Set(comment.likes)];
-  
+
 //       uniqueUserIds.forEach(user_id => {
 //         if (user_id) {
 //           fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -588,8 +588,8 @@ export default Comment;
 //       });
 //     }
 //   };
-  
-  
+
+
 
 //   useEffect(() => {
 //     fetchComments();
@@ -614,7 +614,7 @@ export default Comment;
 //   useEffect(() => {
 //     // Fetch user data for each unique user_id in the comments array
 //     const uniqueUserIds = [...new Set(comments.map(comment => comment.user_id))];
-    
+
 //     uniqueUserIds.forEach(user_id => {
 //       if (user_id) {
 //         fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -657,7 +657,7 @@ export default Comment;
 //         method: 'DELETE',
 //         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
 //       });
-  
+
 //       if (postResponse.ok) {
 //         // setPostData(postData.filter(post => post.id !== commentIdToDelete));
 //         console.log("SETTLEE");
@@ -672,7 +672,7 @@ export default Comment;
 //       setIsCommentPopupOpen(false);
 //     }
 //   };
-  
+
 
 //       // Function to handle liking a post
 //       const handleLike = async (postId) => {
@@ -681,7 +681,7 @@ export default Comment;
 //             method: 'POST',
 //             headers: { 'X-CSRF-Token': csrfToken },
 //           });
-    
+
 //           if (response.ok) {
 //             setLikedPosts((prevLikedPosts) => ({
 //               ...prevLikedPosts,
@@ -696,7 +696,7 @@ export default Comment;
 //           console.error("Error liking the post:", error);
 //         }
 //       };
-    
+
 //       // Function to handle unliking a post
 //       const handleUnlike = async (postId) => {
 //         try {
@@ -704,7 +704,7 @@ export default Comment;
 //             method: 'POST',
 //             headers: { 'X-CSRF-Token': csrfToken },
 //           });
-    
+
 //           if (response.ok) {
 //             setLikedPosts((prevLikedPosts) => ({
 //               ...prevLikedPosts,
@@ -719,7 +719,7 @@ export default Comment;
 //           console.error("Error unliking the post:", error);
 //         }
 //       };
-  
+
 //       const isPostLikedByUser = (comment) => {
 //         return comment.likes && comment.likes.includes(loggedInUserId);
 //       };
@@ -731,8 +731,8 @@ export default Comment;
 //         // alert(`Liked by: ${likedUserNames.join(", ")}`);
 //         setSelectedCommentId(commentId);
 //         setShowLikesPopup(true);
-//       }; 
-  
+//       };
+
 
 //       return (
 //         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -750,14 +750,14 @@ export default Comment;
 //                 />
 //               </div>
 //             </div>
-      
+
 //             {/* Scrollable Content */}
 //             <div className="flex-grow overflow-y-auto">
 //               <div className="my-4 px-6">
 //                 <header className="flex items-center">
 //                   <img
 //                     src={
-//                       post.userProfile.profile?.image 
+//                       post.userProfile.profile?.image
 //                         ? (
 //                             post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
 //                               ? post.userProfile.profile.image
@@ -778,7 +778,7 @@ export default Comment;
 //                       </div>
 //                     </div>
 //                     {/* <p className="text-sm mt-1">{post.content}</p> */}
-                    
+
 //                   </div>
 //                 </header>
 //                 <div className="mt-4">
@@ -787,7 +787,7 @@ export default Comment;
 //                   <hr className="my-6 border-1 border-gray-200"/>
 //                 </div>
 //               </div>
-      
+
 //               {/* Comment Section */}
 //               {/* <hr className="w-full border-1 border-gray-200"/> */}
 //               <div className="pb-4 px-6">
@@ -797,14 +797,14 @@ export default Comment;
 //                     if (Array.isArray(comment.likes)) {
 //                       likesCount = comment.likes.length;
 //                     }
-      
+
 //                     const user = commentedUsers[comment.user_id] || {};
-      
+
 //                     return (
 //                       <div key={comment.id} className="relative flex items-start">
 //                         <img
 //                           src={
-//                             user.profileImage 
+//                             user.profileImage
 //                               ? (
 //                                   user.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
 //                                     ? user.profileImage
@@ -850,20 +850,20 @@ export default Comment;
 //                               </span>
 //                             )}
 //                           </div>
-//                           <img 
-//                             loading="lazy" 
-//                             src="/assets/wallpost-dotbutton.svg" 
-//                             alt="Options" 
-//                             className="absolute top-2 right-4 w-5 h-5 cursor-pointer" 
-//                             onClick={() => handleClickTreeDots(comment.id)} 
+//                           <img
+//                             loading="lazy"
+//                             src="/assets/wallpost-dotbutton.svg"
+//                             alt="Options"
+//                             className="absolute top-2 right-4 w-5 h-5 cursor-pointer"
+//                             onClick={() => handleClickTreeDots(comment.id)}
 //                           />
 //                         </div>
 //                         {isCommentPopupOpen === comment.id && (
 //                           <div
 //                             className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
 //                           >
-//                             <p 
-//                               className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+//                             <p
+//                               className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl p-2"
 //                               onClick={() => confirmDelete(comment.pivot.id)}
 //                             >
 //                               <img className="w-6 h-6 mr-2" src="/assets/DeleteIcon.svg" alt="Delete" />
@@ -877,12 +877,12 @@ export default Comment;
 //                 </div>
 //               </div>
 //             </div>
-      
+
 //             {/* Fixed ShareYourThoughts Section */}
 //             <div className="py-4 border-t flex flex-row justify-between items-center w-full">
 //               <img
 //                 src={
-//                   profileData.profileImage 
+//                   profileData.profileImage
 //                     ? (
 //                         profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
 //                         ? profileData.profileImage
@@ -891,7 +891,7 @@ export default Comment;
 //                           : `/avatar/${profileData.profileImage}`
 //                       )
 //                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
-//                 } 
+//                 }
 //                 alt={profileData.name}
 //                 className="w-[53px] rounded-full mx-4"
 //               />
@@ -901,15 +901,15 @@ export default Comment;
 //                 onCommentPosted={fetchComments}
 //               />
 //             </div>
-      
+
 //             {showLikesPopup && (
-//               <LikesPopup 
-//                 likedUsers={likedUsers} 
-//                 onClose={() => setShowLikesPopup(false)} 
+//               <LikesPopup
+//                 likedUsers={likedUsers}
+//                 onClose={() => setShowLikesPopup(false)}
 //                 commentId={selectedCommentId}
 //               />
 //             )}
-      
+
 //             {showDeletePopup && (
 //               <div
 //                 style={{
@@ -968,7 +968,7 @@ export default Comment;
 //           </div>
 //         </div>
 //       );
-            
+
 // };
 
 // export default Comment;
@@ -987,7 +987,7 @@ export default Comment;
 // const Comment = ({ post, onClose, loggedInUserId }) => {
 
 //   // console.log("POST", loggedInUserId);
-  
+
 //   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(null);
 //   const [showDeletePopup, setShowDeletePopup] = useState(false);
 //   const [commentIdToDelete, setCommentIdToDelete] = useState(null);
@@ -1065,7 +1065,7 @@ export default Comment;
 //   const fetchLikedUsers = (comment) => {
 //     if (Array.isArray(comment.likes)) {
 //       const uniqueUserIds = [...new Set(comment.likes)];
-  
+
 //       uniqueUserIds.forEach(user_id => {
 //         if (user_id) {
 //           fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -1091,8 +1091,8 @@ export default Comment;
 //       });
 //     }
 //   };
-  
-  
+
+
 
 //   useEffect(() => {
 //     fetchComments();
@@ -1117,7 +1117,7 @@ export default Comment;
 //   useEffect(() => {
 //     // Fetch user data for each unique user_id in the comments array
 //     const uniqueUserIds = [...new Set(comments.map(comment => comment.user_id))];
-    
+
 //     uniqueUserIds.forEach(user_id => {
 //       if (user_id) {
 //         fetch(`/api/users/users/${user_id}?with[]=profile`, {
@@ -1160,7 +1160,7 @@ export default Comment;
 //         method: 'DELETE',
 //         headers: { Accept: "application/json", "X-CSRF-Token": csrfToken },
 //       });
-  
+
 //       if (postResponse.ok) {
 //         // setPostData(postData.filter(post => post.id !== commentIdToDelete));
 //         console.log("SETTLEE");
@@ -1175,7 +1175,7 @@ export default Comment;
 //       setIsCommentPopupOpen(false);
 //     }
 //   };
-  
+
 
 //       // Function to handle liking a post
 //       const handleLike = async (postId) => {
@@ -1184,7 +1184,7 @@ export default Comment;
 //             method: 'POST',
 //             headers: { 'X-CSRF-Token': csrfToken },
 //           });
-    
+
 //           if (response.ok) {
 //             setLikedPosts((prevLikedPosts) => ({
 //               ...prevLikedPosts,
@@ -1199,7 +1199,7 @@ export default Comment;
 //           console.error("Error liking the post:", error);
 //         }
 //       };
-    
+
 //       // Function to handle unliking a post
 //       const handleUnlike = async (postId) => {
 //         try {
@@ -1207,7 +1207,7 @@ export default Comment;
 //             method: 'POST',
 //             headers: { 'X-CSRF-Token': csrfToken },
 //           });
-    
+
 //           if (response.ok) {
 //             setLikedPosts((prevLikedPosts) => ({
 //               ...prevLikedPosts,
@@ -1222,7 +1222,7 @@ export default Comment;
 //           console.error("Error unliking the post:", error);
 //         }
 //       };
-  
+
 //       const isPostLikedByUser = (comment) => {
 //         return comment.likes && comment.likes.includes(loggedInUserId);
 //       };
@@ -1234,8 +1234,8 @@ export default Comment;
 //         // alert(`Liked by: ${likedUserNames.join(", ")}`);
 //         setSelectedCommentId(commentId);
 //         setShowLikesPopup(true);
-//       }; 
-  
+//       };
+
 
 //   return (
 //     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -1250,7 +1250,7 @@ export default Comment;
 //             <header className="flex items-center">
 //               <img
 //                 src={
-//                   post.userProfile.profile?.image 
+//                   post.userProfile.profile?.image
 //                     ? (
 //                         post.userProfile.profile.image === '/assets/dummyStaffPlaceHolder.jpg'
 //                           ? post.userProfile.profile.image
@@ -1290,7 +1290,7 @@ export default Comment;
 //                 <div key={comment.id} className="relative flex items-start">
 //                   <img
 //                     src={
-//                       user.profileImage 
+//                       user.profileImage
 //                         ? (
 //                             user.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
 //                               ? user.profileImage
@@ -1336,20 +1336,20 @@ export default Comment;
 //                         </span>
 //                       )}
 //                     </div>
-//                     <img 
-//                       loading="lazy" 
-//                       src="/assets/wallpost-dotbutton.svg" 
-//                       alt="Options" 
-//                       className="absolute top-1 right-1 w-6 h-6 cursor-pointer" 
-//                       onClick={() => handleClickTreeDots(comment.id)} 
+//                     <img
+//                       loading="lazy"
+//                       src="/assets/wallpost-dotbutton.svg"
+//                       alt="Options"
+//                       className="absolute top-1 right-1 w-6 h-6 cursor-pointer"
+//                       onClick={() => handleClickTreeDots(comment.id)}
 //                     />
 //                   </div>
 //                   {isCommentPopupOpen === comment.id && (
 //                     <div
 //                       className="absolute bg-white border-2 rounded-xl p-1 shadow-lg w-[160px] h-auto z-10 right-0 top-full -mt-10"
 //                     >
-//                       <p 
-//                         className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" 
+//                       <p
+//                         className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl p-2"
 //                         onClick={() => confirmDelete(comment.pivot.id)}
 //                       >
 //                         <img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />
@@ -1365,7 +1365,7 @@ export default Comment;
 //         <div className="py-4 border-t flex flex-row justify-between items-start w-full">
 //             <img
 //                 src={
-//                 profileData.profileImage 
+//                 profileData.profileImage
 //                     ? (
 //                         profileData.profileImage === '/assets/dummyStaffPlaceHolder.jpg'
 //                         ? profileData.profileImage
@@ -1374,7 +1374,7 @@ export default Comment;
 //                             : `/avatar/${profileData.profileImage}`
 //                     )
 //                     : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${encodeURIComponent(profileData.name)}&rounded=true`
-//                 } 
+//                 }
 //                 alt={profileData.name}
 //                 className="w-[53px] rounded-full mx-4"
 //             />
@@ -1386,9 +1386,9 @@ export default Comment;
 //         </div>
 //       </div>
 //       {showLikesPopup && (
-//   <LikesPopup 
-//     likedUsers={likedUsers} 
-//     onClose={() => setShowLikesPopup(false)} 
+//   <LikesPopup
+//     likedUsers={likedUsers}
+//     onClose={() => setShowLikesPopup(false)}
 //     commentId={selectedCommentId}
 //   />
 // )}

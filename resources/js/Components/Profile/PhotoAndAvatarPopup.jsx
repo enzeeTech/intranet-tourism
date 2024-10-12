@@ -117,7 +117,7 @@ function PhotoAndAvatarPopup({ onClose, userId, csrfToken, authToken, profileIma
               Cancel
             </button>
             <button onClick={handleSaveClick} className="flex flex-col justify-center text-white">
-              <span className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">Save</span>
+              <span className="bg-primary-500 hover:bg-primary-700 text-white px-4 py-2 rounded-full">Save</span>
             </button>
           </footer>
         </section>

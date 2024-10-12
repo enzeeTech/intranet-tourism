@@ -59,6 +59,7 @@ const ThemeComponent = ({ onSave }) => {
                 );
             }
             document.documentElement.classList.add(`theme-${selectedTheme}`);
+            localStorage.setItem("theme", `theme-${selectedTheme}`);
         });
     };
 

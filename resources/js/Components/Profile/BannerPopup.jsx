@@ -161,7 +161,7 @@ function Popup({ title, onClose, onSave, profileData, id, formData, csrfToken, a
             Cancel
           </button>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-sm text-white px-4 py-2 rounded-full"
+            className="bg-primary-500 hover:bg-primary-700 text-sm text-white px-4 py-2 rounded-full"
             onClick={handleCropAndSave} // Combined Crop and Save function
           >
             Crop & Save

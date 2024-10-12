@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AddMemberPopup from './CommunityMemberPopup'; 
+import AddMemberPopup from './CommunityMemberPopup';
 import { useCsrf } from "@/composables";
 import { set } from 'date-fns';
 import { usePage } from '@inertiajs/react';
@@ -10,8 +10,8 @@ function Avatar({ src, alt, className, status }) {
     if (src.startsWith('staff_image/')) {
         source = `/storage/${src}`;
     } else {
-        source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-            ? src 
+        source = src === '/assets/dummyStaffPlaceHolder.jpg'
+            ? src
             : `/avatar/${src}`;
     }
   // const imageUrl = src === '/assets/dummyStaffPlaceHolder.jpg' ? src : `/avatar/full/${src}`;
@@ -42,7 +42,7 @@ function UserInfo({ name, role, isActive }) {
 
 function UserCard({ src, alt, name, role, status }) {
   return (
-    <div className="flex p-2 text-neutral-800 hover:bg-blue-100 rounded-2xl align-center">
+    <div className="flex p-2 text-neutral-800 hover:bg-primary-100 rounded-2xl align-center">
       <Avatar src={src} alt={alt} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={role} />
     </div>
@@ -60,7 +60,7 @@ const PopupMenuAdmin = ({ onRemove, onAssign, closePopup }) => {
 
   const handleAssign = () => {
     event.preventDefault();
-    event.stopPropagation(); 
+    event.stopPropagation();
     onAssign();
   };
 
@@ -97,7 +97,7 @@ const PopupMenuAdmin = ({ onRemove, onAssign, closePopup }) => {
               <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleClosePopup}>
                 No
               </button>
-              <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleConfirmRemove}>
+              <button className="px-8 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700" onClick={handleConfirmRemove}>
                 Yes
               </button>
             </div>
@@ -119,7 +119,7 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
 
   const handleAssign = () => {
     event.preventDefault();
-    event.stopPropagation(); 
+    event.stopPropagation();
     onAssign();
   };
 
@@ -156,7 +156,7 @@ const PopupMenu = ({ onRemove, onAssign, closePopup }) => {
               <button className="px-6 py-2 text-base font-bold text-gray-400 bg-white border border-gray-400 rounded-full hover:bg-gray-400 hover:text-white" onClick={handleClosePopup}>
                 No
               </button>
-              <button className="px-8 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleConfirmRemove}>
+              <button className="px-8 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700" onClick={handleConfirmRemove}>
                 Yes
               </button>
             </div>
@@ -215,7 +215,7 @@ const MemberCard = ({ id,flag, employment_post_id, imageUrl, name, title, status
 
   return (
     <a href={`/user/${id}`}>
-    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center hover:bg-blue-100">
+    <div className="relative flex p-2 text-neutral-800 rounded-2xl align-center hover:bg-primary-100">
       <Avatar src={imageUrl} className="shrink-0 aspect-[0.95] w-[62px] rounded-full mb-4" status={status} />
       <UserInfo name={name} role={title} isActive={isActive} />
       <div className="ml-auto">
@@ -266,7 +266,7 @@ function CmMembers({communityID, loggedInID}) {
     const membersUrl = `/api/communities/community_members?community_id=${communityID}`;
     const rolesUrl = `/api/permission/model-has-roles?filter=3`;
 
-  
+
     try {
       const [membersResponse, rolesResponse] = await Promise.all([
         fetch(membersUrl, {
@@ -278,20 +278,20 @@ function CmMembers({communityID, loggedInID}) {
           headers: { Accept: 'application/json', 'X-CSRF-Token': csrfToken },
         }),
       ]);
-  
+
       if (!membersResponse.ok) {
         throw new Error('Failed to fetch members');
       }
       if (!rolesResponse.ok) {
         throw new Error('Failed to fetch roles');
       }
-  
+
       const membersData = await membersResponse.json();
       const rolesData = await rolesResponse.json();
-  
+
       const fetchedMembers = membersData|| [];
       fetchedMembers.sort((a, b) => a.order - b.order);
-  
+
       const adminRoleEntries = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
 
       // Cross-check to determine which members are admins
@@ -302,15 +302,15 @@ function CmMembers({communityID, loggedInID}) {
             parseInt(roleEntry.department_id, 10) === departmentId
         )
       );
-  
+
       const fetchedNonAdmins = fetchedMembers.filter(
         member => !fetchedAdmins.includes(member)
       );
-  
+
       // Flagging admins and members
       const updatedAdmins = fetchedAdmins.map(admin => ({ ...admin, flag: 'admin' }));
       const updatedNonAdmins = fetchedNonAdmins.map(nonAdmin => ({ ...nonAdmin, flag: 'member' }));
-  
+
       setAdmins(updatedAdmins);
       setMembers(updatedNonAdmins);
     } catch (error) {
@@ -319,7 +319,7 @@ function CmMembers({communityID, loggedInID}) {
       setIsLoading(false);
     }
   };
-  
+
 
 
   useEffect(() => {
@@ -357,15 +357,15 @@ function CmMembers({communityID, loggedInID}) {
           'X-CSRF-TOKEN': csrfToken || '',
         },
       });
-  
+
       if (!rolesResponse.ok) {
         console.error('Failed to fetch existing roles:', rolesResponse.statusText);
         return;
       }
-  
+
       const rolesData = await rolesResponse.json();
       const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
-  
+
 
       const existingRoleIds = existingRoles.map(role => role.role_id);
       const departmentId = getDepartmentIdFromQuery();
@@ -376,7 +376,7 @@ function CmMembers({communityID, loggedInID}) {
       let communityId = null;
       existingRoles.forEach(role => {
         if (role.community_id) {
-          communityId = role.community_id;  
+          communityId = role.community_id;
         }
       });
 
@@ -389,10 +389,10 @@ function CmMembers({communityID, loggedInID}) {
       console.log("EXISTING ROLE IDS", existingRoleIds);
 
       const updatedRoles = {
-        role_id: existingRoleIds,  
+        role_id: existingRoleIds,
         model_id: user_id,
-        department_id: departmentId,  
-        community_id: communityId,    
+        department_id: departmentId,
+        community_id: communityId,
       };
 
       console.log("UPDATED ROLES", updatedRoles);
@@ -408,7 +408,7 @@ function CmMembers({communityID, loggedInID}) {
 
       if (response.ok) {
         console.log('Admin assigned successfully.');
-        await fetchMembersAndAdmins();  
+        await fetchMembersAndAdmins();
       } else {
         console.error('Failed to assign admin:', response.statusText);
       }
@@ -416,13 +416,13 @@ function CmMembers({communityID, loggedInID}) {
       console.error('Error assigning admin:', error);
     }
 
-    closePopup(); 
+    closePopup();
   };
 
   const handleDemotion = async (member) => {
     try {
       const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
-  
+
       const rolesResponse = await fetch(rolesUrl, {
         method: 'GET',
         headers: {
@@ -430,21 +430,21 @@ function CmMembers({communityID, loggedInID}) {
           'X-CSRF-Token': csrfToken || '',
         },
       });
-  
+
       if (rolesResponse.ok) {
         const rolesData = await rolesResponse.json();
         const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
-  
+
         // get community ids
         let communityId = null;
         existingRoles.forEach(role => {
           if (role.community_id) {
-            communityId = role.community_id;  
+            communityId = role.community_id;
           }
         });
 
         console.log("EXISTING ROLES", existingRoles);
-  
+
         const updatedRoles = existingRoles.filter(
           (role) => !(role.role_id === 2)
         );
@@ -453,22 +453,22 @@ function CmMembers({communityID, loggedInID}) {
 
         if (!updatedRoles.some(role => role.role_id === 4)) {
           updatedRoles.push({
-            role_id: 4, 
+            role_id: 4,
             model_id: member.user_id,
           });
         }
 
         console.log("UPDATED ROLES", updatedRoles);
-  
+
         const rolesPayload = {
           role_id: updatedRoles.map(role => role.role_id),
           model_id: member.user_id,
-          department_id: member.department_id, 
-          community_id: communityId,          
+          department_id: member.department_id,
+          community_id: communityId,
         };
 
         console.log("ROLES PAYLOAD", rolesPayload);
-  
+
         const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
           method: 'POST',
           headers: {
@@ -477,10 +477,10 @@ function CmMembers({communityID, loggedInID}) {
           },
           body: JSON.stringify(rolesPayload),
         });
-  
+
         if (updateRolesResponse.ok) {
           console.log('User demoted successfully.');
-          await fetchMembersAndAdmins();  
+          await fetchMembersAndAdmins();
         } else {
           console.error('Failed to update roles:', updateRolesResponse.statusText);
         }
@@ -490,11 +490,11 @@ function CmMembers({communityID, loggedInID}) {
     } catch (error) {
       console.error('Error demoting user:', error);
     }
-  
+
     closePopup();
   };
 
-  
+
 
   const handleRemove = async (id) => {
     const url = `/api/communities/communities/${communityID}/delete-member`;
@@ -505,7 +505,7 @@ function CmMembers({communityID, loggedInID}) {
             headers: {
                 Accept: 'application/json',
                 'X-CSRF-Token': csrfToken,
-                'Content-Type': 'application/json', 
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 user_id: String(id),
@@ -521,7 +521,7 @@ function CmMembers({communityID, loggedInID}) {
             } else {
               await fetchMembersAndAdmins();
             }
-            
+
         } else {
             const errorData = await response.json();
             console.error('Failed to delete member:', errorData.message || response.statusText);
@@ -535,7 +535,7 @@ function CmMembers({communityID, loggedInID}) {
 
   const handleAdminRemove = async (member) => {
     const url = `/api/department/employment_posts/${member.employment_post_id}`;
-  
+
     try {
       // Delete the member from the department
       const response = await fetch(url, {
@@ -545,14 +545,14 @@ function CmMembers({communityID, loggedInID}) {
           'X-CSRF-Token': csrfToken,
         },
       });
-  
+
       if (response.ok) {
         console.log('Member deleted successfully.');
-  
+
         // Check if the member is an admin and fetch their roles
         if (member.flag === 'admin') {
           const rolesUrl = `/api/permission/model-has-roles?model_id=${member.user_id}`;
-          
+
           const rolesResponse = await fetch(rolesUrl, {
             method: 'GET',
             headers: {
@@ -560,25 +560,25 @@ function CmMembers({communityID, loggedInID}) {
               'X-CSRF-Token': csrfToken,
             },
           });
-  
+
           if (rolesResponse.ok) {
             const rolesData = await rolesResponse.json();
             const existingRoles = Array.isArray(rolesData.data.data) ? rolesData.data.data : [];
-            
+
             let communityId = null;
             existingRoles.forEach(role => {
               if (role.community_id) {
-                communityId = role.community_id;  
+                communityId = role.community_id;
               }
             });
-  
+
             // Filter out the admin role for this department
             const updatedRoles = existingRoles.filter(
               (role) => !(role.role_id === 2)
             );
 
             console.log("UPDATED ROLES", updatedRoles);
-  
+
             const rolesPayload = {
               role_id: updatedRoles.map(role => role.role_id),
               model_id: member.user_id,
@@ -586,8 +586,8 @@ function CmMembers({communityID, loggedInID}) {
             };
 
             console.log("ROLES PAYLOAD", rolesPayload);
-  
-            // Post the updated roles 
+
+            // Post the updated roles
             const updateRolesResponse = await fetch('/api/permission/model-has-roles', {
               method: 'POST',
               headers: {
@@ -596,7 +596,7 @@ function CmMembers({communityID, loggedInID}) {
               },
               body: JSON.stringify(rolesPayload),
             });
-  
+
             if (updateRolesResponse.ok) {
               console.log('Admin role removed successfully.');
             } else {
@@ -606,7 +606,7 @@ function CmMembers({communityID, loggedInID}) {
             console.error('Failed to fetch roles:', rolesResponse.statusText);
           }
         }
-  
+
         // Refresh the members and admins list after deletion
         await fetchMembersAndAdmins();
       } else {
@@ -615,18 +615,18 @@ function CmMembers({communityID, loggedInID}) {
     } catch (error) {
       console.error('Error deleting member:', error);
     }
-  
+
     closePopup();
   };
-  
-  
+
+
 
   const closePopup = () => {
     setActivePopupId(null);
   };
 
   const handleNewMemberAdded = (newMember) => {
-    fetchMembersAndAdmins(); 
+    fetchMembersAndAdmins();
   };
 
   const handleAddMember = (newMemberData) => {
@@ -659,7 +659,7 @@ function CmMembers({communityID, loggedInID}) {
             />
             <button
               onClick={handleSearchChange}
-              className="items-center justify-center px-4 py-2 text-center bg-[#4780FF] rounded-full hover:bg-blue-700 text-md whitespace-nowrap"
+              className="items-center justify-center px-4 py-2 text-center bg-[#4780FF] rounded-full hover:bg-primary-700 text-md whitespace-nowrap"
             >
               Search
             </button>
@@ -722,7 +722,7 @@ function CmMembers({communityID, loggedInID}) {
               ))}
             </section>
           </div>
-          {showInvite && 
+          {showInvite &&
             <AddMemberPopup
               isAddMemberPopupOpen={showInvite}
               setIsAddMemberPopupOpen={setShowInvite}

@@ -13,7 +13,7 @@ function classNames(...classes) {
 
 const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
   // console.log("FILE", file);
-  
+
   if (!file || !file.id) {
     console.error("No file selected or file ID is missing.");
     return null; // or return some placeholder content
@@ -42,30 +42,30 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
       }
       const data = await response.json();
       console.log("API response:", data); // Log the entire API response to check its structure
-  
+
       const fileObject = data.data.data.find(f => f.id === file.id); // Find the file object in the data array
-  
+
       if (!fileObject) {
         throw new Error("File not found in the API response");
       }
-      
+
       // Check if metadata is a string and parse it if necessary
-      const metadata = typeof fileObject.metadata === 'string' 
-        ? JSON.parse(fileObject.metadata) 
+      const metadata = typeof fileObject.metadata === 'string'
+        ? JSON.parse(fileObject.metadata)
         : fileObject.metadata;
-  
+
       // If the path or original_name is undefined, log an error or handle it accordingly
       if (!metadata.path || !metadata.original_name) {
         throw new Error("Invalid metadata format: missing path or original_name");
       }
-  
+
       const fileUrl = `/storage/${metadata.path}`; // Use the metadata for the file path
       console.log("File path:", fileUrl); // Log the file path to verify
-  
+
       // Access the original_name from the metadata object
       const originalName = metadata.original_name || 'default_filename';
       console.log("Original name:", originalName);
-  
+
       const link = document.createElement('a');
       link.href = fileUrl; // Ensure this URL is correct
       link.download = originalName; // Use the correct name or a fallback
@@ -109,7 +109,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={(e) => handleRename(e, close)}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -123,7 +123,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleDownload}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -137,7 +137,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleDelete}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -151,7 +151,7 @@ const PopupContent = ({ file, onRename, onDelete, onFileSelect }) => {
                 <button
                   onClick={handleViewClick}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >

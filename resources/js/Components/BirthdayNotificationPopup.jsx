@@ -60,7 +60,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
             birthdayEvents.sort((a, b) => a.name.localeCompare(b.name));
 
             console.log('birthdayEvents', birthdayEvents);
-            
+
 
             setBirthdays(birthdayEvents);
         } catch (error) {
@@ -79,8 +79,8 @@ function BirthdayNotificationPopup({ onClose, userData }) {
             source = `/storage/${src}`;
         } else {
             // If src doesn't start with 'avatar/', check if it's a placeholder or not
-            source = src === '/assets/dummyStaffPlaceHolder.jpg' 
-              ? src 
+            source = src === '/assets/dummyStaffPlaceHolder.jpg'
+              ? src
               : `/avatar/${src}`;
         }
 
@@ -93,7 +93,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
 
     const handleBirthdayClick = (birthday) => {
         // console.log("BDAY", birthday);
-        
+
         setSelectedBirthday(birthday);
         setIsBirthdayComOpen(true); // Open the BirthdayCom popup
     };
@@ -105,10 +105,10 @@ function BirthdayNotificationPopup({ onClose, userData }) {
     const renderBirthdays = () => {
         return birthdays.map((birthday, index) => (
             console.log("BIRTHDAYS", birthday),
-            
+
             <div
                 key={index}
-                className="cursor-pointer text-sm text-gray-600 mt-1 p-2 hover:bg-blue-100 rounded flex items-center"
+                className="cursor-pointer text-sm text-gray-600 mt-1 p-2 hover:bg-primary-100 rounded flex items-center"
                 onClick={() => handleBirthdayClick(birthday)}
             >
                 <img
@@ -144,7 +144,7 @@ function BirthdayNotificationPopup({ onClose, userData }) {
             {/* Independent BirthdayCom Popup */}
             {selectedBirthday && (
                 // console.log("SBDAY", selectedBirthday.id),
-                
+
                 <Popup isOpen={isBirthdayComOpen} onClose={closeBirthdayComPopup}>
                     <BirthdayCom loggedInUser={userData} profileImage={selectedBirthday.profileImage} name={selectedBirthday.name} selectedID={selectedBirthday.profileId} />
                 </Popup>

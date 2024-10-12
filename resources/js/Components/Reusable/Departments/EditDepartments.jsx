@@ -57,21 +57,21 @@
 //       />
 //     </div>
 //   );
-  
+
 // }
 
 
 
-// function Card({ 
-//   title, 
-//   imgSrc, 
-//   imgAlt, 
+// function Card({
+//   title,
+//   imgSrc,
+//   imgAlt,
 //   user,
-//   department, 
-//   description, 
-//   cancelText, 
-//   saveText, 
-//   onCancel, 
+//   department,
+//   description,
+//   cancelText,
+//   saveText,
+//   onCancel,
 //   onSave
 // }) {
 
@@ -96,10 +96,10 @@
 //   useEffect(() => {
 //     setDepartmentName(department?.name || '');
 //     setInitialDepartmentName(department?.name || '');
-    
+
 //     setImageSrc(department?.banner || imgSrc);
 //     setInitialImageSrc(department?.banner || imgSrc);
-    
+
 //     setSelectedType(department?.type || '');
 //     setInitialSelectedType(department?.type || '');
 
@@ -112,7 +112,7 @@
 
 //     const objectUrl = URL.createObjectURL(file);
 //     setImageSrc(objectUrl);
-//     setImageFile(file); 
+//     setImageFile(file);
 //   };
 
 //   const handleSubmit = async () => {
@@ -203,7 +203,7 @@
 //           </button>
 //           <button
 //             onClick={handleSubmit}
-//             className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+//             className="px-4 py-2 text-white font-bold bg-primary-500 rounded-full hover:bg-primary-700"
 //           >
 //             {saveText}
 //           </button>
@@ -322,7 +322,7 @@ function Avatar({ src, alt, onImageChange }) {
           <div className="flex justify-end w-full mt-4 space-x-2">
             <button
               onClick={handleCrop}
-              className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+              className="px-4 py-2 text-white font-bold bg-primary-500 rounded-full hover:bg-primary-700"
             >
               Apply Crop
             </button>
@@ -341,7 +341,7 @@ function Avatar({ src, alt, onImageChange }) {
               />
               <button
                 onClick={handleRepositionClick}
-                className="mt-2 px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+                className="mt-2 px-4 py-2 text-white font-bold bg-primary-500 rounded-full hover:bg-primary-700"
               >
                 Reposition Image
               </button>
@@ -362,14 +362,14 @@ function Avatar({ src, alt, onImageChange }) {
   );
 }
 
-function Card({ 
-  title, 
-  imgSrc, 
-  imgAlt, 
-  department, 
-  cancelText, 
-  saveText, 
-  onCancel, 
+function Card({
+  title,
+  imgSrc,
+  imgAlt,
+  department,
+  cancelText,
+  saveText,
+  onCancel,
   onSave
 }) {
   const [departmentName, setDepartmentName] = useState(department?.name || '');
@@ -393,10 +393,10 @@ function Card({
   useEffect(() => {
     setDepartmentName(department?.name || '');
     setInitialDepartmentName(department?.name || '');
-    
+
     setImageSrc(department?.banner || imgSrc);
     setInitialImageSrc(department?.banner || imgSrc);
-    
+
     setSelectedType(department?.type || '');
     setInitialSelectedType(department?.type || '');
 
@@ -498,7 +498,7 @@ function Card({
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 text-white font-bold bg-blue-500 rounded-full hover:bg-blue-700"
+            className="px-4 py-2 text-white font-bold bg-primary-500 rounded-full hover:bg-primary-700"
           >
             {saveText}
           </button>
@@ -522,5 +522,3 @@ const EditDepartments = ({ department, onCancel, onSave }) => (
 );
 
 export default EditDepartments;
-
-

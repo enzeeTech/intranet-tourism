@@ -76,7 +76,7 @@ const CreateVideoStory = ({ goBack, onClose }) => {
             />
             <button
               type="button"
-              className="py-2 px-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 max-w-32 "
+              className="py-2 px-4 bg-primary-600 text-white rounded-full hover:bg-primary-700 max-w-32 "
               onClick={handlePreview}
             >
               Preview Text

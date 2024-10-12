@@ -7,7 +7,7 @@ const AddTitles = () => {
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [editingTitleName, setEditingTitleName] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [message, setMessage] = useState(null); 
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const csrfToken = useCsrf();
 
@@ -35,11 +35,11 @@ const AddTitles = () => {
       if (data.data.next_page_url) {
         fetchTitles(data.data.next_page_url);
       } else {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -90,7 +90,7 @@ const AddTitles = () => {
 
   const saveTitle = () => {
     if (editingTitleName.trim() === "") return;
-  
+
     fetch(`/api/department/business_posts/${editingTitleId}`, {
       method: "PATCH",
       headers: {
@@ -123,7 +123,7 @@ const AddTitles = () => {
         showMessage("error", `Failed to edit title. ${error.message}`);
       });
   };
-  
+
 
   return (
     <div className="container p-8 mx-auto">
@@ -136,7 +136,7 @@ const AddTitles = () => {
         </div>
         <button
           onClick={() => setIsPopupOpen(true)}
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+          className="px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
         >
           Add New Title
         </button>
@@ -233,7 +233,7 @@ const AddTitles = () => {
               </button>
               <button
                 onClick={createTitle}
-                className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                className="px-4 py-2 text-white bg-primary-500 rounded-full hover:bg-primary-700"
               >
                 Add
               </button>

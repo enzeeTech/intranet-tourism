@@ -159,7 +159,7 @@
 //           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
 //             {cancelText}
 //           </button>
-//           <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleSubmit}>
+//           <button className="justify-center px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700" onClick={handleSubmit}>
 //             {createText}
 //           </button>
 //         </div>
@@ -266,7 +266,7 @@ function Avatar({ src, alt, onImageChange, cropMode, setCropMode, crop, setCrop,
       )}
       {src && !cropMode && (
         <button
-          className="mt-4 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700"
+          className="mt-4 px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700"
           onClick={() => setCropMode(true)}
         >
           Crop Image
@@ -414,7 +414,7 @@ function Card({ title, imgSrc, imgAlt, user, description, cancelText, createText
           <button className="my-auto font-semibold text-neutral-800" onClick={onCancel}>
             {cancelText}
           </button>
-          <button className="justify-center px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700" onClick={handleSubmit}>
+          <button className="justify-center px-4 py-2 font-bold text-white bg-primary-500 rounded-full hover:bg-primary-700" onClick={handleSubmit}>
             {createText}
           </button>
         </div>

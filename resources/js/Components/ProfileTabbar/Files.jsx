@@ -19,7 +19,7 @@
 // );
 
 // const SearchButton = () => (
-//   <button className="justify-center px-4 py-3 my-auto text-sm font-bold text-center text-white bg-blue-500 hover:bg-blue-700 rounded-3xl mt-8">
+//   <button className="justify-center px-4 py-3 my-auto text-sm font-bold text-center text-white bg-primary-500 hover:bg-primary-700 rounded-3xl mt-8">
 //     Search
 //   </button>
 // );
@@ -97,10 +97,10 @@
 // //               <table className="w-full rounded-2xl bg-white table-fixed overflow-visible border-separate border-spacing-1">
 // //                 <thead>
 // //                   <tr>
-// //                     <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
-// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
-// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
-// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
+// //                     <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
+// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
+// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
+// //                     <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
 // //                     <th scope="col" className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
 // //                   </tr>
 // //                 </thead>
@@ -219,10 +219,10 @@
 //             <table className="w-full rounded-2xl bg-white table-fixed overflow-visible border-separate border-spacing-1">
 //               <thead>
 //                 <tr>
-//                   <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
-//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
-//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
-//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
+//                   <th scope="col" className="w-1/3 md:w-1/2 lg:w-2/4 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 sm:pl-1 shadow-custom">Name</th>
+//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Size (MB)</th>
+//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Extension</th>
+//                   <th scope="col" className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm font-semibold text-blue-500 shadow-custom">Date Created</th>
 //                   <th scope="col" className="w-1/12 relative py-3.5 pl-3 pr-4 sm:pl-3"><span className="sr-only">Edit</span></th>
 //                 </tr>
 //               </thead>
@@ -280,7 +280,7 @@ const SearchInput = () => (
 );
 
 const SearchButton = () => (
-  <button className="justify-center px-4 py-3 my-auto text-sm font-bold text-center text-white bg-blue-500 hover:bg-blue-700 rounded-3xl mt-8">
+  <button className="justify-center px-4 py-3 my-auto text-sm font-bold text-center text-white bg-primary-500 hover:bg-primary-700 rounded-3xl mt-8">
     Search
   </button>
 );
@@ -359,13 +359,13 @@ const Table = ({ userId, departmentID }) => {
             <table className="w-full rounded-2xl p-4 bg-white shadow-custom table-fixed overflow-visible border-separate border-spacing-1">
               <thead>
                 <tr>
-                  <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
+                  <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
                       File Name
                   </th>
-                  {/* <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
+                  {/* <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                       Uploaded By
                   </th> */}
-                  <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
+                  <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                       Date Created
                   </th>
                   <th className="w-1/12 relative py-3.5">

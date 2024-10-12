@@ -73,7 +73,7 @@ const PopupContent = ({ file }) => {
                 <button
                   onClick={(e) => handleRename(e, close)}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >
@@ -87,7 +87,7 @@ const PopupContent = ({ file }) => {
                 <button
                   onClick={handleDelete}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full text-left',
                   )}
                 >
@@ -106,7 +106,7 @@ const PopupContent = ({ file }) => {
                 <button
                   onClick={handleDownload}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full text-left',
                   )}
                 >
@@ -125,7 +125,7 @@ const PopupContent = ({ file }) => {
                 <button
                   onClick={handleViewClick}
                   className={classNames(
-                    active ? 'bg-blue-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-primary-100 text-gray-900' : 'text-gray-700',
                     'group flex items-center px-4 py-2 text-sm w-full'
                   )}
                 >

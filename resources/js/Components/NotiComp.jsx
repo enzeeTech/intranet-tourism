@@ -107,7 +107,7 @@ constructor(props) {
             <div className="notification-list px-2 ">
                 <ul>
                     {filteredNotifications.map(notification => (
-                        <div className="flex flex-row h-[104px] mb-2 hover:bg-blue-100 items-center rounded-xl" key={notification.id}>
+                        <div className="flex flex-row h-[104px] mb-2 hover:bg-primary-100 items-center rounded-xl" key={notification.id}>
                             <div className="flex items-center bg-gray h-16">
                                 <img className="h-14 w-14 ml-2" src={notification.imageSrc} alt=""
                                     style={{

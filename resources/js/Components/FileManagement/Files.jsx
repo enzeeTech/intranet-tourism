@@ -30,7 +30,7 @@ const FileTable = ({ searchTerm }) => {
             let currentPage = 1;
             let totalPages = 1;
             let allFilesData = [];
-    
+
             while (currentPage <= totalPages) {
                 const response = await fetch(
                     `/api/resources/resources?with[]=author&page=${currentPage}`
@@ -40,7 +40,7 @@ const FileTable = ({ searchTerm }) => {
                 }
                 const responseData = await response.json();
                 console.log("RESPONSEDATA", responseData);
-    
+
                 if (!Array.isArray(responseData.data?.data)) {
                     console.error(
                         "Expected an array of files, but received:",
@@ -49,7 +49,7 @@ const FileTable = ({ searchTerm }) => {
                     setLoading(false);
                     return;
                 }
-    
+
                 const filesData = responseData.data.data.map((file) => ({
                     ...file,
                     uploader: file.author.name, // Assuming the API provides an 'uploader' field with the uploader's name
@@ -58,20 +58,20 @@ const FileTable = ({ searchTerm }) => {
                             ? JSON.parse(file.metadata)
                             : file.metadata,
                 }));
-    
+
                 // Accumulate all files data across pages
                 allFilesData = [...allFilesData, ...filesData];
-    
+
                 // Determine the total number of pages
                 totalPages = responseData.data.last_page;
                 currentPage++;
             }
-    
+
             // Sort files by the `created_at` date in descending order (newest first)
             allFilesData.sort(
                 (a, b) => new Date(b.created_at) - new Date(a.created_at)
             );
-    
+
             setFiles(allFilesData);
             setLoading(false);
         } catch (error) {
@@ -79,7 +79,7 @@ const FileTable = ({ searchTerm }) => {
             setLoading(false);
         }
     };
-    
+
 
     useEffect(() => {
         fetchFiles();
@@ -186,7 +186,7 @@ const FileTable = ({ searchTerm }) => {
             console.error("File ID is missing.");
             return;
         }
-    
+
         // Ensure metadata is an object
         let metadata = fileToRename.metadata;
         if (typeof metadata === "string") {
@@ -197,21 +197,21 @@ const FileTable = ({ searchTerm }) => {
                 return;
             }
         }
-    
+
         // Update the metadata object with the new name
         const updatedMetadata = {
             ...metadata,
             original_name: newName,
         };
-    
+
         // Convert updatedMetadata to a JSON string
         const metadataString = JSON.stringify(updatedMetadata);
-    
+
         // Create payload with the metadata as a JSON string
         const payload = {
             metadata: metadataString,
         };
-    
+
         // Prepare API request
         const url = `/api/resources/resources/${fileToRename.id}`;
         const options = {
@@ -223,7 +223,7 @@ const FileTable = ({ searchTerm }) => {
             },
             body: JSON.stringify(payload),
         };
-    
+
         try {
             const response = await fetch(url, options);
             if (!response.ok) {
@@ -231,7 +231,7 @@ const FileTable = ({ searchTerm }) => {
                 console.error("Failed to rename file:", responseBody);
                 throw new Error(`Failed to rename file: ${response.statusText}`);
             }
-    
+
             console.log("File renamed successfully.");
             await fetchFiles(); // Refresh file list after renaming
         } catch (error) {
@@ -240,7 +240,7 @@ const FileTable = ({ searchTerm }) => {
             setEditingIndex(null); // Clear editing state
         }
     };
-    
+
 
     const handleDelete = async (fileId, index) => {
         const url = `/api/crud/resources/${fileId}`;
@@ -275,13 +275,13 @@ const FileTable = ({ searchTerm }) => {
                     <table className="w-full p-4 bg-white border-separate table-fixed rounded-2xl shadow-custom border-spacing-1">
                         <thead>
                             <tr>
-                                <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-blue-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
+                                <th className="w-1/3 md:w-3/4 lg:w-3/4 rounded-full bg-primary-200 px-3 py-3.5 text-center text-sm max-md:text-xs font-semibold text-blue-500 sm:pl-1 shadow-custom">
                                     File Name
                                 </th>
-                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
+                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                                     Uploaded By
                                 </th>
-                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-blue-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
+                                <th className="w-1/6 md:w-1/10 lg:w-1/10 rounded-full bg-primary-200 px-3 py-3.5 max-md:px-0 text-center text-sm max-md:text-xs font-semibold text-blue-500 shadow-custom">
                                     Date Created
                                 </th>
                                 <th className="w-1/12 relative py-3.5">

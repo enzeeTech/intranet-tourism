@@ -36,13 +36,13 @@
 //             </button>
 //           </div>
 //           <button
-//             className="bg-blue-500 text-white py-2 px-4 rounded m-2"
+//             className="bg-primary-500 text-white py-2 px-4 rounded m-2"
 //             onClick={handlePictureClick}
 //           >
 //             Picture
 //           </button>
 //           <button
-//             className="bg-blue-500 text-white py-2 px-4 rounded m-2"
+//             className="bg-primary-500 text-white py-2 px-4 rounded m-2"
 //             onClick={handleVideoClick}
 //           >
 //             Video
@@ -234,4 +234,3 @@ const Popup = ({ isOpen, onClose, children }) => {
 };
 
 export default Popup;
-

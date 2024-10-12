@@ -183,46 +183,46 @@
 //     const handleDownload = async (e) => {
 //         e.stopPropagation();
 //         e.preventDefault();
-    
+
 //         if (!qrCodeSvg) {
 //             console.error("QR code SVG is not available.");
 //             return;
 //         }
-    
+
 //         // Create a jsPDF instance
 //         const pdf = new jsPDF();
-    
+
 //         // Set the font size and add the user name
 //         pdf.setFontSize(16);
 //         pdf.text(`Name: ${user_name}`, 10, 20);
-    
+
 //         // Convert the SVG into an image
 //         const canvas = document.createElement('canvas');
 //         const svgBlob = new Blob([qrCodeSvg], { type: 'image/svg+xml;charset=utf-8' });
 //         const url = URL.createObjectURL(svgBlob);
-    
+
 //         const img = new Image();
 //         img.onload = () => {
 //             canvas.width = img.width;
 //             canvas.height = img.height;
 //             const ctx = canvas.getContext('2d');
 //             ctx.drawImage(img, 0, 0);
-    
+
 //             // Convert the canvas to a data URL
 //             const imgData = canvas.toDataURL('image/png');
-    
+
 //             // Add the image to the PDF
 //             pdf.addImage(imgData, 'PNG', 10, 30, img.width / 4, img.height / 4);
-    
+
 //             // Download the PDF
 //             pdf.save(`${user_name} QR-Code.pdf`);
-    
+
 //             // Clean up
 //             URL.revokeObjectURL(url);
 //         };
 //         img.src = url;
 //     };
-    
+
 
 //     const handleCopyLink = () => {
 //         const qrCodeLink = "https://shattereddisk.github.io/rickroll/rickroll.mp4";
@@ -286,7 +286,7 @@ import { jsPDF } from 'jspdf'; // Make sure you install jspdf using npm or yarn
 
 function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) {
     console.log("TITLEEEDIANI APE", user_title);
-    
+
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [qrCodeSvg, setQrCodeSvg] = useState(null);
     const [qrCodeLink, setQrCodeLink] = useState(null); // Store the QR code link
@@ -344,86 +344,86 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
     const handleDownload = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-    
+
         if (!qrCodeSvg) {
             console.error("QR code SVG is not available.");
             return;
         }
-    
+
         const pdf = new jsPDF();
-    
+
         // Load the logo image
         const logo = new Image();
         logo.src = '/assets/logo_tourism.png';
-    
+
         const leftMargin = 40;  // Left margin
         const rightMargin = 40; // Right margin
         const pageWidth = pdf.internal.pageSize.getWidth();
         const maxWidth = pageWidth - leftMargin - rightMargin; // Adjusted max width for text wrapping
-    
+
         const nameLines = pdf.splitTextToSize(`${user_name}`, maxWidth);
-    
+
         const lineHeight = 10; // Adjust line height as needed
-    
+
         logo.onload = () => {
             const logoWidth = 70; // Adjust logo size as needed
             const logoHeight = 30;
             const logoXPosition = (pageWidth - logoWidth) / 2;
             const logoYPosition = 20;
-    
+
             pdf.addImage(logo, 'PNG', logoXPosition, logoYPosition, logoWidth, logoHeight);
-    
+
             const marginTop = 40; // Adjust margin as needed
             let yPosition = logoYPosition + logoHeight + marginTop;
-    
+
             pdf.setFontSize(24); // Larger font size for name
             pdf.setFont("helvetica", "bold"); // Bold font style
-    
+
             // Add each line of the name text centered, with line spacing
             nameLines.forEach((line) => {
                 pdf.text(line, pageWidth / 2, yPosition, { align: "center" });
                 yPosition += lineHeight; // Move down for the next line
             });
-    
+
             pdf.setFontSize(16);
             pdf.setFont("helvetica", "normal");
             pdf.text(`${user_title}`, pageWidth / 2, yPosition + 10, { align: "center" });
-    
+
             const imageYPosition = yPosition + 40;
-    
+
             const canvas = document.createElement('canvas');
             const svgBlob = new Blob([qrCodeSvg], { type: 'image/svg+xml;charset=utf-8' });
             const url = URL.createObjectURL(svgBlob);
-    
+
             const img = new Image();
             img.onload = () => {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0);
-    
+
                 const imgData = canvas.toDataURL('image/png');
-    
+
                 const imageWidth = img.width / 2;
                 const imageHeight = img.height / 2;
                 const imageXPosition = (pageWidth - imageWidth) / 2;
-    
+
                 pdf.addImage(imgData, 'PNG', imageXPosition, imageYPosition, imageWidth, imageHeight);
-    
+
                 pdf.save(`${user_name} QR-Code.pdf`);
-    
+
                 URL.revokeObjectURL(url);
             };
             img.src = url;
         };
     };
-    
-    
-    
-    
 
-    
-    
+
+
+
+
+
+
 
     const handleCopyLink = () => {
         if (!qrCodeLink) {
@@ -458,9 +458,9 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={closePopup}>
                     <div className=" p-6 rounded-3xl shadow-custom max-w-md popup" onClick={(e) => e.stopPropagation()}>
                     <div className="flex justify-center">
-                        <img 
-                        src="/assets/logo_tourism.png" 
-                        alt="Tourism Logo" 
+                        <img
+                        src="/assets/logo_tourism.png"
+                        alt="Tourism Logo"
                         className="w-20 h-15 mr-2 align-middle my-4"
                         />
                     </div>
@@ -484,10 +484,10 @@ function ProfileIcons({ icon1, icon2, onEdit, user_id, user_name, user_title }) 
 
                         <hr className="mb-4 mt-4 w-full border-gray-300" />
                         <div className="flex w-full -mt-1 relative space-x-4">
-                            <button onClick={handleDownload} className="bg-white hover:bg-blue-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
+                            <button onClick={handleDownload} className="bg-white hover:bg-primary-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
                                 <img src="/assets/downloadiconblue.svg" alt="Download Icon" className="w-6 h-6 shrink-0" />
                             </button>
-                            <button onClick={handleDownload} className="bg-white hover:bg-blue-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
+                            <button onClick={handleDownload} className="bg-white hover:bg-primary-100 rounded-lg py-2 px-auto whitespace-nowrap flex w-full justify-center items-center">
                                 <img src="/assets/copylinkiconblue.svg" alt="Copy Link Icon" className="w-6 h-6 shrink-0" />
                             </button>
                         </div>

@@ -92,11 +92,11 @@ function HeaderSection({ departmentID, departmentHeader, departmentBanner, depar
       />
       <div className="absolute inset-x-0 bottom-0 flex items-center justify-start gap-4 py-4 px-11 max-md:px-5">
         {isEditing ? (
-          <button className="flex items-center px-4 py-2 text-white bg-blue-500 rounded-md" onClick={handleSaveClick}>
+          <button className="flex items-center px-4 py-2 text-white bg-primary-500 rounded-md" onClick={handleSaveClick}>
             Save
           </button>
         ) : (
-          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 mb-4 text-white bg-blue-500 rounded-full" onClick={handleEditClick}>
+          <button className="flex items-center justify-center w-8 h-8 px-1 py-1 mb-4 text-white bg-primary-500 rounded-full" onClick={handleEditClick}>
             <img
               src="/assets/pencil.svg"
               alt="Edit Icon"
@@ -120,21 +120,21 @@ function Navigation({ userId, departmentID, departmentName }) {
       let allUsers = [];
       let page = 1;
       let hasMoreData = true;
-  
+
       while (hasMoreData) {
         try {
           const response = await fetch(`/api/users/users?page=${page}&with[]=profile&with[]=employmentPosts.department&with[]=employmentPosts.businessPost&with[]=employmentPosts.businessUnit`, {
             method: "GET",
           });
-  
+
           const result = await response.json();
           const { data } = result;
-  
+
           // console.log("RESULTT", result);
-  
+
           // Append the current page's users to the allUsers array
           allUsers = [...allUsers, ...data.data];
-  
+
           // Check if there are more pages to fetch
           hasMoreData = data.next_page_url !== null;
           page++;
@@ -143,28 +143,28 @@ function Navigation({ userId, departmentID, departmentName }) {
           hasMoreData = false;
         }
       }
-  
+
       // Get today's date in MM-DD format
       const today = new Date().toISOString().slice(5, 10);
-  
+
       // Filter users whose birthday is today
       const bdayToday = allUsers.filter(user => {
         const dob = user.profile?.dob;
         return dob && dob.slice(5, 10) === today;
       });
-  
+
       console.log("Filtered Birthdays Today", bdayToday);
-  
+
       // Set the filtered list to state
       setBirthdaysToday(bdayToday);
     };
-  
+
     fetchAllUsers();
   }, []);
-  
-  
-  
-  
+
+
+
+
 
   const handleCreatePoll = (poll) => {
     setPolls((prevPolls) => [...prevPolls, poll]);
@@ -212,13 +212,13 @@ function Navigation({ userId, departmentID, departmentName }) {
         {activeTab === 'Post' && (
           <div className="flex flex-col max-w-[1000px] shadow-2xl pb-6 rounded-xl mt-6">
             <div className="max-w-[875px] w-full whitespace-nowrap absolute content-items ">
-              <ShareYourThoughts 
-                userId={userId} 
-                onCreatePoll={handleCreatePoll} 
-                includeAccessibilities={true} 
-                filterType="Department" 
-                filterId={departmentID} 
-                birthdaysToday={birthdaysToday.length > 0 ? birthdaysToday : null} 
+              <ShareYourThoughts
+                userId={userId}
+                onCreatePoll={handleCreatePoll}
+                includeAccessibilities={true}
+                filterType="Department"
+                filterId={departmentID}
+                birthdaysToday={birthdaysToday.length > 0 ? birthdaysToday : null}
               />
               <Filter /><br />
               <OutputData polls={polls} filterType="Department" filterId={departmentID} departmentName={departmentName} variant="department" />
@@ -256,7 +256,7 @@ function Adminsection({ departmentID, departmentHeader, departmentDescription, u
   , [departmentID]);
 
   console.log("DEPARTMENT BANNER", departmentBanner);
-  
+
   const handleEditClick = (isOpen) => {
     setIsEditPopupOpen(isOpen);
   };

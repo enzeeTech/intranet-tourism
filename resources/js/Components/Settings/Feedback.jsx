@@ -6,7 +6,7 @@ import benImage from '../../../../public/assets/benImage.png';
 import thomasImage from '../../../../public/assets/thomasImage.png';
 
 
-// Sample feedback data 
+// Sample feedback data
 const feedbackData = [
   { id: 1, name: 'Aisha Binti', department: 'Department', time: '2024-06-24T04:00:00Z', feedback: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla cursus turpis in imperdiet volutpat. Donec id leo orci. Donec et elit eleifend, tempor lacus et, placerat dui. Donec euismod odio eu nisl vulputate lobortis. ', profileImage: aishaImage, read: false },
   { id: 2, name: 'Thomas', department: 'Department', time: '2024-06-23T01:00:00Z', feedback: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', profileImage: thomasImage, read: false },
@@ -111,7 +111,7 @@ const FeedbackRow = ({ feedback, onRead, onDelete }) => {
             <hr className="mb-5 border-t border-gray-300" style={{ borderColor: '#E4E4E4', width: '100%' }} />
             <p className="mb-2 text-lg font-medium text-center">{feedback.feedback}</p>
             <div className="flex justify-center space-x-4">
-              <button className="px-8 py-2 mt-5 text-white bg-blue-500 rounded-full" onClick={() => setIsFeedbackModalVisible(false)}>Back</button>
+              <button className="px-8 py-2 mt-5 text-white bg-primary-500 rounded-full" onClick={() => setIsFeedbackModalVisible(false)}>Back</button>
             </div>
           </div>
         </div>
@@ -128,7 +128,7 @@ const FeedbackRow = ({ feedback, onRead, onDelete }) => {
             <div className="text-center ">
               <h2 className="mb-4 text-lg font-bold">Delete the feedback permanently?</h2>
               <div className="flex justify-center space-x-4">
-                <button className="px-8 py-2 text-base font-bold text-white bg-blue-500 border border-blue-500 rounded-full" onClick={handleDelete}>Yes</button>
+                <button className="px-8 py-2 text-base font-bold text-white bg-primary-500 border border-blue-500 rounded-full" onClick={handleDelete}>Yes</button>
                 <button className="px-8 py-2 text-base font-bold text-[#979797] bg-white rounded-full border border-[#BDBDBD]" onClick={() => setIsDeleteModalVisible(false)}>No</button>
               </div>
             </div>

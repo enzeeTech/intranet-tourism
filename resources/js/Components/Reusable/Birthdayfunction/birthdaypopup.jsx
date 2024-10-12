@@ -34,13 +34,13 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
   let source = null;
 
   if (!loggedInUser.profile?.image || loggedInUser.profile?.image.trim() === '') {
-    
+
     source = `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${loggedInUser.profile?.bio}`;
   } else if (loggedInUser.profile?.image.startsWith('avatar/')) {
     source = `/storage/${loggedInUser.profile?.image}`;
   } else {
-    source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg' 
-      ? loggedInUser.profile?.image 
+    source = loggedInUser.profile?.image === '/assets/dummyStaffPlaceHolder.jpg'
+      ? loggedInUser.profile?.image
       : `/avatar/${loggedInUser.profile?.image}`;
   }
 
@@ -105,7 +105,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
       });
   };
 
-  
+
 
   return (
     <section className="flex flex-col bg-white rounded-xl w-full max-w-xl mx-auto">
@@ -238,7 +238,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
           />
           {/* Additional images */}
         </div>
-        
+
         <form className="flex flex-col w-full mt-4" onSubmit={handleSubmit}>
         <div className="flex items-center">
             <img
@@ -259,7 +259,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
     {taggedPeople.map((id) => (
       <div
         key={id}  // Ensure person.id is unique
-        className="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-lg shadow-sm"
+        className="flex items-center gap-2 px-3 py-1 bg-primary-100 rounded-lg shadow-sm"
       >
         <span className="text-neutral-800">{name}</span>
       </div>
@@ -269,7 +269,7 @@ const BirthdayCom = ({ profileImage, name, loggedInUser, selectedID }) => {
 
           <button
             type="submit"
-            className="flex justify-center items-center py-2 my-4 text-sm font-bold text-white bg-blue-500 hover:bg-blue-700 rounded-full"
+            className="flex justify-center items-center py-2 my-4 text-sm font-bold text-white bg-primary-500 hover:bg-primary-700 rounded-full"
             onClick={handleClickSend}
           >
             Post

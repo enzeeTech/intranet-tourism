@@ -27,7 +27,7 @@
 // function AddOptionButton({ label, onClick }) {
 //   return (
 //     <div className="flex flex-auto gap-3 py-1.5 bg-gray-100 rounded-3xl pr-5" onClick={onClick}>
-//       <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-blue-500 rounded-3xl h-[30px] w-[30px]">
+//       <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-primary-500 rounded-3xl h-[30px] w-[30px]">
 //         +
 //       </div>
 //       <div className="flex-auto my-auto text-sm leading-5 text-neutral-800">
@@ -153,7 +153,7 @@
 //             Choose end date (opt.)
 //           </div>
 //           <button
-//             className="justify-center items-center px-16 py-3 mt-16 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 rounded-md max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
+//             className="justify-center items-center px-16 py-3 mt-16 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-primary-500 rounded-md max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
 //             onClick={handlePostPoll}
 //           >
 //             Post
@@ -196,7 +196,7 @@ function PollOption({ option, onRemove, onChange }) {
 function AddOptionButton({ label, onClick }) {
   return (
     <div className="flex flex-auto gap-3 py-1.5 bg-gray-100 rounded-3xl pr-5" onClick={onClick}>
-      <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-blue-500 rounded-3xl h-[30px] w-[30px]">
+      <div className="justify-center items-center px-2.5 text-xl font-bold ml-1 text-center text-white whitespace-nowrap bg-primary-500 rounded-3xl h-[30px] w-[30px]">
         +
       </div>
       <div className="flex-auto my-auto text-sm leading-5 text-neutral-800">
@@ -335,7 +335,7 @@ const handlePostPoll = () => {
             Choose end date (opt.)
           </div>
           <button
-            className="justify-center items-center px-16 py-3 mt-10 mb-4 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-blue-500 hover:bg-blue-700 rounded-2xl max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
+            className="justify-center items-center px-16 py-3 mt-10 mb-4 text-lg font-bold leading-6 text-center text-white whitespace-nowrap bg-primary-500 hover:bg-primary-700 rounded-2xl max-md:px-5 max-md:mt-10 max-md:mr-1 max-md:max-w-full"
             onClick={handlePostPoll}
           >
             Post

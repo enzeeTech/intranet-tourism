@@ -267,13 +267,13 @@
 
                 {isPopupOpen[index] && (
                     <div className="absolute bg-white border-2 rounded-xl p-1 shadow-lg mt-14 right-0 w-[160px] h-auto z-10 ">
-                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
+                    <p className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl  p-2" onClick={() => handleEdit(index)}><img className="w-6 h-6" src="/assets/EditIcon.svg" alt="Edit" />Edit</p>
                     <div className="font-extrabold text-neutral-800 mb-1 mt-1 border-b-2 border-neutral-300"></div>
 
-                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
+                    <p className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl p-2" onClick={() => handleDelete(index)}><img className="w-6 h-6" src="/assets/DeleteIcon.svg" alt="Delete" />Delete</p>
                     <div className="font-extrabold text-neutral-800 mb-2 mt-1 border-b-2 border-neutral-300"></div>
 
-                    <p className="cursor-pointer flex flex-row hover:bg-blue-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
+                    <p className="cursor-pointer flex flex-row hover:bg-primary-100 rounded-xl p-2" onClick={() => handleAnnouncement(index)}><img className="w-6 h-6" src="/assets/AnnounceIcon.svg" alt="Announcement" />Announcement</p>
                     </div>
                 )}
                 </header>

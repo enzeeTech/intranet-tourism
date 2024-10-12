@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png'; 
-import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png'; 
+import dropDownDownArrow from '../../../../public/assets/dropdownDownArrow.png';
+import dropDownUpArrow from '../../../../public/assets/dropdownUpArrow.png';
 import dummyStaffPlaceHolder from '../../../../public/assets/dummyStaffPlaceHolder.jpg';
 import SearchPopup from './AddMemberPopup';
-import ThreeDotButton from './ThreeDotButton'; 
+import ThreeDotButton from './ThreeDotButton';
 import './css/DropdownStaffDirectory.css';
 
 const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onNewMemberAdded }) => {
@@ -54,7 +54,7 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
         setSearchTerm('');
       }
     }
-    
+
   };
 
   useEffect(() => {
@@ -88,26 +88,26 @@ const DepartmentDropdown = ({ departments, onSelectDepartment, staffMembers, onN
         <div className="max-md:w-full justify-start">
           {selectedDepartment.id && (
             <a href={`/departmentInner?departmentId=${selectedDepartment.id}`}>
-              <button className="flex-1 text-sm font-bold rounded-full whitespace-nowrap px-4 md:py-2.5 md:mr-4 max-md:py-2.5 lg:py-2.5 bg-blue-500 text-white hover:bg-blue-700">
+              <button className="flex-1 text-sm font-bold rounded-full whitespace-nowrap px-4 md:py-2.5 md:mr-4 max-md:py-2.5 lg:py-2.5 bg-primary-500 text-white hover:bg-primary-700">
                 Visit Department
               </button>
-            </a>      
+            </a>
           )}
-        </div>  
+        </div>
       </div>
       {isOpen && (
         <ul className={`dropdown-list ${isOpen ? 'open' : ''}`}>
           {filteredDepartments.map((dept) => (
             <li key={dept.id} onClick={() => handleSelect(dept)}>
-              {dept.name} 
+              {dept.name}
             </li>
           ))}
         </ul>
       )}
       <div className="max-md:mt-4 relative flex flex-row items-center justify-between max-md:flex-row max-md:justify-between lg:ml-0 w-full">
         {selectedDepartment.id && (
-        <button 
-          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700" 
+        <button
+          className="flex items-center justify-center text-sm font-bold px-6 py-2.5 bg-red-500 text-white rounded-full hover:bg-red-700"
           onClick={toggleAddMemberPopup}
           >
           <img src="/assets/plus.svg" alt="Plus icon" className="w-3 h-3 mr-2" />

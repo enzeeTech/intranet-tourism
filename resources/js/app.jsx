@@ -20,8 +20,10 @@ createInertiaApp({
             import.meta.glob("./Pages/**/*.jsx")
         ),
 
-    setup({ el, App, props }) {
+    async setup({ el, App, props }) {
         const root = createRoot(el);
+        const selectedTheme = await localStorage.getItem("theme");
+        document.documentElement.classList.add(selectedTheme);
         root.render(
             <PrimeReactProvider>
                 <App {...props} />

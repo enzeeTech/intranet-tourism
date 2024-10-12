@@ -28,13 +28,13 @@ function ViewAdminPopup({ onClose }) {
             <AdminItem key={index} name={admin.name} src={admin.src} imgSrc={admin.imgSrc} />
           ))}
           <div className="flex mt-5">
-            <div tabIndex="0" role="button" className="justify-center items-center px-2 text-sm font-bold text-center text-white whitespace-nowrap bg-blue-500 rounded-3xl h-[23px] w-[23px]">+</div>
+            <div tabIndex="0" role="button" className="justify-center items-center px-2 text-sm font-bold text-center text-white whitespace-nowrap bg-primary-500 rounded-3xl h-[23px] w-[23px]">+</div>
             <span className="flex-auto my-auto text-base text-left px-2 font-semibold text-neutral-800">Add Admin</span>
           </div>
           <div className="flex gap-5 self-end mt-5 text-sm text-center whitespace-nowrap">
             <span className="my-auto px-4 py-1 font-semibold text-neutral-800 w-[65px] h-[28px]" tabIndex="0" role="button" onClick={onClose}>Cancel</span>
             <button className="flex flex-col justify-center font-bold text-white">
-              <span className="justify-center px-4 py-1 bg-blue-500 rounded-3xl w-[65px] h-[28px]">Save</span>
+              <span className="justify-center px-4 py-1 bg-primary-500 rounded-3xl w-[65px] h-[28px]">Save</span>
             </button>
           </div>
         </div>

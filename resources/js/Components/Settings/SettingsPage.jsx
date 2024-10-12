@@ -99,7 +99,7 @@
 //           <div className="flex items-center justify-between mb-2 border-b border-gray-200">
 //             <h2 className="mb-3 text-2xl font-bold text-blue-500 ">External Apps</h2>
 //             <button
-//               className="px-4 py-1 mb-2 font-bold text-white bg-blue-500 rounded-full"
+//               className="px-4 py-1 mb-2 font-bold text-white bg-primary-500 rounded-full"
 //               onClick={() => setIsAddModalVisible(true)}
 //             >
 //               + Add
@@ -221,7 +221,7 @@
 //                 className="w-full p-2 mb-4 border rounded-md outline-none border-E4E4E4"
 //               />
 //               <div className="flex justify-end space-x-4">
-//                 <button className="px-6 py-1 font-bold text-white bg-blue-500 rounded-full" onClick={PautanHandleAddApp}>
+//                 <button className="px-6 py-1 font-bold text-white bg-primary-500 rounded-full" onClick={PautanHandleAddApp}>
 //                   Add
 //                 </button>
 //                 <button className="px-4 py-1 text-white font-bold bg-[#FF5436] rounded-full" onClick={() => setIsAddModalVisible(false)}>

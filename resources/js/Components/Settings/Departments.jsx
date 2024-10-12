@@ -150,7 +150,7 @@ const Departments = () => {
           </button>
           <button
             type="submit"
-            className="inline-flex justify-center px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-custom hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            className="inline-flex justify-center px-4 py-2 text-sm font-semibold text-white bg-primary-500 rounded-md shadow-custom hover:bg-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
           >
             Save
           </button>
