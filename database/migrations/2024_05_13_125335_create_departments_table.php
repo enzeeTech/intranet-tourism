@@ -52,6 +52,7 @@ return new class extends Migration
             $table->foreignId('business_scheme_id')->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->boolean('is_hod')->default(false);
+            $table->boolean('is_assistance')->default(false);
             $table->auditable();
         });
 

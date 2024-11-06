@@ -292,6 +292,7 @@ function UserDetailContent() {
                 employmentPost.business_grade_id
             );
             FfData.append("is_hod", employmentPost.is_hod ? 1 : 0);
+            FfData.append("is_assistance", employmentPost.is_assistance ? 1 : 0);
             if (employmentPost.report_to)
                 FfData.append("report_to", employmentPost.report_to);
             FfData.append("location", employmentPost.location);
@@ -546,6 +547,9 @@ function UserDetailContent() {
                                                                 }
                                                                 is_hod={
                                                                     employmentPost.is_hod
+                                                                }
+                                                                is_assistance={
+                                                                    employmentPost.is_assistance
                                                                 }
                                                                 report_to={
                                                                     employmentPost

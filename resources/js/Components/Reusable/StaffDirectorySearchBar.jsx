@@ -63,7 +63,7 @@ const SearchMembers = ({ onSearch, handleStaffListButton, handleOrgChartButton, 
 
   const getImageSource = (imageUrl) => {
     console.log('imageURL', imageUrl);
-    if (imageUrl.startsWith('staff_image/')) {
+    if (imageUrl?.startsWith('staff_image/')) {
       return `/storage/${imageUrl}`;
     } else {
       return imageUrl === '/assets/dummyStaffPlaceHolder.jpg'

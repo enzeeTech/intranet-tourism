@@ -11,6 +11,7 @@ function ProfileDepartment({
     grade,
     report_to,
     is_hod,
+    is_assistance,
     location,
     phone,
     isEditing,
@@ -25,6 +26,7 @@ function ProfileDepartment({
         grade,
         report_to,
         is_hod,
+        is_assistance,
         location,
         phone,
         countryCode: "",
@@ -34,6 +36,7 @@ function ProfileDepartment({
     const [unitOptions, setUnitOptions] = useState([]);
     const [jobTitleOptions, setJobTitleOptions] = useState([]);
     const [isHod, setIsHod] = useState(false);
+    const [isAssistance, setIsAssistance] = useState(false);
     const [positionOptions, setPositionOptions] = useState([
         "Tetap",
         "Kontrak",
@@ -50,6 +53,7 @@ function ProfileDepartment({
 
     useEffect(() => {
         setIsHod(localFormData.is_hod);
+        setIsAssistance(localFormData.is_assistance);
         fetchData(
             "/api/department/departments",
             setDepartmentOptions,
@@ -155,6 +159,9 @@ function ProfileDepartment({
             } else if (name === "is_hod") {
                 updatedData.is_hod = checked;
                 setIsHod(checked);
+            } else if (name === "is_assistance") {
+                updatedData.is_assistance = checked;
+                setIsAssistance(checked);
             } else if (name === "report_to") {
                 updatedData.report_to = value;
             } else if (name === "location") {
@@ -310,6 +317,29 @@ function ProfileDepartment({
                                     ) : (
                                         <div className="block w-full p-2 mt-1 text-sm border-2 border-transparent rounded-md text-neutral-800 text-opacity-80">
                                             {localFormData.is_hod
+                                                ? "Yes"
+                                                : "No"}
+                                        </div>
+                                    )}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="w-1/3  py-2 font-semibold capitalize align-center text-neutral-800">
+                                    Is Assistance
+                                </td>
+                                <td className="w-2/3 py-2 align-center">
+                                    {isEditing ? (
+                                        <input
+                                            type="checkbox"
+                                            name="is_assistance"
+                                            value={localFormData.is_assistance}
+                                            checked={isAssistance}
+                                            onChange={handleInputChange}
+                                            className="block p-2 mt-1 text-sm border-2 text-neutral-800 text-opacity-80 border-stone-300"
+                                        />
+                                    ) : (
+                                        <div className="block w-full p-2 mt-1 text-sm border-2 border-transparent rounded-md text-neutral-800 text-opacity-80">
+                                            {localFormData.is_assistance
                                                 ? "Yes"
                                                 : "No"}
                                         </div>

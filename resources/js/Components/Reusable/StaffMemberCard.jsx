@@ -77,18 +77,16 @@ const StaffMemberCard = ({
     const isPhoneNumberAvailable = () => phoneNo != null;
     const isWorkNumberAvailable = () => workNo != null;
 
-    console.log("imageUrl", imageUrl);
-
     // const source = imageUrl === '/assets/dummyStaffPlaceHolder.jpg' ? imageUrl : `/avatar/${imageUrl}`;
 
     let source = null;
-
-    if (imageUrl.startsWith("staff_image/")) {
+    if (imageUrl?.startsWith("staff_image/")) {
         source = `/storage/${imageUrl}`;
     } else {
         source =
-            imageUrl === "/assets/dummyStaffPlaceHolder.jpg"
-                ? imageUrl
+            imageUrl === "/assets/dummyStaffPlaceHolder.jpg" ||
+            imageUrl === undefined
+                ? "/assets/dummyStaffPlaceHolder.jpg"
                 : `/avatar/${imageUrl}`;
     }
 

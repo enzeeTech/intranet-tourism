@@ -26,6 +26,7 @@ class EmploymentPostController extends Controller
                     'users.id as user_id',
                     'employment_posts.id as employment_post_id',
                     'employment_posts.is_hod',
+                    'employment_posts.is_assistance',
                     'employment_posts.order',
                     'departments.id as department_id',
                     'departments.name as department_name',
@@ -38,6 +39,7 @@ class EmploymentPostController extends Controller
                     'profiles.staff_image',
                     'employment_posts.work_phone',
                     'profiles.phone_no',
+                    'users.email',
                     'supervisors.parent_id',
                 )
                 ->get()

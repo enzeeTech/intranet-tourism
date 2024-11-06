@@ -77,6 +77,7 @@ const StaffDirectory = () => {
 
             const members = data.members.map((member) => ({
                 id: member.user_id,
+                is_assistance: member.is_assistance,
                 post_id: member.employment_post_id,
                 report_to: member.parent_id,
                 is_hod: member.is_hod,
@@ -91,6 +92,7 @@ const StaffDirectory = () => {
                     member.staff_image || "/assets/dummyStaffPlaceHolder.jpg",
                 workNo: member.work_phone,
                 phoneNo: member.phone_no,
+                email: member.email,
                 isDeactivated: member.is_active,
                 order: member.order,
             }));
@@ -266,7 +268,9 @@ const StaffDirectory = () => {
                 id: member.post_id,
                 parent_id: member.report_to,
                 label: member.name,
-                className: "border rounded-lg p-3 shadow-md",
+                className: `border rounded-lg p-3 shadow-md ${
+                    member.is_assistance ? "bg-primary-100" : null
+                }`,
                 expanded: true,
                 type: "person",
             }))
@@ -325,42 +329,81 @@ const StaffDirectory = () => {
     const memberNodeTemplate = (node) => {
         if (node.type === "person") {
             return (
-                // <div className="flex flex-col items-center gap-2">
-                //     <div className="border shadow-md w-20 h-20 rounded-full overflow-hidden">
-                //         <img class="object-contain h-20 w-20" src={node.data.imageUrl} />
-                //     </div>
-                //     <div className="font-bold text-sm">{node.data.name}</div>
-                //     <div className="text-sm">{node.data.role}</div>
-                // </div>
-                <StaffMemberCard
-                    withWrapperClass={false}
-                    key={node.data.id}
-                    id={node.data.id}
-                    name={node.data.name}
-                    role={node.data.role}
-                    status={node.data.status}
-                    imageUrl={node.data.imageUrl}
-                    workNo={node.data.workNo}
-                    phoneNo={node.data.phoneNo}
-                    isDeactivated={node.data.isDeactivated}
-                    onDeactivateClick={() =>
-                        handleDeactivateClick(node.data.id)
-                    }
-                    onActivateClick={() => handleActivateClick(node.data.id)}
-                    isPopupOpen={activePopupId === node.data.id}
-                    setActivePopup={() => {
-                        setActivePopupId(node.data.id);
-                        setActivePopupRef(
-                            document.getElementById(
-                                `staff-popup-${node.data.id}`
-                            )
-                        );
-                    }}
-                    closePopup={() => {
-                        setActivePopupId(null);
-                        setActivePopupRef(null);
-                    }}
-                />
+                <div className="flex items-center gap-2">
+                    <div className="relative border shadow-md w-20 h-20 rounded-full flex-shrink-0">
+                        <img
+                            class="object-cover h-full w-full rounded-full"
+                            src={node.data.imageUrl}
+                        />
+                        <div
+                            className={`absolute top-0.5 right-0.5 w-4 h-4 rounded-full  ${
+                                node.data.isOnline
+                                    ? "bg-green-500"
+                                    : "bg-red-500"
+                            } border-2 border-white`}
+                        ></div>
+                    </div>
+                    <div className="flex flex-col items-start pl-3">
+                        <div className="font-bold text-sm text-pretty uppercase">
+                            {node.data.name}
+                        </div>
+                        <div className="text-nowrap text-sm font-sans uppercase">
+                            {node.data.department_name}
+                        </div>
+                        {node.data.workNo ? (
+                            <a
+                                href={`//wasap.my/${node.data.workNo}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-nowrap text-xs font-mono text-blue-700 active:text-gray-700"
+                            >
+                                {node.data.workNo}
+                            </a>
+                        ) : null}
+                        {node.data.email ? (
+                            <a
+                                href={`mailto:${node.data.email}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-nowrap text-xs font-mono text-blue-700 active:text-gray-700"
+                            >
+                                {node.data.email}
+                            </a>
+                        ) : null}
+                        <div className="font-bold text-[0.6rem] uppercase bg-gray-400 text-white px-1 py-0.5 rounded-full">
+                            {node.data.role}
+                        </div>
+                    </div>
+                </div>
+                // <StaffMemberCard
+                //     withWrapperClass={false}
+                //     key={node.data.id}
+                //     id={node.data.id}
+                //     name={node.data.name}
+                //     role={node.data.role}
+                //     status={node.data.status}
+                //     imageUrl={node.data.imageUrl}
+                //     workNo={node.data.workNo}
+                //     phoneNo={node.data.phoneNo}
+                //     isDeactivated={node.data.isDeactivated}
+                //     onDeactivateClick={() =>
+                //         handleDeactivateClick(node.data.id)
+                //     }
+                //     onActivateClick={() => handleActivateClick(node.data.id)}
+                //     isPopupOpen={activePopupId === node.data.id}
+                //     setActivePopup={() => {
+                //         setActivePopupId(node.data.id);
+                //         setActivePopupRef(
+                //             document.getElementById(
+                //                 `staff-popup-${node.data.id}`
+                //             )
+                //         );
+                //     }}
+                //     closePopup={() => {
+                //         setActivePopupId(null);
+                //         setActivePopupRef(null);
+                //     }}
+                // />
             );
         }
         return <div className="font-bold text-sm">{node.label}</div>;
@@ -392,14 +435,12 @@ const StaffDirectory = () => {
                             ) : isOrgChartActive ? (
                                 // <div>asd</div>
                                 <div className="staff-member-grid-container max-w-[1200px]">
-                                    {reportingStructures.length ? (
+                                    {reportingStructures.length == 1 ? (
                                         <OrganizationChart
                                             value={reportingStructures}
                                             nodeTemplate={memberNodeTemplate}
                                         />
-                                    ) : (
-                                        <div></div>
-                                    )}
+                                    ) : null}
                                 </div>
                             ) : (
                                 <div className="staff-member-grid-container max-w-[1200px]">

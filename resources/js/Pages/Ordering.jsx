@@ -18,7 +18,7 @@ const Ordering = () => {
 
     const fetchStaffMembers = async (departmentId) => {
         setIsLoading(true);
-    
+
         try {
             const response = await fetch(`/api/department/employment_posts?department_id=${departmentId}`, {
                 method: "GET",
@@ -28,7 +28,7 @@ const Ordering = () => {
                 throw new Error("Network response was not ok");
             }
             const data = await response.json();
-    
+
             const members = data.members.map(member => ({
                 id: member.user_id,
                 employment_id: member.employment_post_id,
@@ -39,16 +39,16 @@ const Ordering = () => {
                 isDeactivated: member.is_active,
                 order: member.order,
             }));
-    
+
             members.sort((a, b) => a.order - b.order);
-    
+
             setStaffMembers(members);
         } catch (error) {
             console.error("Error:", error);
         }
         setIsLoading(false);
     };
-    
+
     useEffect(() => {
         if (departmentId) {
           fetchStaffMembers(departmentId);
@@ -118,9 +118,9 @@ const Ordering = () => {
     const handleSave = async () => {
         setIsNotificationVisible(true);
         setNotificationMessage("Saving changes...");
-        
+
         const updatePromises = staffMembers.map((member) => updateOrderInDatabase(member, departmentId));
-        
+
         const results = await Promise.all(updatePromises);
 
         const success = results.every(result => result !== null);
@@ -143,11 +143,11 @@ const Ordering = () => {
     console.log(staffMembers);
 
     const getImageSource = (imageUrl) => {
-        if (imageUrl.startsWith('staff_image/')) {
+        if (imageUrl?.startsWith('staff_image/')) {
             return `/storage/${imageUrl}`;
         } else {
-            return imageUrl === '/assets/dummyStaffPlaceHolder.jpg' 
-                ? imageUrl 
+            return imageUrl === '/assets/dummyStaffPlaceHolder.jpg'
+                ? imageUrl
                 : `/avatar/${imageUrl}`;
         }
     };
