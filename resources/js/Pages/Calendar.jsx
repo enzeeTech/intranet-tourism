@@ -19,16 +19,16 @@ function Calendar() {
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [eventData, setEventData] = useState({ 
-        title: '', 
-        venue: '', 
-        startDate: '', 
-        endDate: '', 
-        startTime: '', 
-        endTime: '', 
+    const [eventData, setEventData] = useState({
+        title: '',
+        venue: '',
+        startDate: '',
+        endDate: '',
+        startTime: '',
+        endTime: '',
         description: '',
-        color: 'purple', 
-        url: '' 
+        color: 'purple',
+        url: ''
     });
     const [includeUrl, setIncludeUrl] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -54,7 +54,7 @@ function Calendar() {
     //         .then(response => response.json())
     //         .then(data => {
     //             console.log("DATAAA", data);
-                
+
     //             const formattedEvents = data.data.data.map(event => ({
     //                 id: event.id,
     //                 title: event.title,
@@ -83,11 +83,11 @@ function Calendar() {
             let allEvents = [];
             let currentPage = 1;
             let totalPages = 1;
-    
+
             while (currentPage <= totalPages) {
                 const response = await fetch(`/api/events/events?with[]=author&page=${currentPage}`);
                 const data = await response.json();
-    
+
                 if (data && data.data && Array.isArray(data.data.data)) {
                     const formattedEvents = data.data.data.map(event => ({
                         id: event.id,
@@ -100,9 +100,9 @@ function Calendar() {
                         userName: event.author.name,
                         url: event.url,
                     }));
-    
+
                     allEvents = [...allEvents, ...formattedEvents];
-    
+
                     totalPages = data.data.last_page;
                     currentPage++;
                 } else {
@@ -110,39 +110,39 @@ function Calendar() {
                     break;
                 }
             }
-    
+
             console.log("All Events:", allEvents);
-    
+
             // Set events in state
             setEvents(prevEvents => [...prevEvents, ...allEvents]);
             setFilteredEvents(prevEvents => [...prevEvents, ...allEvents]);
-    
+
             if (calendarRef.current) {
                 calendarRef.current.getApi().gotoDate(new Date());
             }
-    
+
         } catch (error) {
             console.error('Error fetching events: ', error);
         }
     };
-    
-    
-    
+
+
+
     const fetchBirthdayEvents = async () => {
         try {
             let allProfiles = [];
             let currentPage = 1;
             let totalPages = 1;
-    
+
             while (currentPage <= totalPages) {
                 // const response = await fetch(`/api/profile/profiles?page=${currentPage}`);
                 const response = await fetch(`/api/profile/profiles?filter[]=dob&paginate=false`);
                 const data = await response.json();
-                
-    
+
+
                 if (data && data.data && Array.isArray(data.data.data)) {
                     allProfiles = [...allProfiles, ...data.data.data];
-    
+
                     totalPages = data.data.last_page;
                     currentPage++;
                 } else {
@@ -152,17 +152,17 @@ function Calendar() {
             }
             console.log("DATAAAA", allProfiles);
 
-    
+
             // Map profiles to birthday events
             const birthdayEvents = allProfiles.reduce((acc, profile) => {
                 if (!profile.dob) return acc; // Skip profiles with no dob
-    
+
                 const dob = new Date(profile.dob);
                 if (isNaN(dob.getTime())) return acc; // Skip invalid dob
-    
+
                 const currentYear = new Date().getFullYear();
                 dob.setFullYear(currentYear);
-    
+
                 // const dateStr = dob.toISOString().split('T')[0];
                 const year = dob.getFullYear();
                 const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
@@ -172,9 +172,9 @@ function Calendar() {
                 // console.log("dateStr", dateStr);
                 // console.log("dob", dob);
 
-                
+
                 let existingEvent = acc.find(event => event.start === dateStr);
-    
+
                 if (existingEvent) {
                     // Ensure names property exists and push the new name
                     if (!existingEvent.extendedProps.names) {
@@ -197,16 +197,16 @@ function Calendar() {
                 }
                 return acc;
             }, []);
-    
+
             setEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
             setFilteredEvents(prevEvents => [...prevEvents, ...birthdayEvents]);
         } catch (error) {
             console.error('Error fetching birthdays: ', error);
         }
     };
-    
-    
-    
+
+
+
     const filterEvents = () => {
         if (searchTerm.trim() === '') {
             setFilteredEvents(events);
@@ -214,11 +214,11 @@ function Calendar() {
                 calendarRef.current.getApi().gotoDate(new Date());
             }
         } else {
-            const filtered = events.filter(event => 
+            const filtered = events.filter(event =>
                 event.title.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setFilteredEvents(filtered);
-    
+
             if (filtered.length > 0 && calendarRef.current) {
                 const firstEventDate = new Date(filtered[0].start);
                 calendarRef.current.getApi().gotoDate(firstEventDate);
@@ -249,29 +249,29 @@ function Calendar() {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setEventData({ 
-            title: '', 
-            venue: '', 
-            startDate: '', 
-            endDate: '', 
-            startTime: '', 
-            endTime: '', 
-            color: 'purple', 
-            url: '' 
+        setEventData({
+            title: '',
+            venue: '',
+            startDate: '',
+            endDate: '',
+            startTime: '',
+            endTime: '',
+            color: 'purple',
+            url: ''
         });
     };
 
     const closeEditModal = () => {
         setIsEditModalOpen(false);
-        setEventData({ 
-            title: '', 
-            venue: '', 
-            startDate: '', 
-            endDate: '', 
-            startTime: '', 
-            endTime: '', 
-            color: 'purple', 
-            url: '' 
+        setEventData({
+            title: '',
+            venue: '',
+            startDate: '',
+            endDate: '',
+            startTime: '',
+            endTime: '',
+            color: 'purple',
+            url: ''
         });
     };
 
@@ -290,13 +290,13 @@ function Calendar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const formatDateTime = (date, time) => `${date}T${time}`;
-    
+
         // Hardcoded start and end times
         const defaultStartTime = "09:00";
-        const defaultEndTime = "17:00";  
-        
+        const defaultEndTime = "17:00";
+
         const eventPayload = {
             title: eventData.title,
             start_at: formatDateTime(eventData.startDate, defaultStartTime),
@@ -307,7 +307,7 @@ function Calendar() {
             // Only include venue if it's provided
             ...(eventData.venue ? { venue: eventData.venue } : {}),
         };
-    
+
         fetch('/api/events/events', {
             method: 'POST',
             headers: {
@@ -333,8 +333,8 @@ function Calendar() {
             // fetchEvents();
         });
     };
-    
-    
+
+
 
     const handlePrint = () => {
         setIsPrintModalOpen(true);
@@ -366,26 +366,26 @@ function Calendar() {
 
     const handleEventClick = (eventInfo) => {
         eventInfo.jsEvent.preventDefault();
-        
+
         // Check if the event is a birthday event
         if (eventInfo.event.extendedProps.isBirthday) {
             // If it's a birthday event, do nothing (or you could add custom behavior here)
             return;
         }
-        
+
         // Trigger handleEditClick with the event data for non-birthday events
         handleEditClick(eventInfo.event);
     };
-    
+
     const handleEditClick = (event) => {
         const formatTime = (date) => {
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             return `${hours}:${minutes}`;
         };
-    
+
         const url = event.url !== 'null' ? event.url : ''; // Handle 'null' or undefined
-    
+
         setEventId(event.id); // Set the event ID
         setEventData({
             title: event.title,
@@ -398,14 +398,14 @@ function Calendar() {
             color: event.backgroundColor,
             url: url
         });
-    
+
         setIncludeUrl(url !== ''); // Only set to true if URL is not an empty string
         setIsEditModalOpen(true);
     };
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const FfData = new FormData();
             FfData.append('_method', 'PUT');
@@ -416,7 +416,7 @@ function Calendar() {
             FfData.append('description', eventData.description);
             FfData.append('color', eventData.color);
             // FfData.append('url', eventData.url || '');
-    
+
             const response = await fetch(`/api/events/events/${eventId}`, {
                 method: 'POST',
                 body: FfData,
@@ -425,7 +425,7 @@ function Calendar() {
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
             });
-    
+
             // if (response.ok) {
             //     const updatedEvent = await response.json();
                 setEvents((prevEvents) =>
@@ -454,12 +454,12 @@ function Calendar() {
                     'X-CSRF-TOKEN': csrfToken || '',
                 },
             });
-    
+
             if (response.ok) {
                 setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
                 setIsEditModalOpen(false);
                 window.location.reload();
-                
+
             } else {
                 const errorData = await response.json();
                 console.error('Error deleting event:', errorData);
@@ -486,12 +486,12 @@ function Calendar() {
                         />
                         <button
                             onClick={handlePrint}
-                            className="flex items-center justify-center px-3 py-3 mx-3 mt-2 bg-red-500 rounded-full hover:bg-red-700">
+                            className="flex items-center justify-center px-3 py-3 mx-3 mt-2 bg-secondary-500 rounded-full hover:bg-secondary-700">
                             <img src={printIcon} alt="Print" className="w-6 h-6" />
                         </button>
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="flex items-center text-white bg-blue-500 hover:bg-blue-700 mt-2 px-3.5 py-3.5 rounded-full">
+                            className="flex items-center text-white bg-primary-500 hover:bg-primary-700 mt-2 px-3.5 py-3.5 rounded-full">
                             <img src="/assets/plus.svg" alt="Plus icon" className="w-5 h-5" />
                         </button>
                     </div>
@@ -515,11 +515,11 @@ function Calendar() {
                     events={filteredEvents}
                     eventDidMount={(info) => {
                         console.log("eventDidMount called for event:", info.event);
-                    
+
                         if (info.event.extendedProps.isBirthday) {
-                            
+
                             console.log("Birthday event detected:", info.event.extendedProps.names);
-                    
+
                             // Clear any default styles
                             info.el.style.backgroundColor = 'transparent';
                             info.el.style.border = 'none';
@@ -542,7 +542,7 @@ function Calendar() {
                                     <ul>${namesList}</ul>
                                 </div>
                             `;
-                    
+
                             new bootstrap.Popover(info.el, {
                                 placement: "bottom", // Position popover below the cake icon
                                 trigger: "hover",
@@ -560,18 +560,18 @@ function Calendar() {
                                 hour12: true
                             });
 
-                            // const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null') 
-                            //     ? `<p><strong>Url:</strong> ${info.event.url}</p>` 
+                            // const urlContent = (info.event.url && info.event.url.trim() && info.event.url !== 'null')
+                            //     ? `<p><strong>Url:</strong> ${info.event.url}</p>`
                             //     : '';
 
-                            const descContent = (info.event.extendedProps.description && info.event.extendedProps.description.trim() && info.event.extendedProps.description !== 'null') 
-                                ? `<p><strong>Description:</strong> ${info.event.extendedProps.description}</p>` 
+                            const descContent = (info.event.extendedProps.description && info.event.extendedProps.description.trim() && info.event.extendedProps.description !== 'null')
+                                ? `<p><strong>Description:</strong> ${info.event.extendedProps.description}</p>`
                                 : '';
 
-                            const VenueContent = (info.event.extendedProps.venue && info.event.extendedProps.venue.trim() && info.event.extendedProps.venue !== 'null') 
-                                ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue}</p>` 
+                            const VenueContent = (info.event.extendedProps.venue && info.event.extendedProps.venue.trim() && info.event.extendedProps.venue !== 'null')
+                                ? `<p><strong>Venue:</strong> ${info.event.extendedProps.venue}</p>`
                                 : '';
-                            
+
                             const popoverContent = `
                                 <div>
                                     <p class="event-title"><strong>${info.event.title}</strong></p>
@@ -579,7 +579,7 @@ function Calendar() {
                                     ${VenueContent}
                                     ${descContent}
                                 </div>`;
-                            
+
                             new bootstrap.Popover(info.el, {
                                 placement: "auto",
                                 trigger: "hover",
@@ -590,15 +590,15 @@ function Calendar() {
                             });
                         }
                     }}
-                    
+
                     eventContent={(eventInfo) => {
                         // console.log("eventContent called for event:", eventInfo.event);
-                    
+
                         const isBirthday = eventInfo.event.extendedProps.isBirthday;
                         if (isBirthday) {
                             const names = eventInfo.event.extendedProps.names || [];
                             // console.log("Rendering birthday icon for:", names);
-                    
+
                             return (
                                 <div
                                     style={{
@@ -643,7 +643,7 @@ function Calendar() {
                                     }}
                                     className="fc-event-title"
                                 >
-                                    <div 
+                                    <div
                                         style={{
                                             borderLeft: `5px solid ${eventInfo.event.backgroundColor}`,
                                             height: '100%',
@@ -666,11 +666,11 @@ function Calendar() {
                                 </div>
                             );
                         }
-                    }}  
+                    }}
                 />
 
                 <div className='pb-10'></div>
-                
+
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="modal-container">
@@ -804,7 +804,7 @@ function Calendar() {
                                         <input
                                             type="radio"
                                             name="color"
-                                            value={color} 
+                                            value={color}
                                             onChange={handleChange}
                                             required
                                             checked={eventData.color === color}
@@ -822,7 +822,7 @@ function Calendar() {
                                     </button>
                                 </div>
                             </form>
-                        </div>  
+                        </div>
                     </div>
                 )}
 
@@ -865,7 +865,7 @@ function Calendar() {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 text-white bg-blue-500 rounded-full hover:bg-blue-700"
+                                        className="px-4 py-2 text-white bg-primary-500 rounded-full hover:bg-primary-700"
                                     >
                                         Print
                                     </button>

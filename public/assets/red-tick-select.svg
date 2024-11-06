@@ -2,3 +2,18 @@
 <circle cx="8" cy="8" r="8" fill="#FF5436"/>
 <path d="M2 8L6 12.5L13.5 4" stroke="white" stroke-width="2" stroke-linecap="round"/>
 </svg>
+
+<!--
+<svg
+    className="w-4 h-4 text-white"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+>
+    <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M5 13l4 4L19 7"
+    />
+</svg> -->
