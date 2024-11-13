@@ -352,7 +352,7 @@ const StaffDirectory = () => {
                         </div>
                         {node.data.workNo ? (
                             <a
-                                href={`//wasap.my/${node.data.workNo}`}
+                                href={`tel:${node.data.workNo}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-nowrap text-xs font-mono text-blue-700 active:text-gray-700"
